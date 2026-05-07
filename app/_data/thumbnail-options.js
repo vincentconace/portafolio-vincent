@@ -1,0 +1,43 @@
+export const thumbnailOptions = [
+  {
+    slug: 'stockguardian',
+    isPlaceholder: false,
+    year: 2026,
+    thumbnailImage: '/projects/stockguardian/stockguardian.png',
+    thumbnailVideo: '/projects/stockguardian/stockguardian.mp4',
+    externalUrl: 'https://stock.guardiandz.com/',
+    tech: [
+      'React',
+      'PostgreSQL',
+      'Golang',
+      'Kubernetes',
+      'DigitalOcean',
+      'OpenAI',
+      'Gemini',
+    ],
+    gallery: [],
+  },
+  {
+    slug: 'gas-guardian',
+    isPlaceholder: false,
+    year: 2024,
+    thumbnailImage: '/projects/gas-guardian/cover.png',
+    thumbnailVideo: '/projects/gas-guardian/cover.mp4',
+    externalUrl: 'https://staging-app.gas-guardian.com/',
+    tech: ['React', 'PostgreSQL', 'Golang', 'Kubernetes', 'DigitalOcean'],
+    gallery: [],
+  },
+  {
+    slug: 'yesica-gutierrez',
+    isPlaceholder: false,
+    year: 2026,
+    thumbnailImage: '/projects/yesica-gutierrez/cover.jpeg',
+    externalUrl: 'https://yesica-cm.vercel.app/',
+    tech: ['Next.js', 'Tailwind CSS'],
+    gallery: [],
+  },
+  {
+    slug: 'soon-1',
+    isPlaceholder: true,
+  },
+];

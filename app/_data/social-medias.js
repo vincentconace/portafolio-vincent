@@ -1,14 +1,14 @@
 export const socialMedias = [
   {
-    href: '#',
+    href: 'https://www.linkedin.com/in/vincentconace',
     title: 'LinkedIn',
   },
   {
-    href: '#',
+    href: 'https://www.instagram.com/vincent.webs/',
     title: 'Instagram',
   },
   {
-    href: '#',
+    href: 'https://github.com/vincentconace',
     title: 'GitHub',
   },
 ];

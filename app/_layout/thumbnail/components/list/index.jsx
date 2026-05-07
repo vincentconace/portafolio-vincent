@@ -54,7 +54,7 @@ export function ThumbnailList({
     return (
       <li
         key={`thumbnail-list-${item.slug}`}
-        className='border-t border-solid transition-all last-of-type:border-b group-hover:opacity-90'
+        className='border-t border-solid transition-all last-of-type:border-b hover-hover:group-hover:opacity-90'
         style={{
           paddingInline: 'calc(clamp(1em,3vw,4em) * 2)',
           paddingBlock: 'clamp(1em,3vw,4em)',

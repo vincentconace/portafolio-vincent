@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import {
   useAnimationFrame,
   useMotionValue,
+  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
@@ -13,6 +14,7 @@ import {
 } from 'framer-motion';
 
 export function useParallaxSlider(baseVelocity = 100) {
+  const reducedMotion = useReducedMotion();
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -33,6 +35,7 @@ export function useParallaxSlider(baseVelocity = 100) {
 
   const directionFactor = useRef(1);
   useAnimationFrame((t, delta) => {
+    if (reducedMotion) return;
     let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
 
     /**

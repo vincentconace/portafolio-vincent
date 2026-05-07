@@ -2,11 +2,11 @@
 
 import { useRef } from 'react';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight, ArrowUpRight, Globe } from 'lucide-react';
 import Image from 'next/image';
 
-import { useMagnetic } from '@/hooks';
+import { useHasHover, useMagnetic } from '@/hooks';
 import { Contact, Navbar, Transition } from '@/layout';
 import { useTranslation } from '@/providers';
 
@@ -40,6 +40,9 @@ function GlobeCircle() {
   /** @type {import('react').MutableRefObject<HTMLDivElement>} */
   const ref = useRef(null);
   const { position, handleMagneticMove, handleMagneticOut } = useMagnetic(ref);
+  const hasHover = useHasHover();
+  const reducedMotion = useReducedMotion();
+  const interactive = hasHover && !reducedMotion;
   const { scrollYProgress } = useScroll();
   const backgroundColor = useTransform(
     scrollYProgress,
@@ -50,22 +53,26 @@ function GlobeCircle() {
   return (
     <motion.div
       ref={ref}
-      onPointerMove={handleMagneticMove}
-      onPointerOut={handleMagneticOut}
-      animate={{ x: position.x, y: position.y }}
-      transition={{
-        type: 'spring',
-        damping: 15,
-        stiffness: 150,
-        mass: 0.1,
-      }}
-      whileHover={{ scale: 1.1 }}
+      onPointerMove={interactive ? handleMagneticMove : undefined}
+      onPointerOut={interactive ? handleMagneticOut : undefined}
+      animate={interactive ? { x: position.x, y: position.y } : { x: 0, y: 0 }}
+      transition={
+        reducedMotion
+          ? { duration: 0 }
+          : { type: 'spring', damping: 15, stiffness: 150, mass: 0.1 }
+      }
+      whileHover={interactive ? { scale: 1.1 } : undefined}
+      whileTap={reducedMotion ? undefined : { scale: 0.97 }}
       style={{ backgroundColor }}
-      className='flex h-32 w-32 shrink-0 items-center justify-center rounded-full text-background lg:h-40 lg:w-40'
+      className='flex h-28 w-28 shrink-0 items-center justify-center rounded-full text-background sm:h-32 sm:w-32 lg:h-40 lg:w-40'
     >
       <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+        animate={reducedMotion ? undefined : { rotate: 360 }}
+        transition={
+          reducedMotion
+            ? undefined
+            : { duration: 24, repeat: Infinity, ease: 'linear' }
+        }
       >
         <Globe size={56} strokeWidth={1.25} />
       </motion.div>
@@ -89,7 +96,7 @@ function FadeIn({ children, delay = 0, className = '' }) {
 
 function HeroSection({ heading, paragraph }) {
   return (
-    <section className='container mx-auto px-8 pb-24 pt-32 lg:px-16 lg:pb-32 lg:pt-40'>
+    <section className='container mx-auto px-4 pb-24 pt-32 sm:px-6 md:px-8 lg:px-16 lg:pb-32 lg:pt-40'>
       <FadeIn>
         <h1 className='text-balance text-[clamp(2.5em,8vw,8em)] font-medium leading-[0.95] tracking-tight text-foreground'>
           {heading}
@@ -133,7 +140,7 @@ function HeroSection({ heading, paragraph }) {
 function ServicesSection({ title, items }) {
   return (
     <section className='border-t border-solid border-foreground/10'>
-      <div className='container mx-auto px-8 py-24 lg:px-16 lg:py-32'>
+      <div className='container mx-auto px-4 py-24 sm:px-6 md:px-8 lg:px-16 lg:py-32'>
         <FadeIn>
           <span className='text-xs uppercase tracking-widest text-foreground/60'>
             {title}
@@ -174,7 +181,7 @@ function CredentialsSection({ heading, paragraph }) {
   return (
     <section ref={ref} className='relative z-10'>
       <div className='border-t border-solid border-foreground/10 bg-white text-foreground'>
-        <div className='container mx-auto px-8 py-24 lg:px-16 lg:py-32'>
+        <div className='container mx-auto px-4 py-24 sm:px-6 md:px-8 lg:px-16 lg:py-32'>
           <div className='flex items-start justify-between gap-8'>
             <FadeIn className='flex-1'>
               <div className='flex max-w-3xl flex-col gap-10'>

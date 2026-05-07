@@ -12,19 +12,13 @@ import { Center } from '@/components';
  */
 export function ProjectSlider({ type, source, alt = 'project item' }) {
   return (
-    <Center
-      className='relative w-1/4 overflow-hidden rounded'
-      style={{
-        minWidth: '150px',
-        height: '20vw',
-      }}
-    >
+    <Center className='relative h-[55vw] w-1/4 min-w-[60vw] overflow-hidden rounded sm:h-[35vw] sm:min-w-[40vw] md:h-[25vw] md:min-w-[200px] lg:h-[20vw] lg:min-w-[150px]'>
       {type === 'image' ? (
         <Image
           src={source}
           alt={alt}
           fill
-          sizes='25vw'
+          sizes='(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 25vw'
           className='object-cover'
         />
       ) : (

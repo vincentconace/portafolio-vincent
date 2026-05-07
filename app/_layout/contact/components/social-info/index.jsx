@@ -34,7 +34,7 @@ export function SocialInfo() {
     return (
       <li
         key={id}
-        className='border-b border-solid border-b-transparent transition-all duration-300 ease-in-expo hover:border-b-border'
+        className='border-b border-solid border-b-transparent transition-all duration-300 ease-in-expo active:border-b-border hover-hover:hover:border-b-border'
       >
         <Link href={href} target='_blank' rel='noopener' passHref>
           <MagneticButton>{title}</MagneticButton>
@@ -44,9 +44,9 @@ export function SocialInfo() {
   });
 
   return (
-    <div className='px-12 pb-4 pt-10'>
-      <div className='flex flex-wrap items-stretch justify-between gap-5'>
-        <div className='flex gap-8'>
+    <div className='px-4 pb-4 pt-10 sm:px-8 md:px-12'>
+      <div className='flex flex-col gap-8 lg:flex-row lg:flex-wrap lg:items-stretch lg:justify-between lg:gap-5'>
+        <div className='flex flex-wrap gap-6 md:gap-8'>
           <div>
             <ListTitle>{t('contact.version')}</ListTitle>
             <p className='mt-7'>{t('contact.edition')}</p>
@@ -61,7 +61,7 @@ export function SocialInfo() {
 
         <div className='flex flex-col'>
           <ListTitle>{t('contact.socials')}</ListTitle>
-          <ul className='flex gap-8'>{medias}</ul>
+          <ul className='mt-2 flex flex-wrap gap-4 md:gap-8'>{medias}</ul>
         </div>
       </div>
     </div>

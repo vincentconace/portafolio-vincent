@@ -5,8 +5,12 @@ import { styled } from 'styled-components';
 const containerValue = ({ theme }) => theme?.breakpoints?.container;
 
 export const Container = styled.div`
-  padding-inline: calc(clamp(2.5em, 8vw, 8em) * 2);
+  padding-inline: clamp(1.25rem, 5vw, 4rem);
   margin-inline: auto;
+
+  @media screen and (min-width: ${({ theme }) => theme?.breakpoints?.md}) {
+    padding-inline: calc(clamp(2.5em, 8vw, 8em) * 2);
+  }
 
   @media screen and (min-width: ${containerValue}) {
     max-width: ${containerValue};
@@ -34,6 +38,11 @@ export const ImageWrapper = styled.div`
 `;
 
 export const MainTitle = styled.h2`
-  font-size: calc(clamp(3.25em, 7vw, 8em) * 0.875);
-  line-height: 1.1;
+  font-size: clamp(2.5rem, 12vw, 7rem);
+  line-height: 1.05;
+
+  @media screen and (min-width: ${({ theme }) => theme?.breakpoints?.md}) {
+    font-size: calc(clamp(3.25em, 7vw, 8em) * 0.875);
+    line-height: 1.1;
+  }
 `;

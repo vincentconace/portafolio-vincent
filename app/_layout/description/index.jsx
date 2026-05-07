@@ -30,18 +30,19 @@ export function Description() {
         </div>
 
         <motion.div
+          className='basis-full lg:basis-auto'
           whileInView={{ y: '-15%' }}
           viewport={{ once: true }}
           transition={{
             duration: 0.5,
           }}
         >
-          <div className='absolute right-0 top-3/4 lg:top-full lg:me-10'>
+          <div className='mt-4 flex justify-end lg:absolute lg:right-0 lg:top-full lg:me-10 lg:mt-0 lg:block'>
             <Link href='/about' passHref>
               <MagneticButton
                 variant='ghost'
                 size='xl'
-                className='aspect-square !h-40 !w-40 !p-0'
+                className='aspect-square !h-28 !w-28 !p-0 sm:!h-32 sm:!w-32 lg:!h-40 lg:!w-40'
               >
                 {t('description.cta')}
               </MagneticButton>

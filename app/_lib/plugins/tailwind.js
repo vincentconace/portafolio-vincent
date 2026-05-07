@@ -3,7 +3,13 @@ import plugin from 'tailwindcss/plugin';
 /** @type {import('tailwindcss').Config} */
 export const tailwindPlugin = plugin(
   //? Add CSS variable definitions to the base layer
-  function ({ addBase }) {
+  function ({ addBase, addVariant }) {
+    //? Touch / hover device variants:
+    //? `hover-hover:` only fires on devices that have a real hover-capable pointer (mouse).
+    //? `coarse:` fires on touch / coarse-pointer devices.
+    addVariant('hover-hover', '@media (hover: hover) and (pointer: fine)');
+    addVariant('coarse', '@media (hover: none), (pointer: coarse)');
+
     addBase({
       ':root': {
         '--background': '0 0% 100%',

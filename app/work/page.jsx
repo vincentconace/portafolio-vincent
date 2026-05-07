@@ -46,7 +46,7 @@ function FadeIn({ children, delay = 0, className = '' }) {
 
 function HeroSection({ title, intro }) {
   return (
-    <section className='container mx-auto px-8 pb-16 pt-32 lg:px-16 lg:pb-24 lg:pt-40'>
+    <section className='container mx-auto px-4 pb-16 pt-32 sm:px-6 md:px-8 lg:px-16 lg:pb-24 lg:pt-40'>
       <FadeIn>
         <h1 className='text-balance text-[clamp(2.5em,8vw,8em)] font-medium leading-[0.95] tracking-tight'>
           {title}
@@ -74,7 +74,7 @@ function ProjectsList({ items }) {
   return (
     <section ref={ref} className='relative z-10'>
       <div className='border-t border-solid border-foreground/10 bg-white'>
-        <div className='container mx-auto px-8 py-12 lg:px-16 lg:py-16'>
+        <div className='container mx-auto px-4 py-12 sm:px-6 md:px-8 lg:px-16 lg:py-16'>
           <ul className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12'>
             {items.map((item, index) => (
               <FadeIn
@@ -122,7 +122,7 @@ function ProjectCard({ item }) {
             alt={title}
             fill
             sizes='(max-width: 768px) 100vw, 50vw'
-            className='object-cover transition-transform duration-700 ease-in-expo group-hover:scale-[1.03]'
+            className='object-cover transition-transform duration-700 ease-in-expo group-active:scale-[1.02] hover-hover:group-hover:scale-[1.03]'
           />
         </div>
         <div className='flex flex-col gap-3'>
@@ -131,7 +131,7 @@ function ProjectCard({ item }) {
             <ArrowUpRight
               size={24}
               strokeWidth={1.5}
-              className='shrink-0 transition-transform duration-300 ease-in-expo group-hover:-translate-y-1 group-hover:translate-x-1'
+              className='shrink-0 transition-transform duration-300 ease-in-expo group-active:-translate-y-0.5 group-active:translate-x-0.5 hover-hover:group-hover:-translate-y-1 hover-hover:group-hover:translate-x-1'
             />
           </div>
           <p className='text-sm uppercase tracking-widest text-foreground/60'>

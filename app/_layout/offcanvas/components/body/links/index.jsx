@@ -30,15 +30,17 @@ export function OffcanvasLinks() {
         animate='enter'
         exit='exit'
         onPointerEnter={() => setActiveLink(href)}
+        onFocus={() => setActiveLink(href)}
+        onTouchStart={() => setActiveLink(href)}
       >
         <motion.div
-          className='absolute -left-11'
+          className='absolute -left-7 sm:-left-9 md:-left-11'
           variants={scale}
           animate={activeLink === href ? 'open' : 'closed'}
         >
           <Dot size={36} />
         </motion.div>
-        <Link href={href} className='text-6xl capitalize'>
+        <Link href={href} className='text-4xl capitalize sm:text-5xl md:text-6xl'>
           {t(`nav.${key}`)}
         </Link>
       </motion.li>
@@ -46,8 +48,8 @@ export function OffcanvasLinks() {
   });
 
   return (
-    <div className='mt-20 flex flex-col gap-3'>
-      <div className='mb-10 flex items-center justify-between border-b border-solid pb-2'>
+    <div className='mt-10 flex flex-col gap-3 md:mt-20'>
+      <div className='mb-6 flex items-center justify-between border-b border-solid pb-2 md:mb-10'>
         <h5 className='text-xs uppercase text-secondary-foreground'>
           {t('nav.label')}
         </h5>

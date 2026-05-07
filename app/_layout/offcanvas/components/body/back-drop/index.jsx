@@ -1,9 +1,20 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { motion } from 'framer-motion';
 
 export function OffcanvasBackdrop() {
-  const windowHeight = window.innerHeight;
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  useEffect(() => {
+    const update = () => setWindowHeight(window.innerHeight);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  if (windowHeight === 0) return null;
 
   const initialPath = `M100 0 L200 0 L200 ${windowHeight} L100 ${windowHeight} Q-100 ${
     windowHeight / 2
@@ -36,7 +47,7 @@ export function OffcanvasBackdrop() {
   };
 
   return (
-    <motion.svg className='absolute right-[600px] top-0 h-full w-24 fill-foreground stroke-none'>
+    <motion.svg className='absolute right-full top-0 h-full w-[100px] overflow-visible fill-foreground stroke-none sm:right-[420px] md:right-[520px] lg:right-[600px]'>
       <motion.path
         variants={curve}
         initial='initial'

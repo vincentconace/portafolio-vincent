@@ -94,7 +94,7 @@ function HeroSection({
   const { t } = useTranslation();
 
   return (
-    <section className='container mx-auto px-8 pb-16 pt-32 lg:px-16 lg:pb-24 lg:pt-40'>
+    <section className='container mx-auto px-4 pb-16 pt-32 sm:px-6 md:px-8 lg:px-16 lg:pb-24 lg:pt-40'>
       <FadeIn>
         <h1 className='text-balance text-[clamp(2.5em,9vw,9em)] font-medium leading-[0.95] tracking-tight'>
           {title}
@@ -163,7 +163,7 @@ function MetaBlock({ label, value }) {
 
 function CoverSection({ src, alt }) {
   return (
-    <section className='container mx-auto px-8 pb-16 lg:px-16 lg:pb-24'>
+    <section className='container mx-auto px-4 pb-16 sm:px-6 md:px-8 lg:px-16 lg:pb-24'>
       <FadeIn>
         <div className='relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-neutral-200'>
           <Image
@@ -183,7 +183,7 @@ function CoverSection({ src, alt }) {
 function DescriptionSection({ description, slug }) {
   const { t } = useTranslation();
   return (
-    <section className='container mx-auto px-8 pb-24 lg:px-16 lg:pb-32'>
+    <section className='container mx-auto px-4 pb-24 sm:px-6 md:px-8 lg:px-16 lg:pb-32'>
       <FadeIn>
         <div className='mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[auto_1fr] lg:gap-16'>
           <h2 className='text-xs uppercase tracking-widest text-foreground/60 lg:pt-2'>
@@ -200,8 +200,8 @@ function DescriptionSection({ description, slug }) {
 
 function GallerySection({ items, title, t }) {
   return (
-    <section className='container mx-auto px-8 pb-16 lg:px-16 lg:pb-24'>
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-10'>
+    <section className='container mx-auto px-4 pb-16 sm:px-6 md:px-8 lg:px-16 lg:pb-24'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-10'>
         {items.map((item, index) => (
           <FadeIn key={item.src} delay={index * 0.05}>
             <div className='relative aspect-[16/10] w-full overflow-hidden rounded-sm bg-neutral-200'>
@@ -232,17 +232,17 @@ function ClosingSection({ backLabel }) {
   return (
     <section ref={ref} className='relative z-10'>
       <div className='border-t border-solid border-foreground/10 bg-white text-foreground'>
-        <div className='container mx-auto px-8 py-24 lg:px-16 lg:py-32'>
+        <div className='container mx-auto px-4 py-24 sm:px-6 md:px-8 lg:px-16 lg:py-32'>
           <div className='flex items-start justify-between gap-8'>
             <FadeIn className='flex-1'>
               <Link
                 href='/work'
-                className='group inline-flex items-center gap-3 text-sm uppercase tracking-widest text-foreground/70 transition-colors hover:text-foreground'
+                className='group inline-flex items-center gap-3 text-sm uppercase tracking-widest text-foreground/70 transition-colors active:text-foreground hover-hover:hover:text-foreground'
               >
                 <MoveLeft
                   size={20}
                   strokeWidth={1.5}
-                  className='transition-transform duration-300 ease-in-expo group-hover:-translate-x-1'
+                  className='transition-transform duration-300 ease-in-expo group-active:-translate-x-1 hover-hover:group-hover:-translate-x-1'
                 />
                 {backLabel}
               </Link>

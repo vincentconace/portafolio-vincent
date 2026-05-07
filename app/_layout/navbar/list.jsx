@@ -19,7 +19,7 @@ export function NavbarList() {
           <MagneticButton>
             <span className='text-base capitalize'>{t(`nav.${key}`)}</span>
             <Center>
-              <Dot className='scale-0 transition-transform duration-200 ease-in-expo group-hover:scale-100' />
+              <Dot className='scale-0 transition-transform duration-200 ease-in-expo hover-hover:group-hover:scale-100' />
             </Center>
           </MagneticButton>
         </Link>

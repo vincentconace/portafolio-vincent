@@ -14,7 +14,7 @@ export function Navbar({ theme = 'dark' }) {
     <nav className='absolute inset-x-0 top-0 z-10'>
       <div
         className={cn(
-          'flex items-center justify-between px-8 py-4',
+          'flex items-center justify-between px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6 md:px-8 md:py-4',
           theme === 'light' ? 'text-foreground' : 'text-background',
         )}
       >

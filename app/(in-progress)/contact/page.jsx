@@ -124,13 +124,13 @@ export default function Contact() {
       <div className='relative bg-foreground text-background'>
         <Navbar />
         <main className='pb-32 pt-32 lg:pt-40'>
-          <div className='container mx-auto px-8 lg:px-16'>
+          <div className='container mx-auto px-4 sm:px-6 md:px-8 lg:px-16'>
             <h1 className='text-[clamp(2.5em,7vw,7em)] leading-none'>
               <span className='block'>{t('contactPage.title1')}</span>
               <span className='block'>{t('contactPage.title2')}</span>
             </h1>
 
-            <div className='mt-20 grid grid-cols-1 gap-12 lg:grid-cols-[1fr_320px] lg:gap-20'>
+            <div className='mt-12 grid grid-cols-1 gap-12 md:mt-20 lg:grid-cols-[1fr_320px] lg:gap-20'>
               <form
                 className='flex flex-col gap-2'
                 onSubmit={handleSubmit}
@@ -150,12 +150,12 @@ export default function Contact() {
                   />
                 ))}
 
-                <div className='-mt-20 flex justify-end'>
+                <div className='-mt-12 flex justify-end sm:-mt-16 md:-mt-20'>
                   <MagneticButton
                     type='submit'
                     variant='primary'
                     size='xl'
-                    className='aspect-square !h-40 !w-40 !p-0'
+                    className='aspect-square !h-28 !w-28 !p-0 sm:!h-32 sm:!w-32 md:!h-40 md:!w-40'
                   >
                     <span className='text-base'>{t('contactPage.send')}</span>
                   </MagneticButton>
@@ -185,16 +185,16 @@ function FormField({
 }) {
   const fieldId = `field-${number}`;
   const baseInput =
-    'w-full bg-transparent text-2xl text-background placeholder:text-muted-foreground focus:outline-none lg:text-3xl';
+    'w-full bg-transparent text-xl text-background placeholder:text-muted-foreground focus:outline-none md:text-2xl lg:text-3xl';
 
   return (
-    <div className='border-b border-solid border-muted-foreground/40 py-8'>
-      <div className='flex items-start gap-6'>
+    <div className='border-b border-solid border-muted-foreground/40 py-5 md:py-8'>
+      <div className='flex items-start gap-4 md:gap-6'>
         <span className='mt-3 text-xs text-muted-foreground'>{number}</span>
         <div className='flex-1'>
           <label
             htmlFor={fieldId}
-            className='mb-3 block text-xl font-medium lg:text-2xl'
+            className='mb-3 block text-base font-medium md:text-xl lg:text-2xl'
           >
             {label}
           </label>
@@ -235,7 +235,7 @@ function FormField({
 
 function SideLink({ href, children, external = false }) {
   return (
-    <li className='w-fit border-b border-solid border-b-transparent transition-all duration-300 ease-in-expo hover:border-b-current'>
+    <li className='w-fit border-b border-solid border-b-transparent transition-all duration-300 ease-in-expo active:border-b-current hover-hover:hover:border-b-current'>
       <Link
         href={href}
         target={external ? '_blank' : undefined}
@@ -257,12 +257,12 @@ function ContactSidebar() {
   return (
     <aside className='flex flex-col gap-12 text-base lg:items-start'>
       <div className='flex w-full flex-col items-start gap-6'>
-        <div className='relative aspect-square w-40 overflow-hidden rounded-full bg-foreground lg:w-36'>
+        <div className='relative aspect-square w-32 overflow-hidden rounded-full bg-foreground md:w-36 lg:w-36'>
           <Image
             src='/hero.png'
             alt='Vincent Conace'
             fill
-            sizes='176px'
+            sizes='144px'
             className='object-cover'
           />
         </div>

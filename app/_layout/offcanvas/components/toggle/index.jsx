@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { motion } from 'framer-motion';
 
 import { MagneticButton } from '@/components';
-import { useOffcanvasToggle } from '@/hooks';
+import { useHasHover, useOffcanvasToggle } from '@/hooks';
 import { cn } from '@/utils';
 
 import classes from './index.module.css';
@@ -18,6 +18,7 @@ import classes from './index.module.css';
 export function OffcanvasToggle({ isOpen, handleOpen }) {
   /** @type {import('react').MutableRefObject<HTMLDivElement>} */
   const containerRef = useRef(null);
+  const hasHover = useHasHover();
   const { scrollYProgress } = useOffcanvasToggle({
     element: containerRef,
     callback: latest => latest <= 1 && handleOpen(false),
@@ -32,12 +33,12 @@ export function OffcanvasToggle({ isOpen, handleOpen }) {
         duration: 1,
         ease: [0.76, 0, 0.24, 1],
       }}
-      style={{ scale: scrollYProgress }}
+      style={hasHover ? { scale: scrollYProgress } : undefined}
     >
       <MagneticButton
         size='md'
         variant='ghost'
-        className='border border-solid border-muted-foreground'
+        className='aspect-square border border-solid border-muted-foreground !h-12 !w-12 !p-0 sm:!h-14 sm:!w-14 md:!h-auto md:!w-auto md:!px-8 md:!py-10'
         onClick={() => handleOpen(!isOpen)}
       >
         <span

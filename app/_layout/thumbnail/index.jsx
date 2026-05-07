@@ -1,68 +1,32 @@
 'use client';
 
-import { useRef } from 'react';
+import { useReducedMotion } from 'framer-motion';
 
 import { thumbnailOptions } from '@/data';
-import { useFollowPointer } from '@/hooks';
+import { useHasHover } from '@/hooks';
 import { useTranslation } from '@/providers';
 
 import {
   ThumbnailAction,
-  ThumbnailCursorCircle,
-  ThumbnailCursorLabel,
   ThumbnailLabel,
-  ThumbnailList,
-  ThumbnailModal,
+  ThumbnailListMobile,
 } from './components';
-import { scaleUp } from './variants';
+import { ThumbnailDesktop } from './desktop';
 
 export function Thumbnail() {
   const { t } = useTranslation();
+  const hasHover = useHasHover();
+  const reducedMotion = useReducedMotion();
   const realCount = thumbnailOptions.filter(item => !item.isPlaceholder).length;
-  /** @type {import('react').MutableRefObject<HTMLElement>} */
-  const modal = useRef(null);
-  /** @type {import('react').MutableRefObject<HTMLElement>} */
-  const cursor = useRef(null);
-  /** @type {import('react').MutableRefObject<HTMLElement>} */
-  const label = useRef(null);
-
-  const {
-    item: { active, index },
-    handlePointerEnter,
-    handlePointerLeave,
-    moveItems,
-  } = useFollowPointer({
-    modal,
-    cursor,
-    label,
-  });
+  const showDesktop = hasHover && !reducedMotion;
 
   return (
-    <section
-      className='container relative'
-      onPointerMove={({ clientX, clientY }) => moveItems(clientX, clientY)}
-    >
+    <section className='container relative'>
       <div className='my-8 flex flex-col gap-10'>
         <ThumbnailLabel>{t('thumbnail.title')}</ThumbnailLabel>
-        <ThumbnailList
-          handlePointerEnter={handlePointerEnter}
-          handlePointerLeave={handlePointerLeave}
-          moveItems={moveItems}
-        />
-        <ThumbnailModal
-          ref={modal}
-          variants={scaleUp}
-          active={active}
-          index={index}
-        />
-        <ThumbnailCursorCircle
-          ref={cursor}
-          variants={scaleUp}
-          active={active}
-        />
-        <ThumbnailCursorLabel ref={label} variants={scaleUp} active={active}>
-          {t('thumbnail.view')}
-        </ThumbnailCursorLabel>
+
+        {showDesktop ? <ThumbnailDesktop /> : <ThumbnailListMobile />}
+
         <ThumbnailAction>
           {t('thumbnail.more')}
           <sup className='text-muted-foreground'>{realCount}</sup>

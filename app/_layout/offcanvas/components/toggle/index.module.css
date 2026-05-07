@@ -1,8 +1,7 @@
 .wrapper {
   position: fixed;
-  top: 0;
-  right: 0;
-  margin: theme(margin.6);
+  top: max(theme(spacing.4), env(safe-area-inset-top));
+  right: max(theme(spacing.4), env(safe-area-inset-right));
   z-index: theme(zIndex.40);
 }
 

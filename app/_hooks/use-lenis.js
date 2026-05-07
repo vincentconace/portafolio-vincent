@@ -3,9 +3,13 @@
 import { useEffect } from 'react';
 
 import Lenis from '@studio-freight/lenis';
+import { useReducedMotion } from 'framer-motion';
 
 export function useLenis() {
+  const reducedMotion = useReducedMotion();
+
   useEffect(() => {
+    if (reducedMotion) return;
     const lenis = new Lenis();
 
     function raf(time) {
@@ -14,6 +18,9 @@ export function useLenis() {
     }
     requestAnimationFrame(raf);
 
-    return () => cancelAnimationFrame(raf);
-  }, []);
+    return () => {
+      cancelAnimationFrame(raf);
+      lenis.destroy();
+    };
+  }, [reducedMotion]);
 }

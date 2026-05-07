@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 
 import { useFollowPointer } from '@/hooks';
+import { useTranslation } from '@/providers';
 
 import {
   ThumbnailCursorCircle,
@@ -10,7 +11,6 @@ import {
   ThumbnailList,
   ThumbnailModal,
 } from './components';
-import { useTranslation } from '@/providers';
 import { scaleUp } from './variants';
 
 export function ThumbnailDesktop() {

@@ -381,6 +381,33 @@ export function LevelBadge({
           filter: saturate(1.75) brightness(1.28) contrast(1.08);
         }
 
+        /* ============================================
+           TOUCH / MOBILE — sin puntero no hay tilt-tracking, así que
+           los 11 loops infinitos por chapita (10 capas holo con blur
+           SVG + mix-blend + 1 tilt) son puro costo: 4 chapitas = 44
+           animaciones re-rasterizando blur cada frame → la home se
+           CUELGA en el teléfono. Los CONGELAMOS: la chapita se queda
+           en su primer frame (pose 3D + spread holográfico estáticos,
+           igual de linda) con costo por frame = 0, y despromovemos las
+           ~44 capas (will-change) para liberar memoria del compositor.
+           ============================================ */
+        @media (hover: none) {
+          .lvl-${uid} {
+            /* Una sola sombra (más barata de pintar que dos drop-shadow). */
+            filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.4));
+          }
+          .lvl-${uid}-tilt,
+          .lvl-${uid}-holo > g {
+            animation-play-state: paused !important;
+            will-change: auto;
+          }
+          .lvl-${uid}-holo {
+            /* El blend-mode + saturate se pinta una sola vez (sin loops),
+               pero le bajamos la carga de compositing en scroll. */
+            transition: none;
+          }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .lvl-${uid}-tilt,
           .lvl-${uid}-clip {

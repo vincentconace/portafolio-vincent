@@ -274,8 +274,8 @@ function ContactSidebar() {
           {t('contactPage.sideContact')}
         </h5>
         <ul className='mt-4 flex flex-col items-start gap-2'>
-          <SideLink href='mailto:conacevincent@gmail.com'>
-            <span className='whitespace-nowrap'>conacevincent@gmail.com</span>
+          <SideLink href='mailto:vincent97.web@gmail.com'>
+            <span className='whitespace-nowrap'>vincent97.web@gmail.com</span>
           </SideLink>
           {whatsappLink ? (
             <SideLink href={whatsappLink} external>

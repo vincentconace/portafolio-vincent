@@ -31,6 +31,6 @@ Esto se usa para construir el link de WhatsApp del formulario de contacto.
 
 ## Contacto
 
-- Email: conacevincent@gmail.com
+- Email: vincent97.web@gmail.com
 - Ubicación: Mar del Plata, Argentina
 # portafolio-vincent

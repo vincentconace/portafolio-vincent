@@ -1,0 +1,298 @@
+---
+title: "Claude as web animator — 3 skills to make your designs feel alive"
+description: "Frontend Design (rules) + UI UX Pro Max (67 styles) + Emil Kowalski's Skill (professional animation). The 3 combined give your landing page real transitions, timing, and motion — it doesn't look AI-generated. Setup in 3 commands."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-disenador-web", "5-skills-diseno-claude", "claude-web-builder"]
+---
+
+## Why your designs look flat
+
+You ask Claude for a landing page. It comes out **correct**. Nice-looking. But something doesn't click. Something feels **flat**.
+
+The problem is the **lack of motion**. Without animation:
+- Everything appears at once on load
+- Buttons don't react to hover
+- Scrolling is static
+- Transitions are hard cuts
+
+Result: **it looks like a PowerPoint presentation**, not a real app.
+
+**Animation is the difference between a drawing and a movie**. It turns the "pretty but flat page" into something that feels alive.
+
+---
+
+## The 3 skills you need
+
+| Skill | Role |
+|-------|-------|
+| **Frontend Design Skill** | Rules of good design (official Anthropic) |
+| **UI UX Pro Max** | 67 styles + 161 palettes + 57 typography combos |
+| **Emil Kowalski's Skill** | Professional animation (transitions, timing, motion) |
+
+### Who is Emil Kowalski
+
+A design engineer specialized in web interfaces and animation. He worked at companies like Linear (one of the pioneers of web motion design). He packed his know-how into an open source skill — like getting private lessons from him.
+
+He's the **key piece**. The other 2 skills make the design correct. **Emil makes it feel alive**.
+
+---
+
+## Prerequisites
+
+- Claude Code installed ([setup zero](/boveda/claude-code-setup-zero))
+- Node.js 18+
+
+---
+
+## Installation — 3 commands
+
+```bash
+# Skill 1 — Frontend Design (rules)
+claude install-skill https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design
+
+# Skill 2 — UI UX Pro Max (styles)
+npx skills add nextlevelbuilder/ui-ux-pro-max-skill
+
+# Skill 3 — Emil Kowalski (animation)
+npx skills add emilkowalski/skill
+```
+
+### Verify
+
+```
+> /skills
+```
+
+All 3 should appear in the list.
+
+---
+
+## Usage — once installed, they're automatic
+
+**You don't need to invoke them explicitly** every time. Claude uses them automatically when it detects that it needs to design/animate.
+
+### Typical prompt
+
+```
+> Create a modern landing page for an AI startup.
+
+  It should have:
+  - Hero with entrance animation
+  - 3 columns of features
+  - Testimonials
+  - CTA at the end
+
+  Dark colors with blue accents.
+  Sections appear smoothly on scroll.
+  Buttons have animation on mouse hover.
+```
+
+Claude:
+1. Frontend Design → structures the sections with correct hierarchy
+2. UI UX Pro Max → picks a dark palette + coherent typography
+3. Emil Kowalski Skill → applies animations on-scroll, hover states, page transitions
+
+---
+
+## What gets animated
+
+### 1. Buttons
+
+Without animation: you click and nothing visible changes (except the action).
+
+With animation: hover smooths color/shadow, click makes a visible press (scale 0.98), integrated loading spinner. **Immediate feedback** that confirms to the user that something is happening.
+
+### 2. Reveals on scroll
+
+Without animation: sections appear instantly on load.
+
+With animation: each section does a **fade-in + slight slide-up** when it enters the viewport. Images with blur-to-sharp. Stagger between related items (e.g. the 3 feature columns appear with a 100ms delay between each one).
+
+### 3. Page transitions
+
+Without animation: you navigate from A to B, with a white "flash" between pages.
+
+With animation: **smooth transition** that keeps visual context (the page fades out, the next one fades in). It feels like an app, not a static website.
+
+### 4. Interactions
+
+- **Menus**: open with a smooth radial or vertical animation (not an "instant pop")
+- **Tooltips**: appear with scale 0.95 → 1 + fade
+- **Cards on hover**: lift with shadow + subtle scale 1.02
+- **Forms**: animated focus rings, errors that slide-in
+
+### 5. Micro-interactions
+
+- Heart icon that beats when you activate it
+- Counter that counts upward instead of appearing at the final number
+- Progress bars that fill smoothly
+- Skeleton loaders instead of generic spinners
+
+---
+
+## The secret of timing
+
+What separates amateur animation from professional **isn't the quantity** — it's the **timing**:
+
+| Aspect | Amateur | Professional |
+|---------|---------|-------------|
+| Hover duration | 50ms or 500ms | **150-200ms** |
+| Curve | `linear` or default `ease` | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| Stagger between items | no delay or 500ms | **50-100ms** |
+| Page transitions | 1 second+ | **300-400ms** |
+| Spring vs linear | always one | depends on the case |
+
+Emil's skill puts these values in by default. It saves you **years of learning motion design**.
+
+---
+
+## Use cases
+
+### 1. Premium landing for SaaS
+
+```
+> Landing page for a B2B SaaS "Inventory pro" (inventory management).
+  Audience: founders/COOs of mid-sized retail.
+
+  Aesthetic: professional but MODERN. NOT the typical boring blue SaaS.
+
+  Animations:
+  - Hero: typewriter effect on the headline
+  - Features section: cards appear with stagger on scroll
+  - Numbers: counters that count up when seen
+  - CTA: subtle pulsing that draws attention without being intrusive
+```
+
+### 2. Creative's portfolio
+
+```
+> My portfolio as a motion designer.
+
+  Aesthetic: minimal + brutal + VIBRANT color accent.
+
+  Animations:
+  - Each project: hover with a short video preview
+  - Scroll: subtle parallax on images
+  - Page transitions: morph between pages (advanced)
+  - Custom cursor: cursor that follows the mouse with delay
+```
+
+### 3. App marketing site
+
+```
+> Marketing site for a mobile fitness app.
+
+  Aesthetic: energetic + motivational + bright colors.
+
+  Animations:
+  - Phone mockups: scroll-controlled (3D parallax)
+  - Stats: bars that fill when they appear
+  - Testimonials: carousel with auto-play + drag
+  - Download buttons: subtle bounce on hover
+```
+
+### 4. Interactive documentation
+
+```
+> Docs site for my JS utils library.
+
+  SUBTLE animations (they don't distract from the content):
+  - Sidebar items with a smooth highlight
+  - Code examples with a copy button that confirms
+  - Search opens with a fast fade
+  - Skeleton loaders while search loads
+```
+
+---
+
+## Anti-patterns
+
+### 1. Animating everything
+
+If **everything** moves, **nothing draws attention**. Animate what needs feedback (clicks, scroll), leave passive content still.
+
+### 2. Long durations
+
+500ms for hover feels slow and breaks the flow. **150-200ms** is the sweet spot. When in doubt, make it faster.
+
+### 3. Loop animations in the hero
+
+Constant loops (bouncing arrows, pulsing borders for no reason) **distract from the real CTA**. Use animations that **end** (one-shot when entering the viewport).
+
+### 4. No respect for `prefers-reduced-motion`
+
+Some users disable animations due to vestibular sensitivity. **Respect** the media query. The 3 skills handle it by default, but verify.
+
+### 5. Ignored performance
+
+Animating `width`/`height` causes reflow. Animate `transform` and `opacity`. If your animation lags on mobile, it doesn't add anything — it just annoys.
+
+---
+
+## Powerful combinations
+
+### With Playwright (from [claude-disenador-web](/boveda/claude-disenador-web))
+
+```
+> After generating the animations, open with Playwright,
+  record a 5s video of the full scroll, evaluate the timing and
+  the smoothness. If something looks off, adjust it.
+```
+
+Claude sees its own animations and fixes them.
+
+### With Brand Guidelines
+
+If your brand has a **defined personality** (energetic, calm, formal), the animations should respect it:
+
+```
+> Load the brand pack. The animations should respect the
+  brand personality: [energetic/subtle/formal].
+```
+
+[5 marketing skills](/boveda/cinco-habilidades-marketing) → Brand Guidelines.
+
+### With Code Simplifier
+
+Animations sometimes pull in **heavy dependencies** (Framer Motion + GSAP). Code Simplifier (in [Claude factory to pro](/boveda/claude-fabrica-a-pro)) trims what you don't need.
+
+---
+
+## Publishing your work
+
+Once your page is ready, **publish it**:
+
+```
+> Create a GitHub repository for this project and push all
+  the code.
+```
+
+Then on `vercel.com`:
+1. Log in with GitHub
+2. Add New Project → select your repo
+3. Deploy
+
+5 minutes and you have a public URL with your animated page live.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|-------|
+| Very formal enterprise app | Excessive animations look unprofessional |
+| Mobile-first with critical perf | Heavy animations kill performance |
+| Older audience / high accessibility | Risk of vestibular discomfort |
+| Deliberately boring technical product (CLI, terminal-like) | The product's charm is the "no design" |
+
+---
+
+## Next steps
+
+- For the full web design suite with a real browser, [Claude web designer](/boveda/claude-disenador-web)
+- For the suite of 5 official design skills, [5 design skills](/boveda/5-skills-diseno-claude)
+- For a simple landing without complex animation, [Claude Web Builder](/boveda/claude-web-builder)

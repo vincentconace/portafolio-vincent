@@ -1,0 +1,152 @@
+---
+title: "Plugins Plus Skills — 340 plugins + 1367 skills con package manager propio"
+description: "El marketplace más grande del catálogo: 1.7k⭐, 340 plugins y 1367 agent skills mantenidos por jeremylongshore. Incluye CCPI (package manager), tutoriales interactivos y packs verticales por proveedor."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["40-skills-claude", "agency-agents", "5-claude-skills-necesarias"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-code-plugins-plus-skills"
+github: "https://github.com/jeremylongshore/claude-code-plugins-plus-skills"
+---
+
+## Qué es
+
+Es, sin discusión, el marketplace más grande del ecosistema Claude Code: 340 plugins + 1367 skills, mantenido por Jeremy Longshore. La estrategia es distinta a otros marketplaces: en vez de un catálogo plano, tiene un package manager propio (CCPI), tutoriales interactivos y **packs verticales por proveedor** — Supabase, Vercel, Sentry, Mistral, Linear, Clay, Customer.io, etc., cada uno con 24-30 skills cubriendo su API entera.
+
+La curva de adopción importa: instalar todo es absurdo. Lo lógico es elegir 1-2 vertical packs (los proveedores que usás) y 3-5 plugins horizontales según el rol que jugás.
+
+Tiene de todo: API tools (rate limiter, JWT auth, mock server, SDK generator), database (migrations, sharding, indexes, ORM), security (OWASP, SOC2, HIPAA, PCI DSS), ML/AI (model training, hyperparameter tuning, RAG), crypto/DeFi (un pack entero), DevOps, IaC, ML pipelines.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | jeremylongshore |
+| Stars | 1.7k |
+| Tipo | Marketplace gigante (340 plugins) |
+| Componentes | 1367 skills, 50 commands, 2 agents |
+| Package manager | CCPI |
+| Marketplace | `jeremylongshore/claude-code-plugins-plus-skills` |
+| Web | [tonsofskills.com](https://tonsofskills.com) |
+
+### Vertical packs por proveedor (24-30 skills cada uno)
+
+| Pack | Cubre |
+| --- | --- |
+| `supabase-pack` | Auth, DB, storage, realtime, edge functions, prod ops |
+| `vercel-pack` | Deployments, edge functions, preview envs, perf |
+| `clay-pack` | Data enrichment, waterfall workflows, GTM automation |
+| `cursor-pack` | AI code editing, composer, indexing |
+| `exa-pack` | Neural search, semantic retrieval, web search API |
+| `firecrawl-pack` | Web scraping, markdown conversion, LLM-ready extraction |
+| `klingai-pack` | Video gen, text-to-video, image-to-video |
+| `openrouter-pack` | LLM routing, model selection, multi-provider |
+| `perplexity-pack` | AI search, real-time answers, citations |
+| `replit-pack` | Cloud IDE, deploys, collaborative |
+| `retellai-pack` | Voice agents, phone automation |
+| `sentry-pack` | Error monitoring, performance, session replay |
+| `windsurf-pack` | AI editing, Cascade workflows |
+| `coderabbit-pack` | AI code review, PR automation |
+| `posthog-pack` | Product analytics, feature flags, session replay |
+| `mistral-pack` | LLM inference, embeddings, fine-tuning |
+| `linear-pack` | Issues, project management |
+| `databricks-pack` | Delta Lake, MLflow, Spark |
+| `langchain-pack` | Chains, agents, RAG, memory |
+| `langfuse-pack` | LLM observability |
+| `groq-pack` | LPU inference ultra-rápida |
+| `customerio-pack` | Email, SMS, push, customer journeys |
+| `clerk-pack` | Auth, user management, embeddable UIs |
+| `apollo-pack` | Sales engagement, prospecting |
+| `instantly-pack` | Cold email, outreach |
+| ...y más | Deepgram, Granola, Gamma, Lindy, Ideogram, Juicebox, Vast.ai, Replit, etc. |
+
+### Plugins horizontales más útiles
+
+- `pi-pathfinder` — Meta-plugin: encuentra el plugin correcto para tu tarea automáticamente.
+- `creator-studio-pack` — 20 plugins para builder-filmmakers (docs + video + content)
+- `overnight-dev` — Corre Claude autónomo 6-8 hs con git hooks que enforce TDD
+- `sprint` — Multi-agent autonomous framework con spec-driven sprints
+- `geepers-agents` — 51 agents especializados con orquestadores
+- `domain-memory-agent` — Knowledge base con TF-IDF semantic search
+
+## Cómo se instala
+
+```bash
+# 1) Marketplace
+/plugin marketplace add jeremylongshore/claude-code-plugins-plus-skills
+
+# 2) Vertical packs del stack que usás
+/plugin install supabase-pack@jeremylongshore-claude-code-plugins-plus-skills
+/plugin install vercel-pack@jeremylongshore-claude-code-plugins-plus-skills
+
+# 3) Un meta-plugin para no perderte
+/plugin install pi-pathfinder@jeremylongshore-claude-code-plugins-plus-skills
+```
+
+O `/plugin` → Discover.
+
+Para que Claude curate por vos:
+
+```
+Instalé el marketplace jeremylongshore/claude-code-plugins-plus-skills. Mi stack
+es [tu stack: Next.js + Supabase + Vercel + Sentry + Linear, por ejemplo].
+De los 340 plugins, recomendame 4-5 vertical packs + 3-5 horizontales
+para mi setup específico.
+```
+
+## Qué podés hacer con esto
+
+### Cubrir tu stack entero con vertical packs
+
+Si tu stack es Next.js + Supabase + Vercel + Sentry, instalás esos cuatro packs y cubrís ~100 skills específicas. Sin tener que aprender vos las APIs de cada proveedor — Claude las trae cargadas.
+
+### Encontrar el plugin correcto sin curiosear
+
+`pi-pathfinder` analiza la tarea que pediste y elige el mejor plugin de los 340. Es la respuesta al problema "hay tantas opciones que no sé cuál usar".
+
+### Dejar Claude corriendo de noche
+
+`overnight-dev` configura git hooks que fuerzan TDD durante una corrida autónoma de 6-8 horas. Te despertás con features implementadas y testeadas — o con un PR limpio sin merge si algo falló.
+
+### Spec-driven sprints multi-agent
+
+`sprint` es un framework autonomous: escribís el spec, corrés `/sprint`, y agents coordinados (backend, frontend, QA, UI testing) implementan con loops convergentes auto-iterativos. Más estructurado que [`/goal`](/boveda/goal-claude-code) o [`next-task`](/boveda/codex-plugin-hack).
+
+### Multi-agent serio con `geepers-agents`
+
+51 agents especializados con orquestadores específicos (checkpoint, deploy, quality, fullstack, research, games, web, python). Para equipos que quieren simular un studio.
+
+## Beneficios reales
+
+- **Cobertura horizontal y vertical** — única en el ecosistema.
+- **Package manager propio (CCPI)** que escala mejor que `/plugin install` uno por uno cuando llegás a 20+ plugins.
+- **Vertical packs reales** — no son listas de skills sueltas, vienen organizadas y testeadas para cada proveedor.
+- **`pi-pathfinder`** como meta-discovery — resuelve el problema de "tengo 340 plugins, no sé cuál usar".
+- **Tutoriales interactivos** y patrones de orquestación documentados.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **No instales todo:** vas a tener 1367 skills cargadas y tu Claude no va a entender qué activar. Empezá con el vertical pack de UN proveedor + `pi-pathfinder`.
+- **Si tu stack es muy nicho** y los vertical packs no lo cubren, el valor cae. Mirá la lista antes.
+- **Calidad variable entre los plugins horizontales:** los packs verticales son más cuidados, los plugins horizontales (especialmente los "Jeremy" autogenerados) varían.
+- **Solapamiento con otros marketplaces:** los packs verticales son únicos, pero los plugins horizontales se cruzan con `buildwithclaude`, `alirezarezvani/claude-skills`, etc.
+- **Costo de tokens** con `geepers-agents` y `sprint` corriendo agents en paralelo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Claude Code Plugins Plus Skills](https://www.aitmpl.com/plugins/claude-code-plugins-plus-skills) — listado completo (largo).
+- **Repo en GitHub:** [jeremylongshore/claude-code-plugins-plus-skills](https://github.com/jeremylongshore/claude-code-plugins-plus-skills) — código, issues, CCPI.
+- **Web oficial:** [tonsofskills.com](https://tonsofskills.com) — search, tutoriales.
+
+## Recursos relacionados
+
+- [40 Skills de Claude](/boveda/40-skills-claude) — un set mucho más chico y curado para arrancar si los 1367 te asustan.
+- [Agency Agents](/boveda/agency-agents) — para entender la diferencia entre los agents de `geepers-agents` y los del catálogo.
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — el set mínimo que conviene tener junto con un vertical pack acá.

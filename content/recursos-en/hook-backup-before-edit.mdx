@@ -1,0 +1,93 @@
+---
+title: "Hook Backup Before Edit — timestamped backup before every edit"
+description: "Hook with 396 installs. Before every Edit, it creates an automatic backup of the file with the format `filename.backup.timestamp`. The safety net for when Claude edits and you want to undo it fast."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-ai-bash-guard", "claude-code-best-practices", "plugin-claude-forge"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/pre-tool/backup-before-edit"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/backup-before-edit.json"
+---
+
+## What it is
+
+Before Claude modifies a file with Edit, this hook creates a copy with the format `filename.backup.<timestamp>`. If the edit goes wrong, you restore it by copying the backup back over the file.
+
+It's the basic safety net for sessions where you don't want to rely solely on git (which requires a commit before the change in order to restore) or on Cmd+Z (which only works in the current editor).
+
+Hook event: `PreToolUse` (Edit).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `pre-tool` |
+| Installs | 396 |
+| Hook event | `PreToolUse` (Edit) |
+| Output | `filename.backup.<timestamp>` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook pre-tool/backup-before-edit
+```
+
+For Claude:
+
+```
+I installed the pre-tool/backup-before-edit hook. Try it out: edit any
+file and then list the backups created with `ls *.backup.*`.
+```
+
+## What you can do with this
+
+### Quick restore without git
+
+Claude edited something and the result is worse than before. You restore with `cp filename.backup.TIMESTAMP filename`. No need to remember which commit to go back to.
+
+### Easy before-and-after
+
+`diff filename.backup.TIMESTAMP filename` shows you exactly what changed. Useful for auditing what Claude did.
+
+### Coverage when git isn't enough
+
+If you're going to make 20 changes in a session, you don't want to commit each one. The backups cover the intermediate points.
+
+### Periodic cleanup
+
+Backups pile up. It's worth having a periodic cleanup script (delete backups older than N days) or adding them to `.gitignore`.
+
+### Combo with [AI Bash Guard](/boveda/hook-ai-bash-guard)
+
+Defense in depth: AI Bash Guard blocks destructive commands; this hook makes a backup if any edit gets through.
+
+## Prerequisites
+
+- **Claude Code** with hooks enabled
+- **Disk space** — backups add up if you edit a lot
+- **Edits via the Edit tool**
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you version everything in git:** git already gives you history. The hook duplicates it.
+- **For huge files:** backing up 100MB files on every edit fills the disk fast.
+- **For clean projects:** the backups create clutter. Add them to `.gitignore` (`*.backup.*`).
+- **If you're going to show the directory to others:** timestamped backups look ugly. Consider moving them to `.backups/` (if the implementation allows it).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Backup Before Edit Hook](https://www.aitmpl.com/component/hooks/pre-tool/backup-before-edit) — exact command.
+- **JSON config:** [backup-before-edit.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/backup-before-edit.json).
+
+## Related resources
+
+- [AI Bash Guard Hook](/boveda/hook-ai-bash-guard) — defense in depth: blocks destructive commands + backs up on edits.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices for safe agentic sessions.
+- [Claude Forge](/boveda/plugin-claude-forge) — a framework with 6 security layers that includes similar patterns.

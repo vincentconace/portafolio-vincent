@@ -1,0 +1,103 @@
+---
+title: "MCP Jina AI — web reading, search, grounding y fact-checking"
+description: "MCP server oficial de Jina AI. Capabilities para leer URLs, buscar en web, hacer grounding con citations, y fact-checking. Útil para reducir hallucination y darle a Claude contexto verificado."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "jina-ai"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-context7", "mcp-firecrawl", "mcp-arxiv-mcp-server"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/jina-ai"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jina-ai.json"
+---
+
+## Qué es
+
+Jina AI es una de las empresas que más empuja en infraestructura para apps LLM-native: embeddings, reranker, web reading, grounding, fact-checking. Este MCP oficial integra varias de sus APIs a Claude Code.
+
+Las capabilities clave:
+- **Web reading** — convertir URLs a markdown limpio (similar a [Firecrawl](/boveda/mcp-firecrawl))
+- **Web search** — búsquedas con resultados estructurados
+- **Grounding** — pegar citations reales a las afirmaciones que Claude hace
+- **Fact-checking** — validar afirmaciones contra fuentes web
+
+El uso más diferenciador es **grounding**: anti-hallucination con citations verificables. Cuando importa la confianza de la respuesta (research, contenido público, documentación técnica), el MCP transforma "Claude dijo X" en "X con esta fuente que podés validar".
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 17 (recién publicado) |
+| Servidor MCP | `jina-ai` |
+| Autor | Jina AI (oficial) |
+| Cuenta requerida | Sí — Jina API key |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/jina-ai
+```
+
+Pre-requisito: API key de Jina AI.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/jina-ai. Configurá la API key y mostrame qué
+tools expone: web reading, search, grounding, fact-checking. Después
+hacé una búsqueda con grounding sobre [tema] y devolveme las
+afirmaciones con sus citations.
+```
+
+## Qué podés hacer con esto
+
+### Reducir hallucination con grounding
+
+"Respondeme con grounding activado: ¿cuáles son las features más nuevas de Postgres 17?". Claude responde citando fuentes verificables, no de memoria.
+
+### Fact-check de outputs
+
+"Para este draft de blog post, hacé fact-check de cada claim. Marcame los que no podés validar". Antes de publicar, validación.
+
+### Research con citations
+
+"Investigá el tema X y devolveme un resumen de 5 puntos, cada uno con su fuente". Útil para research que después se publica.
+
+### Web reading con calidad LLM-ready
+
+Como [Firecrawl](/boveda/mcp-firecrawl), Jina convierte URLs a markdown limpio. Comparalas según preferencia.
+
+### Pipeline anti-hallucination
+
+Combinado con [Context7](/boveda/mcp-context7) para librerías y con Jina para info general en la web, cubrís dos vectores grandes de hallucination.
+
+## Pre-requisitos
+
+- **Cuenta Jina AI** con API key
+- **Conexión a internet** (todo pasa por sus APIs)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para info offline o privada:** Jina indexa web público. Tu wiki interno no aplica.
+- **Costos:** algunas APIs cobran por uso. Mirá pricing antes de batchear.
+- **Solo 17 installs:** comunidad probando reducida. Probá en sandbox primero.
+- **Si ya usás [Firecrawl](/boveda/mcp-firecrawl)** para web reading: hay overlap. Probá uno antes de adoptar ambos.
+- **Para grounding sobre tu data privada:** Jina no llega. Mirá RAG propio.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Jina AI MCP](https://www.aitmpl.com/component/mcps/devtools/jina-ai) — comando exacto.
+- **Config JSON:** [jina-ai.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jina-ai.json).
+- **Jina AI oficial:** [jina.ai](https://jina.ai) — API keys, docs, pricing.
+
+## Recursos relacionados
+
+- [Context7 MCP](/boveda/mcp-context7) — para anti-hallucination específica de docs de librerías. Combinalos.
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — alternativa de web reading. Compará pricing y output.
+- [arXiv MCP Server](/boveda/mcp-arxiv-mcp-server) — para grounding sobre papers académicos específicamente.

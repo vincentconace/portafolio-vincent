@@ -1,0 +1,110 @@
+---
+title: "MCP Stripe — la API de Stripe para AI agents (323 installs)"
+description: "MCP server oficial de Stripe. Interfaz directa para que Claude opere Stripe API: customers, charges, subscriptions, products. Ideal para apps que viven en Stripe + querés AI orquestando billing."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "stripe"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["agente-pagokit", "plugin-mercadopago-claude-marketplace", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/stripe"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/stripe.json"
+---
+
+## Qué es
+
+Stripe es el procesador de pagos más usado para apps internacionales. Este MCP **oficial** de Stripe le da a Claude acceso a la API completa: customers, charges, subscriptions, products, invoices, webhooks, payment intents.
+
+Útil para:
+- Apps que viven en Stripe y querés ops automatizadas
+- Debugging de pagos fallidos
+- Generación de reports custom
+- Soporte de cliente asistido (buscar charges, refunds, etc.)
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 323 |
+| Servidor MCP | `stripe` |
+| Autor | Stripe (oficial) |
+| Cuenta requerida | Sí — Stripe + Secret key |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/stripe
+```
+
+Pre-requisito: cuenta Stripe + Secret key (`sk_live_...` o `sk_test_...`).
+
+Para Claude:
+
+```
+Instalé el MCP devtools/stripe. Configurá STRIPE_SECRET_KEY (modo test
+por ahora). Listame los últimos 20 customers creados con sus datos
+básicos. Después mostrame el MRR actual.
+```
+
+## Qué podés hacer con esto
+
+### Customer support asistido
+
+"El customer con email X reporta que el cobro de hoy le falló. Buscame su charge, dame status y razón del fallo. Si conviene, hacé un retry o ofrecele método alternativo".
+
+### Reporting custom
+
+"Mostrame el MRR del último mes desglosado por plan. Compará vs mes anterior. Identificá churn por reason (failed payment, customer cancelled, etc.)".
+
+### Debugging de webhooks
+
+"Listame eventos webhook que fallaron en las últimas 24h. Para cada uno, dame el event_id y status. Identificá si hay un patrón".
+
+### Setup de products / subscriptions
+
+"Creame un nuevo product `Premium Plan` con price $49/mes USD recurring. Creame un coupon `BLACK-2026` de 30% off, válido un mes". Operaciones de billing programáticas.
+
+### Análisis de churn
+
+"De los customers que cancelaron este mes, dame patrón común: ¿cuántos días estuvieron suscritos? ¿qué plan tenían? ¿hay overlap con un cohort específico?".
+
+### Refunds asistidos
+
+"Refundeame el charge X parcial — solo $50 de los $200. Agregame nota interna sobre por qué se hizo el refund".
+
+### Compatibility con [Agente PagoKit](/boveda/agente-pagokit)
+
+Si ya usaste Agente PagoKit (el plugin de Nucleo) para setup, este MCP agrega ops runtime sobre lo que ya construiste.
+
+## Pre-requisitos
+
+- **Cuenta Stripe** con plan apto
+- **Secret key** — preferentemente test al principio (`sk_test_...`)
+- **Webhooks configurados** si querés operar sobre ellos
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="CRÍTICO antes de habilitar con live key">
+
+- **Operaciones con plata real:** charge, refund, delete subscription. Usar live key sin hooks de aprobación es **muy peligroso**. Para producción, **siempre** hooks de confirmación humana.
+- **Test key primero:** arrancá con `sk_test_` para experimentar. No subas a live hasta entender todo.
+- **Secret key en plain:** trátala como credencial bancaria. Vault, no .env commited.
+- **Compliance PCI:** algunas operaciones requieren handling especial. El MCP no te exime.
+- **Si vendés en LATAM:** [Mercado Pago MCP](/boveda/plugin-mercadopago-claude-marketplace) puede ser mejor opción por métodos locales.
+- **Prompt injection:** si Claude lee contenido externo que contiene instrucciones de cobrar, podría ejecutarlas. Hooks de validación.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Stripe MCP](https://www.aitmpl.com/component/mcps/devtools/stripe) — comando exacto.
+- **Config JSON:** [stripe.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/stripe.json).
+- **Stripe API docs:** [stripe.com/docs/api](https://stripe.com/docs/api).
+
+## Recursos relacionados
+
+- [Agente PagoKit](/boveda/agente-pagokit) — el plugin de Nucleo para scaffolding de pagos (Stripe + Mercado Pago + más).
+- [Mercado Pago MCP](/boveda/plugin-mercadopago-claude-marketplace) — para LATAM y métodos locales.
+- [All Deploy](/boveda/all-deploy) — para publicar apps con Stripe configurado.

@@ -1,0 +1,118 @@
+---
+title: "MCP PostgreSQL Integration — el MCP de DB más adoptado (3,214 installs)"
+description: "MCP server con 3,214 installs — el #1 absoluto de la categoría database. Conexión a Postgres para queries avanzadas, ops enterprise y gestión completa. El default cuando trabajás con Postgres."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "postgresql"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-pg-aiguide", "mcp-neon", "mcp-postgresql-documentation"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/postgresql-integration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/postgresql-integration.json"
+---
+
+## Qué es
+
+Es **el** MCP de Postgres a usar por default. 3,214 installs lo hacen el #1 absoluto de la categoría `database` — muy por encima de MySQL (1,081), MongoDB (319), Neon (208).
+
+Capabilities:
+- **Connection** a cualquier Postgres (local, cloud, Atlas)
+- **Queries avanzadas** con full SQL support
+- **Schema management** (DDL ops)
+- **Enterprise ops** (replication info, slow queries, perf)
+
+Para shops con Postgres serio, es la base. Combinalo con [pg-aiguide](/boveda/plugin-pg-aiguide) (que suma skills + docs) para tener todo el stack.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | **3,214 (top absoluto de database)** |
+| Servidor MCP | `postgresql` |
+| Soporte | Cualquier Postgres alcanzable |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/postgresql-integration
+```
+
+Pre-requisito: connection string + credenciales correctas.
+
+Para Claude:
+
+```
+Instalé el MCP database/postgresql-integration. Configurá DATABASE_URL.
+Listame los schemas y tablas. Para `users`, mostrame el schema completo
+con tipos, constraints y índices.
+```
+
+## Qué podés hacer con esto
+
+### Exploración profunda de schema
+
+"Mapeame todas las tablas, sus columnas con tipos exactos, FKs, índices y constraints. Identificá tablas con más de 50 columnas (probable candidato a normalizar)".
+
+### Queries en lenguaje natural
+
+"Top 10 clientes por revenue Q1, con count de pedidos y avg ticket. Ordeñame por revenue desc".
+
+### Performance debugging
+
+"Mostrame las queries más lentas usando `pg_stat_statements`. Para las top 5, dame el plan de ejecución y sugerí índices que ayuden". Performance analysis serio.
+
+### Análisis de uso de índices
+
+"Identificá índices que no se usaron en los últimos 30 días según `pg_stat_user_indexes`. Candidatos a eliminar".
+
+### Migration assistant
+
+"Generame el script de migration para agregar `tenant_id uuid` a 12 tablas. Incluí backfill desde la columna `org_slug` con lookup". Con preview del SQL.
+
+### Audit de data
+
+"Verificá unique constraint en `users.email`. Si hay duplicados (e.g., case-insensitive), mostrame".
+
+### Bulk operations
+
+"En `products`, actualizame los precios sumándoles 15% para la categoría X. Mostrame el COUNT antes de aplicar y pidan confirmación".
+
+### Combinado con [pg-aiguide](/boveda/plugin-pg-aiguide)
+
+pg-aiguide hace que Claude escriba mejor SQL. Este MCP ejecuta. Combo natural.
+
+### Combinado con [Neon](/boveda/mcp-neon)
+
+Si tu Postgres es Neon, podés combinar: este MCP para queries; Neon MCP para cluster management (branches, projects).
+
+## Pre-requisitos
+
+- **Connection string** válida (`postgresql://user:pass@host:port/db`)
+- **Credenciales** con permisos apropiados
+- **Network access** a tu Postgres
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de conectar Claude a Postgres de producción">
+
+- **Operaciones destructivas:** `DROP TABLE`, `DELETE` sin WHERE, `TRUNCATE`. Hooks de aprobación SIEMPRE en prod.
+- **Permisos amplios:** un user con superuser hereda todo. Restringí a SELECT-only para exploración primera.
+- **Queries gigantes:** sin LIMIT, podés volcar millones de rows a Claude. Limitá siempre.
+- **Schema changes (DDL) en prod:** `ALTER TABLE` en tablas grandes pueden lockear. Validá strategy primero.
+- **Connection strings con secrets:** trátalo como credentials sensibles, no hard-code.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [PostgreSQL Integration MCP](https://www.aitmpl.com/component/mcps/database/postgresql-integration) — comando exacto.
+- **Config JSON:** [postgresql-integration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/postgresql-integration.json).
+- **Postgres docs:** [postgresql.org/docs](https://www.postgresql.org/docs/).
+
+## Recursos relacionados
+
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — para que Claude escriba mejor Postgres. Combo natural.
+- [Neon MCP](/boveda/mcp-neon) — si tu Postgres es Neon. Para ops de cluster (branches).
+- [PostgreSQL Documentation MCP](/boveda/mcp-postgresql-documentation) — para que Claude consulte docs cuando duda.

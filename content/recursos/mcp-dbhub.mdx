@@ -1,0 +1,109 @@
+---
+title: "MCP DBHub — un MCP para Postgres, MySQL, MariaDB, SQL Server y SQLite"
+description: "MCP server zero-dependency y token-efficient que soporta PostgreSQL, MySQL, MariaDB, SQL Server y SQLite con la misma API. El 'mcp universal' de bases relacionales para Claude Code."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "postgresql", "mysql"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-pg-aiguide", "anatomia-claude", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/dbhub"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/dbhub.json"
+---
+
+## Qué es
+
+DBHub es el "MCP universal" para bases relacionales. En vez de instalar un MCP distinto para Postgres, otro para MySQL, otro para SQL Server, este servidor único soporta los cinco motores principales con la misma interfaz.
+
+Los selling points del autor:
+- **Zero-dependency** — el server no arrastra deps pesadas.
+- **Token-efficient** — los outputs son compactos. Importante porque queries que devuelven 1000 filas pueden quemar la ventana de contexto.
+- **Multi-engine** — PostgreSQL, MySQL, MariaDB, SQL Server, SQLite.
+
+Útil si tu stack tiene varias bases distintas (lo común en empresas que crecieron por compra o legado). En vez de mantener 4 MCPs, mantenés uno.
+
+Para Postgres puro, [pg-aiguide](/boveda/plugin-pg-aiguide) tiene más expertise específica. DBHub es la opción horizontal.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | 22 |
+| Servidor MCP | `dbhub` |
+| Motores soportados | PostgreSQL, MySQL, MariaDB, SQL Server, SQLite |
+| Características | Zero-dependency, token-efficient |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/dbhub
+```
+
+Pre-requisito: connection string del motor que vayas a usar.
+
+Para Claude:
+
+```
+Instalé el MCP database/dbhub. Mi DB es [PostgreSQL / MySQL / etc.] en
+[host]. Setemos la connection y mostrame las tablas que existen,
+agrupadas por schema.
+```
+
+## Qué podés hacer con esto
+
+### Exploración inicial de un schema
+
+"Mapeame todas las tablas, sus columnas y las foreign keys. Identificá la tabla central y las relacionadas". Onboarding rápido a una DB ajena.
+
+### Queries ad-hoc en lenguaje natural
+
+"Buscame los 10 usuarios con más pedidos en el último mes que no compraron en los últimos 30 días". Claude traduce a SQL y ejecuta.
+
+### Análisis de performance
+
+"Mostrame las 20 queries más lentas según `pg_stat_statements` (si Postgres) o el equivalente en mi motor". DBHub conoce las peculiaridades de cada motor.
+
+### Migration helper
+
+"Tengo esta tabla en MySQL. Generame el script CREATE TABLE equivalente para Postgres respetando los tipos y constraints". Útil cuando migras motores.
+
+### Validación de datos
+
+"Verificá que el constraint `unique(email)` en la tabla `users` no esté violado por NULLs duplicados". Tareas de data hygiene que serían varios queries.
+
+### Comparado con [pg-aiguide](/boveda/plugin-pg-aiguide)
+
+DBHub es horizontal: cubre 5 motores con interfaz común. pg-aiguide es vertical: solo Postgres pero con expertise profundo (extensions, planner hints, idiomática de Postgres avanzada).
+
+Para una shop pure-Postgres: pg-aiguide es mejor. Para shop con varios motores: DBHub.
+
+## Pre-requisitos
+
+- **Connection string** válida al motor target
+- **Credenciales con permisos correctos** (read-only para exploración; write para mutations)
+- **Node.js + Claude Code** funcionando
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de conectar Claude a una DB de producción">
+
+- **Operaciones destructivas sin gate:** `DELETE`, `UPDATE`, `TRUNCATE` ejecutados por error son catastróficos. Para prod, **siempre** hooks de aprobación.
+- **Connection strings con permisos amplios:** usá credentials read-only para exploración. Solo subí permisos cuando explícitamente necesitás escribir.
+- **Si tu DB es NoSQL** (Mongo, DynamoDB, Cassandra): este MCP no aplica. Otros MCPs específicos.
+- **Para Postgres avanzado:** [pg-aiguide](/boveda/plugin-pg-aiguide) tiene más capacidades específicas (extensions, query planner profundo).
+- **Token efficiency tiene límite:** queries que devuelven 100k filas igual van a romper. Limitá con `LIMIT` en tus preguntas.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [DBHub MCP](https://www.aitmpl.com/component/mcps/database/dbhub) — comando exacto.
+- **Config JSON:** [dbhub.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/dbhub.json) — definición.
+
+## Recursos relacionados
+
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — para Postgres serio con expertise vertical de Timescale.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar DBHub como conector externo (no skill ni agent).
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que usen DBHub en flujos de migración o análisis.

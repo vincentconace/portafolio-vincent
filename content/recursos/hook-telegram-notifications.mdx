@@ -1,0 +1,89 @@
+---
+title: "Hook Telegram Notifications — aviso minimal a Telegram cuando termina (695 installs)"
+description: "Hook con 695 installs. Versión minimal: notification al Telegram cuando Claude o un subagent terminan. Requiere TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "telegram"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-telegram-detailed-notifications", "hook-telegram-error-notifications", "hook-discord-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/telegram-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-notifications.json"
+---
+
+## Qué es
+
+La versión minimal del pipeline Telegram. Cuando Claude o un subagent terminan, manda mensaje sin detalle.
+
+Hook events: `Stop` + `SubagentStop`.
+
+Pre-requisitos:
+- `TELEGRAM_BOT_TOKEN` (via @BotFather)
+- `TELEGRAM_CHAT_ID`
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 695 |
+| Hook events | `Stop` + `SubagentStop` |
+| Requiere | Telegram bot + chat ID |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/telegram-notifications
+```
+
+Configurá:
+
+```bash
+export TELEGRAM_BOT_TOKEN="..."
+export TELEGRAM_CHAT_ID="..."
+```
+
+## Qué podés hacer con esto
+
+### Aviso al celular
+
+Telegram tiene la mejor mobile UX. Notification al cel cuando termina.
+
+### Personal channel
+
+Bot privado con vos mismo = canal de tracking sin team.
+
+### Subagent completions
+
+Si tu workflow lanza subagents, cada uno te avisa.
+
+### Comparado con alternativas
+
+| Hook | Detalle |
+| --- | --- |
+| **Telegram Notifications (este)** | Minimal |
+| [Telegram Detailed](/boveda/hook-telegram-detailed-notifications) | Con context |
+| [Telegram Error](/boveda/hook-telegram-error-notifications) | Solo problems |
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin Telegram:** usá Slack/Discord variants.
+- **Sin bot setup:** no funciona.
+- **Para sesiones cortas frecuentes:** saturación.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Telegram Notifications Hook](https://www.aitmpl.com/component/hooks/automation/telegram-notifications) — comando exacto.
+- **Config JSON:** [telegram-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-notifications.json).
+- **Telegram BotFather:** Buscá @BotFather en Telegram.
+
+## Recursos relacionados
+
+- [Telegram Detailed Notifications Hook](/boveda/hook-telegram-detailed-notifications) — con context.
+- [Telegram Error Notifications Hook](/boveda/hook-telegram-error-notifications) — solo problems.
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — equivalente Discord.

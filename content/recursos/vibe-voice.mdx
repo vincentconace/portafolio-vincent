@@ -1,0 +1,253 @@
+---
+title: "Vibe Voice — transcripción gratis 50+ idiomas con Microsoft + Claude"
+description: "Sistema de voz de Microsoft (38k+ ★) que transcribe cualquier audio/video gratis en 50+ idiomas con identificación de hablantes y timestamps. 60 min de audio por pasada. Después Claude lo convierte en resumen, guion viral, análisis o documento. Mata las apps de transcripción paid."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "microsoft"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["microsoft-markitdown", "editor-pro-max", "investigador-automatico"]
+---
+
+## Qué es
+
+Sistema de IA de voz **open source de Microsoft**. Reconocimiento de voz (ASR) + síntesis (TTS).
+
+Lo que nos importa: **transcripción automática**. Le pegás cualquier audio o video — junta, podcast, video TikTok, llamada de ventas — y saca el texto completo con:
+
+- **Identificación de hablantes** (quién dijo qué)
+- **Timestamps**
+- **50+ idiomas** soportados
+- Corre en tu compu, **gratis**
+
+Repo: `microsoft/VibeVoice`. 38k+ estrellas.
+
+| Métrica | Valor |
+|---------|-------|
+| Idiomas | 50+ |
+| Audio por pasada | 60 min |
+| GitHub stars | 38k+ |
+| Costo | Gratis (open source) |
+
+---
+
+## El combo — 3 pasos
+
+```
+1. Vibe Voice transcribe (audio → texto con speakers + timestamps)
+2. Claude procesa (resumen, guion, análisis, doc, lo que sea)
+3. Vos publicás / aplicás
+```
+
+**Mata las apps de transcripción paid** (Otter, Whisper.cpp pre-built, Descript).
+
+---
+
+## Instalación — pegale a Claude
+
+```
+Instalá Vibe Voice de Microsoft desde
+https://github.com/microsoft/VibeVoice en mi computadora.
+
+Pasos:
+1. Leé el README oficial para verificar requisitos
+2. Cloná el repo
+3. Instalá dependencias Python
+4. Descargá modelos pre-entrenados
+5. Configurá para que pueda usarlo desde Claude Code
+
+Probalo al final: pasale audio corto y mostrame la transcripción.
+
+Si algo falla durante instalación, diagnosticá y solucioná —
+NO me preguntes a menos que sea bloqueo real.
+```
+
+Claude se encarga del setup técnico.
+
+---
+
+## Casos de uso
+
+### 1. Transcribir reuniones
+
+```
+> Acá hay grabación de reunión en /audio/meeting-2026-05-28.mp4
+  (90 min, 5 participantes).
+
+  Pasos:
+  1. Vibe Voice: transcribí con speaker identification
+  2. Claude: generá:
+     - Resumen ejecutivo (1 párrafo)
+     - Decisiones tomadas (bullets)
+     - Action items con responsables
+     - Quotes destacables (3-5)
+  3. Guardá todo en /docs/meeting-notes/2026-05-28.md
+```
+
+### 2. Procesar podcasts para newsletter
+
+```
+> Acá hay 3 podcasts de mi nicho de últimos días.
+  URLs: [3 links]
+
+  Pasos:
+  1. Descargá audio
+  2. Vibe Voice transcribí cada uno
+  3. Claude: extraé las 5 ideas más interesantes por podcast
+  4. Sintetizá en un newsletter draft
+  5. Pasalo por /humanizalo
+```
+
+### 3. Convertir video de TikTok a guion replicable
+
+```
+> Vi este video viral: [URL TikTok]
+
+  1. Descargá audio
+  2. Vibe Voice transcribí
+  3. Claude: analizá la estructura del hook + cuerpo + payoff
+  4. Generá 3 variantes de guion con misma estructura pero
+     para mi nicho [TEMA]
+```
+
+### 4. Llamadas de ventas a CRM notes
+
+```
+> Llamada con cliente en /calls/cliente-X-2026-05-28.mp3
+
+  1. Vibe Voice transcribí (identificá quién es cliente vs yo)
+  2. Claude: extraé:
+     - Pain points mencionados
+     - Objeciones
+     - Próximos pasos acordados
+     - Sentiment general
+  3. Generá nota CRM lista para pegar
+```
+
+### 5. Curso de educación procesable
+
+```
+> Tomé curso online de 4 horas (4 videos).
+
+  1. Vibe Voice transcribí los 4
+  2. Claude: estructurá en:
+     - Outline del curso completo
+     - Conceptos clave (1 línea cada uno)
+     - Mis notas personales (cosas a aplicar)
+     - Quiz de autoevaluación de 10 preguntas
+
+  Guardá en mi vault de Obsidian.
+```
+
+---
+
+## Ventajas vs alternativas
+
+| Alternativa | Limitación |
+|-------------|------------|
+| **Whisper.cpp directo** | Sin speaker identification fácil |
+| **Otter** | $20+/mes, peor en idiomas no-inglés |
+| **Descript** | $30+/mes, focus en edición |
+| **Google Speech-to-Text** | Costo por uso, no on-device |
+| **YouTube auto captions** | Mala calidad fuera de inglés |
+
+Vibe Voice: **gratis + 50+ idiomas + speaker ID + on-device**.
+
+---
+
+## Limitaciones
+
+### 60 min por pasada
+
+Para audios largos (>1h), tenés que **dividir**. Claude puede automatizar:
+
+```
+> Audio largo de 3h. Vibe Voice tiene límite de 60 min.
+
+  1. Divide en 3 chunks de 60 min
+  2. Transcribí cada uno
+  3. Concatená respetando timestamps acumulados
+  4. Identificá si hubo speakers que aparecen en múltiples chunks
+```
+
+### Calidad varía por idioma
+
+- **Inglés**: excelente (99%+ accuracy en condiciones buenas)
+- **Español, francés, alemán**: muy buena (95%+)
+- **Idiomas con menos data**: variable
+
+### Audio de mala calidad
+
+Si tu audio tiene ruido fuerte / múltiples voces simultáneas / acentos muy marcados, **transcripción puede tener errores**. Para audios críticos, revisá.
+
+### GPU recomendado
+
+Para 60 min de audio, **CPU puede tardar 30-60 min**. Con GPU, 5-15 min. Si no tenés GPU, paciencia.
+
+---
+
+## Anti-patrones
+
+### 1. Procesar audio sin limpiar
+
+Si tu audio tiene ruido de fondo fuerte, **limpialo primero** (Audacity, RX). Garbage in, garbage out.
+
+### 2. No verificar speaker identification
+
+A veces Vibe Voice confunde speakers similares. **Revisá** la primera transcripción de cada nueva grabación.
+
+### 3. Esperar transcripción perfecta de jerga técnica
+
+Vibe Voice se entrenó con audio general. Para jerga muy especializada (médica, legal, técnica nicho), **revisá términos**.
+
+### 4. No usar timestamps
+
+Los timestamps son **clave** para volver al audio original si querés clip o validar. **Conservalos** aunque parezca ruido.
+
+### 5. Procesar todo en Claude sin estructurar
+
+Si pasás 30 min de transcript bruto a Claude sin pedirle structure específica, **te tira info dispersa**. Pedile output estructurado siempre.
+
+---
+
+## Combinaciones potentes
+
+### Con Editor Pro Max
+
+```
+> Tengo audio de podcast (Vibe Voice transcribió).
+> Quiero hacer Reel de 1 min con los 5 mejores momentos.
+> Usá [Editor Pro Max](/boveda/editor-pro-max) para construir
+  el video con subtítulos burned-in.
+```
+
+### Con MarkItDown
+
+```
+> Convertí transcript de Vibe Voice a Markdown limpio con
+  [MarkItDown](/boveda/microsoft-markitdown).
+> Guardá en mi vault de Obsidian.
+```
+
+### Con Stack Creator
+
+[Stack IA Creador](/boveda/stack-ai-contenido) integra Vibe Voice como pieza de transcripción → guion.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| 1-2 minutos de audio cada tanto | Más fácil transcribir manualmente |
+| Compliance estricto con audit trail | Necesitás SaaS con logs |
+| Audios super sensibles | Sin importar local, validá no leaks |
+| Sin GPU + audios largos | Paciencia o pagás Whisper API |
+
+---
+
+## Próximos pasos
+
+- Para convertir audios/PDFs/docs a Markdown universal, [Microsoft MarkItDown](/boveda/microsoft-markitdown)
+- Para video con transcripts auto, [Editor Pro Max](/boveda/editor-pro-max)
+- Para stack completo de creator que usa Vibe Voice, [Stack IA Creador](/boveda/stack-ai-contenido)

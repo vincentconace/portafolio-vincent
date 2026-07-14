@@ -1,0 +1,273 @@
+---
+title: "3 mistakes with AI — it's not the AI, it's you (the context rule)"
+description: "The 3 universal philosophical mistakes with any AI (Claude, ChatGPT, Gemini): blaming the model, assuming it knows you, jumping between models. All 3 are fixed with ONE rule: context. Five dimensions you always need to provide. A mental checklist of 7 questions before you send a prompt."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "chatgpt", "gemini"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["hablarle-a-claude", "claude-mejores-practicas", "prompting-101-anthropic"]
+---
+
+## The core idea
+
+> Zero context, dumb AI. Full context, monster AI.
+
+The 3 mistakes we all make with AI — **and why all 3 are fixed by the same rule**.
+
+---
+
+## The analogy
+
+Imagine you swap cars every time you show up late to work. You bought 3 cars, changed 4 engines, **you're still showing up late**.
+
+At some point you realize: **the problem wasn't the car**.
+
+It's the same with AI:
+- You switch models
+- You pay for another plan
+- You try another tool
+- The answer stays generic
+
+**The problem travels with you**. It's the driver, not the car.
+
+---
+
+## The 3 mistakes
+
+### Mistake 1 — You blame the AI
+
+You asked it to *"make a viral video"* and it gives you nonsense. You say the AI is **garbage**.
+
+**The model gave you exactly what you gave it**: nothing. A viral video about what? For whom? In what tone? With no info, the model **guesses** — and guesses wrong.
+
+### Mistake 2 — You assume the AI knows you
+
+The AI has access to half the internet. But it **knows nothing about you**.
+
+- Not your project
+- Not your audience
+- Not what you sell
+- Not the tone you use
+
+Assuming it knows you because "it's smart" = guaranteed disappointment.
+
+### Mistake 3 — You jump between models
+
+You ask ChatGPT for a plan, then paste it into Claude to build it out. It comes out crooked.
+
+**Each model reads differently** and fills the gaps differently. The "tone" ChatGPT assumed, Claude won't assume the same way.
+
+### The 3 are really one
+
+They look like 3 different mistakes. They're the same one: **you didn't give it context**.
+
+- You blame the model because it didn't read your mind
+- You assume it knows you because some old thread once did
+- You jump between models looking for one that guesses better
+
+All 3 are the same complaint: **"the AI didn't get it"**. The AI didn't get it because **you didn't explain it**.
+
+---
+
+## The rule — 5 dimensions of context
+
+| # | Dimension | Question |
+|---|-----------|----------|
+| 1 | **Role and project** | Who you are, what you're building |
+| 2 | **Audience** | Who this is for |
+| 3 | **What you sell or build** | The specific product/service |
+| 4 | **Current situation** | Where you stand |
+| 5 | **What you want to happen** | The expected outcome |
+
+> **If you don't hit 4 of 5, the prompt is badly written.**
+
+---
+
+## Before and after
+
+### Without context (all 5 mistakes)
+
+```
+Make me a viral video
+```
+
+Response: generic, for the "average creator". Useful to no one.
+
+### With context (5 dimensions hit)
+
+```
+You're a creative director for B2B SaaS.
+
+Me: founder of [YOUR SAAS], I sell inventory management to
+mid-sized LATAM retail (role + what I sell).
+
+Audience: COOs / ops directors at retailers with 5-50 stores
+(audience).
+
+Situation: we launched 6 months ago, $15k MRR, we want to get to
+$50k MRR (current situation).
+
+I want: 3 concepts for a 30s Reel for LinkedIn that hook this
+audience, with hooks based on their real pain points (what I
+want to happen).
+```
+
+Response: hyper-specific, actionable, useful.
+
+---
+
+## The mental checklist — 7 questions
+
+Before sending an important prompt, answer:
+
+1. Did I tell it **who I am** and what I'm building?
+2. Did I tell it **who** this is for?
+3. Did I tell it **where I stand** (current state)?
+4. Did I tell it **what I want to see in the end** (outcome)?
+5. Did I tell it **what constraints** I have?
+6. Did I tell it **the format** of the output?
+7. Did I tell it **what NOT to do**?
+
+**If you hit 3 "no" answers in a row → DON'T send it**. Rewrite it.
+
+---
+
+## Why it's not "more words"
+
+Someone can write a long paragraph and **still not be giving context** — they just repeat the request in longer sentences.
+
+**Context is the right words in the right order**: who you are, who this is for, what you're building, where you stand, what you want to see in the end.
+
+5 pieces of info. The difference between an empty prompt and a prompt that works is usually **4 sentences**.
+
+---
+
+## 3 copy-paste prompts
+
+### Template 1 — for creative tasks
+
+```
+CONTEXT:
+- I'm a [ROLE] in [INDUSTRY]
+- My product/service: [DESCRIPTION IN 1 LINE]
+- My audience: [SPECIFIC TARGET]
+- My current situation: [STATE]
+- My brand tone: [DESCRIPTION]
+
+I WANT:
+[WHAT I NEED]
+
+CONSTRAINTS:
+[WHAT NOT TO DO / LIMITATIONS]
+
+OUTPUT FORMAT:
+[HOW I WANT IT STRUCTURED]
+```
+
+### Template 2 — for technical tasks
+
+```
+TECHNICAL CONTEXT:
+- Stack: [TECH]
+- My level: [BEGINNER / INTERMEDIATE / ADVANCED]
+- Project conventions: [RULES]
+- Codebase state: [DESCRIPTION]
+
+PROBLEM:
+[WHAT I NEED]
+
+SUCCESS CRITERIA:
+[HOW I KNOW IT'S RIGHT]
+
+WHAT NOT TO DO:
+[TECHNICAL CONSTRAINTS]
+```
+
+### Template 3 — for decisions
+
+```
+SITUATION:
+[WHERE I AM]
+
+OPTIONS:
+[ALTERNATIVES I KNOW OF]
+
+FACTORS THAT MATTER TO ME:
+[WHAT WEIGHS ON THE DECISION]
+
+I'M AFRAID OF:
+[PERCEIVED RISKS]
+
+I WANT YOU TO ANALYZE:
+[WHAT SPECIFICALLY]
+```
+
+---
+
+## Anti-patterns
+
+### 1. Talking to the AI like a friend
+
+❌ "Hey, help me with this"
+✅ "You're a [ROLE]. I'm [X]. I need [Y] for [PURPOSE]"
+
+The AI isn't a friend. It's an assistant that needs a brief.
+
+### 2. Assuming continuity between chats
+
+Every NEW chat starts from scratch. If you trust that it "knows" because you talked before in another chat, **guaranteed disappointment**.
+
+### 3. Switching models when something doesn't work
+
+If it gave you a bad answer, it was probably a bad prompt. **Improve the prompt before switching models**.
+
+### 4. Expecting the model to "read between the lines"
+
+Models are literal. If you want something, **say it explicitly**. Hinting doesn't work.
+
+### 5. Ignoring the output when it's vague
+
+If the answer is generic, **it's a sign** your prompt was vague. DON'T blame the model. Re-prompt.
+
+---
+
+## Powerful combinations
+
+### With Talking to Claude
+
+[Talking to Claude](/boveda/hablarle-a-claude) breaks down the 4 elements. This page gives the **5 dimensions** that extend them.
+
+### With best practices
+
+[Claude best practices](/boveda/claude-mejores-practicas) covers when to `/clear`. This page covers what comes **before** the clear (how to prevent needing it).
+
+### With Prompting 101 Anthropic
+
+[Prompting 101](/boveda/prompting-101-anthropic) is the 10 **technical** pillars for production. This page is the **philosophical** ones for daily use.
+
+---
+
+## When this rule does NOT help you
+
+| Case | Why |
+|------|---------|
+| Super simple one-off tasks ("what time is it?") | Unnecessary overhead |
+| Exploratory brainstorming | You want the AI to propose, not answer something specific |
+| Learning (you want a general explanation) | Asking for context in order to learn is a paradox |
+
+---
+
+## The rule in one line
+
+> **The problem with AI isn't the AI. It's that you didn't explain it.**
+
+Learn this once = **it serves you forever**, no matter which model you use.
+
+---
+
+## Next steps
+
+- For the 4 specific elements of a good prompt, [Talking to Claude](/boveda/hablarle-a-claude)
+- For the rule on when to /clear, [Claude best practices](/boveda/claude-mejores-practicas)
+- For Anthropic's 10 pillars for production, [Prompting 101](/boveda/prompting-101-anthropic)

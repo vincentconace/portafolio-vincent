@@ -1,0 +1,265 @@
+---
+title: "Matt Pocock Skills — 16 'anti-vibe-coding' skills from the author of Total TypeScript"
+description: "Matt Pocock (creator of Total TypeScript, the guy who teaches TS to half the internet) released 16 skills for Claude Code that help you build seriously instead of vibe coding. The 3 stars are Grill Me, Caveman, and Diagnose. One-command install."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["trio-skills-claude-code", "spec-kit", "skills-catalogo-40"]
+---
+
+## Who Matt is and why it matters
+
+Matt Pocock is the author of **Total TypeScript** — the course that teaches TypeScript to a significant chunk of the dev community. He's a **senior engineer with recognized teaching credentials**, not an influencer.
+
+When he releases skills for Claude Code, it's worth paying attention. His philosophy is **anti-vibe-coding**:
+
+> "Most of us start coding with Claude without knowing what we want, waste tokens over-explaining, and when something breaks we guess."
+
+His 16 skills attack those 3 failures. **50k+ stars on GitHub**.
+
+---
+
+## Installation
+
+A single command:
+
+```bash
+npx skills@latest add mattpocock/skills
+```
+
+It downloads all 16 to `~/.claude/skills/`. Next Claude session, they're all available.
+
+If you only want a few specific ones:
+
+```bash
+npx skills@latest add mattpocock/skills/grill-me
+npx skills@latest add mattpocock/skills/caveman
+```
+
+---
+
+## The 3 stars
+
+### Skill 1 — Grill Me
+
+**The one that interrogates you before coding.**
+
+```
+> I want to implement auth in my app.
+> /grill-me
+
+Grill Me:
+  Before touching code, tell me:
+  - Email/password or OAuth only or both?
+  - JWT sessions or session-based?
+  - Do you need MFA?
+  - Multi-tenant (orgs) or single user?
+  - Password recovery?
+  - Magic links?
+  - Mandatory email verification?
+
+  Wait. Answer all 7.
+```
+
+At the end, **you have a written brief** that Claude uses to implement without guessing.
+
+Covered in detail in [trio of skills for Claude Code](/boveda/trio-skills-claude-code) — Grill Me is the first of the "think → plan → polish" trio.
+
+### Skill 2 — Caveman
+
+**Makes Claude answer SHORT.**
+
+The problem: by default Claude tends toward long answers with justifications, alternatives, context. For fast iterations, that **slows you down**.
+
+Caveman switches the mode:
+
+```
+> /caveman
+
+Caveman mode activated.
+
+> Is this function pure?
+
+Caveman: No. Calls Date.now().
+
+> Fix it?
+
+Caveman: Pass now as a parameter. Default Date.now() in signature.
+```
+
+**3 lines of prose → 1 line of answer**. For fast iteration sessions, it saves a ton of reading time.
+
+**Catch**: for exploratory tasks or complex decisions, "caveman" mode can leave you without context. Only turn it on for mechanical iteration.
+
+### Skill 3 — Diagnose
+
+**Structures debugging step by step.**
+
+```
+> My app throws "Cannot read property 'id' of undefined" in production
+  but not locally.
+> /diagnose
+
+Diagnose:
+  Structured debug mode activated. I'll apply a protocol:
+
+  STEP 1 — Reproduce
+  - Can you reproduce it locally? (yes/no)
+  - If not, how does prod differ from local?
+  - Do you have a full stack trace?
+
+  [You answer]
+
+  STEP 2 — Isolate
+  - On which line / function does it happen?
+  - Which variable is undefined?
+  - Where does that variable come from?
+
+  [You keep answering]
+
+  STEP 3 — Hypothesis
+  With the info, I have 3 hypotheses ordered by probability:
+  ...
+
+  STEP 4 — Validate
+  For each hypothesis, what experiment validates or rules it out.
+
+  STEP 5 — Fix
+  Once the cause is confirmed, I propose a fix.
+```
+
+A disciplined structure that avoids "I'll try random things until it works." Similar to the [systematic debugging](/boveda/prompt-debugging-sistematico) pattern.
+
+---
+
+## The other 13
+
+They cover complementary parts of the flow:
+
+| Skill | What for |
+|-------|----------|
+| **TDD** | Test-first workflow with discipline |
+| **Triage** | Classifies issues / bugs / PRs by priority |
+| **PRD** | Generates structured PRDs from a brief |
+| **Git-safe** | Pre-commit hooks that prevent common mistakes |
+| **Refactor** | Safe refactor with validation |
+| **Review** | Structured code review |
+| **Explain** | Inline code documentation |
+| **Snippet** | Reusable snippet management |
+| **Migrate** | Schema / code migrations |
+| **Audit** | Dependency / security audit |
+| **Deploy-check** | Pre-deploy checklist |
+| **Cleanup** | Dead code cleanup |
+| **Plan** | Feature planner |
+
+Some overlap with other popular skills ([code reviewer](/boveda/skill-code-reviewer), [automatic tests](/boveda/comando-tests-automaticos)). Matt's are **opinionated toward TypeScript** and "anti-vibe," which you feel when using them.
+
+---
+
+## The philosophy behind the 16
+
+Matt is a **teacher before a builder**. His skills reflect that:
+
+### 1. Anti-vibe-coding
+
+"Vibe coding" = writing code without thinking, based on feel. It usually ends badly.
+
+Matt's skills **force reflection**:
+- Grill Me forces you to define scope
+- Diagnose forces you to be methodical
+- PRD forces you to structure before implementing
+
+**It's not "less creativity" — it's more quality**.
+
+### 2. Discipline over speed
+
+In the short term, vibe coding seems faster. **In the long term it isn't**. The skills prioritize reaching the right output, not the first one.
+
+### 3. TypeScript-first but useful beyond
+
+Although they're built with TS in mind, **many work well in any stack**. Especially the 3 stars (Grill Me, Caveman, Diagnose).
+
+---
+
+## How to combine them
+
+### For a big new task
+
+```
+1. /grill-me     ← understand what to build
+2. /prd          ← formalize the spec
+3. /tdd          ← tests first
+4. [you implement]
+5. /review       ← validate what's done
+6. /deploy-check ← verify pre-deploy
+```
+
+### For debugging
+
+```
+1. /diagnose     ← structured protocol
+2. [iterate with caveman for speed]
+3. /review       ← once fixed, verify
+```
+
+### For refactoring
+
+```
+1. /audit        ← understand what can be improved
+2. /grill-me     ← confirm scope (what to refactor, what NOT)
+3. /refactor     ← apply
+4. /tdd          ← tests ensure you didn't break anything
+```
+
+---
+
+## Anti-patterns
+
+### 1. Install all 16 and use none
+
+If you install them "to have them" but keep coding vibe-style, **they add nothing**. **You have to invoke them**.
+
+### 2. Caveman for everything
+
+Caveman is excellent for iteration. But if you turn on Caveman for an architecture conversation, **you lose the explanations you needed**.
+
+### 3. Skipping Grill Me on big tasks
+
+It's the **deliberate** friction that prevents disasters. If you skip it, you lose the entire value.
+
+### 4. Expecting the skills to "make you good"
+
+The skills are guardrails. **They don't give you the craft**. If you don't know what good code is, the skills won't teach it to you — they discipline you in the process.
+
+---
+
+## Why this pack is worth more than generic skills
+
+| Generic skills | Matt Pocock |
+|------------------|-------------|
+| Designed in the abstract | Designed by someone who teaches professional engineering |
+| "Improve code" | Attack specific errors in the real workflow |
+| Multiple versions | Maintained by one person with judgment |
+| Mixed community | Curated with a clear opinion |
+
+When someone who **teaches** professional TypeScript releases skills, the opinions they reflect come from years of seeing what fails in real projects.
+
+---
+
+## When NOT to use this pack
+
+❌ You're an absolute beginner at programming (the skills assume a base)
+❌ You only write one-shot scripts (the discipline isn't justified)
+❌ You work in a non-TS stack and don't want to adapt (some assume TS)
+
+For everything else, **it's one of the highest-quality packs** available.
+
+---
+
+## Next steps
+
+- For the trio more focused on the "think → plan → polish" flow, [trio of skills for Claude Code](/boveda/trio-skills-claude-code)
+- For 40 useful skill ideas based on your role, [catalog of 40 skills](/boveda/skills-catalogo-40)
+- For the spec-first pattern Matt promotes, [spec-driven development](/boveda/spec-kit)

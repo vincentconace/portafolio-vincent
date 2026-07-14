@@ -1,0 +1,86 @@
+---
+title: "Setting Command Statusline — custom statusline via shell script"
+description: "Setting with 299 installs. Configure a custom statusline through a shell command that receives the session context via JSON stdin. For advanced users who want full control of the statusline."
+difficulty: "avanzado"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-context-monitor", "setting-colorful-statusline", "setting-bug-circus-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/command-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/command-statusline.json"
+---
+
+## What it is
+
+A setting that points the statusline to a custom shell script (`~/.claude/statusline.sh` by default). The script receives the session context via JSON stdin and returns the string to display.
+
+For anyone who wants full control: you build your own statusline with whatever info is relevant to you.
+
+The JSON stdin includes: model name, current directory, git info, etc.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 299 |
+| Setting key | `statusLine.type=command`, `statusLine.command` |
+| Default path | `~/.claude/statusline.sh` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/command-statusline
+```
+
+Then edit `~/.claude/statusline.sh` with your logic.
+
+For Claude:
+
+```
+I installed the statusline/command-statusline setting. Show me the shape
+of the JSON the script receives via stdin (model, dir, git info, etc.).
+Generate an example script that shows branch + dir + model.
+```
+
+## What you can do with this
+
+### Your own statusline
+
+You combine exactly the info you want. No gimmicks, no one else's decisions.
+
+### For teams with specific preferences
+
+Your org may have specific conventions (ticket number in the branch → show it in the statusline). A custom script makes that possible.
+
+### Mix with your tools
+
+If you have health checks for your local app, you can drop them into the statusline.
+
+### A solid starting point
+
+Other statuslines are shell scripts too. You can take [Colorful Statusline](/boveda/setting-colorful-statusline) as a base and modify it.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **For those not comfortable with shell:** maintaining the script can be friction.
+- **If the existing statuslines are enough for you:** [Context Monitor](/boveda/setting-context-monitor) covers 80% of cases.
+- **If your script is slow:** the statusline renders frequently. Slow = laggy experience.
+- **Without testing:** a bug in the script can silently break the statusline.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Command Statusline Setting](https://www.aitmpl.com/component/settings/statusline/command-statusline) — exact command.
+- **Config JSON:** [command-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/command-statusline.json).
+
+## Related resources
+
+- [Context Monitor Setting](/boveda/setting-context-monitor) — the most adopted, no custom script required.
+- [Colorful Statusline Setting](/boveda/setting-colorful-statusline) — simple option with no scripts.
+- [Bug Circus Statusline](/boveda/setting-bug-circus-statusline) — example of a gimmicky script.

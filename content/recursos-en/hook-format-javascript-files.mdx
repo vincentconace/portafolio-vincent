@@ -1,0 +1,85 @@
+---
+title: "Hook Format JavaScript Files — auto prettier on JS/TS post-edit (566 installs)"
+description: "Hook with 566 installs. Runs prettier automatically on JavaScript/TypeScript files after every Edit. You don't have to remember to format — it just happens."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "prettier"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-format-python-files", "hook-lint-on-save", "hook-nextjs-code-quality-enforcer"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/post-tool/format-javascript-files"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/format-javascript-files.json"
+---
+
+## What it is
+
+After Claude edits a `.js`, `.jsx`, `.ts`, or `.tsx` file, this hook runs prettier on it automatically. Hook event: `PostToolUse`.
+
+Result: your code is always formatted according to your `.prettierrc`. No more noisy diffs from whitespace or trailing commas.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `post-tool` |
+| Installs | 566 |
+| Hook event | `PostToolUse` (Edit) |
+| External tool | `prettier` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook post-tool/format-javascript-files
+```
+
+Prerequisite: `prettier` installed (`npm i -D prettier` or global).
+
+For Claude:
+
+```
+I installed the post-tool/format-javascript-files hook. Try it: edit a
+TS file with inconsistent formatting — it should come out formatted
+after the edit.
+```
+
+## What you can do with it
+
+### Automatic consistent formatting
+
+Your `.prettierrc` is always applied. You don't have to ask Claude to respect formatting — the hook does it afterward.
+
+### Clean diffs
+
+Any changes Claude makes will come out formatted. Your diffs (`git diff --staged`) stay focused on real changes, not whitespace.
+
+### Combo with [Lint On Save](/boveda/hook-lint-on-save)
+
+Format first, lint after. The lint catches what formatting can't fix.
+
+### Combo with [Auto Git Add](/boveda/hook-auto-git-add)
+
+Auto Git Add stages the changes. The formatting from this hook also affects the stage. Combined, your workflow becomes: edit → format → automatic stage.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **Without prettier installed:** the hook fails silently.
+- **Without a .prettierrc in the repo:** prettier uses defaults that may not match your team.
+- **If your team doesn't use prettier:** get everyone aligned before imposing it.
+- **For non-JS/TS files:** this hook is specific. For Python use [Format Python Files](/boveda/hook-format-python-files).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Format JavaScript Files Hook](https://www.aitmpl.com/component/hooks/post-tool/format-javascript-files) — exact command.
+- **JSON config:** [format-javascript-files.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/format-javascript-files.json).
+- **Official Prettier:** [prettier.io](https://prettier.io).
+
+## Related resources
+
+- [Format Python Files Hook](/boveda/hook-format-python-files) — the equivalent for Python with black.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — combines format + lint for complete code quality.
+- [Next.js Code Quality Enforcer Hook](/boveda/hook-nextjs-code-quality-enforcer) — Next.js specific.

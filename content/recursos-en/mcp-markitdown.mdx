@@ -1,0 +1,109 @@
+---
+title: "MCP MarkItDown — convert PDFs, Word, Excel, images, and audio to Markdown"
+description: "Microsoft MCP server with 911 installs. Converts diverse files (PDF, Word, Excel, PowerPoint, images, audio) to clean Markdown so Claude can process them. The antidote to 'paste the PDF into Claude and hope it figures it out'."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-firecrawl", "mcp-filesystem-access", "book-to-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/markitdown"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/markitdown.json"
+---
+
+## What it is
+
+MarkItDown is Microsoft's open source library for converting any file format to Markdown. Its value: instead of feeding Claude a raw PDF (expensive in tokens and confusing), you run it through MarkItDown first, which returns structured markdown that the model processes far better.
+
+Supported formats:
+- **PDF** — with structure preservation
+- **Word** (`.docx`)
+- **Excel** (`.xlsx`)
+- **PowerPoint** (`.pptx`)
+- **Images** — OCR + description
+- **Audio** — transcription
+- **HTML, CSV, JSON, XML**
+
+This MCP connects it to Claude Code. Hand it a file, get back markdown that's ready for Claude to reason over.
+
+911 installs make it one of the most widely adopted devtools MCPs.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 911 |
+| MCP server | `markitdown` |
+| Author | Microsoft (upstream project) |
+| Formats | PDF, Word, Excel, PowerPoint, images, audio, HTML, CSV, JSON |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/markitdown
+```
+
+For Claude:
+
+```
+I installed the devtools/markitdown MCP. Convert the file
+`~/Documents/contrato.pdf` to markdown and summarize the key clauses for me.
+```
+
+## What you can do with it
+
+### Reading contracts / long docs
+
+"Convert this contract (30-page PDF) to markdown, and summarize the obligations for each party and the critical deadlines." A natural "complex PDF → navigable markdown" pipeline.
+
+### Excel to analysis
+
+"Convert this Excel with 5 sheets to markdown. For the `Ventas Q1` sheet, analyze the top 10 products by revenue." MarkItDown preserves table structure.
+
+### Onboarding from slides
+
+"Convert this onboarding PPT to structured markdown and put together a 1-page brief with the essentials."
+
+### OCR + analysis
+
+"I have screenshots of invoices. Convert them to markdown (OCR) and extract date, amount, CUIT/RFC, and service." For automating expense entry.
+
+### Audio transcription + Q&A
+
+"Transcribe this 45-minute meeting and put together action items with owner and due date."
+
+### Pipeline with [Book to Skill](/boveda/book-to-skill)
+
+Long PDFs → MarkItDown → Book to Skill = permanent skills built from complex books.
+
+## Prerequisites
+
+- **Accessible files** (via [Filesystem Access](/boveda/mcp-filesystem-access) or paths Claude Code can reach)
+- **Server-side dependencies** (Python, format-specific libraries — the aitmpl wrapper handles this)
+- **Disk space** if you convert many large files
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before you install">
+
+- **For very complex PDFs** (magazines with multi-column layouts and figures): the conversion loses fidelity. Manually verify anything critical.
+- **For long / noisy audio:** transcription depends on the backend (could be local Whisper or cloud). Variable quality.
+- **OCR on low-quality images:** errors. Don't trust it blindly.
+- **For web pages:** [Firecrawl](/boveda/mcp-firecrawl) is a better fit, more optimized for the web.
+- **Sensitive data:** depending on the backend, you may send files to external APIs. Verify.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [MarkItDown MCP](https://www.aitmpl.com/component/mcps/devtools/markitdown) — exact command.
+- **JSON config:** [markitdown.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/markitdown.json).
+- **MarkItDown upstream:** [github.com/microsoft/markitdown](https://github.com/microsoft/markitdown) — the open source project.
+
+## Related resources
+
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — for URLs (markdown from the web). MarkItDown is for local files.
+- [Filesystem Access MCP](/boveda/mcp-filesystem-access) — to authorize the folders MarkItDown will read.
+- [Book to Skill](/boveda/book-to-skill) — pipeline: PDFs → markdown → permanent Claude skill.

@@ -1,0 +1,97 @@
+---
+title: "Claude Equity Research — institutional buy/sell recommendations in Claude Code"
+description: "A quant-sentiment-ai plugin (389⭐) that builds institutional-grade equity research from Claude Code. Fundamentals, technicals, and risk assessment. For educational purposes — not financial advice."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["agency-agents", "claude-codex-equipo", "codex-plugin-hack"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-equity-research"
+github: "https://github.com/quant-sentiment-ai/claude-equity-research"
+---
+
+## What it is
+
+Claude Equity Research is a plugin that builds stock research reports in the format used by institutional analysts: investment thesis, fundamental analysis (financial statements, ratios, multiples), technical analysis (moving averages, support/resistance, momentum), risk assessment, and a final recommendation (buy/hold/sell) with a price target and rationale.
+
+The important part (and what the repo itself states in big letters): **it's for educational use. It is not financial advice.** In other words, it's useful for learning how a research report is structured, automating part of the reading of financial statements, or getting a first draft before doing your own analysis. It doesn't replace a real advisor or your own due diligence.
+
+What it's actually good for: learning the format, saving time on data extraction, and generating reports that you then validate.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | quant-sentiment-ai |
+| Stars | 389 |
+| Type | Single plugin (commands) |
+| Marketplace | `quant-sentiment-ai/claude-equity-research` |
+| Output | Institutional-style report (buy/hold/sell) |
+| Official disclaimer | Educational only — not financial advice |
+
+## How to install it
+
+```bash
+/plugin marketplace add quant-sentiment-ai/claude-equity-research
+/plugin install claude-equity-research@quant-sentiment-ai-claude-equity-research
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the claude-equity-research plugin from the quant-sentiment-ai marketplace.
+Then build me a sample report for [ticker, e.g. NVDA] with all the
+sections the plugin generates.
+```
+
+## What you can do with this
+
+### Learn to read an institutional research report
+
+If you've never read a serious one (Goldman, JPM, Morgan Stanley), the plugin's output replicates the format. You go from "I don't understand what the analysts are saying" to having a concrete mental map: thesis, fundamentals, technicals, risks, target price.
+
+### Generate a first draft for your own analysis
+
+You give it the ticker, the plugin extracts the public data (financial statements, ratios) and builds the base report. You then add your judgment, context the model doesn't have (local regulation, ongoing M&A, sector outlook) and build your own version.
+
+### Automate the grunt work of research
+
+If you analyze 30 companies a week for a shortlist, instead of starting from scratch every time, the plugin gives you a structured template for each one. You focus on judgment, not format.
+
+### Study the rationale behind buy/sell calls
+
+Looking at how the plugin justifies a recommendation — which metrics it weighs, how it reasons about multiples vs. growth — is useful practice even if you don't use the final conclusion.
+
+## Real benefits
+
+- **Reproducible institutional format** without hiring a consulting firm.
+- **A standard structure** that you can then fill in with your own judgment.
+- **Useful as a study tool** for classic stock analysis.
+- **Saves you from building the template** each time.
+
+## When it's NOT a good idea
+
+<Callout type="danger" title="Read this carefully before using">
+
+- **It is NOT financial advice.** The repo itself says so. Don't make investment decisions based solely on the output. The plugin doesn't know your situation, your horizon, your risk appetite, and it has no insider information.
+- **The data is whatever public data is available** at the time of the query. There's no guarantee the model isn't working with outdated numbers.
+- **It does not replace a licensed advisor** in your jurisdiction.
+- **Model bias:** LLMs tend to over-justify. A report that "looks" solid can rest on fragile premises. You validate it.
+- **Regulatory risk:** in some countries, distributing research recommendations requires a license. Use it personally, don't publish it as a public recommendation.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Equity Research](https://www.aitmpl.com/plugins/claude-equity-research) — the exact command.
+- **Repo on GitHub:** [quant-sentiment-ai/claude-equity-research](https://github.com/quant-sentiment-ai/claude-equity-research) — code, full disclaimer, issues.
+
+## Related resources
+
+- [Agency Agents](/boveda/agency-agents) — to understand the difference between an agent that makes decisions vs. a plugin that builds reports you decide on.
+- [Claude + Codex as a team](/boveda/claude-codex-equipo) — a useful pattern for having a second model critique the generated reports before acting.
+- [Codex Plugin Hack](/boveda/codex-plugin-hack) — combining with Codex to cross-check the recommendations.

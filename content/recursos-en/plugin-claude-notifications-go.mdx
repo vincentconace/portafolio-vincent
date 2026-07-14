@@ -1,0 +1,119 @@
+---
+title: "Claude Notifications Go — cross-platform alerts when Claude finishes (or needs something)"
+description: "Plugin by 777genius (392⭐) that sends notifications from Claude Code to Linux/Mac/Windows or via webhook (ntfy, Slack, Telegram). Zero dependencies, one-line install, 6 notification types with click-to-focus."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code", "slack", "telegram"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["claude-code-loop", "goal-claude-code", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-notifications-go"
+github: "https://github.com/777genius/claude-notifications-go"
+---
+
+## What it is
+
+If you leave Claude Code running a long task (a refactor, an autonomous loop, a build) and want to know when it finishes without having to come back to the editor every 5 minutes, this plugin solves that. It sends notifications to your operating system (native on Linux, macOS, and Windows) or to a configurable webhook (ntfy, Slack, Telegram — anything with a URL).
+
+6 notification types, click-to-focus (it takes you straight to Claude Code when you click), zero dependencies, one-line install. The plugin analyzes context to decide when it's a good moment to alert you — it doesn't spam you with every minor change.
+
+If you work with [/goal](/boveda/goal-claude-code) or long autonomous sessions, it's basically a must-have.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | 777genius |
+| Stars | 392 |
+| Type | Single plugin (commands + hooks) |
+| Components | 4 commands (init, settings, notifications-init, notifications-settings) |
+| Marketplace | `777genius/claude-notifications-go` |
+| Platforms | Linux, macOS, Windows + webhooks |
+
+### The 6 notification types
+
+(Exact details in the repo; the typical pattern is something like)
+
+1. **Task completed** — the task finished
+2. **Task failed** — failed with an error
+3. **Needs input** — Claude needs a human decision
+4. **Long-running started** — something that will take a while just started
+5. **Resource warning** — context near the limit, high cost, etc.
+6. **Custom** — whatever you define via hook
+
+(The plugin is zero-dependencies and multi-platform; you'll find the concrete details in the repo's README.)
+
+## How to install it
+
+```bash
+/plugin marketplace add 777genius/claude-notifications-go
+/plugin install claude-notifications-go@777genius-claude-notifications-go
+```
+
+Then you configure it with:
+
+```
+/notifications-init
+/notifications-settings
+```
+
+For Claude:
+
+```
+Install claude-notifications-go from the 777genius marketplace. Set up
+native macOS notifications for "task completed" and "needs input",
+and a webhook to my Telegram for "task failed".
+```
+
+## What you can do with it
+
+### Long autonomous loops
+
+Combine it with [/goal](/boveda/goal-claude-code), `next-task`, or [Claude Code Loop](/boveda/claude-code-loop). Launch the task, go do something else, and come back when the ping sounds.
+
+### Knowing when Claude needs a decision
+
+Sometimes Claude waits for input ("should I continue or change approach?") and you're not watching. The "needs input" notification alerts you.
+
+### Alerts to a Slack channel for teams
+
+If several devs on your team use Claude Code for long tasks, you can send notifications to a `#claude-runs` channel with who is running what.
+
+### Telegram for emergencies
+
+Webhook to Telegram for "task failed" or "resource warning". More visible than checking the terminal every so often.
+
+### Alerts when context is near the limit
+
+If your session reaches 90% of the context window, you can configure a notification that warns you before it breaks.
+
+## Real benefits
+
+- **Zero dependencies** — it doesn't install an extra stack, everything is cross-platform.
+- **Click-to-focus** — the notification takes you straight to Claude Code, not to hunting for the window.
+- **Webhooks** — scales to any service (ntfy, Slack, Telegram, Discord — anything with a POST URL).
+- **Context analysis** — the plugin decides when to alert, it doesn't spam you.
+- **Lightweight** — 4 commands, it's not a framework.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you only do short tasks (under 2 min):** the ping arrives when you're already looking back. It adds nothing.
+- **If your operating system blocks notifications by default:** fix the permissions at the OS level first.
+- **Public webhooks:** a Slack webhook with a public URL leaked online can be a vector. Protect the URLs.
+- **Noise:** if you configure all 6 types without filtering, you'll get overwhelmed. Start with 2 (completed + needs input) and tune from there.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Notifications Go](https://www.aitmpl.com/plugins/claude-notifications-go) — the exact command.
+- **Repo on GitHub:** [777genius/claude-notifications-go](https://github.com/777genius/claude-notifications-go) — code, issues, webhook configuration.
+
+## Related resources
+
+- [/goal — the goal Claude won't let go of](/boveda/goal-claude-code) — the natural combo: launch an autonomous goal and let claude-notifications-go alert you when it finishes.
+- [Claude Code Loop](/boveda/claude-code-loop) — to run tasks in a loop with notifications for each finished iteration.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices for long sessions, where these notifications are basically a must-have.

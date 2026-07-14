@@ -1,0 +1,135 @@
+---
+title: "Claude Octopus — orchestrate 8 different LLMs from Claude Code"
+description: "Plugin by nyldn (2.1k⭐) that orchestrates 8 providers (Codex, Gemini, Claude, Perplexity, OpenRouter, Copilot, Qwen, Ollama) with 47 commands, 50 skills, and Double Diamond workflows. The most complete multi-LLM option out there."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "codex", "gemini-cli", "ollama"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["claude-codex-equipo", "codex-plugin-hack", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-octopus"
+github: "https://github.com/nyldn/claude-octopus"
+---
+
+## What it is
+
+Claude Octopus is the closest thing to an LLM "switchboard" inside Claude Code that you'll find. The author (nyldn) built it so you're not tied to a single model: it integrates 8 different providers and lets you decide which one to use for each step of the workflow.
+
+The 8 providers it covers:
+- Claude (official)
+- OpenAI Codex
+- Google Gemini
+- Perplexity
+- OpenRouter (gateway to several)
+- GitHub Copilot
+- Qwen (Alibaba)
+- Ollama (local)
+
+On top of that, it ships 47 commands and 50 skills, all designed around Double Diamond workflows (Discover → Define → Develop → Deliver). It's not just "hit another model" — it's an orchestration layer with complete flows: brainstorm, PRD, parallel agents, debate, sentinel, factory, and more.
+
+If your AI usage already spans several tools and you want to unify them in a single environment, this is the plugin.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | nyldn |
+| Stars | 2.1k |
+| Type | Single plugin (multi-provider) |
+| Components | 50 skills, 47 commands, agents, hooks |
+| Providers | Codex, Gemini, Claude, Perplexity, OpenRouter, Copilot, Qwen, Ollama |
+| Marketplace | `nyldn/claude-octopus` |
+| Community | [r/ClaudeOctopus](https://reddit.com/r/ClaudeOctopus/) |
+
+### Key skills and commands
+
+**Double Diamond flows:**
+- `flow-discover`, `flow-define`, `flow-develop`, `flow-deliver`
+- `flow-spec`, `flow-parallel`
+
+**Multi-LLM and debate:**
+- `skill-debate` — multiple models argue it out
+- `skill-deep-research` — Perplexity + synthesis with Claude
+- `skill-thought-partner` — a second brain from another model
+- `skill-copilot-provider` — use Copilot as a sub-provider
+
+**Delivery workflows:**
+- `skill-tdd`, `skill-debug`, `skill-doc-delivery`
+- `skill-ship`, `skill-rollback`, `skill-finish-branch`
+- `skill-staged-review`, `skill-coverage-audit`, `skill-doc-sync`
+
+**Meta-tooling:**
+- `skill-meta-prompt`, `extract-skill`, `skill-factory`
+- `skill-quick`, `skill-status`, `skill-doctor`
+- `skill-cost-projections` — because running 8 LLMs costs money
+
+## How to install it
+
+```bash
+/plugin marketplace add nyldn/claude-octopus
+/plugin install claude-octopus@nyldn-claude-octopus
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install claude-octopus from the nyldn marketplace. Then show me which providers
+it detects as available (I have Codex CLI + local Ollama + a Claude Pro plan).
+Recommend which commands to use first based on the Double Diamond.
+```
+
+## What you can do with this
+
+### Model debate over your spec
+
+`skill-debate` launches several providers in parallel, each with a different role (proposer, challenger, judge), and returns a verdict. More robust than asking a single model to "critique this."
+
+### Research with Perplexity + synthesis with Claude
+
+`skill-deep-research` uses Perplexity to find up-to-date info and then hands the findings to Claude to synthesize. Useful when Claude doesn't have recent info on something.
+
+### Cross code review
+
+`skill-code-review` + `skill-staged-review` with two different models = more coverage. If Codex and Claude agree, high confidence. If they disagree, you take a look.
+
+### Complete Double Diamond workflows
+
+Discover → Define → Develop → Deliver with `flow-*` commands. It's a design framework applied to development: it structures the problem before jumping to solutions.
+
+### Costs under control
+
+`skill-cost-projections` tells you how much running the workflow will cost before you launch it. Crucial when you're moving work across 8 providers.
+
+## Real benefits
+
+- **The most complete multi-LLM option** in the catalog (8 providers).
+- **It doesn't lock you into one model** — if Claude goes down or raises prices tomorrow, you have active alternatives.
+- **47 commands + 50 skills** cover practically the entire dev cycle.
+- **Structured Double Diamond workflows**, not ad-hoc.
+- **Built-in cost projections** — the only serious way to avoid burning money with multi-LLM.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you only use Claude:** most of Octopus's value is in orchestrating several models. If your setup is Claude-only, Anthropic's official plugins already cover you with less overhead.
+- **Costs:** running 8 providers in parallel can multiply your spend. Check `skill-cost-projections` before enabling everything.
+- **Initial setup:** you'll need API keys or configuration for each provider you activate. It's not fully plug-and-play.
+- **Steep learning curve:** 50 skills is a lot. Start with the `flow-*` commands and a couple of skills, not everything at once.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Octopus](https://www.aitmpl.com/plugins/claude-octopus) — exact command + list of skills/commands.
+- **GitHub repo:** [nyldn/claude-octopus](https://github.com/nyldn/claude-octopus) — code, issues, examples.
+- **Subreddit:** [r/ClaudeOctopus](https://reddit.com/r/ClaudeOctopus/) — community and discussions.
+
+## Related resources
+
+- [Claude + Codex as a team](/boveda/claude-codex-equipo) — the basic two-model pattern. Octopus takes it to 8.
+- [Codex Plugin Hack](/boveda/codex-plugin-hack) — a combo of cheap plans. A good reference for understanding the multi-LLM math.
+- [Agency Agents](/boveda/agency-agents) — to tell native agents apart from Octopus's multi-provider ones.

@@ -1,0 +1,311 @@
+---
+title: "Meta Ads post-Andromeda — 8 reglas y prompts para que el algoritmo te lea bien"
+description: "Andromeda hizo que el creativo sea el targeting: lo que decís en el anuncio, lo que muestra el primer frame y lo que dice tu landing son lo que define a quién Meta sale a buscar. 8 reglas accionables y prompts para minar lenguaje, mapear awareness y armar briefs."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "meta-ads"]
+publishedAt: "2026-05-11"
+readingTime: "13 min"
+relatedSlugs: ["nueve-prompts-cowork", "prompting-10-pilares", "prompts-prd-ejecutivo"]
+---
+
+## Qué cambió con Andromeda
+
+Andromeda es el motor de recomendación que Meta usa para decidir a quién mostrar cada anuncio. Antes podías compensar un creativo flojo con un buen interest stack. Ahora **el creativo es el targeting**: Meta lee tu copy, tu primer frame de video, tu landing, y decide la distribución basándose en eso.
+
+**Resultado en la práctica**: las cuentas con un sistema escalando bien. Las cuentas sin sistema corriendo en círculos: lanzan 40 ads sin método, uno se come el presupuesto, los otros se apagan, y nadie sabe qué lo hizo ganador.
+
+Esta guía resume **8 reglas operativas** y prompts para que el creativo esté armado con sistema, no con intuición.
+
+---
+
+## Las 3 ideas centrales
+
+Antes de las reglas, los principios que las atraviesan:
+
+1. **El creativo es el targeting** — lo que decís en el anuncio define a quién Meta sale a buscar
+2. **Tu landing también es targeting** — si el creativo dice una cosa y la landing otra, Meta lo nota y baja la distribución
+3. **El primer frame importa** — los primeros 3 segundos definen si el algoritmo sigue mostrando
+
+Todo lo que viene es operativizar esto.
+
+---
+
+## Regla 1 — Mineá el lenguaje real del cliente
+
+El error típico: escribir copy desde tu cabeza, usando palabras que **vos** usás (jerga de tu industria, beneficios técnicos).
+
+El cliente no busca con esas palabras. Tenés que minar **el lenguaje real** del cliente de 4 fuentes:
+
+| Fuente | Qué saca |
+|--------|----------|
+| **Reseñas de tu producto / competidor** | Cómo describen el problema y la solución |
+| **Reddit / foros del nicho** | Lenguaje natural sin filtro de marketing |
+| **Comentarios en anuncios del competidor** | Objeciones, dudas, deseos |
+| **Llamadas de venta / soporte** (transcript) | Exactamente cómo lo dicen tus clientes reales |
+
+### Prompt para minar lenguaje
+
+```
+Sos analista de copy. Te paso textos crudos (reseñas, comentarios, transcripts).
+Necesito que extraigas el lenguaje real del cliente.
+
+TEXTOS:
+[pegás todo el material crudo]
+
+DEVOLVEME:
+
+## Frases textuales destacadas
+[10 frases EXACTAS del cliente que valen la pena reusar — no parafraseés]
+
+## Pain points en sus palabras
+[5 dolores nombrados con SUS palabras, no las tuyas]
+
+## Beneficios que ellos destacan
+[5 beneficios que mencionan, ordenados por frecuencia]
+
+## Palabras que NO usan
+[palabras tuyas/de marketing que ellos jamás mencionan]
+
+REGLAS:
+- Frases textuales, no resúmenes con tus palabras
+- Si una frase aparece varias veces, marcala
+- Si detectás un patrón de objeción, listalo aparte
+```
+
+---
+
+## Regla 2 — Mapeá el awareness de tu audiencia
+
+No todos en tu audiencia están en el mismo nivel de consciencia. Los 5 niveles clásicos (Eugene Schwartz, sigue vigente):
+
+| Nivel | Qué sabe el cliente | Cómo le hablás |
+|-------|---------------------|----------------|
+| **Unaware** | No sabe que tiene el problema | Contale el problema primero |
+| **Problem aware** | Sabe que tiene el problema, no sabe que hay solución | Mostrale que hay solución |
+| **Solution aware** | Sabe que hay solución, no conoce tu producto | Mostrale tu solución específica |
+| **Product aware** | Conoce tu producto, no compra todavía | Remové objeciones, mostrá pruebas |
+| **Most aware** | Listo para comprar | Oferta + urgencia |
+
+**El gap que te limita el techo de gasto**: la mayoría de las cuentas tienen anuncios solo para 1-2 niveles. Faltan niveles → falta audiencia para escalar.
+
+### Prompt para mapear awareness
+
+```
+Tengo mi avatar de cliente: [descripción detallada del avatar].
+
+Mi producto resuelve: [problema].
+
+Distribuí mi audiencia objetivo entre los 5 niveles de awareness:
+
+## Distribución estimada
+[% en cada nivel con justificación]
+
+## Por cada nivel, lo que tendría que decir un anuncio
+[mensaje núcleo + tipo de prueba + CTA por cada nivel]
+
+## El nivel donde tengo menos anuncios actualmente (asumí que tengo)
+[cuál es y por qué probablemente es así]
+```
+
+---
+
+## Regla 3 — Brief con primer frame explícito
+
+Tu brief de producción debe incluir **exactamente** qué se ve en el primer segundo. No "video dinámico de la marca". Algo concreto:
+
+❌ "Hook fuerte que llame la atención"
+✅ "Primer frame: persona girando rápido hacia cámara con cara de 'me robaron'. Subtitulo grande: 'me cobraron 3 veces el mismo mes'. Sin logo de marca en los primeros 3 segundos."
+
+Meta lee el primer frame visualmente. Si el primer segundo es genérico (logo en fade in, paisaje), el algoritmo no tiene señal para clasificar el ad.
+
+### Prompt para brief de creativo
+
+```
+Sos director creativo. Necesito brief de producción para un video ad de
+[producto] dirigido a nivel de awareness [unaware/problem aware/etc].
+
+CONTEXTO DEL CLIENTE:
+- Avatar: [descripción]
+- Pain point principal en sus palabras: [frase textual de minería]
+- Nivel awareness: [nivel]
+
+DEVOLVEME:
+
+## Hook (primeros 3 segundos)
+- Frame exacto que se ve en segundo 0 (descripción visual concreta)
+- Subtítulo/copy que aparece
+- Audio (si lo hay)
+
+## Desarrollo (segundos 3-12)
+[narrativa del problema en lenguaje del cliente]
+
+## Solución (segundos 12-25)
+[cómo aparece el producto sin que se vea spammy]
+
+## Cierre (últimos 5 segundos)
+[CTA + visual final]
+
+## Notas para el editor
+- Aspect ratio: 9:16 para reels / 1:1 para feed
+- Subtítulos quemados: sí (90% mira sin audio)
+- Logo: NO en primeros 3 segundos
+- Música: [tipo / referencia]
+
+REGLAS:
+- Primer frame debe ser visualmente específico, no genérico
+- El hook NO menciona la marca
+- El copy del hook debe usar lenguaje minado, no jerga
+```
+
+---
+
+## Regla 4 — Landing como parte del creativo
+
+Antes podías mandar todo el tráfico a una landing genérica. Ahora Meta lee la landing y compara con el anuncio. Si no coinciden, baja distribución.
+
+**Patrón que funciona**:
+
+1. **Una landing por ángulo de anuncio**, no una landing genérica
+2. El **headline de la landing** debe matchear el hook del ad (no idéntico — pero mismo mensaje)
+3. La **primera sección** valida que el cliente está en el lugar correcto
+4. **Después** entra el pitch del producto
+
+### Prompt para auditar landing
+
+```
+Sos UX writer. Audito esta landing contra el anuncio que la trae.
+
+ANUNCIO:
+- Hook: [hook]
+- Promesa principal: [promesa]
+- Lenguaje del cliente: [frases minadas]
+
+LANDING (URL o copy):
+[contenido]
+
+REVISÁ:
+
+## Match anuncio-landing
+- ¿El headline de la landing valida la promesa del ad? (sí/no + cita)
+- ¿Hay continuidad de lenguaje? (sí/no + ejemplos)
+- ¿Un usuario aterrizando aquí desde el ad sabe que está en el lugar correcto en 3 segundos?
+
+## Problemas detectados
+[lista con archivo:linea / sección si aplica]
+
+## Cambios concretos sugeridos
+[acción por acción, con texto antes/después]
+```
+
+---
+
+## Regla 5 — Marco de decisiones ANTES de lanzar
+
+Cuando el dashboard arde (un ad explota, otro muere), decidís con emoción. **Eso quema presupuesto**. La solución: definir tu marco de decisiones **antes** de lanzar, no durante.
+
+### Variables que definí antes
+
+- **Presupuesto por ad fijo**: cuánto está dispuesto a perder cada ad antes de matarlo
+- **Métrica de éxito clave**: CPA, ROAS, hookrate — UNA, no 5
+- **Umbral de pausa**: en qué número se mata un ad (ej: CPA > 1.5x tu objetivo durante 48h con +$X gastado)
+- **Umbral de escala**: en qué número se duplica presupuesto (ej: ROAS > 2x objetivo durante 72h)
+
+Escribilo en un doc compartido. Cuando llega el momento de decidir, lo consultás. Sin negociación.
+
+---
+
+## Regla 6 — `ultrathink` antes de las decisiones importantes
+
+Pequeño truco para Claude: cuando le pasás un análisis complejo (auditoría de cuenta, decisión de qué creativo escalar), agregale la palabra **`ultrathink`** en el prompt.
+
+Funciona como pedirle explícitamente que **piense más antes de responder**. Para tareas analíticas en Meta Ads, la diferencia es notable.
+
+```
+ultrathink
+
+Tengo estos 8 anuncios corriendo hace 14 días. [datos]
+
+¿Cuál debería escalar, cuál pausar, cuál dejar quieto?
+
+Justificá cada decisión con la métrica específica que la respalda.
+NO uses promedios — mirá los outliers.
+```
+
+---
+
+## Regla 7 — Iterá en variables, no en ideas
+
+El error típico: lanzar 5 ads "muy distintos" pensando que es testing. Como cada uno cambia 5 variables a la vez, no podés aprender nada del resultado.
+
+**Lo que SÍ funciona**: variables aisladas.
+
+| Test | Variable única que cambia |
+|------|----------------------------|
+| Test A vs B | Hook del primer frame (todo lo demás igual) |
+| Test C vs D | CTA al final (todo lo demás igual) |
+| Test E vs F | Música (todo lo demás igual) |
+
+Aprendés qué movió la aguja. Sin esto, todo es ruido.
+
+### Prompt para diseñar tests
+
+```
+Tengo una variante creativa que rinde [métrica]. Quiero testear N hipótesis:
+
+HIPÓTESIS:
+1. Si cambio el hook a [X], la conversión sube porque [razón]
+2. Si cambio el CTA a [Y], el CTR sube porque [razón]
+...
+
+Diseñame un test plan:
+- ¿Qué tests corro primero? (priorizá por impacto esperado)
+- ¿Cuántos ads por test?
+- ¿Presupuesto mínimo para que el resultado sea significativo?
+- ¿Cuándo declarar un ganador? (criterio explícito)
+- ¿Qué hago con los perdedores? (matar / aprender / archivar)
+```
+
+---
+
+## Regla 8 — Auditoría semanal con sistema
+
+Cada lunes, auditoría de la cuenta con la misma estructura:
+
+| Sección | Qué revisás |
+|---------|-------------|
+| **Hookrate** | Hooks que están funcionando vs los que no |
+| **Awareness gap** | Niveles donde no tengo anuncios |
+| **Frecuencia** | Audiencias quemadas (frecuencia >3) |
+| **Test pipeline** | Qué tests están corriendo, cuáles cerraron, conclusiones |
+| **Próximos creativos** | 3 conceptos para producir esta semana basados en lo aprendido |
+
+Convertí esto en un slash command (como los [9 prompts para Cowork](/boveda/nueve-prompts-cowork)) que corre auto cada lunes y te entrega el reporte.
+
+---
+
+## Anti-patrones
+
+### 1. Esperar que Claude "haga el anuncio" sin contexto
+
+No le pidas "armame anuncios para mi producto X". Sin lenguaje minado + awareness mapeado + brief estructurado, va a inventar genérico que no convierte.
+
+### 2. Cambiar 5 variables a la vez
+
+Si tu test no aísla la variable, no aprendés nada. Tester variable por variable, o no tester.
+
+### 3. Pegarse a un creativo "porque te encanta"
+
+Un creativo que te encanta pero rinde mal, está rindiendo mal. La cuenta no va a esperar a que el algoritmo "entienda tu visión". Mata el creativo, conservá el aprendizaje.
+
+### 4. Outsourcear sin sistema
+
+Si tu agencia/creator no sabe esto, te van a entregar 5 ads "muy creativos" que no se distribuyen. Pasale **el brief con primer frame explícito** y el lenguaje minado. El resultado mejora.
+
+---
+
+## Próximos pasos
+
+- Para mejorar la calidad de cualquier prompt antes de usarlo, [Prompting 101 — 10 pilares](/boveda/prompting-10-pilares)
+- Para automatizar las auditorías semanales, [9 prompts para Cowork](/boveda/nueve-prompts-cowork)
+- Si vas a armar slash-commands custom para esto, [comando /goal](/boveda/comando-goal) ayuda a no perder foco en sesiones largas

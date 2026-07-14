@@ -1,0 +1,432 @@
+---
+title: "Scrapling — open source library to extract leads 100% free"
+description: "Python library with built-in MCP for Claude. Extract info from Google Maps, directories, social media — without getting blocked. 37500+ ★ GitHub, BSD-3 (free even for commercial use). You ask Claude for leads in plain English, it uses Scrapling for you. No paying lead agencies."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "scrapling", "python"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["apify-clientes-ilimitados", "navega-y-automatiza", "agent-browser"]
+---
+
+## What is Scrapling
+
+Picture the internet as a giant supermarket and you want a list of every yogurt with its name, price, and brand. **Scrapling is your robot** that walks aisle by aisle, notes down each yogurt, and builds the list in Excel for you. **The stores never realize** it was a robot.
+
+Technically: an open source Python library that extracts info from any website (Google Maps, directories, social media, stores) **without getting blocked**. It disguises itself as a real human browser.
+
+| Detail | Value |
+|---------|-------|
+| GitHub | 37,500+ ★ |
+| License | BSD-3 (free even for commercial use) |
+| Built-in MCP | ✅ Claude controls it directly |
+| Camouflage | Camoufox (anti-detection) |
+| Real cost | **$0** |
+
+Repo: `D4Vinci/Scrapling`.
+
+---
+
+## Scrapling vs Apify
+
+| Aspect | Scrapling | [Apify](/boveda/apify-clientes-ilimitados) |
+|---------|-----------|---------------------------------------------|
+| Cost | **100% free forever** | $5/mo free |
+| Setup | Install locally with Python | Account + MCP URL |
+| LinkedIn / IG / heavy sites | You get blocked fast | Solved (IP rotation) |
+| Scale | Dozens to hundreds | Thousands, easily |
+| When | Local businesses on Google Maps | LinkedIn / IG / scaling |
+
+**Rule**: Scrapling to get started free with Google Maps. Apify when LinkedIn/IG block you or you want thousands of leads.
+
+---
+
+## Prerequisites
+
+| # | Requirement | How to verify |
+|---|-----------|----------------|
+| 1 | Claude Code or Desktop | `claude.ai/download` |
+| 2 | Python 3.10+ | `python3 --version` |
+| 3 | uv (Python package manager) | see setup below |
+| 4 | Active Anthropic account | Pro recommended for large lists |
+
+### Install uv
+
+**macOS / Linux**:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows PowerShell**:
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+---
+
+## Installation — one prompt and Claude does it all
+
+**You won't install it by hand**. You paste the prompt into Claude Code or Desktop and it takes care of everything.
+
+### Master prompt
+
+```
+I want to use Scrapling to pull customer lists. It's a
+Python library by D4Vinci with built-in MCP for Claude.
+Repo: https://github.com/D4Vinci/Scrapling
+
+Do all of this, reporting each stage:
+
+1. Check that I have Python 3.10+ and uv installed.
+   If either is missing, tell me how to install it.
+
+2. Install Scrapling with full dependencies:
+   uv pip install "scrapling[all]"
+
+3. Run the browser installation that Scrapling needs
+   (Camoufox, Playwright, etc):
+   scrapling install
+
+4. Read the official README to find the exact command for the
+   MCP server (usually "scrapling-mcp" or "scrapling mcp serve").
+
+5. Add Scrapling to claude_desktop_config.json inside
+   "mcpServers". If I have other MCPs, do NOT overwrite them.
+   Locations:
+   - macOS: ~/Library/Application Support/Claude/claude_desktop_config.json
+   - Windows: %APPDATA%\Claude\claude_desktop_config.json
+
+6. Test the installation: pull the first 3 Google results
+   for "dentists nyc" and show them to me.
+
+7. Tell me what to do next: restart Claude Desktop + open a new
+   conversation.
+
+If anything fails, explain what went wrong and how to fix it —
+do NOT move on to the next step without resolving it.
+```
+
+### Important after installation
+
+After step 5, **quit Claude Desktop COMPLETELY** and reopen it:
+- **macOS**: Cmd+Q
+- **Windows**: system tray → Quit
+
+Closing the window isn't enough. Claude needs to read the new config to detect the MCP.
+
+---
+
+## Verify the connection
+
+1. Reopen Claude Desktop
+2. In the chat bar: tools/hammer icon
+3. **scrapling** should appear in the list of connected MCPs
+
+If it doesn't show up:
+- Quit again with Cmd+Q (or Windows tray)
+- Ask Claude Code: "Read my claude_desktop_config.json and verify the Scrapling MCP is well-formed"
+- Check `uv --version` from the terminal
+
+---
+
+## Your first list of 20 customers
+
+```
+Use Scrapling to pull me a list of 20 dentists in [your city].
+
+For each one:
+- Practice name
+- Phone
+- Full address
+- Google Maps rating (stars)
+- Number of reviews
+- Website (if they have one)
+
+When you're done, export to CSV that I can open in Excel or Sheets,
+save it to my Desktop as "dentists-list-01.csv".
+
+If you find fewer than 20, tell me how many. If Google Maps blocks you,
+try alternative directories (Healthgrades, Yellow Pages).
+```
+
+---
+
+## 3 real-world use cases
+
+### Case 1 — Local niche list
+
+Agencies charge $500 for a list like this. You pull it in 5 min.
+
+```
+Use Scrapling to build a list of 50 [profession — e.g.
+veterinarians, accountants, lawyers, mechanics] in [city].
+
+For each one: name, phone, address, rating, number of
+reviews, website (if they have one), and a direct link to the
+Google Maps listing.
+
+Clean up duplicates. Filter out any with fewer than 3 reviews (they
+tend to be fake).
+
+CSV sorted from highest to lowest by reviews (the most active
+first), saved to Desktop as
+"leads-[profession]-[city].csv".
+```
+
+### Case 2 — Businesses with NO web presence
+
+If you sell web design, dev, or ads, **this is pure gold**.
+
+```
+Use Scrapling to pull me 100 restaurants in [city] from
+Google Maps.
+
+For each one, check whether they have their own website (a link
+to Facebook, Instagram, or TripAdvisor does NOT count — only their own domain).
+
+Keep ONLY the ones that do NOT have a website.
+
+For those I want: name, phone, address, hours, rating,
+number of reviews, Google Maps link.
+
+Sort them from highest to lowest by reviews — the most popular ones
+without a website are the ones who close fastest.
+
+CSV on Desktop as "restaurants-no-website-[city].csv".
+Tell me how many you found out of the total.
+```
+
+### Case 3 — Competitor price monitor
+
+"Price intelligence" services charge $500-2000/mo. Here you do it for free.
+
+```
+Use Scrapling to extract the current prices of these products
+from my competitors:
+
+[Paste competitor URLs, one per line]
+
+For each product: name, current price, discount if any,
+stock, URL, extraction date.
+
+Compare against my prices: [optional: path to your catalog]
+
+Tell me:
+- Which products I have priced too high (I'm losing sales)
+- Which products I have priced too low (I'm leaving money on the table)
+Prioritize by biggest difference.
+
+Save as "competitors-[YYYY-MM-DD].csv" on Desktop.
+
+If I want it to run automatically every week, tell me how to
+schedule it.
+```
+
+---
+
+## The money math
+
+Each case = a service **you can sell**.
+
+Example: charge **$200 USD** for a list of 100 restaurants without a website. 2 lists/week = **$1,600/mo** from a tool that cost $0.
+
+---
+
+## 5 more prompts
+
+### Clean and deduplicate a list
+
+```
+Take this CSV: [path] and:
+
+1. Remove duplicates (same phone or address = same business)
+2. Normalize phones to the format +1 XXX XXX XXXX (or for [country])
+3. Drop records without a valid phone
+4. Validate with Scrapling that the phones are still active: visit
+   Google Maps and verify the listing exists
+5. Export the clean version "clean-leads.csv". Tell me how many
+   survived out of the original total.
+```
+
+### Enrich an existing list
+
+```
+I have a list of names at: [path]
+
+Use Scrapling to look up each one on Google Maps and add:
+phone, address, website, rating, number of reviews, hours.
+
+For any you don't find on Maps, search LinkedIn, Instagram, and
+local directories. If still nothing, mark "not found" in a
+separate column.
+
+Enriched CSV sorted by number of reviews.
+```
+
+### Instagram prospecting
+
+```
+With Scrapling, find Instagram accounts for [business type —
+e.g. specialty coffee shops] in [city] that have between
+[minimum] and [maximum] followers.
+
+For each account: @handle, display name, bio, followers,
+contact email or WhatsApp (if it's in the bio), link to the profile.
+
+Filter for ACTIVE businesses only (posted in the last month).
+
+CSV: "instagram-prospects-[category]-[city].csv".
+
+Important: respect rate limiting. Do NOT speed it up. I'd rather it take
+longer than burn the account.
+```
+
+### Full directory mapping
+
+```
+Extract every business listed in this directory: [URL]
+
+Navigate page by page with Scrapling (respecting the rate limit).
+For each record: all available fields (name,
+category, contacts, location, services, hours).
+
+Handle pagination automatically — don't stop until you've covered the
+whole directory or reached [N] pages.
+
+CSV with ALL fields. Tell me the total number of records.
+```
+
+### Autonomous weekly agent
+
+```
+I want Claude to do this automatically every Monday:
+
+1. With Scrapling, search for [criteria — e.g. "new dental
+   practices opened in the last 6 months in Tijuana"]
+2. Compare against my list at ~/Desktop/master-leads.csv
+3. Add only the new ones that aren't already there
+4. Send me a summary by email or Telegram with how many you found
+   + a preview of the 5 most promising ones
+
+Set it up now with whichever Skill or scheduled agent fits best.
+If you need an additional MCP for email/Telegram, install it
+yourself and ask me for credentials.
+```
+
+---
+
+## Advanced tricks
+
+### Stealth mode
+
+Scrapling uses **Camoufox** (an anti-detection browser). Ask Claude to enable it for sites with strict Cloudflare.
+
+### Proxy rotation
+
+For large lists (1000+ records), configure rotating proxies. Claude can integrate them with a proxy pool MCP.
+
+### Auto-match selectors
+
+Scrapling detects changes in a site's HTML and **updates the selectors on its own**. Your scrapers don't break even when the site changes.
+
+---
+
+## Ethical scraping — your business depends on it
+
+### Respect robots.txt + ToS
+
+If a site says "no scraping", **don't scrape it**. Some violations can lead to lawsuits.
+
+### Rate limiting
+
+Scrapling already waits between requests. **Do NOT speed it up**. Burning a site burns you.
+
+### Don't touch sensitive personal data
+
+❌ Private addresses, medical data, private info
+✅ Commercial contacts from Google Maps (public, the business itself published them so you'd contact it)
+
+### GDPR / LFPDPPP
+
+If you contact the leads:
+- Identify yourself
+- Explain where you got their data
+- Offer an opt-out
+
+**A transparent email sells 10x better than spam**.
+
+---
+
+## Anti-patterns
+
+### 1. Speeding up the rate limiting
+
+Wanting 10x speed → you get banned → you lose access. **Patience**.
+
+### 2. Heavy LinkedIn scraping with Scrapling
+
+LinkedIn detects and blocks easily. For LinkedIn → [Apify](/boveda/apify-clientes-ilimitados).
+
+### 3. Selling a list without contacting them
+
+A list without effective outreach = a waste of time. **Sell the outreach too**, not just the list.
+
+### 4. No disclaimer when reaching out
+
+If you contact someone without saying where you got the data, **it's pure spam**. Disclaimer + transparency.
+
+### 5. Skipping the MCP setup
+
+The MCP is what makes the flow magic. Without the MCP, you can use Scrapling as a regular library but you lose the integration with Claude.
+
+---
+
+## Powerful combinations
+
+### With Apify
+
+```
+> Scrapling for local businesses on Google Maps (free).
+> [Apify](/boveda/apify-clientes-ilimitados) for LinkedIn/IG
+  when you need it.
+```
+
+Your next client pays for the Apify account.
+
+### With Agent Browser
+
+To audit individual profiles you've found:
+
+```
+> Scrapling pulled 50 leads.
+> For the top 5, [Agent Browser](/boveda/agent-browser) navigates
+  their sites and extracts additional info.
+```
+
+### With humanizer
+
+```
+> We generate personalized emails for each lead.
+> Run them through /humanizalo before sending.
+```
+
+[Humanízalo](/boveda/humanizalo).
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| Heavy LinkedIn/Instagram | Apify wins |
+| High volume without proxies | You get banned |
+| Strict compliance | Validate first |
+| You don't have a product/service | Leads with no offer = nothing |
+
+---
+
+## Next steps
+
+- For when Scrapling falls short (LinkedIn/IG), [Apify](/boveda/apify-clientes-ilimitados)
+- For general browsing (not just leads), [Firecrawl + Playwright](/boveda/navega-y-automatiza)
+- For more token-efficient browsing, [Agent Browser](/boveda/agent-browser)

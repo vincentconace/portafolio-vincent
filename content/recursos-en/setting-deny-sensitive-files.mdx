@@ -1,0 +1,87 @@
+---
+title: "Setting Deny Sensitive Files — block access to .env and secrets"
+description: "Setting with 219 installs. Configure permissions.deny to block access to sensitive files: environment variables, secrets, critical configs. Defense in depth with a setting (not a hook)."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-env-file-protection", "hook-file-protection", "setting-additional-directories"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/deny-sensitive-files"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/deny-sensitive-files.json"
+---
+
+## What it is
+
+A setting that configures `permissions.deny` with a list of paths/patterns that Claude can't touch:
+- `.env*`
+- `**/secrets/**`
+- `**/*.pem`
+- ...and more (4 patterns by default)
+
+Difference from the [Env File Protection Hook](/boveda/hook-env-file-protection): the hook is trigger-based, pre-tool. This one is a permanent setting in the permission model. Defense in depth.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `permissions` |
+| Installs | 219 |
+| Setting key | `permissions.deny` |
+| Patterns | 4 default (configurable) |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting permissions/deny-sensitive-files
+```
+
+For Claude:
+
+```
+I installed the permissions/deny-sensitive-files setting. List the 4
+patterns that come by default and show me how to add more
+(for example `**/credentials.json`).
+```
+
+## What you can do with it
+
+### Permanent permission model
+
+At the settings level, Claude can't operate on denied paths. Stronger than hooks (which you can temporarily disable).
+
+### Coverage out of the box
+
+The 4 patterns cover the typical cases (.env, secrets, keys, certs). No custom setup needed.
+
+### Combo with complementary hooks
+
+- [Env File Protection Hook](/boveda/hook-env-file-protection) — pre-Write trigger
+- [File Protection Hook](/boveda/hook-file-protection) — broader configurable paths
+- **Deny Sensitive Files (this one)** — permanent baseline
+
+### For autonomous sessions
+
+Long `/goal` or `/loop` runs: the setting is a safety net you can't accidentally disable.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your legitimate workflow accesses .env:** the patterns will block you. Review the list.
+- **If you need more granular control:** [File Protection Hook](/boveda/hook-file-protection) with custom configuration.
+- **For repos without secrets:** less critical (but it won't hurt anyway).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Deny Sensitive Files Setting](https://www.aitmpl.com/component/settings/permissions/deny-sensitive-files) — the exact command.
+- **JSON config:** [deny-sensitive-files.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/deny-sensitive-files.json).
+
+## Related resources
+
+- [Env File Protection Hook](/boveda/hook-env-file-protection) — pre-Write trigger hook for .env.
+- [File Protection Hook](/boveda/hook-file-protection) — broader configurable paths.
+- [Additional Directories Setting](/boveda/setting-additional-directories) — for the opposite side (allow, not deny).

@@ -1,0 +1,281 @@
+---
+title: "Claude best practices — the 2-correction rule and other essentials"
+description: "What most people get wrong — and Claude's creators confirmed it. The 2-correction rule, when to use /clear, how to keep your context clean. The official practices explained with examples."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["tres-errores-con-ia", "trucos-basicos-claude", "prompting-10-pilares"]
+---
+
+## The mistake we all make
+
+Most people use Claude like this:
+
+```
+1. You ask for something
+2. Claude gets it wrong
+3. You say "no, not like that, like this"
+4. It produces something different, also wrong
+5. You say "nope, not that either"
+6. It produces yet another thing
+7. ... you keep correcting in the same session
+```
+
+After 6 corrections, the context is contaminated with **every previous bad version**. Claude gets confused because "not this, not that either, even less this, but something close, but not exactly" drives it crazy.
+
+Anthropic confirmed it: **most users burn 2× their quota because of this mistake**.
+
+---
+
+## The 2-correction rule
+
+It's simple:
+
+> **If Claude got it wrong 2 times in the same conversation, don't correct it a 3rd time. `/clear` + start over with a better prompt.**
+
+### Why it works
+
+| Contaminated session | Clean session |
+|--------------------|----------------|
+| Claude has 5 bad versions in context | Claude has 0 context |
+| It gets confused about what you "don't want" | It starts fresh |
+| Each new correction adds noise | Your improved prompt is clean input |
+
+**The 3rd correction** rarely fixes things. What DOES fix them is a **better prompt in a new session**.
+
+### How to apply it
+
+```
+[You ask for X]
+[Claude: version 1 - mediocre]
+[You tell it how to fix it]
+[Claude: version 2 - still mediocre]
+
+→ STOP
+
+> /clear
+
+[You rewrite the prompt with what you learned from the 2 versions]
+[Claude: new version - usually much better]
+```
+
+What you learned from the 2 bad versions becomes **input for a better prompt**, not more corrections in a contaminated session.
+
+---
+
+## When to use `/clear`
+
+`/clear` wipes the session context. It's **free** (costs no tokens). But most people don't use it enough.
+
+### Use `/clear` when
+
+✅ You switch tasks completely (you finished auth → now you're doing payments)
+✅ The session is running long (>1.5 hours) and you notice Claude getting confused
+✅ You applied the 2-correction rule
+✅ You moved from the exploratory phase to implementation
+✅ Before asking for a code review (you want fresh context to evaluate)
+
+### DON'T use `/clear` when
+
+❌ You're iterating on the same task with constructive feedback
+❌ You have context loaded from files you need
+❌ It's a natural, progressive conversation
+
+---
+
+## Clean context — what it means
+
+"Context" is **everything Claude has in mind during the session**:
+
+- Your current prompt
+- All previous prompts and responses
+- Files it loaded
+- System prompt
+- Configured memory
+
+When we talk about "clean context," it means **only what's needed for the current task**.
+
+### Typical dirty context
+
+```
+[3-hour session]
+- 8 files loaded (5 are no longer relevant)
+- 4 different tasks you did today
+- 12 corrections across different topics
+- Tangential discussions about architecture
+```
+
+**Result**: Claude takes longer, responds worse, burns more tokens.
+
+### Clean context
+
+```
+[New session]
+- CLAUDE.md (always)
+- 1-3 files specific to the task
+- Your current prompt
+
+```
+
+**Result**: Claude responds fast and on point.
+
+---
+
+## How to write prompts that reduce corrections
+
+The way to **avoid entering the correction loop** is: better prompts **from the start**.
+
+### The 5 things that must ALWAYS be there
+
+```
+1. WHAT — clear verb + specific object
+   ❌ "improve this"
+   ✅ "extract the email validation logic into a separate function"
+
+2. INPUT — which file / which data
+   ❌ (unspecified)
+   ✅ "in src/lib/auth/validate.ts:45"
+
+3. CONSTRAINTS — what NOT to do
+   ❌ (unspecified)
+   ✅ "don't change the exported function's signature"
+
+4. OUTPUT FORMAT — what you expect to receive
+   ❌ (unspecified)
+   ✅ "show me the diff before applying"
+
+5. SUCCESS CRITERIA — how you know it's done
+   ❌ (unspecified)
+   ✅ "tests pass, the linter doesn't complain"
+```
+
+If your prompt has all 5, **you'll rarely need to correct**.
+
+### Simple mantra
+
+> "If Claude had to give the answer to a test written by me, what would you hand it so it passes?"
+
+That's your minimum viable prompt.
+
+---
+
+## The other official practices
+
+### Practice 1 — Specify file and line
+
+```
+❌ "Look at the auth module code"
+✅ "Look at src/lib/auth/validate.ts:120 — what does it do if the cart is empty"
+```
+
+Pointing to `file:line` saves Claude from reading the whole file (which burns unnecessary tokens).
+
+### Practice 2 — Use the right model
+
+Covered in [Claude's 3 models](/boveda/claude-tres-modelos). In short:
+
+- Haiku: mechanical tasks
+- Sonnet: default
+- Opus: complex refactors, hard debugging
+
+**Default to Sonnet, switch to Haiku for small ones, Opus for hard ones.**
+
+### Practice 3 — Self-verify before "done"
+
+In your `CLAUDE.md`:
+
+```markdown
+Before declaring any task complete:
+1. Re-read the original request
+2. Run the relevant tests
+3. List what was delivered vs. what was asked
+4. Only after ALL of this, say "done"
+```
+
+Cuts the "oh, this was missing" by 70%.
+
+### Practice 4 — Tell it to ask before making things up
+
+```markdown
+If you're missing critical information to do the task well, ASK.
+Don't invent values or assume. Ask for clarification.
+```
+
+One question now saves 5 corrections later.
+
+### Practice 5 — Point it to CLAUDE.md
+
+```markdown
+Before making architecture or stack decisions, check CLAUDE.md
+to verify the project's conventions.
+```
+
+Claude "forgets" to read CLAUDE.md if you don't force the habit. This line helps.
+
+---
+
+## Before and after
+
+Without these practices:
+
+```
+[2h session]
+- 8 corrections on average
+- 30k tokens burned
+- Mediocre output
+- Accumulated frustration
+```
+
+With these practices:
+
+```
+[30 min session]
+- 1-2 corrections on average
+- 8k tokens burned
+- Good output
+- No frustration
+```
+
+**Same problem. 4× less time and tokens.**
+
+---
+
+## Specific anti-patterns
+
+### 1. "One last correction"
+
+After 4 corrections, you think "almost there, one more and it's done." **No**. Start over.
+
+### 2. Keeping a giant session "because I don't want to lose the context"
+
+If your session is 4 hours long, **the context is no longer value — it's noise**. Do `/clear` and start with a prompt that covers what matters.
+
+### 3. Correcting without diagnosing
+
+"No, not like that" without explaining **what** went wrong. Claude isn't telepathic. Say **specifically** what's wrong and what you expected.
+
+### 4. Skipping `/clear` between different tasks
+
+You worked 1h on auth. Now you switch to payments. Without `/clear`, Claude still has auth in mind and will suggest weird things.
+
+---
+
+## The most important thing
+
+If you only apply **one** practice from this post:
+
+> **`/clear` between different tasks.**
+
+It's **free**, it immediately changes the quality of your next session, and most people don't use it.
+
+The other practices are refinement. This one is the foundation.
+
+---
+
+## Next steps
+
+- For the 4 general tricks that move the needle most, [basic tricks](/boveda/trucos-basicos-claude)
+- To go deeper on writing good prompts from the start, [Prompting 101 — 10 pillars](/boveda/prompting-10-pilares)
+- For the typical mistakes when using AI (not just Claude), [3 mistakes with AI](/boveda/tres-errores-con-ia)

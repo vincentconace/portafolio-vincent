@@ -1,0 +1,354 @@
+---
+title: "Ecosistema de agentes — el patrón de 3 capas para correr equipos 24/7"
+description: "Dashboard arriba, Router al medio, agentes especializados con sub-agentes abajo. El patrón para montar un equipo de agentes que se coordinan y avisan cuándo se caen, corriendo en una Mac mini con suscripción mensual de Claude. Sin API key extra."
+difficulty: "avanzado"
+category: "guías"
+tools: ["claude-code", "telegram"]
+publishedAt: "2026-05-23"
+readingTime: "14 min"
+relatedSlugs: ["memory-palace-agentes", "agent-view-paralelo", "mcp-server-propio"]
+---
+
+## El problema
+
+La primera versión que casi todos montan es la misma: **un agente solo** con un `CLAUDE.md` de 600 líneas tratando de hacer email + Shopify + research + atención al cliente.
+
+Funciona 2 días. Después:
+
+- No decide bien qué herramienta usar para qué (todo es martillo, todo parece clavo)
+- Se traga el contexto en cada turno y empieza a olvidar
+- Cuando algo falla, no hay forma de enterarse hasta que el cliente reclama
+- Si abrís 4 ventanas para "especializar" cada chat, ninguna sabe lo que la otra hizo
+
+El patrón de **3 capas** resuelve los 3 síntomas a la vez. No es complejo de montar — solo requiere pensar agentes como **equipo**, no como individuo.
+
+---
+
+## Las 3 capas
+
+Un mensaje viaja en una dirección clara: entra por el Router → baja al agente especializado → ese agente coordina sus sub-agentes → la respuesta vuelve por el Router. El Dashboard observa todo desde arriba.
+
+```
+       ┌─────────────────────┐
+       │  Dashboard          │ ← health check 24/7
+       │  (observador)       │
+       └──────────┬──────────┘
+                  │ monitorea
+       ┌──────────▼──────────┐
+       │  Router             │ ← entry point (ej: Telegram bot)
+       │  (recibe, dispatcha)│
+       └────┬──────┬──────┬──┘
+            ▼      ▼      ▼
+        ┌─────┐ ┌─────┐ ┌─────┐
+        │Email│ │Shop │ │Comp │ ← agentes especializados
+        └─┬───┘ └─┬───┘ └─┬───┘
+          ▼       ▼       ▼
+        sub-    sub-    sub-     ← sub-agentes para trabajo fino
+        agente  agente  agente
+```
+
+Cada capa tiene un solo trabajo y **sabe qué NO hacer** — esa es la parte que cuesta respetar.
+
+---
+
+## Capa 1 — Agent Dashboard (el observador)
+
+### Qué sabe y hace
+
+- Qué agentes están corriendo (lee un `registry.json` compartido)
+- Última vez que cada uno respondió un ping
+- Último error que registró cada agente
+- Status agregado: 🟢 ok / 🟡 lento / 🔴 caído / ⚫ sin info
+
+### Qué NO hace
+
+- No procesa mensajes del usuario directamente
+- No conoce la lógica de negocio de los agentes
+- No decide cómo arreglar cuando algo se cae — solo avisa
+
+### Implementación mínima
+
+`registry.json` (compartido entre todos los agentes):
+
+```json
+{
+  "agents": [
+    { "name": "email", "path": "/agents/email", "ping_url": "..." },
+    { "name": "shopify", "path": "/agents/shopify", "ping_url": "..." },
+    { "name": "research", "path": "/agents/research", "ping_url": "..." }
+  ]
+}
+```
+
+Cada agente actualiza un `last_seen.json` cada N minutos. El Dashboard lee el registry, hace ping a cada uno, y mantiene un estado global:
+
+```json
+{
+  "checked_at": "2026-05-23T18:42:00Z",
+  "agents": {
+    "email": { "status": "ok", "last_ping": "...", "last_error": null },
+    "shopify": { "status": "slow", "last_ping": "...", "latency_ms": 8400 },
+    "research": { "status": "down", "last_error": "API rate limited" }
+  }
+}
+```
+
+Cuando algo entra en 🔴, manda una notificación (Telegram/email/Slack) **a vos**, no al usuario.
+
+---
+
+## Capa 2 — Agent Router (el dispatcher)
+
+### Qué sabe y hace
+
+- Recibe el input crudo del usuario (típicamente desde Telegram, Slack, o email entrante)
+- Identifica **qué agente** debería manejar el mensaje
+- Dispatcha al agente correcto con el contexto que necesita
+- Devuelve la respuesta del agente al usuario
+
+### Qué NO hace
+
+- No ejecuta lógica de negocio
+- No mantiene estado del agente final
+- No mezcla outputs de varios agentes (eso lo hace un agente especializado si hace falta)
+
+### Cómo identifica el agente correcto
+
+Dos approaches según volumen:
+
+**Approach 1 — Regex / keywords (low volume)**:
+
+```
+Si el mensaje contiene "pedido", "orden", "tracking" → agente Shopify
+Si contiene "factura", "cobrar" → agente Email
+Si contiene "competidor", "research" → agente Research
+Default → agente General
+```
+
+Funciona para casos claros. Falla con frases ambiguas.
+
+**Approach 2 — Claude clasificador (high volume)**:
+
+Un mini-agente cuyo único trabajo es leer el mensaje y devolver un slug del agente destino:
+
+```
+> Mensaje del usuario: "¿llegó la entrega del pedido #2451?"
+< { "destination": "shopify", "confidence": 0.95, "context": "tracking query" }
+```
+
+Después el Router invoca al agente del slug devuelto.
+
+### El bot de Telegram como entry point
+
+Patrón común: el Router es **un bot de Telegram** que vos mandás los mensajes:
+
+- Le hablás natural ("¿el cliente Acme respondió?")
+- El Router clasifica → manda al agente Email
+- Email busca en tu inbox, devuelve resumen
+- El Router te lo devuelve por Telegram
+
+Desde tu teléfono operás todo tu negocio.
+
+---
+
+## Capa 3 — Agentes especializados (con sub-agentes)
+
+### Qué hacen
+
+Cada agente especializado tiene **una sola misión** clara:
+
+- **Email**: leer, clasificar, draftear respuestas, marcar urgencias
+- **Shopify**: tracking de pedidos, inventario, devoluciones
+- **Research**: investigar competencia, mercado, leads
+- **Company**: info interna del negocio (clientes, contratos, historial)
+
+Cada uno tiene su `CLAUDE.md` específico con su contexto, sus herramientas, sus reglas.
+
+### Sub-agentes
+
+Dentro de cada agente especializado, sub-agentes para tareas más finas:
+
+```
+Email/
+├── CLAUDE.md
+├── subagents/
+│   ├── classifier.md    ← clasifica emails entrantes
+│   ├── drafter.md       ← escribe respuestas
+│   └── summarizer.md    ← resume threads largos
+```
+
+El agente coordina; los sub-agentes ejecutan piezas.
+
+### El error típico
+
+**Hacer agentes "que casi se solapan"**: uno que hace research general, otro que hace research de competencia. Lo más probable: terminás eligiendo uno y el otro queda muerto.
+
+Regla: **dominios separados, no especializaciones del mismo dominio**.
+
+---
+
+## Hardware: dónde corre esto
+
+El patrón funciona en cualquier máquina con Claude Code que esté **siempre prendida**. Las opciones realistas:
+
+| Opción | Costo | Pros | Contras |
+|--------|-------|------|---------|
+| **Mac mini M4** | ~USD 700 | Silencioso, eficiente, bajo consumo, durable | Inversión inicial |
+| **VPS Linux (Hetzner, etc.)** | ~USD 20-50/mes | Sin hardware propio, IPs públicas para webhooks | Mantener tú la infra |
+| **Tu laptop principal** | $0 | Lo tenés ya | Si lo apagás, todo cae |
+| **Raspberry Pi 5** | ~USD 100 | Bajo costo | Limitado en RAM, lento para varios Claude paralelos |
+
+**La mayoría arranca en Mac mini.** Una sola, sin display ni mouse — corriendo headless en un rincón.
+
+---
+
+## Qué plan de Claude necesitás
+
+Sin API key extra. Solo suscripción mensual.
+
+| Plan | Costo | Cuántos agentes simultáneos |
+|------|-------|------------------------------|
+| Pro $20 | $20/mes | 1-2 agentes "ligeros" (consultivos, no 24/7 intensos) |
+| Max 5× $100 | $100/mes | 3-4 agentes operando regularmente |
+| Max 20× $200 | $200/mes | 5-8 agentes 24/7 con cargas reales |
+
+**Regla práctica**: si tenés ~3 agentes corriendo + sub-agentes, Max 5× alcanza. Más allá, Max 20×.
+
+Si pasaste a usar API key directa, lo gastás en variabilidad — la suscripción mensual te da costo fijo predecible.
+
+---
+
+## Estructura de carpetas
+
+Una vez montado, la estructura típica en la Mac mini:
+
+```
+~/ecosystem/
+├── registry.json
+├── dashboard/
+│   ├── CLAUDE.md
+│   └── (corre 24/7 monitoreando)
+├── router/
+│   ├── CLAUDE.md
+│   ├── telegram-bridge/
+│   └── (corre 24/7 escuchando)
+└── agents/
+    ├── email/
+    │   ├── CLAUDE.md
+    │   ├── last_seen.json
+    │   └── subagents/...
+    ├── shopify/
+    │   ├── CLAUDE.md
+    │   └── ...
+    └── research/
+        ├── CLAUDE.md
+        └── ...
+```
+
+Cada agente es **una carpeta con su Claude Code propio corriendo**. No comparten contexto — comparten **archivos versionados** (registry, last_seen, logs).
+
+---
+
+## Montaje base — 1 hora
+
+<Step number={1} title="Crear estructura">
+
+```bash
+mkdir -p ~/ecosystem/{dashboard,router,agents/email,agents/shopify}
+cd ~/ecosystem
+echo '{"agents":[]}' > registry.json
+```
+
+</Step>
+
+<Step number={2} title="CLAUDE.md de cada capa">
+
+Cada carpeta tiene su `CLAUDE.md` que define:
+
+- Misión (1 línea)
+- Qué tiene acceso (archivos, MCPs, APIs)
+- Qué NO debe hacer
+- Cómo reportar al Dashboard (cada cuánto actualizar `last_seen.json`)
+
+</Step>
+
+<Step number={3} title="Arrancar los procesos">
+
+En 3 terminales distintas (o tmux):
+
+```bash
+cd ~/ecosystem/dashboard && claude
+cd ~/ecosystem/router && claude
+cd ~/ecosystem/agents/email && claude
+```
+
+Cada uno con su contexto. Con un launchd / systemd / pm2, los podés tener auto-start al boot.
+
+</Step>
+
+<Step number={4} title="Probar el flow" last>
+
+Mandás un mensaje al bot de Telegram (router):
+
+```
+> Tengo email del cliente Acme?
+```
+
+- Router clasifica → manda a agente email
+- Email busca en tu inbox
+- Email actualiza su `last_seen.json`
+- Email devuelve respuesta
+- Router te la pasa por Telegram
+
+Si en algún punto se cae algo, el Dashboard te avisa por separado.
+
+</Step>
+
+---
+
+## Los 5 errores que cuestan tiempo la primera vez
+
+### 1. Querer un agente que hace todo
+
+Cae en 2 días. Empezá con **un dominio bien acotado** (solo email, solo Shopify). Después sumás.
+
+### 2. No tener Dashboard desde el día 1
+
+Sin Dashboard, no te enterás cuando algo se cae hasta que el cliente reclama. Tipear el Dashboard antes que los otros agentes parece overkill pero te ahorra dolor.
+
+### 3. Compartir contexto entre agentes vía chat
+
+Si pasás contexto de un agente a otro pegando mensajes, perdés. Usá **archivos versionados compartidos** ([memory palace style](/boveda/memory-palace-agentes)).
+
+### 4. Sub-agentes de más
+
+3 sub-agentes por agente es razonable. 7 sub-agentes es síntoma de que tu agente tiene scope demasiado grande — partilo en dos.
+
+### 5. No definir "qué NO hace" cada capa
+
+Cada agente que no tenga claro qué **NO** es su trabajo, va a meterse en lo de otros. La sección "Qué NO hace" en el `CLAUDE.md` es tan importante como "Qué hace".
+
+---
+
+## Por qué este patrón vale la pena
+
+Lo que ganás vs un agente monolítico:
+
+| Aspecto | Mono-agente | Ecosistema 3 capas |
+|---------|-------------|--------------------|
+| Debugging cuando falla | "no sé qué pasó" | Dashboard te dice quién falló |
+| Escalado | romper y refactor | sumás un agente sin tocar los demás |
+| Memoria | contexto en RAM | archivos versionados |
+| Observabilidad | nula | dashboard 24/7 |
+| Costo de tokens | alto (contexto enorme) | controlado (contexto chico por agente) |
+| Recuperación de fallos | manual | el dashboard te avisa |
+
+El overhead de montaje se paga después del primer mes.
+
+---
+
+## Próximos pasos
+
+- Para el patrón de memoria compartida entre agentes, [Memory Palace](/boveda/memory-palace-agentes)
+- Para correr varios Claude en paralelo en el mismo repo, [múltiples Claude Code en paralelo](/boveda/agent-view-paralelo)
+- Para los MCPs que cada agente necesita, [tu propio MCP server](/boveda/mcp-server-propio)

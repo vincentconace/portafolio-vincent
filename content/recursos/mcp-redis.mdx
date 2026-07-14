@@ -1,0 +1,112 @@
+---
+title: "MCP Redis — el server oficial de Redis para Claude Code"
+description: "MCP server oficial de Redis. Interfaz en lenguaje natural para Redis: queries, gestión, debugging de cache, pub/sub, streams. Para apps con Redis crítico que querés operar desde Claude."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "redis"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-postgresql-integration", "mcp-mongodb", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/redis"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/redis.json"
+---
+
+## Qué es
+
+Redis es el in-memory data store más usado: cache, pub/sub, queues, streams, leaderboards. Este MCP es la versión **oficial** de Redis, dándole a Claude interfaz natural para consultar y operar tu instancia.
+
+Capabilities:
+- **Queries** y operaciones (GET, SET, MGET, HGET, etc.)
+- **Gestión** de keys (TTLs, expiraciones)
+- **Pub/Sub** introspection
+- **Streams** (Redis Streams)
+- **Module info** (RedisJSON, RediSearch, etc.)
+
+Útil para debugging de cache, análisis de uso de memoria, o configurar streams desde Claude.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | 46 |
+| Servidor MCP | `redis` |
+| Autor | Redis (oficial) |
+| Compatibilidad | Redis OSS + Redis Cloud + Redis Stack |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/redis
+```
+
+Pre-requisitos: URL de conexión + credenciales si aplica.
+
+Para Claude:
+
+```
+Instalé el MCP database/redis. Configurá REDIS_URL. Mostrame el INFO
+del server, número de keys, memory used y los top 10 keys por tamaño
+estimado.
+```
+
+## Qué podés hacer con esto
+
+### Inspección de cache
+
+"Listame las keys que matchean el pattern `session:*`. ¿Cuántas hay y cuál es el TTL promedio?". Útil para entender uso de sesión.
+
+### Debug de keys específicas
+
+"Para la key `user:1234`, mostrame el value, type, TTL y last access". Debug puntual.
+
+### Análisis de memoria
+
+"Identificá las top 20 keys que consumen más memoria. Para cada una, sugerí si conviene cambiar de tipo (string → hash, por ejemplo)".
+
+### Streams
+
+"En el stream `events`, mostrame los últimos 50 mensajes y identificá si hay consumers stuck en el group X".
+
+### Gestión de TTLs
+
+"Buscame keys sin TTL (persistentes). Si no deberían serlo, sugerí TTL apropiado por pattern".
+
+### Pub/Sub debugging
+
+"Listame los channels activos con número de subscribers. Si hay subscribers idle, decime cuál".
+
+### Combo con [Postgres MCP](/boveda/mcp-postgresql-integration)
+
+Redis cache + Postgres source of truth. Claude puede cross-reference: "¿este user está en cache pero no en DB? Algo está raro".
+
+## Pre-requisitos
+
+- **Redis alcanzable** (local, Cloud, instance VM)
+- **Credenciales** si Redis requiere auth
+- **Módulos instalados** si vas a usar RedisJSON, RediSearch, etc.
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de operar Redis de producción">
+
+- **Comandos destructivos:** `FLUSHALL`, `FLUSHDB`, `DEL` masivos. Catastrófico. Hooks de aprobación SIEMPRE.
+- **Comandos pesados:** `KEYS *` en un Redis grande bloquea. Usá `SCAN` (el MCP debería hacerlo, validá).
+- **Sin auth:** muchos Redis self-hosted sin password. Si tu Redis está expuesto, conectar Claude puede ser vector.
+- **Permisos amplios:** ACL en Redis es importante. Usá user con scope mínimo.
+- **Solo 46 installs:** comunidad probando reducida. Probá en sandbox antes de prod.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Redis MCP](https://www.aitmpl.com/component/mcps/database/redis) — comando exacto.
+- **Config JSON:** [redis.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/redis.json).
+- **Redis oficial:** [redis.io](https://redis.io).
+
+## Recursos relacionados
+
+- [PostgreSQL Integration MCP](/boveda/mcp-postgresql-integration) — Postgres como source of truth, Redis como cache. Combo.
+- [MongoDB MCP](/boveda/mcp-mongodb) — para tu stack NoSQL si Redis no alcanza.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar el MCP como conector a un data store.

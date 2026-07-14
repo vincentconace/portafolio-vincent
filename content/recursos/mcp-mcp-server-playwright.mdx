@@ -1,0 +1,101 @@
+---
+title: "MCP Playwright — automation de browser vía Playwright en Claude Code"
+description: "MCP server de Playwright con 675 installs. Browser automation con la librería estándar para testing E2E. Más control que [Browser-use](/boveda/mcp-browser-use-mcp-server), más simple que [Chrome DevTools](/boveda/mcp-chrome-devtools)."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "playwright"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-playwright-skill", "mcp-browser-use-mcp-server", "mcp-chrome-devtools"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/browser_automation/mcp-server-playwright"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/mcp-server-playwright.json"
+---
+
+## Qué es
+
+Playwright es la librería de automation de Microsoft para browsers — el estándar moderno para tests E2E y scripts de browser. Cubre Chromium, Firefox y WebKit con la misma API.
+
+Este MCP envuelve Playwright para que Claude lo controle desde Claude Code. La diferencia con [Playwright Skill](/boveda/plugin-playwright-skill) (que es model-invoked y escribe scripts custom de Playwright):
+
+- **MCP Playwright (este):** Claude llama directamente a primitives (`page.goto`, `page.click`, `page.screenshot`) via JSON-RPC del MCP. Más predecible.
+- **Playwright Skill:** Claude escribe el script entero y lo ejecuta. Más flexible.
+
+Para automation puntual y controlable, este MCP. Para workflows complejos que requieren scripts custom, la skill.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `browser_automation` |
+| Installs | 675 |
+| Servidor MCP | `automatalabs-playwright-server` |
+| Stack | Playwright |
+| Browsers | Chromium, Firefox, WebKit |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp browser_automation/mcp-server-playwright
+```
+
+Pre-requisito: Playwright instala sus propios browsers al primer run.
+
+Para Claude:
+
+```
+Instalé el MCP browser_automation/mcp-server-playwright. Abrí Chromium
+en headless, navegá a example.com, esperá que cargue y devolveme el
+título y un screenshot.
+```
+
+## Qué podés hacer con esto
+
+### Automation puntual
+
+"Andá a `mi-app.com/dashboard`, esperá que el spinner desaparezca, hacé click en el botón `Refresh`, capturá screenshot del resultado". Acciones discretas.
+
+### Cross-browser testing
+
+"Andá a `localhost:3000` en Chromium, Firefox y WebKit. Tomá screenshot de cada uno y compará la home". Detectar inconsistencias.
+
+### Inspección de DOM
+
+"En la página X, dame el HTML del componente con clase `.product-card`. Si hay imágenes, dame sus alt text".
+
+### Validación de UX flows
+
+"Simulá el flujo de signup: andá a /signup, llename con email válido, password válido, click Submit. Capturá screenshot del onboarding y devolveme la URL final".
+
+### Comparado con [Browser-Use](/boveda/mcp-browser-use-mcp-server)
+
+Browser-Use es más agéntico — el modelo decide qué hacer en cada paso. Playwright MCP es más imperativo — vos / Claude saben exactamente qué primitives llamar. Para reproducibilidad, Playwright MCP. Para exploración, Browser-Use.
+
+## Pre-requisitos
+
+- **Playwright** instala sus browsers automáticamente
+- **Espacio en disco** para los browsers (Chromium + Firefox + WebKit = varios GB)
+- **Permisos** para correr browsers en background
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para sites con anti-bot agresivo:** Playwright local puede ser detectado. Usá [Bright Data](/boveda/mcp-brightdata) o [Browserbase](/boveda/mcp-mcp-server-browserbase).
+- **Para testing E2E mantenible:** Cypress, Playwright Test, Detox son mejor opción que un MCP. Playwright MCP es para flows ad-hoc.
+- **Si solo necesitás scrap simple:** [Firecrawl](/boveda/mcp-firecrawl) o `curl` + `pup` son más livianos.
+- **Browser footprint:** Chrome consume RAM. Para muchas sesiones paralelas, considerá cloud (Browserbase).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Playwright MCP](https://www.aitmpl.com/component/mcps/browser_automation/mcp-server-playwright) — comando exacto.
+- **Config JSON:** [mcp-server-playwright.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/mcp-server-playwright.json).
+- **Playwright oficial:** [playwright.dev](https://playwright.dev).
+
+## Recursos relacionados
+
+- [Playwright Skill](/boveda/plugin-playwright-skill) — model-invoked variant. Compará según preferencia.
+- [Browser-Use MCP](/boveda/mcp-browser-use-mcp-server) — agéntico, framework Python.
+- [Chrome DevTools MCP](/boveda/mcp-chrome-devtools) — para debugging de bajo nivel via CDP.

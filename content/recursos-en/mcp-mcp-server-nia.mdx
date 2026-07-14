@@ -1,0 +1,84 @@
+---
+title: "Nia MCP — research depth for Claude Code"
+description: "Nia's MCP server in the deepresearch category. Built for deep AI research workflows. The concrete details live in the config JSON — check there before committing."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "nia"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-arxiv-mcp-server", "mcp-jina-ai", "aprende-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepresearch/mcp-server-nia"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepresearch/mcp-server-nia.json"
+---
+
+## What it is
+
+Nia MCP lives in the `deepresearch` category of the aitmpl catalog — alongside tools focused on deep AI research. The inline description is terse — for concrete details on what it exposes, the [config JSON](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepresearch/mcp-server-nia.json) is the most reliable source.
+
+With 128 installs, it stands out as one of the more adopted MCPs in its niche category.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `deepresearch` |
+| Installs | 128 |
+| MCP server | `mcp-server-nia` |
+| Account required | Probably yes — check the config |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp deepresearch/mcp-server-nia
+```
+
+For Claude:
+
+```
+I installed the deepresearch/mcp-server-nia MCP. Show me the tools the
+server exposes and give me an example of how to invoke it for research
+on [topic].
+```
+
+## What you can do with it
+
+### Research depth
+
+The `deepresearch` category handles deep AI research: multi-step workflows, agents that dig through multiple sources, synthesis of findings.
+
+If your use case is academic research, due diligence, or in-depth topic analysis, this MCP fits the category.
+
+### Validate the real scope
+
+To understand exactly what Nia does, the most useful approach:
+1. Install the MCP
+2. Ask Claude to list the tools it exposes
+3. Try a simple call to see the output
+
+## Prerequisites
+
+- **Check the config JSON** to understand what it requires (credentials, env vars)
+- **A Nia service account** if applicable
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **Limited information on aitmpl:** the description is generic. If your use case is serious, check the provider's official docs.
+- **128 installs is moderate:** community is testing it moderately.
+- **For specific academic research** ([arXiv MCP](/boveda/mcp-arxiv-mcp-server) for papers), [Jina AI](/boveda/mcp-jina-ai) for grounding) may be more concrete.
+- **Try it in a sandbox** before production use.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Nia MCP](https://www.aitmpl.com/component/mcps/deepresearch/mcp-server-nia) — exact command.
+- **Config JSON:** [mcp-server-nia.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepresearch/mcp-server-nia.json) — source of truth on tools.
+
+## Related resources
+
+- [arXiv MCP Server](/boveda/mcp-arxiv-mcp-server) — for specific academic research.
+- [Jina AI MCP](/boveda/mcp-jina-ai) — grounding and fact-checking, complementary.
+- [Aprende Skill](/boveda/aprende-skill) — for building AI research workflows without a specific MCP.

@@ -1,0 +1,83 @@
+---
+title: "Hook Scope Guard — detect changes outside the spec's declared scope"
+description: "Hook with 108 installs. Detects when files are modified outside the scope declared in a .spec.md. For teams doing spec-driven development who want enforcement of the agreed-upon scope."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-plan-gate", "spec-kit", "hook-tdd-gate"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/quality-gates/scope-guard"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/scope-guard.json"
+---
+
+## What it is
+
+When your `.spec.md` explicitly declares which files/paths are in scope (`scope: src/auth/**`), the hook detects whether Claude modified files outside of that. Hook event: `Stop`.
+
+Difference from [Plan Gate](/boveda/hook-plan-gate) (which enforces that a spec exists): Scope Guard enforces that the scope of the existing spec is respected.
+
+For enterprise teams with strict specs.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `quality-gates` |
+| Installs | 108 |
+| Hook event | `Stop` |
+| Trigger | Files modified outside `.spec.md` scope |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook quality-gates/scope-guard
+```
+
+For Claude:
+
+```
+I installed the quality-gates/scope-guard hook. Check that my active
+.spec.md has a `scope:` section. If I edit outside the scope, it should
+warn when the session closes.
+```
+
+## What you can do with this
+
+### Keep the scope focused
+
+If the spec says "auth module only," the hook detects when Claude touched something in billing by mistake.
+
+### Adherence auditing
+
+After the session, the log tells you whether there were overruns and which ones.
+
+### Combo with [Spec Kit](/boveda/spec-kit)
+
+Spec Kit generates specs with scope. Scope Guard enforces the scope.
+
+### Combo with [Plan Gate](/boveda/hook-plan-gate)
+
+Plan Gate enforces that a spec exists. Scope Guard enforces that its scope is respected. A natural combo.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use specs with a declared scope:** it does nothing useful.
+- **For repos without spec-driven development:** overhead.
+- **For legitimate cross-module refactors:** the hook may be overly cautious.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Scope Guard Hook](https://www.aitmpl.com/component/hooks/quality-gates/scope-guard) — exact command.
+- **JSON config:** [scope-guard.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/scope-guard.json).
+
+## Related resources
+
+- [Plan Gate Hook](/boveda/hook-plan-gate) — enforces that a spec exists before editing prod.
+- [Spec Kit](/boveda/spec-kit) — toolkit for Spec-Driven Development.
+- [TDD Gate Hook](/boveda/hook-tdd-gate) — enforces complementary TDD.

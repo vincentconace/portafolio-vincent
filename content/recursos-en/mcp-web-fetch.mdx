@@ -1,0 +1,94 @@
+---
+title: "MCP Web Fetch — the most adopted web MCP (3,346 installs)"
+description: "MCP server with 3,346 installs — the absolute #1 in the web category. Web content fetching and basic extraction. Access to external APIs and simple scraping. The default when you need to pull data from URLs."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-firecrawl", "mcp-jina-ai", "mcp-context7"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/web-fetch"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-fetch.json"
+---
+
+## What it is
+
+Web Fetch is the base MCP of the `web` category: **3,346 installs**, the most adopted. Its scope is straightforward: web content fetching, basic extraction, access to external APIs.
+
+Compared to alternatives:
+- [Firecrawl](/boveda/mcp-firecrawl) — LLM-ready markdown, paid
+- [Jina AI](/boveda/mcp-jina-ai) — grounding + fact-checking
+- **Web Fetch (this one)** — simple, free, no fancy features
+
+It's the "basic fetch that works". For many cases, that's enough.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web` |
+| Installs | **3,346 (top of web)** |
+| MCP server | `fetch` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp web/web-fetch
+```
+
+For Claude:
+
+```
+I installed the web/web-fetch MCP. Fetch this URL [URL] and give me back the
+content. If it's HTML, extract the main text.
+```
+
+## What you can do with it
+
+### Fetching URLs
+
+"Get me the content of `<URL>` and show me the body in plain text". The most basic operation.
+
+### Consuming external APIs
+
+"Do a GET to `https://api.github.com/repos/owner/repo` and give me name, stars, last update". Simple JSON parsing.
+
+### One-off doc reading
+
+"Go to this Next.js docs page and answer me: what is Server Actions?". Homemade anti-hallucination.
+
+### Casual scraping
+
+For pages without anti-bot, it's enough. For serious anti-bot, better to use [Bright Data](/boveda/mcp-brightdata) or [Browserbase](/boveda/mcp-mcp-server-browserbase).
+
+### Combo with any flow
+
+Because it's so basic, it fits into many workflows as an initial connector.
+
+## Prerequisites
+
+- **Node.js + Claude Code**
+- **Internet connection**
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **For sites with heavy JS (SPA):** Web Fetch brings back static HTML. For SPAs you need [Playwright](/boveda/mcp-playwright-mcp-server) or [browser-use](/boveda/mcp-browser-use-mcp-server).
+- **For sites with anti-bot:** better to use specialized tools.
+- **For clean markdown output:** [Firecrawl](/boveda/mcp-firecrawl) is tidier.
+- **For fact-checking / grounding:** [Jina AI](/boveda/mcp-jina-ai).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Web Fetch MCP](https://www.aitmpl.com/component/mcps/web/web-fetch) — exact command.
+- **JSON config:** [web-fetch.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-fetch.json).
+
+## Related resources
+
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — LLM-ready markdown when you need more quality.
+- [Jina AI MCP](/boveda/mcp-jina-ai) — for grounding and fact-checking.
+- [Context7 MCP](/boveda/mcp-context7) — specific for library docs.

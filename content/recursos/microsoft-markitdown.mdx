@@ -1,0 +1,309 @@
+---
+title: "Microsoft MarkItDown — el traductor que ahorra tokens cuando Claude lee PDFs/Word/Excel"
+description: "Herramienta open source de Microsoft (100k+ ★) que convierte PDF, Word, Excel, PowerPoint, imágenes, audios, videos de YouTube a Markdown limpio. Claude lo lee rapidísimo gastando casi nada vs leer el archivo directo. Instalación: pegale un prompt a Claude Code, lo hace solo."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "markitdown"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["claude-oficina-gratis", "cinco-errores-claude", "obsidian-claude"]
+---
+
+## El problema
+
+Cuando le das un PDF, Word o Excel a Claude **directo**, tiene que leer el archivo entero. Eso gasta **muchísimo** de tu cuenta sin que te des cuenta.
+
+Por ejemplo:
+- PDF de 50 páginas → ~30,000 tokens solo en input
+- Word con tablas → tokens extras por estructura
+- Excel con fórmulas → todavía peor
+
+**MarkItDown** es traductor open source de Microsoft. Convierte cualquier archivo a **Markdown limpio** que Claude lee **rapidísimo** y **gastando casi nada**.
+
+Repo: `microsoft/markitdown`. 100k+ estrellas. Open source.
+
+---
+
+## Qué archivos entiende
+
+| Formato | Sí | No |
+|---------|-----|-----|
+| PDF | ✅ | |
+| Word (.docx) | ✅ | |
+| Excel (.xlsx) | ✅ | |
+| PowerPoint (.pptx) | ✅ | |
+| Imágenes con texto (OCR) | ✅ | |
+| Audios (transcribe) | ✅ | |
+| Videos de YouTube (por link) | ✅ | |
+| HTML, CSV, JSON, XML, ZIP | ✅ | |
+
+Cubre prácticamente cualquier formato común.
+
+---
+
+## El ahorro real
+
+Para un PDF típico de 30 páginas:
+
+| Approach | Tokens input | Calidad |
+|----------|--------------|---------|
+| **PDF directo a Claude** | ~20,000 | Buena pero gasta |
+| **MarkItDown → Markdown → Claude** | ~5,000 | Igual o mejor |
+
+**Ahorro: ~75%** en input tokens. Para uso intensivo, transforma tu cuota.
+
+Bonus: Claude **entiende mejor** porque el formato es nativo (Markdown vs PDF parseado).
+
+---
+
+## Instalación — pegale a Claude
+
+No necesitás saber programar. Copy-paste:
+
+```
+Instalá la herramienta MarkItDown de Microsoft desde
+https://github.com/microsoft/markitdown en mi computadora.
+
+Después usala cada vez que te pida convertir un archivo (PDF,
+Word, Excel, PowerPoint, imagen, audio o video) a Markdown
+antes de leerlo.
+
+Avisame cuando termines de instalarla.
+```
+
+Claude:
+1. Se mete a `github.com/microsoft/markitdown`
+2. Descarga
+3. Instala con pip
+4. Te confirma cuando está listo
+
+**Vos no tecleás nada técnico**. Solo aceptás permisos para correr comandos (solo es la instalación).
+
+Funciona en Claude Code, Codex, Cursor, Claude Cowork — cualquier agente compatible.
+
+---
+
+## Cómo usarlo
+
+Después de instalado, en lugar de arrastrarle el archivo, le decís: **"usá MarkItDown para convertir este archivo"**.
+
+Claude lo traduce primero a texto limpio y después lo lee. Ese paso extra te ahorra **muchos tokens**.
+
+### Convertir PDF y resumir
+
+```
+> Usá MarkItDown para convertir /Users/yo/Desktop/contrato.pdf
+  a Markdown.
+  Después leelo y resumímelo en español sencillo con los
+  puntos más importantes.
+```
+
+### Convertir Excel y analizar
+
+```
+> Convertí /Users/yo/Desktop/reporte.xlsx con MarkItDown y
+  decime las 5 cosas más importantes que ves en la tabla,
+  en palabras simples.
+```
+
+### Transcripción de YouTube
+
+```
+> Usá MarkItDown con este link de YouTube
+  https://www.youtube.com/watch?v=XXXX
+  Sacá la transcripción y hacéme resumen en bullets cortos.
+```
+
+### Word a Markdown
+
+```
+> Convertí /docs/propuesta.docx a Markdown con MarkItDown.
+  Guardalo como /docs/propuesta.md.
+  Mantené tablas y formato.
+```
+
+### Audio a texto
+
+```
+> Acá hay grabación /audio/meeting-2026-05-28.mp3.
+  Usá MarkItDown para transcribir.
+  Después dame:
+  1. Resumen ejecutivo
+  2. Decisiones tomadas
+  3. Action items con responsables y deadlines
+```
+
+### Imagen con texto (OCR)
+
+```
+> Acá hay screenshot /screenshots/whiteboard.png con notas
+  manuscritas de una reunión.
+  Usá MarkItDown para extraer el texto (OCR).
+  Después estructurame en formato de outline.
+```
+
+---
+
+## Casos de uso
+
+### 1. Procesar contratos PDF en bulk
+
+```
+> Tengo carpeta /contracts/2026/ con 50 PDFs.
+  Para cada uno:
+  1. MarkItDown a Markdown
+  2. Extraé: nombre cliente, fecha firma, monto, vencimiento
+  3. Generá CSV consolidado /contracts/summary.csv
+```
+
+### 2. Resumir papers académicos
+
+```
+> Convertí /papers/transformer-paper.pdf con MarkItDown.
+  Resumime:
+  - Problema que ataca
+  - Solución propuesta
+  - Resultados clave
+  - Limitaciones reconocidas
+
+  Lenguaje claro, asumí que sé ML básico.
+```
+
+### 3. Analizar reportes corporativos
+
+```
+> /reports/Q1-2026.pdf (50 páginas) → MarkItDown.
+  Extraé:
+  - Top 5 KPIs con números
+  - Cambios vs Q4-2025
+  - Decisiones estratégicas mencionadas
+```
+
+### 4. Procesar tutoriales en video
+
+```
+> Estos 5 videos de YouTube son tutoriales sobre [tema]:
+  - [URL 1]
+  - [URL 2]
+  ...
+
+  Para cada uno: transcribí con MarkItDown.
+  Después sintetizá los puntos comunes a través de los 5.
+```
+
+### 5. Pipeline de research
+
+```
+> Acá hay 20 PDFs en /research/.
+  Convertilos todos con MarkItDown.
+  Después creá knowledge base en /research/notes/:
+  - Una nota por paper
+  - Wikilinks entre conceptos relacionados
+  - Sumario general en /research/summary.md
+```
+
+Combinable con [Obsidian](/boveda/obsidian-claude).
+
+---
+
+## Anti-patrones
+
+### 1. Olvidar invocar MarkItDown
+
+Si decís solo "leé este PDF", Claude lo lee directo (gastando todo). **Decile explícitamente** "usá MarkItDown".
+
+Workaround: agregalo a CLAUDE.md:
+
+```markdown
+## Regla de archivos
+Siempre que se mencione un archivo PDF, Word, Excel, PowerPoint,
+imagen, audio o video, USAR MarkItDown para convertir a Markdown
+ANTES de procesar.
+```
+
+### 2. Convertir archivos triviales
+
+Para un PDF de 1 página, el overhead de MarkItDown puede no compensar. Usalo para archivos **medianos a grandes**.
+
+### 3. Confiar 100% en OCR de imágenes
+
+OCR es bueno pero **no perfecto**. Para texto crítico (legal, médico), validá manualmente.
+
+### 4. Audios largos sin sub-dividir
+
+Para audio de 3+ horas, **divide primero** en chunks. MarkItDown puede tardar y consumir mucho.
+
+### 5. PDFs escaneados con OCR malo
+
+Si el PDF es escaneado con calidad mala, MarkItDown extrae texto roto. Para esos: pre-procesar con OCR mejor (Tesseract, Adobe).
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **MarkItDown** | Conversión universal de office formats, gratis |
+| **pdftotext (poppler)** | Solo PDFs, sin OCR, mínimo overhead |
+| **textract** | Python, similar pero menos formatos |
+| **Adobe Acrobat export** | Calidad premium PDFs complejos |
+| [PDF Skill](/boveda/claude-oficina-gratis) | PDFs específicamente, integrado en Claude |
+
+Sweet spot de MarkItDown: **traducción universal con calidad consistente**.
+
+---
+
+## Combinaciones potentes
+
+### Con PDF Skill
+
+[5 skills oficina gratis](/boveda/claude-oficina-gratis) incluye PDF skill. Para PDFs específicamente, PDF skill es más profundo. MarkItDown es **más rápido y universal**.
+
+Combinálos:
+- PDFs simples → MarkItDown
+- PDFs con formularios o estructura compleja → PDF skill
+
+### Con Obsidian
+
+```
+> Convertí PDFs en /research/ con MarkItDown.
+> Guardá los .md en mi vault de Obsidian /research/.
+> Conectá con wikilinks a conceptos existentes.
+```
+
+[Obsidian](/boveda/obsidian-claude) usa Markdown nativo. MarkItDown alimenta tu vault.
+
+### Con NotebookLM
+
+NotebookLM acepta varios formatos. MarkItDown estandariza todo a `.md` para mantener tu corpus consistente.
+
+### Con tareas programadas
+
+```
+> Cada lunes:
+  1. Buscá nuevos PDFs en /Dropbox/Reports/
+  2. Convertí con MarkItDown
+  3. Guardá en /knowledge-base/
+  4. Mandame email con resúmenes
+```
+
+[Cowork tareas programadas](/boveda/claude-cowork-workflow).
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás preservar formato visual exacto | MarkItDown extrae texto, no diseño |
+| PDFs escaneados con OCR malo | Calidad input mala → output malo |
+| Formularios PDF interactivos | Usá PDF skill o Acrobat |
+| Archivos muy chicos | Overhead no compensa |
+
+---
+
+## Próximos pasos
+
+- Para suite completa de operaciones sobre archivos office, [5 skills oficina gratis](/boveda/claude-oficina-gratis)
+- Para guardar lo convertido en knowledge base, [Obsidian + Claude](/boveda/obsidian-claude)
+- Para entender por qué reducir tokens cambia tu uso, [5 errores Claude](/boveda/cinco-errores-claude)

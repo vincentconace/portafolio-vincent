@@ -1,0 +1,363 @@
+---
+title: "Claude Ads — open source skill to audit Meta, Google and TikTok with 161 checks"
+description: "Turns Claude Code into a senior paid media strategist. 3 parallel agents (audit-meta, audit-google, audit-tiktok), 161 severity-weighted checks, an Ads Health Score 0-100, and the /ads next coach that tells you exactly what to fix next. Open source, MIT."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills", "meta", "google", "tiktok"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["andromeda-meta-ads", "claude-seo", "claude-copywriter"]
+---
+
+## The premise
+
+Running ads on Meta + Google + TikTok requires:
+
+- Knowing 3 different platforms with their quirks
+- Auditing each account to spot problems
+- Prioritizing fixes by impact vs effort
+- Keeping everything up to date with constant platform changes
+
+A decent agency charges **$3-15k/month** to do this well. A senior in-house strategist, $80-150k/year.
+
+**Claude Ads** is an open source skill that automates ~80% of that work. It doesn't replace a senior human, but **the remaining 80% is mechanical execution you were going to delegate anyway**.
+
+Repo: `Hainrixz/claude-ads`. Current version: v2.4.0. MIT license.
+
+---
+
+## What it delivers
+
+### Ads Health Score 0-100
+
+A number + A-F grade that sums up the health of your multi-platform account:
+
+| Grade | Score | Meaning |
+|-------|-------|-----------|
+| A | 90-100 | Minor optimizations only |
+| B | 75-89 | Room for improvement |
+| C | 60-74 | Notable issues that need attention |
+| D | 40-59 | Significant problems |
+| F | under 40 | Urgent intervention |
+
+With per-platform sub-scores so you can see **where you're bleeding**.
+
+### 161 weighted checks
+
+Distributed by platform:
+
+| Platform | Checks | Coverage |
+|------------|--------|-----------|
+| **Google Ads** | 80 | Search, PMax, AI Max, Demand Gen, CTV, YouTube |
+| **Meta Ads** | 50 | FB, IG, Advantage+ Shopping, Pixel/CAPI |
+| **TikTok Ads** | 28 | Smart+, GMV Max, Shop, Symphony, Events API |
+| **Cross-platform** | 3 | Privacy infra, creative diversity, refresh cadence |
+
+Each check is **weighted by severity** (critical/high/medium) **and by impact on your spend mix** (more weight to the platform where you spend the most).
+
+### 3 agents in parallel
+
+- `audit-google`
+- `audit-meta`
+- `audit-tiktok`
+
+They run **at the same time**, not in sequence. The full report arrives in a single pass.
+
+---
+
+## Setup — 90 seconds
+
+### Step 1 — Install
+
+**Recommended (plugin marketplace, auto-updates)**:
+
+```
+> /plugin marketplace add Hainrixz/claude-ads
+> /plugin install claude-ads@tododeia-claude-ads
+```
+
+**Alternative (classic script, no auto-update)**:
+
+```bash
+# macOS/Linux
+curl -fsSL https://raw.githubusercontent.com/Hainrixz/claude-ads/main/install.sh | bash
+
+# Windows PowerShell
+irm https://raw.githubusercontent.com/Hainrixz/claude-ads/main/install.ps1 | iex
+```
+
+### Step 2 — Onboarding wizard
+
+```
+> /ads start
+```
+
+The wizard asks you:
+1. **Industry** (from the 8 templates: ecommerce, local-service, real-estate, healthcare, finance, agency, generic)
+2. **Approximate monthly spend**
+3. **Primary goal** (leads, sales, traffic, installs)
+4. **OAuth platform by platform** (Meta → Google → TikTok)
+
+Everything is saved in `~/.claude-ads/profile.json`. Future `/ads` commands won't ask you again.
+
+### Step 3 — First audit
+
+```
+> /ads audit
+```
+
+3 agents run in parallel. ~2-5 min later you have your Score + breakdown + prioritized list.
+
+---
+
+## The 3 layers to connect accounts
+
+| Layer | Type | Cost | When |
+|------|------|-------|--------|
+| **Community MCP** | Open-source MCP servers | Free | Default — claude.ai handles OAuth for you |
+| **Direct API adapters** | Scripts to official Marketing APIs | Free | If you want full control and your own tokens |
+| **Zernio** | For `/ads publish` | Free for 2 accounts, $1-6/mo extra | Only if you publish creatives from Claude |
+
+The full audit works with either of the first 2. **Start in read-only** — live mode (with write access) only after several clean runs.
+
+---
+
+## The 15 commands
+
+### Main flow (90% of usage)
+
+| Command | When |
+|---------|--------|
+| `/ads start` | Once, first install |
+| `/ads audit` | Weekly or biweekly |
+| `/ads next` | After each audit |
+
+### Platform specialists
+
+| Command | For |
+|---------|------|
+| `/ads google` | Google Ads only (80 checks) |
+| `/ads meta` | Meta Ads only (50 checks) |
+| `/ads tiktok` | TikTok Ads only (28 checks) |
+
+### Cross-cutting utilities
+
+| Command | For |
+|---------|------|
+| `/ads creative` | Creative quality + fatigue detection |
+| `/ads landing` | Landing page review |
+| `/ads budget` | Budget allocation + bidding |
+| `/ads competitor` | Competitor intelligence |
+| `/ads plan [type]` | Strategic plan from a template |
+| `/ads math` | PPC calculator (CPA, ROAS, LTV:CAC, MER) |
+| `/ads test` | A/B test design |
+| `/ads report` | Client PDF report |
+| `/ads update [platform]` | Refreshes internal references |
+| `/ads publish` | Publishes creatives via Zernio |
+
+---
+
+## `/ads next` — the continuous coach
+
+After each audit, this command:
+
+1. Reads the JSON of the most recent result
+2. Reads your history in `~/.claude-ads/history/`
+3. **Ranks actions by (impact × ease × your spend mix)**
+4. Returns a **top 3 punch list**
+5. **Detects regressions**: if your Meta score dropped from 78 to 71, it flags it as **Priority 0**
+
+Sample output:
+
+```
+Next actions (ranked for your $6,000/mo across Meta + Google + TikTok):
+
+ 1. [meta · M02 · critical] Conversions API not deployed
+    Finding: 30-40% data loss (EMQ 4.1 current).
+    Recommendation: deploy CAPI server-side alongside the Pixel.
+    Time: 90 min · Impact: 92
+    Reference: setup-meta.md (CAPI section)
+
+ 2. [google · G43 · high] Enhanced Conversions disabled
+    ...
+
+ 3. [tiktok · T07 · high] Spark Ads not enabled
+    ...
+```
+
+You always know your next action. This is **the real value** of the skill.
+
+---
+
+## The 8 industry templates
+
+For `/ads plan [type]`:
+
+| Template | For |
+|----------|------|
+| `ecommerce` | DTC / ecom · Shopping / PMax · ROAS-driven |
+| `ecommerce-creative` | Ecom with aggressive creative testing |
+| `local-service` | Plumbers, dentists, local agencies · Search + LSA |
+| `real-estate` | Real estate · Special Ad Category (housing) |
+| `healthcare` | Clinics · HIPAA · LegitScript · restricted targeting |
+| `finance` | Fintech · Special Ad Category · disclosures |
+| `agency` | Multi-client · reporting framework |
+| `generic` | Universal questionnaire if none fit |
+
+Each template loads specific **benchmarks, campaign structure, targeting and regulatory disclosures**.
+
+---
+
+## Practical prompts
+
+### Detailed first audit
+
+```
+> /ads audit
+
+  Monthly spend: $6,000 (50% Meta, 30% Google, 20% TikTok)
+  Q3 goal: B2B SaaS leads
+
+  I want to receive:
+  1. My overall Ads Health Score + A-F grade
+  2. Per-platform sub-scores
+  3. Top 5 critical issues with estimated fix time
+  4. Quick wins I can implement today in under 1h each
+  5. Compliance flags (Special Ad Categories, Consent Mode V2)
+
+  At the end, remind me to run /ads next for prioritization by
+  my spend mix.
+```
+
+### Strategic plan for a new campaign
+
+```
+> /ads plan ecommerce
+
+  Product: inventory management SaaS for mid-size retail
+  Market: LATAM (Mexico, Argentina, Colombia)
+  Monthly budget: $8,000
+  Goal: qualified leads
+  Platforms: Meta + Google
+
+  Deliverable:
+  1. Campaign structure per platform
+  2. Specific audiences and exclusions
+  3. Budget split with reasons
+  4. Target KPIs with industry benchmarks
+  5. Regulatory disclosures if applicable
+```
+
+### Competitor intelligence
+
+```
+> /ads competitor
+
+  My competitors: brightpearl.com, cin7.com, tradegecko.com
+  Industry: B2B inventory SaaS
+  My platforms: Meta + Google
+
+  For each competitor:
+  1. Active ad types + estimated volume
+  2. Creative angles / main messaging
+  3. Audiences and geos where they're bidding
+  4. Creative patterns (format, duration, hooks)
+
+  Close with 3 concrete opportunities to differentiate myself.
+```
+
+---
+
+## Recommended weekly routine
+
+| Day | Action |
+|-----|--------|
+| Monday 9am | `/ads audit` — weekly audit |
+| Monday 10am | `/ads next` — top 3 fixes of the week |
+| Monday-Thursday | Implement the fixes |
+| Friday | `/ads creative` — check creative fatigue |
+| Once a month | `/ads update all` — refresh platform references |
+| Once a month | `/ads competitor` — re-map the competition |
+
+---
+
+## Anti-patterns
+
+### 1. Skipping the wizard
+
+If you don't run `/ads start`, the other commands work **without context** about your industry/spend. Prioritizations come out generic. **10 min of setup saves hours later**.
+
+### 2. Auditing 1 platform when you have 3
+
+If your spend is 50% Meta, 30% Google, 20% TikTok, auditing only Meta makes you miss the **remaining 50% of the problem**. For an honest analysis, run `/ads audit` (not `/ads meta`).
+
+### 3. Implementing everything it says
+
+`/ads audit` can throw 47 issues. **You won't fix all 47**. Use `/ads next`, which prioritizes by impact. Focus on the top 3, then the top 6, and so on.
+
+### 4. Live mode without a sandbox first
+
+The skill can write to your accounts with MCP write-enabled. **Start read-only**. Only after 3-4 clean runs should you enable write access.
+
+### 5. Ignoring regressions
+
+If your score dropped week over week, `/ads next` flags it P0. **Don't ignore it**. A regression typically means a recent change broke something (a campaign paused by mistake, a budget misadjusted, a broken conversion).
+
+---
+
+## Powerful combinations
+
+### With Claude Copywriter
+
+Before uploading creatives:
+
+```
+> I have 5 copy variations for my new Meta campaign.
+  Run them through /humanizer first. Then use /ads creative
+  to validate they meet Meta's requirements (length,
+  prohibited words, etc.).
+```
+
+[Claude Copywriter](/boveda/claude-copywriter) + Claude Ads = copy → validated ads pipeline.
+
+### With Claude SEO
+
+To understand your funnel holistically:
+
+```
+> 1. /seo-audit of my main landing page
+  2. /ads landing with the same URL
+  3. Let's cross-check: is there misalignment between what ranks
+     organically and what I'm bidding on in ads?
+```
+
+[Claude SEO](/boveda/claude-seo) + Claude Ads = paid + organic vision.
+
+### With Andromeda
+
+```
+> /ads meta specialized.
+  Apply Andromeda — the 8 rules for Meta Ads.
+  Validate: do my current campaigns respect all 8?
+```
+
+[Andromeda](/boveda/andromeda-meta-ads) goes deep specifically on Meta — Claude Ads is the orchestrator, Andromeda is the system.
+
+---
+
+## When NOT to use it
+
+| Case | Why |
+|------|---------|
+| Very small spend (under $500/mo) | The setup overhead isn't worth it |
+| Very niche industry outside the 8 templates | Generic recommendations may not apply |
+| Agency accounts with strict compliance (SLAs) | The "free MCP" can have variable uptime |
+| Platforms not covered (LinkedIn, Microsoft) | Apple/LinkedIn/MS Ads are NOT in the skill |
+
+---
+
+## Next steps
+
+- For Meta Ads with an in-depth system, [Andromeda — 8 Meta rules](/boveda/andromeda-meta-ads)
+- To humanize your copy before uploading creatives, [Claude Copywriter](/boveda/claude-copywriter)
+- For SEO optimization complementary to paid, [Claude SEO](/boveda/claude-seo)

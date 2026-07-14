@@ -1,0 +1,100 @@
+---
+title: "MCP monday.com — boards y workflows operados por AI"
+description: "MCP server oficial para monday.com con 112 installs. Permite a AI agents operar workflows: leer/crear items, manejar columns, automatizar boards. Para equipos que viven en monday."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "monday"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-mcp-server-trello", "mcp-google-workspace", "plugin-knowledge-work-plugins"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/productivity/monday"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/monday.json"
+---
+
+## Qué es
+
+monday.com es una plataforma de work management muy usada en empresas medias y grandes: boards visuales, workflows, automations, integraciones. Más estructurado que Trello, más opinionado que Notion.
+
+Este MCP enchufa la API de monday a Claude Code. La descripción oficial promete "operar reliable dentro de real workflows" — la idea es que un agent pueda no solo leer estado sino también actualizar items, mover entre groups, asignar people.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `productivity` |
+| Installs | 112 |
+| Servidor MCP | `monday-api-mcp` |
+| Cuenta requerida | Sí — monday.com + API token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp productivity/monday
+```
+
+Pre-requisitos: cuenta monday.com + Personal API token desde Admin → API.
+
+Para Claude:
+
+```
+Instalé el MCP productivity/monday. Configurá MONDAY_API_TOKEN y
+listame los boards disponibles. Mostrame los items del board X en
+status "Working on it" con due date esta semana.
+```
+
+## Qué podés hacer con esto
+
+### Triage de items
+
+"En el board `Sprint Actual`, listame los items con status `Stuck` o sin owner asignado. Para cada uno, decime cuándo se creó y qué bloquea".
+
+### Creación masiva
+
+"Importáme estos 50 leads de mi CSV como items en el board `Pipeline`. Mapeá columnas: A→Nombre, B→Email, C→Empresa, D→Status (default `Nuevo`)".
+
+### Updates programáticos
+
+"Para cada item que tenga el label `deploy-ready` y status `Done`, mové al board `Released` y agregale la fecha de hoy".
+
+### Reporting
+
+"Generame reporte semanal: items completados, items atrasados, items por owner. Output como markdown para pegar en mi update".
+
+### Workflows asistidos
+
+"Cuando un item se mueve a `Code Review`, asigname automáticamente como reviewer si nadie está asignado todavía". Combinás MCP con hooks o automations.
+
+### Combinación con [Google Workspace](/boveda/mcp-google-workspace)
+
+monday + Calendar + Gmail = pipeline completo: items en monday, meetings en Calendar, comunicación en Gmail. Claude correla.
+
+## Pre-requisitos
+
+- **Cuenta monday.com** activa
+- **Personal API token** (Admin → API)
+- **Permisos** sobre los boards/workspaces relevantes
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás otra plataforma** ([Trello](/boveda/mcp-mcp-server-trello), Asana, Linear, ClickUp): este MCP es monday-only.
+- **Operaciones destructivas:** delete items, delete columns. Hooks de aprobación.
+- **API rate limits:** monday tiene cuotas. Imports masivos pueden bloquearte temporalmente.
+- **Token con scope amplio:** el token deja a Claude operar todo lo que tu user puede ver. Restringí si posible.
+- **Si tu uso es read-only casual:** el MCP suma overhead si solo leés boards de vez en cuando.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [monday MCP](https://www.aitmpl.com/component/mcps/productivity/monday) — comando exacto.
+- **Config JSON:** [monday.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/monday.json).
+- **monday docs:** [developer.monday.com](https://developer.monday.com).
+
+## Recursos relacionados
+
+- [Trello MCP](/boveda/mcp-mcp-server-trello) — alternativa más simple.
+- [Google Workspace MCP](/boveda/mcp-google-workspace) — para combinar monday + Calendar + Gmail en un mismo flow.
+- [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins) — para knowledge workers que combinan varias herramientas.

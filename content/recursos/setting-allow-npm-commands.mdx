@@ -1,0 +1,90 @@
+---
+title: "Setting Allow Npm Commands — autoriza npm lint/test/build/start (1,823 installs)"
+description: "Setting con 1,823 installs. Pre-autoriza common npm dev commands: lint, test, build, start. Workflow JS/TS fluido sin pedir permiso por cada comando."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "npm"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-allow-git-operations", "hook-lint-on-save", "hook-run-tests-after-changes"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/allow-npm-commands"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-npm-commands.json"
+---
+
+## Qué es
+
+Pre-autoriza npm commands de desarrollo común:
+- `npm run lint`
+- `npm run test`
+- `npm run build`
+- `npm start`
+
+Es el #2 más adoptado de permission settings (1,823 installs), solo detrás de [Allow Git Operations](/boveda/setting-allow-git-operations) en categoría similar. Razón: workflow JS/TS sin interrupciones es lo que casi todos queremos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `permissions` |
+| Installs | **1,823** |
+| Setting key | `permissions.allow` |
+| Ops autorizadas | lint, test, build, start |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting permissions/allow-npm-commands
+```
+
+Para Claude:
+
+```
+Instalé el setting permissions/allow-npm-commands. Listame las
+npm ops pre-autorizadas. Si quiero agregar `npm run dev`, mostrame
+cómo.
+```
+
+## Qué podés hacer con esto
+
+### Workflow JS sin interrupciones
+
+`npm run lint && npm run test && npm run build` corre sin "permitir" cada step.
+
+### Para sesiones autónomas
+
+`/goal` que incluye build + test: el setting evita confirmations.
+
+### Combo con [Lint On Save Hook](/boveda/hook-lint-on-save)
+
+Hook dispara lint automatic. Setting autoriza la ejecución sin pedir permiso. Pipeline silencioso.
+
+### Combo con [Run Tests After Changes Hook](/boveda/hook-run-tests-after-changes)
+
+Setting + hook = tests corren sin confirmation cada edit.
+
+### Para proyectos polyglot
+
+Si tu proyecto mezcla npm con otros tools, este setting cubre el lado JS/TS.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de habilitar">
+
+- **Scripts custom destructivos:** si tu `npm run something` es `rm -rf node_modules && reinstall`, autorizarlo sin pensar puede ser cuestionable.
+- **Sin scripts en package.json:** el setting no hace nada útil.
+- **Si querés revisar cada step:** este setting saltea revisión.
+- **Para proyectos no-npm:** Yarn/pnpm pueden necesitar setting separado o equivalente.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Allow Npm Commands Setting](https://www.aitmpl.com/component/settings/permissions/allow-npm-commands) — comando exacto.
+- **Config JSON:** [allow-npm-commands.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-npm-commands.json).
+
+## Recursos relacionados
+
+- [Allow Git Operations Setting](/boveda/setting-allow-git-operations) — equivalente git.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — combo natural.
+- [Run Tests After Changes Hook](/boveda/hook-run-tests-after-changes) — pipeline test sin fricciones.

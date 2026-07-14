@@ -1,0 +1,243 @@
+---
+title: "The /goal command — the target Claude won't let go of"
+description: "How to build (and when to use) a slash command that sets a session goal and forces Claude to hold onto it, pulling it back on track whenever it drifts. Handy for long tasks where the problem isn't the code, it's the wandering."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-09"
+readingTime: "9 min"
+relatedSlugs: ["hooks-automatizacion", "memoria-claude-code", "guia-claude-code-completa"]
+---
+
+## The problem it solves
+
+You're working on a big task with Claude. Twenty minutes in, it discovers something interesting in a side file and starts "cleaning this up too." Fifteen minutes later it's refactoring something you never asked for. You come back to review and the original task is only half done.
+
+This is the problem of **agents that get distracted by what they find**. It's especially common with long tasks, where the context fills up and the original goal starts competing with all the exploring it's been doing.
+
+The `/goal` command (which you build yourself as a custom command) gives it an anchor.
+
+---
+
+## How it works
+
+`/goal "complete the email notifications feature + persistence + tests"`
+
+From that point on, Claude:
+
+1. Stores that goal in a session memory
+2. Before each significant action, "asks itself" whether that action contributes to the goal
+3. If it notices it's drifting, it warns you: "I'm heading toward X but the goal was Y — do we keep going with X or should I go back?"
+4. Before declaring "task done," it verifies the objective was actually met
+
+It's not magic — it's a pattern forced by the command's prompt. But it changes how Claude behaves in long sessions.
+
+---
+
+## The command
+
+`~/.claude/commands/goal.md` (global, available in any project):
+
+```markdown
+---
+description: Sets a session goal that Claude must keep visible and never abandon.
+argument-hint: "<goal description>"
+---
+
+# Session goal activated
+
+From this moment on, your goal for this session is:
+
+> $ARGUMENTS
+
+## Rules during this session
+
+### 1. Keep the goal visible
+Every time you respond, internally check: "does this contribute directly to the goal?"
+
+If YES → keep going.
+If NO → ask the user before continuing.
+
+### 2. Don't get distracted by findings
+If while working you come across something interesting but NOT related to the goal
+(a bug elsewhere, a refactor opportunity, suspicious code), **note it down**
+in a `.session-findings.md` file and keep going with the goal. Do NOT get sidetracked.
+
+Format:
+```
+[date time] [file:line] - short description
+```
+
+### 3. Ask for confirmation before scope creep
+If you realize the goal requires something unplanned (e.g. a DB migration
+that wasn't accounted for), stop and ask before doing it.
+
+### 4. Before declaring "done"
+When you think you've finished, do NOT say "done" without first:
+
+a) Rereading the original goal
+b) Listing point by point what you delivered vs. what the goal asked for
+c) Identifying gaps (things asked for that you didn't do)
+
+If there are gaps, do those first. If there are none, only then say "done, goal met."
+
+### 5. If the user changes the goal
+If mid-session the user says something that changes the goal (e.g. "oh, also
+add X for me"), confirm: "does X replace the original goal or add to it?"
+
+## Status check
+
+On the user's request with "/status" or "where are we," return:
+
+- Goal: [the goal]
+- Progress: [what's been done]
+- Pending: [what's left]
+- Findings noted: [count] (not blockers)
+- Next step: [one concrete action]
+```
+
+Once you've defined it, in any session:
+
+```
+> /goal Refactor the auth module to use Clerk instead of Supabase Auth,
+        including migration of existing users and updated tests.
+
+Session goal activated.
+I'll start by listing the files that touch auth to get a clear map.
+OK?
+```
+
+---
+
+## The `.session-findings.md` trick
+
+The most valuable part of the pattern isn't the anchor itself — it's that **the findings don't get lost**.
+
+Without `/goal`:
+- Claude sees a random bug → either fixes it (scope creep) or ignores it (it's lost)
+- Findings don't get documented
+
+With `/goal`:
+- Claude notes the finding in `.session-findings.md` and keeps going with its goal
+- At the end of the session, you open the file and you have a list of "things to look at later"
+- You add it to the project backlog
+
+Example of a real `.session-findings.md`:
+
+```
+[2026-05-09 14:23] src/lib/db/orders.ts:45 — query without index, doing a full table scan
+[2026-05-09 14:48] src/api/webhooks/stripe.ts:12 — missing idempotent signature verification
+[2026-05-09 15:10] tests/auth.test.ts — several tests use .skip(), check if they're still relevant
+[2026-05-09 15:34] src/lib/email/templates.tsx — duplication between welcome and verification, merge them
+```
+
+At the end of the session:
+
+```
+> /status
+
+Goal: Refactor auth to Clerk
+Progress: 12 of 14 files migrated, tests passing
+Pending: migrate the Stripe webhook to use the new userId, update the README
+Findings noted: 4 (in .session-findings.md)
+Next step: touch src/api/webhooks/stripe.ts
+```
+
+Clean. You know what you did, what's left, and what you spotted along the way.
+
+---
+
+## Useful variants of the command
+
+### `/goal-strict` — very strict mode
+
+```markdown
+[same template + this extra rule]
+
+### Strict mode
+
+If the user asks for something that is NOT in the goal:
+- If it's a short question: answer it in 1 line and go back to the goal
+- If it requires real action: reply "that's not part of the current goal. Should I
+  note it in findings, add it to the goal, or leave it for later?"
+
+Do NOT execute tasks outside the goal without explicit confirmation.
+```
+
+Handy for when you yourself get scattered and ask Claude for random things in the middle of an important task.
+
+### `/goal-deadline` — with time pressure
+
+```markdown
+[same template + this rule]
+
+### With a deadline
+
+Your deadline for this session is: $DEADLINE
+
+As you make progress, calculate whether you'll make it. If you notice you will NOT
+make it, stop and propose to the user:
+
+- Reduce scope (which parts can be left for later)
+- Speed up (which steps to skip, at what risk)
+- Ask for more time
+
+Better to renegotiate midway than to deliver something incomplete at the end.
+```
+
+### `/goal-pair` — pair programming mode
+
+```markdown
+[same template + this rule]
+
+### Pair mode
+
+Do NOT act alone. For every significant change, show it first and wait for an ok.
+The user is the "driver," you're the "navigator": you give opinions and suggestions,
+but the human confirms the execution.
+```
+
+For when you want to keep fine-grained control over a session.
+
+---
+
+## When NOT to use `/goal`
+
+- Short sessions (under 20 min) — the overhead isn't worth it
+- Exploration / spike — you want it to wander because you're exploring
+- Clear mechanical tasks (renaming, formatting) — there's no risk of drifting
+
+The command shines on **medium-to-long tasks with a risk of scope creep**.
+
+---
+
+## The "completion" bias
+
+Something subtle that'll help you: Claude tends to declare "done" too early. Rule #4 of the command ("before declaring done, reread the goal and verify") **cuts down a lot** of the "oh, this was missing too."
+
+Without that rule:
+```
+> Done, I finished the migration to Clerk.
+[you review and 3 more places still need updating]
+```
+
+With the rule:
+```
+> Before declaring done, let me check against the goal:
+  - User migration: ✅
+  - Tests updated: ✅
+  - API endpoint changes: ✅
+  - README documentation: ❌ I didn't touch the README
+  
+  I still need to update the README. I'll do it now and report back.
+```
+
+That self-verification pause is probably the most valuable feature of the pattern.
+
+---
+
+## Next steps
+
+- If you've never created a slash command, check the [Claude Code guide](/boveda/guia-claude-code-completa) — custom commands section
+- To combine it with automation, [Claude Code hooks](/boveda/hooks-automatizacion) — you can hook `Stop` so it cleans up/archives `.session-findings.md`
+- For tasks that span several sessions, combine it with [Memory Palace](/boveda/memory-palace-agentes) — persistent memory complements the session goal

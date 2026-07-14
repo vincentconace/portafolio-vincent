@@ -1,0 +1,95 @@
+---
+title: "MCP Dynatrace — real-time observability and monitoring from Claude Code"
+description: "MCP server to integrate Dynatrace with Claude Code. Observability, metrics, traces, and real-time monitoring right from your editor. For enterprise teams that use Dynatrace as their APM platform."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "dynatrace"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-elasticsearch", "all-deploy", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/dynatrace"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/dynatrace.json"
+---
+
+## What it is
+
+Dynatrace is one of the most widely used APM (Application Performance Monitoring) platforms in the enterprise. It covers full observability: metrics, distributed traces, logs, RUM (Real User Monitoring), synthetics. The data is there; the problem is that it's scattered across dashboards.
+
+This MCP brings that observability into Claude Code. Instead of opening the Dynatrace dashboard to diagnose an incident, you ask Claude and it queries on your behalf.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 77 |
+| MCP server | `dynatrace-mcp-server` |
+| Account required | Yes — Dynatrace (enterprise) |
+| Authentication | API token / OAuth |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/dynatrace
+```
+
+Prerequisite: a Dynatrace account and an API token with permissions over the environments you want to query.
+
+For Claude:
+
+```
+I installed the devtools/dynatrace MCP. After setting up the credentials,
+show me the services with an SLO in breach in the prod environment over
+the last 2 hours.
+```
+
+## What you can do with it
+
+### Incident diagnosis
+
+"The `payments-api` service is responding slowly. Show me the slowest traces from the last 30 minutes, the errors grouped by endpoint, and the list of recent deploys." No need to build the dashboard by hand.
+
+### SLO analysis
+
+"Which services are breaching the SLO in prod today? What's the remaining error budget?" Handy for a sprint review or standup.
+
+### Assisted root cause
+
+"The error rate went up 3x at 14:30. What changed in infra or a deploy around that time?" Cross-reference metrics with events.
+
+### Performance bottlenecks
+
+"In the trace for the slowest request of the last hour, show me the dominant span and which service handles it." Useful for pinpointing the exact bottleneck.
+
+### Logs + traces correlation
+
+"Find me the logs that match the traces for the failed request X." A bridge between observability streams.
+
+## Prerequisites
+
+- **A Dynatrace account** with a suitable plan
+- **An API token** with the right scopes for the data you're going to query
+- **Permissions** over the relevant environments
+
+## When it's NOT the right fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your observability stack is something else** (New Relic, Datadog, Honeycomb, Grafana): this MCP is Dynatrace-only.
+- **No enterprise access:** Dynatrace has a limited free tier. For real use you need a plan.
+- **For very ad-hoc single-query tasks:** the native dashboard can be faster. The MCP shines when you combine it with other workflows (writing a post-mortem in Claude, correlating with deploys, etc.).
+- **Broad-scope token:** if your account has access to everything, Claude inherits it. Use a token with minimal scope.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Dynatrace MCP](https://www.aitmpl.com/component/mcps/devtools/dynatrace) — the exact command.
+- **JSON config:** [dynatrace.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/dynatrace.json).
+
+## Related resources
+
+- [Elasticsearch MCP](/boveda/mcp-elasticsearch) — for querying logs/data in ES, complementary.
+- [All Deploy](/boveda/all-deploy) — Dynatrace to observe what's running; All Deploy to publish.
+- [Agency Agents](/boveda/agency-agents) — to orchestrate agents that react to alerts (autohealing, scaling).

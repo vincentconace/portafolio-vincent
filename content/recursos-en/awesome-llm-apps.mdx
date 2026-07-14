@@ -1,0 +1,192 @@
+---
+title: "awesome-llm-apps — the repo with 100+ agents ready to clone"
+description: "A GitHub repository with more than 100 AI agents across 13 categories — from business analysis to full sales teams. How to navigate it without getting lost, which ones are actually useful, and how to adapt them to Claude Code instead of the original stack."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "github"]
+publishedAt: "2026-05-10"
+readingTime: "9 min"
+relatedSlugs: ["cinco-skills-necesarias", "ecosistema-de-agentes", "trio-skills-claude-code"]
+---
+
+## What it is
+
+[awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) is a community-maintained open-source repository with **more than 100 AI agents** ready to clone and install. Apache 2.0, free.
+
+It's not a single tool — it's a **curated catalog** of agents covering 13 categories. The upside: instead of inventing your agent from scratch, you check whether a similar one already exists and start from there.
+
+> 106k+ stars on GitHub, updated frequently.
+
+---
+
+## The 13 categories
+
+| Category | What it's for |
+|-----------|----------|
+| **AI Agents** | Generalist agents (assistant, planner, writer) |
+| **RAG Tutorials** | Agents that search over your docs |
+| **Voice AI** | Agents that speak / listen |
+| **MCP AI** | Agents that use the Model Context Protocol |
+| **Memory AI** | Agents with long-term memory |
+| **Multi-agent Teams** | Coordinated teams of agents |
+| **Vertical AI Agents** | Specialized by industry (legal, finance, health) |
+| **Business AI** | Business analysis, marketing, sales |
+| **Coding AI** | Programming assistants |
+| **Personal AI** | Personal assistants (calendar, email, personal finance) |
+| **Travel AI** | Trip planners, booking assistants |
+| **Research AI** | Academic research, papers |
+| **Creative AI** | Content, writing, art |
+
+---
+
+## How to navigate it without getting lost
+
+The typical problem: you open the repo, see 100+ folders, and get lost. **Start with categories**, not with slugs.
+
+### Approach 1 — By concrete need
+
+Think about what you need to solve **today**:
+
+| Need | Categories to look at first |
+|-----------|----------------------------|
+| Automate your business (sales, marketing) | Business AI, Vertical AI |
+| An assistant that knows your docs | RAG Tutorials, Memory AI |
+| A team of coordinated agents | Multi-agent Teams, Ecosystem |
+| A day-to-day personal assistant | Personal AI |
+| An academic research assistant | Research AI |
+| Programming with AI help | Coding AI |
+
+### Approach 2 — By architecture
+
+If you want to learn the **pattern** more than copy the app:
+
+- **Single agent (1 LLM, several tools)**: start with basic AI Agents
+- **RAG (1 LLM with search over your docs)**: RAG Tutorials
+- **Multi-agent (several coordinated LLMs)**: Multi-agent Teams
+- **Stateful (with persistent memory)**: Memory AI
+
+Each architecture has increasing complexity. Learning them in order gives you a progression.
+
+---
+
+## The important detail: the original stack
+
+Most of these agents are built on top of:
+
+- **OpenAI API** or **Anthropic API** directly
+- **LangChain** or **LangGraph** as the framework
+- **Streamlit** or **Gradio** for a quick UI
+- **ChromaDB / Pinecone** for vector storage in RAG
+
+If you want to run them as-is, that's what you'll have to install. If you want to **port them to Claude Code** (which is what most people will do), the logic translates but you have to rewrite parts.
+
+### Porting pattern to Claude Code
+
+For any agent in the repo, the porting flow is:
+
+1. **Read the README** of the agent — understand what it does and what it needs
+2. **Identify the tools it uses** — which APIs, which storage, which inputs/outputs
+3. **Convert the main prompt into a skill** (`~/.claude/skills/<name>/SKILL.md`)
+4. **If it uses RAG**: instead of ChromaDB, you can use the [Book-to-Skill pattern](/boveda/book-to-skill) for static knowledge
+5. **If it needs external APIs**: build [your own MCP server](/boveda/mcp-server-propio) that exposes them
+6. **The UI**: Claude Code is your UI, you don't need Streamlit
+
+What was an entire app with dependencies becomes a skill + 1 MCP. Much less code to maintain.
+
+---
+
+## 5 agents worth exploring first
+
+Out of the 100+, these 5 are good entry points:
+
+### 1. AI Customer Support Agent
+
+Category: Business AI.
+
+An agent that classifies incoming tickets, answers the simple ones (FAQs), and escalates the complex ones. It learns from history to improve its responses.
+
+**What you get**: classifier + template responder + human handoff.
+**Ported to Claude**: a classification skill + an MCP for the ticketing system + simple logic in CLAUDE.md.
+
+### 2. AI Investment Agent
+
+Category: Personal AI.
+
+It helps you analyze investment opportunities (stocks, ETFs). It gathers data from several sources and returns a structured summary.
+
+**Useful for**: learning the "aggregate data from N sources and summarize" pattern.
+
+### 3. Multi-Agent Code Reviewer
+
+Category: Coding AI, Multi-agent Teams.
+
+3 coordinated agents that review the same PR from different angles (security, performance, style). Then a final agent consolidates the feedback.
+
+**Useful for**: learning multi-agent. **But**: our [code-reviewer skill](/boveda/skill-code-reviewer) does the same thing with less complexity.
+
+### 4. RAG over Local Documents
+
+Category: RAG Tutorials.
+
+The base RAG pattern. You load your PDFs/markdown, and the agent can answer by consulting those docs.
+
+**Useful for**: understanding the pattern conceptually. **For real use**: [Book-to-Skill](/boveda/book-to-skill) is usually simpler in single-user projects.
+
+### 5. Personal Finance Agent
+
+Category: Personal AI.
+
+You load your transactions (bank CSV), the agent classifies them, gives you budget tracking, and alerts you to unusual spending.
+
+**Useful for**: seeing how an agent with state that evolves over time is structured.
+
+---
+
+## Anti-patterns — how NOT to use this repo
+
+### 1. Cloning everything "just in case"
+
+100+ agents take up space, dependencies, and keeping them up to date. Just clone the repo (to browse it) and download / port what you're **actually** going to use.
+
+### 2. Hunting for "the perfect agent" for your case
+
+Most of the agents are **demos / templates**, not production-ready for your specific business. Take them as a **starting point**, not a finished product.
+
+### 3. Staying on the original stack
+
+If everything was built for you with Streamlit + LangChain + OpenAI, you can run it that way for an afternoon. For recurring use, port it to your stack (Claude Code + your tools). The overhead of maintaining Python venvs + Streamlit servers for each agent doesn't scale.
+
+### 4. Skipping the README
+
+Each agent has its README with limitations, requirements, and use cases. **Reading them** saves you from "install and then discover it doesn't apply to your case" later.
+
+---
+
+## How to contribute
+
+If you port an agent to Claude Code and want to contribute, the repo accepts PRs. The pattern:
+
+1. Fork the repo
+2. Create a folder `claude-ports/<agent-name>/`
+3. Inside: SKILL.md, MCP config if there is one, README with your adaptation
+4. PR to main
+
+The maintainer usually merges clean PRs fairly quickly.
+
+---
+
+## The repo's real value
+
+It's not "100 production-ready agents." It's **a catalog of patterns**.
+
+When someone asks you "I need an agent that does X," chances are a similar agent already exists in the repo. You open it, look at how they built it, and adapt it. Much faster than designing from scratch.
+
+**Practical recommendation**: star the repo, subscribe to updates, and use it as a **reference to consult** when you're starting something new. Not as an active dependency of your system.
+
+---
+
+## Next steps
+
+- To understand what it takes to create your own agent, [agent ecosystem](/boveda/ecosistema-de-agentes)
+- For three concrete, high-impact skills, [trio of skills for Claude Code](/boveda/trio-skills-claude-code)
+- If you want to embed stable knowledge in a skill (instead of RAG), [Book to Skill](/boveda/book-to-skill)

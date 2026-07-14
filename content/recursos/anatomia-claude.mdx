@@ -1,0 +1,180 @@
+---
+title: "Anatomía de Claude — proyecto, skill, MCP, plugin, agente explicados claro"
+description: "¿Qué es un proyecto, una skill, un MCP, un plugin y un agente en el ecosistema Claude? Cinco conceptos que se confunden todo el tiempo, explicados con la analogía correcta y cuándo usar cada uno. Si te perdés con la jerga, esto te ordena."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "claude-api"]
+publishedAt: "2026-05-22"
+readingTime: "8 min"
+relatedSlugs: ["claude-code-setup-zero", "skill-code-reviewer"]
+---
+
+## Por qué este recurso existe
+
+Llegás al ecosistema de Claude y en una semana te encontrás con: proyectos, skills, MCPs, plugins, agentes, comandos, hooks, conectores. Todos suenan parecido. Todos prometen cosas similares. Y la documentación oficial los explica asumiendo que ya sabés qué son.
+
+Acá los ordeno en una analogía única: **Claude es un empleado nuevo en tu empresa**. Cada concepto es algo que le das a ese empleado para que trabaje mejor.
+
+---
+
+## La analogía: Claude como empleado nuevo
+
+| Concepto | Analogía con un empleado | Qué le das |
+|----------|--------------------------|------------|
+| **Proyecto** | La oficina / el contexto de trabajo | Una carpeta de archivos con un `CLAUDE.md` que es el "brief" |
+| **Skill** | Un manual de cómo hacer una tarea específica | Un archivo `SKILL.md` con instrucciones que el empleado aplica cuando reconoce que toca esa tarea |
+| **MCP** | Llaves a sistemas externos (DB, CRM, etc.) | Un servidor que expone herramientas controladas que el empleado puede llamar |
+| **Plugin** | Un combo: brief + manuales + llaves preempaquetado | Un paquete que mete skills + comandos + MCPs juntos para un caso de uso |
+| **Agente** | Un empleado autónomo que hace una tarea de punta a punta | Un Claude configurado para una misión específica, con sus propias herramientas y reglas |
+
+Esta tabla es el resumen. Ahora vamos uno por uno.
+
+---
+
+## 1. Proyecto
+
+Un **proyecto** es una carpeta donde Claude trabaja. Lo más importante de un proyecto es el archivo `CLAUDE.md` en su raíz: ese es el "documento de bienvenida" que Claude lee al empezar cada sesión.
+
+```
+mi-app/
+├── CLAUDE.md          ← el brief del proyecto
+├── src/
+├── package.json
+└── .claude/
+    └── settings.json  ← reglas y permisos
+```
+
+**Para qué sirve**: dar contexto persistente. En vez de explicarle cada vez "este es un Next.js, usamos Drizzle, deployamos en Vercel", lo escribís una vez en `CLAUDE.md` y queda.
+
+**Cuándo crearlo**: siempre. El primer comando en un repo nuevo debería ser `claude` → `/init`, que te genera un `CLAUDE.md` analizando tu codebase.
+
+---
+
+## 2. Skill
+
+Una **skill** es un manual reutilizable para hacer una tarea específica. Vive en `.claude/skills/<nombre>/SKILL.md` (por proyecto) o `~/.claude/skills/<nombre>/` (global).
+
+Estructura mínima:
+
+```
+.claude/skills/
+└── code-reviewer/
+    └── SKILL.md
+```
+
+`SKILL.md`:
+
+```markdown
+---
+name: code-reviewer
+description: Revisa el diff actual buscando bugs y violaciones de convenciones.
+  Úsala cuando el usuario diga "revisá" o "code review".
+---
+
+Sos un revisor de código senior. Tu trabajo es...
+```
+
+**Lo importante**: el `description` del frontmatter es lo que Claude lee para decidir **cuándo activar la skill solo**. No la llamás por nombre — vos decís "hacé un code review" y Claude conecta los puntos.
+
+**Cuándo crear una**: cuando hagas la misma tarea más de 3 veces y querés que el output sea consistente.
+
+---
+
+## 3. MCP (Model Context Protocol)
+
+Un **MCP** es un servidor externo que le da a Claude herramientas que vos controlás. La diferencia con todo lo anterior: las skills y los proyectos son **archivos**. Un MCP es un **proceso ejecutando** que expone funciones.
+
+Ejemplo típico: un MCP que consulta tu base de datos interna. Claude no puede acceder a tu DB por sí solo, pero el MCP server sí. Claude le pide al MCP "dame los pedidos de hoy" y el MCP corre la query, devuelve el resultado.
+
+Se registra en `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "pedidos": {
+      "command": "npx",
+      "args": ["-y", "@miempresa/mcp-pedidos"],
+      "env": { "DB_URL": "postgres://..." }
+    }
+  }
+}
+```
+
+**Cuándo crearlo**: cuando necesitás que Claude acceda a algo que no es público (DB interna, sistema legacy, API privada con auth compleja).
+
+Si lo que necesitás es un simple `curl` a una API pública, no hace falta MCP — Claude ya tiene la tool `Bash`.
+
+---
+
+## 4. Plugin
+
+Un **plugin** es un combo empaquetado: junta skills + comandos + MCPs para resolver un caso de uso completo.
+
+Ejemplo: un plugin "ecommerce" podría incluir:
+- 3 skills (revisar carrito, validar checkout, generar reporte)
+- 2 comandos (`/orders`, `/refund`)
+- 1 MCP (conexión a Stripe + tu DB)
+
+Todo se instala con un comando y queda configurado.
+
+**Cuándo usar uno**: cuando alguien (vos o un tercero) ya empaquetó la funcionalidad que necesitás. No reinventes la rueda.
+
+**Cuándo crear uno**: cuando tu equipo necesita compartir un setup repetible (todos los devs necesitan el mismo combo skills+MCPs para tu producto). Empaquetalo como plugin y se instala con un comando.
+
+---
+
+## 5. Agente
+
+Un **agente** es Claude configurado para hacer una tarea autónoma de punta a punta. La diferencia con todo lo anterior: skills/plugins/MCPs son **piezas**. Un agente es un **sistema completo**.
+
+Ejemplos de agentes:
+- Un agente que monitorea tu inbox y responde tickets de soporte
+- Un agente que revisa PRs nuevos y deja comentarios
+- Un agente que arma reportes diarios de métricas
+
+Un agente típicamente usa varios MCPs, varias skills, y un prompt de sistema bien afinado. Vive en `background` (no es una sesión interactiva).
+
+**Cuándo crear uno**: cuando una tarea es repetitiva, tiene criterio claro de cuándo arrancar y de cuándo terminar, y no necesita supervisión constante.
+
+---
+
+## Cómo se combinan en la práctica
+
+Imaginá que tu equipo construye una app SaaS. Tu setup típico:
+
+| Capa | Qué tenés |
+|------|-----------|
+| **Proyecto** | Repo con `CLAUDE.md` explicando: stack (Next.js + Drizzle + Stripe), reglas (siempre tests para lógica de negocio, no commitear secrets) |
+| **Skills** | `code-reviewer`, `db-migration-checker`, `i18n-coverage` — los manuales que Claude aplica solo |
+| **MCPs** | `supabase-mcp` (lectura de DB), `stripe-mcp` (consultas de suscripciones), `linear-mcp` (issues) |
+| **Plugins** | El plugin `claude-saas-base` que instaló todo lo anterior con un comando |
+| **Agentes** | Un agente `pr-reviewer` que mira PRs nuevos en GitHub y deja comments automáticamente, usando las skills + MCPs de arriba |
+
+Cada capa potencia a la siguiente. **No necesitás todas para empezar** — la mayoría arranca con solo proyecto + 1 o 2 skills, y va sumando.
+
+---
+
+## La pregunta que más se hace: ¿skill o MCP?
+
+| Necesidad | Solución |
+|-----------|----------|
+| Quiero que Claude haga una tarea siguiendo un protocolo fijo | **Skill** |
+| Quiero darle acceso a datos o sistemas externos | **MCP** |
+| Quiero que reconozca cuándo aplicar un workflow | **Skill** |
+| Quiero que pueda invocar funciones con args validados | **MCP** |
+| Es un comportamiento, no un dato | **Skill** |
+| Es información que vive afuera | **MCP** |
+
+Regla simple: **skills = comportamiento, MCPs = acceso**.
+
+---
+
+## Próximos pasos
+
+Si arrancás desde cero:
+
+1. Leé la [guía de setup de Claude Code](/boveda/claude-code-setup-zero) para tener el entorno funcionando
+2. Probá crear tu primera skill — la [skill de code review](/boveda/skill-code-reviewer) es un buen primer ejemplo
+3. Cuando necesités acceso a datos externos, mirá la [guía de MCP server propio](/boveda/mcp-server-propio)
+
+No te metas en plugins y agentes hasta tener proyecto + skills funcionando. La complejidad escala mejor de a poco.

@@ -1,0 +1,1376 @@
+
+/* ============================================
+   NÚCLEO IA — Design System
+   Dark mode primary, AI aesthetic
+   ============================================ */
+
+.nucleo-root {
+  /* Background layers */
+  --bg-base: #09090b;
+  --bg-surface: #18181b;
+  --bg-elevated: #27272a;
+  --bg-elevated-hover: #3f3f46;
+
+  /* Borders */
+  --border: #3f3f46;
+  --border-subtle: #27272a;
+  --border-strong: #52525b;
+
+  /* Text */
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-inverse: #09090b;
+
+  /* Accent — amber gold */
+  --accent: #fbbf24;
+  --accent-hover: #f59e0b;
+  --accent-on: #18120a; /* texto oscuro sobre dorado */
+  --accent-rgb: 251, 191, 36;
+  --accent-glow: rgba(251, 191, 36, 0.15);
+  --accent-glow-strong: rgba(251, 191, 36, 0.32);
+  --accent-secondary: #fcd34d; /* amber-300 */
+  --accent-tertiary: #d97706;  /* amber-600 */
+  --accent-warm: #d4a373;       /* warm gold mute */
+  --accent-prose-link-hover: #fde68a;
+  --accent-code-text: #fcd34d;
+
+  /* Difficulty */
+  --difficulty-easy: #22c55e;
+  --difficulty-medium: #f59e0b;
+  --difficulty-hard: #ef4444;
+
+  /* Featured */
+  --featured: #f59e0b;
+  --featured-glow: rgba(245, 158, 11, 0.15);
+
+  /* Theme-reactive surfaces */
+  --navbar-bg-scrolled: rgba(9, 9, 11, 0.92);
+  --glass-bg: rgba(24, 24, 27, 0.8);
+  --glass-bg-elevated: rgba(39, 39, 42, 0.7);
+  --grid-line: rgba(251, 191, 36, 0.05);
+  --grid-line-strong: rgba(251, 191, 36, 0.09);
+  --grid-dot: rgba(251, 191, 36, 0.18);
+  --hero-glow-1: rgba(251, 191, 36, 0.26);
+  --hero-glow-2: rgba(217, 119, 6, 0.16);
+  --hero-glow-3: rgba(212, 163, 115, 0.12);
+  --body-glow-1: rgba(251, 191, 36, 0.07);
+  --body-glow-2: rgba(217, 119, 6, 0.05);
+  --shadow-color: 0, 0, 0;
+  --shadow-strength: 1;
+  --inset-highlight: rgba(255, 255, 255, 0.04);
+  --inset-highlight-strong: rgba(255, 255, 255, 0.06);
+  --card-top-sheen: rgba(255, 255, 255, 0.03);
+  --row-hover-bg: rgba(39, 39, 42, 0.5);
+  --table-head-bg: var(--bg-elevated);
+  --scrollbar-thumb-hover: #52525b;
+
+  /* Syntax tokens */
+  --syntax-keyword: #fcd34d;
+  --syntax-string: #86efac;
+  --syntax-number: #fb923c;
+  --syntax-function: #60a5fa;
+
+  /* Typography */
+  --font-sans: var(--font-neue-montreal);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition: 200ms ease-out;
+  --transition-slow: 300ms ease-out;
+
+  color-scheme: dark;
+}
+
+.nucleo-root {
+  /* Background layers — warm off-white with subtle paper feel */
+  --bg-base: #faf9f6;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4f2ec;
+  --bg-elevated-hover: #ebe8df;
+
+  /* Borders */
+  --border: #e5e1d6;
+  --border-subtle: #efece3;
+  --border-strong: #d4cfc0;
+
+  /* Text */
+  --text-primary: #18120a;
+  --text-secondary: #5b554a;
+  --text-muted: #8b8475;
+  --text-inverse: #fafafa;
+
+  /* Accent — warmer amber for light bg */
+  --accent: #d97706;
+  --accent-hover: #b45309;
+  --accent-on: #ffffff;
+  --accent-rgb: 217, 119, 6;
+  --accent-glow: rgba(217, 119, 6, 0.10);
+  --accent-glow-strong: rgba(217, 119, 6, 0.22);
+  --accent-secondary: #f59e0b;
+  --accent-tertiary: #92400e;
+  --accent-warm: #b45309;
+  --accent-prose-link-hover: #b45309;
+  --accent-code-text: #b45309;
+
+  /* Featured */
+  --featured: #d97706;
+  --featured-glow: rgba(217, 119, 6, 0.12);
+
+  /* Theme-reactive surfaces */
+  --navbar-bg-scrolled: rgba(250, 249, 246, 0.88);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.85);
+  --grid-line: rgba(217, 119, 6, 0.08);
+  --grid-line-strong: rgba(217, 119, 6, 0.12);
+  --grid-dot: rgba(217, 119, 6, 0.22);
+  --hero-glow-1: rgba(245, 158, 11, 0.22);
+  --hero-glow-2: rgba(217, 119, 6, 0.14);
+  --hero-glow-3: rgba(212, 163, 115, 0.18);
+  --body-glow-1: rgba(245, 158, 11, 0.10);
+  --body-glow-2: rgba(217, 119, 6, 0.07);
+  --shadow-color: 30, 25, 15;
+  --shadow-strength: 0.35;
+  --inset-highlight: rgba(255, 255, 255, 0.6);
+  --inset-highlight-strong: rgba(255, 255, 255, 0.8);
+  --card-top-sheen: rgba(255, 255, 255, 0.5);
+  --row-hover-bg: rgba(217, 119, 6, 0.05);
+  --table-head-bg: #f4f2ec;
+  --scrollbar-thumb-hover: #c9c2af;
+
+  /* Syntax tokens — darker for light bg */
+  --syntax-keyword: #b45309;
+  --syntax-string: #15803d;
+  --syntax-number: #c2410c;
+  --syntax-function: #1d4ed8;
+
+  color-scheme: light;
+}
+
+/* ============================================
+   MARCA DEL PORTFOLIO — override monocromo
+   Blanco / tinta #1C1E21 / grises finos, sin color de acento
+   (coherente con el hub /links). Va último → gana en la cascada.
+   ============================================ */
+.nucleo-root {
+  /* Fondos — página en gris suave, cards en blanco (contraste, como la web) */
+  --bg-base: #f4f4f6;
+  --bg-surface: #ffffff;
+  --bg-elevated: #e9e9ec;
+  --bg-elevated-hover: #dededf;
+
+  /* Bordes */
+  --border: #e2e2e5;
+  --border-subtle: #ececef;
+  --border-strong: #d2d2d6;
+
+  /* Texto */
+  --text-primary: #1c1e21;
+  --text-secondary: #52555a;
+  --text-muted: #8a8d93;
+  --text-inverse: #ffffff;
+
+  /* Acento → tinta (monocromo, alto contraste tipo CTA negra) */
+  --accent: #1c1e21;
+  --accent-hover: #000000;
+  --accent-on: #ffffff;
+  --accent-rgb: 28, 30, 33;
+  --accent-glow: rgba(28, 30, 33, 0.06);
+  --accent-glow-strong: rgba(28, 30, 33, 0.12);
+  --accent-secondary: #33363b;
+  --accent-tertiary: #000000;
+  --accent-warm: #52555a;
+  --accent-prose-link-hover: #000000;
+  --accent-code-text: #1c1e21;
+
+  /* Destacado → tinta */
+  --featured: #1c1e21;
+  --featured-glow: rgba(28, 30, 33, 0.08);
+
+  /* Superficies reactivas */
+  --navbar-bg-scrolled: rgba(255, 255, 255, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.9);
+  --grid-line: rgba(28, 30, 33, 0.04);
+  --grid-line-strong: rgba(28, 30, 33, 0.06);
+  --grid-dot: rgba(28, 30, 33, 0.12);
+  --hero-glow-1: rgba(28, 30, 33, 0.05);
+  --hero-glow-2: rgba(28, 30, 33, 0.03);
+  --hero-glow-3: rgba(28, 30, 33, 0.03);
+  --body-glow-1: rgba(28, 30, 33, 0.03);
+  --body-glow-2: rgba(28, 30, 33, 0.02);
+  --shadow-color: 20, 22, 26;
+  --shadow-strength: 0.4;
+  --inset-highlight: rgba(255, 255, 255, 0.7);
+  --inset-highlight-strong: rgba(255, 255, 255, 0.9);
+  --card-top-sheen: rgba(255, 255, 255, 0.6);
+  --row-hover-bg: rgba(28, 30, 33, 0.04);
+  --table-head-bg: #eaeaed;
+  --scrollbar-thumb-hover: #c9ccd1;
+
+  /* Transiciones — el mismo easing de los botones/menú de la web (ease-in-expo) */
+  --transition-fast: 200ms cubic-bezier(0.1, 0, 0.3, 1);
+  --transition: 300ms cubic-bezier(0.1, 0, 0.3, 1);
+  --transition-slow: 500ms cubic-bezier(0.1, 0, 0.3, 1);
+
+  /* Sintaxis de código — monocromo con matices de gris */
+  --syntax-keyword: #1c1e21;
+  --syntax-string: #52555a;
+  --syntax-number: #52555a;
+  --syntax-function: #1c1e21;
+
+  /* Radios tipo /links (12px) */
+  --radius-sm: 8px;
+  --radius: 10px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  color-scheme: light;
+}
+
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.nucleo-root {
+  min-height: 100dvh;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  isolation: isolate;
+  transition: background-color 240ms ease, color 240ms ease;
+}
+
+/* ============================================
+   GLOBAL GRID BACKGROUND
+   Cuadrícula sutil + glow dorado, fijo detrás del contenido
+   en todas las pantallas
+   ============================================ */
+.nucleo-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(ellipse 110% 80% at 50% 25%, #000 30%, transparent 90%);
+  mask-image: radial-gradient(ellipse 110% 80% at 50% 25%, #000 30%, transparent 90%);
+}
+
+.nucleo-root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 35% at 50% 0%, var(--body-glow-1), transparent 70%),
+    radial-gradient(45% 50% at 95% 100%, var(--body-glow-2), transparent 70%);
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+/* Border Beam — rotating conic gradient */
+@keyframes border-beam {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@keyframes border-beam-rotate {
+  0% {
+    --border-beam-angle: 0deg;
+  }
+  100% {
+    --border-beam-angle: 360deg;
+  }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Registered so CSS animations can interpolate it.
+   Used by LevelBadge for the simulated-hover loop:
+   --hs (holo sweep) drives the rotation of the holographic layers. */
+@property --hs { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
+
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Shimmer sweep */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Animated gradient text */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Fade in up */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade in */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Pulse glow */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--accent-glow-strong);
+  }
+}
+
+/* Scale in */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Stagger children */
+.stagger-children > * {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+.stagger-children > *:nth-child(n+9) { animation-delay: 480ms; }
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out both;
+}
+
+/* Reveal on scroll — lo activa <ScrollReveal/> agregando `.reveal-on` al root.
+   Sin JS (o sin IntersectionObserver) el contenido se ve normal. */
+.nucleo-root.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  will-change: opacity, transform;
+}
+.nucleo-root.reveal-on [data-reveal].reveal-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nucleo-root.reveal-on [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Glass effect */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+.glass-elevated {
+  background: var(--glass-bg-elevated);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #1c1e21, #52555a, #1c1e21);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-animated {
+  background: linear-gradient(135deg, #1c1e21, #52555a, #8a8d93, #1c1e21);
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease infinite;
+}
+
+/* Noise texture overlay */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ============================================
+   BORDER BEAM COMPONENT
+   ============================================ */
+
+.border-beam-wrapper {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.border-beam-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    transparent 270deg,
+    #1c1e21 300deg,
+    #52555a 330deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-rotate 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.border-beam-wrapper:hover::before {
+  opacity: 1;
+}
+
+/* ============================================
+   PROSE / MDX STYLES
+   ============================================ */
+
+.prose {
+  color: var(--text-secondary);
+  max-width: 72ch;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--text-primary);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.prose h1 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose h4 {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.prose ul,
+.prose ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}
+
+.prose strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.prose em {
+  color: var(--text-secondary);
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--transition-fast);
+}
+
+.prose a:hover {
+  color: var(--accent-prose-link-hover);
+}
+
+/* Curva de transición hacia el footer (estilo web): tapa clara sobre el
+   tope del footer oscuro, con esquinas de abajo redondeadas. */
+.ni-footer-reveal {
+  position: relative;
+}
+.ni-footer-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--bg-base);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Ancla de los encabezados MDX (aparece al pasar el mouse por el encabezado) */
+.heading-anchor:hover {
+  opacity: 1 !important;
+}
+.nucleo-root *:hover > .heading-anchor {
+  opacity: 0.5;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  background: var(--accent-glow);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Inline <code> only — pre > code is styled by the CodeBlock component */
+.prose :not(pre) > code {
+  font-family: var(--font-mono), 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 0.875em;
+  background: var(--bg-elevated);
+  color: var(--accent-code-text);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+/* Note: <pre> blocks in MDX are rendered via the <CodeBlock> component,
+   which owns its own container styling. No .prose pre rules here to
+   avoid double borders/backgrounds. */
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.prose thead th {
+  background: var(--table-head-bg);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.prose tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover td {
+  background: var(--row-hover-bg);
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* Syntax highlighting colors */
+.prose .token.comment,
+.prose .token.prolog,
+.prose .token.doctype,
+.prose .token.cdata {
+  color: var(--text-muted);
+}
+
+.prose .token.keyword {
+  color: var(--syntax-keyword);
+}
+
+.prose .token.string {
+  color: var(--syntax-string);
+}
+
+.prose .token.number {
+  color: var(--syntax-number);
+}
+
+.prose .token.function {
+  color: var(--syntax-function);
+}
+
+.prose .token.operator {
+  color: var(--text-secondary);
+}
+
+/* Code block language label */
+.code-block-lang {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  font-family: var(--font-mono), monospace;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   COMPONENT BASE STYLES
+   ============================================ */
+
+/* Card */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(var(--shadow-color), calc(0.4 * var(--shadow-strength)));
+}
+
+/* Input */
+.input {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Button base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-elevated-hover);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+/* ============================================
+   GRID PATTERN — Cult / tuto-limpio style
+   Two layered linear-gradients + radial mask
+   ============================================ */
+
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 35%, transparent 80%);
+  mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 35%, transparent 80%);
+  pointer-events: none;
+}
+
+.grid-pattern-dense {
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, #000 40%, transparent 85%);
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, #000 40%, transparent 85%);
+}
+
+.grid-pattern-dots {
+  background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Hero radial glow — sits on top of grid */
+.hero-radial-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 50% 0%, var(--hero-glow-1), transparent 70%),
+    radial-gradient(35% 40% at 78% 22%, var(--hero-glow-2), transparent 70%),
+    radial-gradient(35% 45% at 20% 28%, var(--hero-glow-3), transparent 70%);
+  pointer-events: none;
+}
+
+/* ============================================
+   DRAMATIC COLORED SHADOWS — Guardian / tuto-limpio
+   ============================================ */
+
+.shadow-glow {
+  box-shadow:
+    0 1px 0 var(--inset-highlight) inset,
+    0 18px 60px -30px rgba(var(--accent-rgb), 0.45),
+    0 8px 24px -12px rgba(var(--shadow-color), calc(0.6 * var(--shadow-strength)));
+}
+
+.shadow-glow-strong {
+  box-shadow:
+    0 1px 0 var(--inset-highlight-strong) inset,
+    0 30px 80px -30px rgba(var(--accent-rgb), 0.55),
+    0 14px 32px -12px rgba(var(--shadow-color), calc(0.7 * var(--shadow-strength)));
+}
+
+.shadow-glow-featured {
+  box-shadow:
+    0 1px 0 var(--inset-highlight-strong) inset,
+    0 28px 90px -30px rgba(var(--accent-rgb), 0.4),
+    0 0 0 1px rgba(var(--accent-rgb), 0.12),
+    0 14px 32px -12px rgba(var(--shadow-color), calc(0.6 * var(--shadow-strength)));
+}
+
+.shadow-ring {
+  box-shadow:
+    0 0 0 1px rgba(var(--accent-rgb), 0.35),
+    0 0 0 4px rgba(var(--accent-rgb), 0.10),
+    0 10px 30px -10px rgba(var(--accent-rgb), 0.4);
+}
+
+/* ============================================
+   CULT-STYLE TEXTURE CARD
+   - Soft inner highlight (top edge)
+   - Multi-layer outer shadow
+   - Gradient border on hover via mask-composite
+   ============================================ */
+
+.cult-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, var(--card-top-sheen) 0%, transparent 50%),
+    var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 400ms cubic-bezier(0.1, 0, 0.3, 1),
+              border-color 400ms cubic-bezier(0.1, 0, 0.3, 1),
+              box-shadow 400ms cubic-bezier(0.1, 0, 0.3, 1);
+  box-shadow:
+    0 1px 0 var(--inset-highlight) inset,
+    0 1px 2px rgba(var(--shadow-color), calc(0.4 * var(--shadow-strength)));
+}
+
+/* Gradient border ring — appears on hover */
+.cult-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb), 0.6) 0%,
+    rgba(var(--accent-rgb), 0.35) 40%,
+    transparent 80%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.1, 0, 0.3, 1);
+  pointer-events: none;
+}
+
+.cult-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  border-color: transparent;
+  box-shadow:
+    0 1px 0 var(--inset-highlight-strong) inset,
+    0 22px 60px -24px rgba(var(--accent-rgb), 0.45),
+    0 10px 24px -12px rgba(var(--shadow-color), calc(0.7 * var(--shadow-strength)));
+}
+
+.cult-card:hover::after {
+  opacity: 1;
+}
+
+/* Subtle noise texture overlay — gives the "cult" tactile feel */
+.cult-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Featured variant — amber accent */
+.cult-card-featured {
+  background:
+    linear-gradient(180deg, rgba(var(--accent-rgb), 0.06) 0%, transparent 60%),
+    var(--bg-surface);
+  border-color: rgba(var(--accent-rgb), 0.22);
+}
+
+.cult-card-featured::after {
+  background: linear-gradient(135deg,
+    rgba(var(--accent-rgb), 0.7) 0%,
+    rgba(var(--accent-rgb), 0.4) 40%,
+    transparent 80%);
+}
+
+.cult-card-featured:hover {
+  box-shadow:
+    0 1px 0 var(--inset-highlight-strong) inset,
+    0 22px 60px -24px rgba(var(--accent-rgb), 0.42),
+    0 10px 24px -12px rgba(var(--shadow-color), calc(0.7 * var(--shadow-strength)));
+}
+
+/* Spotlight — radial gradient follows mouse */
+.cult-spotlight {
+  --sx: 50%;
+  --sy: 50%;
+  --so: 0;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--sx) var(--sy),
+    rgba(var(--accent-rgb), 0.18),
+    transparent 45%
+  );
+  opacity: var(--so);
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================
+   RECURSO CARD — contenido (tipografía estilo web)
+   Overline fino + título display medium/tight + meta con hairline.
+   Igual que la home: el peso lo dan el TAMAÑO y el TRACKING, no un bold
+   grueso (Neue Montreal solo trae el peso regular).
+   ============================================ */
+.recurso-card-inner {
+  padding: 1.5rem 1.4rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  color: inherit;
+}
+
+/* Cabecera: overline de categoría · medidor de dificultad | estado + estrella */
+.recurso-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.recurso-head-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.recurso-head-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.recurso-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.recurso-cat svg { color: var(--text-secondary); }
+.recurso-dot { color: var(--border-strong); font-size: 0.7rem; }
+.recurso-star {
+  color: var(--accent);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(var(--accent-rgb), 0.4));
+}
+
+/* Dificultad — medidor monocromo ascendente (1/2/3 barras) */
+.recurso-difficulty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.recurso-meter { display: inline-flex; align-items: flex-end; gap: 2px; }
+.recurso-meter i {
+  width: 3px;
+  border-radius: 1px;
+  background: var(--border-strong);
+  transition: background var(--transition);
+}
+.recurso-meter i:nth-child(1) { height: 5px; }
+.recurso-meter i:nth-child(2) { height: 8px; }
+.recurso-meter i:nth-child(3) { height: 11px; }
+.recurso-meter i.on { background: var(--text-primary); }
+
+/* Título — display medium + tracking ajustado (como los títulos de la home) */
+.recurso-body { flex: 1; min-width: 0; }
+.recurso-title {
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.16;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+  text-wrap: balance;
+}
+.recurso-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Destacada — mini-hero: título más grande = contraste de escala tipo home */
+.cult-card-featured .recurso-title {
+  font-size: clamp(1.3rem, 1.9vw, 1.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.cult-card-featured .recurso-desc {
+  font-size: 0.95rem;
+  -webkit-line-clamp: 3;
+}
+
+/* Tools */
+.recurso-tools { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  font-family: var(--font-mono), monospace;
+}
+
+/* Pie con hairline: meta mono a la izquierda, CTA que invierte a tinta */
+.recurso-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.95rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-subtle);
+}
+.recurso-meta { display: flex; align-items: center; gap: 0.85rem; }
+.recurso-ver,
+.recurso-time {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono), monospace;
+}
+.recurso-time { display: inline-flex; align-items: center; gap: 0.3rem; }
+.recurso-actions { display: flex; align-items: center; gap: 0.6rem; }
+.recurso-dl {
+  color: var(--text-muted);
+  padding: 0.25rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition: color var(--transition);
+}
+.recurso-dl:hover { color: var(--text-primary); }
+.recurso-cta-link {
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), gap var(--transition);
+}
+.recurso-cta-link:hover {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border-color: var(--text-primary);
+  gap: 0.55rem;
+}
+
+/* ============================================
+   TOUCH / MOBILE — vida al tocar (sin hover)
+   En pantallas sin hover, los efectos de hover no disparan: los suplimos
+   con feedback :active (press), y hacemos la card de recurso tappable entera.
+   ============================================ */
+.nucleo-root a,
+.nucleo-root button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none) {
+  /* Press en cards: reemplaza el lift de hover por un "hundido" al tocar.
+     (Las category cards son <Link> enteras; la recurso card se hace tappable
+     con el overlay de abajo → el feedback es honesto en ambas.) */
+  .cult-card {
+    transition: transform 220ms cubic-bezier(0.1, 0, 0.3, 1),
+                box-shadow 220ms cubic-bezier(0.1, 0, 0.3, 1);
+  }
+  .cult-card:active {
+    transform: scale(0.982);
+    box-shadow:
+      0 1px 0 var(--inset-highlight) inset,
+      0 6px 18px -10px rgba(var(--shadow-color), calc(0.6 * var(--shadow-strength)));
+  }
+
+  /* Recurso card entera tappable: el CTA extiende un overlay sobre toda la card.
+     El link de descarga queda por encima (z-index) para seguir siendo clickeable. */
+  .recurso-cta-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .recurso-dl { position: relative; z-index: 1; }
+  .recurso-cta-link:active {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+    border-color: var(--text-primary);
+  }
+
+  /* Botones / controles: press claro */
+  .load-more-btn:active { transform: translateY(0) scale(0.97); }
+  .nf-trigger:active,
+  .nf-textbtn:active { color: var(--text-primary); }
+  .nf-option:active { background: var(--bg-elevated); color: var(--text-primary); }
+  .toc-item:active { color: var(--text-primary); }
+  .toc-header:active { background: var(--bg-elevated); }
+}
+
+/* ============================================
+   GRADIENT BUTTON — Cult-style
+   ============================================ */
+
+.cult-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(180deg, var(--accent-secondary) 0%, var(--accent) 55%, var(--accent-tertiary) 100%);
+  color: var(--accent-on);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 0 rgba(120, 53, 15, 0.2),
+    0 1px 2px rgba(var(--shadow-color), calc(0.4 * var(--shadow-strength))),
+    0 10px 28px -6px rgba(var(--accent-rgb), 0.55);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  white-space: nowrap;
+}
+
+.cult-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(120, 53, 15, 0.25),
+    0 2px 4px rgba(var(--shadow-color), calc(0.4 * var(--shadow-strength))),
+    0 16px 36px -6px rgba(var(--accent-rgb), 0.7);
+}
+
+.cult-button:active {
+  transform: translateY(0);
+}
+
+.cult-button-ghost {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 1px 0 var(--inset-highlight),
+    0 1px 2px rgba(var(--shadow-color), calc(0.3 * var(--shadow-strength)));
+}
+
+.cult-button-ghost:hover {
+  background: var(--bg-elevated-hover);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  box-shadow:
+    inset 0 1px 0 var(--inset-highlight-strong),
+    0 1px 2px rgba(var(--shadow-color), calc(0.3 * var(--shadow-strength))),
+    0 8px 24px -6px rgba(var(--accent-rgb), 0.2);
+}
+
+/* ============================================
+   BADGE STYLES
+   ============================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.18rem 0.52rem;
+  border-radius: var(--radius-full);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.badge-default {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.badge-featured {
+  background: rgba(var(--accent-rgb), 0.15);
+  color: var(--accent);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+}
+
+/* Monocromo: NUEVO = tag tinta (alto contraste, tipo CTA de la web);
+   ACTUALIZADO/POPULAR = contorno gris fino. */
+.badge-new {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border: 1px solid var(--text-primary);
+}
+
+.badge-updated {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+
+.badge-popular {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
+/* ============================================
+   CLAUDE MASCOT — pixel art
+   ============================================ */
+
+.mascot-root {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.mascot-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, 0.25));
+  transition: transform 120ms steps(2, end);
+}
+
+.mascot-root:hover .mascot-svg {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-svg { transition: none; }
+}

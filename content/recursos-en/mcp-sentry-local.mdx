@@ -1,0 +1,104 @@
+---
+title: "MCP Sentry Local — Sentry's official server running locally via npx"
+description: "Official Sentry MCP (local version). Run the Sentry integration locally for debugging, error tracking, and performance monitoring. An alternative to [Sentry MCP](/boveda/mcp-sentry) with a self-managed focus."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "sentry"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-sentry", "mcp-dynatrace", "mcp-logfire"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/sentry-local"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/sentry-local.json"
+---
+
+## What it is
+
+This is the **official** version of the Sentry MCP in local mode. It runs via `npx` without having to set up any extra infrastructure. Compared to the [Sentry MCP (community)](/boveda/mcp-sentry) (270 installs), this one is more recent and officially backed by Sentry — only 21 installs so far.
+
+The "local" distinction usually refers to:
+- It runs as a local Node process
+- It connects to your Sentry SaaS or self-hosted instance (configurable URL)
+- It requires no additional setup compared to versions that need their own server
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 21 |
+| MCP server | `sentry` |
+| Author | Sentry (official) |
+| Mode | Local via npx |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/sentry-local
+```
+
+Prerequisite: a Sentry account + access token.
+
+For Claude:
+
+```
+I installed the devtools/sentry-local MCP. Configure SENTRY_AUTH_TOKEN and
+SENTRY_URL if self-hosted. List the most recent issues and top
+errors in the project.
+```
+
+## What you can do with it
+
+The same operations as with the [Sentry MCP community](/boveda/mcp-sentry):
+
+- Issue triage
+- Assisted debugging with stack traces
+- Release analysis
+- Correlation with deploys
+- Performance triage
+
+Detailed use cases are in [Sentry MCP](/boveda/mcp-sentry) — they apply just the same.
+
+## Differences from the community version
+
+- **Maintained directly by Sentry** — releases synced with the product
+- **Fewer installs (21 vs 270)** — a smaller community trying it out
+- **Official support** if you have an enterprise plan
+- **Predictable updates**
+
+## When to choose which
+
+| Case | Recommendation |
+| --- | --- |
+| Official support matters | **Sentry Local (official)** |
+| More community trying it | **Sentry (community)** |
+| No preference | **Start with community for maturity** |
+| Critical enterprise stack | **Official** |
+
+## Prerequisites
+
+- **Sentry account** + access token
+- **Node.js** to run it via npx
+- **Don't install it alongside the community one** (collision)
+
+## When it's not a good fit
+
+<Callout type="warning" title="Before you install">
+
+- **If you already have the [`sentry`](/boveda/mcp-sentry) community one working:** don't force a migration. Test it in a sandbox.
+- **21 installs is low:** fewer publicly known issues.
+- **For self-hosted, on-prem Sentry:** check that the MCP supports your setup.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Sentry Local MCP](https://www.aitmpl.com/component/mcps/devtools/sentry-local) — exact command.
+- **JSON config:** [sentry-local.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/sentry-local.json).
+- **Official Sentry:** [sentry.io](https://sentry.io).
+
+## Related resources
+
+- [Sentry MCP (community)](/boveda/mcp-sentry) — more widely adopted. Compare before choosing.
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — an APM alternative.
+- [Logfire MCP](/boveda/mcp-logfire) — observability with OTel + Pydantic.

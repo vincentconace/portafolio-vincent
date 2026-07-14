@@ -1,0 +1,101 @@
+---
+title: "MCP Logfire — OpenTelemetry traces and metrics with Pydantic Logfire"
+description: "MCP server that gives access to OpenTelemetry traces and metrics through Logfire (Pydantic). Modern observability for Python apps, especially those using PydanticAI or FastAPI."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "logfire", "opentelemetry"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-dynatrace", "mcp-grafana", "mcp-elasticsearch"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/logfire"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/logfire.json"
+---
+
+## What it is
+
+[Logfire](https://logfire.pydantic.dev) is Pydantic's observability platform. Built for modern Python apps (FastAPI, PydanticAI), it uses OpenTelemetry as its foundation and adds magic auto-instrumentation features.
+
+This MCP connects your Logfire to Claude Code. Query traces, metrics, logs, anomalies. Useful when your observability lives in Logfire and you want that context in your editor.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 97 |
+| MCP server | `logfire` |
+| Author | Pydantic |
+| Standard | OpenTelemetry |
+| Account required | Yes — Logfire |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp devtools/logfire
+```
+
+Prerequisite: Logfire account + API token (write/read token depending on usage).
+
+For Claude:
+
+```
+I installed the devtools/logfire MCP. Configure the credentials and show me
+the slowest traces from the last day, grouped by route. For the
+top 3, give me the dominant span.
+```
+
+## What you can do with this
+
+### Latency diagnosis
+
+"On the `/api/checkout` route, which span contributes most to p95 latency? Show me concrete examples." More direct than opening the dashboard.
+
+### Anomaly detection
+
+"Compare yesterday's latency vs last week. Are there regressions on any endpoint?" A time diff.
+
+### Structured logs
+
+Logfire integrates logs as spans. "Find me errors in the last hour that mention `database connection`." Not LogQL, Logfire's own.
+
+### Trace exploration
+
+"Take the trace with id X. Show me the full tree of spans with duration and tags." Useful for debugging specific requests.
+
+### Integration with FastAPI / PydanticAI
+
+If your stack is FastAPI with Logfire instrumented, endpoints show up as rich traces. The MCP lets you query over them.
+
+### Combining with [Dynatrace](/boveda/mcp-dynatrace) / [Grafana](/boveda/mcp-grafana)
+
+If you use Logfire for Python apps and another stack for infra, you can combine several observability MCPs. Claude correlates.
+
+## Prerequisites
+
+- **Logfire account** with a suitable plan
+- **Correct API token**
+- **Instrumented apps** with OTel/Logfire (the MCP queries what's already being reported)
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your observability is elsewhere:** Logfire-only. For New Relic, Datadog, Sentry, there are specific MCPs or nothing.
+- **If your stack is non-Python:** Logfire supports multiple languages, but its sweet spot is Python. Validate your case.
+- **97 installs is moderate:** a moderately-tested community. For critical production, verify that the tools you need are available.
+- **For alerts:** Logfire has alerting, but the MCP is for querying. Routing to humans still happens via the Logfire UI or PagerDuty.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Logfire MCP](https://www.aitmpl.com/component/mcps/devtools/logfire) — exact command.
+- **JSON config:** [logfire.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/logfire.json).
+- **Official Logfire:** [logfire.pydantic.dev](https://logfire.pydantic.dev) — account and docs.
+
+## Related resources
+
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — alternative enterprise observability.
+- [Grafana MCP](/boveda/mcp-grafana) — for dashboards and generic queries to Prometheus / Loki.
+- [Elasticsearch MCP](/boveda/mcp-elasticsearch) — for data in ES as a logs/observability stream.

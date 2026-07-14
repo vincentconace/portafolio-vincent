@@ -1,0 +1,93 @@
+---
+title: "MCP DeepGraph Vue — composition, reactivity, and template-script as a graph"
+description: "MCP server with 432 installs built specifically for Vue.js. It analyzes component composition, reactive data flow, and template ↔ script relationships. Handy for large Vue projects where reactivity gets tricky."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "vue"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-deepgraph-react", "mcp-deepgraph-typescript", "plugin-cartographer"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-vue"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-vue.json"
+---
+
+## What it is
+
+DeepGraph Vue is the vertical version built for Vue.js projects. The neat part is that it understands Vue-specific concepts: composition API, options API, refs and computed, watchers, reactive stores (Pinia, Vuex), and the relationship between the template and script of a `.vue` file.
+
+When Claude asks "what triggers this watcher" or "which components consume this store", it queries the graph instead of iterating over files.
+
+432 installs is respectable for a more niche category (Vue vs React/Next).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `deepgraph` |
+| Installs | 432 |
+| MCP server | `DeepGraph Vue MCP` |
+| Focus | Vue.js (Composition + Options API) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp deepgraph/deepgraph-vue
+```
+
+For Claude:
+
+```
+I installed the deepgraph/deepgraph-vue MCP. Map the graph of my Vue
+project: component tree, Pinia stores and where they're used, and any
+global watchers.
+```
+
+## What you can do with it
+
+### Component composition tree
+
+"Give me the whole tree from `<App>` down to the leaves, distinguishing Composition API vs Options API." Mixed Vue is common, and seeing it as a graph helps.
+
+### Reactive data flow
+
+"Where does the `userPreferences` prop in `<ProfileSettings>` come from? Trace the chain back to the source." Useful when the flow runs through composables and stores.
+
+### Pinia / Vuex stores
+
+"List all the stores and which components consume them. Flag stores with a single consumer (candidates for local state)."
+
+### Template ↔ Script
+
+"In `<ProductCard>`, which refs from the script are used in the template? Are there any refs defined that aren't used?" Detects dead reactive state.
+
+### Global watchers
+
+"Find all the `watch` and `watchEffect`. Flag the ones that trigger changes across multiple components." A source of bugs in complex reactivity.
+
+## Prerequisites
+
+- **A Vue.js project** you can access
+- **Node.js + Claude Code**
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If your stack is React:** [DeepGraph React](/boveda/mcp-deepgraph-react) or [Next.js](/boveda/mcp-deepgraph-nextjs).
+- **For strict TypeScript analysis on Vue:** combine it with [DeepGraph TypeScript](/boveda/mcp-deepgraph-typescript).
+- **Small Vue projects** (< 20 components): you don't need a graph.
+- **If you use Nuxt:** most of the analysis applies, but some Nuxt concepts (server routes, middleware) aren't specifically covered.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [DeepGraph Vue MCP](https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-vue) — exact command.
+- **JSON config:** [deepgraph-vue.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-vue.json).
+
+## Related resources
+
+- [DeepGraph React MCP](/boveda/mcp-deepgraph-react) — the equivalent for React.
+- [DeepGraph TypeScript MCP](/boveda/mcp-deepgraph-typescript) — combine for Vue + strict TS.
+- [Cartographer](/boveda/plugin-cartographer) — horizontal analysis of any codebase (when DeepGraph doesn't cover your framework).

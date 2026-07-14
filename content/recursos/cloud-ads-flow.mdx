@@ -1,0 +1,255 @@
+---
+title: "Cloud Ads Flow — un agente que corre tus Facebook Ads cada lunes"
+description: "Workflow agéntico que combina Cowork (lee Ads Library de Facebook) + Higgsfield (genera creativos) + Facebook MCP (sube y A/B testea). El loop semanal automatizado: scrapea ganadores, replica variantes, lanza, pausa perdedores. Cuándo conviene y los warnings."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-cowork", "higgsfield", "facebook"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["andromeda-meta-ads", "higgsfield-mcp", "agencia-marketing-claude"]
+---
+
+## Lo que cambia
+
+Si pagás Facebook Ads, conocés el lunes. Te sentás a:
+- Revisar qué pasó la semana pasada (1h refrescando Ads Manager)
+- Mirar qué hacen los competidores (Ads Library, 30 min)
+- Crear nuevos creativos (1-3h según equipo)
+- Subirlos a Ads Manager (30 min)
+- Configurar A/B test (30 min)
+
+**5-6 horas todos los lunes. Toda la vida.**
+
+Cloud Ads Flow ataca eso: **3 sistemas trabajando juntos** dentro de Claude para que el loop entero se repita solo.
+
+| Pieza | Qué hace |
+|-------|----------|
+| **Cowork** (built-in Claude.ai) | Lee Ads Library, identifica ganadores del nicho |
+| **[Higgsfield MCP](/boveda/higgsfield-mcp)** | Genera 10 variantes del creativo ganador con tu marca |
+| **Facebook MCP** | Sube los creativos a Ads Manager y prende A/B |
+
+---
+
+## Los 5 movimientos
+
+### Movimiento 1 — Scanear Ads Library
+
+```
+> Andá a la Ads Library de Facebook, filtrá:
+  - País: Argentina
+  - Nicho: "SaaS pricing tools" o "B2B revenue ops"
+  - Ads activos hace >14 días (señal de que funcionan)
+
+  Bajame los 10 más probables ganadores. Para cada uno:
+  - Screenshot del creativo
+  - Texto del copy
+  - Tiempo activo
+  - Estimado de spend (si Ads Library lo muestra)
+  - Por qué creés que funciona (hook + ángulo)
+```
+
+Output: docs con 10 ads ganadores del nicho.
+
+### Movimiento 2 — Identificar el patrón ganador
+
+```
+> De los 10 que bajaste, identificá el patrón común.
+  - ¿Qué tipo de hook predomina?
+  - ¿Format (foto / video / carrusel) más usado?
+  - ¿Qué pain points mencionan?
+  - ¿Qué CTAs usan?
+
+  Devolveme la "fórmula ganadora" del nicho en 1 página.
+```
+
+No copiás los ads (sería plagio + Meta lo detecta). **Extraés la fórmula** para aplicar con tu marca.
+
+### Movimiento 3 — Generar variantes con tu brand
+
+```
+> Higgsfield: con la fórmula del paso 2, generame 10 variantes para
+  mi producto.
+
+  Mi brand:
+  - Producto: [...]
+  - Audiencia: [...]
+  - Paleta: [...]
+  - Tono: [...]
+  - Tagline: [...]
+
+  Variantes con diferencias en:
+  - 3 con hook A (frustración)
+  - 3 con hook B (curiosidad)
+  - 4 con hook C (resultado)
+
+  Output: 10 imágenes / videos listos para Ads Manager.
+```
+
+Detalle del workflow Higgsfield en [Higgsfield MCP](/boveda/higgsfield-mcp).
+
+### Movimiento 4 — Subir a Facebook Ads Manager
+
+```
+> Facebook MCP: subí los 10 ads a una nueva campaña.
+
+  Settings:
+  - Objetivo: conversiones (signup)
+  - Budget: $20/día por ad set
+  - Audiencia: [...]
+  - Pixel: [tu pixel ID]
+  - URL destino: [tu landing]
+
+  Configurá A/B testing 70/30 entre los hooks. Las 10 ads en
+  ad sets separados por hook.
+
+  ANTES de prender: mostrame review final.
+```
+
+Te muestra la configuración. Confirmás. Se prenden.
+
+### Movimiento 5 — Loop semanal
+
+[Scheduled task de Cowork](/boveda/nueve-prompts-cowork) que corre cada lunes:
+
+```
+Cada lunes 8am:
+
+1. Revisar performance de los ad sets últimos 7 días
+2. Identificar:
+   - Ganadores (CPA bajo, ROAS alto)
+   - Perdedores (CPA alto, no conversion)
+3. Pausar perdedores
+4. Para los ganadores: pedirle a Higgsfield 5 variantes más
+5. Subir variantes a un ad set nuevo
+6. Avisarme cuál fue el ganador de la semana
+```
+
+**El lunes que pasabas refrescando Ads Manager** se convierte en revisar el reporte que el agente te dejó.
+
+---
+
+## Setup
+
+### Requisitos
+
+<Checklist
+  storageKey="cloud-ads-flow-prereqs"
+  items={[
+    "Claude Pro+ (necesitás Cowork + MCPs)",
+    "Cuenta de Facebook Ads Manager con permisos",
+    "Pixel de Facebook funcionando en tu site",
+    "Suscripción de Higgsfield (créditos)",
+    "Facebook MCP instalado y configurado",
+  ]}
+/>
+
+### Conectores
+
+```json
+{
+  "mcpServers": {
+    "higgsfield": {
+      "url": "https://mcp.higgsfield.ai/mcp",
+      "headers": { "Authorization": "Bearer ${HIGGSFIELD_TOKEN}" }
+    },
+    "facebook-ads": {
+      "command": "npx",
+      "args": ["-y", "@facebook/ads-mcp"],
+      "env": {
+        "FB_ACCESS_TOKEN": "${FB_TOKEN}",
+        "FB_AD_ACCOUNT_ID": "${FB_AD_ACCOUNT_ID}"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Anti-patrones críticos
+
+### 1. Copiar ads de la competencia literal
+
+Sacar el creativo de un competidor y subirlo igualito = **violación de copyright**. Meta también detecta y banea cuenta.
+
+**Solo extraé la fórmula** (estructura, hooks, ángulos). Tu visual y copy tienen que ser **propios**.
+
+### 2. Lanzar 50 ads sin método
+
+10 ads bien testeados > 50 ads random. **Disciplina sobre volumen**.
+
+### 3. No auditar el setup periódicamente
+
+Después de 4-8 semanas, **audit completo**:
+- ¿La fórmula ganadora cambió?
+- ¿Tus mejores ads siguen rindiendo o se quemaron por frecuencia?
+- ¿Aparecieron nuevos competidores con ads relevantes?
+
+Sin audit, el loop se vuelve mecánico y deja de adaptarse.
+
+### 4. Sin presupuesto sufficient para learning
+
+Cada ad set necesita **al menos 50 conversiones** para que Meta aprenda. Si tu CPA es $50, eso es $2500 por ad set. **Si no tenés ese budget, los A/B no rinden datos útiles**.
+
+### 5. Confiar 100% en lo que el agente decide
+
+El agente propone, **vos validás**. Pausar un ad sin revisar puede pausar uno que iba a despegar la próxima semana. **Aprobá las decisiones críticas**.
+
+---
+
+## Combinación con auditoría manual mensual
+
+Una vez al mes, audit completo con [Claude Ads (parte de agencia marketing)](/boveda/agencia-marketing-claude):
+
+```
+> /claude-ads auditá toda mi cuenta de Facebook Ads del último mes.
+
+  Cubrí:
+  - Creative fatigue
+  - Targeting overlap
+  - Bidding ineficiente
+  - Pixel firing correctly
+  - Conversion attribution
+
+  Devolveme top 5 issues críticos + recomendaciones.
+```
+
+El loop semanal mantiene el motor andando; la auditoría mensual previene drift acumulado.
+
+---
+
+## Cuándo este flow gana
+
+✅ Manejás tu propio Facebook Ads (no agencia)
+✅ Spend mensual > $1500 (justifica el setup)
+✅ Aceptás revisar 1h por semana (no es 0 trabajo)
+✅ Tu producto tiene conversion clara y trackeable
+
+❌ Spend muy bajo (menos de $300/mes) → no hay data para A/B testing
+❌ Niche con regulación estricta (gambling, salud, finanzas) → Meta rechaza ads creativos
+❌ Ya tenés agencia que hace esto bien → duplicar esfuerzo
+
+---
+
+## El cálculo realista
+
+Tiempo ahorrado por semana: **4-5 horas**.
+Costo adicional vs hacerlo a mano:
+- Higgsfield: $30-100/mes
+- Facebook MCP: incluido en plan paid
+- Cowork: tu plan de Claude existente
+
+Si tu hora vale más de $20, **se paga en una semana**.
+
+Lo que NO ahorra:
+- El criterio para decidir qué ads escalar / pausar (tuyo)
+- Las decisiones de presupuesto general (tuya)
+- La estrategia de la campaña (tuya)
+
+---
+
+## Próximos pasos
+
+- Para entender bien Facebook Ads post-Andromeda, [Andromeda — 8 reglas Meta Ads](/boveda/andromeda-meta-ads)
+- Para detalle del componente de generación visual, [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para el combo más amplio de marketing automation, [agencia marketing con Claude](/boveda/agencia-marketing-claude)

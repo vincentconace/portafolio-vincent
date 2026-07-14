@@ -1,0 +1,96 @@
+---
+title: "Setting API Key Helper — script custom para generar auth tokens dinámicos"
+description: "Setting con 325 installs. Configura un script que genera dynamicamente tokens de autenticación. Útil para environments con credentials rotativas (SSO, vault, tokens expirables)."
+difficulty: "avanzado"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-aws-credentials", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/authentication/api-key-helper"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/authentication/api-key-helper.json"
+---
+
+## Qué es
+
+Configurás un script (ej. `/bin/generate_temp_api_key.sh`) que Claude Code ejecuta para obtener API keys dinámicos. Útil cuando:
+
+- Tu org usa SSO con tokens temporales
+- Vault rotativo (HashiCorp Vault, AWS Secrets Manager)
+- Tokens con TTL corto
+
+El setting incluye `CLAUDE_CODE_API_KEY_HELPER_TTL_MS` para definir cuánto vivir el token antes de regenerar.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `authentication` |
+| Installs | 325 |
+| Setting key | `apiKeyHelper` + `CLAUDE_CODE_API_KEY_HELPER_TTL_MS` |
+| Default TTL | 3,600,000 ms (1 hora) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting authentication/api-key-helper
+```
+
+Después editá tu config para apuntar al script real:
+
+```json
+{
+  "apiKeyHelper": "/bin/your_generate_api_key.sh",
+  "env": {
+    "CLAUDE_CODE_API_KEY_HELPER_TTL_MS": "3600000"
+  }
+}
+```
+
+Para Claude:
+
+```
+Instalé el setting authentication/api-key-helper. Mostrame el shape
+del script que debe devolver y cómo testearlo.
+```
+
+## Qué podés hacer con esto
+
+### SSO con tokens efímeros
+
+Tu org usa Okta/Auth0 con tokens de 1 hora. El script renueva automatic.
+
+### Vault rotativo
+
+Token expira → script regenera → Claude sigue funcionando sin que vos intervengas.
+
+### Multi-cloud credentials
+
+El script puede consultar AWS STS, Azure AD, GCP Workload Identity según el caso.
+
+### Combo con [AWS Credentials](/boveda/setting-aws-credentials)
+
+API Key Helper para auth genérica. AWS Credentials para AWS Bedrock específicamente. Cubren caps diferentes.
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de habilitar">
+
+- **Script con bugs:** si el script falla, Claude no autentica. Test seriamente antes.
+- **Script con secrets hard-coded:** todos los avisos sobre credentials apply. El script puede ver y filtrar.
+- **Para auth simple con API key estática:** este setting es overkill.
+- **TTL muy corto:** si el TTL es menor que tus operaciones, Claude se queda sin auth mid-task.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [API Key Helper Setting](https://www.aitmpl.com/component/settings/authentication/api-key-helper) — comando exacto.
+- **Config JSON:** [api-key-helper.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/authentication/api-key-helper.json).
+
+## Recursos relacionados
+
+- [AWS Credentials Setting](/boveda/setting-aws-credentials) — para AWS específico.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — patrones de auth.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de configuración.

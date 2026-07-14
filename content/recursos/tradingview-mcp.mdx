@@ -1,0 +1,266 @@
+---
+title: "TradingView + Claude — análisis de gráficas en tiempo real"
+description: "Patrón MCP que conecta Claude directo a TradingView Desktop: ve tus gráficas en tiempo real, dibuja niveles, propone alertas y arma reportes de mercado. Setup, casos donde sirve y los warnings sobre cuándo NO usarlo para trading real."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "tradingview", "mcp"]
+publishedAt: "2026-05-22"
+readingTime: "9 min"
+relatedSlugs: ["mcp-server-propio", "plugin-supabase-mcp", "plugin-n8n-mcp"]
+---
+
+## El problema
+
+Hasta hace poco, si querías que Claude te ayude con análisis técnico de gráficas:
+
+1. Tomabas screenshot del chart
+2. Lo pegabas en el chat
+3. Claude veía **una imagen plana** — pixeles, no data
+4. Te tiraba un análisis genérico basado en lo que pareciera ver
+
+Resultado: análisis pobre, sin acceso a indicadores reales, sin precios actuales, sin contexto histórico.
+
+El **patrón MCP de TradingView** cambia eso: Claude se conecta directo a tu TradingView Desktop y **ve la misma data que vos**. Precios en tiempo real, indicadores activos, drawings, alertas — todo accesible como tools.
+
+> **Importante**: este patrón es para **análisis y reporting**. NO ejecuta trades por vos. Más sobre eso al final.
+
+---
+
+## Qué hace el MCP
+
+Una vez configurado, Claude tiene acceso a estas tools:
+
+| Tool | Qué hace |
+|------|----------|
+| `get_chart_data` | Lee la data del ticker actual (precio, volumen, OHLC) |
+| `get_indicators` | Lee los valores actuales de indicadores activos (RSI, MACD, EMAs, etc.) |
+| `draw_level` | Dibuja un nivel horizontal en el chart |
+| `draw_trendline` | Dibuja una trendline |
+| `set_alert` | Configura una alerta en TradingView |
+| `list_alerts` | Lista las alertas activas |
+| `get_symbol_info` | Info del activo: market cap, sector, próximo earnings, etc. |
+| `screenshot_chart` | Captura el chart actual (para reportes con visual) |
+
+No es "Claude tradea por vos". Es "Claude **lee** lo que vos ves y opera sobre el chart como un asistente".
+
+---
+
+## Setup
+
+### Requisitos
+
+<Checklist
+  storageKey="tradingview-mcp-prereqs"
+  items={[
+    "TradingView Desktop instalado (la app, no la web)",
+    "Cuenta de TradingView (Free funciona; Pro+ tiene más indicadores accesibles)",
+    "Claude Code v1.5+",
+    "Node.js 20+ para correr el MCP server",
+  ]}
+/>
+
+### Pasos
+
+<Step number={1} title="Instalar el MCP">
+
+El MCP es un paquete npm que corre localmente y se conecta a TradingView Desktop via su API local.
+
+```bash
+npm install -g tradingview-mcp-server
+```
+
+(O usás `npx -y` en el settings de Claude — no requiere install global.)
+
+</Step>
+
+<Step number={2} title="Configurar en Claude Code">
+
+`.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "tradingview": {
+      "command": "npx",
+      "args": ["-y", "tradingview-mcp-server"],
+      "env": {
+        "TRADINGVIEW_PORT": "8421"
+      }
+    }
+  }
+}
+```
+
+</Step>
+
+<Step number={3} title="Habilitar el API local de TradingView">
+
+En TradingView Desktop:
+
+1. Settings → Advanced → Enable local API
+2. Verificá que esté en `http://localhost:8421` (o el puerto que configuraste)
+
+</Step>
+
+<Step number={4} title="Probar la conexión" last>
+
+Abrí TradingView, abrí un chart cualquiera, después en Claude Code:
+
+```
+> ¿Qué ticker tengo abierto en TradingView?
+```
+
+Claude debería invocar `get_chart_data` y devolverte el símbolo + precio actual.
+
+</Step>
+
+---
+
+## Casos de uso reales
+
+### 1. Reporte diario de mercado
+
+Cada mañana, Claude te arma un reporte basado en los tickers que estás siguiendo:
+
+```
+> Armame el reporte diario. Estos son los tickers que sigo:
+  SPY, QQQ, BTC, ETH, AAPL, NVDA, TSLA, AMZN.
+
+  Para cada uno:
+  - Cambio % desde apertura
+  - Estado de los EMAs (precio sobre/bajo EMA 20 y 50)
+  - Volumen actual vs promedio 20 días
+  - Niveles clave cercanos (support/resistance)
+
+  Devolveme en formato tabla, ordenado por % cambio descendente.
+  Al final, las 3 setups más interesantes para watchlist hoy.
+```
+
+Lo agendás con [hooks](/boveda/hooks-automatizacion) `SessionStart` y al abrir Claude por la mañana ya está listo.
+
+### 2. Análisis técnico estructurado
+
+```
+> En el chart actual (BTCUSD, 4h), hacé análisis técnico estructurado:
+
+1. Estructura: HH/HL o LH/LL? Confirmá con últimos 3 swings
+2. Niveles clave: identificá los 2 supports y 2 resistances más relevantes
+3. Indicadores: estado de RSI (overbought/oversold/neutro), MACD (crossover reciente?)
+4. Volumen: confirmando o divergiendo del movimiento de precio?
+5. Setup: ¿hay alguno claro acá? si sí, cuál y con qué riesgo/recompensa
+
+Si dibujás los niveles que identifiques, usá draw_level.
+```
+
+Claude no inventa — lee data real, escribe análisis con justificación, dibuja niveles en el chart.
+
+### 3. Alertas inteligentes
+
+```
+> Configurame alertas en BTCUSD 4h:
+
+- Alerta si el precio cierra por encima de 68500 (resistance principal)
+- Alerta si el precio cierra por debajo de 64200 (support principal)
+- Alerta si RSI cruza por encima de 70 o por debajo de 30
+
+Usá set_alert.
+
+Después listame todas las alertas activas para confirmar.
+```
+
+Mucho más rápido que configurar una por una en la UI.
+
+### 4. Comparativa entre activos
+
+```
+> Comparame BTC, ETH, SOL en timeframe diario:
+
+- Performance últimos 7 días
+- Performance últimos 30 días
+- Volatilidad (ATR como % del precio)
+- Estado actual vs sus EMAs 50 y 200
+
+Tabla comparativa + cuál se ve más fuerte técnicamente.
+```
+
+---
+
+## Lo que NO conviene hacer
+
+### 1. NO usarlo para ejecutar trades
+
+El MCP **no tiene tools de ejecución**. Y aunque las tuviera (vía broker), **no las habilites**. Hay razones:
+
+- LLMs no son deterministas — el mismo prompt puede dar decisiones distintas
+- Errores de ejecución por LLM cuestan dinero real
+- La velocidad humano-en-loop es suficiente para timeframes >5min
+
+**Usalo para análisis. La decisión final es tuya. La ejecución es manual en TradingView o tu broker.**
+
+### 2. NO confiar en el análisis sin verificar
+
+Claude puede equivocarse leyendo gráficas:
+
+- Confundir patrones (un H&S parcial puede parecer doble techo)
+- Malinterpretar volumen sin contexto histórico
+- No saber de eventos macro que afectan el ticker
+
+**El análisis es input para tu decisión**, no la decisión.
+
+### 3. NO usarlo en scalping / day-trading rápido
+
+Los tiempos de respuesta de un LLM (segundos) son demasiado lentos para timeframes de 1min o menos. Útil para 1h, 4h, diario.
+
+### 4. NO darle credenciales del broker
+
+Algunas extensiones del MCP proponen conectar al broker. **No lo hagas hasta tener experiencia probada con el MCP en modo solo-lectura por meses**.
+
+---
+
+## El warning del trading con IA
+
+Más allá del MCP, una verdad incómoda sobre trading con asistentes IA:
+
+> **Si una herramienta de trading fuera realmente buena, no la venderían — la usarían ellos.**
+
+Esto aplica también a los análisis con LLM. Pueden ser **útiles para organizar tu pensamiento, generar reportes y configurar alertas más rápido**. NO son edge sobre el mercado.
+
+El MCP de TradingView **no te va a hacer ganar plata por sí solo**. Te va a hacer **más eficiente en tu workflow de análisis**. Eso es valioso, pero es diferente.
+
+Si lo usás esperando un alpha mágico, vas a perder plata y a echarle la culpa a Claude.
+
+---
+
+## Variaciones del patrón
+
+El mismo approach se aplica a otros dominios con apps locales:
+
+| App | MCP equivalente posible | Caso de uso |
+|-----|--------------------------|--------------|
+| Excel | Office add-in / MCP | Modelos financieros, análisis de datos |
+| Photoshop / Figma | MCPs creativos | Edición asistida |
+| Logic / Ableton | MCPs musicales | Composición y edición |
+| DAW / VFX software | MCPs según herramienta | Tareas técnicas repetitivas |
+
+El patrón "MCP local que expone la app que ya usás" es replicable. TradingView es solo el ejemplo más maduro hoy en finanzas.
+
+---
+
+## Cuándo este patrón te conviene
+
+✅ Hacés análisis técnico recurrente (no scalping)
+✅ Querés automatizar reportes diarios de mercado
+✅ Necesitás dibujar niveles / configurar alertas en lote
+✅ Aceptás que la herramienta es asistente, no oráculo
+
+❌ Esperás señales automáticas para tradear
+❌ Hacés scalping de timeframes bajos
+❌ No tenés disciplina para tradear por tu cuenta — un asistente no resuelve esa parte
+
+---
+
+## Próximos pasos
+
+- Para entender MCPs en general, [tu propio MCP server](/boveda/mcp-server-propio)
+- Si tu workflow está más en datos financieros corporativos (no trading personal), [Claude Financial Services](/boveda/claude-finanzas)
+- Para combinar varios MCPs en agentes que trabajan 24/7, [ecosistema de agentes](/boveda/ecosistema-de-agentes)

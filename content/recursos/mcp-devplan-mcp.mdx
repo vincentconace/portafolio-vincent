@@ -1,0 +1,84 @@
+---
+title: "MCP Devplan — integración con la plataforma Devplan"
+description: "MCP server para conectar Claude Code con Devplan. Instalación de una línea vía npx. Pensado para equipos que usan Devplan como su plataforma de planning y orquestación de desarrollo."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "devplan"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["spec-kit", "anatomia-claude", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/devplan-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/devplan-mcp.json"
+---
+
+## Qué es
+
+Devplan MCP conecta Claude Code con la plataforma Devplan. La descripción oficial en aitmpl es breve — para detalles concretos de qué expone el server, mirá el [JSON de configuración](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/devplan-mcp.json) y la página oficial de Devplan.
+
+Si tu equipo ya usa Devplan para tracking de proyectos, planning o agentic workflows, este MCP es el puente para que Claude consulte/actúe contra esa plataforma desde tu editor.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 43 |
+| Servidor MCP | `devplan` |
+| Cuenta requerida | Sí — Devplan |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/devplan-mcp
+```
+
+Pre-requisito: cuenta y credenciales de Devplan.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/devplan-mcp. Decime qué env vars o credenciales
+necesito setear y mostrame qué operaciones expone el server.
+```
+
+## Qué podés hacer con esto
+
+### Integrar Devplan en tu workflow de Claude
+
+Si tu equipo planifica en Devplan y vos codeás en Claude, este MCP elimina el cambio de contexto entre los dos. Vos preguntás "qué tareas tengo en sprint" desde Claude y el MCP responde.
+
+### Sync entre código y plan
+
+Patrones tipo "cuando termino una tarea de código, actualizo su estado en Devplan automáticamente" se vuelven triviales con el MCP + un hook.
+
+### Onboarding a contexto del proyecto
+
+Cuando arrancás una nueva tarea, Claude puede leer el contexto desde Devplan (descripción, criterios de aceptación, links) antes de tocar código.
+
+## Pre-requisitos
+
+- **Cuenta Devplan** activa
+- **API token** o credenciales que el server pida
+- **Verificá el JSON de configuración** para entender qué exactamente expone
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Devplan:** obvio. Para Linear hay otros MCPs; para Jira también; para Notion también.
+- **Información limitada en aitmpl:** la descripción es genérica. Si tu uso es serio, mirá la doc de Devplan oficial y el JSON antes de comprometerte.
+- **Pocos installs (43):** menos comunidad probando. Probá en sandbox antes de uso productivo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Devplan MCP](https://www.aitmpl.com/component/mcps/devtools/devplan-mcp) — comando exacto.
+- **Config JSON:** [devplan-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/devplan-mcp.json) — definición real del server (lo más confiable acá).
+
+## Recursos relacionados
+
+- [Spec Kit](/boveda/spec-kit) — para Spec-Driven Development oficial de GitHub, opción alternativa para planning estructurado.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar el MCP como conector externo.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que actualicen Devplan automáticamente.

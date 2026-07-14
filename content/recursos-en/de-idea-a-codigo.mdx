@@ -1,0 +1,281 @@
+---
+title: "From idea to code — the workflow with 3 Claude models in sequence"
+description: "The problem isn't building — it's that NOBODY tells you where to start. Step-by-step workflow using the 3 models in sequence: Haiku (dump your idea) → Sonnet (structure) → Opus (plan) → Sonnet (builds). Each model doing what it does best. Cuts costs + better results."
+difficulty: "intermedio"
+category: "guides"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["construye-tu-app", "cambia-de-modelo", "trabaja-con-claude"]
+---
+
+## The problem
+
+Everyone wants to build with AI. But **nobody tells you where to start**.
+
+You open Claude Code, you see the empty terminal, and you sit there thinking.
+
+---
+
+## The solution — use each model for what it does best
+
+```
+Haiku   → dump your idea (fast and cheap)
+Sonnet  → give it structure
+Opus    → build the deep plan
+Sonnet  → build
+```
+
+Each model in its role. **It costs less** and **gives better results** than using Opus for everything.
+
+---
+
+## Step 1 — Haiku: dump your idea
+
+### Why Haiku
+
+Haiku is **fast and cheap**. To get your idea out of your head in raw form, you don't need Opus.
+
+### How to use it
+
+```
+/model haiku
+
+> I have an idea: [VAGUE DESCRIPTION]
+
+  Just organize what I said into bullets. DON'T ask me questions.
+  DON'T tell me if it's a good idea. DON'T suggest a stack.
+
+  Just organize what I have in my head.
+```
+
+### Output
+
+A clean list of:
+- What it is
+- Who it's for
+- Main features
+- Implicit constraints
+
+The good part: Haiku **doesn't butt in**, it just organizes.
+
+---
+
+## Step 2 — Sonnet: give it structure
+
+### Why Sonnet
+
+Sonnet is **the balance**. It has good judgment without spending like Opus. Perfect for structuring the raw idea.
+
+### How to use it
+
+```
+/model sonnet
+
+> Take the organized idea from before and give me:
+  1. A specific audience (not generic)
+  2. The concrete problem it solves
+  3. Why someone would use this
+  4. Must-have features for v1 (3-5 max)
+  5. Features it should NOT have in v1
+  6. Success metrics for v1
+```
+
+### Output
+
+A basic PRD. Structured, but not yet an executable plan.
+
+---
+
+## Step 3 — Opus: build the plan
+
+### Why Opus
+
+Opus is **the heavy brain**. For a technical plan that accounts for architecture, critical decisions, edge cases — Opus shines.
+
+### How to use it
+
+```
+/model opus
+
+> With the PRD we put together, make a complete technical plan:
+
+  1. Recommended stack (with justification)
+  2. Overall architecture
+  3. DB schema
+  4. APIs/endpoints
+  5. Step-by-step build order
+  6. Technical risks to anticipate
+  7. How to split into phases (MVP → v1 → v2)
+
+  ultrathink — think this through thoroughly. This is the plan we're going to execute.
+```
+
+### Output
+
+An executable technical blueprint. This is what the next phase builds.
+
+---
+
+## Step 4 — Sonnet: build
+
+### Why Sonnet again
+
+For code execution, Sonnet is **more than enough**. Opus would be a waste.
+
+### How to use it
+
+```
+/model sonnet
+
+> Start building according to the plan. Phase 1, step 1.
+
+  Plan Mode (Shift+Tab). Show me what you're going to do BEFORE you code.
+
+  Wait for my OK on each step.
+```
+
+You iterate step by step.
+
+---
+
+## The real savings
+
+If you did EVERYTHING with Opus 4.7:
+
+| Phase | Opus cost | Optimal cost |
+|------|-----------|--------------|
+| Dump the idea | $$$ | $ (Haiku) |
+| Structure | $$$ | $$ (Sonnet) |
+| Deep plan | $$$ | $$$ (Opus) |
+| Build | $$$$$ (many turns) | $$ × N (Sonnet) |
+| **Total** | **100%** | **~30-40%** |
+
+**60-70% savings** without losing quality. The critical plan is still Opus.
+
+---
+
+## Use cases
+
+### 1. New SaaS
+
+```
+Haiku: "Idea — SaaS for retail inventory management"
+Sonnet: structure the PRD
+Opus: technical plan with Next + Supabase + Stripe
+Sonnet: builds phase by phase
+```
+
+### 2. Complex landing page
+
+```
+Haiku: "Landing page for my [X] course"
+Sonnet: structure sections + flow
+Opus: visual plan + framework decisions
+Sonnet: builds
+```
+
+### 3. Internal tool
+
+```
+Haiku: "Internal calculator for sales"
+Sonnet: expected features + internal audience
+Opus: architecture (when CSV, when API, etc.)
+Sonnet: builds
+```
+
+### 4. Feature in an existing project
+
+```
+Haiku: "I want to add [feature]"
+Sonnet: how it integrates with the current code
+Opus: migration plan + impact
+Sonnet: implements
+```
+
+---
+
+## Anti-patterns
+
+### 1. Skipping Haiku "for speed"
+
+Haiku is NOT about speed. It's for **separating raw thinking from structure**. If you start straight with Sonnet, Sonnet feels obligated to structure immediately and you don't get time to think.
+
+### 2. Using Opus at every step
+
+Opus 4.7 costs more. If you use it for "organize this into bullets", **you're spending for nothing**.
+
+### 3. Skipping Plan Mode in step 4
+
+Sonnet without Plan Mode = it starts coding before you approve. **Always Plan Mode** when building.
+
+### 4. Not reviewing between models
+
+Each step is a deliverable. **Validate** before moving to the next one. Otherwise you carry errors forward.
+
+### 5. Switching models mid-step
+
+You start the plan with Opus and halfway through you switch to Sonnet "to save". Inconsistent. **Finish the step with the assigned model**, then switch.
+
+---
+
+## Workflow variants
+
+### For small tasks
+
+```
+Sonnet (the whole flow)
+```
+
+It's not worth the overhead of switching models for 1 small feature.
+
+### For a complex refactor
+
+```
+Opus (analyze + plan)
+Sonnet (execute)
+```
+
+No idea phase — you already have the problem defined.
+
+### For an experimental project
+
+```
+Haiku (dump) → Sonnet (structure) → Sonnet (build)
+```
+
+No Opus — you're going to iterate a lot and throw things away.
+
+---
+
+## Powerful combinations
+
+### With Plan Mode + ultrathink
+
+In step 3 (Opus), [Plan Mode + ultrathink](/boveda/trucos-basicos-de-claude) supercharges the result.
+
+### With The Architect
+
+[The Architect](/boveda/the-architect) replaces steps 2-3 with a structured 16-section blueprint.
+
+### With Build your app
+
+[Build your app](/boveda/construye-tu-app) is a simpler 3-step approach (chat → plan → Claude Code). This page is **more refined** with model switching.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Trivial task (change some text) | Overhead of 4 steps |
+| No time to iterate | The workflow assumes hours |
+| You prefer free-form conversation | Switching models breaks the flow |
+
+---
+
+## Next steps
+
+- For a simpler 3-step approach, [build your app](/boveda/construye-tu-app)
+- To understand when to switch models, [switch models](/boveda/cambia-de-modelo)
+- To understand Claude's 3 modes (chat/cowork/code), [work with Claude](/boveda/trabaja-con-claude)

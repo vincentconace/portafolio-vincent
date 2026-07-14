@@ -1,0 +1,95 @@
+---
+title: "MCP Filesystem Access — file access with configurable permissions (2,114 installs)"
+description: "MCP server with 2,114 installs (the second most adopted in the catalog) that gives Claude secure filesystem access with per-directory configurable permissions. The foundation for almost any flow that touches files outside the project."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["claude-code-best-practices", "anatomia-claude", "mcp-context7"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/filesystem/filesystem-access"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/filesystem/filesystem-access.json"
+---
+
+## What it is
+
+By default, Claude Code has access to the current project and little else. If you want it to read files in other folders on your system (a notes directory in `~/Documents`, datasets in `~/data`, configs in `/etc/`), you need an MCP that gives you controlled filesystem access.
+
+This MCP does exactly that: it lets you configure which directories Claude can read/write and what operations it can perform. Granular permissions per path: read-only here, read-write there, forbidden in `/etc`.
+
+2,114 installs make it the second most adopted MCP in the catalog, right behind [Context7](/boveda/mcp-context7). It's fundamental to many workflows.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `filesystem` |
+| Installs | **2,114 (top 2 in the catalog)** |
+| MCP server | `filesystem` |
+| Key capability | Per-directory configurable permissions |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp filesystem/filesystem-access
+```
+
+Then you configure which directories to authorize and with what permissions (read-only / read-write).
+
+For Claude:
+
+```
+I installed the filesystem/filesystem-access MCP. Show me the config
+format to authorize `~/notes` (read-write) and `~/datasets` (read-only).
+```
+
+## What you can do with this
+
+### Read notes/context outside the project
+
+"Read my notes in `~/notes/proyecto-x/` and summarize the decisions made in the last 7 days." Without having to copy everything into the project.
+
+### Cross-project refactor
+
+"Across all the repos in `~/code/`, find me files that use the `<X>` library in an old version and propose the upgrade." An operation that requires looking beyond the current repo.
+
+### Dataset analysis
+
+"I have CSVs in `~/data/sales-2026/`. Analyze the monthly distribution and give me the top 5 products by growth." Read-only over the data folder.
+
+### Sync with personal knowledge bases
+
+If your PKM lives in `~/obsidian-vault/`, this MCP gives Claude access to read/write notes following your rules.
+
+### File migration
+
+"Move all the old `.tar.gz` files (more than 90 days) from `~/Downloads/` to `~/archive/`." Housekeeping operations.
+
+## Prerequisites
+
+- **A clear permissions setup:** decide which directories to authorize and at what level.
+- **Knowledge of your home directory structure:** the MCP doesn't guess where you keep things.
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Permissions = power. Configure carefully before enabling">
+
+- **Don't authorize your entire `~/` or `/`:** if Claude has broad access plus a malicious prompt, the consequences are serious. Always restrict.
+- **Beware of sensitive files:** `.ssh/`, `.aws/`, `.env` with secrets — NEVER authorize those paths.
+- **Backups first:** before enabling write on any path with valuable content, make sure you have a backup.
+- **Combine with approval hooks:** for destructive writes (delete, overwrite), a hook that asks for confirmation is a basic must.
+- **Audit logging:** if Claude operates outside the project, it's worth having a trail of what it did and when.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Filesystem Access MCP](https://www.aitmpl.com/component/mcps/filesystem/filesystem-access) — exact command.
+- **JSON config:** [filesystem-access.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/filesystem/filesystem-access.json) — definition and configuration options.
+
+## Related resources
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — critical best practices when you enable broad filesystem access.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to understand why a filesystem MCP is one of the most foundational.
+- [Context7 MCP](/boveda/mcp-context7) — the two top picks in the catalog. Context7 + Filesystem is the base combo for almost any flow.

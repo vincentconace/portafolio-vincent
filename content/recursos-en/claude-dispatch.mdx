@@ -1,0 +1,306 @@
+---
+title: "Claude Dispatch — assign tasks from your phone and run them on your computer"
+description: "A feature inside Cowork that creates a single continuous conversation between your phone and your desktop. From the subway you ask Claude to open files, organize folders, read email. Claude works on your computer while you do something else. Setup in 8 steps."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude", "cowork"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-control-remoto", "claude-cowork-workflow", "agent-view"]
+---
+
+## What Dispatch is
+
+Dispatch is a feature inside **Cowork** (the new way of working with Claude). What makes it special: it creates **a single continuous conversation** between your phone and your desktop.
+
+They're not separate chats. **It's the same chat on both devices**. You type from your phone on the subway, and Claude has access to your local files + connectors (Slack, Gmail, Drive) + any plugins you have installed on your computer.
+
+### A simple analogy
+
+You leave a note for your assistant at the office. You leave. When you come back, the work is done. **Dispatch is exactly that**.
+
+| Regular chat | Dispatch |
+|-------------|----------|
+| Each conversation independent | One continuous conversation |
+| No access to your computer | Full access to files + apps |
+| Only responds with text | Runs real actions |
+| Different on mobile and desktop | Synced across devices |
+
+---
+
+## Prerequisites
+
+### 1. Claude desktop app
+
+`claude.ai/download` — available for macOS and Windows x64. If you already have it, **update** to the latest version.
+
+### 2. Claude mobile app
+
+App Store (iOS) or Google Play (Android). A recent version — Dispatch only shows up in newer versions.
+
+### 3. Pro or Max plan
+
+Dispatch is a **paid** feature. It doesn't work with the Free plan.
+
+### 4. Internet + computer powered on
+
+**The most critical part**: your computer must be **powered on with Claude Desktop open** while you want Dispatch to work.
+
+If the computer goes to sleep or you close Claude Desktop, Dispatch **stops**. It's like the assistant at the office — if the office closes, they can't work.
+
+---
+
+## Setup — 8 steps
+
+### 1. Update Claude Desktop
+
+Check that you have the latest version.
+
+### 2. Update the mobile app
+
+Search "Claude" in your app store and update.
+
+### 3. Open Cowork
+
+In either app (mobile or desktop), find the **Cowork** section.
+
+### 4. Go to Dispatch
+
+In Cowork's left panel, click **"Dispatch"**.
+
+### 5. "Get started"
+
+The first time you'll see a "Get started" button. Click it.
+
+### 6. Configure permissions
+
+Claude asks you for **2 critical permissions**:
+
+| Permission | What for |
+|---------|----------|
+| File access | Read/work with local files |
+| Keep computer awake | Prevents it from sleeping while Claude works |
+
+**Enable both**. Without them, Dispatch doesn't work.
+
+### 7. Finish setup
+
+Claude verifies that your phone ↔ computer are connected.
+
+### 8. Done
+
+You can now text from Dispatch on your phone and Claude runs it on your computer.
+
+---
+
+## The flow
+
+```
+📱 Your phone           ☁️ Claude Cloud          💻 Your computer
+   (you type task)   →  (syncs)              →  (Claude runs it)
+```
+
+Everything in a single conversation. The context is kept across devices.
+
+---
+
+## Use cases
+
+### 1. Process an Excel from the bar
+
+```
+From your phone:
+
+> Open the Excel "ventas-marzo.xlsx" on my desktop.
+  Extract the 10 largest accounts.
+  Make me a summary with totals and top 3 products per account.
+  Email it to contadora@empresa.com.
+```
+
+You leave the bar, and the email is already in your inbox.
+
+### 2. Email + Slack brief from the subway
+
+```
+> Review my last 20 emails and Slack messages from the
+  #proyectos channel.
+
+  Make a briefing with:
+  - 3 urgent things
+  - 3 decisions I need to make
+  - What can be ignored
+```
+
+### 3. Generate a presentation while you have lunch
+
+```
+> Take data from the "Q1-results.xlsx" report in Drive.
+  Create a 10-slide presentation with key points for Monday's
+  meeting.
+
+  Visual stack: clean corporate.
+  Save it in Drive as "Q1-presentation-final.pptx".
+```
+
+### 4. Organize Downloads in the background
+
+```
+> Organize my Downloads folder:
+  - PDFs → /Documents/PDFs/
+  - Images → /Pictures/imported/
+  - Videos → /Movies/imported/
+  - Delete duplicate files (same MD5 hash)
+  - Send me a log of what you moved and what you deleted
+```
+
+### 5. Smart search
+
+```
+> Search my Documents folder for all PDFs that
+  contain the word "contract".
+
+  For each one: name, modification date, a 1-line summary
+  of the content.
+
+  Put it in /Desktop/resumen-contratos.txt
+```
+
+---
+
+## Anti-patterns
+
+### 1. Trusting that the computer stays on
+
+If your Mac goes into deep sleep or your laptop runs out of battery, **Dispatch silently stops working**. You keep sending messages from your phone thinking it's running. **Confirm** the computer is on before long tasks.
+
+Tip: on Mac, `caffeinate -d` keeps it awake. And plug it into power.
+
+### 2. Destructive tasks without confirmation
+
+"Delete all the old PDFs" from your phone = catastrophe if it misinterprets. Ask it for **confirmation before deleting**:
+
+```
+> BEFORE deleting anything, send me a list of the files you're
+  going to delete so I can confirm.
+```
+
+### 3. Expecting notifications when it finishes
+
+**Right now Dispatch does NOT notify you** when a task finishes. It's a research preview. You have to check manually.
+
+Workaround: ask it to send an email/Slack when it's done:
+
+```
+> When you're done, email me to confirm.
+```
+
+### 4. Multi-thread
+
+There's only **one active thread** in Dispatch. You can't have 3 parallel tasks. For multi-parallel, use [Agent View](/boveda/agent-view).
+
+### 5. Tasks that need your input mid-flight
+
+If Claude asks for confirmation halfway through and you're on the subway with no signal, **it just waits**. For autonomous tasks, be explicit:
+
+```
+> DON'T ask me anything in the middle. Make sensible decisions.
+  If something is critical, pause and let me know by email — not Dispatch.
+```
+
+---
+
+## When to use it
+
+✅ **Good situations**:
+- You're out and need something processed on your computer
+- Mechanical tasks you want to delegate while you do something else
+- An automatic email/Slack brief in the morning
+- File organization in the background
+- Reports built from local data
+
+❌ **Bad situations**:
+- Urgent tasks (the latency + possible computer idle)
+- Creative / iterative work (you need many back-and-forths)
+- Critical tasks without supervision
+- Real multi-tasking (Dispatch is 1 thread)
+
+---
+
+## Security — critically important
+
+Instructions from your phone **run real actions on your computer**:
+- Read files
+- Move files
+- **Delete files**
+- Access your emails
+- Send messages on your behalf
+
+Before enabling Dispatch, **understand what Claude has access to**:
+
+### Default permissions
+
+| Access | Implication |
+|--------|-------------|
+| Files | Can read / modify / delete |
+| Email | Can read and send on your behalf |
+| Slack | Can read and post on your behalf |
+| Drive | Can access your docs |
+
+### Security best practices
+
+1. **Start with a sandbox**: test with a test account or a specific folder
+2. **Destructive actions**: always ask for explicit confirmation
+3. **Critical tasks**: review the output before closing
+4. **Revoke access**: if you stop using it, **disable the connectors**
+
+---
+
+## Powerful combinations
+
+### With Computer Use
+
+[Computer Use](/boveda/claude-control-remoto) + Dispatch = Claude can operate your **entire** computer (mouse, keyboard, apps without an API) **from your phone**.
+
+### With Agent View
+
+[Agent View](/boveda/agent-view) on your computer shows you what Dispatch is doing in real time when you're nearby.
+
+### With persistent Memory
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) makes Dispatch remember patterns from your frequent tasks.
+
+### With managed agents
+
+For truly autonomous tasks (that do NOT need your computer powered on), consider [Managed Agents](/boveda/agentes-managed-claude) instead of Dispatch.
+
+---
+
+## Comparison with alternatives
+
+| Approach | Computer on | Cost | When |
+|----------|----------------|-------|--------|
+| **Dispatch** | Yes | Pro/Max | Tasks with local files while you're away |
+| **Managed Agents** | No | Pay-per-use | Cloud-only tasks without your computer |
+| **/schedule** | No | Pay-per-use | Simple recurring tasks |
+| **Mac mini ecosystem** | Mac mini yes | $700 + power | Total sovereignty |
+
+Dispatch's sweet spot: **you have a computer powered on and you want to work from your phone**.
+
+---
+
+## Current limitations (research preview)
+
+- ❌ No notifications when it finishes
+- ❌ Only one thread at a time
+- ❌ Computer must be powered on
+- ❌ No automatic retry if the computer goes to sleep
+
+Anthropic is iterating — expect improvements in the coming months.
+
+---
+
+## Next steps
+
+- To have Claude control your computer visually (mouse/keyboard), [Computer Use](/boveda/claude-control-remoto)
+- For the full Cowork flow (not just Dispatch), [Claude Cowork workflow](/boveda/claude-cowork-workflow)
+- For a cloud-only alternative without your computer, [Managed Agents](/boveda/agentes-managed-claude)

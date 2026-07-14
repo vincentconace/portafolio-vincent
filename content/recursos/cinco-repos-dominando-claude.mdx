@@ -1,0 +1,408 @@
+---
+title: "5 repos que están dominando Claude Code — Abril 2026"
+description: "Claude Mem, Andrej Karpathy Skills, Hermes Agent, GenericAgent y Evolver. Memoria persistente, las 4 reglas de Karpathy, agentes multi-plataforma, computer use y auto-mejora. Qué hace cada uno, comando exacto y prompt para que Claude te lo instale."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "agentes"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-canales-tg-discord", "ecosistema-de-agentes", "mejores-practicas-claude"]
+---
+
+## Los 3 huecos que tienen estos repos en mente
+
+Claude Code es excelente, pero por defecto tiene 3 huecos:
+
+1. **Sin memoria persistente** — olvida todo entre sesiones
+2. **Demasiada libertad** — inventa cosas, sobre-complica, toca lo que no se le pidió
+3. **Vive encerrado en la terminal** — no llega a Telegram, Discord, ni controla tu compu
+
+5 repos que se popularizaron en abril 2026 cubren exactamente esos huecos + agregan 2 capacidades más (computer use, auto-evolución):
+
+| # | Repo | Resuelve |
+|---|------|----------|
+| 1 | **Claude Mem** | Memoria persistente entre sesiones |
+| 2 | **Andrej Karpathy Skills** | Comportamiento disciplinado (4 reglas) |
+| 3 | **Hermes Agent** | Vive en Telegram, Discord, WhatsApp, terminal |
+| 4 | **GenericAgent** | Controla tu compu (mouse, teclado, pantalla) |
+| 5 | **Evolver** | Tus agentes se auto-mejoran |
+
+---
+
+## Repo 1 — Claude Mem
+
+**`thedotmack/claude-mem`** · ~54k estrellas
+
+### Qué hace
+
+Le da memoria persistente a Claude Code. Captura **automáticamente** lo que pasa en cada sesión (qué tools usó, qué decisiones tomaste, qué archivos tocaste), lo comprime con IA, y lo trae al iniciar la siguiente sesión.
+
+Incluye:
+- Visor web en `http://localhost:37777` para revisar tu historial
+- Skill `mem-search` para buscar con lenguaje natural
+
+### El problema que resuelve
+
+Sin Claude Mem, cada sesión arranca en cero. Volvés a explicar el proyecto, el estilo de código, las decisiones que ya tomaste. Quema tokens y desgasta.
+
+### Instalación
+
+```bash
+npx claude-mem install
+```
+
+Después **reiniciá Claude Code** (los hooks solo activan post-restart).
+
+### Prompt para que Claude te lo instale
+
+```
+> Claude, instalá Claude Mem desde
+  https://github.com/thedotmack/claude-mem
+  para no perder contexto entre sesiones.
+
+  1. Corré 'npx claude-mem install' y mostrame la salida
+  2. Explicame qué pasa con mi CLAUDE.md actual (si tengo).
+     ¿Se integra o se pisa?
+  3. Indicame cómo reiniciar Claude Code para activar el plugin
+  4. Abrí http://localhost:37777 y confirmá que el visor está activo
+  5. Dame ejemplo de uso de la skill 'mem-search' en mi historial
+```
+
+### Tips de uso
+
+✅ Complementá con CLAUDE.md (reglas fijas ahí, memoria viva en Claude Mem)
+✅ Revisá el visor web semanalmente para auditar qué está recordando
+✅ Usá `mem-search` cuando volvés a un proyecto después de días
+
+❌ **No confíes ciegamente** — decisiones críticas, escribilas también en CLAUDE.md
+❌ No olvides reiniciar Claude Code después de instalar
+
+### Combina bien con
+
+[5 skills equipo dev](/boveda/5-skills-equipo-dev) — Context Optimizer complementa la compresión de Claude Mem.
+
+---
+
+## Repo 2 — Andrej Karpathy Skills
+
+**`forrestchang/andrej-karpathy-skills`**
+
+### Qué hace
+
+CLAUDE.md con las **4 reglas de Karpathy** (ex-director de IA de Tesla, co-founder de OpenAI):
+
+1. **Think Before Coding** — pensá antes de escribir
+2. **Simplicity First** — lo simple primero
+3. **Surgical Changes** — no toques lo que no toca
+4. **Goal-Driven Execution** — criterios de éxito claros
+
+### El problema que resuelve
+
+Claude por defecto:
+- Asume cosas que no debería
+- Sobre-complica soluciones
+- A veces toca código ajeno sin que se lo pidas
+
+Las 4 reglas cortan esos hábitos de raíz.
+
+### Instalación
+
+**Opción A — Plugin del marketplace**:
+
+```
+> /plugin marketplace add forrestchang/andrej-karpathy-skills
+> /plugin install andrej-karpathy-skills@karpathy-skills
+```
+
+**Opción B — Copiar CLAUDE.md** (para proyecto nuevo):
+
+```bash
+curl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md
+```
+
+### Prompt para integrar en proyecto existente
+
+```
+> Claude, aplicá las 4 reglas de Karpathy desde
+  https://github.com/forrestchang/andrej-karpathy-skills
+
+  1. Revisá si ya existe CLAUDE.md en root
+  2. Si no existe, bajalo con curl
+  3. Si existe, append (cuidado con duplicar reglas)
+  4. Lee el archivo completo y resumime las 4 reglas con
+     tus palabras, pensando cómo aplican a este repo
+  5. Proponé un commit corto para versionar las reglas
+```
+
+### Tips
+
+✅ Leé el CLAUDE.md completo una vez, no solo lo pegues
+✅ Ajustá las reglas si tu proyecto tiene convenciones propias
+✅ Versioná con commit claro (tu equipo debe saber que están activas)
+
+❌ No usés Opción A (plugin) Y Opción B (CLAUDE.md) a la vez — duplicás reglas
+❌ No le pegues el archivo a proyecto grande sin avisar al equipo
+
+---
+
+## Repo 3 — Hermes Agent
+
+**`NousResearch/hermes-agent`**
+
+### Qué hace
+
+Agente autónomo de **Nous Research** (equipo de los modelos Hermes). Vive donde lo pongas: Telegram, Discord, Slack, WhatsApp, Signal o terminal.
+
+Características:
+- Ciclo de aprendizaje integrado (crea skills a partir de experiencia)
+- Memoria persistente entre sesiones
+- Compatible con 200+ LLMs (OpenRouter, OpenAI, Nous Portal, modelos locales)
+
+### El problema que resuelve
+
+La mayoría de agentes viven dentro de editor/web. Si querés que conteste en grupo de Telegram de tu equipo, construís el puente vos. Hermes lo trae resuelto para 6 plataformas.
+
+### Instalación
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+source ~/.zshrc  # o ~/.bashrc
+hermes
+```
+
+Funciona en Linux, macOS, WSL2 y Android vía Termux.
+
+### Prompt para instalar + conectar Telegram
+
+```
+> Claude, instalá Hermes Agent y conectalo a Telegram.
+
+  1. Corré el one-liner de install desde el README oficial
+  2. Cargá el PATH (source ~/.zshrc) y arrancá con 'hermes'
+  3. ANTES de pedir API keys, preguntame qué LLM voy a usar
+     (OpenRouter, OpenAI, Nous Portal, local)
+  4. Guíame paso a paso para conectar el bot a Telegram:
+     - Cómo saco el token de @BotFather
+     - Dónde lo pego, qué archivo edito
+  5. Smoke test: mandale 'hola' al bot y mostrame respuesta
+
+  NO avances al siguiente paso sin que yo confirme el anterior.
+```
+
+### Tips
+
+✅ Empezá con UNA plataforma (la que más usás), después sumá más
+✅ Guardá tokens en variables de entorno, no en código
+✅ Dejalo corriendo en VPS barato si querés 24/7
+
+❌ NO pongas API keys en texto plano en archivos versionados
+❌ NO actives WhatsApp/Signal sin leer los términos de cada red (algunas bloquean bots)
+
+### Combina bien con
+
+[Claude canales TG/Discord](/boveda/claude-canales-tg-discord) — Hermes es alternativa más autónoma que el plugin oficial de Anthropic.
+
+---
+
+## Repo 4 — GenericAgent
+
+**`lsdefine/GenericAgent`**
+
+### Qué hace
+
+Agente que controla tu computadora (mouse, teclado, pantalla, navegador, archivos). 3000 líneas de Python, Agent Loop de apenas 100.
+
+Capacidades:
+- Visión de pantalla
+- Control de input devices
+- Navegador, terminal, sistema de archivos
+- Dispositivos móviles
+- Cristaliza flows exitosos en skills reutilizables
+
+### El problema que resuelve
+
+Hay tareas sin API: cerrar banners, drag-and-drop entre tabs, automatizar apps sin integración. GenericAgent las hace porque **ve la pantalla y mueve el cursor como vos**.
+
+### Advertencia crítica
+
+GenericAgent **ejecuta comandos reales en tu sistema**. Si te equivocás, puede:
+- Borrar archivos
+- Mandar mensajes
+- Hacer compras
+- Romper config
+
+**REGLA**: usalo siempre en **VM, contenedor o máquina dedicada**. Nunca en tu laptop principal con acceso a archivos personales.
+
+### Instalación
+
+```bash
+# EN UNA VM AISLADA — no en tu compu principal
+git clone https://github.com/lsdefine/GenericAgent.git
+cd GenericAgent
+pip install streamlit pywebview
+cp mykey_template.py mykey.py
+# Editá mykey.py con tu API key
+python launch.pyw
+```
+
+### Prompt para instalación segura
+
+```
+> Claude, instalá GenericAgent desde
+  https://github.com/lsdefine/GenericAgent
+
+  ANTES de empezar: confirmá que estoy en una VM, contenedor
+  o máquina dedicada (no mi laptop principal). Si NO lo estoy,
+  detenete y pedime que lo haga primero.
+
+  Cuando confirme entorno aislado:
+  1. git clone + cd GenericAgent
+  2. pip install streamlit pywebview
+  3. cp mykey_template.py mykey.py
+  4. Preguntame qué LLM usar y ayudame a editar mykey.py
+  5. Lanzá con 'python launch.pyw'
+  6. Dame primera tarea de prueba segura (ej: abrir navegador
+     y buscar la hora actual)
+
+  Explicame cada comando antes de correrlo.
+```
+
+### Tips
+
+✅ Carpeta de trabajo específica, permisos limitados
+✅ Primera tarea: algo corto, observado en tiempo real
+✅ API keys con scope mínimo necesario
+
+❌ Nunca en laptop principal con archivos personales
+❌ No le des API keys con permisos globales
+❌ No lo dejes solo hasta confiar en su comportamiento
+
+### Combina bien con
+
+[Hermes Agent](#repo-3) — Hermes da el canal de comunicación, GenericAgent da el control del sistema.
+
+---
+
+## Repo 5 — Evolver
+
+**`EvoMap/evolver`**
+
+### Qué hace
+
+Motor de **auto-mejora** para agentes. Analiza logs de ejecución, detecta patrones de error, propone evoluciones de prompts. Todo queda como **Genes y Capsules** auditables vía git.
+
+Algoritmo: **GEP** (Genetic-Evolutionary Prompting).
+
+### El problema que resuelve
+
+Refinar prompts a mano no escala. Cada ajuste queda disperso, sin historial, sin forma de revertir. Evolver vuelve el proceso un protocolo auditable.
+
+### Pre-requisitos
+
+- Node 18+
+- Proyecto inicializado como **git** (fuera de repo, falla)
+- Al menos 1 agente con logs reales de ejecución
+
+### Instalación
+
+```bash
+npm install -g @evomap/evolver
+```
+
+### Prompt para integrar a tu proyecto
+
+```
+> Claude, instalá Evolver desde https://github.com/EvoMap/evolver
+  para mejorar prompts de mis agentes de forma disciplinada.
+
+  PRIMERO verificá:
+  - Node 18+ (node -v)
+  - Repo inicializado con git (git status)
+  Si algo falla, detenete y decime qué falta.
+
+  Cuando esté listo:
+  1. npm install -g @evomap/evolver
+  2. Explicame qué son Genes y Capsules antes de crear el primero
+  3. Ayudame a identificar agente existente en mi repo candidato
+     a evolucionar (archivos con prompts largos o comportamientos
+     repetidos)
+  4. Corré primera iteración y mostrame diff propuesto ANTES
+     de aplicarlo
+```
+
+### Tips
+
+✅ Solo en proyectos con logs reales (no agente recién nacido)
+✅ Revisá cada diff antes de aceptar (git te deja revertir)
+✅ Nombrá Genes/Capsules con sentido (audit trail legible meses después)
+
+❌ NO en repo sin git inicializado
+❌ NO aceptes evoluciones a ciegas (perdés control)
+
+---
+
+## Por dónde empezar — 3 rutas según tu nivel
+
+### Ruta 1 — Recién instalaste Claude Code
+
+```
+Claude Mem → Andrej Karpathy Skills
+```
+
+Memoria primero (no pierde contexto) + reglas de Karpathy (no inventa). Con estos dos, Claude se porta distinto desde la primera sesión.
+
+### Ruta 2 — Ya usás Claude Code a diario
+
+```
+Andrej Karpathy Skills → Claude Mem → Hermes Agent
+```
+
+Si ya tenés ritmo, el siguiente salto es sacar a Claude del editor. Hermes te lleva a Telegram/Discord con la disciplina que trae Karpathy.
+
+### Ruta 3 — Construís agentes para clientes/startup
+
+```
+Hermes Agent → GenericAgent → Evolver
+```
+
+Hermes da el canal, GenericAgent da el control del sistema, Evolver hace que mejoren con el tiempo sin ajustes manuales.
+
+---
+
+## Plantilla universal para instalar cualquier repo
+
+Si te encontrás un repo nuevo (no necesariamente de esta lista), esta plantilla funciona:
+
+```
+> Claude, instalá {NOMBRE_REPO} desde {URL_GITHUB}.
+
+  1. Leé el README directamente — no inventes pasos
+  2. Ejecutá los comandos de instalación uno por uno,
+     explicando cada uno
+  3. Si requiere API key o env var, preguntame antes de pedirla
+  4. Al terminar, hacé smoke test mínimo
+  5. Dame ejemplo de uso con mi caso real: {MI_CASO}
+
+  NO continues al siguiente paso hasta confirmar el anterior.
+```
+
+---
+
+## Errores comunes (con fix rápido)
+
+| Repo | Error | Fix |
+|------|-------|-----|
+| Claude Mem | "Instalé pero no recuerda nada" | Faltó reiniciar Claude Code |
+| Karpathy Skills | "Reglas chocan con las mías" | Dejá UNA versión de cada regla |
+| Hermes | "comando 'hermes' no se encuentra" | `source ~/.zshrc` |
+| GenericAgent | "Borró archivos que no debía" | Lo corriste fuera de sandbox |
+| Evolver | "not a git repository" | `git init` + primer commit |
+| Claude Mem | "localhost:37777 no carga" | Otro proceso usa el puerto |
+
+---
+
+## Próximos pasos
+
+- Para canales Telegram/Discord más simples que Hermes, [Claude canales TG/Discord](/boveda/claude-canales-tg-discord)
+- Para construir tu propio sistema multi-agente, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para principios generales que aplican a todos estos repos, [mejores prácticas Claude](/boveda/mejores-practicas-claude)

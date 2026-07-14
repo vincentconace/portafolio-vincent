@@ -1,0 +1,195 @@
+---
+title: "Skill Vault — agente que organiza, audita y recomienda tus skills de Claude"
+description: "Agente open source que vive en su propia carpeta. Le pegás un skill (link, código, URL), lo audita con 13 checks de seguridad, lo organiza en cajoncitos temáticos (diseño/automatización/código), y cuando necesitás algo te recomienda cuál usar. Sin npm install."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["agencia-digital-completa", "crea-claude-skills", "obsidian-claude"]
+---
+
+## Qué es
+
+Imaginate que tenés un montón de juguetes regados. Unos son carritos, otros muñecos, otros pelotas. **No sabés cuáles están rotos** y no encontrás el que necesitás.
+
+**Skill Vault es una caja mágica** que hace 3 cosas:
+
+1. **Revisa cada juguete** para asegurar que no está roto ni peligroso
+2. **Los guarda en cajoncitos** organizados por tipo
+3. **Te dice cuál usar** cuando le decís qué querés hacer
+
+Eso mismo hace con tus **skills de Claude Code**.
+
+Repo: `Hainrixz/skill-vault`. Open source.
+
+### Importante — no es un skill
+
+Skill Vault **no es un skill** — es un **agente completo** que vive en su propia carpeta y administra todas las habilidades que le metés. Vos solo le tirás un skill, él hace todo lo demás.
+
+---
+
+## Setup
+
+### Opción 1 — Con git (recomendada)
+
+```bash
+git clone https://github.com/Hainrixz/skill-vault.git \
+  && cd skill-vault \
+  && claude
+```
+
+### Opción 2 — Descarga ZIP
+
+1. Botón "Download ZIP" en GitHub
+2. Descomprimir
+3. Abrir terminal en la carpeta
+4. `claude`
+
+### Sin instalación extra
+
+**No hay** `npm install`, `pip`, ni config. Solo necesitás Claude Code. **Descargás la carpeta, abrís Claude Code adentro, agente activado**.
+
+---
+
+## Cómo se usa
+
+### Flow básico
+
+1. Encontrás un skill en internet (Twitter, YouTube, IG, donde sea)
+2. Abrís Claude Code dentro de la carpeta Skill Vault
+3. Le pegás `/vault-add` + el skill (link o código)
+4. Él lo **audita** con 13 checks de seguridad
+5. Lo **organiza solo** en la carpeta temática correcta
+6. Cuando necesitás algo: `/vault-recommend` + descripción → te dice cuáles usar
+
+---
+
+## Los 7 comandos
+
+| Comando | Para qué |
+|---------|----------|
+| `/vault-add` | Pegás link o código → lo guarda en bóveda |
+| `/vault-search` | Buscás por nombre — "busca diseño" |
+| `/vault-recommend` | Decís qué hacés → te dice qué skills usar |
+| `/vault-discover` | Busca skills nuevos en internet y los importa |
+| `/vault-list` | Lista todos tus skills organizados por carpeta |
+| `/vault-stats` | Cuántos tenés + cuáles usás más |
+| `/vault-remove` | Borra skill que ya no querés |
+
+---
+
+## El análisis de 13 puntos
+
+Cada skill que agregás, Skill Vault lo **audita con 13 checks de seguridad** antes de guardarlo. Detecta:
+
+- Comandos que pueden borrar archivos
+- Código que intenta robar contraseñas
+- Trucos escondidos
+- Permisos sospechosos
+- Network calls a dominios raros
+- Dependencias con CVEs
+- Y más
+
+Te clasifica: **Seguro / Riesgo medio / Riesgoso / Peligroso**.
+
+Decide vos si guardarlo o descartarlo.
+
+---
+
+## Casos de uso
+
+### 1. Curaduría personal de skills
+
+Cada semana ves 5-10 skills nuevos en YouTube/Twitter. En lugar de instalar todo y abrumarte, **los acumulás en Skill Vault**. Cuando necesitás algo, preguntás.
+
+### 2. Compartir biblioteca con tu equipo
+
+Tu equipo comparte una carpeta Skill Vault. Cada uno aporta skills. Auditados, organizados, buscables.
+
+### 3. Aprendizaje activo
+
+```
+> /vault-discover skills para análisis de datos con Pandas
+```
+
+Skill Vault busca, audita, importa. Vos aprendés con curaduría automática.
+
+### 4. Limpiar tu setup antes de proyecto crítico
+
+```
+> /vault-list
+> /vault-stats
+```
+
+Ves qué tenés instalado, eliminás lo que no usás (riesgo de ataques + confusión).
+
+---
+
+## Anti-patrones
+
+### 1. Importar TODO sin filtrar
+
+Aunque Skill Vault audita, **no eligas todo automáticamente**. Si el análisis dice "Riesgo medio", **leelo** antes de aprobar.
+
+### 2. No usar `/vault-recommend`
+
+El comando estrella es la recomendación. Si solo importás y nunca pedís recomendaciones, **perdés la mitad del valor**.
+
+### 3. Skills duplicados
+
+Cuando importás algo similar a lo que ya tenés, Skill Vault te avisa. **No los acumules duplicados** — quedate con la mejor versión.
+
+### 4. Carpeta sin backup
+
+Tu Skill Vault es **tu biblioteca**. Si formateás tu compu sin backup, perdés meses de curaduría. **Versioná con git**.
+
+### 5. Ignorar `/vault-stats`
+
+Cada 1-2 meses revisá stats. Skills que usaste 0 veces → considerá removerlos.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **Skill Vault** | Curaduría personal de skills + auditoría |
+| [Antigravity Skills](/boveda/agencia-digital-completa) | Biblioteca masiva (978+) pre-armada |
+| Crear desde cero | Skills custom para tu workflow específico |
+
+Sweet spot de Skill Vault: **curaduría individual de skills descubiertos en la web**.
+
+---
+
+## Combinaciones potentes
+
+### Con Antigravity
+
+[Antigravity Skills](/boveda/agencia-digital-completa) son skills pre-armadas. **Skill Vault organiza** las que vas acumulando de otras fuentes.
+
+### Con crear skills propias
+
+Cuando creás tu propia skill con [crear claude skills](/boveda/crea-claude-skills), agregala a Skill Vault para mantenerla auditada y accesible.
+
+### Con Obsidian
+
+Si tu vault de [Obsidian](/boveda/obsidian-claude) está separado de Skill Vault, **podés linkear**: notas de Obsidian referencian skills específicos del Vault.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Solo usás 2-3 skills | Overhead no compensa |
+| Workflow estable sin descubrir nuevos | No tenés qué auditar |
+| Compliance estricto enterprise | Necesitás audit logs robustos |
+
+---
+
+## Próximos pasos
+
+- Para biblioteca pre-armada de 978+ skills, [Agencia Digital Completa](/boveda/agencia-digital-completa)
+- Para crear tus propias skills, [crear Claude skills](/boveda/crea-claude-skills)
+- Para knowledge base personal con Markdown, [Obsidian + Claude](/boveda/obsidian-claude)

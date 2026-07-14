@@ -1,0 +1,82 @@
+---
+title: "Setting Time Statusline — model + directory + clock"
+description: "Setting with 261 installs. Simple statusline: model name, directory, current time. Useful for tracking session duration and staying aware of the time during long coding sessions."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-deadline-countdown", "setting-minimal-statusline", "setting-context-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/time-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/time-statusline.json"
+---
+
+## What it is
+
+Simple statusline with a clock. It shows:
+- **Model** name
+- Project **directory**
+- **Current time**
+
+Useful for long sessions where you lose track of time, or for tracking duration.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 261 |
+| Shows | Model + dir + clock |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/time-statusline
+```
+
+For Claude:
+
+```
+I installed the statusline/time-statusline setting. Show me the current
+time so it's visible.
+```
+
+## What you can do with it
+
+### Anti time-sink-from-deep-work
+
+If you get into flow and hours slip by, the clock helps.
+
+### Session duration tracking
+
+Combined with the start time, you can compute how long you've been working.
+
+### For scheduled meetings
+
+It reminds you to check the time before a meeting.
+
+### Combo with [Deadline Countdown](/boveda/setting-deadline-countdown)
+
+Time shows the present moment. Deadline shows how long until the cutoff. They're alternatives (one statusline).
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If your OS already shows a clock:** mac/Linux/Windows have a system clock. Redundant.
+- **If you want more info:** [Context Monitor](/boveda/setting-context-monitor) has a clock + more.
+- **For deep focus:** seeing the time can break flow.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Time Statusline Setting](https://www.aitmpl.com/component/settings/statusline/time-statusline) — exact command.
+- **JSON config:** [time-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/time-statusline.json).
+
+## Related resources
+
+- [Deadline Countdown Setting](/boveda/setting-deadline-countdown) — countdown to a specific deadline.
+- [Minimal Statusline Setting](/boveda/setting-minimal-statusline) — no clock, more lightweight.
+- [Context Monitor Setting](/boveda/setting-context-monitor) — info-rich with time.

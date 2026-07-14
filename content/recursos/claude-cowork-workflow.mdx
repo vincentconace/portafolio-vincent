@@ -1,0 +1,305 @@
+---
+title: "Cowork — proyectos persistentes, instrucciones y tareas programadas en Claude Desktop"
+description: "Cowork es el espacio dentro de Claude Desktop donde Claude ya te conoce. Proyectos con contexto persistente, instrucciones que aplican a cada chat, contexto inteligente (carpetas + archivos + URLs) y tareas programadas que corren mientras dormís. Plus: Keep Awake."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude", "cowork"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-dispatch", "claude-code-loop", "agentes-managed-claude"]
+---
+
+## El problema que resuelve
+
+Si cada vez que abrís Claude tenés que **explicar de cero** quién sos, qué hacés, cómo querés que responda — estás perdiendo tiempo.
+
+Las primeras 5 oraciones de cada chat repetidas siempre:
+- "Soy founder de SaaS B2B"
+- "Mi target son CTOs de retail"
+- "Tono profesional pero cercano"
+- "Respondé en español Latam"
+- "Sin emojis en docs formales"
+
+**Cowork resuelve eso**. Es un espacio dentro de Claude Desktop donde Claude **ya sabe** quién sos y cómo querés que funcione.
+
+| Sin Cowork | Con Cowork |
+|------------|------------|
+| Cada chat empieza de cero | Claude recuerda tu proyecto |
+| Repetís contexto siempre | Instrucciones persistentes |
+| Sin memoria entre chats | Contexto siempre disponible |
+| Trabajo individual | Tareas programadas autónomas |
+
+---
+
+## Pre-requisitos
+
+- **Claude Desktop** (no chat web)
+- Plan Pro o Max
+
+---
+
+## 1. Crear tu primer proyecto
+
+### Paso a paso
+
+1. Claude Desktop → sección **Cowork** en panel izquierdo
+2. **Projects** → botón **"+"**
+3. Elegir tipo:
+   - **Desde cero**: proyecto vacío, vos definís todo
+   - **Desde carpeta**: Claude lee estructura de carpeta local
+
+### Cuándo cada tipo
+
+**Desde cero**: cuando arrancás algo nuevo sin contexto previo. Vos definís manualmente instrucciones, contexto, archivos.
+
+**Desde carpeta**: cuando ya tenés código/archivos organizados. Claude **lee la estructura automáticamente**. Ideal para proyectos existentes.
+
+---
+
+## 2. Instrucciones de proyecto
+
+Las instrucciones **moldean el comportamiento** de Claude en **TODAS** las conversaciones del proyecto. Son las reglas del juego.
+
+### Ejemplo
+
+```
+Sos mi asistente de marketing para agencia DigitalLAB.
+
+Formato:
+- Respondé siempre en español Latam
+- Bullet points, no párrafos largos
+- Incluí métricas cuando aplique
+
+Reglas:
+- NUNCA inventes datos — si no sabés, preguntá
+- Priorizá acciones concretas sobre teoría
+- Cuando propongas copy, dame 3 variantes
+
+NO hagas:
+- Emojis en docs formales
+- Asumir presupuesto del cliente sin preguntar
+- Recomendar tools que no validé antes
+```
+
+### Tips
+
+**1. Sé específico**:
+✅ "Respondé en español Latam"
+❌ "Respondé en mi idioma"
+
+**2. Incluí los "NO hagas"**:
+Claude respeta restricciones claras. "No hagas X" es **más efectivo** que esperar que infiera.
+
+**3. Iterá las instrucciones**:
+No son permanentes. Cuando notes algo recurrente que falta, agregalo. Cada semana mejorá.
+
+---
+
+## 3. Contexto inteligente
+
+Más allá de instrucciones, podés agregar **contexto** al proyecto:
+
+### Carpetas locales
+
+Linkear carpeta de tu compu. Claude lee archivos dentro **on demand**.
+
+Útil para:
+- Brand assets
+- Datos del negocio
+- Templates
+- Documentación interna
+
+### Archivos sueltos
+
+Subir PDFs, hojas de cálculo, imágenes específicas al proyecto.
+
+### URLs
+
+Pegás link → Claude extrae contenido relevante.
+
+Útil para:
+- Documentación oficial de stack
+- Referencias de competencia
+- Artículos relevantes para el proyecto
+
+### Importante — aislamiento
+
+Cada proyecto es un **espacio aislado**. Lo que platicás en proyecto A **no llega** a proyecto B. No se mezclan contextos.
+
+---
+
+## 4. Tareas programadas — la función más potente
+
+Acá está el cambio paradigmático. Le decís a Claude:
+
+> "Todos los lunes 9am, revisá esta carpeta y hacéme resumen"
+
+Le ponés horario + modelo + tarea. Claude **lo hace solo**.
+
+### Ejemplo — resumen semanal
+
+```
+Cada lunes 9:00 AM:
+
+1. Revisá /Documentos/Reportes/
+2. Identificá archivos nuevos o modificados últimos 7 días
+3. Leé cada archivo y extraé puntos clave
+4. Generá resumen ejecutivo en
+   /Documentos/Resumenes/resumen-semanal.md
+5. Si encontrás algo urgente, ponelo al inicio marcado
+   como URGENTE
+```
+
+### Ejemplo — monitoreo de competencia
+
+```
+Cada miércoles 8:00 AM:
+
+1. Visitá las 3 páginas:
+   - competidor1.com
+   - competidor2.com
+   - competidor3.com
+2. Extraé precios actuales de productos principales
+3. Compará con /Documentos/precios-actuales.csv
+4. Generá reporte de diferencias en
+   /Documentos/competencia/reporte-semanal.md
+5. Si algún competidor bajó >10%, marcalo como ALERTA
+```
+
+### Opciones de la tarea
+
+| Opción | Detalle |
+|--------|---------|
+| **Frecuencia** | Cada hora / diario / semanal / cron custom |
+| **Modelo** | Haiku (mecánico) / Sonnet (razonamiento) / Opus (crítico) |
+| **Ejecuciones perdidas** | Si compu estaba apagada, ejecuta la más reciente en últimos 7 días |
+
+---
+
+## 5. Keep Awake
+
+### Activar
+
+`Claude Desktop → Settings → General → Keep computer awake`
+
+Evita que tu compu entre en modo suspensión.
+
+### Importante
+
+Las tareas programadas **solo corren** mientras:
+- Tu compu está prendida
+- Claude Desktop está abierto
+
+Keep Awake **evita suspensión**, pero **no enciende** tu compu si la apagás.
+
+### Si se perdió una ejecución
+
+Claude revisa últimos 7 días y ejecuta **la más reciente** que se perdió. **Solo una** — no recupera todas las pérdidas.
+
+---
+
+## El cambio de paradigma
+
+> Ya NO abrís Claude para decirle qué hacer.
+> Abrís Claude para ver QUÉ HIZO.
+
+| Pieza | Para qué |
+|-------|----------|
+| **Proyectos** | Tu espacio. Claude te conoce. |
+| **Instrucciones persistentes** | No repetís nada |
+| **Contexto inteligente** | Toda tu info accesible |
+| **Tareas programadas** | Claude trabaja mientras dormís |
+
+---
+
+## Casos de uso reales
+
+### Founder solo
+
+**Proyecto "Negocio diario"**:
+- Brand pack como contexto
+- Instrucciones: "Sos mi asistente operativo"
+- Tarea programada: cada mañana 7am, brief de email + calendar + KPIs
+
+Te despertás → ya tenés brief preparado.
+
+### Marketing en equipo
+
+**Proyecto "Cliente X"**:
+- Carpeta con assets, briefs, contratos
+- URLs de cuentas de redes del cliente
+- Instrucciones: tono del cliente, restricciones
+- Tarea: viernes 5pm, reporte semanal automático
+
+### Investigación continua
+
+**Proyecto "AI research watch"**:
+- URLs: Arxiv, blogs relevantes
+- Instrucciones: "Filtrá por relevancia para mi vertical"
+- Tarea: diario 9am, top 5 papers nuevos con resumen
+
+### Operaciones de negocio
+
+**Proyecto "Análisis de ventas"**:
+- Carpeta con CSVs de ventas históricas
+- Instrucciones: KPIs específicos del negocio
+- Tarea: cada lunes, reporte vs semana anterior
+
+---
+
+## Anti-patrones
+
+### 1. Un solo proyecto "para todo"
+
+Si metés marketing + dev + finanzas en un solo proyecto, **las instrucciones se contradicen** entre dominios. Mejor: **proyecto por dominio**.
+
+### 2. Instrucciones de 50 líneas
+
+Después de cierto tamaño, Claude las ignora parcialmente. Mantenelas **enfocadas**: 10-20 reglas máximo, las más importantes.
+
+### 3. Tareas programadas sin output verificable
+
+Si tu tarea hace algo pero no genera output revisable, **no sabés si funcionó**. Siempre mandá output a archivo / email / Slack.
+
+### 4. Compu que se duerme + tareas críticas
+
+Si tareas importantes dependen de Keep Awake y tu compu se duerme igual (battery, reboot, etc.), te perdés ejecuciones. Para tareas REALMENTE críticas: [Managed Agents](/boveda/agentes-managed-claude) en lugar de Cowork.
+
+### 5. No iterar instrucciones
+
+Las instrucciones iniciales nunca son perfectas. **Revisalas cada 2 semanas** según qué problemas detectaste.
+
+---
+
+## Combinaciones potentes
+
+### Con Dispatch
+
+[Dispatch](/boveda/claude-dispatch) te deja **interactuar con tu proyecto Cowork desde el celular**. Mismo contexto.
+
+### Con Managed Agents
+
+Para tareas que necesitan correr aunque tu compu esté apagada, usá [Managed Agents](/boveda/agentes-managed-claude) en lugar de tareas programadas Cowork.
+
+### Con Claude Code /loop
+
+[Claude Code /loop](/boveda/claude-code-loop) es el equivalente en terminal para devs. Misma idea de tareas recurrentes pero más programable.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Solo usás web | Cowork es feature de Desktop |
+| Plan Free | No incluido |
+| Tareas críticas / SLA | Compu prendida no es confiable |
+| Trabajo súper variable | El valor está en patrones recurrentes |
+
+---
+
+## Próximos pasos
+
+- Para trabajar desde celular en el mismo proyecto, [Claude Dispatch](/boveda/claude-dispatch)
+- Para equivalente programable en terminal, [Claude Code /loop](/boveda/claude-code-loop)
+- Para tareas autónomas sin tu compu prendida, [Managed Agents](/boveda/agentes-managed-claude)

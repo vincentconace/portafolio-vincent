@@ -1,0 +1,305 @@
+---
+title: "5 herramientas top-tier para Claude Code 2026 — Superpowers, ECC, UI UX Pro Max, claude-mem, n8n-MCP"
+description: "Las 5 herramientas open source que transforman Claude Code en mayo 2026. Subagentes en piloto automático, departamento de ingeniería completo (60 subagentes + 232 skills + 75 comandos), diseño profesional, memoria permanente y automatizaciones n8n. Más las 3 capas de n8n + Claude despejadas."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "n8n", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["4-superpoderes-claude", "seis-mejores-skills-claude", "completa-tu-claude"]
+---
+
+## El hub
+
+5 herramientas open source que la mayoría de usuarios de Claude **paga sin saber que existen**. Desde piloto automático con subagentes hasta memoria permanente, diseño profesional y automatizaciones de n8n.
+
+| # | Tool | Para qué |
+|---|------|----------|
+| 01 | Superpowers | Subagentes en piloto automático + TDD |
+| 02 | Everything Claude Code (ECC) | Departamento ingeniería completo |
+| 03 | UI UX Pro Max | 67 estilos + 161 paletas por industria |
+| 04 | claude-mem | Memoria permanente entre sesiones |
+| 05 | n8n-MCP | Claude diseña workflows n8n |
+
+---
+
+## 01 — Superpowers (piloto automático)
+
+### Qué hace
+
+Framework de habilidades agénticas. Crea subagentes que se reparten tareas, revisa su propio código en 2 etapas, trabaja **solo por horas**. v5 sumó brainstorming visual con mockups HTML.
+
+### Qué incluye
+
+- Subagentes paralelos
+- Revisión en 2 etapas (validación antes de aceptar)
+- TDD obligatorio (RED → GREEN → REFACTOR)
+- Debugging sistemático con análisis de causa raíz
+- Cross-harness: Claude Code, Codex, Factory, Cursor, Gemini CLI, OpenCode
+
+### Instalación
+
+**Marketplace oficial**:
+
+```
+/plugin install superpowers@claude-plugins-official
+```
+
+**Legacy** (sigue funcionando):
+
+```bash
+npx superpowers@latest init
+```
+
+Repo: `obra/superpowers` (~198k stars).
+
+### Cuándo NO
+
+Si recién arrancás y todavía no distinguís skills vs subagentes vs comandos slash, **esperá una semana**. Es framework que asume contexto previo.
+
+---
+
+## 02 — Everything Claude Code (ECC)
+
+### Qué es
+
+60 subagentes especializados + 232 skills + 75 comandos slash. Literalmente **descargás un departamento de ingeniería**. Ganador del Claude Code Hackathon de febrero 2026.
+
+### Qué incluye
+
+| Capa | Cantidad |
+|------|----------|
+| Subagentes | 60 (planning, arch, testing, security, code review) |
+| Skills | 232 (TDD, security, frontend, backend, DevOps) |
+| Comandos | 75 (/plan, /tdd, /code-review, /verify) |
+| AgentShield | Escáner vulnerabilidades con 102 reglas |
+
+Multi-lenguaje: TypeScript, Python, Go, Java, Kotlin, Rust, C++, F#, PHP, Perl, Swift, ArkTS.
+
+### Instalación
+
+**Marketplace**:
+
+```
+/plugin install ecc@ecc
+```
+
+**Legacy**:
+
+```bash
+git clone https://github.com/affaan-m/everything-claude-code.git
+```
+
+### Cuándo NO
+
+En repos chicos donde no vas a usar ni el 30% de lo que trae. Arrancá con 5-10 skills sueltas si tu proyecto es liviano.
+
+---
+
+## 03 — UI UX Pro Max (diseño pro)
+
+### Qué hace
+
+Le enseña a Claude a diseñar como profesional. Le decís para qué es tu app y elige colores, tipografías, estructura, stack — todo. v2.0 sumó **Intelligent Design System Generator**.
+
+### Números
+
+| Categoría | Cantidad |
+|-----------|----------|
+| Estilos UI | 67 (Glassmorphism, AI-Native, Brutalism, Bento Grid, Claymorphism, Neumorphism) |
+| Reglas por industria | 161 (tech, finance, salud, e-commerce, servicios, creativos) |
+| Paletas | 161 alineadas a industria |
+| Combos tipográficas | 57 con Google Fonts |
+| Tipos de gráficos | 25 |
+| Guías UX | 99 (accesibilidad + anti-patrones) |
+| Stacks soportados | más de 15 |
+
+### Instalación
+
+```bash
+npm install -g uipro-cli && uipro init --ai claude
+```
+
+Repo: `nextlevelbuilder/ui-ux-pro-max-skill` (~80k stars).
+
+### Cuándo NO
+
+Si ya tenés design system corporativo (tokens, Figma library), **no metas UI UX Pro Max encima** — se pelea con tus tokens. Es para arrancar de cero.
+
+---
+
+## 04 — claude-mem (memoria permanente)
+
+### Qué hace
+
+Le da memoria permanente a Claude. Todo lo que pasa en una sesión lo guarda, comprime con IA, recuerda en la siguiente. Búsqueda semántica híbrida (SQLite + Chroma) y visor web en `localhost:37777`.
+
+### Qué incluye
+
+- Memoria persistente automática entre sesiones
+- Compresión progresiva con visibilidad de costo
+- Búsqueda semántica vía skill `mem-search`
+- Visor web tipo mini Notion
+- Control de privacidad con tags `<private>`
+- Sistema de citas con IDs rastreables
+
+### Instalación
+
+```bash
+npx claude-mem install
+```
+
+Repo: `thedotmack/claude-mem` (~76k stars, 270 releases).
+
+### Alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| Mem0 | Memoria estructurada clave-valor, más rígido |
+| Letta | Memoria con grafo, multi-agente complejo |
+| claude-mem | Medio — más simple que Letta, más flexible que Mem0 |
+
+### Cuándo NO
+
+Proyectos cortos desechables. Tampoco en máquina compartida — el viewer expone tu historial en localhost por default, revisá config antes.
+
+---
+
+## 05 — n8n-MCP (Claude diseña workflows)
+
+### Qué hace
+
+Servidor MCP community que conecta Claude con n8n. Le describís qué automatizar y arma el workflow completo. Acceso a **1.650 nodos y 2.352 templates** pre-extraídos.
+
+### Cobertura
+
+- 1.650 nodos indexados (820 core + 830 community)
+- 2.352 templates con 100% cobertura de metadata
+- 265 variantes de AI tools documentadas
+- 99% coverage de node properties
+- Validación multi-nivel antes de crear workflows
+
+### Dashboard hosteado
+
+`dashboard.n8n-mcp.com` con tier free: **100 tool calls/día** sin instalar nada local.
+
+### Instalación
+
+```bash
+claude mcp add n8n-mcp -- npx n8n-mcp
+```
+
+Repo: `czlonkowski/n8n-mcp` (~20k+ stars).
+
+### Cuándo NO
+
+Sin n8n corriendo (self-hosted o n8n Cloud), no aplica. Primero levantá instancia, después instalá.
+
+---
+
+## n8n + Claude — las 3 capas (la confusión #1)
+
+"n8n + Claude" significa **3 cosas distintas**. La gente las mezcla todo el tiempo.
+
+### Capa 01 — Anthropic node (n8n oficial)
+
+Claude **como modelo dentro** de un workflow n8n. El nodo built-in.
+
+**Caso**: email entra → Claude lo clasifica → n8n responde.
+
+**Instalación**: nada — viene incluido en n8n.
+
+### Capa 02 — MCP Server Trigger (n8n oficial)
+
+n8n actúa **como MCP server** para Claude. Tus workflows se vuelven tools que Claude consume.
+
+**Caso**: "mandá este resumen al canal de Slack del equipo" — Claude dispara el workflow.
+
+**Instalación**: en n8n agregás nodo "MCP Server Trigger" → conectás workflows como tools → copiás URL + Bearer Token → sumás gateway en Claude.
+
+**Disponible desde**: n8n Cloud v1.88+.
+
+### Capa 03 — n8n-mcp (community, czlonkowski)
+
+Claude **diseña y crea workflows** desde cero.
+
+**Caso**: "diseñame un workflow que cada lunes revise X y mande Y por email" — Claude arma el JSON completo o lo crea directo en tu instancia.
+
+**Instalación**: la que mostramos en sección 05.
+
+### Cómo elegir
+
+| Querés | Capa |
+|--------|------|
+| Claude es UN paso del workflow | 01 (Anthropic node) |
+| Claude ejecuta tus workflows como tools | 02 (MCP Server Trigger) |
+| Claude DISEÑA los workflows | 03 (n8n-mcp) |
+
+Las 3 pueden convivir.
+
+---
+
+## /plugin install — el camino moderno
+
+En enero 2026 Anthropic abrió el **marketplace oficial de plugins**. Ya no hay que hacer git clone ni copiar configs.
+
+### Cómo
+
+1. Abrís Claude Code
+2. Ejecutás `/plugin` — abre browser integrado
+3. Instalás con `/plugin install nombre@source`
+
+En mayo 2026 hay más de 15.000 plugins indexados.
+
+### Las 5 en el marketplace
+
+- **Superpowers** y **ECC** ya están: `claude-plugins-official` y `ecc`
+- **UI UX Pro Max**, **claude-mem**, **n8n-MCP**: CLI propios (legacy sigue funcionando perfecto)
+
+---
+
+## Anti-patrones
+
+### 1. Instalar las 5 a la vez
+
+Cada una cambia tu workflow. **Elegí una**, dejala una semana, después la siguiente.
+
+### 2. Ignorar el orden por necesidad
+
+| Necesitás | Empezá por |
+|-----------|------------|
+| Claude se olvida todo | claude-mem |
+| Diseño pobre | UI UX Pro Max |
+| Agentes trabajando solos | Superpowers |
+| Workflows | n8n-MCP |
+
+### 3. n8n-MCP sin n8n
+
+Ya lo dijimos. Instalá n8n primero (`cloud.n8n.io` tiene tier free).
+
+### 4. ECC en repos chicos
+
+Si tu proyecto cabe en 5 archivos, **75 comandos slash sobran**.
+
+### 5. Instalar en repo de cliente sin avisar
+
+Varios de estos modifican el contexto global de Claude. **No los pruebes en proyecto pagado** sin entender qué hacen.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Solo chat.claude.ai | Requieren Claude Code |
+| Setup corporativo restrictivo | Plugins externos pueden estar vedados |
+| Sin n8n corriendo | Skill #5 no aplica |
+| Proyecto cliente "rapidito" | Probá en sandbox primero |
+
+---
+
+## Próximos pasos
+
+- Para deep-dive de Superpowers, [4 superpoderes Claude](/boveda/4-superpoderes-claude)
+- Para curaduría de 6 skills, [6 mejores skills Claude](/boveda/seis-mejores-skills-claude)
+- Para parches al Claude base, [completá tu Claude](/boveda/completa-tu-claude)

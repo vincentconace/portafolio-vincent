@@ -1,0 +1,252 @@
+---
+title: "Vercel Skills + skills.sh — discover and install skills in natural language"
+description: "skills.sh is an open directory of skills for Claude Code. find-skills is the skill that lets you search for and install other skills by talking to Claude in plain English. You say 'install a frontend skill' and Claude finds, evaluates, and configures it on its own."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["agencia-digital-completa", "crea-claude-skills", "skill-vault"]
+---
+
+## What skills.sh is
+
+**skills.sh** is an **open directory** where you can search for skills available for Claude Code. It works like a skills store: you find what you need and install it with a single command.
+
+URL: `skills.sh`
+
+---
+
+## The key skill — find-skills
+
+**find-skills** is a special skill: it gives Claude Code the ability to **search for and install other skills for you**.
+
+It's the **first thing you install**.
+
+### Installation
+
+```bash
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+### After that
+
+You talk to Claude in plain English and it does the work.
+
+---
+
+## How to use it
+
+### Search by topic
+
+In Claude Code:
+
+```
+> Find frontend skills
+```
+
+```
+> Find skills for testing
+```
+
+```
+> What skills are there for databases
+```
+
+find-skills searches the directory and shows you options.
+
+### Install what you find
+
+```
+> Install that skill
+```
+
+(referring to the one it showed you). It configures it automatically.
+
+---
+
+## Natural language examples
+
+```
+> Find skills for deploying on Vercel
+```
+
+```
+> Install a frontend design skill
+```
+
+```
+> What skills are there for databases
+```
+
+```
+> Show me testing and quality skills
+```
+
+```
+> I need skills for AI agents
+```
+
+No commands. **No memorizing URLs**.
+
+---
+
+## Why Vercel Skills is different
+
+| Catalog | Type | Count |
+|----------|------|----------|
+| **skills.sh / Vercel Skills** | **Curated** by Vercel Labs + community | ~100-200 |
+| [Antigravity Skills](/boveda/agencia-digital-completa) | Massive | 978+ |
+| Individual GitHub repos | Scattered | Thousands |
+
+Vercel Skills is **curated**: every skill goes through a basic quality review before it appears in the directory. **Fewer in number, better curated**.
+
+---
+
+## Recommended workflow
+
+### For Vercel ecosystem devs (Next.js, etc.)
+
+```
+1. Install find-skills
+2. "Find skills for Next.js"
+3. Install the relevant ones
+4. Work as usual — Claude already has the skills
+```
+
+### To explore the ecosystem without overwhelming yourself
+
+```
+1. find-skills
+2. "Show me the top 10 skills by category"
+3. Install 2-3 based on immediate need
+4. After 2 weeks, repeat — add whatever is justified
+```
+
+### For maintenance
+
+Every 1-2 months:
+
+```
+> Audit my installed skills. Tell me which ones I haven't used
+  in 30+ days. Suggest which to uninstall.
+```
+
+Apply the [global vs project skills](/boveda/skills-global-o-proyecto) rule.
+
+---
+
+## Use cases
+
+### 1. Quick onboarding to Claude Code
+
+You just installed Claude Code. Instead of searching for skills one by one on GitHub:
+
+```
+> I'm a [role]. Show me 5 essential skills for my case.
+```
+
+find-skills makes recommendations.
+
+### 2. You hit a problem and want a skill
+
+```
+> I need a skill that automates E2E testing with Playwright.
+> Search and install if you find anything decent.
+```
+
+### 3. Explore the ecosystem without saturation
+
+```
+> List the 10 most popular skills from the last week.
+```
+
+find-skills keeps you up to date without you having to follow Twitter/GitHub.
+
+### 4. Validate before installing from outside
+
+If you saw a skill on YouTube:
+
+```
+> Search for [SKILL NAME] on skills.sh. If it exists there, install it.
+  If not, tell me and I'll see whether it's worth installing from
+  an external repo.
+```
+
+skills.sh is a **minimum quality signal**.
+
+---
+
+## Anti-patterns
+
+### 1. Skipping find-skills
+
+If you're going to explore skills, **install find-skills first**. It saves you hours vs searching manually.
+
+### 2. Installing everything you find
+
+find-skills shows you options. **You choose** the relevant ones. Don't install 20 "just in case".
+
+### 3. Not applying the global/project rule
+
+When Claude offers to install a skill, **ask yourself**: do I use it in 3+ projects? If not, it goes to the project, not global.
+
+### 4. Trusting the directory 100%
+
+skills.sh has basic curation but no guarantee. **Read the README** before installing.
+
+### 5. Forgetting that find-skills is discovery only
+
+find-skills helps you **find** skills. **It doesn't use them for you**. After installing, you talk to the skills as usual.
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **find-skills + skills.sh** | Discover curated skills in natural language |
+| [Antigravity Skills](/boveda/agencia-digital-completa) | Massive library (978+) |
+| Manual GitHub search | Discover what isn't in directories yet |
+| [Skill Vault](/boveda/skill-vault) | Manage and audit your installed skills |
+
+---
+
+## Powerful combinations
+
+### With Skill Vault
+
+```
+1. find-skills discovers and proposes
+2. You approve which to install
+3. [Skill Vault](/boveda/skill-vault) audits them with 13 checks
+   and organizes them
+```
+
+Discovery + auditing + organization.
+
+### With creating your own skills
+
+If find-skills doesn't find what you need, [create one](/boveda/crea-claude-skills) custom.
+
+### With the global/project rule
+
+Apply [global vs project skills](/boveda/skills-global-o-proyecto) when installing.
+
+---
+
+## When NOT to use the directory
+
+| Case | Why |
+|------|---------|
+| A skill very niche to your industry | It's probably not there |
+| You need a private enterprise skill | Public catalogs don't apply |
+| You want everything manual with your own curation | find-skills takes that control away from you |
+
+---
+
+## Next steps
+
+- For an alternative massive library (978+ skills), [Antigravity Skills](/boveda/agencia-digital-completa)
+- To audit/organize what you install, [Skill Vault](/boveda/skill-vault)
+- For the rule on where to install each skill, [global vs project skills](/boveda/skills-global-o-proyecto)

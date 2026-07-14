@@ -1,0 +1,89 @@
+---
+title: "Hook Test Runner — corre tests relevantes post-code-changes (663 installs)"
+description: "Hook con 663 installs. Detecta test files automáticamente y corre los apropiados según las extensiones y file structure. Más inteligente que [Run Tests After Changes](/boveda/hook-run-tests-after-changes)."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-run-tests-after-changes", "hook-tdd-gate", "hook-lint-on-save"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/testing/test-runner"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/testing/test-runner.json"
+---
+
+## Qué es
+
+Otro hook de testing post-edit. La diferencia con [Run Tests After Changes](/boveda/hook-run-tests-after-changes): detecta inteligentemente qué tests son relevantes según extensiones y file structure, en vez de correr toda la suite.
+
+Hook event: `PostToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `testing` |
+| Installs | 663 |
+| Hook event | `PostToolUse` |
+| Mecanismo | Detect test files relevantes |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook testing/test-runner
+```
+
+Para Claude:
+
+```
+Instalé el hook testing/test-runner. Editá `src/auth/login.ts` —
+debería correr `tests/auth/login.test.ts` y dependencias, no toda
+la suite.
+```
+
+## Qué podés hacer con esto
+
+### Tests relevantes solo
+
+En lugar de correr 1,000 tests por un edit chico, corre los 5 relacionados.
+
+### Feedback más rápido
+
+Suite parcial = segundos vs minutos.
+
+### Combo con [TDD Gate](/boveda/hook-tdd-gate)
+
+TDD Gate enforce que existan tests. Test Runner los ejecuta. Workflow TDD completo.
+
+### Combo con [Lint On Save](/boveda/hook-lint-on-save)
+
+Lint + tests relevantes = quality pipeline rápido.
+
+## Cuándo elegir cuál
+
+| Hook | Cuándo |
+| --- | --- |
+| **Test Runner (este)** | Querés tests inteligentes (relevantes only) |
+| [Run Tests After Changes](/boveda/hook-run-tests-after-changes) | Querés suite completa (más adoptado, 1,017 installs) |
+| Ambos | No los instales juntos |
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu file structure no tiene convention test/source clara:** el hook puede no detectar bien.
+- **Para sesiones autónomas largas:** suite completa periódica puede ser más confiable.
+- **Si tu suite es rápida:** correr todo es overhead bajo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Test Runner Hook](https://www.aitmpl.com/component/hooks/testing/test-runner) — comando exacto.
+- **Config JSON:** [test-runner.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/testing/test-runner.json).
+
+## Recursos relacionados
+
+- [Run Tests After Changes Hook](/boveda/hook-run-tests-after-changes) — alternativa más adoptada (1,017 vs 663).
+- [TDD Gate Hook](/boveda/hook-tdd-gate) — combo TDD completo.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — quality pipeline.

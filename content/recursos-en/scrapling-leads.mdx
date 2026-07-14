@@ -1,0 +1,260 @@
+---
+title: "Scrapling — generate lead lists from Maps and directories"
+description: "Open-source library with built-in MCP to extract public info from Google Maps, directories, and public sites. Claude uses it with simple prompts to build lead lists without paying agencies. When it's worth it, and when it's legally borderline."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "mcp", "scrapling"]
+publishedAt: "2026-05-08"
+readingTime: "10 min"
+relatedSlugs: ["plugin-n8n-mcp", "mcp-server-propio", "openwa-whatsapp"]
+---
+
+## The problem it solves
+
+You need a list of **dentists in your city with phone number and address** for B2B outreach. Your options:
+
+| Option | Cost | Quality |
+|--------|-------|---------|
+| Lead agency | $500-5000 per list | Stale data, repeated, poorly segmented |
+| Tools like ZoomInfo / Apollo | $1k-50k/year | Good but expensive, built for enterprise |
+| Paying a freelancer | $100-500 per list | Slow, depends on the freelancer |
+| **Your own scraping with MCP** | $0 + your time | As good as you define it, repeatable |
+
+The pattern with Scrapling: an open-source library with built-in MCP that **Claude controls for you**. You ask in plain language, it builds the list.
+
+> Before **going any further**: scraping public info is NOT illegal in itself, but there are legal nuances depending on country, site, and use. Read the "The legal warning" section before you start.
+
+---
+
+## What Scrapling is
+
+A Python open-source library to extract info from websites without getting blocked. It disguises itself as a real browser (not a bot). It has a **built-in MCP server** → Claude can invoke it directly.
+
+Capabilities:
+
+| Capability | What it's for |
+|-----------|----------|
+| CSS / XPath selectors | Pull specific fields from a page |
+| Automatic identity rotation | Avoid detection as a scraper |
+| JavaScript handling | SPA sites where content is rendered |
+| Automatic pagination | Sites with results across multiple pages |
+| Human-like rate limiting | Don't hammer the server (ethical and technical) |
+| Export to CSV / JSON | Usable output for your CRM or spreadsheet |
+
+---
+
+## Setup
+
+### Installation
+
+```bash
+pip install scrapling
+```
+
+### Configuring the MCP in Claude
+
+`.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "scrapling": {
+      "command": "scrapling-mcp",
+      "env": {
+        "SCRAPLING_RATE_LIMIT": "human"
+      }
+    }
+  }
+}
+```
+
+Done. In your next Claude session, you can invoke it.
+
+---
+
+## Use cases
+
+### Case 1 — Local B2B leads
+
+```
+> I need a list of gyms in downtown Buenos Aires.
+  For each one:
+  - Name
+  - Address
+  - Phone
+  - Website URL (if any)
+  - Google rating
+  - Number of reviews
+
+  Use Scrapling on Google Maps. Filter for those with rating >4 and
+  more than 10 reviews (signals of a real operation).
+
+  Output: CSV to /tmp/gimnasios-baires.csv
+```
+
+Claude invokes Scrapling, does the scraping with your config, and returns the file.
+
+### Case 2 — Competitor monitoring
+
+```
+> Every Monday, pull the products from competitor X's site:
+  - Product
+  - Current price
+  - Previous price (if visible)
+  - Declared stock
+  - Product URL
+
+  Compare against last week's output (it's in
+  /tmp/competencia/{fecha}.csv) and show me the changes:
+  - New products
+  - Discontinued products
+  - Price changes (>5%)
+```
+
+Scheduled as a [hook](/boveda/hooks-automatizacion) or slash command that runs weekly.
+
+### Case 3 — Lead enrichment
+
+You have a CSV with 200 companies but only the name. You want to enrich it:
+
+```
+> Take /tmp/empresas-input.csv (it only has the company name).
+  For each one, search publicly and add:
+  - Website URL
+  - Industry
+  - Approximate size (employees range)
+  - Main city
+  - LinkedIn URL if you find it
+
+  If you can't find a field, leave it blank. DON'T make things up.
+  Output to /tmp/empresas-enriched.csv
+```
+
+Much cheaper than paid enrichment services.
+
+### Case 4 — Technical sites
+
+Not just Google Maps. Scrapling also works for extracting info from:
+
+- API docs / reference pages
+- Job listings (for salary analysis)
+- Product catalogs
+- Public forums and communities
+
+Any site with structured public info.
+
+---
+
+## The legal warning
+
+**Scraping can be legal, illegal, or "it depends"** based on multiple factors:
+
+### Generally OK
+
+- ✅ Scraping **public** info (no login)
+- ✅ Respecting `robots.txt`
+- ✅ Human-like rate limit (no hammering)
+- ✅ For personal use or internal analysis
+- ✅ Data with no sensitive personal info
+
+### Gray zone (be careful)
+
+- ⚠️ Sites whose Terms prohibit scraping
+- ⚠️ Large volumes (may trigger legal protections)
+- ⚠️ Republishing the scraped content
+- ⚠️ Personal data (GDPR / LGPD apply)
+
+### Generally NOT
+
+- ❌ Scraping content behind a login with credentials
+- ❌ Technically bypassing a paywall
+- ❌ Mass email harvesting
+- ❌ Copyright-protected data (articles, photos, code)
+- ❌ Using the scraped data for spam or fraud
+
+### Practical rules
+
+1. **If the site asks you to log in to view it, scraping it is legally risky**, regardless of the technique.
+2. **If the site has a public API, use the API** instead of scraping (more stable, clearly legal, better performance).
+3. **For outreach**: you scrape public info, but the outreach itself must comply with anti-spam laws (CAN-SPAM, GDPR in Europe).
+4. **Don't sell the scraped data** unless the site explicitly allows it.
+
+---
+
+## Anti-patterns
+
+### 1. Massive volume without rate limit
+
+If you scrape 100k pages in an hour, the site blocks you **and possibly takes legal action**. **Always use a human-like rate limit** (1-2 req/sec max).
+
+### 2. Email harvesting for cold spam
+
+Having scraped emails doesn't give you the right to send them mass cold outreach. In many countries that violates anti-spam laws. Your IP/domain ends up blacklisted.
+
+### 3. Scraping social networks with login
+
+LinkedIn, Facebook, and Instagram have an **explicit prohibition** on scraping in their Terms. They detect and ban accounts. Some famous lawsuits (LinkedIn vs HiQ) show the topic is legally complex.
+
+**For social data**: use the official APIs even if they're limited or expensive.
+
+### 4. Not validating the data before using it
+
+Scraping isn't 100% reliable. The data comes with typos, inconsistent formats, and missing values. **Always validate before sending outreach** — a poorly scraped email sent to the wrong person ruins your brand.
+
+---
+
+## Combinations with other patterns
+
+### Scrapling + automated outreach
+
+1. Scrapling gathers leads
+2. Claude enriches them (looks up public info for each lead)
+3. [n8n MCP plugin](/boveda/plugin-n8n-mcp) handles outreach across multiple channels
+4. [Lead hunter from the Small Business plugin](/boveda/claude-small-business) does the follow-up
+
+A complete pipeline without paying 5 different services.
+
+### Scrapling + competitive research
+
+1. Scrapling monitors competitor sites (prices, products, content)
+2. Weekly diff against the last run
+3. Claude summarizes changes and proposes actions
+4. Report to Slack / email
+
+Useful for retail, SaaS, and agencies.
+
+---
+
+## When this pattern is worth it
+
+✅ You need lead lists from public info (Maps, directories)
+✅ Recurring competitor monitoring
+✅ Enriching your own databases
+✅ Competitive research
+✅ You accept the legal and ethical responsibility of scraping
+
+❌ You need verified, compliant emails for cold outreach (better to use Apollo/Lemlist)
+❌ Critical data where you need 100% reliability (better to use official APIs)
+❌ Sensitive personal data
+❌ You don't want to deal with debugging when sites change their HTML
+
+---
+
+## The hidden cost of scraping
+
+Something most people underestimate: **sites change their HTML**. What works today may break in 3 months because the site was redesigned.
+
+Your pipeline needs:
+- Failure monitoring (a scrape that returned 0 results → probably broken)
+- Updated selectors (every time the target HTML changes)
+- Fallbacks (if the scraping fails, what happens?)
+
+If the list is **single-use** (you gather it and never again), it's cheap. If it's **continuous**, the maintenance cost can be significant. Factor this in before building the pipeline.
+
+---
+
+## Next steps
+
+- To use the scraped data in automations, [n8n MCP plugin](/boveda/plugin-n8n-mcp)
+- To understand MCPs in general and build your own, [your own MCP server](/boveda/mcp-server-propio)
+- If you're going to do outreach over WhatsApp with the leads, read the warnings first at [WhatsApp + Claude](/boveda/openwa-whatsapp)

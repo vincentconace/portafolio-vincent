@@ -1,0 +1,224 @@
+---
+title: "The AI founder's playbook — what to build and why it matters more than how"
+description: "An actionable summary of Anthropic's Founder's Playbook. The 3 hard truths (building is free, AI agrees with you, your experience is the moat), the 4 stages (Idea/MVP/Launch/Scale), and prompts for each one. For technical and non-technical founders."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude", "claude-code", "claude-cowork"]
+publishedAt: "2026-05-12"
+readingTime: "16 min"
+relatedSlugs: ["prompting-10-pilares", "tres-errores-con-ia", "prompts-prd-ejecutivo"]
+---
+
+## The shift
+
+Five years ago, a startup founder was defined by what they knew how to do: the technical one wrote code, the non-technical one sold. Whoever couldn't build, didn't build. Whoever couldn't sell, didn't sell. Each one needed the other.
+
+That broke. In 2026, anyone with an idea and discipline can ship production software using AI, and anyone with technical skill can put together a decent go-to-market strategy without ever having sold anything. The wall between **having the idea** and **being able to build it** came down.
+
+But watch out: just because building is easier doesn't mean succeeding is easier. **Building is already free.** What's hard now is knowing **what** to build. That's the central idea of Anthropic's Founder's Playbook, and the one we're going to break down here.
+
+---
+
+## The 3 hard truths
+
+### 1. Building is now the easy part — which is why so many startups fail
+
+42% of startups die because they build something **nobody wanted**. This used to happen because building was expensive and took months: by the time you realized the mistake, you'd already spent everything. Now it happens for the opposite reason: **building is so fast that people skip validation**.
+
+> In 4 hours with Claude Code you have a working MVP. That's wonderful if you validated first. It's a disaster if you didn't.
+
+**The antidote**: before spending a whole weekend building, spend 5 days talking to the people who would buy it. Not to validate the solution — to validate that **the problem exists and that someone will pay to fix it**. The prototype is useful afterward to have better conversations, not as proof that you nailed it.
+
+### 2. AI agrees with you, and that sinks you
+
+You ask "is my idea good?" and it says yes. You ask for the market size and it throws you a number that makes you feel like a millionaire. You ask for competitor names and it lists three that are half dead.
+
+This is NOT because the AI "hallucinates" technically. It's because it's trained to be helpful, and being helpful tends to line up with confirming what you already think. Confirmation bias now comes with a built-in search engine.
+
+**The antidote**: use AI as devil's advocate, not as a hype machine:
+
+```
+> Destroy my idea. Find the 5 competitors that are going to crush me.
+  Give me the 7 most likely reasons this fails. Assume I'm in
+  love with the idea and you're the investor who has to tell me no.
+```
+
+AI is much more useful trying to demolish your plan than trying to defend it. If it survives the demolition, **then** you have something.
+
+### 3. Your experience is the only defensible moat
+
+What AI can do today, anyone can do tomorrow. **There is no technical moat.** The code you write with Claude, anyone with Claude writes. The prompts that work for you become a commodity in a few months.
+
+What can't be replicated? **What you know about your domain that the rest don't.** The weird details of your industry. What you learned by doing it for 10 years. The things that seem obvious but aren't. That's the only thing a competitor with more money and more people can't copy.
+
+**The antidote**: build **on top of** your experience, not in spite of it. If you worked 8 years in logistics, don't build a notes app. Build what your logistics self of 5 years ago needed and nobody gave you.
+
+---
+
+## The 4 stages of every startup
+
+The playbook divides the journey into 4 stages. Each one has **a different goal**, **different exit criteria**, and **different typical mistakes**. Confusing the stages is what kills startups.
+
+### Stage 1 — Idea: validate before building
+
+**Goal**: gather evidence that the problem is real and that someone will pay to fix it. **You're not building anything yet.**
+
+**Criteria to move to MVP**:
+- 10+ conversations with potential users
+- A clear pattern of a repeated pain point
+- At least 3 people who said "I'd pay for that" — not in the abstract, but with a number
+- You have a testable hypothesis: "X type of user will pay $Y for Z outcome"
+
+**Typical mistakes**:
+- Starting to code on day 2
+- Validating with your close circle (they'll say yes out of affection)
+- Confusing "interest" with "commitment"
+- Moving to MVP without an explicit price
+
+**Useful prompt for this stage**:
+
+```
+> I'm a founder of a startup at the idea stage. My hypothesis: [hypothesis].
+  My target audience: [profile].
+
+  Generate for me:
+  1. An 8-question interview guide to validate (not leading, not
+     biased toward "yes")
+  2. The 5 questions I should NOT ask and why each one is wrong
+  3. A matrix to classify the answers into: "validated", "partial
+     signal", "indifference", "rejection"
+```
+
+### Stage 2 — MVP: turn what's validated into a product
+
+**Goal**: put the smallest possible version of your solution in front of real users and look for **evidence of usage**, not just interest.
+
+**Criteria to move to Launch**:
+- Real users are using it (not demos, continuous usage)
+- Someone already paid (or signed up on a waitlist with a card)
+- Basic retention metric: they come back the next week
+- You have qualitative feedback that indicates what to improve (not "it's nice" — something actionable)
+
+**Typical mistakes**:
+- Building every feature you were asked for before charging
+- Launching free and "we'll monetize later" (it almost never happens)
+- Polishing the UI before having usage
+- Assuming silence = a problem; silence can be indifference
+
+**Useful prompt for this stage**:
+
+```
+> I have the MVP of [product]. [N] people use it. The ones who came back
+  more than 2 times are [profile]. The ones who left are [another profile].
+
+  Help me:
+  1. Identify the key difference between the two groups
+  2. Design 3 cheap experiments to validate the difference
+  3. Decide whether to pivot, adjust, or double down on the group that comes back
+```
+
+### Stage 3 — Launch: growth that doesn't depend on you alone
+
+**Goal**: go from scattered traction to a **repeatable growth engine**. So the next customer doesn't depend on you sending them a personal DM.
+
+**Criteria to move to Scale**:
+- 1 acquisition channel that works consistently
+- Customer acquisition cost (CAC) that's known and reasonable vs. LTV
+- Onboarding that works without your manual intervention
+- Solid retention metrics (not just novelty)
+
+**Typical mistakes**:
+- Testing 10 channels in parallel instead of going deep on 1
+- Scaling marketing without having solved retention (you're filling a leaky bucket)
+- Hiring before having a process (more people = more chaos without processes)
+- Optimizing conversion when the problem is the product
+
+**Useful prompt**:
+
+```
+> I have [N] users with [retention rate]. I want to move to Launch.
+
+  Audit my setup:
+  1. Is the retention I'm reporting healthy or misleading? (which number to look at)
+  2. What's the first channel I should test given my user profile
+     and my budget? (propose 1, not 5)
+  3. What do I need to have solved BEFORE investing in growth? (list
+     ordered by priority)
+```
+
+### Stage 4 — Scale: build a defensible moat
+
+**Goal**: accumulated depth — proprietary data, domain expertise, integrations that are costly to build, a brand that competitors can't easily replicate.
+
+**Criteria** (these are less "exit" and more "you're here if...")
+- Predictable revenue 6 months out
+- A team beyond the founder doing the day-to-day work
+- Data/integrations/relationships that a new competitor doesn't have
+- The ability to make investment decisions 12+ months out
+
+**Typical mistakes**:
+- Assuming you've won and stopping iterating
+- Over-scaling the team before you need it
+- Diversifying the product before mastering the core
+- Forgetting to keep talking to customers
+
+---
+
+## The 3 surfaces of Claude — what to use for what
+
+| Surface | When it's a good fit | Why |
+|------------|------------------|---------|
+| **Claude (chat)** | Quick questions, brainstorms, fast rewrites | Zero setup, ideal for exploration |
+| **Claude Cowork** | Research, document analysis, reports | Access to your files and connectors, holds long context |
+| **Claude Code** | Building, testing, deploying software | Plan mode, git, runs code locally |
+
+A common trap: using Chat for what needs Cowork (you lack sustained context), or Cowork for what needs Code (it can't run what it writes).
+
+Quick rule: **if the output goes to a downstream system (DB, deploy, project file), you use Cowork or Code. If the output goes into your head or a blank doc, Chat is enough.**
+
+---
+
+## The 3 superpowers of the AI founder
+
+The playbook groups them into three ways AI changes your role:
+
+### 1. Research and conversational intelligence
+
+Before: you needed a consultant for competitive analysis, a lawyer to understand a contract, a finance person to build the model.
+
+Now: an expert on call for every domain, on demand. Competitive analysis, market sizing, financial models, writing PRDs and memos. All in hours, not weeks.
+
+### 2. Coding with agents
+
+Before: you needed a technical co-founder, an agency, or months of hiring to get to the MVP.
+
+Now: you describe in natural language what you want and an agent (Claude Code) builds, tests, and deploys it. **You decide what to build; the AI handles the how.**
+
+This does NOT mean anyone without technical experience can put together a Stripe-killer in a weekend. It means the "I don't know how to write code" barriers disappear, but the "I don't know what a good system is" ones persist — and that one is still solved by your judgment.
+
+### 3. Operations automation
+
+Before: the founder does 40 administrative things a week because they don't have a team yet.
+
+Now: many of those 40 are done by an agent. CRM updates, weekly reports, feedback tracking, doc keep-up. You focus on the decisions that only you can make.
+
+---
+
+## What to do today
+
+If you're getting started right now:
+
+1. **Identify what stage you're in** (Idea / MVP / Launch / Scale). Not the one you want to be in — the real one.
+2. **Reread the exit criteria of your current stage.** Do you meet all of them? If not, **that's** what you need to work on.
+3. **Use your stage's prompt** with Claude. Write down what comes out, adjust.
+4. **Go talk to 3 real people** this week. Without the pretext of validating the solution — just to understand the problem better.
+
+The entire playbook can be summed up in one sentence: **invest more time thinking about what to build, because building is now the easy part**.
+
+---
+
+## Next steps
+
+- For the Idea-stage validation prompts, [executive PRD prompts](/boveda/prompts-prd-ejecutivo) will help (the comparative PRD especially)
+- To avoid falling into AI's confirmation bias, [3 mistakes with AI](/boveda/tres-errores-con-ia)
+- When you get to the building phase, start with [Claude Code 0-to-100](/boveda/guia-claude-code-completa)

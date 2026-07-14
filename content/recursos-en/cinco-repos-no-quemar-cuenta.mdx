@@ -1,0 +1,373 @@
+---
+title: "5 open source repos that save you up to 98% of tokens in Claude Code"
+description: "By default Claude burns way more than it needs to: verbose answers, entire files loaded for no reason, context that grows without end. These 5 repos tackle each problem from a different angle: Token Efficient, Caveman, Context Mode, RTK and Code Review Graph. Install in 1 command. Sessions up to 6x longer."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills", "plugins"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-token-efficient", "cinco-errores-claude", "cual-plan-claude"]
+---
+
+## Why you're burning through your account without realizing it
+
+Claude Code is excellent. But **Claude doesn't know that tokens cost money**.
+
+Every time you ask it something:
+- It answers like it's writing a novel (explanation + alternatives + examples + follow-up)
+- It reads entire files (out of a 500-file project, **it reads all 500**)
+- Every terminal command hands it back 200 lines (of which 3 matter)
+
+Result: your session lasts **20 minutes** when it should last **2 hours**.
+
+5 open source repos from the community tackle **every part** of the problem from different angles:
+
+| Repo | Problem it tackles | Reduction |
+|------|---------------------|-----------|
+| **Claude Token Efficient** | Verbose answers | 63% less output |
+| **Caveman** | Inflated conversational style | 65% fewer tokens |
+| **Context Mode** | Context that grows without end | Sessions 6x longer |
+| **RTK** | Terminal spitting out junk | 80% fewer tokens in CLI sessions |
+| **Code Review Graph** | Unnecessary file loading | 6.8x-49x less on refactors |
+
+---
+
+## Repo 1 — Claude Token Efficient (4.5k ⭐)
+
+### What it is
+
+The easiest of the 5. A `CLAUDE.md` file with 8 rules that cut the "fluff" out of Claude's output.
+
+### Why it works
+
+Claude reads CLAUDE.md when it opens the project as if it were its instructions. This repo gives you one that's already done, telling it to:
+
+- Skip the greeting
+- Don't explain what I already know
+- Edit instead of rewriting
+- Simple solutions
+- No goodbyes
+
+Result: **answers that are 63% shorter** without losing useful info.
+
+### Installation
+
+```bash
+curl -o CLAUDE.md https://raw.githubusercontent.com/drona23/claude-token-efficient/main/CLAUDE.md
+```
+
+Or with a prompt for Claude Code:
+
+```
+> Install Claude Token Efficient in this project.
+  Repo: https://github.com/drona23/claude-token-efficient
+
+  Steps:
+  1. If CLAUDE.md already exists, back it up as CLAUDE.backup.md
+     BEFORE touching anything
+  2. Download the official one and save it as CLAUDE.md
+  3. Confirm what you did + the lines of the new file
+```
+
+See [Claude Token Efficient in detail](/boveda/claude-token-efficient) for the 8 rules and customization.
+
+---
+
+## Repo 2 — Caveman (39k ⭐)
+
+### What it is
+
+A plugin that puts **a filter on Claude's output**. Instead of:
+
+> "Would you like me to explain this step-by-step?"
+
+It tells you:
+
+> "Here it is. Next."
+
+**Same message, half the words**. Claude still thinks just as deeply inside — it only trims the verbosity of the output.
+
+### Why it has 39k stars
+
+It's the most popular plugin in the ecosystem. The name ("caveman") describes the effect: brutal, direct communication with no frills.
+
+### Installation
+
+```
+> /plugin marketplace add JuliusBrussee/caveman
+> /plugin install caveman
+```
+
+Or a prompt so Claude installs it:
+
+```
+> Install Caveman in Claude Code.
+  Repo: https://github.com/juliusbrussee/caveman
+
+  1. Register the marketplace: /plugin marketplace add JuliusBrussee/caveman
+  2. Install: /plugin install caveman
+  3. Tell me how to activate it in my current session
+  4. Confirm it's loaded
+```
+
+### When to turn it off
+
+For sessions where you **want explanations** (learning, collaborative debugging), turn it off. Caveman will kill the pedagogy.
+
+---
+
+## Repo 3 — Context Mode (8k ⭐)
+
+### What it is
+
+An automatic compressor for accumulated context. In long sessions, **70% of the context is junk** (old messages already resolved, files that are no longer being modified).
+
+Context Mode reads everything accumulated and compresses it by **98%**.
+
+### Analogy
+
+Claude read a 500-page book. Context Mode summarizes it in 10 sentences — the 10 that matter. **Claude still has the memory, without the weight**.
+
+### Effect
+
+**Sessions 6x longer** before hitting the limit. If before it lasted you 30 min, now it's 3 hours.
+
+### Installation
+
+```
+> /plugin marketplace add mksglu/context-mode
+> /plugin install context-mode
+```
+
+Or with a prompt for Claude:
+
+```
+> Install Context Mode.
+  Repo: https://github.com/mksglu/context-mode
+
+  1. /plugin marketplace add mksglu/context-mode
+  2. /plugin install context-mode
+  3. Explain to me in 2 lines how to activate it and when the
+     automatic compression triggers
+  4. Confirm it's loaded
+```
+
+### When it shines
+
+- Long sessions (>2h)
+- Pro $20 plan that burns fast
+- Working on large projects where context accumulates
+
+### When NOT
+
+- Short sessions (there's nothing to compress)
+- Critical work where you need exact retention of every decision
+
+---
+
+## Repo 4 — RTK (30k ⭐)
+
+### What it is
+
+A gatekeeper between your terminal and Claude. Every command Claude runs (`ls`, `git status`, `npm install`) typically hands it back **a wall of text** — 200 lines where only 3 matter.
+
+RTK **filters** that output before passing it to Claude. It gives it only:
+- Errors
+- Relevant changes
+- Lines that failed
+
+### Effect
+
+**80% fewer tokens** in terminal-intensive sessions. Without you touching anything — RTK works transparently.
+
+### Installation
+
+```bash
+brew install rtk
+```
+
+Or with a prompt:
+
+```
+> Install RTK for me.
+  Repo: https://github.com/rtk-ai/rtk
+
+  1. Check if I have Homebrew. If yes: brew install rtk
+  2. If not (Linux without Homebrew), let me know and suggest the
+     official alternative from the repo. DO NOT assume a method.
+  3. After installing, verify: rtk --version
+  4. Tell me in 1 line how to activate it to filter commands
+     for this session
+```
+
+### When it shines
+
+- Backend / DevOps / data eng devs (lots of terminal)
+- Workflows with `git`, `npm`, `docker`, etc.
+- Long sessions on projects with lots of commands
+
+### When NOT
+
+- You work 100% frontend in the browser
+- Sessions where you **need** to see full outputs for debugging
+
+---
+
+## Repo 5 — Code Review Graph (11k ⭐)
+
+### What it is
+
+The most advanced one. It scans **your entire project** and builds a dependency map:
+- Which file calls which
+- Which component depends on which service
+- Which function affects which route
+
+When you ask it for a change, Claude **doesn't read all 500 files just in case**. It looks at the map, finds the 3 that matter, and reads only those.
+
+### Effect
+
+- **Average**: 6.8x fewer tokens
+- **Large tasks** (refactor, new feature, tricky debug): **up to 49x less**
+
+### Installation
+
+```bash
+pip install code-review-graph
+code-review-graph install
+```
+
+Or with a prompt:
+
+```
+> Install Code Review Graph in this project for me.
+  Repo: https://github.com/tirth8205/code-review-graph
+
+  1. Check for Python 3 + pip
+  2. pip install code-review-graph
+  3. code-review-graph install
+  4. Scan this project to build the initial graph
+  5. Confirm the indexed files, where it saved the graph,
+     and how Claude will use it in future questions
+```
+
+### When it shines
+
+- Projects with >100 files
+- Codebases with lots of internal dependencies
+- Massive refactors where Claude tends to "read everything"
+
+### When NOT
+
+- Small projects (fewer than 30 files) — the graph's overhead isn't worth it
+- Very dynamic projects (the graph goes stale fast)
+- If you already use the [File Search skill](/boveda/5-skills-equipo-dev), there's overlap
+
+---
+
+## Recommended installation order
+
+Don't install all 5 on day one. Each has a learning curve.
+
+### Day 1 — Token Efficient
+
+Literally **drag a file over**. 5 minutes and you already see a difference.
+
+### Day 3 — Caveman
+
+Add it if you want **visual brutality**. Give yourself 1-2 days to get used to it so you don't miss the fluff.
+
+### Day 7 — Context Mode
+
+The one with the most impact in long sessions. **Marry this one** if you work for hours with Claude.
+
+### Day 14 — RTK
+
+Only if you live in the terminal. If your work is 100% browser/UI, skip it.
+
+### Day 30 — Code Review Graph
+
+Only if your project has >100 files. Heavier setup, but huge impact.
+
+---
+
+## Impact comparison
+
+| Repo | Setup | Ongoing effort | Impact |
+|------|-------|------------------|---------|
+| Token Efficient | 30s | 0 | High (63% output) |
+| Caveman | 1 min | Getting used to it | High (65% output) |
+| Context Mode | 1 min | 0 | Very high (6x session) |
+| RTK | 2 min | 0 | High if you work in the CLI |
+| Code Review Graph | 5-10 min | Periodic re-scan | Very high on large projects |
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 5 without understanding what each one does
+
+You'll get **inconsistent results** and won't know what to attribute them to. **One by one**, measuring.
+
+### 2. Caveman for learning
+
+If you're learning Claude/a new technology, Caveman cuts the explanations you needed. Activate it selectively.
+
+### 3. Code Review Graph on a very dynamic project
+
+If your structure changes daily, the graph goes stale. **Re-scan** every N days.
+
+### 4. RTK during debugging sessions
+
+Sometimes you need to see the full output of a command to understand what happened. **Turn RTK off temporarily** for those cases.
+
+### 5. Thinking these repos replace the [5 basic mistakes](/boveda/cinco-errores-claude)
+
+The repos are an **additional upgrade**. If you keep making the 5 basic mistakes (new corrections, long chats, etc.), the repos help you less. **Basic habits first**.
+
+---
+
+## Combinations with other resources
+
+### With the 5 mistakes
+
+Apply the [5 basic mistakes](/boveda/cinco-errores-claude) first. Then these 5 repos amplify the savings.
+
+### With switching models
+
+[Switch models](/boveda/cambia-de-modelo) depending on the task — mechanical tasks to Haiku, reasoning to Opus. Another dimension of optimization.
+
+### With Which Plan
+
+Applying the repos, you can [stay on the Pro plan](/boveda/cual-plan-claude) longer before moving up to Max.
+
+---
+
+## Estimated combined ROI
+
+Without the 5 mistakes fixed + without the repos:
+
+| Plan | Typical duration |
+|------|-----------------|
+| Pro $20 | ~70-100h/month intensive |
+
+With the 5 mistakes fixed:
+
+| Plan | Duration |
+|------|----------|
+| Pro $20 | ~140-200h/month |
+
+With mistakes fixed + 3 of the 5 repos (Token Efficient + Context Mode + Caveman):
+
+| Plan | Duration |
+|------|----------|
+| Pro $20 | ~250-400h/month |
+
+**The Pro $20 plan can reach Max $100 range** through optimization alone.
+
+---
+
+## Next steps
+
+- To understand Token Efficient in depth, [Claude Token Efficient](/boveda/claude-token-efficient)
+- For the basic habits before advanced optimizations, [5 Claude mistakes](/boveda/cinco-errores-claude)
+- To understand which plan you need, [which Claude plan](/boveda/cual-plan-claude)

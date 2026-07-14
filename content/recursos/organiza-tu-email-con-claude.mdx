@@ -1,0 +1,256 @@
+---
+title: "Organizá tu Gmail con Claude — conectalo en 2 clicks (sin código)"
+description: "Claude Desktop se conecta directo a Gmail (con permisos de Google) y organiza tu inbox por lenguaje natural. 6 prompts copy-paste para agrupar por tema, marcar urgentes, resumir hilos, buscar facturas, redactar borradores y limpiar newsletters. Pro $20 o Team requerido."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "gmail"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-cowork-workflow", "claude-dispatch", "5-preguntas-ia-negocio"]
+---
+
+## Lo que necesitás
+
+| Requisito | Detalle |
+|-----------|---------|
+| Computadora | Mac o Windows (no mobile aún) |
+| Cuenta Anthropic | Plan Pro $20 o Team |
+| Cuenta Gmail | Personal o Workspace |
+
+**No necesitás programar**. Todo el proceso son clicks y permisos.
+
+---
+
+## Diferencia app vs navegador
+
+- **claude.ai (web)** = solo chat. No conecta a herramientas.
+- **Claude Desktop** = app. **SÍ conecta a Gmail, Calendar, Drive, archivos**.
+
+Para este caso, **necesitás la app**.
+
+---
+
+## Setup en 3 pasos
+
+### 1. Descargar Claude Desktop
+
+`claude.ai/download` → descargá para tu OS → instalá → login con tu cuenta Anthropic.
+
+### 2. Conectar Gmail
+
+1. Settings (ícono engranaje)
+2. **Connections** o **Integrations**
+3. **Google Workspace** (incluye Gmail + Calendar + Drive)
+4. Ventana de Google pide permisos → **Permitir**
+
+### 3. Verificar
+
+```
+> Listame mis 5 correos sin leer más recientes.
+```
+
+Si te devuelve la lista, conectado.
+
+---
+
+## La analogía
+
+Conectar Gmail es como **darle las llaves de tu oficina** a un asistente de confianza. Puede entrar, revisar tus documentos, organizar — **pero solo cuando vos le pedís**. No hace nada por su cuenta.
+
+---
+
+## 6 prompts copy-paste
+
+### 1. Organizar por tema
+
+```
+> Revisá mis últimos 50 correos y agrupalos por tema: trabajo,
+  personal, facturas, newsletters, otros.
+  Dame resumen de cada grupo.
+```
+
+### 2. Etiquetar urgentes
+
+```
+> De mis correos sin leer, identificá cuáles necesitan respuesta
+  urgente (hoy) y cuáles pueden esperar.
+  Explicame por qué.
+```
+
+### 3. Resumir conversaciones largas
+
+```
+> Resumí los 3 hilos de correo más largos de esta semana.
+  Dame puntos clave + si hay acción pendiente de mi parte.
+```
+
+### 4. Buscar info (facturas, recibos)
+
+```
+> Buscá en mis correos del último mes cualquier factura o recibo.
+  Dame lista con fecha, remitente y monto.
+```
+
+### 5. Borradores de respuesta
+
+```
+> Revisá mis correos sin responder de últimos 3 días.
+  Redactá borradores cortos y profesionales para cada uno.
+
+  NO los envíes. Solo borradores para que yo apruebe.
+```
+
+### 6. Limpieza de suscripciones
+
+```
+> Identificá newsletters, promos y correos automáticos que recibo
+  repetidamente.
+  Dame lista para que decida cuáles cancelar.
+```
+
+---
+
+## Seguridad
+
+| Garantía | Detalle |
+|----------|---------|
+| Permiso por acción | Claude pide confirmación antes de tocar nada |
+| No envía sin tu OK | Redacta borradores, vos decidís enviar |
+| Privacidad | Anthropic NO usa tus correos para entrenar |
+| Desconectar | Settings → Connections → Revoke en cualquier momento |
+
+### Cuidado con info sensible
+
+Aunque Claude es seguro, **usá sentido común**:
+- Evitá procesar correos con contraseñas, datos bancarios completos, info médica
+- Si un correo tiene data muy sensible, **maneját directamente** vos
+
+---
+
+## Tips para mejores resultados
+
+### 1. Sé específico
+
+❌ "Organizá mi correo"
+✅ "Agrupá mis correos de esta semana por remitente y decime cuáles necesitan respuesta"
+
+### 2. Empezá poco a poco
+
+No intentes procesar 10,000 correos de golpe. **Últimos 7 días primero**, después ampliás.
+
+### 3. Revisá antes de enviar
+
+Claude muestra los borradores antes de enviar. **Siempre revisalos**. A veces sobre-formaliza o pierde matiz.
+
+### 4. Mantenimiento semanal
+
+Lunes 5min: pedile a Claude un resumen de la semana + acciones pendientes. Tu bandeja se mantiene limpia sin esfuerzo.
+
+### 5. Múltiples cuentas
+
+Podés conectar **varias cuentas Gmail**. Al pedir algo, Claude te pregunta cuál usar.
+
+---
+
+## Casos de uso avanzados
+
+### 1. Daily briefing automático
+
+Combinado con [Cowork tareas programadas](/boveda/claude-cowork-workflow):
+
+```
+> Cada mañana 8am, hacéme brief:
+  - 3 correos más importantes sin leer
+  - Hilos que requieren mi respuesta hoy
+  - Facturas/pagos del día
+  - Mandalo a mi propio email como resumen
+```
+
+### 2. Triage para tu VA
+
+```
+> Procesá mis correos sin leer:
+  - Si es de cliente actual → flag URGENTE
+  - Si es soporte → label "soporte" para mi VA
+  - Si es spam → archivar
+  - Resto → quedan en inbox
+
+  No respondas ninguno. Solo triage.
+```
+
+### 3. CRM ligero
+
+```
+> De mis correos del último mes con clientes potenciales:
+  Hacé tabla con: nombre, empresa, etapa (hot/cold/closed),
+  último contacto, próxima acción sugerida.
+```
+
+### 4. Reporte mensual
+
+```
+> Resumen del mes de mayo:
+  - Cantidad de correos recibidos vs respondidos
+  - Top 5 personas/empresas con más interacciones
+  - Hilos con compromisos que aún no cerré
+  - Sugerencia de qué priorizar en junio
+```
+
+---
+
+## Anti-patrones
+
+### 1. Auto-enviar respuestas
+
+NO. Aunque Claude redacte bien, **siempre revisás**. Una respuesta mal interpretada puede dañar relaciones.
+
+### 2. Confiar 100% en clasificación
+
+Claude puede marcar como "no urgente" algo crítico que el contexto no le mostró. **Revisá los flags**.
+
+### 3. Procesar correos con datos legales/financieros sensibles
+
+Para correos con contratos, datos bancarios, info médica → vos directo. No Claude.
+
+### 4. No iterar instrucciones
+
+Si Claude clasifica mal, **enseñale**: "este tipo de correo va a 'soporte' no a 'urgente'". Mejora con feedback.
+
+### 5. Aplicar mismas reglas a personal + trabajo
+
+Conectá cuentas separadas con reglas distintas. **No mezclés contextos**.
+
+---
+
+## Combinaciones potentes
+
+### Con Cowork
+
+[Cowork](/boveda/claude-cowork-workflow) tareas programadas → automatizá el triage diario sin pedirle cada mañana.
+
+### Con Dispatch
+
+[Dispatch](/boveda/claude-dispatch) → procesá email desde el celular mientras estás fuera.
+
+### Con 5 preguntas IA negocio
+
+[5 preguntas](/boveda/5-preguntas-ia-negocio) → entendés tu proceso. Email es uno de los pasos más automatizables. Identificá qué reglas exactas aplicar.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Plan Free de Anthropic | Integrations requiere Pro+ |
+| Solo usás email en mobile | Claude Desktop no está en mobile |
+| Compliance corporate estricto | Tu empresa puede prohibir IA con email |
+| Correo súper sensible (legal/medical) | Mejor manejar manual |
+
+---
+
+## Próximos pasos
+
+- Para procesar email desde el celular, [Claude Dispatch](/boveda/claude-dispatch)
+- Para tareas programadas tipo "brief diario automático", [Cowork workflow](/boveda/claude-cowork-workflow)
+- Para entender qué procesos automatizar antes de email, [5 preguntas IA negocio](/boveda/5-preguntas-ia-negocio)

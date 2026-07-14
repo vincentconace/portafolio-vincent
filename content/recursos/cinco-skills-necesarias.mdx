@@ -1,0 +1,192 @@
+---
+title: "Las 5 skills que hacen Claude Code trabajar casi solo"
+description: "El combo que cierra el ciclo: una skill que busca e instala otras (meta-skill), una que conecta a tus herramientas (MCP builder), una que navega internet, una que audita diseño y una que diseña frontend. Con el orden correcto para instalarlas."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-21"
+readingTime: "10 min"
+relatedSlugs: ["anatomia-claude", "skill-code-reviewer", "trio-skills-claude-code"]
+---
+
+## El combo
+
+Claude Code de fábrica es potente, pero le faltan manos para tareas específicas. Estas 5 skills no son las que más suenan en Twitter — son las que, **juntas**, cierran un ciclo completo de trabajo: encontrar lo que te falta, conectar tus herramientas, navegar internet, revisar tu output y dejarlo bonito.
+
+Cada una tapa un hueco distinto. Y hay un orden que importa: la primera te instala las otras.
+
+| # | Skill | Para qué | De dónde |
+|---|-------|----------|----------|
+| 1 | `find-skills` | Busca e instala otras skills del catálogo | Vercel Labs |
+| 2 | `mcp-builder` | Crea MCPs hablando, sin escribir código | Anthropic |
+| 3 | `agent-browser` | Navega internet con click reales, no scraping | Vercel Labs |
+| 4 | `web-design-guidelines` | Audita tu UI contra 100+ reglas | Vercel Labs |
+| 5 | `frontend-design` | Genera UI que no parece de IA | Anthropic |
+
+---
+
+## 1. `find-skills` — la meta-skill
+
+Es la que **busca e instala las demás**. Le decís en lenguaje natural qué necesitás:
+
+```
+> necesito algo para auditar mi diseño
+> quiero conectar Claude a Notion
+> me sirve una skill que escriba tests automáticos
+```
+
+Y `find-skills` se mete al catálogo, encuentra la que sirve, y te la instala sola. Se acabó andar por GitHub copiando comandos.
+
+**Por qué va primera**: con ella adentro, las otras 4 se instalan solas. Sin ella, tenés que buscar cada una a mano, leer el README, ejecutar el install, etc.
+
+**Cuándo justifica el setup**: siempre. Es la skill que multiplica el valor de todas las que vengan después.
+
+---
+
+## 2. `mcp-builder` — conecta sin código
+
+Le describís con palabras una herramienta que usás (tu CRM interno, una API privada, lo que sea) y la skill **escribe el MCP server** que conecta Claude a esa herramienta.
+
+Ejemplo de uso:
+
+```
+> mcp-builder, necesito conectar Claude a nuestro sistema interno de
+  pedidos. Es una API REST con auth bearer token. Las funciones que
+  quiero exponer son: listar pedidos por fecha, obtener detalle de un
+  pedido, y marcar como enviado.
+```
+
+La skill arma el código del MCP, lo testea, te muestra cómo registrarlo en `settings.json`. **Vos no escribiste código** — pero código sí hay, generado y revisable.
+
+**Trampa común**: confiar en lo que generó sin revisar la auth. Validá que los tokens no queden hardcodeados en el código generado.
+
+**Cuándo conviene**: si tenés sistemas internos a los que querés que Claude llegue. Si todo lo tuyo es público vía API, podés usar `Bash + curl` directo y no necesitás esto.
+
+---
+
+## 3. `agent-browser` — los ojos y manos en internet
+
+Los ojos y las manos de Claude en internet. Entra a páginas, hace **click reales** (no scraping HTML), saca info, prueba tu web como una persona.
+
+La diferencia con un simple fetch:
+
+| Necesidad | Fetch + parse | agent-browser |
+|-----------|---------------|---------------|
+| Bajar el HTML de una página estática | ✅ rápido | ⚠️ overkill |
+| Loguearse y navegar | ❌ no puede | ✅ |
+| Probar un flujo end-to-end | ❌ | ✅ |
+| Sites con JS pesado / SPA | ❌ ve el shell | ✅ ve la app renderizada |
+| Costo en tokens | Alto (HTML enorme) | Más bajo (solo lo relevante) |
+
+**Cuándo conviene**: testing de flows reales (registro, checkout, etc.), QA visual, scraping de sites con JS, automatización de tareas que requieren interacción.
+
+**Cuándo NO**: si solo necesitás bajar HTML estático, `curl` + parser es 10× más simple.
+
+---
+
+## 4. `web-design-guidelines` — el auditor
+
+Agarra una colección grande de reglas de diseño web (espaciado, tipografía, contraste, jerarquía visual, accesibilidad) y **revisa tu página** contra todas ellas.
+
+No diseña. **Critica.** Te tira:
+
+```
+- Contraste insuficiente en links del footer (4.1:1, mínimo accesible 4.5:1)
+- Línea de texto demasiado larga en hero (95 caracteres, recomendado 50-75)
+- Jerarquía rota: H2 tiene mismo tamaño que H3
+- Padding inconsistente entre secciones (varía entre 48px y 80px sin patrón)
+- Botones primarios y secundarios con casi mismo peso visual
+```
+
+**Cuándo conviene**: después de armar una primera versión de UI con `frontend-design` (skill #5), pasala por este auditor antes de mostrársela a alguien.
+
+**Trampa**: las reglas son guías, no leyes. Si todas las páginas siguen exactamente las mismas reglas, terminan todas iguales. Usá la auditoría como **input para decidir**, no como veredicto.
+
+---
+
+## 5. `frontend-design` — diseña sin que parezca IA
+
+El generador. Es la que **mata el look de IA** — esa estética genérica de "Tailwind UI por default" que tienen todas las apps hechas con LLMs sin guía.
+
+Trae **direcciones estéticas con tipografías ya combinadas**:
+
+- Variantes editoriales (Inter + Lora, Geist + Source Serif)
+- Variantes minimalistas (Inter sola, distintos pesos)
+- Variantes brutalist (Space Grotesk + monospace)
+- Variantes brand-heavy (custom fonts, colores saturados)
+
+Cuando le pedís "diseñame el landing", no genera "otro Tailwind UI". Te da una propuesta con personalidad.
+
+**Cuándo conviene**: arranque de proyecto donde la estética matters. Si estás haciendo un dashboard interno, esta skill es overkill — usá shadcn directo.
+
+---
+
+## El flujo de los 5
+
+Cómo encajan juntas en un ciclo de trabajo típico:
+
+```
+1. find-skills te instala todas las que necesités
+2. frontend-design propone la estética inicial
+3. (codeás con Claude Code normal)
+4. agent-browser prueba el flujo end-to-end como usuario
+5. web-design-guidelines audita visualmente
+6. (iterás)
+7. mcp-builder te conecta a la API privada que necesita la app
+```
+
+Una secuencia que cubre desde el arranque hasta tener algo testeado y conectado.
+
+---
+
+## Instalación
+
+Cada una se instala con su comando propio. Pero si ya tenés `find-skills`, no hace falta:
+
+```
+> /skill install find-skills
+```
+
+Y después:
+
+```
+> find-skills, instalame las skills más usadas de Vercel Labs y Anthropic
+```
+
+Sale por su cuenta a buscarlas e instalarlas todas. Esa es la idea de la meta-skill.
+
+---
+
+## Anti-patrones — cuándo NO instalar las 5
+
+### 1. Sos backend puro y no tocás UI
+
+`frontend-design` y `web-design-guidelines` no te aportan. Ahorrate la instalación.
+
+### 2. No tenés sistemas internos a conectar
+
+`mcp-builder` brilla cuando hay APIs privadas. Si todo lo que usás es público, `Bash` + `curl` o `fetch` directo te alcanza.
+
+### 3. Hacés solo CLIs / scripts
+
+`agent-browser` es para web. Si vivís en terminal, no lo necesitás.
+
+### 4. Estás aprendiendo Claude Code todavía
+
+Instalar 5 skills antes de entender bien qué hace una skill básica es contraproducente. Empezá con [una skill propia](/boveda/skill-code-reviewer), entendé bien el concepto, y después sumá.
+
+---
+
+## El patrón general
+
+Estas 5 ejemplifican una idea más amplia: **las skills son tools que extienden Claude para tu workflow**. La diferencia con escribir prompts complejos cada vez es que las skills se **invocan solas** cuando Claude detecta que aplican.
+
+Si en tu trabajo hacés algo repetido (auditar diseño, conectar APIs, testear flows), hay buenas chances de que **ya exista una skill** para eso. `find-skills` te las muestra.
+
+---
+
+## Próximos pasos
+
+- Si todavía no escribiste tu primera skill, [skill code-reviewer](/boveda/skill-code-reviewer) es el ejemplo más claro
+- Para entender qué es una skill vs un MCP vs un plugin, [anatomía de Claude](/boveda/anatomia-claude)
+- Para una combinación específica de 3 skills más opinadas, [trío de skills](/boveda/trio-skills-claude-code)

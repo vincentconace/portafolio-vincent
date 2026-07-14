@@ -1,0 +1,445 @@
+---
+title: "Andromeda — the 8 rules of post-2026 Meta Ads with prompts for Claude"
+description: "Andromeda didn't break Meta Ads — it widened the gap between those with a system and those without. The 8 rules we apply every week: creative is targeting, the first frame is targeting, the landing page is targeting. Language mining across 4 sources, awareness mapping and a decision framework — all with 10 copy-paste prompts."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "meta"]
+publishedAt: "2026-05-28"
+readingTime: "13 min"
+relatedSlugs: ["claude-meta-ads", "claude-ads", "claude-copywriter"]
+---
+
+## What changed with Andromeda
+
+Andromeda is the recommendation engine that Meta started using in earnest to decide who each ad gets shown to.
+
+**Before**: you could compensate for a weak creative with a good interest stack.
+
+**Now**: the **creative is the targeting**. What you say, how you say it, what shows up in the first frame and what your landing page says — that's what defines who Meta goes out to find.
+
+Accounts with a system are scaling like never before. The ones without run in circles: they launch 40 ads with no method, one eats the budget, the rest get switched off, and nobody knows what made the winner win.
+
+---
+
+## The 3 conceptual pillars
+
+### Pillar 1 — The creative IS the targeting
+
+What you say in the ad (who you're talking to, what pain you name, what words you use) tells Meta who to show the ad to. **No interest stack fixes a generic ad**.
+
+### Pillar 2 — Your landing page is targeting too
+
+Andromeda **scrapes your landing page**, sees what people click, what they fill out. If the ad says one thing and the landing page another, the algorithm receives a **mixed signal** and distribution drops.
+
+### Pillar 3 — The first frame is targeting
+
+Second 0 of the video does targeting **before the first word**. A bedroom at night triggers one profile. A kitchen triggers another. A clinical white background triggers no one.
+
+---
+
+## The magic word — `ultrathink`
+
+Before the rules, one tool:
+
+In prompts that require **deep reasoning** (audits, mappings, decision frameworks), add the word `ultrathink` to the prompt. In Claude Code it triggers extended reasoning mode. In Claude.ai web, turn on the **Extended Thinking** toggle — same effect.
+
+Reasoning tier list:
+
+```
+think < think hard < think harder < ultrathink (max)
+```
+
+For audits and frameworks: **always ultrathink**.
+
+For mechanical tasks (formatting a list, translating): not needed.
+
+---
+
+## The 8 rules
+
+| # | Rule | In 1 line |
+|---|-------|-----------|
+| 1 | Volume is not strategy | Guessing with a bigger budget is not testing |
+| 2 | Let go of audience targeting | Meta places better than you do |
+| 3 | Creative + landing are the targeting | Andromeda reads both |
+| 4 | Mine the customer's language | The winning hook doesn't come out of a meeting |
+| 5 | Map every ad to awareness | Frequency 5-6 = you've run out of people at that level |
+| 6 | Test angles across formats | One angle in a single format tells you nothing |
+| 7 | Build from the winners | The winner is a signal, not a destination |
+| 8 | Decision framework BEFORE launching | If you decide with a red dashboard, you decide with emotion |
+
+---
+
+## Rule 4 — Mine the customer's language
+
+The winning hook doesn't come out of a meeting. It comes from:
+- A frustrated customer posting on Reddit
+- A review on Trustpilot
+- A comment a competitor never answered
+
+The work is to **go to those places and bring back the exact words** — without polishing them, without "improving" them.
+
+### 4 sources and their prompts
+
+#### Source 1 — Your own reviews
+
+500 minimum. Load them into Claude and ask it to extract exact language:
+
+```
+You're a creative strategist for Meta Ads in 2026 (post-Andromeda).
+
+I'm going to paste in my customers' reviews (500 minimum). Your job:
+
+1. Extract the EXACT LANGUAGE they use to describe:
+   - The pain before buying (literal pain point)
+   - The solutions they tried and that failed
+   - The desired outcome (how they imagined their life after)
+   - The "aha moment" (what finally made them buy)
+
+2. Give me back 15 distinct hook angles based on VERBATIM
+   phrases. DON'T paraphrase: copy the customer's words.
+
+3. For each hook, assign an awareness level (Unaware /
+   Problem aware / Solution aware /
+   Product aware / Ready to buy).
+
+4. Star the 3 angles most likely to
+   scale beyond the current bottom-of-funnel.
+
+ultrathink — I want in-depth analysis, not a summary.
+
+Reviews:
+[PASTE YOUR REVIEWS HERE]
+```
+
+#### Source 2 — Reddit
+
+You're looking for the pain (NOT your brand). Sort by upvotes.
+
+```
+You're a market researcher for Meta Ads. I'm going to paste posts
+and comments from Reddit about [TOPIC / CUSTOMER PAIN].
+
+Your job:
+1. Extract the 10 most up-voted phrases that describe the pain
+   in the customer's literal language.
+2. Identify the 5 "common enemies" they mention (products
+   they tried and that failed, brands that let them down, myths
+   they repeat).
+3. Give me back 10 hooks ready for short video (UGC / podcast
+   style) using those verbatim phrases.
+4. For each hook, suggest the first frame (setting, time,
+   camera) — remember the first frame is targeting.
+
+ultrathink — emotional and identity patterns, not just
+descriptive ones.
+
+Posts:
+[PASTE HERE]
+```
+
+#### Source 3 — Comments on competitor ads
+
+Where people say **exactly what stopped them from buying**.
+
+```
+You're a creative auditor. I'm going to paste the comments from
+my competitors' best-performing ads on Meta.
+
+Your job:
+1. Identify the 5 most repeated OBJECTIONS (what stopped
+   people from buying from them).
+2. Identify the 5 most repeated PRAISES (what they did like
+   but wasn't enough to convert).
+3. For each objection, write me a hook that dissolves it in
+   the first 3 seconds.
+4. For each praise my competitors aren't taking advantage of,
+   suggest an angle of attack for me.
+
+Be brutally honest about where I'm losing.
+
+Comments:
+[PASTE HERE]
+```
+
+#### Source 4 — Your own account (90 days)
+
+The data you already have.
+
+```
+You're a growth marketer doing a post-Andromeda audit. I'm
+sending you the report from the last 90 days of my Meta account
+(spend, CPA, ROAS, frequency, hook rate, hold rate per ad).
+
+Your job:
+1. Identify the 3 ads that spent the most and dissect WHAT
+   made them work (hook, angle, format, first frame,
+   awareness level they were targeting).
+2. Detect whether there's a pattern in what scales vs what dies.
+3. Map EVERY active ad to an awareness level. Tell me
+   what % of spend is concentrated in each level.
+4. Tell me what the GAP is: which awareness level I'm NOT
+   targeting and why that's capping my spend ceiling.
+5. Propose 5 new angles to cover the gap.
+
+ultrathink — the spend ceiling isn't broken with more
+bottom-of-funnel.
+
+Report:
+[PASTE HERE]
+```
+
+---
+
+## Rule 5 — Map every ad to awareness
+
+80-90% of the creative in most accounts is **bottom-of-funnel**. When frequency hits 5-6, it's not that you've run out of creativity — **you've run out of people at that level**.
+
+### The 5 levels
+
+| Level | State | Hook example |
+|-------|--------|-----------------|
+| 1 — Unaware | Doesn't know they have a problem | "If your dog already knows bath time is coming before you even turn on the tap, there's something you're not seeing." |
+| 2 — Problem aware | Recognizes the pain, isn't looking for a solution | "Does it frustrate you that every time you search for something in your inbox it takes 10 minutes?" |
+| 3 — Solution aware | Tried others and failed | "You tried 3 CRMs and they all ended up as an abandoned spreadsheet. See why." |
+| 4 — Product aware | Knows your brand, hasn't bought | "You know we exist. Here are the 3 reasons people didn't regret it." |
+| 5 — Ready to buy | Just needs the offer | "Today only: annual plan with 2 months free." |
+
+### Prompt — awareness classifier
+
+```
+I'm going to paste my list of active ads (copy + description
+of the visual). For each one:
+
+1. Assign an awareness level.
+2. Justify briefly (what specific phrase tells you).
+3. At the end, give me the % of my ads at each level.
+4. If more than 80% is in "Product aware" or "Ready to
+   buy", propose 5 hooks for "Unaware" and
+   "Problem aware".
+
+ultrathink — frequency 5-6 doesn't mean you've run out of
+creativity, it means you've run out of people at that level.
+
+Ads:
+[PASTE HERE]
+```
+
+---
+
+## Rules 1-2-3 — Creative + landing + first frame
+
+3 rules that are really one: **everything the algorithm sees counts as targeting**.
+
+### How to brief the first frame
+
+When you hand the brief to the creator, don't just tell them the hook. Tell them the **exact setting, time of day, wardrobe, camera, what's visible in the background**. So specific they can't improvise.
+
+```
+I'm going to brief a creator for an ad. I need a brief with an
+EXPLICIT first frame.
+
+Context:
+- Product: [PASTE]
+- Audience (customer language): [PASTE]
+- Awareness level: [Unaware / Problem aware / etc.]
+- Angle: [PASTE]
+- Hook: [PASTE]
+
+Generate a brief that includes:
+1. First frame (second 0): setting, time of day, wardrobe,
+   camera, what's visible in the background. So specific the creator
+   can't improvise.
+2. Seconds 1-3: how the hook connects with the visual.
+3. Seconds 3-15: development of the angle (without drifting).
+4. Seconds 15-30: proof / social proof / demo.
+5. CTA + landing: copy for the final frame and suggested link. The
+   landing page has to repeat the same language as the hook.
+
+Be brutally specific. A vague brief = a generic ad.
+```
+
+### Ad ↔ landing coherence audit
+
+```
+Andromeda reads my landing page and my ads. If they say different
+things, I lose distribution.
+
+I'm sending you:
+- Ad (copy + visual description): [PASTE]
+- Landing page (URL or text): [PASTE]
+
+Audit:
+1. Does the ad's hook appear VERBATIM in the first scroll
+   of the landing page? If not, why not?
+2. Is the ad's angle the dominant angle of the landing page,
+   or is the landing page selling a different pitch?
+3. Does the ad's awareness level match the landing page?
+   (Unaware → educational landing page, not a direct checkout.)
+4. Are the CTAs coherent? Are they measuring the same event?
+5. List of discrepancies + the exact fix for each one.
+
+ultrathink — the algorithm is reading mixed signals. That
+explains why a good ad sometimes doesn't scale.
+```
+
+---
+
+## Rules 6-7 — Testing and winners
+
+### The important difference
+
+- **Angle**: the idea the ad is built on. The frustration or desire that makes the right person feel the ad was made for them.
+- **Hook**: the first 3 seconds. The way you open the angle.
+- **Format**: the vehicle (UGC, static, podcast, street).
+
+Same angle in UGC + static + podcast → if all 3 die, the angle is the problem. If one scales, the format was the variable.
+
+### Prompt — 5 hook variations
+
+```
+I have a validated angle that works. I want 5 hook variations
+(first 3 sec) to test the same concept.
+
+Validated angle:
+[DESCRIBE IT AND WHY IT WORKS]
+
+Your job:
+1. Generate 5 hooks that attack the SAME angle from 5
+   different emotional entry points:
+   - Hook 1: direct question about the pain
+   - Hook 2: visual pattern interrupt + striking phrase
+   - Hook 3: contrast (before/after or what they think vs reality)
+   - Hook 4: confessional testimonial
+   - Hook 5: statistic or specific data point
+2. For each hook, describe the first frame (setting, wardrobe,
+   camera).
+3. Suggest the ideal format for each (UGC, static, podcast, street).
+
+ultrathink — I want REAL variation, not the same words
+reordered.
+```
+
+### Prompt — extend a winner
+
+```
+I have a winning ad. I want to squeeze the juice out of it before it fatigues.
+
+Winning ad:
+- Hook: [PASTE]
+- Angle: [PASTE]
+- Format: [UGC / static / podcast / street]
+- Metrics: [CPA, ROAS, spend, frequency]
+
+Give me 3 extension strategies:
+1. Frankenstein: combine this hook with the body of ANOTHER ad
+   that already worked.
+2. Same angle, different format: turn this UGC into static,
+   podcast and street interview.
+3. 5 hook variations: 5 new ways to open the same
+   angle.
+
+ultrathink — the winner is a signal, not a destination.
+```
+
+---
+
+## Rule 8 — Decision framework BEFORE launching
+
+Two mistakes that kill accounts:
+- **Switching off too soon**: if it's spending, the algorithm is learning. Give it 3-5 days minimum
+- **Holding on out of hope**: if after several weeks and significant spend it doesn't hit the target, holding on is burning budget
+
+### 3 principles
+
+1. **Trust spend over per-ad ROAS**. Meta optimizes the whole account, not ad by ad. An ad with low ROAS that spends a lot is often doing invisible work.
+
+2. **Optimize for PURCHASE**. Always. Train wrong → find wrong. Accounts that optimize for ATC, view content or traffic find the wrong people with precision.
+
+3. **Write your criteria BEFORE launching**. If you define them with a red dashboard, you decide with emotion.
+
+### Prompt — decision framework
+
+```
+I want to define my decision framework BEFORE launching the next
+batch — so I DON'T decide under pressure while it's spending.
+
+Data:
+- Target CPA: [X]
+- Target ROAS: [X]
+- Average daily spend: [X]
+- Category / margin: [PASTE]
+
+Generate a framework with:
+1. Review threshold: at what spend do I review an ad?
+   (3-5 days minimum if it's spending)
+2. Kill threshold: what CPA/ROAS at how much spend = kill?
+3. Soft metrics that signal potential: hook rate, hold rate,
+   CTR, thumb-stop. Thresholds that say "it has juice even if
+   CPA is high"
+4. Top-spender rule: if an ad spends a lot even though
+   per-ad ROAS is low, when do I NOT switch it off?
+5. Pixel optimization: confirm I'm optimizing for
+   PURCHASE.
+
+Return it as a printable decision-tree chart to stick next
+to Ads Manager.
+
+ultrathink — I don't want generic, I want a framework for MY margin
+and spend velocity.
+```
+
+---
+
+## Why the 8 matter together
+
+Andromeda **learns from consistency**. If every ad tells a different story, the algorithm resets. If you feed it a system — same language, same angle across formats, same awareness level attacked in several ways — **it compounds**.
+
+That's why these 8 work together: no single one is enough on its own.
+
+---
+
+## What most people are still getting wrong in 2026
+
+- **Optimizing for ATC, view content or traffic** instead of purchase
+- **Switching off the top-spender** because its per-ad ROAS is low
+- **Throwing out 40 ads with no system** and calling it "testing"
+
+---
+
+## Powerful combinations
+
+### With Claude Meta Ads
+
+[Claude Meta Ads](/boveda/claude-meta-ads) is the safe connector to the account. Andromeda is the conceptual rules. **Connector + system**.
+
+### With Claude Ads
+
+[Claude Ads](/boveda/claude-ads) is the multi-platform orchestrator. Andromeda digs specifically into Meta.
+
+### With Claude Copywriter
+
+```
+> Generate ad copy with the Andromeda rules.
+  Then run it through /humanizer so it doesn't sound like AI.
+```
+
+[Claude Copywriter](/boveda/claude-copywriter) closes the loop.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You've never touched Ads Manager | Start with the basics first |
+| You're looking for campaign budget tricks | This guide is about creatives |
+| Bottom-of-funnel only, without raising awareness | The system requires a mindset shift |
+
+---
+
+## Next steps
+
+- For a safe connector to Meta without getting banned, [Claude Meta Ads](/boveda/claude-meta-ads)
+- For a multi-platform suite, [Claude Ads](/boveda/claude-ads)
+- To humanize the generated copy, [Claude Copywriter](/boveda/claude-copywriter)

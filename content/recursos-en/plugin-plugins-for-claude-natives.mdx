@@ -1,0 +1,143 @@
+---
+title: "Plugins for Claude Natives — 13 plugins for power users with a Korean flavor"
+description: "team-attention marketplace (691⭐) with 13 plugins for advanced users: agent council (Gemini+GPT+Codex), session wrap, KakaoTalk, gmail, google-calendar, Korean podcast, doubt, team-assemble and more."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "gmail", "google-calendar"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["5-claude-skills-necesarias", "nueve-prompts-cowork", "dominar-cowork"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/plugins-for-claude-natives"
+github: "https://github.com/team-attention/plugins-for-claude-natives"
+---
+
+## What it is
+
+A marketplace built for "Claude natives" — people who live in Claude every day and want specific conveniences. team-attention put together 13 varied plugins with a lot of connection to the Korean world (bilingual Korean/English TTS, KakaoTalk, Korean podcasts), but most of them are useful to any user.
+
+The most interesting ones for general use:
+- `agent-council` — collects opinions from Gemini + GPT + Codex
+- `clarify` — three lenses to clarify (vague specs, blind spots, content vs form)
+- `session-wrap` — session-closing workflow with multi-agent analysis
+- `team-assemble` — build agent teams dynamically
+- `doubt` — forces Claude to re-validate when you have doubts
+- `gmail` and `google-calendar` — multi-account, real integration
+
+The more specific / Korean ones:
+- `say-summary` — macOS Korean/English TTS
+- `youtube-digest` — summaries with Korean translation and quizzes
+- `kakaotalk` — KakaoTalk messages via the Accessibility API
+- `podcast` — Korean episodes from URLs/tweets/articles
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | team-attention |
+| Stars | 691 |
+| Type | Marketplace (13 plugins) |
+| Components | 16 skills, 3 hooks, 9 agents, 1 command |
+| Marketplace | `team-attention/plugins-for-claude-natives` |
+
+### The plugins by use case
+
+**Multi-model / multi-agent:**
+- `agent-council` — Gemini + GPT + Codex give opinions simultaneously
+- `team-assemble` — dynamic agent teams for complex tasks
+- `session-wrap` — multi-agent wrap-up (docs, automation, learning, follow-up)
+
+**Workflow / authoring:**
+- `clarify` — three lenses to clarify (specs, blind spots, leverage)
+- `doubt` — forces re-validation with `!doubt`
+- `interactive-review` — web UI for visual approval of plans/docs
+- `dev` — community scanning + technical decision-making
+
+**Productivity:**
+- `gmail` — multi-account read/search/send/manage with a 5-step workflow
+- `google-calendar` — multi-account, parallel querying, conflict detection
+- `say-summary` — macOS Korean/English TTS
+
+**Korean / Korea:**
+- `kakaotalk` — KakaoTalk via the Accessibility API
+- `podcast` — Korean podcasts with OpenAI TTS + YouTube auto-upload
+- `youtube-digest` — summary + insights + Korean translation + quizzes
+
+## How to install it
+
+```bash
+/plugin marketplace add team-attention/plugins-for-claude-natives
+
+# For general use (non-Korean):
+/plugin install agent-council@team-attention-plugins-for-claude-natives
+/plugin install clarify@team-attention-plugins-for-claude-natives
+/plugin install doubt@team-attention-plugins-for-claude-natives
+/plugin install gmail@team-attention-plugins-for-claude-natives
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+I installed the team-attention/plugins-for-claude-natives marketplace. I'm
+[a Spanish speaker / Korean / bilingual]. Out of the 13 plugins, recommend
+the ones most useful for me and give me the command to install them.
+```
+
+## What you can do with this
+
+### Cross-opinion from three models
+
+`agent-council` consults Gemini, GPT, and Codex simultaneously on the same topic, synthesizes the three answers, and shows you where they agree and where they disagree. Useful for decisions where you want different perspectives.
+
+### Validate when you have doubts
+
+`doubt` is triggered with `!doubt` — it forces Claude to re-read its work and re-validate. The human equivalent of "hey, read it again".
+
+### Close a session with an automatic summary
+
+`session-wrap` runs at the end of a long session: it documents what was done, identifies patterns to automate, captures learnings, lists follow-ups. A good adoption of [Compound Engineering](/boveda/plugin-compound-engineering-plugin) without installing that whole package.
+
+### Multi-account Gmail with a safe-send workflow
+
+`gmail` has a 5-step workflow before sending an email — you verify the recipient, subject, content, etc. Anti-misfire for important emails. If you manage several accounts, it's very useful.
+
+### Multi-account Calendar with conflict detection
+
+`google-calendar` queries several accounts in parallel and detects cross-account conflicts. Something like "I have a meeting on the work account at 3, but am I free on the personal one?". It asks both.
+
+### If you know Korean
+
+If your usage includes Korean, `say-summary`, `youtube-digest`, `podcast`, and `kakaotalk` are unique. Few plugins cover that linguistic pipeline.
+
+## Real benefits
+
+- **Focused plugins** (not a giant marketplace, 13 curated ones).
+- **`agent-council` covers the multi-LLM pattern** without installing all of [Octopus](/boveda/plugin-claude-octopus).
+- **`doubt` and `clarify`** are useful "metacognition" tools that few plugins cover.
+- **Multi-account Gmail/Calendar** without having to fight the setup.
+- **Unique Korean coverage** for that audience.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Gmail / Calendar / Slack:** a lot of the value of the productivity plugins falls away.
+- **The Korean plugins don't apply** if you don't handle Korean.
+- **`team-assemble` requires using Claude Code's agent teams feature** — check that your version supports it.
+- **`kakaotalk` only works on macOS** (it uses the Accessibility API).
+- **Some plugins are experiments** — don't expect official Anthropic marketplace quality.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Plugins for Claude Natives](https://www.aitmpl.com/plugins/plugins-for-claude-natives) — all 13 plugins.
+- **Repo on GitHub:** [team-attention/plugins-for-claude-natives](https://github.com/team-attention/plugins-for-claude-natives) — code, issues.
+
+## Related resources
+
+- [5 essential Claude Skills](/boveda/5-claude-skills-necesarias) — the minimum set. A good base before layering on more specific plugins like these.
+- [9 prompts for Claude Cowork](/boveda/nueve-prompts-cowork) — for Cowork users who want similar productivity (Gmail, Calendar, etc.) without installing plugins.
+- [Master Cowork](/boveda/dominar-cowork) — if your life is in Gmail/Calendar/Slack, Cowork may be a better environment than Claude Code for this.

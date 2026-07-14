@@ -1,0 +1,448 @@
+---
+title: "n8n MCP — Claude builds n8n automations without you touching a single node"
+description: "Free MCP server (18k★ GitHub) that gives Claude access to n8n's 1,505 nodes + thousands of templates + your instance's API. Describe the agent you want in plain language, Claude finds a template, validates the config, builds the workflow, and leaves it in draft. Setup in 5 min."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "n8n", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["crea-agentes-con-claude", "mcp-server-propio", "agentes-managed-claude"]
+---
+
+## The problem
+
+**Before**: n8n is the best tool for automating your business without paying SaaS for everything. But you'd open the screen, see **1,505 possible nodes**, and not even know which one to drag. You configured credentials by hand, read docs, tried, failed. Without coding, you were drowning.
+
+**Now**: **n8n-mcp** is an MCP server (free, MIT, ~18k stars) that gives Claude direct access to:
+- Documentation for all 1,505 nodes
+- Thousands of ready-made templates
+- Your n8n instance's API
+
+You explain what you want in plain language → Claude finds a template → validates the config → builds the workflow → leaves it ready for you.
+
+Repo: `czlonkowski/n8n-mcp`. Open source MIT.
+
+---
+
+## The change
+
+| Before | After |
+|-------|---------|
+| Blind drag & drop across 1,505 nodes | You describe it, Claude builds it |
+| You configure credentials one by one | You load them in n8n, Claude references them by ID |
+| Debugging in production | Testing in draft with `n8n_test_workflow` |
+| You paid a freelancer $500-2000 for an automation | Almost zero |
+
+---
+
+## Who needs it
+
+✅ You already pay for n8n (cloud or self-hosted) and aren't tapping its potential
+✅ You were about to pay a freelancer $500-2k for an automation
+✅ Your business has repetitive flows that aren't automated
+✅ A client asking for a "WhatsApp agent" / "inbox organizer"
+
+---
+
+## Setup — 2 paths
+
+### Path A — Hosted (no install, just to try)
+
+`dashboard.n8n-mcp.com` gives you a free API key with **100 calls/day**. Good for trying it out before committing.
+
+Hosted MCP config (Claude Code):
+
+```json
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "MCP_API_KEY": "your-api-key-from-the-dashboard"
+      }
+    }
+  }
+}
+```
+
+**Limitation**: the management tools (create/edit real workflows) require your own n8n instance. For the 3 real agents → Path B.
+
+### Path B — Self-host with your n8n
+
+For the 3 agents in the real flow. You need:
+
+| Variable | Where from |
+|----------|----------|
+| `N8N_API_URL` | Your n8n base URL + `/api/v1` (e.g.: `https://my-n8n.com/api/v1`) |
+| `N8N_API_KEY` | n8n → Settings → n8n API → Create an API key |
+
+#### Prompt for Claude to install it
+
+```
+I want to install n8n-mcp (github.com/czlonkowski/n8n-mcp) in
+this Claude Code. Do it for me:
+
+1. Add n8n-mcp to my MCP config using `claude mcp add` with
+   the command `npx n8n-mcp`.
+
+2. Ask me for the 2 variables it needs:
+   - N8N_API_URL (my n8n's API URL, usually
+     https://my-n8n.com/api/v1)
+   - N8N_API_KEY (I generate it in n8n → Settings → API)
+
+3. Set them as the MCP server's env.
+
+4. Call the n8n_health_check tool to confirm the
+   connection works.
+
+5. If it fails, tell me exactly what to ask n8n for to fix it.
+
+DON'T touch real workflows yet. Just the connection.
+```
+
+#### Manual config
+
+```json
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["n8n-mcp"],
+      "env": {
+        "N8N_API_URL": "https://your-n8n.com/api/v1",
+        "N8N_API_KEY": "your-n8n-api-key"
+      }
+    }
+  }
+}
+```
+
+---
+
+## Verify the connection
+
+```
+> Use the MCP's n8n_health_check tool and tell me:
+
+  - Whether the connection to my instance is alive
+  - n8n version
+  - How many workflows I have active vs. inactive
+  - Whether there are credential errors to fix before building
+
+  If everything's OK, give me the green light and propose which workflow to build first.
+```
+
+### If it fails
+
+90% of the time it's one of 3 errors:
+1. **URL without `/api/v1`**
+2. **API key with extra spaces** copied by accident
+3. **Your n8n doesn't expose a public API** — check the `N8N_PUBLIC_API_DISABLED` variable
+
+---
+
+## The 3 agents that change a business
+
+### Important
+
+The **credentials** (WhatsApp token, Gmail password, Twilio keys) **you enter yourself** directly in n8n → Credentials. Claude only references them by ID. **Never paste them in the prompt**.
+
+---
+
+### Agent 1 — 24/7 WhatsApp receptionist
+
+```
+I need an agent in n8n that answers WhatsApp for me while I
+sleep. Build this workflow:
+
+Trigger:
+- Incoming WhatsApp webhook (WhatsApp Business or Twilio).
+
+Logic:
+1. Receive the customer's message
+2. Detect intent: book appointment, request info, complaint, other
+3. If it's booking an appointment → check my Google Calendar, propose
+   3 free time slots, and confirm with the customer
+4. If they request info → reply with the FAQs I give you
+5. If it's a complaint or other → mark as pending and notify me by email
+
+End of day:
+- At 9pm, send a summary email: how many messages it answered, how many
+  appointments it booked, which ones are still pending.
+
+Before creating:
+1. Call search_templates with searchMode: 'by_nodes' and
+   nodeTypes: ['n8n-nodes-base.whatsApp',
+                'n8n-nodes-base.googleCalendar']
+2. Build the workflow with n8n_create_workflow
+3. Validate it with validate_workflow before activating
+4. DON'T activate it. Leave it in draft so I can turn it on.
+```
+
+### Agent 2 — Gmail organizer
+
+```
+I need an agent that organizes my Gmail inbox on its own.
+
+Trigger:
+- Every 15 min, check for new emails.
+
+Classification rules:
+1. Emails from customers who already bought → label "customers"
+   + main inbox
+2. Emails with "budget", "quote", or "invoice" → move
+   to the Drive folder "Quotes to review" + label
+3. Newsletters, promos, notifications → archive + label "noise"
+4. Emails where my name appears in the body (not just in CC)
+   → mark important + leave in inbox
+5. Anything else → leave in inbox untouched
+
+Before building:
+1. Call search_templates with query: 'gmail filter classify'
+2. Build with n8n_create_workflow and validate with validate_workflow
+3. Test it in dry-run with the last 10 emails before activating
+
+DON'T activate anything until I confirm the rules.
+```
+
+### Agent 3 — Call receptionist
+
+```
+I need an agent that answers my business's calls 24/7 as a
+receptionist. Build this workflow:
+
+Trigger:
+- Incoming call via Twilio (or the available voice provider).
+
+Flow:
+1. Recorded greeting with the business name
+2. The agent's voice (ElevenLabs or available TTS) asks the reason
+3. If they want to book → check Google Calendar, offer 3 time slots
+4. If they want product info → reply with the catalog I give you
+5. If it's an emergency → escalate: call my cell + message the chat
+   with a transcript
+
+Closing:
+- Transcribe the full call
+- Send a summary to the Slack channel #reception with: customer name,
+  reason, next step, transcript attached
+
+Before creating:
+1. Call search_templates with nodeTypes: ['n8n-nodes-base.twilio',
+   'n8n-nodes-base.slack']
+2. If there's a similar template, use it as a base
+3. Build with n8n_create_workflow and validate with validate_workflow
+4. DON'T activate it or add my Twilio credentials. Leave the
+   workflow ready and tell me exactly which credentials to create.
+```
+
+### How to run them in order
+
+**One by one**, NOT all 3 at once:
+1. Paste the prompt
+2. Wait for Claude's plan
+3. Review the workflow in n8n
+4. Activate when you're happy
+5. If anything looks off, ask for `n8n_test_workflow` before production
+
+---
+
+## The MCP's 20 tools
+
+### 7 core tools (work without your n8n)
+
+| Tool | What for |
+|------|----------|
+| `tools_documentation` | Docs for any MCP tool |
+| `search_nodes` | Full-text search across the 1,505 nodes |
+| `get_node` | Detail of a node (minimal/standard/full) |
+| `validate_node` | Validates a node's config before adding it |
+| `validate_workflow` | Validates the full workflow with suggestions |
+| `search_templates` | Searches thousands of templates |
+| `get_template` | Full JSON of a template |
+
+### 13 management tools (need your n8n)
+
+| Tool | What for |
+|------|----------|
+| `n8n_create_workflow` | Creates a new workflow |
+| `n8n_get_workflow` | Fetches an existing workflow |
+| `n8n_update_partial_workflow` | Updates by diffs (token-efficient) |
+| `n8n_validate_workflow` | Validates a workflow by ID |
+| `n8n_autofix_workflow` | Suggests automatic fixes |
+| `n8n_test_workflow` | Runs in test mode |
+| `n8n_executions` | Lists/queries past executions |
+| `n8n_manage_credentials` | CRUD for credentials |
+| `n8n_health_check` | Checks connectivity |
+| `n8n_audit_instance` | Security audit + technical debt |
+| `n8n_deploy_template` | Deploys a template directly |
+| `n8n_workflow_versions` | History + rollback |
+| `n8n_delete_workflow` | Deletes a workflow (with confirmation) |
+
+---
+
+## Pro prompts
+
+### Search templates before building from scratch
+
+```
+Before building a workflow from scratch, look for existing templates.
+
+search_templates modes depending on the need:
+- By task: { searchMode: 'by_task', task: 'webhook_processing' }
+- By complexity (beginners): { searchMode: 'by_metadata',
+    complexity: 'simple', maxSetupMinutes: 30 }
+- By nodes: { searchMode: 'by_nodes',
+    nodeTypes: ['n8n-nodes-base.slack'] }
+- Free text: { query: 'whatsapp appointment reminder' }
+
+When you find a good one, get_template with mode: 'full' to
+see the JSON. If you want to deploy it directly for me, n8n_deploy_template
+— but first give me a summary of what it does and which nodes it uses.
+```
+
+### Audit your instance
+
+```
+Audit my instance with n8n_audit_instance. Report:
+
+1. Workflows exposed to the internet without authentication
+2. Credentials with broader permissions than needed
+3. Workflows that did NOT run in 30+ days (candidates to archive)
+4. Recurring errors in the last 7 days
+5. Deprecated nodes to migrate to a new version
+
+Order by severity: critical → recommended → optional.
+For each finding, propose a concrete fix but DON'T apply it.
+Just tell me what you'd touch and what risk it carries.
+```
+
+### Update without breaking the workflow
+
+```
+Modify workflow {WORKFLOW_ID} without tearing everything down and
+rebuilding. Use n8n_update_partial_workflow with diff operations:
+
+Changes:
+1. [Change 1, e.g.: "add an IF node after the webhook that
+   filters by country"]
+2. [Change 2, e.g.: "update the Slack node's credentials"]
+3. Clean up orphaned connections if any remain
+
+Before applying:
+1. n8n_get_workflow with mode: 'structure' to see the current state
+2. Give me the operations plan (addNode, updateNode,
+   addConnection, removeConnection, cleanStaleConnections) and
+   show it to me before executing
+3. Then validate with n8n_validate_workflow
+
+If the workflow is active in production, WARN ME before touching anything.
+```
+
+### Test before activating
+
+```
+Test workflow {WORKFLOW_ID} without putting it into production. Use
+n8n_test_workflow:
+
+1. If it's a webhook → send it the test payload I give you
+2. If it's a manual trigger → run it with dummy data
+3. If it has a chat trigger → send 3 messages that cover:
+   happy path, edge case, expected error
+
+Then:
+- Show me the output of each node in order
+- Flag in red the ones that failed
+- If something failed, propose a fix with n8n_autofix_workflow but DON'T
+  apply it.
+```
+
+---
+
+## The 5 security rules
+
+### 1. You enter credentials, not Claude
+
+API keys, WhatsApp tokens, SMTP passwords, Twilio — **never in the prompt**. You create them in n8n → Credentials. The MCP references them by ID.
+
+### 2. DON'T edit production workflows directly with AI
+
+**The repo's rule #1**. Work in a **draft** workflow, validate with `validate_workflow + n8n_test_workflow`. When it's clean, **you activate it by hand**.
+
+### 3. Public webhooks behind a secret
+
+Any webhook exposed to the internet must require a secret header or sit behind an IF node that validates. Otherwise, anyone can trigger it.
+
+### 4. Audit once a month
+
+Monthly `n8n_audit_instance`. Review abandoned workflows, credentials with broad permissions, deprecated nodes.
+
+### 5. Periodic backup
+
+The MCP doesn't back up anything. If self-hosted: DB snapshots. If n8n Cloud: export critical workflows weekly.
+
+See the repo's `SECURITY_HARDENING.md` for the full guide.
+
+---
+
+## Anti-patterns
+
+### 1. Activating workflows directly from Claude
+
+NO. **You always activate** after reviewing in the n8n UI.
+
+### 2. Pasting credentials in the prompt
+
+**Never**. Only IDs. The creds go in n8n → Credentials.
+
+### 3. Skipping `n8n_test_workflow`
+
+Testing in draft with dummy data saves you 90% of production problems.
+
+### 4. Multiple agents at once
+
+Better one by one. Each agent validated before the next.
+
+### 5. Never auditing
+
+After 3-6 months, your n8n accumulates zombie workflows, abandoned credentials, technical debt. Audit.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You don't have n8n and don't plan to | The hosted path is just for exploring |
+| The workflow is a single step | Zapier is enough |
+| Strict compliance that doesn't allow an exposed API | You need robust auth + audit logs |
+| The team knows nothing about workflows | The initial learning curve still exists |
+
+---
+
+## Powerful combinations
+
+### With Build Agents
+
+```
+> Design the agent with [build agents with Claude](/boveda/crea-agentes-con-claude).
+> You implement the agent with n8n-mcp.
+```
+
+Conception + technical execution.
+
+### With Managed Agents
+
+[Managed Agents](/boveda/agentes-managed-claude) runs on Anthropic's cloud. n8n-mcp runs on your n8n.
+
+For complex workflows with many steps: n8n.
+For simpler cloud-native tasks: Managed Agents.
+
+---
+
+## Next steps
+
+- To design agents before implementing, [build agents with Claude](/boveda/crea-agentes-con-claude)
+- For a managed alternative without your own infra, [Managed Agents](/boveda/agentes-managed-claude)
+- To understand MCPs in general, [your own MCP server](/boveda/mcp-server-propio)

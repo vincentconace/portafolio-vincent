@@ -1,0 +1,287 @@
+---
+title: "Your own MCP server — giving Claude the tools your team needs"
+description: "I built an MCP server from scratch in TypeScript that exposes custom tools to Claude Code. Real-world case: a server that queries your internal database and returns the latest orders. Includes authentication, schema validation and deploy."
+difficulty: "avanzado"
+category: "guías"
+tools: ["claude-code", "mcp", "typescript", "node"]
+featured: true
+featuredOrder: 4
+version: "v1.2"
+publishedAt: "2026-05-18"
+readingTime: "22 min"
+github: "https://github.com/anthropics/model-context-protocol"
+relatedSlugs: ["hooks-automatizacion", "plugin-supabase-mcp"]
+---
+
+## What this is for
+
+An **MCP server** (Model Context Protocol) gives Claude tools that your team controls. The difference from hooks: hooks are automatic actions; the tools of an MCP are **functions that Claude decides to invoke** based on context.
+
+Cases where your own MCP wins:
+
+- Querying an internal database that you can't expose over public HTTP
+- Giving it access to your wiki/Notion/Linear with fine-grained permissions
+- Connecting to a legacy system that only has SOAP/SSH
+- Moving sensitive data without it ever leaving the dev's laptop
+
+If your need can be solved with a Bash command or a `curl`, you don't need MCP. **MCP shines when there's state, schemas, and authentication that you want to centralize.**
+
+---
+
+## Requirements
+
+<Checklist
+  storageKey="mcp-server-prereqs"
+  items={[
+    "Node.js 20+ installed",
+    "Claude Code v1.5 or higher (check with: claude --version)",
+    "Intermediate knowledge of TypeScript",
+    "Access to the resource you're going to expose (DB, internal API, etc.)",
+  ]}
+/>
+
+---
+
+## Step 1 — Bootstrap the project
+
+<Step number={1} title="Create the package">
+
+```bash
+mkdir mcp-pedidos && cd mcp-pedidos
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+npm install -D typescript @types/node tsx
+npx tsc --init
+```
+
+Edit `tsconfig.json` so it targets modern ESM:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}
+```
+
+And in `package.json`, add `"type": "module"`.
+
+</Step>
+
+<Step number={2} title="Minimal server">
+
+`src/index.ts`:
+
+```ts
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js'
+import { z } from 'zod'
+
+const server = new Server(
+  { name: 'mcp-pedidos', version: '0.1.0' },
+  { capabilities: { tools: {} } }
+)
+
+// Input schema validated with Zod
+const ListarPedidosInput = z.object({
+  desde: z.string().describe('ISO date. Example: 2026-05-01'),
+  estado: z.enum(['pendiente', 'pagado', 'enviado', 'cancelado']).optional(),
+  limite: z.number().int().min(1).max(100).default(20),
+})
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    {
+      name: 'listar_pedidos',
+      description:
+        'Lists orders since a date. Useful for checking recent customer activity.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          desde: { type: 'string', description: 'ISO date' },
+          estado: { type: 'string', enum: ['pendiente', 'pagado', 'enviado', 'cancelado'] },
+          limite: { type: 'number', default: 20 },
+        },
+        required: ['desde'],
+      },
+    },
+  ],
+}))
+
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  if (req.params.name === 'listar_pedidos') {
+    const args = ListarPedidosInput.parse(req.params.arguments)
+    const pedidos = await consultarBD(args)
+    return {
+      content: [{ type: 'text', text: JSON.stringify(pedidos, null, 2) }],
+    }
+  }
+  throw new Error(`Unknown tool: ${req.params.name}`)
+})
+
+async function consultarBD(args: z.infer<typeof ListarPedidosInput>) {
+  // Here you connect to your real DB (Postgres, MySQL, whatever)
+  // For now, mock:
+  return [
+    { id: 1, cliente: 'Acme SA', estado: 'pagado', monto: 4500, fecha: '2026-05-16' },
+    { id: 2, cliente: 'Beta SRL', estado: 'pendiente', monto: 1200, fecha: '2026-05-17' },
+  ]
+}
+
+const transport = new StdioServerTransport()
+await server.connect(transport)
+```
+
+</Step>
+
+<Step number={3} title="Register it in Claude Code" last>
+
+Add it to the `.claude/settings.json` of the project where you want to use it:
+
+```json
+{
+  "mcpServers": {
+    "pedidos": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-pedidos/dist/index.js"],
+      "env": {
+        "DATABASE_URL": "postgres://..."
+      }
+    }
+  }
+}
+```
+
+Compile and test:
+
+```bash
+npx tsc && claude
+```
+
+Inside Claude, type:
+
+```
+> What pending orders do we have since May 1st?
+```
+
+Claude will detect the `listar_pedidos` tool, invoke it and summarize the response for you.
+
+</Step>
+
+---
+
+## Step 2 — Validation and errors
+
+The problem with returning "whatever came from the DB" is that Claude can receive garbage if the query fails. Pattern I recommend:
+
+```ts
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  try {
+    const args = ListarPedidosInput.parse(req.params.arguments)
+    const pedidos = await consultarBD(args)
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: pedidos.length === 0
+            ? 'No orders found with those filters.'
+            : JSON.stringify(pedidos, null, 2),
+        },
+      ],
+    }
+  } catch (err) {
+    return {
+      isError: true,
+      content: [
+        { type: 'text', text: `Error querying orders: ${(err as Error).message}` },
+      ],
+    }
+  }
+})
+```
+
+With `isError: true`, Claude knows there was a problem and can decide to retry, ask you for info or change its approach.
+
+---
+
+## Step 3 — Authentication
+
+If your MCP server touches sensitive data, **don't trust the caller**. Validate a token on every request:
+
+```ts
+const REQUIRED_TOKEN = process.env.MCP_TOKEN
+if (!REQUIRED_TOKEN) {
+  console.error('MCP_TOKEN not set. Aborting.')
+  process.exit(1)
+}
+
+// In each handler:
+const auth = req.params.arguments?._auth as string | undefined
+if (auth !== REQUIRED_TOKEN) {
+  return {
+    isError: true,
+    content: [{ type: 'text', text: 'Access denied: invalid token.' }],
+  }
+}
+```
+
+Pass the token from `settings.json` via `env`. This prevents a curious process on your machine from invoking your MCP server.
+
+<Callout type="warning" title="Stdio is not public">
+The `StdioServerTransport` transport only listens on the process's stdin. It doesn't open ports. It's secure by default — the risk only appears if you expose the process over the network (with `--transport http`, for example).
+</Callout>
+
+---
+
+## Patterns worth the effort
+
+| Pattern | Why |
+|--------|---------|
+| **One tool = one intent** | Don't build `consultar_o_modificar`. Build separate `consultar_pedidos` and `modificar_pedido`. Claude chooses better. |
+| **Long, specific descriptions** | The tool's `description` is what Claude reads to decide. "Lists orders" is bad. "Lists orders filtered by date and status, sorted by date desc" is better. |
+| **Strict schema on inputs** | Use Zod with `.describe()` on every field. Claude reads the descriptions and builds correct arguments. |
+| **Idempotency where possible** | If a tool can run twice without harm, flag it. Claude sometimes retries. |
+| **Logs to stderr** | Don't use `console.log` (it breaks the stdio protocol). Use `console.error` for logs and serialize to a file. |
+
+---
+
+## Deploy
+
+For your team to use it:
+
+1. Publish it as an npm package (private if it has secrets)
+2. In each dev's `settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "pedidos": {
+      "command": "npx",
+      "args": ["-y", "@miempresa/mcp-pedidos"],
+      "env": { "MCP_TOKEN": "${MCP_TOKEN}" }
+    }
+  }
+}
+```
+
+With `npx -y`, npm downloads the package the first time and caches it. Versioned, distributed, no manual installation.
+
+---
+
+## Next steps
+
+- Check out the [official MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk) — it has helpers for resources and prompts, not just tools.
+- If you want a real production-ready example, take a look at our [Supabase MCP plugin](/boveda/plugin-supabase-mcp).
+- For tools that require UI (auth flows, picks, etc.), consider the HTTP transport with a web wizard.

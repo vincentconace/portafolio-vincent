@@ -1,0 +1,443 @@
+---
+title: "Obsidian + Claude — usar tu vault como memoria permanente de Claude"
+description: "Obsidian guarda todo como archivos .md — el idioma nativo de Claude. Convertís tu vault en disco duro persistente: Claude lee tus notas al empezar, no gastás contexto re-explicando, construye conocimiento acumulado. Setup: instalar obsidian-skills + un CLAUDE.md afinado."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "obsidian", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["cinco-repos-dominando-claude", "claude-cowork-workflow", "crea-claude-skills"]
+---
+
+## La analogía
+
+Imaginate que hablás español de nacimiento. **No necesitás diccionario** — entendés directo. Claude "habla" Markdown de nacimiento. Los `.md` son su idioma nativo.
+
+Obsidian guarda **todo** como Markdown. Cuando Claude abre tu vault, **lee en su lengua materna** — sin conversión, sin perder nada.
+
+---
+
+## El problema
+
+Claude **no tiene memoria** entre sesiones. Cada conversación = pizarra en blanco.
+
+Resultado:
+- Repetís el mismo contexto cada sesión
+- Tu ventana de contexto se llena rápido
+- Perdés eficiencia re-explicando
+- Claude no aprende de sesiones anteriores
+
+---
+
+## La solución
+
+Tu vault de Obsidian es **disco duro persistente**. Claude lo lee al empezar, no gastás contexto.
+
+### El modelo mental
+
+- **Ventana de contexto** = memoria de trabajo (RAM)
+- **Obsidian vault** = disco duro
+- **No gastás RAM** recordando cosas que ya están en el disco
+
+---
+
+## Por qué Obsidian (no Notion u otros)
+
+| Característica | Obsidian | Notion | Apple Notes |
+|----------------|----------|--------|-------------|
+| Almacenamiento | Local | Cloud | Cloud (iCloud) |
+| Formato | `.md` nativo | DB propietaria | Propio |
+| Claude lee directo | ✅ | Solo vía API + JSON | Solo vía API |
+| Sin vendor lock-in | ✅ | ❌ | ❌ |
+| Wikilinks `[[]]` | ✅ | Diferentes | ❌ |
+| Costo | Gratis | Free → paid | Gratis |
+
+**Obsidian gana** porque:
+- Los archivos son **tuyos** en disco
+- **Markdown nativo** = Claude lee sin traducir
+- **Wikilinks `[[]]`** = Claude navega entre conceptos
+
+---
+
+## Setup — 4 pasos
+
+### Paso 1 — Descargar Obsidian
+
+`obsidian.md`. Gratis. Mac, Windows, Linux, iOS, Android.
+
+### Paso 2 — Crear vault
+
+Al abrir primera vez, te pide crear **vault**. Es una carpeta en tu compu donde van todas tus notas.
+
+```bash
+~/Documents/mi-vault/
+```
+
+### Paso 3 — Instalar obsidian-skills
+
+```bash
+claude install-skill https://github.com/kepano/obsidian-skills
+```
+
+Esto le enseña a Claude a escribir en formato Obsidian nativo. Son 5 habilidades:
+
+1. **Markdown con wikilinks**
+2. **Bases de datos** (frontmatter YAML)
+3. **Canvas visual**
+4. **CLI de Obsidian**
+5. **Extracción de contenido web**
+
+### Paso 4 — Abrir Claude Code desde el vault
+
+```bash
+cd ~/Documents/mi-vault && claude
+```
+
+**Crítico**: Claude solo accede a tu vault si lo abrís **desde adentro**. Si abrís desde otra carpeta, no ve tus notas.
+
+---
+
+## El paso clave — CLAUDE.md
+
+Sin `CLAUDE.md` en la raíz del vault, Claude **no sabe que tiene que usarlo como memoria**.
+
+### CLAUDE.md base para empezar
+
+Guardá esto como `CLAUDE.md` en la raíz del vault:
+
+```markdown
+# Vault de Conocimiento
+
+## Propósito
+Este vault es mi base de conocimiento personal. Toda
+información relevante debe guardarse acá como notas Markdown.
+
+## Convenciones para crear notas
+- Usá wikilinks [[nombre-de-nota]] para conectar conceptos
+- Una idea por nota (notas atómicas)
+- Usá aliases en frontmatter cuando una nota tiene varios nombres
+- Usá block references (^id) para citar secciones específicas
+- Nombres de archivo en kebab-case: mi-nota-importante.md
+- Frontmatter YAML con tags y fecha de creación
+
+## Estructura de carpetas
+- /proyectos — notas por proyecto activo
+- /conceptos — definiciones y explicaciones
+- /referencias — info de fuentes externas
+- /diario — notas de trabajo diarias
+
+## Reglas
+- SIEMPRE guardá resumen al terminar sesión de trabajo
+- SIEMPRE revisá notas existentes antes de crear duplicados
+- Conectá notas nuevas con existentes usando wikilinks
+- Actualizá STATE.md con estado actual del proyecto activo
+```
+
+Claude lo lee **automáticamente** cada vez que abrís sesión desde esa carpeta.
+
+---
+
+## Prompts esenciales
+
+### Al final de cada sesión — guardar resumen
+
+```
+> Guardá resumen de lo que hicimos hoy en mi vault.
+
+  Creá nota en /diario con fecha de hoy + cambios principales
+  + decisiones tomadas + lo que queda pendiente.
+
+  Conectá con wikilinks a las notas de proyecto relevantes.
+```
+
+### Al inicio de cada sesión — recuperar contexto
+
+```
+> Antes de empezar, revisá mis notas sobre [PROYECTO] en
+  /proyectos.
+
+  Leé el STATE.md y las notas más recientes en /diario.
+
+  Dame resumen de dónde quedamos y qué sigue pendiente.
+```
+
+### Actualizar estado del proyecto
+
+```
+> Actualizá el STATE.md del proyecto con lo que hicimos.
+
+  Incluí:
+  - Fase actual
+  - Tareas completadas
+  - Tareas pendientes
+  - Decisiones importantes
+  - Bloqueos
+
+  Usá el formato que ya tiene el archivo.
+```
+
+### Crear notas conectadas
+
+```
+> Creá notas individuales en /conceptos para cada concepto
+  nuevo que vimos hoy.
+
+  Cada nota debe tener:
+  - Explicación simple
+  - Ejemplo práctico
+  - Wikilinks a conceptos relacionados que ya existan
+```
+
+---
+
+## Estructura recomendada para tu vault
+
+```
+mi-vault/
+├── CLAUDE.md            ← reglas que Claude lee siempre
+├── STATE.md             ← estado actual de tu proyecto principal
+├── proyectos/
+│   ├── proyecto-x.md
+│   └── proyecto-y.md
+├── conceptos/
+│   ├── concepto-a.md
+│   ├── concepto-b.md
+│   └── concepto-c.md
+├── referencias/
+│   ├── articulo-leido-1.md
+│   └── papers/
+├── diario/
+│   ├── 2026-05-28.md
+│   └── 2026-05-29.md
+└── .claude/
+    └── (skills instaladas)
+```
+
+---
+
+## Casos de uso
+
+### 1. Dev manteniendo proyecto largo
+
+```
+mi-vault/
+├── CLAUDE.md
+├── STATE.md             ← features in progress, decisiones arquitectura
+├── proyectos/
+│   └── mi-saas/
+│       ├── architecture.md
+│       ├── decisions/
+│       │   ├── 2026-03-auth.md
+│       │   └── 2026-04-db.md
+│       └── features/
+│           ├── pagos.md
+│           └── notificaciones.md
+└── diario/
+    └── 2026-05-28-deploy.md
+```
+
+Claude retoma exactamente donde dejaste — knows architecture, decisions, features in progress.
+
+### 2. Investigador / research
+
+```
+mi-vault/
+├── CLAUDE.md
+├── papers/
+│   ├── transformers.md
+│   ├── chain-of-thought.md
+│   └── ...
+├── conceptos/
+│   └── attention-mechanism.md
+└── ideas/
+    └── proyectos-futuros.md
+```
+
+Claude cita papers que ya leíste, conecta conceptos via wikilinks.
+
+### 3. Founder / negocio
+
+```
+mi-vault/
+├── CLAUDE.md
+├── empresa/
+│   ├── vision.md
+│   ├── metrics.md
+│   └── strategy/
+├── clientes/
+│   ├── cliente-A.md
+│   └── cliente-B.md
+├── proyectos/
+│   └── lanzamiento-Q3/
+└── diario/
+    └── reuniones/
+```
+
+Claude entiende tu negocio sin que repitas.
+
+### 4. Estudiante
+
+```
+mi-vault/
+├── CLAUDE.md
+├── materias/
+│   ├── algoritmos/
+│   ├── bases-de-datos/
+│   └── ...
+├── ejercicios/
+└── examenes/
+```
+
+Claude te ayuda a estudiar conectando lo que ya viste.
+
+---
+
+## Anti-patrones
+
+### 1. Abrir Claude fuera del vault
+
+```bash
+cd ~/proyectos
+claude
+```
+
+Claude no ve tu vault. **Siempre** desde adentro:
+
+```bash
+cd ~/Documents/mi-vault && claude
+```
+
+### 2. CLAUDE.md vacío o vago
+
+Si tu CLAUDE.md dice "este es mi vault", Claude no sabe **cómo usarlo**. Las reglas explícitas (estructura, convenciones, qué hacer al terminar sesión) son lo que activa el comportamiento.
+
+### 3. Notas gigantes
+
+Un archivo de 5000 palabras es difícil para Claude de procesar quirúrgicamente. **Notas atómicas** (1 idea por archivo) son mejores.
+
+### 4. No mantener STATE.md
+
+Si STATE.md está desactualizado, Claude trabaja con info vieja. **Actualizá al terminar cada sesión**.
+
+### 5. No usar wikilinks
+
+Sin `[[conexiones]]`, tu vault es solo una pila de archivos. Wikilinks son lo que **permite a Claude navegar** entre conceptos relacionados.
+
+### 6. Mezclar vault personal con vault de trabajo
+
+Mezclar contextos te trae respuestas confusas. **Vault separado por dominio** (personal vs trabajo vs cliente A vs cliente B).
+
+---
+
+## Tips avanzados
+
+### 1. Aliases en frontmatter
+
+```markdown
+---
+aliases: ["MCP", "Model Context Protocol", "protocol mcp"]
+---
+
+# Model Context Protocol
+```
+
+Claude entiende que cuando mencionás "MCP", se refiere a esa nota.
+
+### 2. Block references
+
+```markdown
+La decisión que tomamos: ^decision-pagos-stripe
+
+vs
+
+[[arquitectura-pagos#^decision-pagos-stripe]]
+```
+
+Linkea a un párrafo específico, no a nota entera.
+
+### 3. Templates
+
+Creá `_templates/sesion-template.md`:
+
+```markdown
+---
+fecha: {{date}}
+tipo: sesion-trabajo
+---
+
+## Qué hicimos
+
+## Decisiones
+
+## Pendiente
+
+## Próximos pasos
+```
+
+Claude lo aplica al crear notas de diario.
+
+### 4. Tags para filtrado
+
+```markdown
+---
+tags: [decision, arquitectura, urgente]
+---
+```
+
+Pedile: "buscá todas las notas con tag #decision en últimos 30 días".
+
+---
+
+## Combinaciones potentes
+
+### Con claude-mem
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) hace memoria entre sesiones a nivel app. Obsidian es memoria a nivel **knowledge base** estructurada.
+
+Los dos combinados:
+- claude-mem: "qué hicimos en la última sesión"
+- Obsidian: "qué decisiones tomamos hace 6 meses sobre arquitectura X"
+
+### Con Cowork projects
+
+[Cowork projects](/boveda/claude-cowork-workflow) son proyectos en Claude Desktop. Obsidian es tu **knowledge base** que esos proyectos pueden referenciar.
+
+### Con NotebookLM Skill
+
+[NotebookLM Skill](/boveda/cinco-habilidades-marketing) conecta Claude a tus PDFs/videos. Obsidian es para **notas que vos escribís**. Complementarios.
+
+### Con crear skills
+
+[Crear skills](/boveda/crea-claude-skills) propias que **respeten tu vault**:
+
+```markdown
+---
+name: investigador-personal
+description: Hace research y guarda en mi vault de Obsidian
+---
+
+Cuando hago research:
+1. Buscá info nueva
+2. Guardá hallazgos en /referencias/ con frontmatter YAML
+3. Conectá con notas existentes vía wikilinks
+4. Si encontrás concepto nuevo importante, creá nota en /conceptos/
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| No te gusta tomar notas | Vault sin notas no aporta |
+| Trabajo 100% colaborativo en tiempo real | Notion gana en colaboración |
+| Sin disciplina de updateAr STATE.md | Memoria desactualizada peor que sin memoria |
+| Mobile-only | Obsidian funciona pero Mac/PC es mejor |
+
+---
+
+## Próximos pasos
+
+- Para memoria persistente a nivel app, [Claude Mem](/boveda/cinco-repos-dominando-claude)
+- Para proyectos en Claude Desktop con tareas programadas, [Cowork workflow](/boveda/claude-cowork-workflow)
+- Para crear skills custom que respeten tu vault, [crear skills](/boveda/crea-claude-skills)

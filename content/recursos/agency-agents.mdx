@@ -1,0 +1,235 @@
+---
+title: "Agency Agents — colección de 144 especialistas para Claude Code"
+description: "Cuando un Claude generalista no alcanza: una colección open-source con 144+ agentes especializados (Marketing, Ingeniería, Ventas, Diseño, etc.) que cambian la forma de pensar de Claude según la tarea. Setup, criterio para elegir cuáles, y cómo encadenar agentes en flujos."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-26"
+readingTime: "11 min"
+relatedSlugs: ["ecosistema-de-agentes", "skills-catalogo-40", "cinco-skills-necesarias"]
+---
+
+## El problema
+
+Le pedís a Claude generalista que escriba copy de TikTok y un memo financiero. Las dos cosas las hace **decente**, pero ninguna brilla:
+
+- El copy de TikTok le sale corporativo (Claude no tiene "personalidad de creator")
+- El memo financiero le falta la estructura formal que un controller espera
+- En general, todo suena a Claude — mismo tono, misma estructura
+
+La fix: **agentes especializados** con personalidad propia, forma de pensar específica, métricas que les importan. Cuando trabajás con el "TikTok Strategist", piensa distinto que cuando trabajás con el "Backend Architect".
+
+Una colección como **Agency Agents** te da 144 de estos listos. La idea no es instalar los 144 — es elegir los 5-10 que matchean tu trabajo real.
+
+---
+
+## Cómo funciona un agente especializado
+
+Un agente es un archivo markdown en `~/.claude/agents/<nombre>.md`:
+
+```markdown
+---
+name: tiktok-strategist
+description: Especialista en estrategia de contenido para TikTok.
+  Activate cuando el usuario hable de TikTok, shorts, contenido viral,
+  hooks para video corto.
+---
+
+# TikTok Strategist
+
+Sos estratega de contenido para TikTok. Tu rol:
+
+- Pensás en hooks de 3 segundos, no en titles de blog
+- Conocés los formatos que funcionan (POV, storytime, transformation,
+  reaction, tutorial fast)
+- Sabés que el algoritmo prioriza retention > CTR
+- Hablás en lenguaje de creators, no de marketing corporativo
+
+## Reglas
+
+- NO escribir copy que suene a "marca seria" — TikTok castiga eso
+- SIEMPRE pensar en mobile-first vertical
+- Si el cliente quiere contenido "elegante", expliquele que en TikTok
+  elegante = aburrido = bajo retention
+- Validar ideas contra: ¿esto lo grabaría un creator real?
+
+## Output esperado
+
+Cuando proponés ideas de contenido, formato:
+- Hook (primeros 3 segundos, descripción visual + texto en pantalla)
+- Beat 1 / 2 / 3 (lo que pasa después)
+- CTA al final
+```
+
+Claude lee este archivo cuando matchea el `description`. **El cambio de tono** es lo importante — no es "Claude con prompt distinto", es "Claude operando con marco mental distinto".
+
+---
+
+## Las 14 divisiones típicas
+
+Una colección como Agency Agents organiza sus 144+ en categorías. Las que suelen aportar más:
+
+| División | Ejemplos de agentes |
+|----------|---------------------|
+| **Marketing** | TikTok Strategist, SEO Specialist, Brand Storyteller, Email Marketer |
+| **Ingeniería** | Backend Architect, Frontend Developer, DevOps Engineer, Database Designer |
+| **Ventas** | Deal Closer, Outbound Strategist, Discovery Caller, Negotiator |
+| **Diseño** | UX Researcher, Visual Designer, Design Systems Architect, Motion Designer |
+| **Game Dev** | Game Designer, Level Designer, Game Economy Designer |
+| **Finance** | Controller, FP&A Analyst, Treasury Manager, Investor Relations |
+| **Project Mgmt** | Scrum Master, Product Manager, Program Manager |
+| **Testing** | QA Engineer, Test Automator, Security Auditor |
+| **Paid Media** | Meta Ads Buyer, Google Ads Specialist, Influencer Negotiator |
+| **Support** | Customer Success Manager, Tier 1 Support, Escalation Specialist |
+| **Spatial Computing** | AR/VR Designer, 3D Modeler |
+| **Otros** | Legal Reviewer, Compliance Officer, HR Generalist, Recruiter |
+
+---
+
+## Cómo elegir cuáles instalar
+
+**No instales los 144**. La trampa: con 144 agentes activos, las descriptions empiezan a competir y Claude se confunde sobre cuál activar.
+
+Aplicá este filtro:
+
+1. **¿Esta función la cumplís vos o tu equipo?** Si no la harías humano, tampoco necesitás agente.
+2. **¿Lo hacés con frecuencia (semanal+)?** Tareas raras no justifican el setup.
+3. **¿Necesitás output con personalidad / estructura específica?** Si el output genérico de Claude alcanza, no necesitás especialista.
+
+Pasan el filtro → instalá. Si quedan más de 15, recortá. **10 agentes bien afinados > 144 instalados al azar**.
+
+### Pack típico por tipo de empresa
+
+**Agencia / Marketing**:
+- TikTok Strategist
+- SEO Specialist
+- Meta Ads Buyer
+- Brand Storyteller
+- Content Repurposer
+
+**Startup SaaS técnica**:
+- Backend Architect
+- Frontend Developer
+- DevOps Engineer
+- Customer Success Manager
+- Product Manager
+
+**E-commerce**:
+- Conversion Optimizer
+- Meta Ads Buyer
+- Email Marketer
+- Customer Support
+- Inventory Planner
+
+---
+
+## Encadenar agentes — el flujo
+
+El valor real aparece cuando **encadenás agentes** para flujos completos.
+
+### Ejemplo — del brief al MVP
+
+```
+1. Product Manager → escribe el PRD
+2. UX Researcher → identifica los user flows críticos
+3. Visual Designer → propone la jerarquía visual
+4. Backend Architect → diseña la API
+5. Frontend Developer → estructura los componentes
+6. QA Engineer → enumera los tests críticos
+```
+
+Cada agente sale del anterior. **Cada paso es una sesión / invocación distinta** con contexto explícito.
+
+### Ejemplo — del prospecto al cierre
+
+```
+1. Outbound Strategist → identifica empresas target
+2. Brand Storyteller → escribe el cold email personalizado
+3. Discovery Caller → guía la primera llamada
+4. Deal Closer → maneja la negociación final
+```
+
+Implementación práctica: en tu `CLAUDE.md` o en una skill orquestadora, definís el flow y le decís a Claude qué agente invocar en cada paso.
+
+---
+
+## Instalación
+
+Una colección como Agency Agents se instala con un script o git clone:
+
+```bash
+# Clonás el repo
+git clone https://github.com/msitarzewski/agency-agents.git ~/agency-agents-source
+
+# Copiás los agentes que te interesan a ~/.claude/agents/
+mkdir -p ~/.claude/agents
+cp ~/agency-agents-source/marketing/tiktok-strategist.md ~/.claude/agents/
+cp ~/agency-agents-source/engineering/backend-architect.md ~/.claude/agents/
+# ... etc
+```
+
+O en un solo comando con Claude:
+
+```
+> Andá al repo https://github.com/msitarzewski/agency-agents y bajame
+  estos 10 agentes a ~/.claude/agents/:
+  [lista de 10 nombres]
+
+  No copies los otros 134.
+```
+
+Claude se encarga.
+
+---
+
+## La diferencia entre agente y skill
+
+A esta altura puede parecer que "agente" y "skill" son lo mismo. Hay un matiz:
+
+| Skill | Agente |
+|-------|--------|
+| Hace **una tarea específica** | Es **un rol completo** con varias capacidades |
+| "Code reviewer" — revisa diff y reporta | "Backend Architect" — diseña, audita, propone, decide |
+| Más enfocada, más corta | Más amplia, más opinada |
+| Frontmatter + reglas | Frontmatter + personalidad + reglas + frameworks mentales |
+
+En la práctica las dos viven como archivos `.md` con frontmatter. Pero conceptualmente, una **skill** es un **comportamiento puntual** y un **agente** es **un colaborador con rol**.
+
+---
+
+## Anti-patrones
+
+### 1. Instalar todos los agentes "por si los uso"
+
+Empezá con 5-10. Sumá cuando notes el gap. Más allá de 15 activos, la calidad baja.
+
+### 2. Confundir agente con expert real
+
+Un agente "Lawyer" no es abogado. Te ayuda a **estructurar** un análisis legal, pero no reemplaza consejo legal real para temas serios.
+
+### 3. Esperar que el agente decida por vos
+
+Los agentes proponen, vos decidís. Si dejás que el "Deal Closer" mande emails de cierre solo, vas a quemar oportunidades.
+
+### 4. No customizar para tu contexto
+
+Los agentes genéricos del repo son punto de partida. Editá los archivos para incluir tu producto, tu industria, tus reglas. La versión customizada vale 10× la genérica.
+
+---
+
+## Cuándo no necesitás esto
+
+✅ Sí necesitás si: trabajás en múltiples dominios distintos donde el output con personalidad específica importa
+
+❌ No necesitás si:
+- Tu trabajo es uniforme (siempre código en el mismo stack, siempre el mismo tipo de copy)
+- Tu equipo ya tiene especialistas humanos
+- Estás aprendiendo Claude Code todavía (primero entendé skills básicas)
+
+---
+
+## Próximos pasos
+
+- Para entender el patrón de cómo se coordinan agentes en sistemas más complejos, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Si querés ideas más enfocadas (no 144), [catálogo de 40 skills](/boveda/skills-catalogo-40) tiene un menú curado
+- Para tu primer agente / skill propio paso a paso, [guía de skills 0-a-100](/boveda/guia-skills-claude)

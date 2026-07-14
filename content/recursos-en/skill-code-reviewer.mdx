@@ -1,0 +1,169 @@
+---
+title: "Skill: Code Reviewer — a second pair of eyes before the PR"
+description: "A Claude skill that reviews your current diff looking for bugs, vulnerabilities, unnecessary complexity, and code that goes against the project's conventions. It gives you actionable feedback, not a generic checklist."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+featured: false
+badge: "nuevo"
+version: "v1.1"
+publishedAt: "2026-05-12"
+readingTime: "9 min"
+relatedSlugs: ["claude-code-setup-zero", "skill-traduccion-tecnica"]
+---
+
+## What it's for
+
+Before opening a PR, you want **someone or something** to give it one last review. Linters catch style, not design. Tests verify what you thought to test, not what slipped past you.
+
+This skill looks at your full diff and returns a structured analysis: likely bugs, side effects you didn't consider, complexity that can be simplified, and things that break the project's conventions (which it reads from `CLAUDE.md`).
+
+It's **complementary** to human code review, not a replacement. It saves you the obvious comments ("missing an `await`", "this could be undefined") and leaves the human free for what matters.
+
+---
+
+## How to install it
+
+Skills live in `~/.claude/skills/` (global) or `.claude/skills/` (per project). Create it:
+
+```bash
+mkdir -p .claude/skills/code-reviewer
+```
+
+Then set up the two files that make up a skill:
+
+<Step number={1} title="SKILL.md — the manifest">
+
+`.claude/skills/code-reviewer/SKILL.md`:
+
+```markdown
+---
+name: code-reviewer
+description: Reviews the current diff looking for bugs, vulnerabilities, and convention violations. Use it when the user says "review", "code review", "before merging", or when they're about to open a PR.
+---
+
+# Code Reviewer
+
+You are a senior code reviewer. Your job is to analyze the diff of the current work and return actionable feedback.
+
+## Protocol
+
+1. Run `git diff --staged` and `git diff` to see the changes. If there are no staged changes, assume the review is about what's been modified.
+2. If the repo has a `CLAUDE.md`, read it. The project's conventions come first.
+3. For each modified hunk, evaluate:
+   - **Likely bugs**: unhandled nulls, off-by-one, race conditions, incorrect types
+   - **Security**: SQL injection, XSS, hardcoded secrets, missing validation of external input
+   - **Unnecessary complexity**: abstractions for 1 caller, nested ifs that simplify with an early return
+   - **Conventions**: violations of what `CLAUDE.md` says or obvious patterns in the codebase
+4. Return a structured report (see the format below).
+
+## Report format
+
+```
+## Changes analyzed
+[short list of files]
+
+## 🔴 Blockers (fix before merging)
+- [file:line] description + suggestion
+
+## 🟡 Improvable (not blocking, but you should look at them)
+- [file:line] description + suggestion
+
+## 🟢 Well done
+- [optional, 1-2 things that deserve a positive mention]
+```
+
+## Rules
+
+- Don't invent problems to fill sections. If there are no blockers, write "none".
+- Always cite the file and the line. "There's a bug somewhere" is useless.
+- Be specific with the suggestion. "This is wrong" is useless. "Change X to Y because Z" works.
+- If the diff touches code that has tests, check whether the tests cover the new paths.
+```
+
+</Step>
+
+<Step number={2} title="Try it out" last>
+
+Inside Claude Code, make any change and ask it:
+
+```
+> code review of what I did
+```
+
+Or more naturally:
+
+```
+> review the changes before I open the PR
+```
+
+Claude will detect the skill from its description and apply it. The key point: the skill activates **without you calling it by name**. That's why the `description` in the frontmatter is critical — it's what Claude reads to decide when to invoke it.
+
+</Step>
+
+---
+
+## Why it works
+
+The difference between this skill and just "asking Claude to review code" is that:
+
+1. **The protocol is fixed**. It always reads the diff first, always reads CLAUDE.md, always returns the same format. Without the skill, it might skip steps each time.
+2. **The format is predictable**. Your brain learns to scan the report in 10 seconds instead of reading a free-form 3-paragraph text.
+3. **It invokes itself**. When you say "before merging", Claude connects the dots without you having to type `/run code-reviewer`.
+
+---
+
+## Tweaks worth making
+
+### By language
+
+If you always work in TypeScript, add this to the end of the SKILL.md:
+
+```markdown
+## TypeScript-specific rules
+
+- Flag any use of `any` that isn't justified with a `// any: reason` comment.
+- `as` casts are suspicious; check that there's a type guard before them.
+- `useEffect` without complete dependencies is a blocker.
+- Async functions without try/catch that call external APIs are a blocker.
+```
+
+### By team
+
+If your team has hard rules (e.g. "every PR must add a test"), make that rule an **explicit blocker**:
+
+```markdown
+- If the diff touches business logic and does NOT add tests, flag it as an automatic 🔴 blocker.
+```
+
+### "Blockers only" mode
+
+Sometimes you don't want the whole report. Add a variant:
+
+```markdown
+If the user says "quick review" or "just the critical stuff", return only the 🔴 blockers section. If there are none, say "all OK" in one line.
+```
+
+---
+
+## Limitations
+
+<Callout type="warning" title="What this skill does NOT do well">
+
+- **Large refactors**: if the change touches >500 lines, the analysis gets diluted. Ask for a partial review by area.
+- **Complex business logic**: it can review the implementation, but it doesn't know whether the business rule is correct. For that you need a human who understands the domain.
+- **Performance**: it catches obvious things (N+1 queries) but not real profiling. For serious optimizations, use dedicated tools.
+
+</Callout>
+
+---
+
+## Next steps
+
+If you liked this pattern, check out other useful skills:
+
+- **db-migration-checker** — reviews DB migrations before merging them
+- **i18n-coverage** — verifies that new strings are translated
+- **api-contract** — checks that endpoint changes don't break the contract
+
+If you want to contribute your own skill, send a PR to the [vault repo](https://github.com/anthropics/claude-code).

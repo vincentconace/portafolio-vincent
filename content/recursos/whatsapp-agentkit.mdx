@@ -1,0 +1,268 @@
+---
+title: "WhatsApp AgentKit — agente de WhatsApp con IA en 30 minutos"
+description: "Construir un agente de WhatsApp que responde a clientes 24/7 sin escribir código. Claude Code arma todo el setup mientras vos solo respondés preguntas sobre tu negocio. Cuándo conviene vs los otros approaches, y los warnings que aplican siempre."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "whatsapp"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["openwa-whatsapp", "ecosistema-de-agentes", "claude-small-business"]
+---
+
+## Qué resuelve
+
+WhatsApp es el canal #1 para soporte y ventas en LATAM. Pero atenderlo en serio requiere:
+
+- Estar disponible en horarios extendidos
+- Responder rápido (los leads se enfrían en horas)
+- Mantener tono consistente entre operadores
+- Documentar histórico de cada conversación
+
+Para PyMEs sin equipo grande, esto **no escala**. **WhatsApp AgentKit** (open source, MIT) resuelve eso: en ~30 min armás un agente que responde 24/7, usando tu Claude Code como motor.
+
+> **Warning importante**: igual que [OpenWA](/boveda/openwa-whatsapp), esto usa conexión NO oficial de WhatsApp → riesgo de baneo del número. Léete la sección "Reglas duras" antes de empezar.
+
+---
+
+## La diferencia con armar uno desde cero
+
+| Sin AgentKit | Con AgentKit |
+|--------------|--------------|
+| Escribís el gateway + bridge + lógica | Te lo arma Claude Code en 30 min |
+| Decidís cada componente | Stack opinado y testeado |
+| 2-3 días de setup | 30 min |
+| Mantenimiento por tu cuenta | El kit se actualiza |
+
+AgentKit es **el shortcut**. Si tu objetivo es aprender los componentes, armalo a mano. Si tu objetivo es **tener algo funcionando para tu negocio**, AgentKit gana.
+
+---
+
+## Lo que armás
+
+Al final tenés un sistema con 3 piezas:
+
+1. **Gateway WhatsApp**: se conecta a tu número (vía QR como WhatsApp Web)
+2. **Bridge**: recibe los mensajes, los pasa a Claude, devuelve respuesta
+3. **Knowledge base**: lo que el agente "sabe" de tu negocio (productos, FAQs, políticas)
+
+Más opcional:
+4. **Handoff humano**: cuando el agente no puede, te avisa a vos
+5. **Logs**: histórico de conversaciones para audit y mejora
+
+---
+
+## El setup
+
+### Las 3 cosas que el kit te va a preguntar
+
+Casi todo lo arma Claude. Vos solo respondés:
+
+<Step number={1} title="Sobre tu negocio">
+
+```
+- ¿Qué vendés / qué hacés? (1 párrafo)
+- ¿Quién es tu cliente típico?
+- ¿Qué productos / servicios? (lista)
+- ¿Precios?
+- ¿Política de devoluciones / garantía?
+- ¿Horarios de atención (cuándo respondés humanamente)?
+- ¿Qué NO debe contestar el agente? (ej: cosas legales, descuentos no autorizados)
+```
+
+Esta info es lo que el agente va a "saber". Cuanto más completa, mejor responde.
+
+</Step>
+
+<Step number={2} title="Sobre el tono">
+
+```
+- ¿Cómo le hablás a tus clientes? (formal / cordial / familiar)
+- ¿Usás voseo / tuteo / usted?
+- ¿Hay palabras que NUNCA usás?
+- ¿Hay frases típicas que SÍ usás?
+- Pasá 3-5 ejemplos de conversaciones reales (de WhatsApp Business)
+```
+
+De los ejemplos Claude aprende tu voz. Sin ejemplos, suena genérico.
+
+</Step>
+
+<Step number={3} title="Sobre escalación a humano" last>
+
+```
+- ¿Cuándo el agente DEBE pasarte el caso?
+  - Compras > $X
+  - Quejas serias
+  - Preguntas que no sabe responder
+  - Cliente VIP (lista)
+- ¿Por dónde te avisa? (otro WhatsApp, Slack, email)
+- ¿Cómo le explica al cliente que "alguien le va a responder"?
+```
+
+</Step>
+
+Con esas 3 secciones llenas, Claude Code arma el código y el agente queda funcionando.
+
+---
+
+## Lo que pasa el día 1
+
+Tu primer día con el agente:
+
+### Las primeras conversaciones
+
+```
+[Cliente]: Hola, ¿venden producto X?
+[Agente]: ¡Hola! Sí, tenemos. Cuesta $Y. ¿Te interesa que te
+          mande el catálogo completo?
+
+[Cliente]: ¿Tienen envío a Córdoba?
+[Agente]: Sí, hacemos envíos a todo el país. A Córdoba llega
+          en 3-5 días hábiles. ¿Querés cotizar uno?
+
+[Cliente]: Mi pedido #4521 no llegó.
+[Agente]: Veo que pedido #4521 está marcado como en tránsito.
+          Voy a pasarle el caso a alguien del equipo para que
+          revise. En unos minutos te contactan.
+[Agente → vos por Slack]: Pedido #4521 con problema de entrega.
+          Cliente: Juan Pérez. WhatsApp: +54...
+```
+
+### Lo que vas a ver el día 1
+
+✅ Respuestas correctas para FAQs claras
+✅ Escalación a vos en casos correctos
+⚠️ Algunos "no entendí, ¿podrías reformular?" cuando el cliente escribe ambiguo
+⚠️ Algunos errores de tono (no exactamente como vos hablás)
+❌ Algunos casos donde podría haber respondido pero no lo hizo
+
+**Vas a iterar la primera semana**: cada vez que el agente falla, **agregás contexto al knowledge base**. Después de 2-3 semanas, está afinado.
+
+---
+
+## Las reglas duras (mismo warning que OpenWA)
+
+> **NUNCA conectes tu número personal.** Si se banea, perdés WhatsApp personal. Usá un **número nuevo** dedicado.
+
+> **NO mandes outbound masivo.** El kit es para **responder**, no para mandar cold spam. Hacer outbound masivo te banea el número rápido.
+
+> **No automatices respuestas a casos sensibles.** Quejas serias, casos legales, problemas regulatorios → siempre humano.
+
+> **Mostralo como "agente" si conviene.** Algunos negocios dicen al inicio: "Soy [nombre del agente], el asistente IA de [empresa]. Si necesitás humano, decime y te paso." Más transparente, menos riesgo de queja por "me engañaron".
+
+---
+
+## Casos donde brilla
+
+### 1. E-commerce con consultas repetitivas
+
+90% de las preguntas son las mismas:
+- ¿Hacés envíos a X?
+- ¿Cuánto cuesta Y?
+- ¿Cuándo llega mi pedido?
+- ¿Aceptan tarjeta?
+
+El agente las contesta de una. Vos te dedicás solo al 10% que requiere humano.
+
+### 2. Servicios profesionales con triage
+
+Sos abogado / contador / consultor. El agente:
+- Califica si la consulta es para vos o no
+- Pide info básica (nombre, problema, urgencia)
+- Te pasa solo los casos calificados
+
+Filtrás el 60% de consultas que no son tu fit.
+
+### 3. Restaurants / delivery
+
+Toma pedidos básicos, confirma horarios, manda menú. **Solo escala a humano cuando hay algo no estándar.**
+
+### 4. Educación / cursos
+
+FAQs sobre programa, inscripción, costos. Drafta respuestas para preguntas más complejas (que humano valida antes de mandar).
+
+---
+
+## Lo que NO hace bien
+
+❌ **Negociación**: el agente cierra al precio listado. Si pidieras descuento, debería escalar.
+❌ **Consultas técnicas profundas**: si el cliente pregunta cosas que requieren expertise, **escalá**.
+❌ **Emociones intensas**: cliente enojado, queja seria → humano siempre.
+❌ **Multi-step complejo**: procesos con muchas variables → mejor formulario web.
+
+---
+
+## Costo
+
+| Componente | Costo |
+|------------|-------|
+| Tu suscripción Claude | $20-100/mes |
+| Número WhatsApp dedicado (chip) | $5-15/mes |
+| Servidor (compu prendida) | $0 si usás tu máquina; $5-20/mes en VPS |
+| **Total** | **$25-135/mes** |
+
+Comparado con contratar persona part-time para atender WhatsApp ($300-800/mes mínimo), el ROI es claro. **Si el negocio aguanta el riesgo de baneo del número.**
+
+---
+
+## Patrón: agente + handoff humano transparente
+
+El error común es presentar el agente como humano. La gente lo nota → se enoja.
+
+Patrón mejor:
+
+```
+[Cliente]: Hola
+[Agente]: ¡Hola! Soy Sofi, el asistente IA de [Empresa]. Te
+          ayudo con consultas frecuentes 24/7. Si necesitás
+          hablar con humano, decime "agente humano" en
+          cualquier momento. ¿En qué puedo ayudarte?
+
+[Cliente]: ¿Qué precios tienen los kits?
+[Agente]: [responde con precios]
+
+[Cliente]: agente humano
+[Agente]: Genial, paso tu mensaje al equipo. Te contactan en
+          horario de oficina (lunes a viernes 9 a 18).
+[Agente → vos]: Cliente quiere hablar con vos. Contexto: [...].
+```
+
+**Transparente. Funcional. Sin generar queja.**
+
+---
+
+## Combinaciones útiles
+
+### Con CRM (HubSpot / Pipedrive)
+
+Cuando llega un lead nuevo, agente:
+1. Responde inmediato
+2. Lo carga en CRM con info extraída
+3. Si calificó como "warm/hot", te asigna en el CRM
+
+Cero data loss entre WhatsApp y CRM.
+
+### Con ManyChat para flow más estructurado
+
+Para flows tipo "consulta inicial → catálogo → carrito → checkout", ManyChat puede manejar el flow estructurado, y el agente IA solo aparece para preguntas libres.
+
+### Con [agentes managed](/boveda/agentes-managed)
+
+Si no querés mantener servidor propio: corré la lógica del agente como Managed Agent. Pagás solo por minuto activo, sin servidor.
+
+---
+
+## Cuándo NO usar este patrón
+
+❌ Tu volumen es muy bajo (~10 mensajes/día) → atender a mano alcanza
+❌ Tu negocio no tolera riesgo de baneo del número
+❌ Industria regulada (salud, finanzas, legal con consejo) → mejor WhatsApp Business API oficial
+❌ Tu margen no aguanta error ocasional del agente
+
+---
+
+## Próximos pasos
+
+- Para los warnings completos sobre WhatsApp no-oficial, [OpenWA + Claude](/boveda/openwa-whatsapp) — sección "el warning"
+- Si necesitás agentes con más coordinación (no solo WhatsApp), [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para PyMEs en general con stack más amplio, [Claude Small Business](/boveda/claude-small-business)

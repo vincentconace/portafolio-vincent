@@ -1,0 +1,250 @@
+---
+title: "Multiple Claude Code instances in parallel — the Agent View pattern"
+description: "When and how to run several Claude Code instances in parallel, each working on a different task in the same project. Setup with git worktrees, without stepping on each other, and the 3 cases where it's actually worth it."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-18"
+readingTime: "11 min"
+relatedSlugs: ["claude-codex-equipo", "guia-claude-code-completa"]
+---
+
+## The idea
+
+Until now you've thought of Claude Code as "a conversation with an assistant." But you can run **several instances in parallel**, each with its own context, working on different tasks in the same project at the same time. Like having several junior devs at once.
+
+The obvious problem: if they all touch the same files, they step on each other. The solution: **git worktrees** + clear scope assignment.
+
+---
+
+## When it DOES make sense
+
+1. **Independent tasks over different areas of the codebase**: one in `backend/auth/`, another in `frontend/dashboard/`, another writing tests
+2. **Refactor + features at the same time**: one instance does the heavy refactor, another keeps building features on the old version, and you merge once the refactor is done
+3. **Parallel exploration of solutions**: for the same question, two instances try different approaches. Then you compare and pick the best one
+
+---
+
+## When it does NOT
+
+- Tasks that share critical files (auth, DB models)
+- When you're still learning Claude Code
+- If you don't have discipline with git
+- For a single task, no matter how big it is
+
+---
+
+## Setup with git worktrees
+
+Git worktrees let you have **several checkouts of the same repo** in different folders, without cloning again and sharing the same `.git`.
+
+<Step number={1} title="Create the worktrees">
+
+From your main repo:
+
+```bash
+# Worktree for task A (notifications feature)
+git worktree add ../mi-app-notifs feature/notifs
+
+# Worktree for task B (DB refactor)
+git worktree add ../mi-app-db refactor/db-layer
+
+# Worktree for task C (writing tests)
+git worktree add ../mi-app-tests feature/coverage
+```
+
+You end up with three folders, one per task. Each with its own branch, its own HEAD, and its own independent uncommitted changes.
+
+```
+~/code/
+├── mi-app/             ← main repo (main)
+├── mi-app-notifs/      ← worktree for notifs feature
+├── mi-app-db/          ← worktree for DB refactor
+└── mi-app-tests/       ← worktree for tests
+```
+
+</Step>
+
+<Step number={2} title="Open Claude Code in each one">
+
+Three terminals, one per worktree:
+
+```bash
+# Terminal 1
+cd ~/code/mi-app-notifs && claude
+
+# Terminal 2
+cd ~/code/mi-app-db && claude
+
+# Terminal 3
+cd ~/code/mi-app-tests && claude
+```
+
+Each Claude Code is isolated: it has its own folder, its own context, its own changes. They have no idea about each other.
+
+</Step>
+
+<Step number={3} title="Merge as each one finishes" last>
+
+When a task is ready:
+
+```bash
+cd ~/code/mi-app
+git checkout main
+git pull
+git merge feature/notifs
+git push
+
+# When you no longer need the worktree, clean it up:
+git worktree remove ../mi-app-notifs
+```
+
+</Step>
+
+---
+
+## Scope assignment: the critical rule
+
+Without this, the pattern doesn't work. **Before starting the instances, define what each one touches and what it does NOT**.
+
+```
+Instance A — notifs feature:
+  ✅ src/notifications/
+  ✅ src/lib/email/
+  ✅ migrations/202605_notifs.sql
+  ❌ DON'T touch src/auth/
+  ❌ DON'T touch src/lib/db/schema.ts (adding a column YES, modifying existing tables NO)
+
+Instance B — DB refactor:
+  ✅ src/lib/db/
+  ✅ src/lib/queries/
+  ❌ DON'T touch features (other instances are on top of them)
+
+Instance C — tests:
+  ✅ Only create *.test.ts files
+  ❌ DON'T modify production code to make tests pass
+```
+
+Each instance gets this scope in its local `CLAUDE.md` (yes, you can have a different `CLAUDE.md` per worktree because they live in separate folders).
+
+<Callout type="warning" title="No scope = chaos">
+If all three instances modify `src/lib/db/schema.ts` "because each one needs it," merge hell is guaranteed. Scope assignment is the only thing that keeps the parallelism from turning into a waste of time.
+</Callout>
+
+---
+
+## Pattern A — Parallel exploration
+
+This is the most interesting and underused one. You want to know the best approach for something complex. You give **the same task** to 2-3 instances and compare results.
+
+```bash
+git worktree add ../mi-app-opt-a explore/opt-a
+git worktree add ../mi-app-opt-b explore/opt-b
+git worktree add ../mi-app-opt-c explore/opt-c
+```
+
+In each one, you open Claude and give it the same prompt:
+
+```
+> I need to add caching to the orders queries. The most frequent queries
+  are listing the last 30 days and searching by customer_id.
+
+  Implement whatever solution you choose (Redis, in-memory, DB-level, etc.).
+  Document in docs/cache-decision.md why you chose it.
+```
+
+Three different solutions in parallel. Then you compare them:
+- One uses external Redis → scales but adds infra
+- Another uses in-memory LRU → simple but limited
+- Another uses materialized views → zero caching code but more DB complexity
+
+You decide which one to merge and discard the others. In 30 minutes this gives you what normally takes 3 days exploring one at a time.
+
+---
+
+## Pattern B — "Doer vs Critic"
+
+One instance does the work, another critiques it. Useful for sensitive PRs.
+
+```
+"Doer" instance:
+  Works on feature/new-checkout
+  Implements the feature
+
+"Critic" instance:
+  Reads the diff every so often
+  Looks for bugs, vulnerabilities, violations
+  Leaves notes in a review-notes.md file
+```
+
+The critic instance runs **with no prior context** about the implementation → its feedback is more impartial than that of the doer, which is already "married" to its solution.
+
+Practical implementation: run `git diff main...feature/new-checkout > /tmp/diff.patch` and paste that into the critic instance.
+
+---
+
+## Pattern C — Pipeline
+
+One instance does the first phase, hands off to the next worktree, and so on.
+
+```
+Worktree 1 (research):
+  Investigates lib X, writes docs/x-evaluation.md
+
+Worktree 2 (implementation):
+  Reads docs/x-evaluation.md
+  Implements following the recommendation
+
+Worktree 3 (tests):
+  Reads the implementation, writes the tests
+
+Worktree 4 (docs):
+  Documents the public API
+```
+
+Each one with fresh context and a clear mission. The "state" is passed between worktrees via versioned files.
+
+---
+
+## Cost management
+
+Three Claude Code instances in parallel = 3× the token consumption. Things to keep in mind:
+
+| Trick | Savings |
+|-------|--------|
+| Use Haiku on the mechanical instances (tests, simple refactor) | ~70% on those tasks |
+| Aggressive `/clear` when a sub-task finishes | Avoids piling up dead tokens |
+| Mechanical tasks in batch, not one at a time | Less overhead per request |
+| Worktrees with a specific `CLAUDE.md` (limited scope) | Less context loaded |
+
+For occasional use it doesn't matter. For heavy daily use, pay attention to the `/cost` of each instance.
+
+---
+
+## Common problems
+
+### "The worktrees see uncommitted changes from others"
+
+No, they don't. Each worktree has its own working tree. What they **do share** is the list of branches. If you run `git branch -D X` in one, it disappears in the others too.
+
+### "I get confused about which terminal is which task"
+
+Rename the tabs/windows. In zsh:
+
+```bash
+echo -ne "\033]0;notifs\007"
+```
+
+Or use [tmux](https://github.com/tmux/tmux) with named panes.
+
+### "All three instances ask me for permission for the same thing"
+
+Configure `permissions.allow` in `.claude/settings.json` **of the main repo** (all worktrees inherit it).
+
+---
+
+## Next steps
+
+- For tasks that don't require parallelism, the [complete Claude Code guide](/boveda/guia-claude-code-completa) is enough.
+- If you're going to combine it with Codex, check out the [Claude + Codex pattern](/boveda/claude-codex-equipo), which is similar but with two different tools.
+- Setting up shared hooks across worktrees: [Claude Code hooks](/boveda/hooks-automatizacion).

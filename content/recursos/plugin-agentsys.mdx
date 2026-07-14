@@ -1,0 +1,122 @@
+---
+title: "Agentsys — 19 plugins de orquestación y delivery para Claude Code"
+description: "Marketplace de agent-sh (658⭐) con 19 plugins, 47 agents y 39 skills enfocados en lo que viene después de que escribís código: gates de calidad, ship, audits, debate cross-tool y onboarding."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "codex", "cursor"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["goal-claude-code", "claude-codex-equipo", "trifecta-perfecta"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/agentsys"
+github: "https://github.com/agent-sh/agentsys"
+---
+
+## Qué es
+
+El pitch de agent-sh es claro: "AI escribe código. Esto automatiza todo lo demás." Y de hecho la mayoría de los plugins del marketplace son sobre el "todo lo demás" — quality gates, ship, audits, debate entre herramientas, onboarding, performance.
+
+Es un marketplace de 19 plugins, con cross-compatibilidad probada: funciona en Claude Code, OpenCode, Codex, Cursor y Kiro. No te ata a una sola herramienta.
+
+El plugin estrella es `next-task`: un orquestador autónomo que arma flujos con optimización de modelo (Opus para pensar, Sonnet/Haiku para ejecutar), gestión de estado en dos archivos, gates de enforcement y 8 sub-agents especializados. Si querés un loop autónomo bien armado, no tener que hacerlo desde cero.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | agent-sh |
+| Stars | 658 |
+| Tipo | Marketplace (19 plugins) |
+| Componentes | 47 agents, 39 skills |
+| Cross-tool | Claude Code, OpenCode, Codex, Cursor, Kiro |
+| Marketplace | `agent-sh/agentsys` |
+| Web | [agent-sh.github.io/agentsys](https://agent-sh.github.io/agentsys/) |
+
+### Los plugins que te interesan primero
+
+| Plugin | Qué hace |
+| --- | --- |
+| `next-task` | Orquestador autónomo con 8 sub-agents y gates de enforcement |
+| `prepare-delivery` | Pre-ship: deslop, simplify, agnix, enhance, review loop, docs sync |
+| `gate-and-ship` | Encadena `prepare-delivery` + `ship` en un comando |
+| `ship` | PR workflow completo: commit, ship, rollback automático |
+| `deslop` | Detector de "AI slop" en 3 fases (regex, analyzers, CLI) |
+| `audit-project` | Review iterativo multi-agente hasta cero issues |
+| `drift-detect` | Realinea planes con la realidad del repo |
+| `agnix` | Linter de configs (SKILL.md, CLAUDE.md, hooks, MCP) contra 342 reglas |
+| `consult` / `debate` | Pedir segunda opinión a Gemini CLI, Codex, OpenCode o Copilot |
+| `web-ctl` | Browser automation con defensa contra prompt injection |
+| `skillers` | Aprende patrones de sesión y sugiere skills/hooks para automatizar |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add agent-sh/agentsys
+
+# Después instalás los que necesites
+/plugin install next-task@agent-sh-agentsys
+/plugin install gate-and-ship@agent-sh-agentsys
+```
+
+O `/plugin` → Discover → tab "agent-sh".
+
+Para Claude Code en lenguaje natural:
+
+```
+Instalá el marketplace agent-sh/agentsys. Después agregame next-task,
+prepare-delivery y ship. Mostrame el flujo recomendado para usarlos juntos.
+```
+
+## Qué podés hacer con esto
+
+### Loop autónomo hasta el ship
+
+`next-task` toma una tarea, arma el plan, lo ejecuta con sub-agents, y pasa por gates antes de avanzar al siguiente paso. No es lo mismo que [/goal](/boveda/goal-claude-code) — `next-task` ya viene con gates de calidad armados, mientras que `/goal` es el primitivo nativo de Claude Code.
+
+### Pre-flight check antes de cada PR
+
+`prepare-delivery` corre en pipeline: detecta slop con regex y analyzers, simplifica código duplicado, valida configs con `agnix` (342 reglas), corre el review loop y sincroniza docs. Cuando termina, el código está listo para que `ship` lo mande a prod.
+
+### Segunda opinión cross-tool
+
+Si solo te confiás de Claude para revisar, perdés un canal. `consult` te permite pedirle a Gemini CLI, Codex CLI o Copilot CLI que revisen el output de Claude — y `debate` arma rondas estructuradas con proposer/challenger hasta consenso. Misma filosofía que [Claude + Codex en equipo](/boveda/claude-codex-equipo).
+
+### Linter de tu propia config
+
+`agnix` revisa tu `CLAUDE.md`, las skills locales, los hooks y los MCPs contra 342 reglas. Si tu config se fue de las manos (y todas se van), te dice qué arreglar.
+
+### Patrones repetidos → automatizaciones
+
+`skillers` mira tus sesiones, detecta lo que hacés a mano repetidamente, y te sugiere armar un skill/hook que lo automatice. Es el equivalente a un "promote to skill" inteligente.
+
+## Beneficios reales
+
+- **Cubre el gap entre "Claude escribió código" y "el código está en producción"** — la parte que la mayoría ignora.
+- **Cross-tool de verdad** — si mañana querés probar Cursor o Codex, los plugins siguen sirviendo.
+- **Gates de calidad explícitos** en `prepare-delivery` — no es un wishlist, es un pipeline con steps verificables.
+- **Modular** — instalás 1, 2 o los 19, según necesidad.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si recién instalaste Claude Code:** son 19 plugins con dependencias entre sí. Arrancá por el [setup oficial](/boveda/claude-code-setup) y un par de skills básicas.
+- **Si tu workflow ya está cubierto:** muchos de estos plugins resuelven cosas que vos quizás ya tenés con CI/CD propio + Cursor + Codex. Sumarlos puede solapar.
+- **Si no querés ejecuciones autónomas largas:** `next-task` está pensado para correr horas sin supervisión. Si esa idea te incomoda, no lo uses.
+- **Costo de tokens:** los plugins de debate y review iterativo consumen mucho. Mirá tu cuota antes.
+
+</Callout>
+
+## Bajalo de la fuente
+
+agent-sh es independiente. Tienen web, docs y un repo activo:
+
+- **Ficha en aitmpl.com:** [Agentsys](https://www.aitmpl.com/plugins/agentsys) — listado completo de los 19 plugins.
+- **Repo en GitHub:** [agent-sh/agentsys](https://github.com/agent-sh/agentsys) — código, issues, contributing.
+- **Web oficial:** [agent-sh.github.io/agentsys](https://agent-sh.github.io/agentsys/) — guías y referencia.
+
+## Recursos relacionados
+
+- [/goal — la meta que Claude no suelta](/boveda/goal-claude-code) — el primitivo nativo para ejecuciones autónomas. Compará contra `next-task` antes de adoptar uno.
+- [Claude + Codex en equipo](/boveda/claude-codex-equipo) — el patrón cross-tool ya documentado. Agentsys lo lleva a 5 herramientas.
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — combo más liviano (3 herramientas) si Agentsys te suena demasiado para empezar.

@@ -1,0 +1,80 @@
+---
+title: "Hook Desktop Notification On Stop — native alert when Claude finishes responding"
+description: "A hook with 90 installs that fires a native OS notification every time Claude finishes responding. One notification per response — handy for long sessions where you step away to do something else."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["plugin-claude-notifications-go", "hook-discord-notifications", "hook-context-timeline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/monitoring/desktop-notification-on-stop"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/desktop-notification-on-stop.json"
+---
+
+## What it is
+
+Every time Claude Code finishes responding (Stop event), this hook fires a native operating-system notification (macOS, Linux, Windows).
+
+Unlike [Discord Notifications](/boveda/hook-discord-notifications) (which goes to a remote channel) or [Claude Notifications Go](/boveda/plugin-claude-notifications-go) (which is a full plugin), this is the simplest version: a system notification, one per response.
+
+Hook event: `Stop`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `monitoring` |
+| Installs | 90 |
+| Hook event | `Stop` |
+| Output | Native desktop notification |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --hook monitoring/desktop-notification-on-stop
+```
+
+For Claude:
+
+```
+I installed the monitoring/desktop-notification-on-stop hook. Ask Claude
+to do something that takes 20 seconds. When it finishes, my OS
+notification should go off.
+```
+
+## What you can do with it
+
+### For long sessions
+
+You kick off a 5-minute task and step away to do something else. When the notification comes back, it's ready.
+
+### No webhooks or external services
+
+Unlike Discord/Slack notifications, this is OS-only. No internet, no webhook URLs.
+
+### Combo with focus mode
+
+If you have focus mode enabled on macOS, the notifications still show up in your summary.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your workflow is continuously interactive:** it doesn't help — you're always watching.
+- **If your OS blocks notifications:** some setups block them by default. Enable them first.
+- **If you need remote notifications** (to alert someone else or reach your phone): go with [Claude Notifications Go](/boveda/plugin-claude-notifications-go) or [Discord Notifications](/boveda/hook-discord-notifications) instead.
+- **For short tasks:** the notification arrives after you've already seen the output.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Desktop Notification On Stop Hook](https://www.aitmpl.com/component/hooks/monitoring/desktop-notification-on-stop) — exact command.
+- **JSON config:** [desktop-notification-on-stop.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/desktop-notification-on-stop.json).
+
+## Related resources
+
+- [Claude Notifications Go Plugin](/boveda/plugin-claude-notifications-go) — plugin with 6 types + webhooks + click-to-focus.
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — for a remote channel.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualization instead of a one-off notification.

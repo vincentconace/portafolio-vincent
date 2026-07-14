@@ -1,0 +1,102 @@
+---
+title: "MCP GitHub Integration — el conector con 2,867 installs (top integration)"
+description: "MCP server con 2,867 installs — el más adoptado de la categoría integration. Acceso directo a la API de GitHub: repos, issues, PRs, code review, releases. El estándar de facto para conectar Claude Code con GitHub."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "github"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["anthropic-github", "mcp-github-official", "claude-codex-equipo"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/integration/github-integration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/github-integration.json"
+---
+
+## Qué es
+
+Si trabajás con GitHub (casi todos), este MCP es uno de los que más vas a usar. Le da a Claude Code acceso a la API de GitHub: leer repos, crear issues, manejar PRs, revisar código, gestionar releases, buscar.
+
+2,867 installs lo posicionan como **el MCP más adoptado de la categoría integration** del catálogo aitmpl. Indica que es el estándar de facto, no un experimento.
+
+Comparado con [mcp-github-official](/boveda/mcp-github-official) (la versión "official" en el catálogo), este es el que la comunidad eligió por consistencia. Hay diferencias menores; para la mayoría de casos, cualquiera de los dos sirve.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `integration` |
+| Installs | **2,867 (top de integration)** |
+| Servidor MCP | `github` |
+| Cuenta requerida | Sí — GitHub + Personal Access Token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp integration/github-integration
+```
+
+Pre-requisitos: GitHub account + Personal Access Token con scopes apropiados (repo, issues, pull_request).
+
+Para Claude:
+
+```
+Instalé el MCP integration/github-integration. Después de setear
+GITHUB_TOKEN, listame mis 5 repos más activos por commits del último mes
+y los PRs abiertos en cada uno.
+```
+
+## Qué podés hacer con esto
+
+### Triage de issues
+
+"Listame los 20 issues más viejos sin actividad en el último mes en mis repos. Para cada uno, decime si tiene sentido cerrarlos o necesitan atención". Útil para limpieza periódica.
+
+### Workflow de PR completo
+
+"Creá un branch desde main, agregá este cambio, commit con mensaje X, abrí PR con descripción Y, asigná reviewers Z". El flujo entero en un prompt.
+
+### Code review asistido
+
+"Andá al PR #234, leé el diff y dame review por cada archivo: bugs, style, edge cases. Si está OK, dejá un comment de approval con resumen".
+
+### Búsqueda cross-repo
+
+"Buscame en todos mis repos usos de la función `legacyAuth()` y armá un plan de migración". GitHub Search API a través del MCP.
+
+### Gestión de releases
+
+"Sacá un release v1.2.0 con changelog desde los últimos 30 commits, agrupados por tipo (feat/fix/chore)".
+
+### Sync con [Claude + Codex en equipo](/boveda/claude-codex-equipo)
+
+Si el patrón es "Claude implementa, Codex revisa", el MCP de GitHub hace que la review y el PR funcionen en una sesión sin context switching.
+
+## Pre-requisitos
+
+- **Cuenta GitHub** activa
+- **Personal Access Token** con scopes correctos (mirá el repo del MCP para el listado exacto)
+- **Acceso al repo / org** que vas a consultar
+- **2FA** habilitado recomendado (no obligatorio para el MCP)
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de habilitar writes en repos importantes">
+
+- **Tokens con scopes amplios:** el token hereda lo que tu usuario puede hacer. Si tenés admin sobre 100 orgs, Claude también. Restringí scopes al mínimo.
+- **Operaciones destructivas:** delete branches, force-push, close issues sin querer. Hooks de aprobación SIEMPRE en repos productivos.
+- **Audit log:** todo lo que Claude haga queda en tu user. Mirá audit logs si te pasás.
+- **GitHub Enterprise Cloud o Server:** verificá compatibilidad. La mayoría funciona, algunas features GHES no.
+- **Rate limits:** la API tiene cuotas. Operaciones masivas pueden bloquearte temporalmente.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [GitHub Integration MCP](https://www.aitmpl.com/component/mcps/integration/github-integration) — comando exacto.
+- **Config JSON:** [github-integration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/github-integration.json).
+
+## Recursos relacionados
+
+- [Anthropic GitHub](/boveda/anthropic-github) — para sacarle jugo al ecosistema GitHub de Anthropic (templates, recursos).
+- [GitHub Official MCP](/boveda/mcp-github-official) — versión "official" del catálogo. Comparalas según preferencia.
+- [Claude + Codex en equipo](/boveda/claude-codex-equipo) — el patrón cross-tool donde este MCP es central.

@@ -1,0 +1,94 @@
+---
+title: "Cartographer — map giant codebases with parallel sub-agents"
+description: "Plugin by kingbootoshi (525⭐) that scans and documents any codebase using sub-agents in parallel. Built for repos where reading file by file just isn't feasible."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["anatomia-claude", "book-to-skill", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/cartographer"
+github: "https://github.com/kingbootoshi/cartographer"
+---
+
+## What it is
+
+Cartographer solves a very specific problem: when you pick up someone else's codebase (or one of your own that you abandoned two years ago) and you need to understand what each part does without reading all of it. Traditionally you'd ask Claude to walk through the repo, but with large repos Claude runs out of context before mapping anything useful.
+
+The plugin avoids this by using sub-agents that run in parallel. Each one takes charge of a section of the repo, returns a structured summary, and at the end a coordinating agent stitches everything together into a coherent map of the project. The result is actionable documentation: which folder does what, where the entry points are, which modules have the most dependencies.
+
+It's a single plugin — one `/plugin install` and you're done.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | kingbootoshi |
+| Stars | 525 |
+| Type | Single plugin (skills) |
+| Marketplace | `kingbootoshi/cartographer` |
+| Mechanics | Sub-agents in parallel |
+
+## How to install it
+
+```bash
+/plugin marketplace add kingbootoshi/cartographer
+/plugin install cartographer@kingbootoshi-cartographer
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the cartographer plugin from kingbootoshi/cartographer and show me
+how to invoke it on this repo.
+```
+
+## What you can do with this
+
+### Onboarding onto someone else's codebase
+
+You start a new project and you have to understand 200+ files in a repo you didn't create. Instead of reading them one by one, Cartographer builds the map: entry points, main modules, dependencies between folders, critical files. In 5-10 minutes you have more context than you'd get spending an afternoon reading.
+
+### Reviving an old repo of your own
+
+A repo you abandoned 2 years ago: you no longer remember the architecture. Cartographer reconstructs the mental model you lost.
+
+### Auditing before refactoring
+
+Before you touch a module, you know which other modules depend on it. Useful for not breaking things you didn't know were connected.
+
+### Generating the initial `CLAUDE.md`
+
+The output Cartographer returns is perfect for feeding your `CLAUDE.md`. You go from "Claude doesn't understand a thing about this repo" to "Claude has the map loaded" in a single run.
+
+## Real benefits
+
+- **Parallel sub-agents** — it doesn't eat up your main context window.
+- **Works on repos of any size** — the author specifically tests it on large codebases.
+- **The output is structured** — markdown you can save in `docs/` or paste into `CLAUDE.md`.
+- **A single command** — nothing weird to configure.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **Small repo (fewer than 30 files):** you don't need a map. Open the files and read them. Cartographer is overkill there.
+- **If you only care about one folder:** the plugin maps everything. If you want something focused, just ask Claude directly "explain what `src/auth/` does".
+- **If your repo has a lot of noise** (versioned `node_modules`, builds, giant assets): clean up your `.gitignore` first, otherwise Cartographer wastes time mapping junk.
+- **Token cost:** parallel sub-agents on a large repo consume quite a bit. Check your quota before running it on a monorepo.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Cartographer](https://www.aitmpl.com/plugins/cartographer) — the exact command + a short description.
+- **Repo on GitHub:** [kingbootoshi/cartographer](https://github.com/kingbootoshi/cartographer) — code, issues, output examples.
+
+## Related resources
+
+- [Anatomy of Claude](/boveda/anatomia-claude) — the conceptual foundation: why Cartographer is a "skill" and not an "agent" or an "MCP".
+- [Book to Skill](/boveda/book-to-skill) — a similar pattern for books: it breaks a giant manual into pieces accessible on-demand.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — what to put in `CLAUDE.md` after Cartographer hands you the map.

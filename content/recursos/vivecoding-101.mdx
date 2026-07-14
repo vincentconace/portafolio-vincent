@@ -1,0 +1,296 @@
+---
+title: "VibeCoding 101 — de idea a app publicada con proceso (no hype)"
+description: "Guía para construir productos con IA desde fundamentos. Paso 1 crítico: crear PRD (Product Requirements Doc) ANTES de tocar herramientas — es lo que separa app funcional de algo que se ve hecho en 20 min. Plus: stack recomendado, prompts copy-paste y errores típicos de vibe coders."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "chatgpt"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["stack-app-movil-ia", "the-architect", "hablarle-a-claude"]
+---
+
+## Lo que distingue "vibe coding" funcional de juguete
+
+La diferencia entre app que **funciona** y app que **se ve hecha en 20 min** es UNA cosa:
+
+> **El PRD (Product Requirements Document) ANTES de tocar herramientas**
+
+Sin PRD vas a improvisar feature por feature, te vas a perder, y al final tu app tiene 5 cosas mediocres en lugar de 2 cosas excelentes.
+
+---
+
+## Paso 1 — Crear PRD (no te lo saltes)
+
+Definí ANTES de cualquier prompt:
+
+- **Qué problema resolvés** y para quién
+- **Qué debe hacer SÍ o SÍ** tu v1 (must-have)
+- **Qué queda fuera** para no sobrecargar primer build
+- **Cómo vas a medir** que funciona
+
+### Prompt para generar PRD
+
+```
+Actuá como Product Manager senior y ayudame a crear PRD completo
+para mi app.
+
+100% en español.
+
+Contexto:
+- Nombre: [NOMBRE_PROYECTO]
+- Problema: [PROBLEMA_QUE_RESUELVE]
+- Usuario ideal: [USUARIO_OBJETIVO]
+- Resultado esperado: [QUÉ ESPERA EL USUARIO]
+- Plataformas: [WEB / iOS / ANDROID]
+- Must-have: [FEATURES OBLIGATORIAS]
+- Nice-to-have: [FEATURES OPCIONALES]
+- Restricciones: [REGLAS DE NEGOCIO]
+- Monetización: [SI APLICA]
+
+PRD debe incluir:
+1. Resumen ejecutivo (1 párrafo)
+2. Problema y oportunidad
+3. Perfil de usuario (ICP)
+4. Objetivos del producto
+5. Alcance v1 (in scope / out of scope)
+6. Requisitos funcionales (bullets)
+7. Requisitos no funcionales (perf, security, UX)
+8. Arquitectura sugerida (front, back, DB, IA si aplica)
+9. User stories (Como X, quiero Y, para Z)
+10. Criterios de aceptación por feature crítica
+11. Métricas de éxito (KPIs)
+12. Riesgos y supuestos
+13. Plan de ejecución en fases (MVP → v1 → v2)
+
+Entrega: markdown. Concreto, sin relleno.
+```
+
+### Output esperado
+
+Documento de 800-1500 palabras que define **CLARAMENTE** qué construir y qué no.
+
+---
+
+## Paso 2 — Stack según tu skill level
+
+### Si NO programás
+
+| Tool | Para qué |
+|------|----------|
+| **Lovable** / **Bolt** / **v0** | App entera por chat |
+| **Vercel** | Deploy automático |
+| **Supabase** | Backend + auth + DB |
+
+### Si programás algo
+
+| Tool | Para qué |
+|------|----------|
+| **Claude Code** | Construcción con tu intervención |
+| **Next.js + Tailwind** | Stack frontend estándar |
+| **Supabase** | Backend |
+| **Vercel** | Deploy |
+
+Ver [stack app móvil IA](/boveda/stack-app-movil-ia) para mobile.
+
+### Si sos dev experimentado
+
+Tu stack habitual + Claude Code como copiloto + [Plan Mode](/boveda/planea-audita-construye) + [The Architect](/boveda/the-architect).
+
+---
+
+## Paso 3 — Construir en fases (NO todo de una)
+
+### Fase 0 — Setup (1-2h)
+
+- PRD listo
+- Stack elegido
+- Repo creado
+- Deploy básico (página "hello world")
+
+### Fase 1 — MVP funcional (1-2 días)
+
+- 1-2 features core
+- DB schema básico
+- Auth (si aplica)
+- Deploy en producción
+
+### Fase 2 — Validar (1-2 semanas)
+
+- Mostrarle a 5-10 usuarios reales
+- Recoger feedback
+- Iterar lo que mueve aguja
+
+### Fase 3 — Crecer (1-3 meses)
+
+- Features que validaste
+- Optimizar conversión
+- Marketing
+
+**NO saltes fases**. Vibe coders que arrancan Fase 3 sin validar terminan con producto que nadie usa.
+
+---
+
+## Paso 4 — Workflow con Claude Code
+
+### Sesión típica
+
+```
+1. Le pegás el PRD (sección específica) a Claude
+2. Le pedís construir esa sección
+3. Revisás lo que generó
+4. Iterás si algo no convence
+5. Commit + deploy
+6. Siguiente sección
+```
+
+### Prompts esenciales
+
+**Para empezar feature**:
+
+```
+> Estamos en Fase 1 MVP. Vamos a construir [FEATURE].
+
+  Del PRD: [PEGÁS LA SECCIÓN RELEVANTE]
+
+  Stack: Next.js + Tailwind + Supabase.
+
+  Antes de codear, hacé Plan Mode: decime archivos a crear/modificar,
+  componentes nuevos, schema de DB si aplica.
+
+  Después de plan, esperás mi OK para construir.
+```
+
+**Para iterar**:
+
+```
+> La feature funciona pero [PROBLEMA ESPECÍFICO].
+  Arreglalo manteniendo el resto intacto.
+```
+
+**Para deploy**:
+
+```
+> Feature lista. Hacé:
+  1. Tests básicos pasan
+  2. Build sale verde
+  3. Commit con mensaje claro
+  4. Deploy a Vercel
+```
+
+---
+
+## Los errores típicos de vibe coders
+
+### 1. Construir sin PRD
+
+Lo más común. Resultado: 5 features mediocres en lugar de 2 excelentes.
+
+### 2. Cambiar stack a mitad
+
+"Empecé con Next.js, ahora me parece mejor SvelteKit". **NO**. Quedate con uno hasta v1.
+
+### 3. Querer todo perfecto antes de mostrar
+
+Mostrá MVP feo. **Feedback real > Pulir en solitario**.
+
+### 4. No usar Plan Mode
+
+Si Claude empieza a generar sin plan, **te perdés control**. [Plan Mode](/boveda/planea-audita-construye) siempre.
+
+### 5. Sin tests, sin auth, sin nada de seguridad
+
+Para MVP de validación, OK. Para producto que cobrás → seguridad NO opcional. [Cyber Neo](/boveda/cyber-neo) + [protege tu app](/boveda/protege-tu-app).
+
+### 6. Stack overload
+
+Querer Supabase + Firebase + Vercel + Render + 3 servicios SaaS = **caos**. Mínimo viable de tools.
+
+### 7. No hablar con usuarios
+
+Construir 2 semanas en silencio sin mostrar. Cuando mostrás, **es demasiado tarde** para ajustar.
+
+### 8. Copiar producto que ya existe sin diferenciación
+
+"Voy a hacer un Notion pero mejor". OK pero **¿en qué dimensión específica**? Si no podés contestar en 1 frase, no tenés diferenciación.
+
+---
+
+## ROI realista — qué esperar
+
+| Time invested | Output realista |
+|---------------|-----------------|
+| 4-8h con PRD bien hecho | MVP funcional para mostrar a amigos |
+| 2-3 semanas (10h/semana) | App publicable con primeros 10-50 usuarios |
+| 2-3 meses | Producto con cierta tracción si pegaste el problema |
+| 6-12 meses | $1k-10k MRR posible si todo va bien |
+
+**Expectativas**: 90% de vibe coding projects **no escalan más allá de side project**. Está bien. **Eso te enseña** a construir.
+
+---
+
+## Cuándo cada herramienta
+
+| Necesidad | Tool |
+|-----------|------|
+| Prototype visual sin código | [Artefactos](/boveda/artefactos-claude), Lovable |
+| Landing pages | [Instant Landing](/boveda/instant-landing) |
+| App entera no-code | [Claude Web Builder](/boveda/claude-web-builder) |
+| App móvil | [Stack app móvil](/boveda/stack-app-movil-ia) |
+| Producto serio con código | Claude Code + [The Architect](/boveda/the-architect) |
+
+---
+
+## Combinaciones potentes
+
+### Stack completo de vibe coding
+
+```
+1. PRD con prompt de arriba
+2. [The Architect](/boveda/the-architect) genera blueprint
+3. [Plan Mode](/boveda/planea-audita-construye) audita
+4. Claude Code construye
+5. [Cyber Neo](/boveda/cyber-neo) audit security
+6. [All Deploy](/boveda/all-deploy) sube
+```
+
+End-to-end con metodología.
+
+### Con humanizer para landing
+
+```
+> Tu landing del MVP necesita copy. Genéralo con Claude.
+  Pasalo por /humanizalo antes de publicar.
+```
+
+[Humanízalo](/boveda/humanizalo).
+
+---
+
+## Reglas de oro
+
+1. **PRD primero. Siempre.**
+2. **Una feature a la vez.**
+3. **Mostrá MVP feo antes de pulir.**
+4. **Hablá con usuarios reales semanal.**
+5. **Stack mínimo viable.**
+
+---
+
+## Cuándo NO conviene "vibe coding"
+
+| Caso | Mejor approach |
+|------|----------------|
+| Producto enterprise crítico | Dev team formal |
+| Compliance estricto regulado | Auditoría profesional |
+| Multi-million $ products | Engineering team |
+| Sin tiempo para iterar | Comprá SaaS existente |
+
+Vibe coding es **excelente para validar ideas y MVPs**. Para producción seria, eventualmente necesitás más.
+
+---
+
+## Próximos pasos
+
+- Para stack específico de app móvil, [Stack app móvil IA](/boveda/stack-app-movil-ia)
+- Para blueprint estructurado pre-construcción, [The Architect](/boveda/the-architect)
+- Para fundamentos de cómo hablarle a Claude, [hablarle a Claude](/boveda/hablarle-a-claude)

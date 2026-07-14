@@ -1,0 +1,251 @@
+---
+title: "Plugin: evaluador de prompts — si está vago, te pregunta antes de ejecutar"
+description: "Un plugin que intercepta tus prompts y, si detecta que son vagos o ambiguos, te hace 2-3 preguntas concretas antes de mandarlos. Reduce el ping-pong de 'no, no era eso' y el gasto de tokens en respuestas incorrectas."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-07"
+readingTime: "7 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "prompting-10-pilares", "comando-tests-automaticos"]
+---
+
+## El problema
+
+El usuario nuevo de Claude Code escribe cosas como:
+
+- *"Mejorá este archivo"*
+- *"Optimizá la performance"*
+- *"Hacelo más limpio"*
+- *"Agregá tests"*
+
+Estos prompts son **interpretables**. Claude tira algo razonable pero rara vez es lo que vos querías. Resultado:
+
+1. Claude implementa una interpretación
+2. Vos: "no, así no"
+3. Claude rehace con otra interpretación
+4. Vos: "tampoco"
+5. ... 4-5 idas y vueltas, tokens quemados, frustración acumulada
+
+El plugin de "evaluador de prompts" mete una capa adelante: **detecta la vaguedad y te pregunta antes de ejecutar**.
+
+---
+
+## Cómo funciona
+
+Es un slash command (o una skill con prioridad alta) que activás al inicio de tareas:
+
+```
+> /eval-prompt "mejorá el archivo de auth"
+
+Detecté que tu pedido es ambiguo. Antes de empezar:
+
+1. ¿Qué tipo de "mejora"? Opciones que veo:
+   a) Performance (parece OK por ahora — auth no es bottleneck)
+   b) Legibilidad (hay funciones de 80+ líneas que se pueden partir)
+   c) Seguridad (no veo problemas obvios, pero puedo auditar)
+   d) Cobertura de tests (cobertura actual: 34%)
+   e) Manejo de errores (varios catch que tragan errores)
+
+2. ¿Aplica a todo src/auth/ o a un archivo específico?
+
+3. ¿Hay restricciones? (ej: no romper la API pública, no cambiar tests existentes)
+
+Respondeme estos 3 puntos y arranco.
+```
+
+Vos respondés con la info faltante. Claude tiene contexto preciso. Implementa sin idas y vueltas.
+
+---
+
+## El plugin / comando
+
+`~/.claude/commands/eval-prompt.md`:
+
+```markdown
+---
+description: Evalúa el prompt del usuario antes de ejecutar. Si es ambiguo, pide clarificación. Si es claro, sigue.
+argument-hint: <prompt original>
+---
+
+# Evaluador de prompts
+
+El usuario pidió: $ARGUMENTS
+
+## Tu tarea
+
+ANTES de ejecutar nada, analizá la calidad del prompt. Usá esta heurística:
+
+### Indicadores de prompt vago
+
+- Verbos genéricos sin objeto claro: "mejorar", "optimizar", "limpiar", "arreglar"
+- Adjetivos sin métrica: "más rápido", "más limpio", "mejor"
+- Falta el "qué" o el "para qué"
+- No menciona archivo/función específica cuando claramente aplica a algo concreto
+- No menciona criterio de éxito
+
+### Indicadores de prompt claro
+
+- Verbo + objeto + criterio: "agregar tests con cobertura >80% para src/auth/login.ts"
+- Archivo/función específica mencionada
+- Restricciones explícitas
+- Output esperado descrito
+
+## Protocolo
+
+### Si el prompt es claro (3+ indicadores claros):
+Procedé directo, sin preguntas. Solo confirmá: "OK, voy a hacer X, Y, Z."
+
+### Si el prompt tiene ambigüedad (2+ indicadores vagos):
+NO ejecutes. En su lugar:
+
+1. Identificá las 2-3 ambigüedades principales
+2. Para cada una, proponé opciones concretas (no preguntas abiertas tipo "¿qué querés?")
+3. Pediime que confirme cada una
+
+Formato:
+```
+Detecté ambigüedad en el pedido. Antes de empezar:
+
+1. [pregunta concreta]
+   Opciones: a) ..., b) ..., c) ...
+
+2. [pregunta concreta]
+   ...
+
+Confirmame estos puntos y arranco.
+```
+
+### Si solo hay 1 ambigüedad:
+Hacé la pregunta y proponé tu interpretación más probable.
+
+## Reglas
+
+- NO inventes opciones. Si no podés enumerar 2-3 alternativas razonables, preguntá abierto.
+- Las preguntas deben ser **específicas y respondibles en 1 línea**. Evitá "¿qué tipo de mejora querés?" → preguntá "¿performance, legibilidad o seguridad?"
+- Si el usuario insiste en proceder con vaguedad ("hacé lo que te parezca"), seguí pero advertí que vas a tomar criterio propio.
+```
+
+---
+
+## Activación automática (la versión skill)
+
+Para que se active **siempre**, no solo cuando vos lo invocás, montalo como skill con descripción amplia:
+
+`~/.claude/skills/prompt-evaluator/SKILL.md`:
+
+```markdown
+---
+name: prompt-evaluator
+description: Evalúa la calidad de los pedidos del usuario antes de ejecutar.
+  Se activa al inicio de cualquier tarea no trivial, especialmente cuando el
+  usuario pide "mejorar", "optimizar", "arreglar", "limpiar" o usa verbos
+  genéricos sin objeto claro.
+---
+
+[mismo contenido del comando, adaptado a skill]
+```
+
+Con esto, cualquier pedido vago dispara la skill antes de que Claude haga nada.
+
+---
+
+## Trade-off: fricción vs precisión
+
+El plugin te agrega una pausa antes de cada tarea ambigua. Es **fricción intencional**.
+
+| Sin el plugin | Con el plugin |
+|---------------|---------------|
+| 1 prompt → 5 iteraciones → resultado | 1 prompt → 3 preguntas → 1 ejecución → resultado |
+| 5 minutos respondiendo "no, así no" | 30 segundos respondiendo preguntas concretas |
+| Tokens gastados en respuestas incorrectas | Tokens gastados en preguntas baratas |
+
+La fricción de las preguntas es **menor** que la fricción de iterar sobre código incorrecto.
+
+---
+
+## Cuándo desactivarlo
+
+Hay momentos donde la pausa es contraproducente:
+
+- **Exploración / spike**: querés que Claude pruebe algo random, las preguntas matan el flow
+- **Tareas claras pero cortas**: si decís "agregale un comentario a la función X", el plugin debería detectar que es claro y no preguntar (si lo hace mal, es un bug)
+- **Iteración rápida en algo conocido**: cuando ya tenés contexto compartido, las preguntas se sienten innecesarias
+
+Para esos casos, usás `/no-eval` o desactivás la skill por sesión:
+
+```
+> /skill-off prompt-evaluator
+```
+
+---
+
+## El patrón es generalizable
+
+El "evaluador de prompts" es un caso de **interceptor**: una skill que se mete entre el pedido del usuario y la ejecución. Otros interceptores útiles:
+
+| Interceptor | Qué intercepta |
+|-------------|----------------|
+| **Cost-checker** | Si Claude detecta que la tarea va a costar mucho, advierte y propone alcance reducido |
+| **Risk-checker** | Si la tarea toca código sensible (auth, payments, prod), pide doble confirmación |
+| **Time-estimator** | Antes de empezar, estima cuánto tarda y avisa si parece >1h |
+| **Dependency-checker** | Si la tarea requiere algo no instalado, lista qué falta antes de empezar |
+
+Todos son skills similares al evaluador de prompts. El patrón: **interceptar → analizar → confirmar o pasar**.
+
+---
+
+## Ejemplo del antes y después
+
+### Sin plugin
+
+```
+> Hacé mejor el código de checkout.
+
+[Claude tira 200 líneas de cambios, 3 archivos]
+
+> No, no era esto. Quería que solo optimices la performance, no que rehagas la UI.
+
+[Claude rehace, ahora optimiza, pero rompió un test]
+
+> Y arreglá ese test.
+
+[Claude arregla el test...]
+```
+
+15 minutos, ~8k tokens.
+
+### Con plugin
+
+```
+> Hacé mejor el código de checkout.
+
+Detecté ambigüedad. Antes de empezar:
+
+1. ¿Qué tipo de mejora?
+   a) Performance (veo 2 queries N+1 en checkout flow)
+   b) UX / UI (no analicé, dame contexto si era esto)
+   c) Manejo de errores (varios catch genéricos)
+   d) Testing (cobertura actual 41%)
+
+2. ¿Solo el archivo checkout.tsx o también el endpoint /api/checkout?
+
+3. ¿Algo que NO toque?
+```
+
+```
+> a) y la query N+1. Solo el endpoint. No toques los tests existentes.
+
+OK. Voy a optimizar las 2 queries N+1 del endpoint /api/checkout. Empiezo
+por la del cálculo de envío que pega 1 query por item. No voy a tocar
+checkout.tsx ni los tests. Arranco.
+```
+
+5 minutos, ~2k tokens.
+
+---
+
+## Próximos pasos
+
+- Si te gustó el patrón, mirá la [skill code-reviewer](/boveda/skill-code-reviewer) que aplica filosofía parecida (verificar antes de aprobar)
+- Para los [prompts de PRD](/boveda/prompts-prd-ejecutivo), el patrón de "agujeros explícitos con ❓" es relacionado
+- Si tus prompts son consistentemente vagos, leer [Prompting 101 — 10 pilares](/boveda/prompting-10-pilares) ayuda a mejorar el input, no solo a filtrarlo

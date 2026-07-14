@@ -1,0 +1,81 @@
+---
+title: "Setting Game Performance Monitor Statusline — FPS + draw calls + memory for game dev"
+description: "Setting with 70 installs. Custom statusline for game engine development: FPS targets, draw calls, memory usage, build optimization. For Unity/Unreal/Godot devs who need inline metrics."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-asset-pipeline-controller-statusline", "setting-context-monitor", "setting-command-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/game-performance-monitor-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/game-performance-monitor-statusline.json"
+---
+
+## What it is
+
+A custom statusline built specifically for game development. It shows:
+- **FPS targets** and compliance
+- **Draw calls** count
+- **Memory usage** at runtime
+- **Polygon count** and build optimization metrics
+
+Niche: Unity, Unreal, and Godot devs who live with these metrics as part of their routine.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 70 |
+| Focus | Game engines |
+| Metrics | FPS, draw calls, memory, polys |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting statusline/game-performance-monitor-statusline
+```
+
+For Claude:
+
+```
+I installed the statusline/game-performance-monitor-statusline setting.
+Show me the metrics it detects in my Unity/Unreal/Godot project.
+```
+
+## What you can do with it
+
+### Always-visible metrics
+
+For game dev, metrics like FPS and draw calls are critical. Having them always in the statusline keeps them front of mind.
+
+### Build optimization tracking
+
+While you code features, you can see whether your changes affect the target metrics.
+
+### Combo with [Asset Pipeline Statusline](/boveda/setting-asset-pipeline-controller-statusline)
+
+Asset Pipeline for asset processing. Game Performance for runtime. They cover different angles of the game dev workflow.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't do game dev:** the metrics don't apply.
+- **If your engine doesn't expose those metrics via an accessible interface:** the setting may not detect them.
+- **For web devs:** [Context Monitor](/boveda/setting-context-monitor) is the option.
+- **Only 70 installs:** very niche. Validate the implementation.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Game Performance Monitor Statusline Setting](https://www.aitmpl.com/component/settings/statusline/game-performance-monitor-statusline) — exact command.
+- **JSON config:** [game-performance-monitor-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/game-performance-monitor-statusline.json).
+
+## Related resources
+
+- [Asset Pipeline Controller Statusline](/boveda/setting-asset-pipeline-controller-statusline) — natural game dev combo.
+- [Context Monitor Setting](/boveda/setting-context-monitor) — general alternative.
+- [Command Statusline Setting](/boveda/setting-command-statusline) — for custom scripts.

@@ -1,0 +1,260 @@
+---
+title: "G Stack — the Claude Code setup gifted by the president of Y Combinator"
+description: "23 tools combined so Claude operates as a 6-role team: strategist, designer, engineer, QA, security auditor and publisher. Garry Tan opened up his own stack — explained in depth and with prompts."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "12 min"
+relatedSlugs: ["trifecta-perfecta", "trio-skills-claude-code", "agency-agents"]
+---
+
+## Who put it together
+
+Garry Tan is the **president of Y Combinator** — the accelerator that produced Airbnb, Stripe, Dropbox, Coinbase. Someone who watches thousands of startups build product every year.
+
+When he shares his own Claude Code setup, it's worth paying attention: **this isn't someone who uses Claude casually**. It's someone who uses the tool intensively.
+
+What he gifted: **23 commands / skills / agents combined** that turn Claude into a team of 6 roles working in coordination.
+
+---
+
+## The 6 roles
+
+| Role | What for | When it kicks in |
+|-----|----------|---------------|
+| **Strategist (CEO)** | Interrogates you about the idea and builds the product plan | At the start, before any code |
+| **Designer** | Generates mockups, visual decisions, system | After validating the plan |
+| **Engineer** | Implements the code | After you have spec + design |
+| **QA** | Tests the app in a real browser | After each feature |
+| **Security Auditor** | Hunts for bugs and vulnerabilities | Before deploy |
+| **Publisher** | Deploys to production | When everything is validated |
+
+Each role is **a skill or agent** with its own personality, its own rules, its own tools.
+
+---
+
+## How they work combined
+
+The interesting part isn't each role in isolation — it's **how they chain together**. Garry uses them in a disciplined order:
+
+### Phase 1 — Strategist interrogates you
+
+```
+> /estratega I want to build an inventory management app for retailers.
+
+Strategist:
+  Before writing code:
+
+  1. Who is your ideal first user? Be specific (not "retailers" —
+     "pharmacy owners with 3-15 branches in Mexico")
+  2. What concrete problem does it solve today? What's the "after"?
+  3. Why is now the moment? Why not 5 years ago?
+  4. What's the MINIMUM MVP that validates the hypothesis?
+  5. How much does building that MVP cost you in time / money?
+  6. How do you know if it worked after 30 days?
+
+  Wait. Answer all 6.
+```
+
+Without these answers, **it builds nothing**. It forces thinking before executing.
+
+### Phase 2 — Designer proposes visuals
+
+```
+> /disenador Based on the strategist's work, propose:
+  - 3 distinct visual directions (mood + palette + typography)
+  - Wireframe of the 4 main screens
+  - Spacing and hierarchy system
+
+  Before implementing anything, I validate with you.
+```
+
+### Phase 3 — Engineer implements
+
+```
+> /ingeniero Implement the MVP following:
+  - Strategist's spec
+  - Designer's approved design
+  - Stack: Next.js 16, Drizzle, Tailwind
+
+  Rules:
+  - Don't add features outside the spec
+  - If you're missing info, ask before inventing
+  - Tests for every piece of business logic
+```
+
+### Phase 4 — QA tests in the browser
+
+```
+> /qa Test the app in a real browser. Cases:
+  1. Happy path: new user creates an account, loads 3 products
+  2. Edge case: load a product with no stock
+  3. Edge case: two simultaneous users
+  4. Typical bug: refresh in the middle of a flow
+
+  For each one: does it pass? If not, file:line of the problem.
+```
+
+### Phase 5 — Security auditor
+
+```
+> /security Before deploy:
+  - Hardcoded secrets
+  - SQL injection risks
+  - Missing input validation
+  - CSRF / XSS in forms
+  - Dependencies with CVEs
+
+  Report critical / high / medium.
+```
+
+### Phase 6 — Publisher deploys
+
+```
+> /publisher Deploy to production.
+  - Verify tests pass
+  - Verify the security auditor closed criticals
+  - Optimized build
+  - Environment variables set correctly on the host
+  - Deploy + post-deploy verification
+```
+
+**6 roles, 6 phases, coordinated output**.
+
+---
+
+## Why this pattern beats a generalist Claude
+
+| Approach | Result |
+|----------|-----------|
+| **One Claude doing everything** | Average. Blends the criteria of all 6 roles, none shines. |
+| **G Stack with 6 roles** | Each phase has **specialized judgment**. Each one operates through its own lens. |
+
+The technical difference is subtle but real: when the "strategist" interrogates, **it doesn't think about code**. When the "engineer" implements, **it isn't distracted by UX**. Each role covers its angle with focus.
+
+---
+
+## The 23 tools
+
+The full stack includes:
+
+### 6 main agents (the roles above)
+
+### 7 support skills
+- `/spec` — turns ideas into specs
+- `/architecture` — technical design
+- `/migration` — safe DB migrations
+- `/refactor-safe` — refactors that don't break things
+- `/test-generator` — tests with edge cases
+- `/code-review` — PR review
+- `/explain` — documenting code
+
+### 4 orchestration commands
+- `/start-project` — starts the 6-role flow
+- `/checkpoint` — saves state between phases
+- `/handoff` — passes from one role to the next with context
+- `/recap` — summary of the current state
+
+### 6 automation hooks
+- Format on save
+- Run tests on commit
+- Lint on PR
+- Auto-update CLAUDE.md when the stack changes
+- Notify when long tasks finish
+- Back up state every N hours
+
+---
+
+## How to install it (no terminal)
+
+If you've never used a terminal, you can still install it:
+
+<Step number={1} title="Install Claude desktop">
+
+Download the app from [claude.ai/download](https://claude.ai/download).
+
+</Step>
+
+<Step number={2} title="Clone the G Stack repo">
+
+In the desktop app, Claude Code → ask it:
+
+```
+> Clone Garry Tan's G Stack repo for me and install all the
+  skills + agents in my setup. Then list what's now available.
+```
+
+Claude handles the `git clone`, copying to `~/.claude/`, etc.
+
+</Step>
+
+<Step number={3} title="Verify" last>
+
+```
+> /start-project
+```
+
+If the strategist flow kicks off, everything is installed correctly.
+
+</Step>
+
+---
+
+## When this stack wins
+
+✅ You're building product from scratch (not editing an existing one)
+✅ Solo or a small team (you don't have a team covering all 6 roles)
+✅ You want structured phase discipline
+✅ You accept investing 2-3h in the initial setup to save weeks later
+
+---
+
+## When it's NOT worth it
+
+❌ You just want to edit a file or add a small feature → it's overkill
+❌ You work on an existing product with a large team → you already have human roles
+❌ You don't have the patience to answer the strategist's 6 questions → you'll feel friction
+
+---
+
+## Anti-patterns
+
+### 1. Using only the engineer
+
+The typical trap: you install all 23 but only use `/ingeniero` because you want code. **You miss 80% of the value**. The other 5 roles exist because the friction of thinking before coding is where quality is won.
+
+### 2. Skipping the strategist
+
+"I know what I want to do, I don't need an interrogation." 80% of the time, the strategist's questions **will surprise you** with something you hadn't thought of.
+
+### 3. Not customizing the roles
+
+The 23 come generic. If your industry has specific rules, **edit the SKILL.md files**. The generic strategist vs the strategist that knows your market are different tools.
+
+### 4. Using them linearly for everything
+
+For refactors / edits / debugging, you don't need all 6 roles. **The stack is for building new things.**
+
+---
+
+## The mental shift it requires
+
+G Stack forces a shift in how you work with Claude:
+
+| Without G Stack | With G Stack |
+|-------------|-------------|
+| "Do X" → Claude does it | "Let's think about X" → structured conversation |
+| You iterate on code | You iterate on decisions |
+| Immediate speed | Sustained quality |
+| You feel like you already started | You realize how many things you hadn't thought of |
+
+If your instinct is "just write code now", **you'll clash** with G Stack. If you accept the friction, **the output quality is noticeably better**.
+
+---
+
+## Next steps
+
+- For the more concise trio of code-focused skills, [trio of skills](/boveda/trio-skills-claude-code)
+- For 144 specialized agents with broad scope, [Agency Agents](/boveda/agency-agents)
+- To understand the "think → plan → execute" pattern without G Stack, [perfect trifecta](/boveda/trifecta-perfecta)

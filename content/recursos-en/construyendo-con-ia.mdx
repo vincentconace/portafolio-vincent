@@ -1,0 +1,254 @@
+---
+title: "Building with AI — hands-on workshop to publish your first app with Codex"
+description: "A practical path to go from zero to a real, published app with Codex. Adapted from the construyeconia repo in Spanish. It won't turn you into an engineer in an afternoon — it gets you to publish something real TODAY. Philosophy: learn by building, finishing something > planning perfectly for a week."
+difficulty: "fácil"
+category: "guides"
+tools: ["codex"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["construye-tu-app", "vivecoding-101", "instant-landing"]
+---
+
+## Who it's for
+
+You don't need prior technical experience. Just:
+- A laptop
+- The desire to experiment
+- Clarity to describe what you want to create
+
+**We're not trying to turn you into an engineer in an afternoon**. We want you to build something real and **put it on the internet TODAY**.
+
+---
+
+## What you'll get today
+
+- ✅ A working app on the internet
+- ✅ A public link ready to share
+- ✅ A **repeatable** system to create more products
+
+---
+
+## Philosophy
+
+> **Learn by building, not by hoarding theory.**
+>
+> **Finishing something today** > planning perfectly for a week.
+
+Move fast, publish fast, iterate with real feedback.
+
+---
+
+## The only thing you need to know
+
+| Skill | Level |
+|-------|-------|
+| Using your computer (opening apps, folders, copy/paste) | Basic |
+| Basic terminal commands | We'll guide you |
+| Describing clearly what you want | Critical |
+
+The last one is **the most important**. Codex does the technical work, you write the **brief**.
+
+---
+
+## One-line setup
+
+```bash
+# Mac / Linux
+curl -fsSL https://raw.githubusercontent.com/construyeconia/setup/main/install.sh | bash
+
+# Windows PowerShell
+irm https://raw.githubusercontent.com/construyeconia/setup/main/install.ps1 | iex
+```
+
+This installs:
+- Codex CLI
+- Base dependencies (git, node, npm)
+- Starter project
+- Local server
+- cloudflared tunnel for a public URL
+
+5-10 min later you're ready to build.
+
+---
+
+## The flow — 4 phases
+
+### Phase 1 — Define your idea (15 min)
+
+Before touching Codex, answer:
+- **What your app does** (1 line)
+- **Who it's for** (audience)
+- **What's the MOST important** thing that has to work
+- **What it looks like** (visual reference if you have one)
+
+If you struggle to answer, use the [VibeCoding 101](/boveda/vivecoding-101) prompt for a PRD.
+
+### Phase 2 — Build the MVP (1-3h)
+
+```
+> I want to build [DESCRIBE YOUR APP].
+
+  Brief:
+  - Audience: [...]
+  - MUST-have features: [3 max]
+  - Visual style: [reference]
+  - Stack: whatever works well
+
+  Build me a working MVP running locally.
+  Show me when it's ready to test.
+```
+
+Codex generates code, shows you a preview, you iterate.
+
+### Phase 3 — Iterate (30-60 min)
+
+You test it. Something's off → be specific:
+
+```
+> The Hero button is too small, make it prominent.
+> The background color is too dark, make it lighter.
+> The email form doesn't send a confirmation.
+```
+
+Codex adjusts.
+
+### Phase 4 — Publish (15-30 min)
+
+```
+> It's ready. Publish it:
+  1. Create a repo in my GitHub
+  2. Deploy to Vercel
+  3. Configure the domain
+  4. Give me the final public URL
+```
+
+URL in hand.
+
+---
+
+## Use cases
+
+### 1. Landing page to validate an idea
+
+```
+Idea: Coaching service for [TARGET]
+MVP: Landing + contact form + calendar embed
+Time: 2h total
+Result: A URL to share and validate interest
+```
+
+### 2. Simple tool
+
+```
+Idea: Pricing calculator for freelancers
+MVP: Interactive form + calculation + share button
+Time: 3h
+Result: A tool you can monetize later
+```
+
+### 3. Personal portfolio
+
+```
+Idea: Portfolio with case studies
+MVP: 5 projects + about me + contact
+Time: 1-2h
+Result: A URL for LinkedIn / applications
+```
+
+### 4. Small utility app
+
+```
+Idea: A [X] generator that automates a task you do by hand
+MVP: Input + processing + output
+Time: 2-4h
+Result: Your own tool, you can side-monetize it
+```
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **Building with AI** (this one) | Workshop setup with Codex specifically |
+| [Build your app](/boveda/construye-tu-app) | 3-step approach with Claude |
+| [VibeCoding 101](/boveda/vivecoding-101) | With a formal PRD first |
+| [Instant Landing](/boveda/instant-landing) | Landing only, single execution |
+| [Claude Web Builder](/boveda/claude-web-builder) | 6-phase flow with Claude Code |
+
+---
+
+## Anti-patterns
+
+### 1. Wanting Spotify in v1
+
+Your first app **doesn't need features from established products**. 3 well-built features > 15 mediocre ones.
+
+### 2. Polishing something ugly
+
+If you polish for 1 week, you lose momentum. **Ship it ugly and improve it later**.
+
+### 3. Not publishing "because it's not perfect"
+
+Perfect = you never publish it. **Publish today. Iterate this week**.
+
+### 4. Switching stacks halfway
+
+You started Codex with Next.js. **Don't switch** to SvelteKit halfway. Stick with it.
+
+### 5. No real feedback
+
+Show the URL to 5-10 people. Their feedback **is worth more than your opinion**.
+
+---
+
+## The first day
+
+### A realistic schedule
+
+```
+9:00 — Define the idea + brief
+10:00 — Setup + first prompt to Codex
+11:00 — MVP visible
+12:00 — Lunch + reflection
+13:00 — Iteration with feedback
+15:00 — Deploy
+16:00 — Share with 5 people
+17:00 — Gather initial feedback
+```
+
+**8 hours → published app and initial feedback**.
+
+---
+
+## Powerful combinations
+
+### With Animations
+
+If your app needs custom animations, [Animations](/boveda/animaciones) also uses Codex.
+
+### With Instant Landing
+
+If you only need a landing page (not an app), [Instant Landing](/boveda/instant-landing) is faster.
+
+### With humanizer
+
+Run all the copy generated by Codex through [humanize it](/boveda/humanizalo) before publishing.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| Enterprise product with compliance | You need real devs + auditing |
+| You're already a senior dev | Not for you (entry-level workshop) |
+| No clear idea | Validate the idea first |
+
+---
+
+## Next steps
+
+- For a Claude-based approach (not Codex), [Build your app](/boveda/construye-tu-app)
+- For a methodology with a formal PRD, [VibeCoding 101](/boveda/vivecoding-101)
+- For a landing page only, [Instant Landing](/boveda/instant-landing)

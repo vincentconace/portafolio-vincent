@@ -1,0 +1,109 @@
+---
+title: "MCP Notion — el server oficial de Notion para Claude Code (462 installs)"
+description: "MCP server oficial de Notion API con 462 installs. Buscar páginas, crear y editar docs, manejar databases, gestionar workspace. Para equipos que viven en Notion y querés AI orquestando contenido."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "notion"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-google-workspace", "mcp-monday", "plugin-knowledge-work-plugins"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/productivity/notion"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/notion.json"
+---
+
+## Qué es
+
+Notion es la plataforma elegida por muchos equipos para wikis, docs, databases híbridos y project management ligero. Este MCP **oficial** de Notion da acceso a su API para que Claude opere tu workspace.
+
+Capabilities:
+- **Buscar** páginas y databases
+- **Crear / editar** docs
+- **Manejar databases** (filtros, ordering, items)
+- **Comments y mentions**
+- **Permissions y workspace ops**
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `productivity` |
+| Installs | 462 |
+| Servidor MCP | `notionApi` |
+| Autor | Notion (oficial) |
+| Cuenta requerida | Sí — Notion + Integration token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp productivity/notion
+```
+
+Pre-requisitos: cuenta Notion + crear una "internal integration" en [notion.so/my-integrations](https://www.notion.so/my-integrations) + compartir las páginas relevantes con esa integration.
+
+Para Claude:
+
+```
+Instalé el MCP productivity/notion. Configurá NOTION_TOKEN. Listame las
+databases visibles en mi workspace. Para la database `Projects`,
+mostrame los items con status `In Progress` que tienen due date esta
+semana.
+```
+
+## Qué podés hacer con esto
+
+### Búsqueda y referencia cruzada
+
+"Buscame en mi workspace todas las notas que mencionen `OAuth 2.0`. Mostrame solo las modificadas en los últimos 30 días". Más rápido que la búsqueda nativa de Notion.
+
+### Generación de docs desde código
+
+"Para el endpoint `/api/users` que recién implementé, generame doc en Notion bajo la página `API Reference` con: descripción, params, response shape, ejemplos". Útil para docs vivos.
+
+### Update de databases con context
+
+"En la database `Roadmap`, agregame los items del backlog que cerré este sprint. Para cada uno, status=`Done`, due=hoy, asignee=yo, link al PR de GitHub".
+
+### Sync entre Notion y código
+
+"Para cada PR que tenga el label `feature`, creame una entrada en la database `Release Notes` con resumen del PR".
+
+### Templates dinámicos
+
+"Generame un nuevo proyecto en Notion siguiendo mi template `Sprint Plan`: 1 página principal, sub-páginas para goals/risks/timeline, database vinculada para tasks".
+
+### Combo con [Google Workspace](/boveda/mcp-google-workspace)
+
+Notion + Calendar + Gmail = workflow knowledge worker completo cuando Claude orquesta los tres.
+
+## Pre-requisitos
+
+- **Cuenta Notion** activa
+- **Internal Integration token** (Notion Settings → My integrations)
+- **Páginas compartidas con la integration** (Notion requiere esto explícitamente)
+- **Permisos correctos** según workspace
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Notion:** obvio. Para Confluence, Slite, otros, otros MCPs.
+- **Permisos no se heredan automático:** tenés que compartir cada page/database con la integration. Pasos manuales.
+- **Operaciones destructivas:** delete page, archive masivo. Hooks de aprobación.
+- **Para personal wikis chicos:** el MCP es overhead. Notion UI alcanza.
+- **Datos sensibles:** el token deja a Claude ver lo compartido. Mirá qué exactamente le diste acceso.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Notion MCP](https://www.aitmpl.com/component/mcps/productivity/notion) — comando exacto.
+- **Config JSON:** [notion.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/notion.json).
+- **Notion Integrations:** [notion.so/my-integrations](https://www.notion.so/my-integrations).
+- **Notion API docs:** [developers.notion.com](https://developers.notion.com).
+
+## Recursos relacionados
+
+- [Google Workspace MCP](/boveda/mcp-google-workspace) — combo si Notion y Workspace conviven en tu flow.
+- [Monday MCP](/boveda/mcp-monday) — alternativa de work management.
+- [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins) — marketplace oficial Anthropic para knowledge work, complementario.

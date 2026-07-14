@@ -1,0 +1,249 @@
+---
+title: "Agent Browser de Vercel — Claude navega sin quemar tokens"
+description: "Vercel Labs liberó Agent Browser: un navegador para Claude que reduce 10× el costo de tokens al navegar. En vez de mandar screenshots, numera cada botón y link y le manda solo eso. Setup en 1 prompt y 5 casos prácticos para arrancar."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "agent-browser"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["browser-harness", "scrapling-leads", "cinco-skills-necesarias"]
+---
+
+## El problema antes de Agent Browser
+
+Antes, para que Claude "navegue internet" tenías 2 opciones malas:
+
+| Opción | Problema |
+|--------|----------|
+| **Screenshots** | Claude lee la imagen → ~3000 tokens por acción → quemás cuota en 10 min |
+| **Claude para Chrome / Playwright** | Mismo problema — manda screenshots al modelo |
+
+Resultado: cualquier flow de 10+ clicks **quemaba el plan de $20 en una sesión**.
+
+---
+
+## Lo que cambia Agent Browser
+
+En vez de mandar la página renderizada, Agent Browser **enumera los elementos interactivos** y le pasa **solo la lista**:
+
+```
+Antes:
+[Screenshot 1080×800 de tu landing] → ~3000 tokens
+
+Después:
+[1] Logo (link, va a /)
+[2] Botón "Sign in"
+[3] Input email (vacío)
+[4] Input password (vacío)
+[5] Botón "Login"
+[6] Link "Forgot password"
+
+→ ~300 tokens
+```
+
+**10× menos tokens por interacción.**
+
+### La analogía
+
+Es como si en lugar de describirte el restaurant entero (paredes, mesas, decoración), te pasara **la carta con los números**. Vos pedís "el plato 3" y listo.
+
+Para tareas donde Claude **interactúa** (clicks, formularios, navegación), eso es todo lo que necesita saber.
+
+---
+
+## Setup en 1 prompt
+
+```
+> Instalame Agent Browser de Vercel Labs siguiendo el README oficial
+  del repo. Después validame que funciona abriendo google.com y
+  listándome los elementos interactivos visibles.
+```
+
+Claude:
+1. Clona el repo de Vercel Labs
+2. Instala deps
+3. Configura el binding con Claude Code
+4. Te abre google.com como test
+5. Lista los elementos
+
+Si responde, instalado.
+
+---
+
+## 5 casos para arrancar el primer día
+
+### Caso 1 — Leer contenido detrás de paywall ligero
+
+```
+> Andá a [URL de blog post]. Si el contenido está visible, leelo
+  completo y resumime en 3 puntos.
+```
+
+Mucho más barato que un screenshot. Agent Browser parsea el HTML, te tira el texto.
+
+### Caso 2 — Auditar tu propia landing
+
+```
+> Andá a https://miapp.com/landing. Listame:
+  - Todos los CTAs visibles
+  - Cuál es el primer CTA (above the fold)
+  - Cuántos botones hay en total
+  - Si el formulario de email funciona (click vacío, ¿muestra error?)
+
+Después audita la UX: ¿qué mejorarías?
+```
+
+Combinás "ojos de Claude" con análisis. Mucho más barato que screenshots iterativos.
+
+### Caso 3 — Bajar imágenes / assets
+
+```
+> Andá a [URL de blog post con galería]. Identificá las imágenes
+  principales del post (no thumbnails laterales). Para cada una:
+  - URL original
+  - Alt text
+  - Tamaño aprox
+
+  Bajame las URLs a un .txt.
+```
+
+Útil para investigación, research, archivo.
+
+### Caso 4 — Llenar form complejo
+
+```
+> Andá a [form de inscripción de cliente]. Llenalo con:
+  - Email: [...]
+  - Nombre: [...]
+  - Empresa: [...]
+  - [otros campos]
+
+  Antes de submit, mostrame todo lo cargado. NO submit hasta que confirme.
+```
+
+Automatización de tareas repetitivas (subir productos, completar formularios, etc.).
+
+### Caso 5 — Probar tu checkout end-to-end
+
+```
+> En staging.miapp.com:
+  1. Andá al producto X
+  2. Agregalo al carrito
+  3. Ir a checkout
+  4. Email: test@test.com
+  5. Tarjeta de test: 4242 4242 4242 4242
+  6. Confirmar
+
+Reportame:
+- Cuántos pasos
+- Si algún paso falló
+- Tiempo aproximado total
+```
+
+QA real, sin escribir Playwright a mano.
+
+---
+
+## vs alternativas
+
+| Herramienta | Costo tokens | Cuándo gana |
+|-------------|--------------|--------------|
+| **Agent Browser (Vercel)** | ~300/acción | Navegación interactiva en sites cualquiera |
+| **[Browser Harness](/boveda/browser-harness)** | ~500/acción | Sites con login (usa tu Chrome real) |
+| **Playwright + screenshots a Claude** | ~3000/acción | NO usar — caro |
+| **[Scrapling](/boveda/scrapling-leads)** | ~50/acción | Solo extracción de info (no interacción) |
+| **HTTP curl + parse** | Mínimo | Sites estáticos sin JS |
+
+**Regla**: para flows interactivos en sites públicos, Agent Browser es el más eficiente. Para sites con login, Browser Harness. Para extracción pura, Scrapling.
+
+---
+
+## Cómo funciona técnicamente
+
+Para curiosos:
+
+1. Agent Browser corre un Chrome headless (Playwright bajo el capó)
+2. Cuando le pedís acción ("click en login"), navega usando los IDs numerados que generó
+3. Después de cada acción, **re-enumera la página** (nueva lista de elementos)
+4. Te devuelve la nueva lista en formato compacto
+
+El **truco eficiencia** es que **nunca manda el HTML completo al modelo**. Solo manda:
+- Lista de elementos interactivos (numerados)
+- Texto principal de la página (no formato)
+- Resultado de la última acción
+
+Eso son ~300 tokens vs 3000 de un screenshot.
+
+---
+
+## Anti-patrones
+
+### 1. Sites SPA pesados que cargan dinámicamente
+
+Agent Browser detecta los elementos visibles al momento. Si el site **carga contenido en scroll** o tiene lazy loading, **puede no ver lo de abajo**.
+
+Mitigación: pedirle explícitamente "scroll down y re-evaluá la página".
+
+### 2. Sites con anti-bot agresivo
+
+Aunque Agent Browser usa Chrome real, **patrones repetitivos te bloquean** (CAPTCHAs, rate limits). Para sites con anti-bot:
+
+- Bajá frecuencia
+- Random delays
+- Considerá [Browser Harness](/boveda/browser-harness) que usa tu Chrome con cookies persistentes
+
+### 3. Esperar que reemplace QA humano
+
+Agent Browser detecta cosas funcionales (botón existe, link funciona). **No detecta**:
+- Que el diseño se ve mal
+- Que el texto suena raro
+- Issues de accesibilidad visual
+
+Es complemento del QA humano, no reemplazo.
+
+### 4. Tareas que requieren timing exacto
+
+Si tu flow depende de carrera contra otro proceso (race condition test, performance benchmark), **Agent Browser tiene latencia** que afecta el timing.
+
+---
+
+## Cuándo conviene
+
+✅ Auditar / probar sites públicos (tu landing, competidores, etc.)
+✅ Automatización de tareas repetitivas (formularios, uploads)
+✅ Tareas exploratorias en internet
+✅ Combinar con Claude para análisis post-navegación
+
+❌ Sites con login complejo → [Browser Harness](/boveda/browser-harness)
+❌ Solo extracción de data → [Scrapling](/boveda/scrapling-leads)
+❌ Producción crítica con SLA → herramienta dedicada como Playwright manual
+
+---
+
+## El cálculo real de ahorro
+
+Antes con screenshots:
+
+```
+1 sesión de 30 minutos navegando = ~30 acciones × 3000 tokens = 90k tokens
+Costo: ~$2-4 según modelo
+Tu plan de $20: 5-10 sesiones por mes
+```
+
+Después con Agent Browser:
+
+```
+1 sesión de 30 minutos = ~30 acciones × 300 tokens = 9k tokens
+Costo: ~$0.20-0.40
+Tu plan de $20: 50-100 sesiones por mes
+```
+
+**10× más capacidad** del mismo plan. Para quien navegaba seguido, es **el cambio del año**.
+
+---
+
+## Próximos pasos
+
+- Para sites con login que requieren cookies persistentes, [Browser Harness](/boveda/browser-harness)
+- Para extracción masiva de data (no interacción), [Scrapling](/boveda/scrapling-leads)
+- Para 5 skills que cubren un combo amplio incluyendo browser, [5 skills necesarias](/boveda/cinco-skills-necesarias)

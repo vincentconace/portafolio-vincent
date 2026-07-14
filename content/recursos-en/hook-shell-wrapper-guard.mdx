@@ -1,0 +1,87 @@
+---
+title: "Hook Shell Wrapper Guard — catch destructive commands hidden in sh -c, python3 -c, and more"
+description: "Hook with 76 installs. Detects destructive commands disguised inside shell wrappers (sh -c, bash -c, python3 -c, node -e, perl -e, ruby -e). Complements [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker)."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-dangerous-command-blocker", "hook-ai-bash-guard", "hook-env-file-protection"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/shell-wrapper-guard"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/shell-wrapper-guard.json"
+---
+
+## What it is
+
+The basic [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) matches direct patterns: `rm -rf`, `dd if=`. But `bash -c 'rm -rf /'` slips past the simple match.
+
+This hook covers that gap: it detects destructive commands inside wrappers:
+- `sh -c "..."`
+- `bash -c "..."`
+- `python3 -c "..."`
+- `node -e "..."`
+- `perl -e "..."`
+- `ruby -e "..."`
+
+It inspects the embedded code looking for destructive commands. Hook event: `PreToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `security` |
+| Installs | 76 |
+| Hook event | `PreToolUse` (Bash) |
+| Wrappers covered | sh, bash, python3, node, perl, ruby |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook security/shell-wrapper-guard
+```
+
+For Claude:
+
+```
+I installed the security/shell-wrapper-guard hook. Try it:
+`bash -c "rm -rf /tmp/test"` should be blocked even though it goes through a wrapper.
+```
+
+## What you can do with it
+
+### Close the basic blocker's gap
+
+If all you have is [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker), a command routed through a wrapper gets through. This hook covers it.
+
+### For autonomous sessions
+
+AI models sometimes "invent" creative ways to get things done — including destructive commands via wrappers. Defense in depth.
+
+### Natural combo
+
+A triple safety net:
+1. [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) — direct patterns
+2. **Shell Wrapper Guard (this one)** — wrappers
+3. [AI Bash Guard](/boveda/hook-ai-bash-guard) — AI-driven, catches variations
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your legitimate workflow relies heavily on wrappers:** sysadmins, devops. Overriding may be frequent.
+- **Without [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) installed:** the complement stands alone. Install both together.
+- **Only 76 installs:** validate the implementation.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Shell Wrapper Guard Hook](https://www.aitmpl.com/component/hooks/security/shell-wrapper-guard) — exact command.
+- **JSON config:** [shell-wrapper-guard.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/shell-wrapper-guard.json).
+
+## Related resources
+
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — the primary blocker.
+- [AI Bash Guard Hook](/boveda/hook-ai-bash-guard) — AI-driven complement.
+- [Env File Protection Hook](/boveda/hook-env-file-protection) — for .env specifically.

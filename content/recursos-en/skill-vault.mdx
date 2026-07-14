@@ -1,0 +1,195 @@
+---
+title: "Skill Vault — an agent that organizes, audits, and recommends your Claude skills"
+description: "Open source agent that lives in its own folder. You hand it a skill (link, code, URL), it audits it with 13 security checks, files it into thematic drawers (design/automation/code), and when you need something it recommends which one to use. No npm install."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["agencia-digital-completa", "crea-claude-skills", "obsidian-claude"]
+---
+
+## What it is
+
+Imagine you have a pile of toys scattered around. Some are cars, others are dolls, others are balls. **You don't know which ones are broken** and you can't find the one you need.
+
+**Skill Vault is a magic box** that does 3 things:
+
+1. **Checks each toy** to make sure it isn't broken or dangerous
+2. **Stores them in drawers** organized by type
+3. **Tells you which one to use** when you say what you want to do
+
+That's exactly what it does with your **Claude Code skills**.
+
+Repo: `Hainrixz/skill-vault`. Open source.
+
+### Important — it's not a skill
+
+Skill Vault **is not a skill** — it's a **full agent** that lives in its own folder and manages all the skills you feed it. You just toss it a skill, and it handles everything else.
+
+---
+
+## Setup
+
+### Option 1 — With git (recommended)
+
+```bash
+git clone https://github.com/Hainrixz/skill-vault.git \
+  && cd skill-vault \
+  && claude
+```
+
+### Option 2 — ZIP download
+
+1. "Download ZIP" button on GitHub
+2. Unzip
+3. Open a terminal in the folder
+4. `claude`
+
+### No extra install
+
+**There's no** `npm install`, `pip`, or config. All you need is Claude Code. **Download the folder, open Claude Code inside it, agent activated**.
+
+---
+
+## How to use it
+
+### Basic flow
+
+1. You find a skill on the internet (Twitter, YouTube, IG, wherever)
+2. You open Claude Code inside the Skill Vault folder
+3. You paste `/vault-add` + the skill (link or code)
+4. It **audits** it with 13 security checks
+5. It **files it on its own** into the correct thematic folder
+6. When you need something: `/vault-recommend` + description → it tells you which ones to use
+
+---
+
+## The 7 commands
+
+| Command | What for |
+|---------|----------|
+| `/vault-add` | You paste a link or code → it stores it in the vault |
+| `/vault-search` | You search by name — "search design" |
+| `/vault-recommend` | You say what you're doing → it tells you which skills to use |
+| `/vault-discover` | Finds new skills on the internet and imports them |
+| `/vault-list` | Lists all your skills organized by folder |
+| `/vault-stats` | How many you have + which you use most |
+| `/vault-remove` | Deletes a skill you no longer want |
+
+---
+
+## The 13-point analysis
+
+Every skill you add, Skill Vault **audits with 13 security checks** before storing it. It detects:
+
+- Commands that can delete files
+- Code that tries to steal passwords
+- Hidden tricks
+- Suspicious permissions
+- Network calls to odd domains
+- Dependencies with CVEs
+- And more
+
+It classifies it: **Safe / Medium risk / Risky / Dangerous**.
+
+You decide whether to keep it or discard it.
+
+---
+
+## Use cases
+
+### 1. Personal skill curation
+
+Every week you see 5-10 new skills on YouTube/Twitter. Instead of installing everything and getting overwhelmed, **you stash them in Skill Vault**. When you need something, you ask.
+
+### 2. Sharing a library with your team
+
+Your team shares a Skill Vault folder. Everyone contributes skills. Audited, organized, searchable.
+
+### 3. Active learning
+
+```
+> /vault-discover skills for data analysis with Pandas
+```
+
+Skill Vault searches, audits, imports. You learn with automatic curation.
+
+### 4. Cleaning up your setup before a critical project
+
+```
+> /vault-list
+> /vault-stats
+```
+
+You see what you have installed, and remove what you don't use (risk of attacks + confusion).
+
+---
+
+## Anti-patterns
+
+### 1. Importing EVERYTHING without filtering
+
+Even though Skill Vault audits, **don't approve everything automatically**. If the analysis says "Medium risk," **read it** before approving.
+
+### 2. Not using `/vault-recommend`
+
+The star command is the recommendation. If you only import and never ask for recommendations, **you lose half the value**.
+
+### 3. Duplicate skills
+
+When you import something similar to what you already have, Skill Vault warns you. **Don't pile up duplicates** — keep the best version.
+
+### 4. Folder with no backup
+
+Your Skill Vault is **your library**. If you wipe your computer without a backup, you lose months of curation. **Version it with git**.
+
+### 5. Ignoring `/vault-stats`
+
+Every 1-2 months, review your stats. Skills you've used 0 times → consider removing them.
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **Skill Vault** | Personal skill curation + auditing |
+| [Antigravity Skills](/boveda/agencia-digital-completa) | Massive pre-built library (978+) |
+| Building from scratch | Custom skills for your specific workflow |
+
+Skill Vault's sweet spot: **individual curation of skills discovered on the web**.
+
+---
+
+## Powerful combinations
+
+### With Antigravity
+
+[Antigravity Skills](/boveda/agencia-digital-completa) are pre-built skills. **Skill Vault organizes** the ones you accumulate from other sources.
+
+### With building your own skills
+
+When you build your own skill with [building Claude skills](/boveda/crea-claude-skills), add it to Skill Vault to keep it audited and accessible.
+
+### With Obsidian
+
+If your [Obsidian](/boveda/obsidian-claude) vault is separate from Skill Vault, **you can link them**: Obsidian notes reference specific skills in the Vault.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You only use 2-3 skills | The overhead isn't worth it |
+| Stable workflow, not discovering new ones | You have nothing to audit |
+| Strict enterprise compliance | You need robust audit logs |
+
+---
+
+## Next steps
+
+- For a pre-built library of 978+ skills, [Complete Digital Agency](/boveda/agencia-digital-completa)
+- To build your own skills, [building Claude skills](/boveda/crea-claude-skills)
+- For a personal knowledge base with Markdown, [Obsidian + Claude](/boveda/obsidian-claude)

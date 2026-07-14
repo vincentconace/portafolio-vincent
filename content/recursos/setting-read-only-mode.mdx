@@ -1,0 +1,88 @@
+---
+title: "Setting Read Only Mode — Claude solo lee, no edita ni ejecuta"
+description: "Setting con 110 installs. Restringe Claude a operaciones read-only. Cero modifications, cero commands. Ideal para code review, analysis y exploración de repos untrusted."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-development-mode", "setting-deny-sensitive-files", "setting-privacy-focused"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/read-only-mode"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/read-only-mode.json"
+---
+
+## Qué es
+
+Setting que restringe Claude Code completamente a operaciones read-only:
+- **Allow:** 4 ops (Read, Grep, Glob, listings)
+- **Deny:** 5 ops (Write, Edit, Bash, MultiEdit, etc.)
+
+Resultado: Claude puede analizar pero no modificar nada.
+
+Ideal para:
+- **Code review** de repos ajenos
+- **Auditoría** de codebases
+- **Exploración** de repos untrusted (cloned sin saber qué tienen)
+- **Análisis** sin riesgo de side effects
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `permissions` |
+| Installs | 110 |
+| Allow | 4 ops (read-only) |
+| Deny | 5 ops (mutations) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting permissions/read-only-mode
+```
+
+Para Claude:
+
+```
+Instalé el setting permissions/read-only-mode. Confirmá que no puedo
+editar archivos ni ejecutar comandos. Solo lectura.
+```
+
+## Qué podés hacer con esto
+
+### Code review safe
+
+Cloning un repo de terceros y querés analizarlo sin riesgo: read-only te protege.
+
+### Para sandbox / shared envs
+
+En máquinas compartidas o sandbox temporales, read-only previene side effects.
+
+### Para auditorías de security
+
+Querés explorar un repo sospechoso sin que Claude accidentalmente ejecute algo.
+
+### Anti vs [Development Mode](/boveda/setting-development-mode)
+
+Dev Mode allow amplio + deny chico. Read Only es lo opuesto: deny amplio.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si querés que Claude implemente cosas:** read-only bloquea writes. Te queda solo análisis.
+- **Para workflow productivo:** [Development Mode](/boveda/setting-development-mode) o granular allow.
+- **Si necesitás ejecutar tests:** read-only bloquea Bash también.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Read Only Mode Setting](https://www.aitmpl.com/component/settings/permissions/read-only-mode) — comando exacto.
+- **Config JSON:** [read-only-mode.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/read-only-mode.json).
+
+## Recursos relacionados
+
+- [Development Mode Setting](/boveda/setting-development-mode) — opposite (permissive).
+- [Deny Sensitive Files Setting](/boveda/setting-deny-sensitive-files) — más granular en deny.
+- [Privacy Focused Setting](/boveda/setting-privacy-focused) — privacy bundle.

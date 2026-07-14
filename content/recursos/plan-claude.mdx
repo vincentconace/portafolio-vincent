@@ -1,0 +1,263 @@
+---
+title: "Plan Mode — el modo arquitecto de Claude Code (intro simple)"
+description: "Plan Mode convierte a Claude en arquitecto: investiga tu código, lee archivos, busca patrones, diseña plan completo — todo sin tocar ni una línea. Cuando aprobás, ejecuta. Activación con Shift+Tab. Para tareas grandes o cuando querés revisar antes de cambiar."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["planea-audita-construye", "trucos-basicos-de-claude", "ultra-plan"]
+---
+
+## La idea simple
+
+Plan Mode es el **modo arquitecto** de Claude Code. Cuando lo activás, Claude:
+- ✅ Lee archivos
+- ✅ Busca código
+- ✅ Explora tu proyecto
+- ✅ Piensa
+- ❌ **NO edita, NO crea, NO borra**
+
+### La analogía
+
+Si vas a remodelar tu casa, no empezás tirando paredes. Primero llamás a un **arquitecto** que:
+1. Recorre cada cuarto
+2. Revisa la estructura
+3. Toma medidas
+4. **Dibuja un plano**
+
+Solo después alguien toca un martillo.
+
+Plan Mode es ese arquitecto. Cuando aprobás el plan, cambia a modo normal y ejecuta.
+
+---
+
+## Por qué importa
+
+Sin Plan Mode, Claude empieza a editar archivos **de inmediato**. Para bugs chicos o cambios simples, OK.
+
+**Para tareas grandes** querés que Claude primero **entienda el panorama completo** antes de tocar tu código. Plan Mode te da esa garantía.
+
+---
+
+## Cómo activarlo — 3 formas
+
+### Opción 1 — Shift+Tab (dentro de sesión)
+
+```
+Shift+Tab
+```
+
+Cambia entre Plan Mode y Auto Mode. **La más fácil**.
+
+### Opción 2 — Iniciar en Plan Mode
+
+```bash
+claude --permission-mode plan
+```
+
+Útil cuando sabés desde antes que querés planear.
+
+### Opción 3 — One-shot
+
+```bash
+claude -p "analizá la arquitectura de este proyecto y sugerí mejoras"
+```
+
+Para análisis puntuales sin sesión interactiva.
+
+---
+
+## Qué puede y qué NO
+
+### Puede
+
+| Acción | Detalle |
+|--------|---------|
+| Leer | Cualquier archivo de tu proyecto |
+| Buscar | Código, funciones, patrones |
+| Explorar | Estructura de carpetas |
+| Investigar | Web (docs, APIs, referencias) |
+| Pensar | Diseñar plan detallado |
+
+### NO puede
+
+| Acción | Por qué |
+|--------|---------|
+| Editar archivos | Sería tocar tu código |
+| Crear archivos | Idem |
+| Borrar archivos | Idem |
+| Correr comandos destructivos | rm, drop table, force push |
+| Instalar paquetes | Cambia tu env |
+
+---
+
+## Los 4 escenarios donde brilla
+
+### 1. Features nuevas grandes
+
+Vas a agregar pagos, auth, dashboards multi-page. **No querés que Claude empiece a tocar sin entender** cómo se conecta con lo que ya tenés.
+
+```
+Shift+Tab → Plan Mode
+> Quiero agregar sistema de pagos con Stripe. Analizá mi
+  arquitectura actual y proponé el plan.
+```
+
+### 2. Refactor
+
+Tocar muchos archivos a la vez. Plan Mode te garantiza que Claude **piensa el alcance** antes de cambiar.
+
+```
+> Mi módulo de orders/ está spagueti. Analizá y proponé refactor
+  que mantenga API pública pero limpie estructura.
+```
+
+### 3. Onboarding a codebase
+
+Heredás proyecto. Antes de tocar:
+
+```
+> Analizá este proyecto. Decime:
+  - Qué stack usa
+  - Arquitectura general
+  - Patrones de código
+  - Dónde está la deuda técnica
+```
+
+### 4. Decisión arquitectónica
+
+Pensás cambiar algo importante (DB, framework, deployment). Plan Mode te ayuda a **explorar la decisión sin commit**:
+
+```
+> ¿Vale la pena migrar de Express a Fastify?
+  Analizá mi código actual y dame pros/contras concretos.
+```
+
+---
+
+## Ejemplo paso a paso
+
+### Setup
+
+Tu proyecto Next.js, querés agregar autenticación.
+
+### Sin Plan Mode
+
+```
+> Agregame login con Google
+```
+
+Claude **inmediatamente** crea archivos, instala libs, modifica config. Después descubrís que **no usó la pattern que tu equipo tenía establecida**. Rehacés.
+
+### Con Plan Mode
+
+```
+Shift+Tab → ⏸ plan mode on
+
+> Quiero agregar login con Google. Analizá:
+  1. Cómo está estructurada mi app actual
+  2. Si hay alguna lógica de session/user existente
+  3. Pattern recomendado dado mi stack (Next 16 App Router)
+  4. Plan paso a paso de qué archivos crear/modificar
+```
+
+Claude investiga, te entrega plan:
+
+```
+PLAN:
+1. Crear /app/(auth)/login/page.tsx
+2. Configurar /lib/auth/google.ts con OAuth
+3. Middleware en /middleware.ts para protected routes
+4. Actualizar /lib/db/schema.ts para tabla users
+5. Migración de DB
+6. Tests en /tests/auth/
+
+Dependencies: @auth/nextjs, @auth/core
+```
+
+Vos revisás. Si convence:
+
+```
+Shift+Tab → Auto mode
+> Aprobado. Construí según el plan.
+```
+
+Sin sorpresas.
+
+---
+
+## Cómo salir sin aprobar
+
+`Shift+Tab` una vez más. Cerrás Plan Mode sin tocar nada. **Perdés el plan**.
+
+Para cuando la propuesta no convenció y querés empezar de cero.
+
+---
+
+## Variantes avanzadas
+
+| Variante | Para qué | Ver |
+|----------|----------|-----|
+| **Ultra Plan** | Plan en la nube, revisás en navegador | [Ultra Plan](/boveda/ultra-plan) |
+| **Plan Mode + ultrathink** | Razonamiento profundo en plan | [trucos básicos](/boveda/trucos-basicos-de-claude) |
+| **Plan Mode + auditoría** | Audit completa antes de aprobar | [Plan Mode audit](/boveda/planea-audita-construye) |
+
+---
+
+## Anti-patrones
+
+### 1. Plan Mode para tareas chicas
+
+`> Cambiá este texto` → Plan Mode es overhead. **Modo normal directo**.
+
+### 2. Aprobar sin leer
+
+El plan tiene valor solo si **lo leés**. Si aprobás scrolleando rápido, perdés la garantía.
+
+### 3. Quedarte en Plan Mode para siempre
+
+Algunos refinen el plan 6 veces. Después de 3 iteraciones, **aprobá lo que tenés**. Los detalles finales salen en la ejecución.
+
+### 4. Confiar que Plan Mode previene TODOS los problemas
+
+Plan Mode previene **problemas de diseño**. NO previene bugs de implementación. Después de aprobar, **seguís revisando código**.
+
+### 5. Saltearse Plan Mode "porque ya sabés lo que querés"
+
+Aunque sepas, Claude puede tener insights que vos no. **Costo bajo, beneficio alto**.
+
+---
+
+## Combinaciones potentes
+
+### Con ultrathink
+
+[Trucos básicos](/boveda/trucos-basicos-de-claude) explican Plan Mode + ultrathink = razonamiento más profundo en el plan.
+
+### Con auditoría
+
+[Plan Mode audit](/boveda/planea-audita-construye) profundiza con las 4 preguntas de auditoría que aplicás dentro de Plan Mode.
+
+### Con Ultra Plan
+
+Si el plan es grande, Ultra Plan te lo abre en navegador para review estructurado.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Cambios de 1 archivo | Overhead innecesario |
+| Vos exactamente sabés qué hacer | Plan agrega ceremonia |
+| Brainstorming exploratorio | Plan Mode es para ejecución |
+| Chat para entender, no construir | Mejor modo normal o web |
+
+---
+
+## Próximos pasos
+
+- Para metodología completa con auditoría, [Plan Mode audit](/boveda/planea-audita-construye)
+- Para Plan Mode en la nube con review estructurado, [Ultra Plan](/boveda/ultra-plan)
+- Para profundizar con ultrathink, [trucos básicos](/boveda/trucos-basicos-de-claude)

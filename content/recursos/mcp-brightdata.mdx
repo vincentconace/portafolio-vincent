@@ -1,0 +1,110 @@
+---
+title: "MCP Bright Data — 60+ tools para scraping y web data desde Claude Code"
+description: "MCP server oficial de Bright Data con 60+ herramientas: web search, scraping de sitios complejos, structured data extraction y browser automation. Una de las plataformas más serias para scraping a escala empresarial."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "brightdata"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-claude-plugins-official", "apify-mcp", "browser-harness"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web-data/brightdata"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/brightdata.json"
+---
+
+## Qué es
+
+Bright Data (antes Luminati) es una de las plataformas más serias del mercado para scraping a escala. Su valor: residential proxies, CAPTCHA bypass, structured data extraction de cientos de sitios, y orquestación de browser farms. La usan empresas grandes para inteligencia competitiva, monitoreo de precios, market research.
+
+Este MCP da acceso a las 60+ tools de Bright Data desde Claude Code. En vez de armar tu propio pipeline de scraping (proxies, anti-bot, parsers), le pedís a Claude que use el tool de Bright Data y te devuelve datos limpios.
+
+138 installs lo posicionan como uno de los MCPs más adoptados de la categoría web-data. Comparte espacio con [Apify](/boveda/mcp-apify); las diferencias son tecnológicas y de pricing.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `web-data` |
+| Installs | 138 |
+| Servidor MCP | `brightdata` |
+| Tools disponibles | 60+ |
+| Cuenta requerida | Sí — Bright Data (no tiene free tier real) |
+| Modelo | Enterprise pricing |
+
+### Tools clave de Bright Data
+
+- **Web Unlocker** — scrapear sitios con anti-bot (Cloudflare, DataDome, etc.)
+- **SERP API** — resultados estructurados de Google, Bing, etc.
+- **Web Scraper API** — pipelines pre-armados para sitios específicos
+- **Browser API** — automation con browsers reales en cloud
+- **Datasets** — datos ya recolectados (LinkedIn, Amazon, etc.)
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp web-data/brightdata
+```
+
+Vas a necesitar credenciales de tu cuenta Bright Data (API token).
+
+Para Claude:
+
+```
+Instalá el MCP web-data/brightdata. Después decime cómo seteo las
+credenciales y listame las 60+ tools disponibles agrupadas por
+categoría (Unlocker, SERP, Scraper API, Browser API, Datasets).
+```
+
+## Qué podés hacer con esto
+
+### Scrapear sitios con anti-bot serio
+
+Sitios como LinkedIn, Instagram, Cloudflare-protected, etc. Sin Bright Data, te trabás en el primer captcha. Con Web Unlocker, pasás directo. "Traeme los perfiles del top 100 de LinkedIn que mencionen 'data engineer' en Buenos Aires".
+
+### SERP API estructurada
+
+"Hacé 50 búsquedas en Google con estas keywords y devolveme los top 10 resultados orgánicos por cada una en JSON". Más limpio que scrapear Google directamente (que rompen).
+
+### Browser API para flows con login
+
+"Logueate a este SaaS competidor con la cuenta de prueba, navegá a su pricing page interno (post-signup) y traeme la tabla". Browser API maneja el flow con sesión real.
+
+### Datasets pre-recolectados
+
+Para casos donde no querés esperar a que el scraper corra, Bright Data tiene datasets ya armados (perfiles públicos, precios e-commerce, etc.) que comprás y descargás.
+
+### Comparado con [Apify](/boveda/mcp-apify)
+
+Ambos hacen scraping. Apify tiene catálogo de Actors comunidad, free tier real, mejor pricing para small/medium. Bright Data es enterprise grade, infraestructura más robusta, más cara. Si scrapeás millones, Bright Data. Si scrapeás miles, Apify.
+
+## Pre-requisitos
+
+- **Cuenta Bright Data** activa con plan apto para tu uso
+- **API token** o credenciales por tool
+- **Presupuesto** — los planes están en hundred to thousand USD/mes
+- **Compliance review** si tu uso involucra data regulada o sitios con TOS estrictos
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no tenés cuenta enterprise:** Bright Data sin presupuesto no funciona. Para indie / hobby usá Apify o construcción propia.
+- **Legal y TOS:** scrapear sitios con TOS que lo prohíben puede ser legalmente arriesgado. Bright Data te da los tools, no te exime de responsabilidad.
+- **Data sensible (PII regulada):** ten cuidado dónde guardás lo scrapeado.
+- **Si solo necesitás 1-2 tools puntuales:** mirá si la versión "lite" o pay-per-use te alcanza. Plan empresarial es overkill.
+- **Latencia y costos:** algunas tools tienen costos por request. Mirá pricing por tool.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Bright Data MCP](https://www.aitmpl.com/component/mcps/web-data/brightdata) — comando exacto.
+- **Config JSON:** [brightdata.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/brightdata.json) — definición.
+- **Bright Data oficial:** [brightdata.com](https://brightdata.com) — cuenta, pricing, docs.
+- **Marketplace Anthropic:** el plugin `brightdata-plugin` aparece curado en [Claude Plugins Official](/boveda/plugin-claude-plugins-official).
+
+## Recursos relacionados
+
+- [Apify MCP](/boveda/mcp-apify) — alternativa con free tier, mejor pricing para uso indie/SMB.
+- [Browser Harness](/boveda/browser-harness) — para cuando necesitás tu propia sesión logueada, no proxies anónimos.
+- [Plugins Plus Skills](/boveda/plugin-claude-code-plugins-plus-skills) — incluye vertical packs para varias plataformas de web data.

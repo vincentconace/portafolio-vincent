@@ -1,0 +1,274 @@
+---
+title: "Claude Code /loop — scheduled tasks and recurring automation"
+description: "The /loop command makes Claude Code run tasks at defined intervals. Combined with remote control from your phone, it replaces tools like OpenClaw for most workflows. 12 useful patterns, setup, and the warnings about when not to use it."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["hooks-automatizacion", "comando-goal", "nueve-prompts-cowork"]
+---
+
+## What `/loop` does
+
+`/loop` is a command inside Claude Code that runs a task **at fixed intervals** without you watching. Basic syntax:
+
+```
+/loop 5m /command-or-task
+```
+
+That means: every 5 minutes, run `/command-or-task`. It keeps running until you stop it.
+
+Variants:
+
+```
+/loop 1h "/check-prs"
+/loop daily 09:00 "/brief"
+/loop weekly mon 17:00 "/weekly-report"
+```
+
+What changes compared to a traditional cron: **Claude handles the output** of each iteration. If an iteration fails, it tells you. If an iteration detects something critical, it escalates. If there's nothing to do, it says so and doesn't bother you.
+
+---
+
+## When `/loop` wins
+
+Vs. other automation options:
+
+| Option | When it wins |
+|--------|-------------|
+| **`/loop`** | Smart tasks that require reasoning + contextual action |
+| **Traditional cron** | Pure commands that don't need an LLM |
+| **GitHub Actions** | Logic tied to the PR/push cycle |
+| **SessionStart hooks** | Triggered by event, not by time |
+| **Managed Agents** | 24/7 without your machine turned on |
+
+`/loop` shines when:
+- Your computer is on almost all day (no server needed)
+- The task requires context and reasoning (not just a command)
+- You want decisions made with judgment, not a rigid script
+
+---
+
+## 12 useful patterns
+
+### Monitoring
+
+**1. Watch a specific PR**
+```
+/loop 10m "Check PR #234. If CI passes, show me the green check.
+            If it fails, tell me the specific error."
+```
+
+**2. Prod log monitor**
+```
+/loop 5m "Look at the prod logs from the last interval (npm run logs:tail).
+          If there are >5 5xx errors, alert me. Otherwise, stay quiet."
+```
+
+**3. Service health check**
+```
+/loop 1m "Curl https://api.myapp.com/health. If it responds 200, don't say
+          anything. If it responds with anything else, alert me."
+```
+
+### Recurring work
+
+**4. Daily brief at startup**
+```
+/loop daily 08:30 "/brief"
+```
+
+(Your `/brief` skill already built, see [9 prompts for Cowork](/boveda/nueve-prompts-cowork))
+
+**5. Weekly team report**
+```
+/loop weekly fri 17:00 "/weekly-report"
+```
+
+**6. Inbox cleanup**
+```
+/loop daily 09:00 "/triage-inbox"
+```
+
+### Research / scraping
+
+**7. Brand mentions**
+```
+/loop 2h "Search for mentions of 'mycompany' on HN/Twitter/Reddit from the
+          interval. If there are new ones, summarize the tone and links."
+```
+
+**8. Changes on a competitor's site**
+```
+/loop 6h "Scrape competitorX's site. Compare vs the previous version
+          (you save a snapshot). If there are significant changes in
+          features/pricing, let me know."
+```
+
+### Development workflow
+
+**9. Tests in watch mode with feedback**
+```
+/loop 30s "If there are changes in src/ since the last check, run the
+          affected tests and report to me only if they failed."
+```
+
+**10. Auto-rebase feature branch against main**
+```
+/loop 4h "If I'm on a feature branch and main moved ahead, rebase me
+          showing me conflicts first. If there are no conflicts, do it."
+```
+
+### Personal productivity
+
+**11. Smart break reminder**
+```
+/loop 45m "Remind me to take a break if I've gone more than 45 min without
+          stopping. If I'm in flow (recent commits), don't interrupt me."
+```
+
+**12. Token usage review**
+```
+/loop daily 22:00 "Show me the token spend for the day and compare vs the
+                   average from the last week. If it went up >40%, tell me
+                   which task was to blame."
+```
+
+---
+
+## Setup
+
+### Basic mode — from Claude Code
+
+Inside a session:
+
+```
+/loop 10m "your prompt or command"
+```
+
+The loop starts. **If you close the session, the loop keeps running** (in the background, you don't need to keep the window open).
+
+To list active loops:
+
+```
+/loop list
+```
+
+To stop one:
+
+```
+/loop stop <id>
+```
+
+### Scheduled mode — from Claude Desktop
+
+The desktop app has a **visual scheduler**:
+
+1. Settings → Scheduled Tasks
+2. New Task → select "Claude Code Loop"
+3. UI to define interval + command + conditions
+4. Save
+
+Friendlier if you don't want to type out the interval.
+
+### Remote mode — from your phone
+
+Combined with [Claude Channels (Telegram)](/boveda/claude-canales-tg-discord):
+
+```
+[On Telegram]
+You: /loop 30m "check if an email from Acme arrived"
+Bot: Loop activated. I'll let you know if one comes in.
+
+[30 min later]
+Bot: An email from Acme arrived. Subject: "Re: proposal". Here's the summary:
+     [summary]
+```
+
+Control your Claude from your phone as if it were an assistant following standing instructions.
+
+---
+
+## Anti-patterns
+
+### 1. `/loop 1s "..."`
+
+Very short loops burn tokens. **Recommended minimum: 1 minute.** For anything that needs less, use an external script with curl.
+
+### 2. Loops that never end
+
+If a loop checks something that never changes, it will run forever with no purpose. **Always define the exit condition.**
+
+```
+❌ /loop 5m "watch the PR"
+✅ /loop 5m "watch PR #234 until it's merged"
+```
+
+### 3. Destructive actions in a loop
+
+NEVER `/loop ... "delete old files"`. A mistake in the prompt → damage multiplied across the iterations.
+
+For destructive actions: scripts with human confirmation, not loops.
+
+### 4. Too many simultaneous loops
+
+Each loop consumes context + tokens. **Keep a maximum of 3-5 active loops**. Beyond that you start to notice slowness and cost.
+
+### 5. Loops without output filtering
+
+If your loop tells you about EVERYTHING it sees, you'll go crazy. Tell it **what's worth alerting you about**:
+
+```
+✅ "If there are >5 errors, alert me. Otherwise, stay quiet."
+✅ "Only tell me when the status changes."
+```
+
+---
+
+## Combining with hooks
+
+`/loop` and [hooks](/boveda/hooks-automatizacion) complement each other:
+
+- **Hooks**: triggered by **event** (after Edit, on session startup)
+- **Loop**: triggered by **time** (every N minutes)
+
+For tasks that have both components, you combine them:
+
+```
+- PostToolUse hook: runs tests when you edit something
+- Loop daily 18:00: check whether any tests were left failing during the day
+```
+
+Each one covers its own angle.
+
+---
+
+## The cost
+
+Every iteration of a loop **spends tokens**. Consider:
+
+| Loop | Approx tokens / iteration | Cost / day |
+|------|--------------------------|--------------|
+| Simple health check | 200-500 | under $0.10 |
+| Daily brief | 2000-5000 | ~$0.05 |
+| Log monitor | 1000-3000 | ~$0.30 |
+| Scraping + analysis | 5000-15000 | ~$1-3 |
+
+Light-reasoning loops running all day → a few dollars a month. Heavy loops → calculate ahead of time so you don't get surprised.
+
+---
+
+## When not to use `/loop`
+
+- **Computer often off**: the loop dies when you close Claude / the computer. For real 24/7, [Managed Agents](/boveda/agentes-managed) or your own server
+- **Critical latency (under 1 min)**: `/loop` doesn't guarantee an exact interval. For a strict SLA, dedicated scripts
+- **Tasks that do NOT require context**: if it's just "run this command", cron is cheaper
+
+---
+
+## Next steps
+
+- For event-driven automation (instead of time-based), [Claude Code hooks](/boveda/hooks-automatizacion)
+- For more structured tasks with fixed goals, [the /goal command](/boveda/comando-goal)
+- For agents truly running 24/7 without your computer, [Managed Agents](/boveda/agentes-managed)

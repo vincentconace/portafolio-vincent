@@ -1,0 +1,238 @@
+---
+title: "Managed Agents — agentes 24/7 sin servidor propio ni código complejo"
+description: "Anthropic ofrece agentes que corren en su infra (no en tu compu) con su propia VM. Le describís qué hacer, conectás cuentas, listo. Sin Zapier, sin n8n, sin servidor que mantener. Cuándo conviene, cuándo es overkill y los warnings que pocos mencionan."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude", "claude-api"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["ecosistema-de-agentes", "plugin-n8n-mcp", "openwa-whatsapp"]
+---
+
+## Qué son los Managed Agents
+
+Los **Managed Agents** son agentes que corren en la infraestructura de Anthropic, no en tu compu. Le describís qué tienen que hacer, conectás las cuentas que necesitan (Gmail, Calendar, etc.), y **se quedan trabajando 24/7** sin que vos tengas que mantener nada.
+
+Analogía: contratás a alguien 24/7 que **solo te cobra los minutos que está trabajando**. Cuando está esperando algo (un email entrante, un trigger), el reloj se detiene.
+
+Diferencias con los otros approaches:
+
+| Approach | Dónde corre | Mantenimiento |
+|----------|-------------|---------------|
+| **Managed Agents** | Infra de Anthropic | Cero (ellos lo hacen) |
+| [Ecosistema en Mac mini](/boveda/ecosistema-de-agentes) | Tu compu local | Vos |
+| Zapier / n8n | Cloud del provider | Cero pero limitado |
+| Agentes custom en tu server | Tu infra | Vos completamente |
+
+---
+
+## Costo aproximado
+
+El cálculo de Anthropic: **~$0.70/hora de trabajo activo** del agente. Cuando el agente está idle (esperando trigger), no pagás nada.
+
+Para comparar:
+
+| Caso | Costo mensual aprox |
+|------|---------------------|
+| Agente que procesa 50 tareas chicas/día (2 min cada una) | ~$35/mes |
+| Agente que monitorea email + responde simples (4h/día activo) | ~$84/mes |
+| Agente que hace trabajo pesado (data processing 8h/día) | ~$170/mes |
+| Empleado humano part-time | $1000-3000/mes |
+
+Para tareas que un humano haría a $20-50/hora, el ROI es claro. Para tareas que cuestan $5-10/hora delegar, hay que evaluar caso por caso.
+
+---
+
+## Lo que SÍ puede hacer
+
+### Tareas que justifican Managed Agents
+
+| Caso | Por qué bien |
+|------|--------------|
+| Procesamiento de inbox 24/7 (clasificar, drafft, escalar) | Trigger constante, trabajo distribuido |
+| Monitoreo de menciones de marca en redes / news | Ciclo periódico, output estructurado |
+| Triaje de leads entrantes (form + enriquecimiento + clasificación) | Trigger event-driven, lógica clara |
+| Reportes recurrentes (semanal/diario) | Schedule fijo, output predecible |
+| Investigación de prospectos antes de reuniones | Tarea concreta, requirements claros |
+| Procesar batches de docs (contratos, CVs, papers) | Volumen alto, lógica repetitiva |
+
+### Lo que NO hace bien
+
+| Caso | Por qué mal |
+|------|-------------|
+| Decisiones críticas sin supervisión | Necesitan humano en el loop |
+| Conversaciones complejas con clientes (alto stake) | Tono y matiz mejor con humano |
+| Operaciones destructivas / irreversibles | Riesgo alto si se equivoca |
+| Tareas que requieren creatividad / strategy | No es el lugar |
+| Acceso a sistemas no soportados por conectores oficiales | Limitación técnica |
+
+---
+
+## Setup en 5 pasos
+
+<Step number={1} title="Cuenta con plan adecuado">
+
+Managed Agents requiere plan de Anthropic con acceso a agents (Pro+ típicamente, o tier API específico).
+
+Verificá en `console.anthropic.com` → Agents → si ves la opción, tenés acceso.
+
+</Step>
+
+<Step number={2} title="Definir qué hace tu agente">
+
+Antes de tocar nada, escribilo:
+
+```markdown
+# Mi Agente: Triador de Leads
+
+## Trigger
+Form de contacto en mi website (webhook)
+
+## Lo que hace
+1. Recibe los datos del lead (nombre, email, empresa, mensaje)
+2. Enriquece con info pública (LinkedIn, sitio web de la empresa)
+3. Clasifica: hot / warm / cold según criterio X
+4. Para hot: drafta respuesta personalizada, postea en Slack #ventas
+5. Para warm: agenda follow-up en mi calendar a 7 días
+6. Para cold: agrega a sequence de nurturing (HubSpot)
+
+## Reglas duras
+- NUNCA mande email sin que yo lo apruebe
+- Si detecta lead VIP (empresa >500 empleados), pingueame directo
+- Si la info enriquecida está incompleta, marcalo en el draft
+
+## Datos sensibles
+- No incluir email del lead en logs públicos
+- Hash de IP, no IP cruda
+
+## Métricas que monitoreo
+- Latencia: <2 min desde form submit a Slack
+- Precisión: <10% de hot mal clasificados
+- Costo mensual objetivo: <$50
+```
+
+Sin este doc, configurar el agente es ad-hoc → caótico después.
+
+</Step>
+
+<Step number={3} title="Configurar conectores">
+
+En la UI de agents, conectás:
+
+- Gmail (para mandar emails / drafts)
+- Calendar (para agendar)
+- Slack (para postear)
+- HubSpot (para CRM)
+- El webhook de tu form (input trigger)
+
+Cada conector pide auth. Permisos mínimos necesarios (no aprobés "todo" si no hace falta).
+
+</Step>
+
+<Step number={4} title="Test en sandbox">
+
+Antes de prender en producción, **test mode**:
+
+1. El agente corre con datos reales pero **NO ejecuta acciones externas**
+2. En lugar de mandar email, te muestra qué hubiera mandado
+3. En lugar de agendar, te muestra qué hubiera agendado
+
+Probás 10-20 casos. Ajustás las reglas si algo está mal.
+
+</Step>
+
+<Step number={5} title="Activar en producción + monitorear" last>
+
+Una vez que el sandbox sale bien, activás. Pero **NO te olvides**:
+
+- Mirar los logs el primer día cada 2-3 horas
+- Mirar primera semana cada mañana
+- Configurar alertas para casos raros (>X errores/h, output inesperado)
+
+Después de la primera semana sin incidentes, ya podés relajarte. **Pero seguís auditando una vez por semana** para detectar drift.
+
+</Step>
+
+---
+
+## Anti-patrones
+
+### 1. Activar sin sandbox
+
+El sandbox es **el** paso crítico. Si saltás directo a producción, las primeras 50 acciones van a tener errores que querías ver antes.
+
+### 2. Reglas duras genéricas
+
+"Sé profesional" no es regla, es decoración. **Reglas específicas**:
+- "Nunca uses la palabra 'sinergia'"
+- "Si el lead menciona >100 empleados, ping a Slack #vip"
+- "Devoluciones por monto >$500 requieren confirmación manual"
+
+### 3. Sin métricas de éxito
+
+¿Cómo sabés si el agente está funcionando bien? Si no medís precisión, latencia y costo, **no sabés**. Definí las 3-5 métricas y revisalas semanal.
+
+### 4. Confiar 100% después del primer mes
+
+Los modelos cambian. Los conectores actualizan APIs. Los inputs evolucionan (clientes nuevos hablan distinto). **Audit cada 4-8 semanas** para detectar drift.
+
+### 5. Múltiples agentes que se solapan
+
+Si tenés 5 agentes con responsabilidades parcialmente superpuestas, se van a pisar. Mejor **menos agentes, scope claro cada uno**.
+
+---
+
+## vs Ecosistema en Mac mini
+
+Comparación honesta:
+
+| Aspecto | Managed Agents | [Mac mini self-host](/boveda/ecosistema-de-agentes) |
+|---------|----------------|------------------|
+| Setup inicial | 1-2h | 4-8h |
+| Costo mensual fijo | $0 (solo pagas uso) | Hardware + electricidad ($20-40) |
+| Costo variable | $0.70/h activo | Tu suscripción de Claude |
+| Privacidad | Pasa por Anthropic | Local |
+| Conectores | Solo los soportados | Los que armes |
+| Customización | Limitada a lo soportado | Total |
+| Disponibilidad | SLA de Anthropic | Tu compu (caídas posibles) |
+| Para empresas con compliance estricto | Verificar términos | Más controlable |
+
+**Regla**: si tu caso encaja en lo soportado y los costos cierran, Managed Agents es la opción de menor fricción. Si necesitás customización pesada o privacidad estricta, self-host.
+
+---
+
+## El warning de los costos
+
+El "~$0.70/h activo" suena barato. Pero:
+
+- Agentes mal diseñados están "activos" cuando deberían estar idle
+- Loops infinitos cuestan plata (cada iteración = trabajo activo)
+- Errores que reintentan suman costo
+- Procesamiento de datos grandes puede correr mucho más de lo esperado
+
+**Recomendado**: setear **límite de gasto mensual** en la cuenta. Si lo pasa, el agente se pausa y te avisa.
+
+Sin límite: he visto cuentas con $500+/mes inesperados por un agente con bug.
+
+---
+
+## Cuándo Managed Agents conviene
+
+✅ Necesitás 24/7 sin servidor propio
+✅ Tu workflow encaja en conectores soportados (email, calendar, CRM, Slack)
+✅ El volumen es bajo-medio (decenas/cientos de tareas por día)
+✅ Aceptás que la data pase por Anthropic
+✅ Querés foco en el negocio, no en infra
+
+❌ Volumen muy alto (miles/h) → custom scales mejor
+❌ Compliance estricto que prohíbe data en cloud externo
+❌ Conectores no soportados → necesitás MCP propio
+❌ Lógica muy custom que no encaja en el framework
+
+---
+
+## Próximos pasos
+
+- Para alternativa self-host con más control, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para combinar con automatización visual, [plugin n8n MCP](/boveda/plugin-n8n-mcp)
+- Si vas a montar agente que responde WhatsApp, lee los warnings de [WhatsApp + Claude](/boveda/openwa-whatsapp)

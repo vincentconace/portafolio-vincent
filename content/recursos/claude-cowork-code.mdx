@@ -1,0 +1,267 @@
+---
+title: "Claude Chat, Cowork y Code — los 3 modos en una sola app"
+description: "Una descarga de Claude = 3 herramientas distintas. Chat con Projects para razonar con tu data, Cowork agéntico (Projects + Connectors + Live Artifacts + Scheduled Tasks + Computer Use), y Claude Code en terminal. Cuándo usar cada uno: pensar / delegar / construir."
+difficulty: "intermedio"
+category: "guides"
+tools: ["claude", "cowork", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-cowork-workflow", "claude-dispatch", "instalar-claude-code"]
+---
+
+## Los 3 modos
+
+Descargás Claude una vez y traés **3 herramientas distintas**:
+
+| Modo | Para qué | Intención |
+|------|----------|-----------|
+| **Chat** | Razonar con tu data específica | **Pensar** |
+| **Cowork** | Tareas autónomas async | **Delegar** |
+| **Code** | Crear archivos, automatizar | **Construir** |
+
+Misma cuenta, mismo login, **3 trabajos completamente distintos**.
+
+---
+
+## Cuándo usar cada uno
+
+### Chat — Pensar
+
+> "Revisá este post de Instagram y sugeríme 3 versiones más cortas con el mismo tono."
+
+Razonar con tu data, contestar preguntas, generar drafts. **Vos manejás cada turno**.
+
+### Cowork — Delegar
+
+> "Todos los lunes 9am leé mis correos, priorizalos y dejá drafts listos en Gmail."
+
+Tareas recurrentes o async. **Claude actúa, no solo lee**. Trabaja mientras vos no estás.
+
+### Code — Construir
+
+> "Construime el agente de Instagram que automatiza posts en este proyecto."
+
+Crear archivos, automatizar, tocar código, armar sistemas. **Vive en la app o terminal**.
+
+---
+
+## Chat vs Cowork — ambos comparten Projects + Connectors
+
+| Chat | Cowork |
+|------|--------|
+| Vos abrís el chat | Dejás el agente corriendo |
+| Activás conectores **esa conversación** | Scheduled Tasks + Live Artifacts |
+| Claude responde con tu data | Claude **actúa** cuando vos no estás |
+| **Read-mostly**, vos drivéas cada turno | **Autónomo**, trabaja en background |
+
+---
+
+## Modo 1 — Chat con Projects
+
+### La metáfora — 4 pasos
+
+Projects es como un cerebro chiquito que solo sabe de un tema. Lo armás en 4 pasos:
+
+| Paso | Pieza | Para qué |
+|------|-------|----------|
+| 1 | **Cascarón** | Crear Project con nombre |
+| 2 | **Cerebro** | Instructions personalizadas |
+| 3 | **Datos crudos** | Cargás archivos relevantes |
+| 4 | **Brazos** | Conectás integraciones (Gmail, Drive, etc.) |
+
+### Ejemplo — Project "Cliente A"
+
+**Cascarón**: nombre del project "Cliente A — Marketing Q3"
+
+**Cerebro (instructions)**:
+```
+Sos asistente de marketing para Cliente A.
+- Industria: e-commerce de moda sustentable
+- Target: mujeres 28-45 LATAM
+- Tono: cercano, optimista, NO corporate
+- Brand colors: verde tierra, terracota
+```
+
+**Datos**: brand pack, copy histórico, calendario editorial
+
+**Brazos**: Drive (assets) + Notion (docs internos)
+
+Cada chat dentro del Project **ya tiene todo el contexto**.
+
+---
+
+## Modo 2 — Cowork
+
+5 features que trabajan **por vos** en segundo plano.
+
+### Feature 1 — Projects
+
+(Igual que en Chat, pero el agente trabaja autónomo)
+
+### Feature 2 — Connectors
+
+Conectás Gmail, Calendar, Slack, Drive, Notion, etc. Una vez configurado, Claude los usa en background.
+
+### Feature 3 — Live Artifacts
+
+Artefactos que viven más allá de la conversación. Si pedís dashboard, queda guardado y editable.
+
+### Feature 4 — Scheduled Tasks
+
+Lo más potente. Le decís a Claude:
+
+```
+> Cada lunes 9am, hacé X.
+```
+
+Y lo hace solo. Sin tu intervención. Ver [Cowork workflow](/boveda/claude-cowork-workflow) para profundizar.
+
+### Feature 5 — Computer Use
+
+Claude opera tu compu (mouse, teclado, pantalla). Ver [Computer Use](/boveda/claude-control-remoto).
+
+### Disclosure honesto sobre Connectors
+
+Los **connectors se activan por conversación**, no global. Si abrís nueva conversación en un Project, **tenés que reactivar** los conectores que querés usar.
+
+---
+
+## Modo 3 — Claude Code
+
+### Vive en la app O en terminal
+
+Mismo Claude Code, dos UIs:
+
+- **App de escritorio**: Claude Code embebido, con interfaz visual
+- **Terminal**: `claude` desde CLI, para devs que viven en tmux/vim
+
+### La magia de las carpetas
+
+Cada carpeta = especialidad distinta. Vivís en un proyecto, Claude conoce ese proyecto.
+
+```bash
+cd ~/proyectos/cliente-A
+claude
+```
+
+Claude ya ve los archivos de Cliente A, sus skills, su CLAUDE.md.
+
+### Atajos clave
+
+| Atajo | Para qué |
+|-------|----------|
+| `Shift + Tab` | Elegir modo (default / acceptEdits / plan) |
+| `/model` | Cambiar modelo (Haiku/Sonnet/Opus) |
+| `ultrathink` | Subir razonamiento (al final del prompt) |
+| `/goal` | Modo autónomo (Claude se da goal) |
+
+### Skills + MCPs = enchufes
+
+Skills son módulos que extienden Claude. MCPs conectan a apps externas. Ambos viven en `.claude/` del proyecto.
+
+Ver [crear skills](/boveda/crea-claude-skills) y [skills global vs proyecto](/boveda/skills-global-o-proyecto).
+
+### Sesiones en paralelo
+
+Podés tener **múltiples sesiones Claude Code corriendo simultáneo** en distintas terminales. Cada una en su proyecto. Ver [Agent View](/boveda/agent-view) para gestión visual de las paralelas.
+
+---
+
+## Decisión final — cuándo cada modo
+
+### Usá Chat si:
+
+- Querés razonar interactivo con tu data
+- Iterativo, no autónomo
+- No necesitás que Claude **actúe** en tus apps
+
+### Usá Cowork si:
+
+- Tarea es recurrente (semanal, diaria)
+- Querés que Claude **haga** algo, no solo responda
+- Tu compu va a estar prendida (o usás Managed Agents en lugar)
+
+### Usá Code si:
+
+- Querés crear/editar archivos
+- Necesitás `git`, terminal, comandos
+- Construís sistemas, no solo respuestas
+
+---
+
+## Cómo combinarlos en un flow real
+
+### Día típico de un founder
+
+**Mañana — Cowork**:
+- Scheduled Task corrió 7am
+- Brief de emails + KPIs ya en Gmail
+- Vos lo leés mientras tomás café
+
+**Día — Chat**:
+- Pensás estrategia con Claude
+- Cargás Project "Lanzamiento Q3"
+- Iterás 5-10 mensajes hasta convencer
+
+**Tarde — Code**:
+- La estrategia requiere features nuevas en el SaaS
+- `cd ~/proyectos/mi-saas && claude`
+- Construís lo necesario
+
+**Noche — Cowork otra vez**:
+- Scheduled Task para el día siguiente
+- Reportes de KPIs procesando overnight
+
+---
+
+## Comparación rápida
+
+| Característica | Chat | Cowork | Code |
+|----------------|------|--------|------|
+| Tu compu prendida | No | Sí (Scheduled) | Sí |
+| Autonomía | Baja | Alta | Media |
+| Acceso a archivos locales | Limitado | Por connector | Total |
+| Plataforma | Web + Desktop + Mobile | Desktop | Desktop + Terminal |
+| Para tareas largas/complejas | Bajo | Alto | Alto |
+
+---
+
+## Anti-patrones
+
+### 1. Usar Chat para tareas autónomas
+
+Si vas a pedir lo mismo todos los lunes, **es Cowork**, no Chat. Te ahorrás repetir.
+
+### 2. Usar Cowork para razonamiento exploratorio
+
+Cowork está optimizado para **ejecución**. Para pensamiento iterativo, **Chat**.
+
+### 3. Usar Code para todo
+
+Code es potente pero requiere disciplina. Para pensar libremente sin codear, **Chat o Cowork** alcanzan.
+
+### 4. Mezclar conectores entre Projects
+
+Si tu Project A es "Cliente A" y Project B es "Cliente B", **conectores distintos**. No conectes Gmail personal en project de cliente.
+
+### 5. No reactivar conectores en nueva conversación
+
+Sorpresa típica: "Claude no ve mi Gmail". Probablemente no activaste el connector en **esta conversación**.
+
+---
+
+## Cuándo NO usar Cowork
+
+| Caso | Por qué |
+|------|---------|
+| Compu rara vez prendida | [Managed Agents](/boveda/agentes-managed-claude) |
+| Tarea es one-off | Chat alcanza |
+| Sin Pro o Max | Free no incluye Cowork |
+
+---
+
+## Próximos pasos
+
+- Para profundizar en Cowork específicamente, [Cowork workflow](/boveda/claude-cowork-workflow)
+- Para operar Cowork desde tu celular, [Claude Dispatch](/boveda/claude-dispatch)
+- Para instalar Claude Code en terminal, [instalar Claude Code](/boveda/instalar-claude-code)

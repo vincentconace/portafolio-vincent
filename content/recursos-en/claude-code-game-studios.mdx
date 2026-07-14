@@ -1,0 +1,284 @@
+---
+title: "Claude Code Game Studios — a video game studio inside your terminal"
+description: "49 agents and 72 commands to brainstorm, design, code, and illustrate video games in Godot, Unity, or Unreal. When it actually helps you build a complete game and when you're better off learning the fundamentals first."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "godot", "unity", "unreal"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["agency-agents", "gstack-equipo-ia", "claude-trabajo-creativo"]
+---
+
+## What it is
+
+An open-source repo with **49 specialized agents + 72 commands** that turn Claude Code into a video game studio. It covers the entire pipeline:
+
+| Role | How many agents |
+|-----|-----------------|
+| **Directors** | 3 (game director, art director, narrative director) |
+| **Leads** | 8 (lead programmer, lead designer, etc.) |
+| **Programming specialists** | 12 (gameplay, AI, networking, UI, audio, etc.) |
+| **Art specialists** | 10 (concept, 3D modeling, animation, VFX, etc.) |
+| **Design specialists** | 8 (level design, mechanics, balancing, etc.) |
+| **QA / Testing** | 4 (playtest, bug hunter, balance tester, perf) |
+| **Production / Business** | 4 (producer, business analyst, marketing, monetization) |
+
+It supports the 3 main engines: **Godot, Unity, Unreal**.
+
+> 9.5k+ stars on GitHub, MIT license.
+
+---
+
+## The honest truth before the hype
+
+> Can you make a video game without knowing how to code?
+
+Short answer: **yes, but with enormous asterisks**.
+
+| What you can do | What you CAN'T do |
+|-----------------|-----------------|
+| Playable prototypes (Pong, Snake, simple runners) | AAA / competitive multiplayer |
+| 2D games with clear mechanics | Complex custom physics systems |
+| Pixel art games | Photorealistic 3D environments |
+| Game jams (48-72h projects) | Commercial games aiming for >$5 |
+| Learn what game dev is | Become a professional game dev |
+
+**To get started and learn the craft**: gold.
+**To produce a serious game without the craft**: you're going to crash.
+
+---
+
+## The supported engines
+
+### Godot
+
+- Open-source, free, BSD
+- **Best option to get started** with this repo
+- Language: GDScript (Python-like)
+- 2D and 3D
+- Growing community
+
+**The repo is more finely tuned for Godot** than for Unity / Unreal.
+
+### Unity
+
+- Industry standard for many
+- C# as the language
+- Steeper curve than Godot
+- Confusing royalties (recent controversial changes)
+
+### Unreal
+
+- AAA / realistic 3D
+- C++ + Blueprints visual scripting
+- Steeper curve
+- For projects where graphical quality is the priority
+
+**Recommendation if you've never made a game**: start with **Godot + this repo**.
+
+---
+
+## The 72 commands by phase
+
+The repo organizes the commands into the typical game dev phases:
+
+### Phase 1 — Idea / Concept
+
+```
+/idea           Generates initial concept from a brief
+/genre-pick     Helps you choose a genre
+/pillars        Defines the 3-5 design pillars
+/elevator       1-minute pitch
+/tone           Tone and atmosphere
+```
+
+### Phase 2 — Pre-production
+
+```
+/gdd            Game Design Document
+/mechanics      Core mechanics design
+/loops          Gameplay loops (action → reward → progression)
+/scope          Realistic scope vs ambition analysis
+/timeline       Timeline estimation
+```
+
+### Phase 3 — Production
+
+```
+/prototype      Generates a prototype in Godot/Unity/Unreal
+/level <num>    Designs level N
+/enemy <name>   Creates an enemy with balanced stats
+/item <name>    Creates an item with effects
+/dialogue       Generates dialogue in your style
+/audio          Suggests SFX and music
+```
+
+### Phase 4 — Art
+
+```
+/sprite <name>   Generates a prompt for a sprite
+/3d-model        3D modeling plan
+/animation       Key animation frames
+/vfx             Effect description for shaders
+/ui              UI design ported to the engine
+```
+
+### Phase 5 — QA
+
+```
+/playtest       Structured playtest plan
+/balance        Balance analysis
+/bug-hunt       Test for common bugs
+/perf           Performance audit
+```
+
+### Phase 6 — Launch
+
+```
+/marketing      Pre-launch marketing plan
+/steam-page     Optimize the Steam page
+/trailer        Trailer plan
+/monetization   Pricing strategy
+```
+
+---
+
+## The flow for a small game (game jam)
+
+For a 48-72h game jam, the typical flow:
+
+### Hour 0-2 — Idea + GDD
+
+```
+> /idea I want a short game for a game jam. Theme: "echoes".
+
+[Generates 5 concepts]
+
+[You pick one: "Echo Hunter — a lost sound designer tries to recover
+his loops from a silent world"]
+
+> /gdd Echo Hunter
+[Generates a 2-3 page GDD with mechanics, controls, UX flow]
+```
+
+### Hour 2-12 — Prototype
+
+```
+> /prototype Godot 2D Echo Hunter following the GDD
+
+[Claude sets up the Godot project with:
+- Player movement
+- Sound capture mechanic
+- Placeholder level
+- Basic UI]
+
+[You open it in Godot, you test it]
+```
+
+### Hour 12-36 — Iteration
+
+```
+> /level 1 — easy intro level (5 min of gameplay)
+> /level 2 — new mechanic twist
+> /level 3 — final challenge
+> /sprite Player
+> /audio Capture sound, ambient music suggestions
+```
+
+### Hour 36-60 — Polish + balance
+
+```
+> /balance Echo Hunter
+> /playtest Generate a playtest plan
+> /bug-hunt Common Godot 2D issues
+```
+
+### Hour 60-72 — Submit
+
+```
+> /steam-page  (or jam.itch.io)
+> /trailer Make a 30s trailer plan
+```
+
+A **playable game** by the end of the jam. It won't be a masterpiece, but **it works**.
+
+---
+
+## When this repo wins
+
+✅ Weekend game jam
+✅ Prototypes to validate mechanics
+✅ Learning game dev (with guardrails)
+✅ Non-commercial side projects
+✅ Pixel art / 2D games
+
+❌ Serious commercial production with a team
+❌ AAA or complex online multiplayer
+❌ When you already have a professional flow with your team
+❌ If you've never opened Godot/Unity (install the engine, do a basic tutorial first, then this)
+
+---
+
+## Game dev-specific anti-patterns
+
+### 1. Massive scope creep
+
+The #1 mistake in game dev. You want "GTA but with magic". The repo will generate **everything you ask for** without necessarily stopping you. You are the guardian of scope.
+
+Rule: **if your first game takes >2 weeks, the scope is too big**.
+
+### 2. Wanting AAA art
+
+AI visual outputs are still limited. For **pixelated / minimalist / abstract aesthetics**, AI works great. For **realistic AAA-quality 3D**, it doesn't.
+
+Accept the limitation or the result will frustrate you.
+
+### 3. Ignoring playtesting with humans
+
+The repo can simulate playtesting. **It doesn't replace real humans playing**. Without human testers, your game is predictably flat.
+
+### 4. Skipping the fundamentals
+
+Even though the repo automates a lot, **you need to know**:
+- What a game loop does
+- What a basic state machine is
+- The difference between fixed update and normal update
+- Game feel concepts
+
+Without those fundamentals, you'll understand 0 of what Claude generates for you.
+
+---
+
+## What's going to happen (realistically)
+
+If you start with this repo without experience:
+
+**Day 1**: You're excited, you generate beautiful concepts
+**Day 2-3**: The prototype works but feels "off" (game feel)
+**Day 4-7**: You get stuck on something specific to Godot/Unity
+**Day 8-14**: You learn to read the generated code, you fix things
+**Day 15+**: You know a fair amount about game dev. Good or bad, **you learned**.
+
+The real value of the repo: **it accelerates the path to learning**, it doesn't skip it for you.
+
+---
+
+## Comparison with other tools
+
+| Tool | When |
+|-------------|--------|
+| **Claude Code Game Studios** | Prototypes, jams, learning |
+| **GameMaker** | 2D arcade-style, no coding |
+| **Construct** | 2D no-code, fast learning |
+| **Unreal Blueprints** | Partial 3D no-code |
+| **RPG Maker** | RPGs only |
+
+Game Studios shines in **flexibility + integration with your Claude workflow**. If you already work with Claude for other code, adding Game Studios is natural.
+
+---
+
+## Next steps
+
+- To understand the more general "agency of 144 specialists" pattern, [Agency Agents](/boveda/agency-agents)
+- If your general workflow isn't game dev but you want inspiration from the pattern, [G Stack](/boveda/gstack-equipo-ia)
+- To integrate Blender (3D modeling) into the flow, [Blender MCP](/boveda/blender-mcp)

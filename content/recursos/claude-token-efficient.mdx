@@ -1,0 +1,297 @@
+---
+title: "Token Efficient — un CLAUDE.md de 8 reglas que ahorra ~63% de tokens"
+description: "Un solo archivo CLAUDE.md con 8 reglas que cortan el relleno típico de Claude (saludos, despedidas, re-lectura innecesaria, reescritura de archivos enteros). Reportes reales: 63% menos palabras en general, 75% menos en code reviews. Setup: 30 segundos."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["mejores-practicas-claude", "comando-de-sistema", "claude-fabrica-a-pro"]
+---
+
+## Por qué importa
+
+Claude te cobra por **cada token** que lee o escribe. Sin instrucciones específicas:
+
+- Te saluda con "¡Claro! Excelente pregunta..."
+- Te explica todo el contexto antes de responder
+- Reescribe archivos enteros cuando solo necesitaba cambiar 3 líneas
+- Re-lee archivos que ya leyó en la misma sesión
+- Te cierra con "Espero que esto te haya sido útil!"
+
+Todo eso son **tokens que pagás** (en plan API o que consumen tu cuota en plan flat).
+
+**Token Efficient** es un archivo `CLAUDE.md` con 8 reglas que cortan ese desperdicio. Repo: `drona23/claude-token-efficient`.
+
+---
+
+## Las 8 reglas
+
+| # | Regla | Qué corta |
+|---|-------|-----------|
+| 1 | Think before acting. Read existing files before writing code. | Trabajo perdido por no leer contexto |
+| 2 | Be concise in output but thorough in reasoning. | Output verboso (no el razonamiento interno) |
+| 3 | Prefer editing over rewriting whole files. | Reescritura de 200 líneas para cambiar 3 |
+| 4 | Do not re-read files you have already read unless the file may have changed. | Re-lectura redundante |
+| 5 | Test your code before declaring done. | "Listo" sin verificar |
+| 6 | No sycophantic openers or closing fluff. | Saludos y despedidas |
+| 7 | Keep solutions simple and direct. | Over-engineering |
+| 8 | User instructions always override this file. | Conflictos con tus pedidos específicos |
+
+### Por qué la 6 (sin "fluff") es la más impactante
+
+Si te fijás en 10 outputs típicos de Claude:
+
+- "¡Claro! Excelente pregunta..." = ~10 tokens
+- "Voy a ayudarte con esto..." = ~8 tokens
+- "Como puedes ver..." = ~5 tokens
+- "Espero que esto te haya sido útil! Si tenés más preguntas..." = ~20 tokens
+
+Total fluff/output: **40-50 tokens** que no aportan valor.
+
+En 100 interacciones diarias: **4000-5000 tokens** que se podrían destinar a contenido útil.
+
+### Por qué la 3 (edit, no rewrite) ahorra mucho
+
+Sin esta regla, le pedís "cambiame el color del botón Primary" y Claude:
+1. Lee el archivo Button.tsx completo (1500 tokens input)
+2. Reescribe el archivo completo (1500 tokens output)
+
+Total: 3000 tokens.
+
+Con la regla:
+1. Lee Button.tsx (1500 input)
+2. Aplica edit puntual (30 tokens output)
+
+Total: 1530 tokens. **~50% menos**.
+
+---
+
+## Setup — 30 segundos
+
+### Opción A — Copy/paste
+
+Creá archivo `CLAUDE.md` en la raíz de tu proyecto con:
+
+```markdown
+# CLAUDE.md - Token Efficient Rules
+
+1. Think before acting. Read existing files before writing code.
+2. Be concise in output but thorough in reasoning.
+3. Prefer editing over rewriting whole files.
+4. Do not re-read files you have already read unless the file may have changed.
+5. Test your code before declaring done.
+6. No sycophantic openers or closing fluff.
+7. Keep solutions simple and direct.
+8. User instructions always override this file.
+```
+
+### Opción B — Descarga directa
+
+```bash
+curl -o CLAUDE.md https://raw.githubusercontent.com/drona23/claude-token-efficient/main/CLAUDE.md
+```
+
+### Dónde va el archivo
+
+En la **raíz del proyecto** — al mismo nivel que `package.json` o `README.md`. Claude Code lo detecta automáticamente al abrir el proyecto.
+
+---
+
+## Resultados reportados
+
+Usuarios que probaron las 8 reglas:
+
+| Métrica | Antes | Después | Ahorro |
+|---------|-------|---------|--------|
+| Palabras en respuesta general | 465 | 170 | **63%** |
+| Palabras en code review | 120 | 30 | **75%** |
+| Palabras en explicaciones | 180 | 65 | **64%** |
+| Tokens totales por sesión | baseline | -16% | **16%** |
+
+El 16% de ahorro total **es conservador** — depende del balance entre input (donde no ahorrás mucho) y output (donde ahorrás mucho).
+
+Para sesiones con mucho output (generación de código grande, refactors largos), el ahorro real puede ser **30-50%**.
+
+---
+
+## Antes y después
+
+### Sin las reglas
+
+```
+> Cambiame el color del botón primary a azul
+
+Claude:
+"¡Excelente! Voy a ayudarte a cambiar el color del botón primary
+a azul. Para hacerlo correctamente, primero voy a leer el archivo
+del botón para entender su estructura actual.
+
+[lee archivo]
+
+Como puedes ver, el botón está definido usando Tailwind CSS con
+clases utility. Voy a actualizar el color de fondo de bg-purple-600
+a bg-blue-600, y también actualizar el hover state correspondiente.
+
+Aquí está el archivo completo actualizado:
+
+[200 líneas del archivo entero, con cambios mínimos]
+
+¡Listo! He cambiado el color del botón a azul. El cambio incluye:
+- bg-purple-600 → bg-blue-600
+- hover:bg-purple-700 → hover:bg-blue-700
+
+¿Hay algo más que quieras ajustar? Estoy aquí para ayudar!"
+```
+
+Tokens: ~600+
+
+### Con las reglas
+
+```
+> Cambiame el color del botón primary a azul
+
+Claude:
+[lee archivo]
+[edit: bg-purple-600 → bg-blue-600, hover:bg-purple-700 → hover:bg-blue-700]
+
+Hecho.
+```
+
+Tokens: ~200
+
+**Ahorro**: 67%. La misma acción, sin fluff.
+
+---
+
+## Combinaciones potentes
+
+### Con Sequential Thinking
+
+[Sequential Thinking](/boveda/claude-fabrica-a-pro) lo hace pensar mejor antes de actuar (regla 1 reforzada). Las reglas + Sequential = combo de pensamiento profundo + output conciso.
+
+### Con Code Simplifier
+
+[Code Simplifier](/boveda/claude-fabrica-a-pro) actúa **sobre el código** que genera. Las reglas actúan **sobre el output narrativo**. Los dos se complementan sin pisarse.
+
+### Con tu CLAUDE.md custom
+
+Si ya tenés CLAUDE.md con reglas de tu proyecto, **agregá estas 8 al final**:
+
+```markdown
+[Tu CLAUDE.md actual con reglas del proyecto]
+
+## Token Efficient Rules
+
+1. Think before acting. Read existing files before writing code.
+2. Be concise in output but thorough in reasoning.
+3. Prefer editing over rewriting whole files.
+4. Do not re-read files you have already read unless the file may have changed.
+5. Test your code before declaring done.
+6. No sycophantic openers or closing fluff.
+7. Keep solutions simple and direct.
+8. User instructions always override this file.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Esperar 63% en todos los casos
+
+El 63% es para output narrativo. Si tu sesión es mayoritariamente código generado, **el ahorro es menor**. Las reglas afectan principalmente el "habla" no el "código".
+
+### 2. Aplicar a chats donde necesitás explicaciones
+
+Si estás aprendiendo y querés que Claude **te explique** las cosas, las reglas matan eso. Quitalas para sesiones educativas.
+
+### 3. Cargar las reglas y después pedir output verboso
+
+Si después de cargar pedís "explicame en detalle", la regla 8 (user override) gana. Bien. Pero **no te frustres** si Claude es menos charlatán por defecto — eso es lo que pediste con las reglas.
+
+### 4. No iterar las reglas
+
+Las 8 son baseline. Después de 1-2 semanas, podés:
+- Agregar reglas específicas de tu workflow
+- Quitar las que no aplican (ej: si trabajás en research, regla 5 "test code" no aplica)
+- Customizar tono ("respondé en español Latam")
+
+### 5. Pegarlas global en `~/.claude/CLAUDE.md` sin pensar
+
+Si las pegás global, aplican a **todos** los proyectos. A veces no querés eso (ej: para learning projects sí querés explicaciones largas). Cargalas **por proyecto** salvo que sepas que querés global.
+
+---
+
+## Variantes para distintos tipos de proyecto
+
+### Para producción (código serio)
+
+Las 8 base + agregar:
+
+```
+9. Always run tests after each change.
+10. Never disable error handling to "make it work".
+11. Comments only when intent isn't obvious from code.
+```
+
+### Para learning / proyectos educativos
+
+Las 8 base **excepto** la 2 y 6 (ahí sí querés explicaciones):
+
+```
+1. Think before acting. Read existing files before writing code.
+3. Prefer editing over rewriting whole files.
+4. Do not re-read files you have already read unless the file may have changed.
+5. Test your code before declaring done.
+7. Keep solutions simple and direct.
+8. User instructions always override this file.
+
+[Nuevas reglas educativas]
+9. After making changes, briefly explain WHAT you did and WHY.
+10. If the user asks "why", give detailed reasoning.
+```
+
+### Para trabajo con cliente / documentación
+
+Las 8 + agregar:
+
+```
+9. Document all decisions in commit messages.
+10. When in doubt about scope, ask before expanding.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Estás aprendiendo Claude (necesitás explicaciones) | Las reglas matan la pedagogía |
+| Workflows donde el "fluff" es parte del producto (chatbot conversational) | Las reglas pisan el tono que necesitás |
+| Sesiones de brainstorming creativo | Querés que Claude expanda, no que comprima |
+| Trabajo con stakeholders no-técnicos | Pueden necesitar explicaciones para entender |
+
+---
+
+## ROI estimado
+
+Para uso intensivo (~3-5h/día con Claude Code):
+
+| Sin reglas | Con reglas |
+|------------|------------|
+| Cuota plan Pro alcanza ~70-100h/mes | ~85-120h/mes |
+| Equivalente costo si pagás API: $30-50/mes en saludos | $5-15/mes |
+
+Ahorro anual estimado para dev intensivo: **$200-500/año** en costo API o equivalente en horas de plan flat.
+
+Inversión: **30 segundos de setup**.
+
+ROI: difícil de mejorar.
+
+---
+
+## Próximos pasos
+
+- Para principios más amplios de buen Claude, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para crear tus propios prompts custom, [comando de sistema](/boveda/comando-de-sistema)
+- Para suite completa de upgrades de Claude, [Claude de fábrica a pro](/boveda/claude-fabrica-a-pro)

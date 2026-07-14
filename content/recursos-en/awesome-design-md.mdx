@@ -1,0 +1,259 @@
+---
+title: "Awesome Design MD — 55 designs from the most famous sites, free"
+description: "Open source collection of 55 DESIGN.md files with the design system extracted from famous sites (Apple, Stripe, Linear, Vercel, Notion). Copy a file, paste it into your project, tell Claude 'design like this but with my brand.' Claude uses the colors, fonts, spacing, buttons."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["replica-disenos-web", "clonador-de-paginas", "cult-ui"]
+---
+
+## The idea
+
+You want your site to look like Apple. Before:
+- You hired a designer
+- You searched for inspiration for weeks
+- You pulled colors one by one
+
+**Now**: someone already did the work. They opened Apple, pulled all the colors, fonts, sizes, buttons, spacing → put it all into a text file called `DESIGN.md`.
+
+You:
+1. Copy that file
+2. Paste it into your project
+3. Tell Claude "design like this"
+4. Claude uses that design system
+
+Repo: `VoltAgent/awesome-design-md`. Open source.
+
+| Metric | Value |
+|---------|-------|
+| Designs | 55 |
+| Files per design | 3 (DESIGN.md + 2 previews) |
+| Cost | $0 |
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/VoltAgent/awesome-design-md.git
+```
+
+Or grab the ZIP from GitHub.
+
+---
+
+## How to use it — 3 steps
+
+### 1. Pick a design
+
+Look in the `designs/` folder. 55 folders, each named after a company (`apple/`, `stripe/`, `linear/`, etc.).
+
+### 2. Copy the DESIGN.md into your project
+
+```bash
+cp awesome-design-md/designs/linear/DESIGN.md ~/mi-proyecto/
+```
+
+### 3. Tell Claude
+
+In your project:
+
+```
+> Read DESIGN.md.
+
+  I want to design a landing page for [YOUR PRODUCT] using that design
+  system but with my brand.
+
+  My brand:
+  - Primary color: [YOUR COLOR]
+  - My tone: [YOUR TONE]
+  - My audience: [YOUR TARGET]
+
+  Apply the structure, spacing, and visual hierarchy from the
+  DESIGN.md but with my values.
+```
+
+Claude designs your page with the aesthetic of the original but **with your identity**.
+
+---
+
+## What a typical DESIGN.md contains
+
+```markdown
+# Linear Design System
+
+## Colors
+- Primary: #5E6AD2 (RGB: 94, 106, 210)
+- Background: #1C1C24 (dark)
+- Text primary: #F7F8F8
+- Text secondary: #B4BBC4
+- Accent: #8b5cf6 (purple)
+
+## Typography
+- Headings: Inter, font-weight 600
+- Body: Inter, font-weight 400
+- Mono: JetBrains Mono
+- Sizes: 12px base, 1.25 scale
+
+## Spacing
+- Base unit: 4px
+- Common: 8, 12, 16, 24, 32, 48, 64
+- Section padding: 96px desktop, 48px mobile
+
+## Buttons
+- Border radius: 6px
+- Padding: 12px 16px
+- Hover: scale 0.98 + brightness change
+- Primary: solid color, white text
+- Secondary: transparent border
+
+## Components
+- Cards: subtle border, no shadow, hover state
+- Inputs: minimal border, focus highlight
+- Navigation: top bar with subtle blur backdrop
+```
+
+It's a **distillation of the original's design system**.
+
+---
+
+## The 55 sites (categories)
+
+| Category | Examples |
+|-----------|----------|
+| **Tech / SaaS** | Stripe, Vercel, Linear, Notion, Figma |
+| **Apple-like** | Apple, Apple Music, Apple Card |
+| **AI / Modern** | Anthropic, OpenAI, Perplexity |
+| **Editorial** | Substack, Medium, NY Times |
+| **E-commerce** | Famous Shopify stores |
+| **Portfolio** | Well-known designers |
+| **Brand-first** | Nike, Tesla, Glossier |
+
+55 covers **practically any aesthetic** you might need.
+
+---
+
+## Use cases
+
+### 1. I want MY landing page but Linear-style
+
+```
+> Read designs/linear/DESIGN.md.
+> My product: inventory management SaaS for retail.
+> My color: green #2DA44E (instead of Linear's violet).
+> Keep Linear's spacing, type, hierarchy, and components.
+> Change the specific colors to my palette.
+```
+
+### 2. Pitch deck with an Apple vibe
+
+```
+> Read designs/apple/DESIGN.md.
+> I want a pitch deck (Keynote or PPTX) with that aesthetic.
+> 10 slides, my company info: [paste].
+```
+
+### 3. Mobile app Notion-style
+
+```
+> Read designs/notion/DESIGN.md.
+> Build me a mobile app (Next.js + Tailwind, responsive
+  mobile-first) with that aesthetic.
+> Main feature: taking notes with bullets, headers, code blocks.
+```
+
+### 4. Mix 2 styles
+
+```
+> Read designs/stripe/DESIGN.md and designs/linear/DESIGN.md.
+> I want a hybrid aesthetic: Stripe's spacing + hierarchy,
+  Linear's palette + subtle dark.
+```
+
+### 5. Audit your current design
+
+```
+> Read designs/stripe/DESIGN.md.
+> Audit MY current landing page: [URL].
+> Tell me what it's missing to reach that design quality.
+> Priority: high-impact changes first.
+```
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **Awesome Design MD** (this one) | Specific aesthetic of a famous site |
+| [Page cloner](/boveda/clonador-de-paginas) | Clone the entire page literally |
+| [Replicate designs](/boveda/replica-disenos-web) | Replicate layout + style from a URL |
+| [Cult UI](/boveda/cult-ui) | Premium pre-built components |
+
+### Key difference
+
+**Awesome Design MD** gives you the **language of the design system**. It doesn't copy the page — it copies the **visual grammar**. You fill it in with your content + your identity.
+
+---
+
+## Anti-patterns
+
+### 1. Copying literally with no differentiation
+
+If your landing page ends up being **Linear with another name**, you're not differentiating. Use the design system as a **base**, add your own twist.
+
+### 2. Mixing 5 design systems
+
+3 mixed systems = chaos. **Pick 1-2 dominant ones** + maybe accents from a third.
+
+### 3. Forcing an aesthetic that doesn't match your product
+
+If you sell products for grandmas and want a **cyberpunk aesthetic** — that clashes with your audience. **Make it match**.
+
+### 4. Assuming that copying the DESIGN.md makes you pixel-perfect
+
+It's **language, not an exact copy**. Expect 80-90% of the original's feel, not 100%.
+
+### 5. Not iterating
+
+The first generation is rarely perfect. **Iterate** with specific feedback.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| A brand with a super specific visual identity | Conflicts with an external design system |
+| An industry that demands its own UI (banking compliance) | You need a custom design |
+| A product whose whole value is "being visually unique" | Copying a known aesthetic = not unique |
+
+---
+
+## Powerful combinations
+
+### With replica-disenos-web
+
+[Replicate designs](/boveda/replica-disenos-web) + DESIGN.md = **double source** for the style. Replicate brings the layout, DESIGN.md brings the fine-grained details.
+
+### With Cult UI
+
+```
+> Use DESIGN.md/linear as the visual guide.
+> Implement it with components from [Cult UI](/boveda/cult-ui)
+  so the pieces are premium-grade.
+```
+
+### With The Architect
+
+The Architect generates a functional blueprint. DESIGN.md adds **visual identity** to the blueprint.
+
+---
+
+## Next steps
+
+- To replicate a specific full page with Playwright, [Replicate web designs](/boveda/replica-disenos-web)
+- To clone a complete UI with a real Chrome browser, [Page cloner](/boveda/clonador-de-paginas)
+- For premium, ready-to-implement components, [Cult UI](/boveda/cult-ui)

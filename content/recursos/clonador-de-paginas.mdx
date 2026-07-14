@@ -1,0 +1,285 @@
+---
+title: "Clonador de páginas — Claude analiza una URL y la reconstruye en Next.js"
+description: "Template open source con 6700+ estrellas. Le das URL a Claude (con flag --chrome), abre la página con browser real, extrae colores/fuentes/layout y reconstruye en Next.js + Tailwind. No copia contenido — clona el DISEÑO. Pipeline de 5 fases con agentes paralelos."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude-code", "nextjs", "tailwind"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-web-builder", "claude-disenador-web", "stitch-diseno-ia"]
+---
+
+## El caso de uso
+
+Viste una página web que te gusta y querés algo similar.
+
+**Antes**: 3-6 horas de Figma o inspección manual del CSS, copiando colores/fuentes/spacings a mano.
+
+**Con clonador-de-paginas**: 10-30 min. Le das URL, Claude analiza, te construye el código en Next.js + Tailwind.
+
+Repo: `JCodesMore/ai-website-cloner-template`. 6700+ estrellas.
+
+---
+
+## Qué hace y qué NO hace
+
+### Qué hace
+
+- Extrae **paleta de colores** completa
+- Detecta **tipografía** (Google Fonts equivalente si es proprietaria)
+- Reconstruye **layout** (grid, flexbox, spacing system)
+- Identifica **componentes** (navbar, hero, cards, footer)
+- Genera código **Next.js + Tailwind** limpio
+- Configura **design tokens** del sitio original
+
+### Qué NO hace
+
+- **No copia contenido** (textos, imágenes con copyright)
+- No reproduce funcionalidades (auth, e-commerce, etc.)
+- No clona código fuente del original (es ingeniería visual, no scraping de JS)
+
+Clona el **diseño**. Vos ponés tu propio contenido después.
+
+---
+
+## Setup
+
+### Pre-requisitos
+
+- Claude Code instalado (ver [setup zero](/boveda/claude-code-setup-zero))
+- Node 18+
+- Chrome instalado (lo usa para inspección)
+
+### Instalación
+
+```bash
+# Paso 1 — Clonar el template
+git clone https://github.com/JCodesMore/ai-website-cloner-template.git mi-clon
+
+# Paso 2 — Instalar deps
+cd mi-clon && npm install
+
+# Paso 3 — Abrir Claude con flag --chrome
+claude --chrome
+```
+
+### Por qué `--chrome`
+
+Claude por defecto **no abre browsers reales**. Para inspeccionar una página renderizada (con sus estilos cargados, animaciones aplicadas, JS ejecutado), necesita un browser real.
+
+El flag `--chrome` le da acceso a Chrome via DevTools Protocol. Sin esto, ve solo el HTML inicial — perdés el 80% del diseño real.
+
+---
+
+## Uso
+
+Ya con Claude abierto y el template cargado:
+
+```
+> /clone-website https://nike.com
+```
+
+Eso es todo. El comando dispara el pipeline completo.
+
+---
+
+## El pipeline de 5 fases
+
+### Fase 1 — Reconocimiento
+
+Claude:
+1. Abre la URL con Chrome
+2. Toma capturas de pantalla (multiples viewports: mobile, tablet, desktop)
+3. Extrae colores via inspección computada de cada elemento
+4. Detecta fonts (font-family computed)
+5. Inspecciona estructura del DOM
+
+### Fase 2 — Fundamentos
+
+Claude:
+1. Crea proyecto Next.js (App Router por defecto)
+2. Configura Tailwind con los design tokens detectados
+3. Define `tailwind.config.ts` con la paleta extraída
+4. Setea fuentes (descarga de Google Fonts si aplica)
+
+### Fase 3 — Spec de componentes
+
+Claude genera **especificación detallada** de cada sección:
+- Navbar (con sus links, dropdowns, mobile menu)
+- Hero (layout, CTAs, background images)
+- Sección de productos/features
+- Testimonios
+- Footer
+
+Para cada uno, especifica **CSS exacto, props necesarios, comportamiento responsive**.
+
+### Fase 4 — Construcción paralela
+
+Acá está la magia. Claude lanza **múltiples agentes en paralelo**:
+
+```
+Agente 1: construye Navbar en branch feature/navbar
+Agente 2: construye Hero en branch feature/hero
+Agente 3: construye Features section en branch feature/features
+Agente 4: construye Footer en branch feature/footer
+```
+
+Cada uno trabaja **en su propia rama de git**. No se pisan. Es como tener un equipo de devs.
+
+### Fase 5 — Ensamblaje y QA
+
+Claude:
+1. Mergea todas las ramas a `main`
+2. Renderiza la página completa
+3. Toma capturas y compara contra original
+4. Detecta diferencias visibles
+5. Hace ajustes finos hasta que matchee
+
+---
+
+## Casos de uso
+
+### 1. Migrar página vieja
+
+Tu landing vive en WordPress lento, querés moverla a Next.js sin rehacer todo desde cero.
+
+```
+> /clone-website https://mipaginavieja.com
+
+  Mantené diseño y estructura. Después yo subo mi contenido real.
+```
+
+Output: Next.js limpio con tu diseño actual. Le sumás tu contenido encima.
+
+### 2. Aprender del diseño de los mejores
+
+Querés estudiar **cómo está construida** una landing exitosa:
+
+```
+> /clone-website https://stripe.com
+
+  Quiero entender específicamente:
+  - Cómo construyen las animaciones del hero
+  - Sistema de tipografía (qué tamaños, qué pesos, dónde)
+  - Cómo manejan responsiveness en el grid de features
+```
+
+Te devuelve no solo el código, sino **un análisis de las decisiones de diseño**.
+
+### 3. Extraer design system
+
+Necesitás los tokens de diseño para tu propio proyecto:
+
+```
+> /clone-website https://linear.app
+
+  Solo me interesa el design system extraído:
+  - Paleta completa con nombres de tokens
+  - Sistema tipográfico
+  - Spacing scale
+  - Border radius scale
+  - Shadow tokens
+
+  Generame un archivo design-tokens.json + tailwind.config.ts.
+  NO necesito los componentes.
+```
+
+### 4. Prototipo rápido para cliente
+
+Cliente te manda link diciendo "quiero algo así":
+
+```
+> /clone-website https://airbnb.com
+
+  Cloname la home como base. Después yo adapto:
+  - Cambiar colores a los de mi marca (paleta verde)
+  - Reemplazar "alojamientos" por "tours"
+  - Quitar features de mensaje y wishlist
+```
+
+20-40 min después tenés MVP visual para enseñarle al cliente.
+
+---
+
+## Anti-patrones
+
+### 1. Clonar sin permisos
+
+Aunque el código que generás es 100% original, **clonar diseños protegidos** sin permiso del owner tiene zona gris legal. **Apple, Nike, marcas con identidad fuerte**: usalas como referencia, no clones literalmente para publicar.
+
+### 2. Esperar pixel-perfect
+
+Algunos detalles (animaciones complejas, micro-interacciones específicas, fonts proprietarias) **no se clonan al 100%**. El output es 80-90% similar. Si necesitás clon exacto, tenés que ajustar a mano.
+
+### 3. Clonar sin entender qué se está clonando
+
+Si pegás `https://gmail.com` esperando una app de email funcional → te decepciona. **Solo se clona el visual**, no la lógica.
+
+### 4. Clonar páginas detrás de auth
+
+Si la URL requiere login, Claude no puede acceder. Necesitás:
+- Hacer screenshot manual
+- Pasar el screenshot con un prompt distinto: "reconstruí esta UI"
+
+### 5. No customizar después
+
+El output es **base**, no producto final. Si publicás el clon literal sin tu diferenciación, es plagio (legal y comercialmente). Usalo como **starting point**, después diferenciá.
+
+---
+
+## Combinaciones potentes
+
+### Con Brand Guidelines skill
+
+```
+> /clone-website https://stripe.com
+
+  Después aplicá Brand Guidelines (mi brand pack en /brand/) para
+  cambiar:
+  - Paleta a la mía
+  - Tipografía a la mía
+  - Voz/tono donde haya copy
+```
+
+Combina con [5 skills marketing](/boveda/cinco-habilidades-marketing) → clon de estructura + tu identidad.
+
+### Con Stitch para iteración
+
+```
+> Cloné stripe.com pero quiero variantes del hero.
+  Usá Stitch para generar 5 variantes del hero, manteniendo
+  el resto del clon.
+```
+
+[Stitch MCP](/boveda/stitch-diseno-ia) te deja iterar sobre el clon.
+
+### Con humanizer para copy
+
+Si después de clonar querés cambiar todos los copy:
+
+```
+> Para cada sección del clon, generá copy original
+  para mi producto [descripción]. Pasalo por /humanizer
+  antes de aplicarlo.
+```
+
+[Claude Copywriter](/boveda/claude-copywriter) te asegura que el nuevo copy no suene IA.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Sitios con anti-bot fuerte (Cloudflare strict) | Chrome puede ser bloqueado |
+| Single-page apps con render condicional | Lo que ve depende de timing, puede inconsistente |
+| Sitios con paywall completo | No puede inspeccionar lo que no ve |
+| Necesitás funcionalidad, no solo visual | Solo clona diseño |
+
+---
+
+## Próximos pasos
+
+- Para landing más simple sin clon, [Claude Web Builder](/boveda/claude-web-builder)
+- Para diseñador web a la medida desde texto, [Claude diseñador web](/boveda/claude-disenador-web)
+- Para diseñar UIs con IA (Google Stitch), [Stitch MCP](/boveda/stitch-diseno-ia)

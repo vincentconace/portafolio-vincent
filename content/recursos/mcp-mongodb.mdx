@@ -1,0 +1,111 @@
+---
+title: "MCP MongoDB — conectar Claude a MongoDB y Atlas Clusters"
+description: "MCP server con 319 installs para conectar Claude Code a bases MongoDB y MongoDB Atlas. Queries, aggregations, gestión de collections — todo desde lenguaje natural. La opción más adoptada de la categoría database."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "mongodb"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-mongodb-official", "mcp-dbhub", "plugin-pg-aiguide"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/mongodb"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mongodb.json"
+---
+
+## Qué es
+
+MongoDB es la NoSQL document-oriented más usada. Atlas es su servicio cloud managed. Este MCP conecta Claude Code a cualquier instancia de MongoDB (local, self-hosted, Atlas).
+
+Capabilities típicas:
+- **Queries** en lenguaje natural
+- **Aggregations** (el feature más potente de Mongo)
+- **Gestión de collections** (create, drop, index)
+- **Inspección de schemas** (Mongo no es schemaless realmente — los docs tienen forma)
+
+319 installs lo hacen el MCP MongoDB más adoptado del catálogo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 319 |
+| Servidor MCP | `MongoDB` |
+| Soporte | Local + Atlas + self-hosted |
+| Connection | URI estándar MongoDB |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/mongodb
+```
+
+Pre-requisitos: connection string a tu MongoDB.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/mongodb. Configurá MONGODB_URI a [tu URI].
+Listame los databases y collections. Para `users`, mostrame el shape
+típico del document (sampling de 5 docs).
+```
+
+## Qué podés hacer con esto
+
+### Exploración de un schema NoSQL
+
+"Para la collection `orders`, sampleame 100 docs y dame el shape inferido. Identificá fields opcionales vs requeridos y los tipos típicos".
+
+### Queries en lenguaje natural
+
+"Buscame los 20 usuarios con más pedidos en el último mes, que no compraron en los últimos 30 días". Claude traduce a `find()` + filtros.
+
+### Aggregations complejas
+
+"Por cada categoría de producto, calculá revenue total del Q1 y top 3 productos. Output como tabla". Pipeline aggregation generado.
+
+### Análisis de uso de índices
+
+"Listame las queries más lentas del último día según `db.currentOp` o profile. Sugerí índices que podrían ayudar".
+
+### Migration assistant
+
+"Para la collection `users-v1`, generame el script de transformación a `users-v2` añadiendo campo `tenant_id` desde lookup en otra collection".
+
+### Atlas-specific
+
+Si usás Atlas, capabilities adicionales: cluster info, performance advisor recommendations, backup status. Verificá el JSON.
+
+### Comparado con [DBHub](/boveda/mcp-dbhub)
+
+DBHub cubre relacionales (Postgres, MySQL, etc.). MongoDB MCP es específico NoSQL. Si tu stack es híbrido (común), instalá ambos.
+
+## Pre-requisitos
+
+- **Connection string** válida a tu MongoDB
+- **Credenciales** con permisos correctos (read-only para exploración, write para mutations)
+- **Para Atlas:** API keys si vas a usar capabilities de gestión del cluster
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de conectar Claude a una DB de producción">
+
+- **Operaciones destructivas:** `db.collection.drop()`, `deleteMany({})`, etc. Catastrófico si sale mal. Hooks de aprobación SIEMPRE para writes en prod.
+- **Permisos amplios:** un user con readWriteAnyDatabase tiene poder total. Restringí scope.
+- **Queries que devuelvan colecciones gigantes:** podés agotar memoria o context. Limitá con `.limit()`.
+- **Si tu DB es relacional:** [pg-aiguide](/boveda/plugin-pg-aiguide) o [DBHub](/boveda/mcp-dbhub) son la opción correcta.
+- **Compliance:** queries sobre data sensible pueden quedar en historial. Mirá políticas.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [MongoDB MCP](https://www.aitmpl.com/component/mcps/devtools/mongodb) — comando exacto.
+- **Config JSON:** [mongodb.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mongodb.json).
+- **MongoDB docs:** [docs.mongodb.com](https://docs.mongodb.com).
+
+## Recursos relacionados
+
+- [MongoDB Official MCP](/boveda/mcp-mongodb-official) — versión oficial de MongoDB (menos installs pero respaldo oficial).
+- [DBHub MCP](/boveda/mcp-dbhub) — para relacionales (combo si tu stack es híbrido).
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — para Postgres serio con MCP oficial de Timescale.

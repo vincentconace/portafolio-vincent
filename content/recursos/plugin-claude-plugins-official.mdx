@@ -1,0 +1,154 @@
+---
+title: "Claude Plugins Official — el marketplace oficial de Anthropic (15k⭐)"
+description: "El directorio oficial mantenido por Anthropic con 119 plugins curados. Incluye 16+ plugins firmados por Anthropic (claude-code-setup, frontend-design, hookify, pr-review-toolkit, skill-creator) y 100+ integraciones de terceros verificadas."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["claude-code-setup", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-plugins-official"
+github: "https://github.com/anthropics/claude-plugins-official"
+---
+
+## Qué es
+
+Es el marketplace oficial de plugins para Claude Code, mantenido directamente por Anthropic. 15k stars no son un accidente: es el lugar donde la propia empresa publica sus plugins de referencia y donde curan integraciones de terceros que pasaron su filtro de calidad.
+
+Si recién instalaste Claude Code y querés saber por dónde empezar sin tener que evaluar marketplaces de comunidad, esta es la respuesta corta: instalá este primero, mirá qué hay, y después capás con cosas más específicas.
+
+119 plugins en total. La división mental útil es: **plugins firmados por Anthropic** (~16+) y **integraciones de terceros verificadas** (~100+, marcadas como "external" o "community-managed").
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | Anthropic |
+| Stars | 15k |
+| Tipo | Marketplace oficial (119 plugins) |
+| Componentes | 23 skills, 16 agents, 16 commands, 12 LSPs, 11 hooks |
+| Marketplace | `anthropics/claude-plugins-official` |
+| Docs | [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins) |
+
+### Los plugins firmados por Anthropic
+
+| Plugin | Para qué |
+| --- | --- |
+| `agent-sdk-dev` | Development kit para trabajar con el Claude Agent SDK |
+| `claude-code-setup` | Escanea tu repo y recomienda hooks/skills/MCPs |
+| `claude-md-management` | Mantenimiento y mejora de `CLAUDE.md` |
+| `code-review` | Review automatizado con scoring de confianza |
+| `code-simplifier` | Refactor para claridad y mantenibilidad |
+| `commit-commands` | Workflow git: commit, push, PR creation |
+| `feature-dev` | Feature dev completo con agents para exploration/arch/review |
+| `frontend-design` | Generación de frontend grado producción, sin aesthetic genérico |
+| `hookify` | Crear custom hooks desde markdown — anti-comportamientos no deseados |
+| `mcp-server-dev` | Skills para diseñar y construir MCP servers |
+| `playground` | HTML playgrounds interactivos para explorar conceptos |
+| `plugin-dev` | Toolkit completo para desarrollar plugins (7 skills, 3 agents) |
+| `pr-review-toolkit` | 6 agents especializados para PR review |
+| `ralph-loop` | Ralph Wiggum technique: loops self-referenciales iterativos |
+| `security-guidance` | Hook que avisa de vulns al editar (XSS, command injection) |
+| `skill-creator` | Crear, mejorar y medir performance de skills |
+| `explanatory-output-style`, `learning-output-style` | Recrean styles deprecados de Claude |
+
+**LSPs oficiales de Anthropic:** clangd, csharp, gopls, jdtls, kotlin, lua, php, pyright, ruby, rust-analyzer, swift, typescript. (Los equivalentes a [Claude Code LSPs](/boveda/plugin-claude-code-lsps) pero oficiales de Anthropic.)
+
+### Integraciones de terceros destacadas
+
+**Productividad / management:** Asana, Atlassian (Jira + Confluence), Linear, Notion, Slack, Figma.
+
+**Dev / DevOps:** GitHub, GitLab, Sentry, Vercel, Railway, Stripe, Supabase, Firebase, PlanetScale, Prisma, CockroachDB, Neon.
+
+**Browser / scraping:** Chrome DevTools MCP, Playwright, Firecrawl, BrightData, Stagehand.
+
+**Code review / security:** CodeRabbit, Semgrep, autofix-bot (DeepSource), Aikido, NightVision.
+
+**Cloud:** AWS Serverless, deploy-on-aws, migration-to-aws, Wix, WordPress, Netlify.
+
+**AI infra:** Pinecone, HuggingFace, Goodmem, Greptile, Atomic Agents.
+
+**Mensajería con access control:** discord, telegram, imessage.
+
+**HashiCorp:** terraform (MCP oficial).
+
+## Cómo se instala
+
+```bash
+# 1) Marketplace
+/plugin marketplace add anthropics/claude-plugins-official
+
+# 2) Empezá con lo oficial Anthropic + un par de integraciones
+/plugin install claude-code-setup@anthropics-claude-plugins-official
+/plugin install commit-commands@anthropics-claude-plugins-official
+/plugin install pr-review-toolkit@anthropics-claude-plugins-official
+/plugin install hookify@anthropics-claude-plugins-official
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalá el marketplace anthropics/claude-plugins-official. Listame solo los
+plugins firmados por Anthropic. Después recomendame qué integraciones de
+terceros me convienen según mi stack [tu stack].
+```
+
+## Qué podés hacer con esto
+
+### Setup base de Claude Code en 10 minutos
+
+`claude-code-setup` escanea tu repo, te recomienda hooks/skills/MCPs específicos para ese proyecto. `hookify` te deja crear los hooks desde markdown sin escribir código. `pr-review-toolkit` cubre la salida.
+
+### Frontend grado producción sin aesthetic genérico
+
+`frontend-design` está pensado específicamente para que el código que genera no se vea "hecho por IA". Es el plugin de referencia si te pasaste 6 meses peleando con UIs feas autogeneradas.
+
+### Mantener `CLAUDE.md` vivo
+
+`claude-md-management` audita tu `CLAUDE.md`, captura aprendizajes de sesión y los suma. La memoria del proyecto deja de envejecer sola.
+
+### Conectar herramientas reales sin escribir MCPs
+
+Asana, Notion, Linear, Slack, GitHub, Sentry, etc. — todos verificados por Anthropic. Esto evita el riesgo de instalar un MCP de comunidad que filtre tokens.
+
+### Probar Stagehand para browser automation
+
+[Stagehand](https://www.aitmpl.com/plugins/playwright-skill) es uno de los enfoques más prometedores en browser automation con LLMs. Está en el marketplace, listo para probar.
+
+### LSPs oficiales (mejor que adivinanza)
+
+12 LSPs firmados por Anthropic. Equivalente a [Claude Code LSPs](/boveda/plugin-claude-code-lsps) pero con la garantía de Anthropic detrás.
+
+## Beneficios reales
+
+- **Mantenido por la fuente** — Anthropic releases plugins primero acá.
+- **Curación seria** — los terceros pasan filtros antes de aparecer listados.
+- **119 plugins** — cubre lo más importante sin overlap caótico.
+- **Updates frecuentes** — sale feature nueva en Claude Code, sale plugin que la aprovecha.
+- **Es el "default" del ecosistema** — si una guía te dice "instalá X plugin", probablemente está acá.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **No hay "instalá todo":** son 119, varios solapan (`code-review` Anthropic vs CodeRabbit vs autofix-bot). Elegí.
+- **Algunos plugins de terceros tienen su propio sub-marketplace** (`atomic-agents`, `superpowers`) — instalar este abre otra rabbit hole.
+- **No tiene los plugins comunidad más experimentales** — para eso vas a `cc-marketplace`, `buildwithclaude`, o `jeremylongshore/claude-code-plugins-plus-skills`.
+- **Si querés MCPs de Docker:** el marketplace oficial los tiene puntuales (chrome-devtools, playwright). Para el catálogo completo de 199+, [buildwithclaude](/boveda/plugin-buildwithclaude) tiene `mcp-servers-docker`.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Claude Plugins Official](https://www.aitmpl.com/plugins/claude-plugins-official) — listado completo.
+- **Repo en GitHub:** [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) — código, issues, criterios de curación.
+- **Docs oficiales:** [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins).
+
+## Recursos relacionados
+
+- [Claude Code Setup](/boveda/claude-code-setup) — el plugin oficial estrella. Corrélo primero.
+- [Agency Agents](/boveda/agency-agents) — para entender la diferencia entre agents, skills y commands que aparecen en el marketplace.
+- [Anatomía de Claude](/boveda/anatomia-claude) — el mapa mental: dónde encaja cada cosa que vas a ver acá.

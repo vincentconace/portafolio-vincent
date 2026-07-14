@@ -1,0 +1,360 @@
+---
+title: "5 repos to become an AI engineer (without paying for a $2000 bootcamp)"
+description: "5 free GitHub repositories that cover the same ground as a bootcamp: a local model with Ollama, a framework with LangChain, RAG with LlamaIndex, agents with CrewAI, and a portfolio with Awesome LLM Apps. A 5-week path to your first real agent."
+difficulty: "intermedio"
+category: "guías"
+tools: ["ollama", "langchain", "llamaindex", "crewai"]
+publishedAt: "2026-05-27"
+readingTime: "12 min"
+relatedSlugs: ["awesome-llm-apps", "ecosistema-de-agentes", "mcp-server-propio"]
+---
+
+## The argument
+
+"AI Engineer" bootcamps cost **$1500-3000**. They cover 4-8 weeks of:
+- How to run models
+- Frameworks (LangChain, LlamaIndex)
+- RAG (retrieval augmented generation)
+- Agents
+- Final project
+
+**The 5 repos below, for free, cover exactly the same thing**. If you have the discipline to follow them, **you save $2000 and learn just as much or more**.
+
+What the repo doesn't give you: the peer group, the instructor feedback, the pressure of deadlines. If those are what you need to see it through, **pay for the bootcamp**. If you have discipline, the repos will get you there.
+
+---
+
+## The 5 repos
+
+| # | Repo | Covers |
+|---|------|-------|
+| 1 | **Ollama** | LLM models running locally on your machine |
+| 2 | **LangChain** | Framework for connecting LLMs with apps |
+| 3 | **LlamaIndex** | RAG over your documents |
+| 4 | **CrewAI** | Teams of agents with roles |
+| 5 | **Awesome LLM Apps** | 100+ projects for inspiration / portfolio |
+
+---
+
+## Repo 1 — Ollama (local models)
+
+### What it's for
+
+Running LLM models on your machine, without an external API. **Free, no paying for tokens, no sending data to anyone**.
+
+Models available via Ollama:
+- Llama 3.1, 3.2, 3.3 (Meta)
+- Mistral, Mixtral
+- Qwen (Alibaba)
+- DeepSeek
+- Phi (Microsoft)
+- And many more
+
+### Why it matters
+
+- **Privacy**: your data never leaves your machine
+- **Cost**: zero per inference
+- **Offline**: works without internet
+- **Learning**: you see how a model works locally
+
+### How to install
+
+```bash
+# Mac / Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Download a model
+ollama pull llama3.2
+
+# Run it
+ollama run llama3.2
+```
+
+In 10 minutes you have a model running on your machine.
+
+### What you'll learn
+
+- Differences between models (7B vs 70B parameters)
+- Quantization (compressed models)
+- The speed vs quality trade-off
+- When local beats an API
+
+---
+
+## Repo 2 — LangChain (framework)
+
+### What it's for
+
+LangChain is the most widely used framework for **building apps with LLMs**. It provides abstractions for:
+- Connecting to models (API or local)
+- Reusable prompts
+- Memory across conversations
+- Chains (chaining steps together)
+- Tools and agents
+
+### Why it matters
+
+If you're going to build serious apps, **you don't build them from scratch** — you use a framework. LangChain is the de facto standard.
+
+### Hello world
+
+```python
+from langchain_anthropic import ChatAnthropic
+from langchain_core.prompts import ChatPromptTemplate
+
+llm = ChatAnthropic(model="claude-sonnet-4-6")
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant"),
+    ("user", "{question}")
+])
+
+chain = prompt | llm
+
+response = chain.invoke({"question": "Capital of France?"})
+print(response.content)
+```
+
+3 lines and you have a working app.
+
+### What you'll learn
+
+- The difference between a prompt, an LLM, and a chain
+- Memory (how to keep context)
+- Output parsers (forcing a format)
+- Response streaming
+- Tool calling
+
+---
+
+## Repo 3 — LlamaIndex (RAG)
+
+### What it's for
+
+RAG = Retrieval Augmented Generation. It means **giving the LLM access to your documents** so it answers based on them.
+
+Without RAG: Claude knows what's on the internet up to its training cutoff.
+With RAG: Claude knows **your** information (your PDFs, your product DB, your internal docs).
+
+LlamaIndex is the most popular framework for this.
+
+### Hello world
+
+```python
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+
+# Load your docs
+docs = SimpleDirectoryReader("./my_docs").load_data()
+
+# Create the index
+index = VectorStoreIndex.from_documents(docs)
+
+# Query
+query_engine = index.as_query_engine()
+response = query_engine.query("What does the manual say about returns?")
+print(response)
+```
+
+You load your PDFs into a folder. LlamaIndex indexes them. You query in natural language.
+
+### What you'll learn
+
+- Embeddings (how to "search by meaning")
+- Vector stores (specialized DBs)
+- Chunking (how to split docs)
+- Re-ranking
+- Trade-offs between RAG approaches
+
+### Comparison with [Book-to-Skill](/boveda/book-to-skill)
+
+Book-to-Skill is **simpler** (Claude Code skills). LlamaIndex is **more powerful** (a full RAG stack with vector stores, retrievers, etc.).
+
+For solo use: Book-to-Skill is enough. For a multi-user product: LlamaIndex.
+
+---
+
+## Repo 4 — CrewAI (agents with roles)
+
+### What it's for
+
+CrewAI lets you **build teams of agents**, each with its own role, its own tools, its own goal. They coordinate with each other.
+
+It's A2A (Agent-to-Agent) turned into a framework.
+
+### Hello world
+
+```python
+from crewai import Agent, Task, Crew
+
+# Define the agents
+researcher = Agent(
+    role="Researcher",
+    goal="Research the topic in depth",
+    backstory="You are a senior technology analyst"
+)
+
+writer = Agent(
+    role="Writer",
+    goal="Write a clear article",
+    backstory="You are a technical editor"
+)
+
+# Define the tasks
+research_task = Task(
+    description="Research the latest AI news",
+    agent=researcher
+)
+
+writing_task = Task(
+    description="Write an article based on the research",
+    agent=writer
+)
+
+# Build the team
+crew = Crew(
+    agents=[researcher, writer],
+    tasks=[research_task, writing_task]
+)
+
+result = crew.kickoff()
+print(result)
+```
+
+Two agents with defined roles work in sequence.
+
+### What you'll learn
+
+- How to break work down into sub-tasks
+- Assigning tools per agent
+- Communication between agents
+- When to use agents vs. when a single, well-prompted LLM is enough
+
+---
+
+## Repo 5 — Awesome LLM Apps (portfolio)
+
+### What it's for
+
+100+ open-source AI projects across 13 categories. **You don't have to invent what to build — you clone one, understand it, adapt it**.
+
+Covered in [awesome-llm-apps](/boveda/awesome-llm-apps).
+
+### For your portfolio
+
+After the previous 4 weeks, **you clone 2-3 projects** from the repo, adapt them to your niche, and push to GitHub:
+
+```
+my-github/
+├── project-1-customer-support-rag/
+│   └── (based on repo X, adapted to your business)
+├── project-2-multi-agent-analyst/
+└── project-3-voice-assistant/
+```
+
+These 3 projects on GitHub **are your portfolio** for interviews or freelance work.
+
+---
+
+## The 5-week path
+
+### Week 1 — Local model (Ollama)
+
+- Install Ollama
+- Download 2-3 different models
+- Compare performance
+- Understand quantization and trade-offs
+- Build 1 trivial app (chat with the model via the terminal)
+
+**Deliverable**: a terminal app that chats with a local Llama
+
+### Week 2 — Framework (LangChain)
+
+- Set up LangChain
+- Build "Hello world"
+- Prompts with templates
+- Memory across turns
+- Basic tool calling (calculator, web search)
+
+**Deliverable**: a chatbot with memory + 1 tool
+
+### Week 3 — RAG (LlamaIndex)
+
+- Load your own PDFs
+- Create an index
+- Run queries
+- Tune chunking and embeddings
+- Compare results with / without RAG
+
+**Deliverable**: an app that answers about YOUR documents
+
+### Week 4 — Agents (CrewAI)
+
+- Set up CrewAI
+- Define 3 distinct roles
+- Coordinate them on 1 complex task (e.g.: research + analyze + write)
+- Iterate on the output
+
+**Deliverable**: a multi-agent system that produces something useful
+
+### Week 5 — Portfolio
+
+- Clone 2-3 projects from Awesome LLM Apps
+- Adapt them to your specific niche
+- Document them (README + demo)
+- Push to GitHub
+- Post on LinkedIn
+
+**Deliverable**: a public portfolio with 3 AI engineer projects
+
+---
+
+## What the repos DON'T teach you
+
+Being honest about the gaps vs a bootcamp:
+
+| A bootcamp gives | The repos don't give |
+|-------------|--------------|
+| Networking with other students | Nothing (you're on your own) |
+| Instructor feedback | Nothing (self-taught) |
+| Deadlines and social pressure | Your own discipline |
+| Job placement / coaching | Nothing |
+| Certificate | Nothing (but a GitHub portfolio is worth more) |
+
+If you **learn well on your own**, the repos are enough. If you need external structure, consider the bootcamp.
+
+---
+
+## The realistic timing
+
+5 weeks if you put in **10-15 hours / week**. If you can only manage 5h/week, it's ~3 months.
+
+Compared to a full-time bootcamp (40h/week × 2-3 months), the self-taught path takes more calendar time but **fewer total hours** because you focus on what matters.
+
+---
+
+## The next step after the 5
+
+Once you've completed the 5 weeks, you should know how to:
+
+- Run models locally + via API
+- Build apps with LangChain
+- Implement decent RAG
+- Coordinate agents
+- Have 3 projects in your portfolio
+
+From there, the directions to dig deeper into are:
+
+| If you're interested in... | Dig into |
+|-------------------|----------------|
+| Building products | MLOps, LLM evaluation, deployment |
+| Research | NeurIPS / ICLR papers, fine-tuning |
+| Freelance / consulting | The production stack (Bedrock, Vertex AI) |
+| Technical founder | Business + the 5 weeks + product validation |
+
+---
+
+## Next steps
+
+- To get inspired by 100+ pre-built agents, [awesome-llm-apps](/boveda/awesome-llm-apps)
+- To understand protocols (API, MCP, A2A), [APIs MCPs and A2A](/boveda/apis-mcps-a2a)
+- To build coordinated agents for real, [ecosystem of agents](/boveda/ecosistema-de-agentes)

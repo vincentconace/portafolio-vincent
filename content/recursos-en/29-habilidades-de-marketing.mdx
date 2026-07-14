@@ -1,0 +1,293 @@
+---
+title: "29 (+33) marketing skills — the complete library to install in Claude"
+description: "Open source collection of 33 marketing skills (Corey Haines, MIT). Each skill turns Claude into a specialist: copywriting, SEO, ads, email, conversion optimization, paid media. Install once and Claude automatically detects the right one based on your question."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["cinco-habilidades-marketing", "claude-ads", "claude-seo"]
+---
+
+## What it is
+
+Imagine hiring **33 marketing specialists** — one for SEO, another for copywriting, another for ads, another for email — and having them available 24/7.
+
+That's what these skills are: **expert playbooks** that give Claude specialized knowledge in every area of marketing.
+
+- **Install once** → they stay forever
+- **Natural language**: you say what you need, Claude detects the right skill
+- **Open source MIT** (Corey Haines)
+
+Repo: `coreyhaines31/marketingskills`.
+
+---
+
+## The 33 skills — by category
+
+### Conversion Optimization (6)
+
+| Skill | What for |
+|-------|----------|
+| `page-cro` | Optimize landing pages, homepages, any page |
+| `signup-flow-cro` | Improve signup and activation flows |
+| `onboarding-cro` | Optimize post-signup onboarding |
+| `form-cro` | Optimize forms (leads, contact, anything) |
+| `popup-cro` | Create popups, modals, banners for conversion |
+| `paywall-upgrade-cro` | Optimize paywalls, upgrade screens, upsells |
+
+### Content and Copy (6)
+
+| Skill | What for |
+|-------|----------|
+| `copywriting` | Copy for landing pages, ads, emails |
+| `content-marketing` | Content and editorial strategy |
+| `seo-content` | SEO-optimized content |
+| `blog-post` | Specific blog posts |
+| `case-study` | Case studies and testimonials |
+| `product-marketing` | Product positioning |
+
+### Email and Lifecycle (5)
+
+| Skill | What for |
+|-------|----------|
+| `email-marketing` | General email strategy |
+| `welcome-sequence` | Welcome flow for new signups |
+| `re-engagement` | Win-back of inactive users |
+| `transactional-email` | Transactional email with persuasive copy |
+| `newsletter` | Recurring newsletter |
+
+### Paid Ads (5)
+
+| Skill | What for |
+|-------|----------|
+| `meta-ads` | Facebook / Instagram ads |
+| `google-ads` | Google Search + Display ads |
+| `tiktok-ads` | TikTok ads and creative |
+| `linkedin-ads` | LinkedIn ads for B2B |
+| `ad-creative` | Ad creative concepts |
+
+### SEO and Organic (4)
+
+| Skill | What for |
+|-------|----------|
+| `technical-seo` | Technical SEO (crawl, schema, perf) |
+| `keyword-research` | Keyword research |
+| `link-building` | Backlink strategy |
+| `local-seo` | Local SEO for brick-and-mortar businesses |
+
+### Social and Community (4)
+
+| Skill | What for |
+|-------|----------|
+| `social-media` | Organic social strategy |
+| `community-building` | Community building |
+| `influencer-marketing` | Influencer strategies |
+| `viral-marketing` | Viral growth tactics |
+
+### Growth and Strategy (3)
+
+| Skill | What for |
+|-------|----------|
+| `growth-strategy` | End-to-end growth strategy |
+| `pricing-strategy` | Pricing and monetization |
+| `retention` | Retention and churn reduction |
+
+---
+
+## Installation
+
+### In Claude (web)
+
+```
+> Install the awesome-claude-skills collection:
+  https://github.com/coreyhaines31/marketingskills
+
+  For each skill, do the corresponding upload from
+  Settings → Skills.
+
+  Start with the 5 most used:
+  - copywriting
+  - email-marketing
+  - page-cro
+  - meta-ads
+  - growth-strategy
+```
+
+### In Claude Code
+
+```bash
+# Install all
+npx skills add coreyhaines31/marketingskills
+
+# Or selectively
+npx skills add coreyhaines31/marketingskills --skill copywriting
+npx skills add coreyhaines31/marketingskills --skill page-cro
+```
+
+---
+
+## How to use them
+
+**You don't need to invoke the skill by name**. Claude detects it based on your prompt.
+
+### Example 1 — Landing page copy
+
+```
+> I need copy for a B2B SaaS inventory landing page.
+  Audience: COOs at mid-size retail in LATAM.
+
+  Generate:
+  - Hero (headline + subhead)
+  - 3 feature sections
+  - Main CTA
+```
+
+Claude uses `copywriting` + `page-cro` + `product-marketing` automatically.
+
+### Example 2 — Growth strategy
+
+```
+> My SaaS hit $15k MRR. I want to get to $50k in 6 months.
+  Current stack: organic content + paid Google.
+
+  Strategy to grow 3x while keeping current CAC.
+```
+
+Claude uses `growth-strategy` + `pricing-strategy` + `meta-ads`.
+
+### Example 3 — Email sequence
+
+```
+> A 5-email welcome sequence for new signups to my SaaS.
+  Goal: convert free trial to paid within 14 days.
+```
+
+Claude uses `email-marketing` + `welcome-sequence` + `retention`.
+
+---
+
+## The stack of the 5 most used
+
+If you only have time to install 5, these cover 80% of cases:
+
+1. **copywriting** — for landing pages, ads, emails
+2. **page-cro** — for optimizing conversion
+3. **email-marketing** — for nurturing and retention
+4. **meta-ads** — for paid distribution
+5. **growth-strategy** — for macro decisions
+
+---
+
+## Real use cases
+
+### Solo founder
+
+```
+Typical use case: "Build me the complete marketing strategy
+for my [X] SaaS"
+
+Skills Claude activates:
+- growth-strategy (overview)
+- product-marketing (positioning)
+- content-marketing (organic foundation)
+- meta-ads (paid distribution)
+- email-marketing (retention)
+- pricing-strategy (monetization)
+```
+
+### Agency serving a client
+
+```
+Use case: "Client X sells [product]. Audit their current funnel
+and propose prioritized fixes."
+
+Claude uses as needed:
+- page-cro
+- form-cro
+- email-marketing
+- copywriting
+- technical-seo
+```
+
+### In-house marketing team
+
+```
+Use case per member:
+- Content marketer → content-marketing + blog-post + seo-content
+- Performance marketer → meta-ads + google-ads + ad-creative
+- Email manager → email-marketing + welcome-sequence + transactional-email
+- Growth lead → growth-strategy + pricing-strategy + retention
+```
+
+Each person has their favorite skills.
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **29 (33) marketing skills** | Complete suite, free, already curated |
+| [5 marketing skills](/boveda/cinco-habilidades-marketing) | More focused (5 essentials) |
+| [Claude Ads](/boveda/claude-ads) | Paid ads only, multi-platform |
+| [Claude SEO](/boveda/claude-seo) | SEO only, with 13 commands |
+| Paid courses / consultants | $$$ vs $0 |
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 33 at the start
+
+Your Claude gets distracted with 33 active skills. **Start with 5-7** relevant to your role.
+
+### 2. Expecting every output to be great
+
+Skills are a **knowledge base**. Your **specific brief + iteration** is what makes them shine.
+
+### 3. Forgetting context
+
+Each skill applies differently depending on your industry, audience, and stage. **Give it** specific context, always.
+
+### 4. Not iterating
+
+The first generation is 70%. Iterating gets you to 95%.
+
+### 5. Confusing tactical with strategic
+
+Skills cover the tactical (how to do email X). For real strategic decisions, **complement with humans**.
+
+---
+
+## Powerful combinations
+
+### With Andromeda
+
+[Andromeda — 8 Meta rules](/boveda/andromeda-rules-for-claude) goes deep specifically into Meta Ads. Combined with the `meta-ads` skill → maximum power on that platform.
+
+### With Claude SEO
+
+[Claude SEO](/boveda/claude-seo) has 13 specific commands. `technical-seo` and `seo-content` from the set complement it.
+
+### With humanizer
+
+Run everything these skills generate through [humanize it](/boveda/humanizalo) before publishing.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You don't use Claude regularly | The setup doesn't pay off |
+| Your marketing is 100% offline | Skills focused on digital |
+| Strict compliance | Human reviewers required |
+
+---
+
+## Next steps
+
+- For a more focused suite (5 essentials), [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- To go deeper on Meta Ads specifically, [Andromeda](/boveda/andromeda-rules-for-claude)
+- For an SEO audit with 13 commands, [Claude SEO](/boveda/claude-seo)

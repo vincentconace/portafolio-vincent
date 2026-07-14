@@ -1,0 +1,89 @@
+---
+title: "Setting Privacy Focused — privacy bundle: telemetry off, no autoupdate, no error reporting (395 installs)"
+description: "Setting with 395 installs. Privacy bundle: disables all telemetry, error reporting, non-essential network traffic, autoupdater, and bug command. For sensitive data or orgs with strict privacy."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-disable-telemetry", "setting-deny-sensitive-files", "setting-custom-telemetry"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/environment/privacy-focused"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/privacy-focused.json"
+---
+
+## What it is
+
+An all-in-one privacy bundle. It disables 5 things with 5 env vars:
+- `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: 1` — no non-essential traffic
+- `DISABLE_TELEMETRY: 1` — no usage analytics
+- `DISABLE_ERROR_REPORTING: 1` — no error reports to Anthropic
+- `DISABLE_BUG_COMMAND: 1` — no bug reporting CLI
+- `DISABLE_AUTOUPDATER: 1` — no automatic updates
+
+It replaces having to install [Disable Telemetry](/boveda/setting-disable-telemetry) separately and configure the rest by hand.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `environment` |
+| Installs | 395 |
+| Disabled vars | 5 (telemetry, error reporting, traffic, bug cmd, autoupdater) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting environment/privacy-focused
+```
+
+For Claude:
+
+```
+I installed the environment/privacy-focused setting. Verify the 5 env
+vars that got set to 1 (disable).
+```
+
+## What you can do with this
+
+### Maximum privacy in one command
+
+Instead of configuring 5 vars manually, a single install.
+
+### For regulated data
+
+You work with healthcare/finance/legal: this setting is the baseline.
+
+### For airgapped or offline-priority
+
+Auto-updater off + non-essential traffic off = more predictable behavior offline.
+
+### Combo with [Deny Sensitive Files](/boveda/setting-deny-sensitive-files)
+
+Privacy Focused for the network. Deny Sensitive for the filesystem. They cover both angles.
+
+### Combo with [Custom Telemetry](/boveda/setting-custom-telemetry)
+
+If you do want to send telemetry but to your own endpoint (not Anthropic), combine them.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **DISABLE_AUTOUPDATER:** with no auto updates, your Claude Code goes stale. You'll have to update it manually.
+- **DISABLE_BUG_COMMAND:** you can't report bugs via CLI. If you find a bug, it's manual.
+- **If you want to help with feature improvements:** telemetry helps. It's a trade-off.
+- **If your org does NOT require strict privacy:** unnecessary overhead.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Privacy Focused Setting](https://www.aitmpl.com/component/settings/environment/privacy-focused) — exact command.
+- **JSON config:** [privacy-focused.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/privacy-focused.json).
+
+## Related resources
+
+- [Disable Telemetry Setting](/boveda/setting-disable-telemetry) — telemetry only, more granular.
+- [Deny Sensitive Files Setting](/boveda/setting-deny-sensitive-files) — filesystem privacy.
+- [Custom Telemetry Setting](/boveda/setting-custom-telemetry) — your own endpoint.

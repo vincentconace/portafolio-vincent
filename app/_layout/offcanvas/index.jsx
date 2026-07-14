@@ -15,6 +15,9 @@ export function Offcanvas() {
     setOpen(false);
   }, [pathname]);
 
+  // El hub de links es una landing autónoma: sin el offcanvas global.
+  if (pathname?.startsWith('/links')) return null;
+
   return (
     <>
       <AnimatePresence mode='wait'>

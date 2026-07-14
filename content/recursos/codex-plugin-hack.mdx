@@ -1,0 +1,191 @@
+---
+title: "Estirar Claude Code con el plugin de Codex — $60 vs $200 al mes"
+description: "El hack que mueve la carga pesada (debugging + ejecución) a Codex de OpenAI, dejando a Claude para planear. Como Codex factura contra tu suscripción de ChatGPT, no toca tus tokens de Claude. Cómo funciona, los 4 comandos para instalarlo y cuándo realmente vale la pena."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex", "openai"]
+publishedAt: "2026-05-21"
+readingTime: "10 min"
+relatedSlugs: ["claude-codex-equipo", "guia-claude-code-completa", "trucos-basicos-claude"]
+---
+
+## La verdad incómoda
+
+Si pagás los $20 de Claude Code, ya conocés el patrón:
+
+- **Semana 1**: todo fluye, pedís features y Claude las construye
+- **Semana 2**: empezás a iterar bugs y los tokens caen rápido
+- **Semana 3**: rebotás contra el límite de plan
+
+Lo que más quema el plan **no es construir features nuevas**. Es **arreglar errores que van saliendo, intento tras intento**. Cada ciclo de debugging cuesta 3-5× más que el feature original. Ahí se va el plan sin que lo veas.
+
+El hack: **mover el debugging a Codex**. Como Codex factura contra tu suscripción de ChatGPT (otro $20), no se come tus tokens de Claude. Total: $40-60/mes haciendo lo que el plan Max Ultra de $200 te daría.
+
+---
+
+## La idea — Claude planea, Codex ejecuta
+
+| Rol | Por qué |
+|-----|---------|
+| **Claude** = arquitecto/planner | Mejor en razonamiento, mejor en código en lenguajes complejos, mejor en decisiones de diseño |
+| **Codex** = ejecutor mecánico | Más rápido en aplicar cambios, baratísimo en debugging iterativo |
+
+Flow típico:
+
+1. Le pedís a Claude que **planee** una feature o **diagnostique** un bug → te da un plan
+2. Pasás el plan a Codex para que **ejecute** los cambios
+3. Si aparecen errores, Codex los itera sin tocar tu plan de Claude
+4. Cuando ya está estable, volvés a Claude para review final
+
+El resultado: el 80% del consumo de tokens va a Codex (que tiene su propio bucket en tu plan de ChatGPT). Claude queda fresh para lo que de verdad necesita Claude.
+
+---
+
+## El plugin que une los dos
+
+Hay un **plugin oficial de OpenAI** que se instala adentro de Claude Code y agrega ~6 slash commands para invocar Codex desde tu sesión de Claude. No tenés que cambiar de terminal ni copy-paste.
+
+### Instalación — 4 comandos
+
+```bash
+# 1. Instalar Codex CLI (si no lo tenés)
+npm install -g @openai/codex
+
+# 2. Login con tu cuenta de ChatGPT
+codex login
+
+# 3. Instalar el plugin en Claude Code
+claude
+> /plugin install openai/codex-plugin-cc
+
+# 4. Verificar
+> /codex-status
+```
+
+Si todo va bien, te dice "Codex conectado, plan: ChatGPT Plus" (o el que tengas).
+
+### Comandos que agrega
+
+Una vez instalado, dentro de Claude tenés:
+
+| Comando | Qué hace |
+|---------|----------|
+| `/codex-do <tarea>` | Manda una tarea concreta a Codex para que la ejecute |
+| `/codex-fix` | Pasa el último error a Codex para que itere |
+| `/codex-test` | Codex corre los tests y arregla lo que falla |
+| `/codex-explain <archivo>` | Codex explica el archivo (más rápido para archivos chicos) |
+| `/codex-review` | Codex hace review del diff actual |
+| `/codex-status` | Cuánto plan de Codex te queda |
+
+---
+
+## Flow típico — el "patrón sandwich"
+
+Lo más rentable es el patrón sandwich: Claude → Codex → Claude.
+
+### Ejemplo
+
+Querés agregar paginación a un endpoint.
+
+```
+1. Vos en Claude:
+   > Necesito agregar paginación a /api/orders. Plan, no ejecutes todavía.
+
+2. Claude planea (gasta tokens de Claude):
+   "Voy a tocar 3 archivos: route.ts, lib/orders.ts, components/OrdersList.tsx
+    El approach es offset/limit. Schema actual permite eso. Te paso el plan."
+
+3. Vos pasás a Codex:
+   > /codex-do Aplicá este plan: [pegás el plan]
+
+4. Codex ejecuta (gasta tokens de Codex/ChatGPT):
+   Edita los 3 archivos según el plan. Si tira error, itera él mismo.
+
+5. Vos volvés a Claude para review:
+   > Mirá el diff actual y validame que sigue el plan original.
+
+6. Claude review (gasta poco):
+   "Diff revisado, todo OK excepto este detalle en línea X que ajusté."
+```
+
+**Resultado**: Claude gastó ~10% de los tokens que hubiera gastado solo. Codex hizo el trabajo pesado. Vos no cambiaste de herramienta — todo desde Claude Code.
+
+---
+
+## La cuenta económica
+
+| Plan | Costo mensual | Tokens efectivos |
+|------|---------------|------------------|
+| Solo Claude Pro $20 | $20 | ~70-100h/mes uso intensivo |
+| Solo Claude Max $200 | $200 | ~400h/mes |
+| **Claude Pro ($20) + ChatGPT Plus ($20) + plugin** | **$40** | **~150-200h/mes combinado** |
+| Claude Pro + ChatGPT Plus + Codex $20 extra | $60 | ~250-300h/mes |
+
+Para uso intensivo, $40-60/mes te lleva al rango del plan Max Ultra ($200) con la ventaja extra de **dos modelos distintos** (a veces lo que uno no resuelve, el otro sí).
+
+---
+
+## Cuándo este patrón conviene
+
+✅ Usás Claude Code intensamente (>30h/mes)
+✅ Notás que rebotás contra el límite del plan
+✅ Hacés debugging seguido (más que construcción de zero)
+✅ Tu workflow tolera el switching entre dos contextos
+
+❌ Uso ligero (no llegás al límite del plan de $20)
+❌ Tareas muy específicas a un solo modelo (ej. APIs raras de Claude)
+❌ Trabajo enterprise con compliance estricto donde no podés mezclar providers
+
+---
+
+## Anti-patrones
+
+### 1. Mandar todo a Codex "porque es más barato"
+
+Codex y Claude tienen perfiles distintos. Para razonamiento complejo o decisiones de arquitectura, **Claude gana**. Si mandás todo a Codex, calidad cae.
+
+Regla: razonamiento → Claude. Ejecución mecánica → Codex.
+
+### 2. Olvidar revisar lo que Codex hizo
+
+El loop de debugging de Codex puede divagar. Periódicamente, pasale el diff a Claude para verificar que no se fue por la tangente.
+
+### 3. Mismo prompt para los dos
+
+Cada modelo tiene su sensibilidad. Un prompt afinado para Claude no necesariamente funciona igual en Codex. **Re-tunear** vale la pena.
+
+### 4. No usar `/codex-status`
+
+Si no monitoreás cuánto plan de Codex te queda, te encontrás con el mismo problema en el otro lado. Cheq quá una vez por semana.
+
+---
+
+## El detalle legal/compliance
+
+Si trabajás en empresa, antes de mezclar Claude + Codex:
+
+- **Verificá qué provider está aprobado** por tu IT/Legal
+- **No metas el mismo código sensible en ambos** sin saber las políticas de retención de cada uno
+- Para uso personal/freelance, no aplica — usá los dos sin problema
+
+---
+
+## Variaciones del patrón
+
+El mismo "split entre modelos" funciona también con:
+
+| Combo | Cuándo |
+|-------|--------|
+| **Claude + Claude (cuentas separadas)** | Pareja team de $20 cada uno |
+| **Claude + Gemini** | Si tu org usa Google Cloud y tiene Gemini incluido |
+| **Claude + local LLM (Llama)** | Para tareas mecánicas en cantidad sin tocar plan paid |
+
+La idea es la misma: razonamiento al modelo bueno, ejecución mecánica al modelo barato.
+
+---
+
+## Próximos pasos
+
+- Para entender más profundo el patrón Claude + Codex sin el plugin, [Claude + Codex en equipo](/boveda/claude-codex-equipo)
+- Si tu uso es muy alto y necesitás escalar, [múltiples Claude Code en paralelo](/boveda/agent-view-paralelo)
+- Para optimizar el consumo de tokens en general, [trucos básicos](/boveda/trucos-basicos-claude)

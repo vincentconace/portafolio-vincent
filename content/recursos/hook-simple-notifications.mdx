@@ -1,0 +1,91 @@
+---
+title: "Hook Simple Notifications — el hook más adoptado del catálogo (6,810 installs)"
+description: "Hook con **6,810 installs — el #1 absoluto del catálogo aitmpl entero**. Desktop notifications cuando Claude termina o necesita input. macOS y Linux. La opción default para tener avisos."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-desktop-notification-on-stop", "plugin-claude-notifications-go", "hook-discord-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/simple-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/simple-notifications.json"
+---
+
+## Qué es
+
+**6,810 installs — el hook más adoptado de todo el catálogo aitmpl.com.** Por encima de [Dependency Checker](/boveda/hook-dependency-checker) (1,729), [Lint On Save](/boveda/hook-lint-on-save) (2,329), incluso [Smart Commit](/boveda/hook-smart-commit) (2,577). Por qué: cubre el caso más universal con cero fricción.
+
+Manda desktop notifications cuando:
+- **Stop** — Claude termina
+- **Notification** — Claude requiere user input
+
+Funciona en macOS y Linux nativo. Sin webhooks, sin servicios externos, sin pagar nada.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | **6,810 (#1 absoluto del catálogo)** |
+| Hook events | `Stop` + `Notification` |
+| Plataformas | macOS, Linux |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/simple-notifications
+```
+
+Para Claude:
+
+```
+Instalé el hook automation/simple-notifications. Lanzá una tarea de
+20 segundos y confirmá que llega la notification al terminar.
+```
+
+## Qué podés hacer con esto
+
+### Trabajo "fire and forget"
+
+Lanzás tarea, te vas a hacer otra cosa, vuelve la notification cuando termina. Patrón universal.
+
+### Detection de input needed
+
+Si Claude se detiene esperando tu respuesta, te avisa. Sin esto, podés tardar minutos en notar.
+
+### Cero setup
+
+No requiere webhooks ni servicios. Si tu SO permite notifications, funciona out of the box.
+
+### Para sesiones largas
+
+`/goal` autónomos: notification al terminar es básicamente obligatorio.
+
+### Comparado con alternativas
+
+- **[Desktop Notification On Stop](/boveda/hook-desktop-notification-on-stop)** (90 installs) — similar pero solo Stop event. Este cubre también Notification.
+- **[Claude Notifications Go Plugin](/boveda/plugin-claude-notifications-go)** — plugin más completo con webhooks, 6 tipos, click-to-focus.
+- **[Discord Notifications](/boveda/hook-discord-notifications)** — para remoto.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **En Windows:** la descripción dice macOS y Linux. Verificá Windows compat.
+- **Si tu SO bloquea notifications:** habilítalas en System Settings primero.
+- **Para sesiones muy frecuentes y cortas:** notification spam.
+- **Si querés remoto:** este es solo local. Usá [Discord/Slack/Telegram](/boveda/plugin-claude-notifications-go).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Simple Notifications Hook](https://www.aitmpl.com/component/hooks/automation/simple-notifications) — comando exacto.
+- **Config JSON:** [simple-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/simple-notifications.json).
+
+## Recursos relacionados
+
+- [Desktop Notification On Stop Hook](/boveda/hook-desktop-notification-on-stop) — similar más simple.
+- [Claude Notifications Go Plugin](/boveda/plugin-claude-notifications-go) — full-featured con webhooks.
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — para canal remoto.

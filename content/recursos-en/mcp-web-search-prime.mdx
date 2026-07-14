@@ -1,0 +1,94 @@
+---
+title: "MCP Web Search Prime — web search via Z.AI search"
+description: "MCP server with 149 installs based on the Z.AI search API. Web search capabilities for MCP-compatible clients. Z.AI alternative to the search MCP ecosystem."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "zai"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-searxng", "mcp-jina-ai", "mcp-web-reader"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/web-search-prime"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-search-prime.json"
+---
+
+## What it is
+
+Web Search Prime is Z.AI's search implementation as an MCP. It provides web search for Claude Code and other MCP-compatible clients using Z.AI's infrastructure.
+
+It's part of the Z.AI MCP ecosystem ([Vision](/boveda/mcp-zai-mcp-server), [Web Reader](/boveda/mcp-web-reader), [zread](/boveda/mcp-zread)).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web` |
+| Installs | 149 |
+| MCP server | `web-search-prime` |
+| Author | Z.AI |
+| Account required | Yes — Z.AI |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp web/web-search-prime
+```
+
+Prerequisite: Z.AI account + API key.
+
+For Claude:
+
+```
+I installed the web/web-search-prime MCP. Set up the credentials.
+Search for "MCP server" and return the top 10 results with title,
+URL and snippet.
+```
+
+## What you can do with it
+
+### Web search from Claude
+
+You ask Claude to search for something instead of reasoning from memory. Anti-hallucination for current info.
+
+### Recurring research
+
+Periodic searches on topics that change. Combined with a scheduler.
+
+### Multi-engine alternative
+
+If you already use Z.AI for other MCPs, keeping a consolidated stack.
+
+### Compared to alternatives
+
+- **[SearXNG](/boveda/mcp-searxng):** privacy-first metasearch, self-hostable
+- **[Jina AI](/boveda/mcp-jina-ai):** grounding + fact-checking (more sophisticated)
+- **Web Search Prime (this one):** Z.AI infrastructure, simpler
+
+## Prerequisites
+
+- **Active Z.AI account**
+- **API key**
+- **Verify the specific tools in the JSON**
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you already have a working search solution:** assess whether Z.AI adds anything.
+- **Compliance:** Chinese service. Some countries / orgs have restrictions.
+- **For search with citations / grounding:** [Jina AI](/boveda/mcp-jina-ai) is better.
+- **For full privacy:** [SearXNG](/boveda/mcp-searxng) self-hosted.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Web Search Prime MCP](https://www.aitmpl.com/component/mcps/web/web-search-prime) — exact command.
+- **Config JSON:** [web-search-prime.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-search-prime.json).
+- **Z.AI:** [open.bigmodel.cn](https://open.bigmodel.cn).
+
+## Related resources
+
+- [SearXNG MCP](/boveda/mcp-searxng) — privacy-first alternative.
+- [Jina AI MCP](/boveda/mcp-jina-ai) — search with grounding.
+- [Web Reader MCP](/boveda/mcp-web-reader) — combo from the same Z.AI ecosystem.

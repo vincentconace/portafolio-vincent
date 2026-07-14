@@ -1,0 +1,92 @@
+---
+title: "Hook Telegram Detailed Notifications — Telegram alerts with context"
+description: "Hook with 413 installs. Sends notifications to Telegram with detailed context: working directory, duration, system info. For users who live in Telegram and want remote tracking."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "telegram"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-telegram-error-notifications", "hook-slack-detailed-notifications", "hook-discord-detailed-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/telegram-detailed-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-detailed-notifications.json"
+---
+
+## What it is
+
+The equivalent of [Discord Detailed](/boveda/hook-discord-detailed-notifications) and [Slack Detailed](/boveda/hook-slack-detailed-notifications) for Telegram. It sends messages with detailed info:
+- Working directory
+- Duration
+- System info
+
+Hook events: `SessionStart` + `Stop`.
+
+Prerequisite: a Telegram bot + a chat ID to send to (you create the bot via @BotFather).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 413 |
+| Hook events | `SessionStart` + `Stop` |
+| Requires | Telegram bot + chat ID |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/telegram-detailed-notifications
+```
+
+Prerequisites:
+- A bot created with @BotFather (you receive a token)
+- A chat ID (channel or personal)
+
+For Claude:
+
+```
+I installed the automation/telegram-detailed-notifications hook. Configure
+TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID. Run a session and verify
+that it arrives.
+```
+
+## What you can do with this
+
+### Notifications on your phone
+
+Telegram has the best mobile experience of the three platforms. Great for tracking on the go.
+
+### Teams in countries where Telegram dominates
+
+LATAM, Eastern Europe, parts of Asia. If your team is there, Telegram > Slack.
+
+### Personal channels
+
+A private bot with just you = your own tracking channel without team noise.
+
+### Combo with [Telegram Error Notifications](/boveda/hook-telegram-error-notifications)
+
+Detailed for success + Error for problems = complete visibility.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Telegram:** go with Slack or Discord.
+- **Bot setup overhead:** creating a bot, getting a chat ID, configuring it. If it's casual use, it's not worth it.
+- **Compliance:** Telegram has policies. For enterprise teams, check first.
+- **Spam:** short sessions will flood your chat.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Telegram Detailed Notifications Hook](https://www.aitmpl.com/component/hooks/automation/telegram-detailed-notifications) — the exact command.
+- **JSON config:** [telegram-detailed-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-detailed-notifications.json).
+- **Telegram BotFather:** Search for @BotFather in Telegram to create the bot.
+
+## Related resources
+
+- [Telegram Error Notifications Hook](/boveda/hook-telegram-error-notifications) — for problems specifically.
+- [Slack Detailed Notifications Hook](/boveda/hook-slack-detailed-notifications) — the Slack equivalent.
+- [Discord Detailed Notifications Hook](/boveda/hook-discord-detailed-notifications) — the Discord equivalent.

@@ -1,0 +1,262 @@
+---
+title: "Claude Code on web and mobile — no install needed"
+description: "Claude Code now runs from the browser at claude.ai/code and from your phone. You connect your repo, send it the task, and when you reach your computer the teleport command pulls the session down to the terminal with history and branch ready to go. Full workflow and gotchas."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "8 min"
+relatedSlugs: ["guia-claude-code-completa", "claude-canales-tg-discord", "agent-view-paralelo"]
+---
+
+## What changed
+
+Claude Code used to be **terminal-only**. You needed:
+- A computer with Node 18+
+- An open terminal
+- A local session
+- Your repo cloned locally
+
+Now there are 3 different entry points, **all to the same session**:
+
+| Entry point | Where |
+|---------|-------|
+| **Web** | `claude.ai/code` from the browser |
+| **Mobile** | The Claude app on iOS / Android |
+| **Terminal** | `claude` from your computer, just like always |
+
+All three sync via the `--teleport` command. You start on your phone, continue on the web, finish in the terminal. **Same history, same branch, no lost context.**
+
+---
+
+## Setup
+
+### Requirements
+
+- A Claude Pro+ plan (doesn't work on free)
+- A connected GitHub account
+- An accessible repo (public, or private with permissions)
+
+### Connecting your first repo
+
+<Step number={1} title="Web">
+
+1. Go to `claude.ai/code` in your browser
+2. "Connect GitHub" → authorize it
+3. Select the repos you want to expose to Claude Code (not all of them, just the ones you'll actually use)
+4. You're all set
+
+</Step>
+
+<Step number={2} title="Mobile">
+
+1. Open the Claude app on your phone
+2. "Code" tab → takes you to the same dashboard
+3. Your connected repos already show up
+
+</Step>
+
+<Step number={3} title="Terminal (if you have it installed)" last>
+
+Normal:
+
+```bash
+claude
+```
+
+You've seen this before. What's new: `claude --teleport`, which **brings your web/mobile session** into the terminal.
+
+</Step>
+
+---
+
+## Typical workflow — the "follow me"
+
+The killer use case:
+
+### On the subway / commuting (mobile)
+
+```
+[Claude app on iPhone]
+You: I'm about to start the notifications feature. Take a look at the repo,
+     analyze the lib/notifs/ module, and propose a plan.
+
+Claude (on mobile):
+[Reads the module]
+[Generates a plan in the chat]
+"I'm going to touch 4 files: ...
+ Approach: ...
+ Should we start with X or Y first?"
+
+You: With X. Go ahead.
+
+[Claude starts working on your phone and shows you the progress]
+```
+
+### You get to the office (web)
+
+```
+[claude.ai/code in the browser]
+You open it → your session is still there. You see all the context.
+
+Claude: "X is done, moving on to Y. Show me the tests you want to keep."
+
+[You reply from the web, way more comfortable than on mobile]
+```
+
+### You sit down at your computer (terminal)
+
+```bash
+$ claude --teleport
+```
+
+The full session shows up in your terminal. Branch already on `feature/notifs`, history intact, context loaded. **You pick up right where you left off, without losing a byte.**
+
+---
+
+## The 3 contexts to use each one
+
+### Web — for extended work
+
+✅ Long sessions at the office/home
+✅ Code review on a big screen
+✅ Multi-file edits
+✅ When you don't want to install anything (someone else's computer)
+
+❌ Quick operations (slow for small tasks)
+
+### Mobile — for queries and commands
+
+✅ "How's task X going?"
+✅ "Pause what you're doing"
+✅ Approve / reject specific actions
+✅ Get notifications for long-running tasks
+
+❌ Writing complex prompts (tiny keyboard)
+❌ Deep code review
+
+### Terminal — for serious work
+
+✅ Intense coding sessions
+✅ Locally configured hooks and skills
+✅ When you need maximum performance
+✅ Power-user workflow with keybindings
+
+❌ When you don't have your computer
+
+---
+
+## The `--teleport` command
+
+Variants:
+
+```bash
+claude --teleport           # pulls the last active session
+claude --teleport <id>      # pulls a specific session
+claude --tp                 # short alias
+/teleport                   # from inside Claude Code
+```
+
+What happens when you teleport:
+
+1. Claude clones the corresponding branch to your local machine (if it wasn't already there)
+2. Restores the conversation context
+3. Shows you the last message and the current state
+4. You can keep typing like nothing happened
+
+---
+
+## Cases where it shines
+
+### 1. Async productivity
+
+Your team hands you a bug at 9pm. You asked Claude to fix it from bed (mobile). In the morning at the office, you open the web, validate it. Merge. **8 hours of work done without you**.
+
+### 2. Distributed pair programming
+
+You at the office (web), your colleague in another city (web). Both watching the same session in real time. Inline comments, shared decisions.
+
+### 3. "Inheriting" another dev's session
+
+Your teammate started a feature, then went on vacation. They send you the session link, you teleport it to your terminal. You have all the context without them having to explain anything.
+
+### 4. Mobile-first triage
+
+As the on-call dev, you get paged about an incident. From your phone: you investigate logs, identify the bug, **decide whether you need your laptop** or whether Claude can resolve it on its own from the web.
+
+---
+
+## Gotchas that'll trip you up the first time
+
+### 1. The first load is slow
+
+The first time you open web/mobile, it **loads the entire repo**. For big repos (>5k files), it can take 30-60 seconds. Once cached, it won't again.
+
+### 2. Uncommitted changes don't sync
+
+If you have uncommitted changes locally and you open the web, **the web doesn't see them**. Commit first (even if it's WIP) if you want them synced.
+
+### 3. Paid plan required
+
+The free tier doesn't include Claude Code on web/mobile. You need Pro+.
+
+### 4. Limited permissions on mobile
+
+On mobile, **destructive operations may require extra confirmation**. For safety — you don't want to type `rm -rf` with your phone's autocorrect.
+
+### 5. Notifications — watch the opt-in
+
+By default you won't get push notifications when Claude finishes tasks. Turn it on in Settings if you want to be notified.
+
+### 6. Private org repos
+
+Your personal GitHub account may not have access to your org's repos. Your org admin has to **approve Claude Code** in the organization settings.
+
+---
+
+## Combining with channels
+
+If you also enable [Claude Channels (Telegram/Discord)](/boveda/claude-canales-tg-discord), you get **4 entry points**:
+
+| Entry point | When |
+|---------|--------|
+| Web | Serious session on a computer without installing |
+| Mobile | Native app with notifications |
+| Terminal | Power user on a computer |
+| Telegram/Discord | Notifications and quick commands from anywhere |
+
+The most-used combo: **terminal + Telegram**. You work in the terminal when you're at the computer, and get notifications and send commands when you're not.
+
+---
+
+## What you still CAN'T do
+
+Some limitations of the web/mobile version:
+
+❌ **Custom skills** — local ones don't load on web (yet)
+❌ **Local MCPs** — the ones running on your computer only live there
+❌ **Hooks** — some don't apply on web
+❌ **Computer use** — desktop only, not web/mobile
+
+If you rely heavily on skills/MCPs/hooks, web/mobile works for **queries and triage**, not your full workflow. For that you still need the terminal.
+
+---
+
+## When this pattern makes sense
+
+✅ You move around a lot between devices
+✅ You work async with a team
+✅ You want "Claude working" without your computer turned on
+✅ You operate repos from places where you can't install anything
+
+❌ Your workflow depends on skills/MCPs/hooks (terminal is still primary)
+❌ Super-long sessions with a lot of context (web has a few ms more latency)
+❌ Strict compliance where you can't expose repos to the cloud
+
+---
+
+## Next steps
+
+- If you want notifications / control from your phone, [Claude Channels](/boveda/claude-canales-tg-discord)
+- To have Claude running 24/7 without your computer, [Managed Agents](/boveda/agentes-managed)
+- For the base setup of Claude Code in the terminal, [full guide](/boveda/guia-claude-code-completa)

@@ -1,0 +1,113 @@
+---
+title: "Mercado Pago Marketplace — the OFFICIAL MP plugin for Claude Code"
+description: "Official plugin from Mercado Pago's Developer Experience team. Scaffold, review, and maintain payment integrations across 7 LATAM countries (AR, BR, MX, CL, CO, PE, UY) and 13 products: Checkout Pro, Bricks, QR, Subscriptions, Marketplace, and more."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "mercado-pago"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["agente-pagokit", "all-deploy", "claude-cowork-code"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/mercadopago-claude-marketplace"
+github: "https://github.com/mercadopago/mercadopago-claude-marketplace"
+---
+
+## What it is
+
+If you sell anything in LATAM, this is news: Mercado Pago published an **official** plugin for Claude Code, maintained by its Developer Experience team. It covers the 7 countries where MP operates (Argentina, Brazil, Mexico, Chile, Colombia, Peru, Uruguay) and the 13 main products: Checkout Pro, Bricks, QR, Subscriptions, Marketplace, etc.
+
+The difference from [agente-pagokit](/boveda/agente-pagokit) (which also integrates MP among others) is that this one is **official from MP**. It knows the exact particularities of each country (Pix in Brazil, OXXO Pay in Mexico, Rapipago in Argentina), follows the team's official conventions, and gets updated whenever MP ships new features.
+
+It covers the entire integration lifecycle: **scaffold** (it builds the initial code for you), **review** (it checks that it's implemented correctly), and **maintain** (it helps you update when MP changes something).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | Mercado Pago (Developer Experience team) |
+| Stars | 0 (just published) |
+| Type | Single official plugin |
+| Components | agents, commands, skills, hooks |
+| Countries covered | AR, BR, MX, CL, CO, PE, UY |
+| Products | Checkout Pro, Bricks, QR, Subscriptions, Marketplace, +8 more |
+| Marketplace | `mercadopago/mercadopago-claude-marketplace` |
+| Official docs | [mercadopago.com/developers](https://www.mercadopago.com/developers) |
+
+## How to install it
+
+```bash
+/plugin marketplace add mercadopago/mercadopago-claude-marketplace
+/plugin install mercadopago-claude-marketplace@mercadopago-mercadopago-claude-marketplace
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the official Mercado Pago plugin. My project sells in
+[country: Mexico / Argentina / Brazil / etc.] and I need to implement
+[Checkout Pro / Bricks / Subscriptions / QR]. Start the scaffold.
+```
+
+## What you can do with it
+
+### Scaffold Checkout Pro in minutes
+
+Ask Claude to build the checkout for your country and product. The plugin knows:
+- The correct API keys for sandbox vs production
+- The local payment methods (PSE Colombia, OXXO/CoDi Mexico, Pix Brazil, Rapipago Argentina)
+- The country-specific webhook conventions
+- The correct amount formats (decimals, separators)
+
+### Bricks — the embedded components
+
+If you want a checkout that's more customizable than Checkout Pro, MP offers "Bricks" (prebuilt components you integrate into your UI). The plugin knows which ones exist and how to plug them in.
+
+### QR for in-person payments
+
+If your business has an offline component (physical store, restaurant, event), MP has QR Pago. The plugin builds the server-side integration + the endpoint that generates the QR.
+
+### Recurring subscriptions
+
+`Subscriptions` for SaaS or membership. The plugin builds the complete flow: create plan → subscribe customer → handle renewals → handle payment failures → cancellations. It covers all 7 countries with their particularities.
+
+### Marketplace (payment split)
+
+If you're building a marketplace where multiple sellers receive payments, MP has a specific product. The plugin handles the split and the settlement.
+
+### Review and maintain
+
+When MP ships a change (they change a webhook, deprecate an endpoint, improve a payment method), the plugin tells you and helps you migrate. This, maintained by MP's own team, is gold: you don't depend on a community dev who finds out late.
+
+## Real benefits
+
+- **Official** — the only real guarantee that it follows MP's conventions.
+- **7 countries covered**, each with its own particularities.
+- **13 products** = broad coverage of the MP catalog.
+- **Maintained by MP's Developer Experience team.**
+- **Scaffold + review + maintain** — all three moments covered.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't operate in LATAM:** Mercado Pago doesn't process outside the 7 covered countries. For EU/US, Stripe is the option.
+- **If you need multiple providers in parallel:** this plugin is MP-only. To combine it with Stripe / Wompi / Lemon Squeezy, [agente-pagokit](/boveda/agente-pagokit) chooses automatically.
+- **If your integration is already built and working:** the value is in scaffold and maintenance. If you already have something stable in prod, there's no rush.
+- **If you need crypto / blockchain:** MP doesn't process crypto. Check out other plugins (e.g. [Pinion OS](/boveda/plugin-pinion-os) for x402 micropayments).
+- **Requires an active MP account** with generated API keys. The plugin doesn't create the account for you.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Mercado Pago](https://www.aitmpl.com/plugins/mercadopago-claude-marketplace) — exact command.
+- **Repo on GitHub:** [mercadopago/mercadopago-claude-marketplace](https://github.com/mercadopago/mercadopago-claude-marketplace) — code and maintenance.
+- **Official MP docs:** [mercadopago.com/developers](https://www.mercadopago.com/developers) — reference for APIs, products, and countries.
+
+## Related resources
+
+- [Agente PagoKit](/boveda/agente-pagokit) — multi-provider alternative (Stripe, MP, Wompi, Lemon Squeezy). Compare if you sell in several markets.
+- [All Deploy](/boveda/all-deploy) — to ship your integration to production once it's built.
+- [Claude Cowork & Code](/boveda/claude-cowork-code) — to decide whether you build your integration in Code or consult from Cowork.

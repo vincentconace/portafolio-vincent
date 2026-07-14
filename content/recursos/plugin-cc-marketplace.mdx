@@ -1,0 +1,132 @@
+---
+title: "CC Marketplace — 119 plugins de comunidad para Claude Code"
+description: "Marketplace de ananddtyagi (669⭐) con 119 plugins, 17 agents, 40 commands y 1 hook. Mezcla heterogénea de autores con flujos de PR, code review, debugging, git workflows y el set completo de agents tipo 'studio'."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["5-claude-skills-necesarias", "agency-agents", "codex-plugin-hack"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/cc-marketplace"
+github: "https://github.com/ananddtyagi/cc-marketplace"
+---
+
+## Qué es
+
+CC Marketplace es el marketplace original de Anand Tyagi para Claude Code. No tiene una temática única: junta lo que aporta la comunidad — git workflows, code review, PR creation, debugging, sub-agents de Michael Galpert (los famosos "studio" agents: rapid-prototyper, ui-designer, growth-hacker, etc.), planificación con `plan` y `explore` de Galen Ward, prompt optimization con `lyra`, y más.
+
+Es decir: si en lugar de un marketplace temático ([alirezarezvani](/boveda/5-claude-skills-necesarias) para eng/marketing, [HashiCorp](https://www.aitmpl.com/plugins/agent-skills) para Terraform) querés un cajón con cosas variadas que aportan distintos autores, este es ese cajón.
+
+Cubre 119 plugins. La mayoría son de 1 comando o 1 agent cada uno — son piezas chicas, no toolkits monolíticos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | ananddtyagi |
+| Stars | 669 |
+| Tipo | Marketplace (119 plugins) |
+| Componentes | 17 agents, 40 commands, 1 hook |
+| Marketplace | `ananddtyagi/cc-marketplace` |
+
+### Plugins que vale la pena mirar primero
+
+**Git workflows (varios autores):**
+- `commit`, `2-commit-fast` — commits con convenciones
+- `create-pr`, `create-pull-request`, `fix-pr` — PR end-to-end
+- `husky` — setup de pre-commit hooks
+- `create-worktrees` — git worktrees para PRs en paralelo
+
+**Code review y refactor:**
+- `code-review`, `code-review-assistant`, `pr-review` — varios estilos
+- `refractor` (sic), `optimize` — refactor + optimización
+- `audit`, `analyze-codebase` — security + análisis general
+- `double-check` — anti-"job done", fuerza segunda lectura
+
+**Planificación y exploración:**
+- `plan`, `explore` (por Galen Ward) — el patrón Explore → Plan → Execute
+- `ultrathink` — coordinator agent con 4 subs (Architect, Research, Coder, Tester)
+- `analyze-issue`, `fix-github-issue`, `fix-issue` — GitHub Issues end-to-end
+
+**Agents tipo "studio" (Michael Galpert):**
+- `rapid-prototyper`, `ui-designer`, `mobile-app-builder`, `frontend-developer`, `backend-architect`
+- `growth-hacker`, `tiktok-strategist`, `app-store-optimizer`, `whimsy-injector`
+- `experiment-tracker`, `feedback-synthesizer`, `tool-evaluator`
+- `studio-coach`, `studio-producer` — orquestadores
+
+**Especialistas (varios):**
+- `claude-desktop-extension` — context para `.dxt` (extensiones de Claude Desktop)
+- `lyra` — prompt optimization
+- `bug-detective`, `debug-session`, `debugger` — debugging asistido
+- `n8n-workflow-builder` — workflows en n8n
+- `python-expert`, `react-native-dev`, `flutter-mobile-app-dev`, `web-dev`
+
+## Cómo se instala
+
+```bash
+# 1) Agregar el marketplace
+/plugin marketplace add ananddtyagi/cc-marketplace
+
+# 2) Instalar los plugins que querés (uno por uno)
+/plugin install plan@ananddtyagi-cc-marketplace
+/plugin install create-pr@ananddtyagi-cc-marketplace
+/plugin install lyra@ananddtyagi-cc-marketplace
+```
+
+O `/plugin` → Discover.
+
+Para curar con Claude:
+
+```
+Instalé el marketplace ananddtyagi/cc-marketplace. Soy [tu rol] trabajando en
+[tu proyecto]. De los 119 plugins disponibles, recomendame los 8-10 más
+útiles para mi caso, agrupados por categoría.
+```
+
+## Qué podés hacer con esto
+
+### Armar tu flujo de PR end-to-end
+
+`plan` → `explore` → implementación → `code-review` → `create-pr` → `fix-pr` (si llegan comentarios). Es el patrón Explore-Plan-Execute pero con plugins curados para cada paso. Buen reemplazo para "voy a hacerlo a mano".
+
+### Stack de agents para construir productos
+
+Si trabajás en algo tipo agencia o producto chico, los agents de Michael Galpert dan un equipo virtual: `rapid-prototyper` para arrancar, `ui-designer` para diseñar, `mobile-app-builder` para empaquetar, `growth-hacker` para distribución, `app-store-optimizer` para publicar. Es la línea ágil completa.
+
+### Trabajar mejor con GitHub Issues
+
+`analyze-issue` te lee el issue y arma una spec. `fix-github-issue` lo implementa con la spec. Atajo decente cuando tu backlog es ruidoso y querés que Claude haga el grunt work de leer y entender.
+
+### Cross-tool: combinar con Codex
+
+El marketplace también incluye plugins que se llevan bien con Codex (igual filosofía que [Claude + Codex en equipo](/boveda/claude-codex-equipo)). Si ya tenés Codex pago, este combo extrae más valor por dólar.
+
+## Beneficios reales
+
+- **Diversidad de autores** — distintas voces, distintos estilos. Si una no te convence, hay alternativas.
+- **Plugins chicos y específicos** — instalás lo que usás, descartás el resto.
+- **Cubre flujos de día a día** (commit, PR, review, debug) sin pretender ser un framework.
+- **No está atado a un dominio** — sirve tanto a un dev solo como a un equipo de startup.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si ya usás otro marketplace gigante** como `alirezarezvani/claude-skills` o `jeremylongshore/claude-code-plugins-plus-skills`, hay solapamiento (debug, code-review, PR helpers). Elegí uno como principal.
+- **Heterogeneidad alta = calidad variable.** Los plugins de autores conocidos (Galen Ward, Michael Galpert, Anand) son sólidos. Otros son experimentos. Probá uno antes de adoptarlos en serio.
+- **Algunos plugins son redundantes con primitivos nativos** — `plan` vs el `/plan` mode nativo de Claude Code; `double-check` vs hooks. Mirá qué ya tenés antes de duplicar.
+- **Si solo querés 2-3 commands específicos**, podés copiarlos en local sin instalar el marketplace entero.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [CC Marketplace](https://www.aitmpl.com/plugins/cc-marketplace) — listado completo de los 119 plugins.
+- **Repo en GitHub:** [ananddtyagi/cc-marketplace](https://github.com/ananddtyagi/cc-marketplace) — código, issues, contributing.
+
+## Recursos relacionados
+
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — para arrancar con lo esencial antes de meter un marketplace de 119 plugins.
+- [Agency Agents](/boveda/agency-agents) — relacionado con el stack "studio" de Michael Galpert si lo querés explorar más a fondo.
+- [Codex Plugin Hack](/boveda/codex-plugin-hack) — para extraer más valor combinando varios marketplaces con tu sub de Codex.

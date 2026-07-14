@@ -1,0 +1,107 @@
+---
+title: "MCP Postman — collections, tests, and API workflow from Claude"
+description: "MCP server with 310 installs for Postman. Manage collections, run requests, execute tests, and operate workspaces. For teams that live in Postman and want AI orchestrating APIs without opening the app."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "postman"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-github-integration", "all-deploy", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/postman"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/postman.json"
+---
+
+## What it is
+
+Postman is the universal app for testing and documenting APIs: collections, environments, tests, mocking, monitors. This MCP connects your account to Claude Code.
+
+Capabilities:
+- **Search collections** and requests
+- **Run requests** with environments
+- **Run tests**
+- **Operate workspaces**
+- **Generate requests** from specs (OpenAPI / GraphQL)
+
+Useful when your team keeps specs in Postman as the source of truth and you want Claude to operate right there.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 310 |
+| MCP server | `postman-api-http-server` |
+| Account required | Yes — Postman + API key |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp devtools/postman
+```
+
+Prerequisite: Postman account + API key from [postman.com/settings](https://www.postman.com/settings).
+
+For Claude:
+
+```
+I installed the devtools/postman MCP. List my collections in the
+`Backend APIs` workspace. Run the `Health Check` request in the
+`production` environment and show me the response.
+```
+
+## What you can do with it
+
+### Collection audit
+
+"List all collections in workspace X. Identify the ones that haven't been edited in the last 90 days (candidates for archiving)."
+
+### Running tests
+
+"Run the entire `Smoke Tests` collection in the `staging` environment. If any test fails, show me the request, response, and assertion that failed."
+
+### Generating requests from OpenAPI
+
+"From this OpenAPI spec, generate a Postman collection with one request per endpoint, grouped by tag."
+
+### Sync with code
+
+"For each endpoint I changed in my backend, update the corresponding request in collection X — params, body, headers."
+
+### Documentation as code
+
+"For the 20 endpoints in my collection, generate markdown docs with: description, request example, response example, error codes." Output for a README or site.
+
+### Combining with [GitHub](/boveda/mcp-github-integration)
+
+PR that changes an endpoint → the Postman MCP updates the collection → the GitHub MCP commits the changes to the docs repo. A pipeline.
+
+## Prerequisites
+
+- **Active Postman account**
+- **API key** from Postman Settings → API Keys
+- **Workspaces and collections** already structured
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Postman:** this MCP is Postman-only. For Insomnia / Bruno / Hoppscotch there are other tools.
+- **For serious E2E testing:** Postman is for API testing. For E2E, better go with [Playwright](/boveda/mcp-playwright-mcp-server) or dedicated tools.
+- **Destructive operations:** delete collections / workspaces. Approval hooks.
+- **API key with broad scope:** restrict it if your plan allows.
+- **If your team doesn't update collections:** the MCP shines when collections are the source of truth. If they're stale, it doesn't help.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Postman MCP](https://www.aitmpl.com/component/mcps/devtools/postman) — exact command.
+- **JSON config:** [postman.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/postman.json).
+- **Postman API docs:** [learning.postman.com/docs/developer/postman-api](https://learning.postman.com/docs/developer/postman-api/).
+
+## Related resources
+
+- [GitHub Integration MCP](/boveda/mcp-github-integration) — a natural combo for syncing Postman with specs in repos.
+- [All Deploy](/boveda/all-deploy) — pre-deploy, run the smoke tests collection via the Postman MCP.
+- [Agency Agents](/boveda/agency-agents) — to orchestrate pipelines that span Postman + GitHub + alerting.

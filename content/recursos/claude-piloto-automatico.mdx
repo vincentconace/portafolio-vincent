@@ -1,0 +1,350 @@
+---
+title: "Claude en piloto automático — YOLO mode + hooks + GSD/Superpowers"
+description: "Claude por defecto pide permiso para TODO. Te enseño cómo activar YOLO mode (sin permisos), proteger con hooks (reglas de seguridad), y usar GSD para proyectos nuevos o Superpowers para proyectos existentes. Setup en 15 minutos, ahorro masivo en clicks."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "hooks"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["hooks-automatizacion", "5-skills-equipo-dev", "agent-view"]
+---
+
+## El problema
+
+Claude pide permiso para **todo**:
+
+- Leer archivo → permiso
+- Correr comando → permiso
+- Instalar paquete → permiso
+- Crear carpeta → permiso
+- Editar archivo → permiso
+
+Vos ahí clickeando "aceptar" 50 veces por sesión. Pierde el flow, pierde el ritmo, **Claude no puede trabajar autónomamente**.
+
+---
+
+## La solución — 3 piezas
+
+| Pieza | Para qué |
+|-------|----------|
+| **YOLO Mode** | Desactiva confirmaciones (Claude trabaja sin interrupciones) |
+| **Hooks de protección** | Reglas de seguridad que bloquean acciones peligrosas |
+| **GSD o Superpowers** | Frameworks que aprovechan la autonomía para proyectos completos |
+
+Combinadas: Claude trabaja **horas solo** sin tocar nada que no deba.
+
+---
+
+## Pieza 1 — YOLO Mode
+
+### Qué es
+
+Modo que desactiva **todas las confirmaciones**. Lo activás con un flag y Claude lee/escribe/ejecuta sin pedir permiso.
+
+### Comando
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+### Por qué se llama "dangerously"
+
+El nombre es **intencional**. Sin protecciones adicionales, Claude puede:
+- Borrar archivos que no debe
+- Ejecutar `rm -rf`
+- Hacer `git push --force` a main
+- Drop tables en producción
+
+Es como darle las llaves de tu casa sin decirle qué puertas NO abrir. **Por eso necesitás los hooks**.
+
+### Cuándo usarlo
+
+✅ Tenés hooks configurados
+✅ Proyecto en VM, contenedor o repo aislado
+✅ Tareas largas donde la autonomía vale más que el riesgo
+
+❌ Tu máquina principal con archivos críticos sin hooks
+❌ Producción
+❌ Primera vez usando Claude (aprendé sin YOLO primero)
+
+---
+
+## Pieza 2 — Hooks de protección
+
+### Qué son
+
+Reglas automáticas que se ejecutan **antes** de cada acción de Claude. Si la acción es peligrosa, se bloquea.
+
+Es como un guardia de seguridad: Claude llega con una tarea, el guardia revisa, **deja pasar solo lo seguro**.
+
+### Setup básico
+
+Archivo: `~/.claude/settings.json`
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/proteger.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Script de protección
+
+Archivo: `.claude/hooks/proteger.sh`
+
+```bash
+#!/bin/bash
+# Revisa cada comando antes de que Claude lo ejecute
+
+COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command')
+
+# Bloqueamos rm -rf
+if echo "$COMMAND" | grep -q 'rm -rf'; then
+  echo "Comando peligroso bloqueado: $COMMAND" >&2
+  exit 2
+fi
+
+# Bloqueamos drop table
+if echo "$COMMAND" | grep -qi 'drop table'; then
+  echo "Operación de base de datos bloqueada" >&2
+  exit 2
+fi
+
+# Bloqueamos force push a main
+if echo "$COMMAND" | grep -qE 'git push.*--force.*main'; then
+  echo "Force push a main bloqueado" >&2
+  exit 2
+fi
+
+# Bloqueamos sudo
+if echo "$COMMAND" | grep -q '^sudo'; then
+  echo "sudo bloqueado — escalá manualmente si lo necesitás" >&2
+  exit 2
+fi
+
+# Todo lo demás, permitir
+exit 0
+```
+
+Hacelo ejecutable:
+
+```bash
+chmod +x .claude/hooks/proteger.sh
+```
+
+### Los 3 exit codes que importan
+
+| Exit code | Significa |
+|-----------|-----------|
+| `0` | Permitir (todo bien) |
+| `2` | Bloquear (peligroso) |
+| Otro | Advertir pero continuar |
+
+### Tipos de hooks
+
+| Tipo | Para qué |
+|------|----------|
+| `command` | Corre script en tu compu (el más común) |
+| `http` | Llama a URL (útil si tenés servidor de validación) |
+| `prompt` | Le pregunta a otra IA si la acción es segura |
+| `agent` | Usa un agente con tools para verificar |
+
+Para mayoría de casos, `command` con un script bash alcanza. Ver [hooks de automatización](/boveda/hooks-automatizacion) para profundizar.
+
+---
+
+## Pieza 3a — GSD (proyectos nuevos)
+
+### Qué es
+
+GSD ("Get Shit Done") es un skill que te lleva de **idea → deploy** con metodología estructurada. Cada paso en contexto limpio (no se confunde con tareas grandes).
+
+### Instalación
+
+```bash
+npx get-shit-done-cc@latest
+```
+
+### Los 6 comandos
+
+| Comando | Para qué |
+|---------|----------|
+| `/gsd:new-project` | Arranca proyecto nuevo desde cero |
+| `/gsd:discuss-phase` | Discute y define qué vas a construir |
+| `/gsd:plan-phase` | Crea plan de ejecución |
+| `/gsd:execute-phase` | Ejecuta el plan automáticamente |
+| `/gsd:verify-work` | Verifica que todo funcione |
+| `/gsd:ship` | Sube y deploya |
+
+### Cuándo usar GSD
+
+✅ Empezás proyecto desde cero
+✅ Querés guía estructurada (idea → producto)
+✅ No tenés decisiones de arquitectura definidas
+
+❌ Modificás proyecto existente
+❌ Sabés exactamente qué querés (GSD agrega ceremonia)
+
+---
+
+## Pieza 3b — Superpowers (proyectos existentes)
+
+### Qué es
+
+Framework que crea **sub-agentes** trabajando en paralelo. Cada sub-agente tiene contexto limpio. Trabajan **horas sin perder el hilo**.
+
+### Instalación
+
+```bash
+npx superpowers@latest init
+```
+
+### El flow de 7 pasos
+
+1. **Brainstorm** — Claude te hace preguntas para entender
+2. **Design** — Diseña solución antes de codear
+3. **Plan** — Divide en tareas chicas (2-5 min cada una)
+4. **Implement** — Sub-agentes ejecutan cada tarea en paralelo
+5. **Test** — Tests automáticos
+6. **Review** — Como lo haría senior dev
+7. **Complete** — Cierra rama y entrega
+
+### Cuándo usar Superpowers
+
+✅ Proyecto existente con cambios/features
+✅ Tareas grandes (>2h) que querés delegar
+✅ Code base que requiere coordinación de cambios
+
+❌ Quick fixes (overkill)
+❌ Proyectos triviales
+
+Ver más en [top 10 abril 2026](/boveda/top-10-claude-abril-2026) y [5 skills equipo dev](/boveda/5-skills-equipo-dev).
+
+---
+
+## El combo completo
+
+### Setup inicial (una vez)
+
+```bash
+# 1. Crear hooks
+mkdir -p ~/.claude/hooks
+mkdir -p .claude/hooks
+
+# 2. Configurar settings.json (ver código arriba)
+# 3. Crear proteger.sh (ver código arriba)
+# 4. chmod +x
+
+# 5. Instalar uno de los frameworks
+npx get-shit-done-cc@latest   # proyecto nuevo
+# o
+npx superpowers@latest init    # proyecto existente
+```
+
+### Workflow diario
+
+```bash
+# Arrancar Claude en piloto automático
+claude --dangerously-skip-permissions
+
+# Adentro:
+> /gsd:new-project
+# o
+> Usá superpowers para agregar feature de pagos recurrentes
+```
+
+Claude trabaja **horas solo**. Vos volvés a revisar resultado, no a clickear "aceptar" 50 veces.
+
+---
+
+## Anti-patrones
+
+### 1. YOLO sin hooks
+
+**Riesgo real**. Cualquier comando destructivo se ejecuta sin chequeo. Una mala vibe del modelo + un `rm -rf` = catástrofe.
+
+**Regla**: hooks PRIMERO, YOLO después.
+
+### 2. Hooks que bloquean demasiado
+
+Si tus hooks son tan restrictivos que bloquean cosas legítimas, **vas a desactivarlos** y volver al punto cero. Encontrá el balance: bloqueá lo catastrófico (`rm -rf`, force push a main, drop table), dejá pasar lo recuperable.
+
+### 3. Hooks sin testing
+
+Si nunca testeás tus hooks, no sabés si funcionan. **Probá manualmente**:
+
+```bash
+echo '{"command": "rm -rf /"}' | TOOL_INPUT="$(cat)" .claude/hooks/proteger.sh
+echo $?  # Debería ser 2
+```
+
+### 4. GSD para tareas chicas
+
+GSD agrega ceremonia (brainstorm, design, plan). Para "agregame este botón", es overhead. Para "construime esta app completa", brilla.
+
+### 5. YOLO en tu repo personal sin backup
+
+Si algo sale mal y no tenés git remoto + push frecuente, podés perder trabajo. **Mantené git limpio** antes de YOLO.
+
+---
+
+## Niveles de autonomía
+
+Hay un spectrum, no solo "YOLO sí o no":
+
+| Nivel | Setup | Cuándo |
+|-------|-------|--------|
+| **0 — Default** | Sin nada | Aprendiendo Claude |
+| **1 — Permisos selectivos** | `permissions.allow` en settings.json | Workflows conocidos |
+| **2 — Hooks pasivos** | Hooks que avisan (exit ≠ 0/2) pero no bloquean | Auditoría |
+| **3 — Hooks activos** | Hooks que bloquean acciones peligrosas | Trabajo serio |
+| **4 — YOLO + hooks** | `--dangerously-skip-permissions` + hooks | Piloto automático |
+| **5 — Agent View + YOLO + hooks** | Múltiples agentes paralelos sin permisos | Producción intensiva |
+
+Empezá en 0, avanzá un nivel cada 2-4 semanas. **No saltees al 4 sin entender los anteriores**.
+
+---
+
+## Combinaciones potentes
+
+### Con Agent View
+
+[Agent View](/boveda/agent-view) (varios agentes paralelos) + YOLO + hooks = **multi-agente en piloto automático**. Cada agente trabaja sin pedirte permiso, protegidos por hooks.
+
+### Con Memory persistente
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) recuerda entre sesiones lo que aprendiste de hooks que aplicaste. Mejor calibración con el tiempo.
+
+### Con Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) en CLAUDE.md hace que Claude trabaje **sin fluff** durante la sesión autónoma. Más trabajo útil por dólar gastado.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Producción / repos críticos sin staging | Riesgo no compensa autonomía |
+| Equipos compartiendo sin protocolo | Hooks distintos = caos |
+| Aprendiendo Claude | YOLO oculta lo que Claude hace |
+| Trabajo creativo exploratorio | Querés ver cada paso, no autonomía |
+
+---
+
+## Próximos pasos
+
+- Para profundizar en hooks específicamente, [hooks de automatización](/boveda/hooks-automatizacion)
+- Para multi-agente en paralelo con piloto automático, [Agent View](/boveda/agent-view)
+- Para suite de skills que complementan autonomía, [5 skills equipo dev](/boveda/5-skills-equipo-dev)

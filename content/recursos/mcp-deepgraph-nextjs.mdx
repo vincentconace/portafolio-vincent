@@ -1,0 +1,94 @@
+---
+title: "MCP DeepGraph Next.js — mapeá tu proyecto Next.js como un grafo navegable"
+description: "MCP server con 1,092 installs que analiza tu proyecto Next.js como un grafo: componentes, dependencias, routes y arquitectura. Claude entiende el shape real del proyecto antes de tocar nada."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "nextjs"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-deepgraph-react", "mcp-deepgraph-typescript", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-nextjs"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-nextjs.json"
+---
+
+## Qué es
+
+DeepGraph Next.js es un MCP que arma un grafo del proyecto: nodos (componentes, páginas, layouts, API routes), edges (imports, props, llamadas a server actions). Cuando Claude pide "qué componentes usa el header", consulta el grafo en vez de adivinar leyendo archivos sueltos.
+
+La diferencia con [Cartographer](/boveda/plugin-cartographer) (que mapea cualquier repo): DeepGraph es vertical en Next.js — conoce app router vs pages router, Server vs Client Components, layouts anidados, route groups. Para Next.js específico, da más profundidad.
+
+1,092 installs lo posicionan como el MCP más adoptado de la categoría `deepgraph` y uno de los más reconocidos para análisis estructural.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `deepgraph` |
+| Installs | **1,092** |
+| Servidor MCP | `DeepGraph Next.js MCP` |
+| Foco | Next.js (App Router + Pages Router) |
+| Costo | Gratis (revisar pricing oficial) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp deepgraph/deepgraph-nextjs
+```
+
+Para Claude:
+
+```
+Instalé el MCP deepgraph/deepgraph-nextjs. Mostrame el grafo de mi
+proyecto: routes principales, layouts anidados, y qué componentes
+son Server vs Client.
+```
+
+## Qué podés hacer con esto
+
+### Onboarding rápido a un proyecto ajeno
+
+"Mapeame todos los layouts y qué páginas heredan de cada uno". Sin leer archivo por archivo, tenés el tree completo.
+
+### Impact analysis antes de refactor
+
+"Si renombro el componente `<Header>`, qué archivos se rompen?". El MCP devuelve la lista exacta de imports.
+
+### Detectar misuse de Server / Client Components
+
+"Listame los Server Components que importan código `'use client'` directamente". Detecta una de las fuentes más comunes de bugs en App Router.
+
+### Inspección de route groups y dynamic routes
+
+"Mostrame todas las rutas dinámicas y qué params reciben". Para auditorías de SEO o de routing.
+
+### Detección de imports circulares o dead code
+
+"Listame los componentes que no son importados por ningún otro". Limpieza pre-deploy.
+
+## Pre-requisitos
+
+- **Proyecto Next.js** (App Router o Pages Router) accesible
+- **Node.js + Claude Code** funcionando
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu proyecto no es Next.js:** mirá las versiones [React](/boveda/mcp-deepgraph-react), [TypeScript](/boveda/mcp-deepgraph-typescript) o [Vue](/boveda/mcp-deepgraph-vue).
+- **Para análisis genérico de codebase:** [Cartographer](/boveda/plugin-cartographer) es horizontal (cualquier proyecto).
+- **Proyectos muy chicos:** un par de páginas no necesitan grafo. Abrí los archivos directo.
+- **Análisis runtime:** el MCP es estático. Para perf en runtime, usá [Chrome DevTools MCP](/boveda/mcp-chrome-devtools).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [DeepGraph Next.js MCP](https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-nextjs) — comando exacto.
+- **Config JSON:** [deepgraph-nextjs.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-nextjs.json).
+
+## Recursos relacionados
+
+- [DeepGraph React MCP](/boveda/mcp-deepgraph-react) — análisis equivalente para proyectos React puros (sin Next).
+- [DeepGraph TypeScript MCP](/boveda/mcp-deepgraph-typescript) — para análisis de tipos cuando importa más que el routing.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para sacarle jugo a un grafo cargado.

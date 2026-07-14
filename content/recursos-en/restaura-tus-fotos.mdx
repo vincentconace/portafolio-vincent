@@ -1,0 +1,317 @@
+---
+title: "Restore old or blurry photos with NanoBanana MCP in Claude Code"
+description: "NanoBanana is an MCP server that connects Claude with Google Gemini to generate and restore images. 2-minute setup, free API key, 4K output. Here's the fine-tuned prompt for ultra-realistic restoration without the AI look."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "mcp", "gemini"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["higgsfield-mcp", "5-skills-diseno-claude", "mcp-server-propio"]
+---
+
+## What NanoBanana is
+
+**NanoBanana** is an MCP server (`github.com/zhongweili/nanobanana-mcp-server`) that connects Claude Code with **Google Gemini** to:
+
+- Restore damaged, blurry, low-quality photos
+- Generate new images from text
+- Process at **4K** resolution with real photographic quality
+
+Unlike web services (where you upload your photo and wait), NanoBanana runs from Claude — the photo **never leaves your machine** except to call the Gemini API.
+
+| Feature | Detail |
+|----------------|---------|
+| Output | 4K |
+| Cost | Free (Gemini API free tier) |
+| Setup | 2 minutes |
+| Aspect ratios | 1:1, 4:3, 16:9, 9:16, 21:9 |
+| Models | NB2 (Gemini Flash) and Pro |
+
+---
+
+## Setup in 3 steps
+
+### Step 1 — Gemini API key (free)
+
+1. Go to `aistudio.google.com`
+2. Log in with a Google account
+3. Click **"Get API Key"** or "Create API Key"
+4. Copy it
+
+The free Gemini API has **generous limits** for personal use. Don't share it, don't push it to public repos.
+
+### Step 2 — Install the MCP server
+
+The fastest method: paste this to Claude Code:
+
+```
+> Install the MCP server nanobanana-mcp-server from
+  github.com/zhongweili/nanobanana-mcp-server
+
+  Use uvx: uvx nanobanana-mcp-server@latest
+
+  Configure it with my Gemini API key: YOUR_API_KEY_HERE
+
+  Make sure it's working and verify with a
+  simple test (generate an image of "a cat").
+```
+
+Manual alternative:
+
+```bash
+pip install nanobanana-mcp-server
+```
+
+### Step 3 — Verify
+
+Once installed, Claude should have access to the `generate_image` tool. Try:
+
+```
+> Generate a 1024x1024 image of "a latte on wood,
+  cinematic style". Use NanoBanana.
+```
+
+If it returns a PNG, **you're connected**.
+
+---
+
+## The fine-tuned restoration prompt
+
+This is the prompt that gives the best results for restoring photos without them looking "AI-generated":
+
+```
+Apply ultra-realistic photographic restoration with natural
+skin texture, precise detail, and a professional photographic look.
+
+Output at 4K resolution with sharp but natural focus,
+modern cinematic lighting, subtle volumetric lighting,
+professional color grading, subtle depth of field, and HDR.
+
+The output must look like a real photograph taken with a
+high-end cinema camera with a raw aesthetic. NOT AI-generated,
+NOT illustrated, NOT overly sharp, NOT plastic-looking.
+
+Do NOT apply creative reinterpretation, style changes,
+identity alterations, facial remodeling, or exaggerated features.
+NO cartoon, painting, or illustration styles.
+NO over-sharpening, blur, noise, film grain, or
+JPEG artifacts.
+```
+
+### How to use it
+
+```
+> Photo path: /Users/me/Pictures/grandma-photo-1985.jpg
+
+  Apply the professional restoration prompt [paste the prompt
+  from above].
+
+  Output: 4K, aspect ratio 4:3 (keep original).
+  Save to: /Users/me/Pictures/restored/
+```
+
+---
+
+## Prompt variants
+
+### For an old family photo
+
+```
+> [Base restoration prompt]
+
+  Additional context: it's a family photo from the 70s/80s.
+  Warm tones, slightly faded. Keep that vintage aesthetic
+  in the grading — do NOT "modernize" it. Only fix physical
+  damage (scratches, stains) and sharpness.
+```
+
+### For a document / scan
+
+```
+> [Base prompt]
+
+  It's a scanned document. Prioritize:
+  - Text legibility
+  - Removal of stains and creases
+  - Do NOT invent content in illegible areas — leave them
+    slightly blurry so it's clear that info is missing
+```
+
+### For a professional portrait
+
+```
+> [Base prompt]
+
+  It's a corporate headshot. Goals:
+  - Natural skin (NOT excessive photoshop)
+  - Eyes with definition but NOT overprocessed
+  - Corrected lighting if it's under/over exposed
+  - Keep real wrinkles, moles, imperfections — they're part
+    of the identity
+```
+
+### For golden hour
+
+```
+> [Base prompt]
+
+  Additional creative adjustment: simulate golden hour lighting
+  (low sun, warm golden tones, side light). Subtle — don't
+  overdo the effect.
+```
+
+---
+
+## Available models
+
+| Model | When |
+|--------|--------|
+| **NB2 (Gemini Flash)** | Default. Speed + 4K. For most photos. |
+| **Pro** | Complex compositions that need more analysis (multi-subject, scenes with many elements) |
+
+To specify:
+
+```
+> Restore with the Pro model
+```
+
+---
+
+## Aspect ratios
+
+NanoBanana supports:
+
+- **1:1** — classic Instagram feed
+- **4:3** — standard photo format
+- **16:9** — widescreen, banner
+- **9:16** — vertical, Stories/Reels
+- **21:9** — ultra-wide cinematic
+
+```
+> Restore this photo. Aspect ratio: 16:9. If the original photo
+  doesn't fit, NO major crops — better to add plausible background.
+```
+
+---
+
+## Output
+
+By default, files are saved to `./nanobanana-output/` inside the current directory.
+
+To change it:
+
+```bash
+export IMAGE_OUTPUT_DIR=/Users/me/Pictures/restored
+```
+
+Or in `.env`:
+
+```
+IMAGE_OUTPUT_DIR=/path/to/output
+```
+
+---
+
+## Use cases
+
+### 1. Family archive
+
+Your collection of photos of your dad/mom/grandparents from the 60s-90s. Many blurry, scratched, faded.
+
+```
+> Here are 12 photos in /Users/me/family-archive/.
+  Restore all 12 one by one with the professional prompt.
+  Keep vintage tones in the B&W ones.
+  Output to /Users/me/family-restored/.
+  Name each output as the original + "-HD" suffix.
+```
+
+### 2. E-commerce product
+
+Your shop has old, low-res photos. You restore the whole catalog:
+
+```
+> Process the photos in /products/old/.
+  - Restore to 4K
+  - Aspect ratio 1:1 (centered on the product)
+  - Pure white background
+  - Neutral professional lighting
+
+  Output: /products/hd/
+```
+
+### 3. Professional portraits
+
+You or your client has old headshots and needs HD versions for LinkedIn/web:
+
+```
+> Professional portrait: /headshots/raw/juan.jpg
+  Restore with the professional prompt + studio-style lighting
+  (Rembrandt or split lighting). Aspect 1:1.
+```
+
+### 4. Historical documents
+
+Letters, papers, archive photos:
+
+```
+> Scanned document /docs/letter-1972.jpg
+  Restore prioritizing legibility. Do NOT invent text.
+  Output at 4K in B&W.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Expecting magical face reconstruction
+
+If the original photo has a very blurry face (10x10 pixels), NanoBanana **can't invent the real face**. What it will deliver is **a plausible face** that is NOT the original person. For family photos, this can be **unacceptable**.
+
+**Rule**: if the face isn't clear in the original, don't expect miracles. Accept the limitation.
+
+### 2. Over-processing
+
+Restoring = fixing damage. **Not re-inventing the photo**. If you ask "make me look younger" or "change the background", **it's not restoration**, it's manipulation.
+
+### 3. Not reviewing the outputs before a large batch
+
+Before processing 100 photos, **test with 3-5**. If you don't like the prompt, **tweak it**. Then run the batch.
+
+### 4. Uploading sensitive content without thinking
+
+The Gemini API processes your photos on Google's servers. For private/sensitive photos, **read Gemini's policies** before uploading.
+
+### 5. Using the same prompt for everything
+
+A wedding photo vs a document photo vs a product require **different prompts**. What's ideal for skin tones can destroy a scanned text.
+
+---
+
+## When NOT to use it
+
+| Case | Why |
+|------|---------|
+| Professional photos for large-format printing | You need >4K, better to use Topaz Gigapixel or dedicated tools |
+| Forensic restoration (legal, medical) | NanoBanana invents where info is missing — not legally admissible |
+| Frame-by-frame video | NanoBanana is photo-by-photo, not optimized for video |
+| Industrial volume (1000+ photos/day) | Gemini's free tier will hit rate limits |
+
+---
+
+## Cost
+
+The Gemini API free tier is **very generous** for personal use:
+
+- ~1500 requests/day of NB2
+- ~50 requests/day of Pro
+
+For heavy commercial use (e-commerce with thousands of products), consider upgrading to Gemini's paid tier.
+
+---
+
+## Next steps
+
+- For video + cinematic imagery with other models, [Higgsfield MCP](/boveda/higgsfield-mcp)
+- For UI design (not photos), [5 design skills](/boveda/5-skills-diseno-claude)
+- To understand MCPs in general, [your own MCP server](/boveda/mcp-server-propio)

@@ -1,0 +1,77 @@
+---
+title: "Hook Git Add Changes — auto stage post-edit (420 installs version)"
+description: "Hook with 420 installs. Automatically stages git changes after modifications. The `post-tool` catalog version of the auto-stage pattern. Compare with [Auto Git Add](/boveda/hook-auto-git-add), which is more widely adopted."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-auto-git-add", "hook-conventional-commits", "hook-format-javascript-files"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/post-tool/git-add-changes"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/git-add-changes.json"
+---
+
+## What it is
+
+Another implementation of the "auto-stage" pattern. After every file modification, it runs `git add` automatically. Hook event: `PostToolUse`.
+
+Difference from [Auto Git Add](/boveda/hook-auto-git-add) (870 installs, in the `git-workflow` category): same concept, different implementation. The more widely adopted one is Auto Git Add.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `post-tool` |
+| Installs | 420 |
+| Hook event | `PostToolUse` |
+| Action | `git add` post-edit |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook post-tool/git-add-changes
+```
+
+For Claude:
+
+```
+I installed the post-tool/git-add-changes hook. After an edit, run
+`git status` to verify it was staged.
+```
+
+## What you can do with it
+
+Same operations as [Auto Git Add](/boveda/hook-auto-git-add):
+- Clean git workflow with no overhead
+- Easy diff to review (`git diff --staged`)
+- Combinable with auto-format and conventional commits
+
+## When to choose which
+
+| Case | Recommendation |
+| --- | --- |
+| No preference | [Auto Git Add](/boveda/hook-auto-git-add) (more widely adopted) |
+| Categorization under `post-tool` matters | This one |
+| Don't install both | Only one |
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you want a manual review before staging:** both hooks stage automatically.
+- **If you already have [Auto Git Add](/boveda/hook-auto-git-add):** don't install this one on top of it — duplication.
+- **For experimental edits:** staged files are commit-ready. Be careful with WIP.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Git Add Changes Hook](https://www.aitmpl.com/component/hooks/post-tool/git-add-changes) — exact command.
+- **JSON config:** [git-add-changes.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/git-add-changes.json).
+
+## Related resources
+
+- [Auto Git Add Hook](/boveda/hook-auto-git-add) — the more widely adopted variant (870 installs).
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — a natural combo: stage + valid commit.
+- [Format JavaScript Files Hook](/boveda/hook-format-javascript-files) — format before staging.

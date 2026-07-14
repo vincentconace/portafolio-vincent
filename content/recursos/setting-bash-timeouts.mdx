@@ -1,0 +1,91 @@
+---
+title: "Setting Bash Timeouts — timeouts custom para Bash commands (594 installs)"
+description: "Setting con 594 installs. Configura timeouts para Bash command execution: default 120s, max 600s, output limit 100KB. Previene comandos colgados sin matar legítimos lentos."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-performance-monitor", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/environment/bash-timeouts"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/bash-timeouts.json"
+---
+
+## Qué es
+
+Configura limites para ejecución de Bash commands:
+
+- `BASH_DEFAULT_TIMEOUT_MS` = 120,000 (2 min) — timeout default por comando
+- `BASH_MAX_TIMEOUT_MS` = 600,000 (10 min) — máximo absoluto
+- `BASH_MAX_OUTPUT_LENGTH` = 100,000 — caracteres max de output capturado
+
+Previene que comandos colgados (network stuck, script con loop infinito) consuman tiempo y tokens indefinidamente.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `environment` |
+| Installs | 594 |
+| Settings | BASH_DEFAULT_TIMEOUT_MS, BASH_MAX_TIMEOUT_MS, BASH_MAX_OUTPUT_LENGTH |
+| Default | 2min / 10min / 100KB |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting environment/bash-timeouts
+```
+
+Para Claude:
+
+```
+Instalé el setting environment/bash-timeouts. Listame los valores
+actuales. Si quiero subir el max a 20 min (para builds largos),
+mostrame cómo.
+```
+
+## Qué podés hacer con esto
+
+### Anti-hang
+
+Si un comando se cuelga (network timeout, script con bug), no espera indefinidamente.
+
+### Cap a tokens
+
+Output limit evita que un `find /` grabe MBs en context y queme tu cuota.
+
+### Tunear para tu workflow
+
+- Builds rápidos (< 1 min) — bajá default a 60s para feedback más fast
+- Builds lentos (> 10 min) — subí max para no morder a mitad
+
+### Para sesiones autónomas
+
+`/goal` largos: los timeouts evitan que Claude espere por algo que nunca va a terminar.
+
+### Combo con [Performance Monitor Hook](/boveda/hook-performance-monitor)
+
+Settings cap el timeout. Hook reporta cuál comando lo está consumiendo. Diagnóstico completo.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de cambiar defaults">
+
+- **Para builds que de verdad tardan 30 min:** si subís max muy alto, perdés la red contra hangs.
+- **Si tu output útil es grande:** algunos comandos legítimos generan 200KB de output. Subí el límite con cuidado.
+- **Si tu environment es muy lento** (red lenta, máquina chica): los defaults pueden ser muy estrictos.
+- **Setting global afecta a todo:** si tu workflow tiene comandos muy variados (algunos rápidos, otros lentos), un solo timeout no encaja perfecto.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Bash Timeouts Setting](https://www.aitmpl.com/component/settings/environment/bash-timeouts) — comando exacto.
+- **Config JSON:** [bash-timeouts.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/bash-timeouts.json).
+
+## Recursos relacionados
+
+- [Performance Monitor Hook](/boveda/hook-performance-monitor) — para identificar qué comandos son lentos.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — environment tuning patterns.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de configuración.

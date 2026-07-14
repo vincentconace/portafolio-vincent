@@ -1,0 +1,88 @@
+---
+title: "Hook Performance Budget Guard — block deploys that break Core Web Vitals"
+description: "Hook with 234 installs. Monitors bundle size and Core Web Vitals during development. Blocks deployments that exceed your performance budgets, with detailed reports of what grew."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-performance-monitor", "hook-deployment-health-monitor", "hook-dependency-checker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/performance/performance-budget-guard"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/performance/performance-budget-guard.json"
+---
+
+## What it is
+
+Performance budgets are limits you define: "the JS bundle can't exceed 200KB gzipped", "LCP can't be greater than 2.5s". If your app breaks them, there's a regression.
+
+This hook automatically monitors:
+- **Bundle size** after every build
+- **Core Web Vitals** metrics (LCP, FID, CLS)
+
+If you break a budget, it blocks the deploy and shows you what grew.
+
+Hook event: `PostToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `performance` |
+| Installs | 234 |
+| Hook event | `PostToolUse` |
+| Metrics | Bundle size + Core Web Vitals |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook performance/performance-budget-guard
+```
+
+For Claude:
+
+```
+I installed the performance/performance-budget-guard hook. Set up the
+initial budgets: max bundle 200KB gzip, max LCP 2.5s, max CLS
+0.1.
+```
+
+## What you can do with this
+
+### Catch bundle regressions
+
+Claude adds a heavy lib by mistake → bundle grows 50KB → the hook blocks the deploy and tells you which dependency it was.
+
+### Keep Core Web Vitals in check
+
+If your app lives on SEO, you can't tolerate an LCP regression. The hook protects it.
+
+### Combo with [Deployment Health Monitor](/boveda/hook-deployment-health-monitor)
+
+Performance Budget Guard is pre-deploy. Deployment Health Monitor is post-deploy. Together they cover both windows.
+
+### For teams with a UX SLO
+
+If you have a formal performance agreement, the hook is automatic enforcement of the SLO.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your app has no perf SLO:** budgets without a baseline are arbitrary.
+- **For internal / admin apps:** Core Web Vitals matter less.
+- **For pure backends:** the hook is for frontend perf — it doesn't apply.
+- **If you block deploys with this:** make sure you have an emergency override.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Performance Budget Guard Hook](https://www.aitmpl.com/component/hooks/performance/performance-budget-guard) — exact command.
+- **JSON config:** [performance-budget-guard.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/performance/performance-budget-guard.json).
+
+## Related resources
+
+- [Performance Monitor Hook](/boveda/hook-performance-monitor) — OS metrics (CPU/memory) during Claude Code.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — post-deploy observability.
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — catch heavy deps pre-build.

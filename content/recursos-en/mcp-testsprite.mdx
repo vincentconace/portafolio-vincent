@@ -1,0 +1,95 @@
+---
+title: "MCP TestSprite — read intent, test code, tell you what to fix"
+description: "MCP server with 111 installs. TestSprite reads your intent, runs tests against your code and tells you what to fix. It's AI-driven testing with actionable feedback — not just 'the red test says X'."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "testsprite"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-playwright-mcp-server", "claude-code-best-practices", "plugin-playwright-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/testsprite"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/testsprite.json"
+---
+
+## What it is
+
+TestSprite is an AI-driven testing platform. Its tagline nails it: "reads your intent, tests your code, tells you what to fix". Instead of human-written tests (which break every time you refactor), TestSprite understands what you're trying to achieve and generates adaptive tests.
+
+This MCP connects to Claude Code. Ask Claude "build me tests for this component respecting the user flows" and TestSprite runs them and reports back.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 111 |
+| MCP server | `TestSprite` |
+| Account required | Yes — TestSprite + API key |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/testsprite
+```
+
+Prerequisite: TestSprite account + API key.
+
+For Claude:
+
+```
+I installed the devtools/testsprite MCP. Set up the credentials. I want
+to test my app's signup flow. My intent: the form accepts a valid email
++ password of 8+ chars and rejects invalid ones. Generate and run the
+tests, then tell me what fails and propose a fix.
+```
+
+## What you can do with this
+
+### Tests from intent
+
+"For my `/api/users` endpoint, my intent is: GET lists paginated users with Bearer auth, POST creates a user with unique email validation, PUT updates only for the owner, DELETE only for admin. Generate tests that cover each scenario including edge cases".
+
+### Actionable feedback
+
+Unlike a classic test runner that just tells you "it failed", TestSprite tells you **what to fix**. "The test expected 201 but got 500. Root cause: the `email` field isn't being sanitized before the query and breaks with special characters. Suggestion: add `validateEmail()` before the insert".
+
+### Regression detection
+
+"After my change, run the suite for me and confirm no existing functionality broke. For the tests that pass but with warnings, bring them to me".
+
+### E2E without manual Playwright/Cypress
+
+If your app is typical (frontend + API + DB), TestSprite can build a full suite without you writing selectors by hand.
+
+### For CI/CD
+
+Integrable into pipelines. The MCP lets you trigger runs from Claude to validate before a merge.
+
+## Prerequisites
+
+- **TestSprite account** on a suitable plan
+- **API key**
+- **App reachable** by TestSprite (local with tunneling, staging URL, etc.)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **No budget for AI-driven testing:** TestSprite charges. Check the pricing first.
+- **If you already have a maintained suite** (Jest, Vitest, Cypress, manual Playwright): TestSprite adds value but there's overlap. Try it on a new piece first.
+- **For super-specific unit tests:** TestSprite shines at E2E and integration. For unit tests, traditional tools are more direct.
+- **If your intent isn't clear:** "test that it works" gives it no context. The better you articulate the intent, the better the output.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [TestSprite MCP](https://www.aitmpl.com/component/mcps/devtools/testsprite) — exact command.
+- **JSON config:** [testsprite.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/testsprite.json).
+
+## Related resources
+
+- [Playwright MCP Server](/boveda/mcp-playwright-mcp-server) — for traditional E2E tests with full control.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — model-invoked tests, a more manual alternative.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — testing best practices when you combine AI with traditional tests.

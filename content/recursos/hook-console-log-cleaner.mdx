@@ -1,0 +1,78 @@
+---
+title: "Hook Console Log Cleaner — avisa si Claude deja console.log en rama de producción"
+description: "Hook con 88 installs que detecta `console.log` cuando editás archivos en branches productivos (main/master). Te avisa antes de que debug code llegue a producción."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-dangerous-command-blocker", "hook-conventional-commits", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/pre-tool/console-log-cleaner"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/console-log-cleaner.json"
+---
+
+## Qué es
+
+Cuando Claude edita un archivo y vos estás en una branch productiva (`main`, `master`), el hook detecta si el cambio agrega `console.log` y te lo avisa. Hook event: `PreToolUse`.
+
+Caso típico: Claude agrega `console.log` para debuggear, vos te olvidás de sacarlo, termina en prod. Este hook lo previene.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `pre-tool` |
+| Installs | 88 |
+| Hook event | `PreToolUse` |
+| Trigger | Edit en branch productiva con `console.log` agregado |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook pre-tool/console-log-cleaner
+```
+
+Para Claude:
+
+```
+Instalé el hook pre-tool/console-log-cleaner. Probá: estoy en main.
+Pedile a Claude que agregue un console.log para debug — el hook
+debería warn.
+```
+
+## Qué podés hacer con esto
+
+### Prevención básica de debug code en prod
+
+Te alerta cuando estás a punto de mergeear debug code.
+
+### Para teams con CI estricto
+
+Algunos teams tienen lint rules que bloquean console.log en prod. Este hook te avisa antes de que CI te lo tire.
+
+### Para sesiones autónomas
+
+Si Claude está corriendo con `/goal` y modifica branches productivas, este hook agrega red de seguridad.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu proyecto USA `console.log` legítimamente:** algunos backends (CLIs, scripts) usan console.log como output normal. Falso positivo.
+- **Si tu lint ya cubre esto:** ESLint con `no-console` bloquea automáticamente. El hook duplica.
+- **Si no usás JS/TS:** no aplica.
+- **Para Python (`print`):** este hook es JS-specific. Para Python necesitarías otro.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Console Log Cleaner Hook](https://www.aitmpl.com/component/hooks/pre-tool/console-log-cleaner) — comando exacto.
+- **Config JSON:** [console-log-cleaner.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/console-log-cleaner.json).
+
+## Recursos relacionados
+
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — para bloquear comandos peligrosos, no console.log.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — para enforcing convention en commits, complementario.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para evitar debug code en prod.

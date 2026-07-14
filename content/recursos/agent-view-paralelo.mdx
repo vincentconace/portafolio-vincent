@@ -1,0 +1,250 @@
+---
+title: "Múltiples Claude Code en paralelo — patrón Agent View"
+description: "Cuándo y cómo correr varias instancias de Claude Code en paralelo trabajando en tareas distintas del mismo proyecto. Setup con git worktrees, sin que se pisen, y los 3 casos donde realmente vale la pena."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-18"
+readingTime: "11 min"
+relatedSlugs: ["claude-codex-equipo", "guia-claude-code-completa"]
+---
+
+## La idea
+
+Hasta ahora pensaste Claude Code como "una conversación con un asistente". Pero podés correr **varias instancias en paralelo**, cada una con su propio contexto, trabajando en tareas distintas del mismo proyecto al mismo tiempo. Como tener varios devs juniors a la vez.
+
+El problema obvio: si todos tocan los mismos archivos, se pisan. La solución: **git worktrees** + asignación clara de scope.
+
+---
+
+## Cuándo SÍ tiene sentido
+
+1. **Tareas independientes sobre áreas distintas del codebase**: uno en `backend/auth/`, otro en `frontend/dashboard/`, otro escribiendo tests
+2. **Refactor + features simultáneos**: una instancia hace el refactor pesado, otra sigue avanzando features sobre la versión vieja, mergeás cuando el refactor está
+3. **Exploración paralela de soluciones**: a la misma pregunta, dos instancias prueban approaches distintos. Después comparás y elegís el mejor
+
+---
+
+## Cuándo NO
+
+- Tareas que comparten archivos críticos (auth, modelos de DB)
+- Cuando estás aprendiendo Claude Code todavía
+- Si no tenés disciplina con git
+- Para una tarea sola, no importa qué grande sea
+
+---
+
+## Setup con git worktrees
+
+Git worktrees te permiten tener **varios checkouts del mismo repo** en carpetas distintas, sin clonar de nuevo y compartiendo `.git`.
+
+<Step number={1} title="Crear los worktrees">
+
+Desde tu repo principal:
+
+```bash
+# Worktree para tarea A (feature de notificaciones)
+git worktree add ../mi-app-notifs feature/notifs
+
+# Worktree para tarea B (refactor de DB)
+git worktree add ../mi-app-db refactor/db-layer
+
+# Worktree para tarea C (escribir tests)
+git worktree add ../mi-app-tests feature/coverage
+```
+
+Te quedan tres carpetas, una por tarea. Cada una con su branch, su HEAD, sus cambios uncommitted independientes.
+
+```
+~/code/
+├── mi-app/             ← repo principal (main)
+├── mi-app-notifs/      ← worktree para feature notifs
+├── mi-app-db/          ← worktree para refactor DB
+└── mi-app-tests/       ← worktree para tests
+```
+
+</Step>
+
+<Step number={2} title="Abrir Claude Code en cada uno">
+
+Tres terminales, una por worktree:
+
+```bash
+# Terminal 1
+cd ~/code/mi-app-notifs && claude
+
+# Terminal 2
+cd ~/code/mi-app-db && claude
+
+# Terminal 3
+cd ~/code/mi-app-tests && claude
+```
+
+Cada Claude Code está aislado: tiene su carpeta, su contexto, sus cambios. No se enteran uno del otro.
+
+</Step>
+
+<Step number={3} title="Mergear cuando termine cada uno" last>
+
+Cuando una tarea está lista:
+
+```bash
+cd ~/code/mi-app
+git checkout main
+git pull
+git merge feature/notifs
+git push
+
+# Cuando ya no necesitás el worktree, lo limpiás:
+git worktree remove ../mi-app-notifs
+```
+
+</Step>
+
+---
+
+## Asignación de scope: la regla crítica
+
+Sin esto, el patrón no funciona. **Antes de arrancar las instancias, definí qué toca cada una y qué NO**.
+
+```
+Instancia A — feature notifs:
+  ✅ src/notifications/
+  ✅ src/lib/email/
+  ✅ migrations/202605_notifs.sql
+  ❌ NO tocar src/auth/
+  ❌ NO tocar src/lib/db/schema.ts (sumar columna SÍ, modificar tablas existentes NO)
+
+Instancia B — refactor DB:
+  ✅ src/lib/db/
+  ✅ src/lib/queries/
+  ❌ NO tocar features (otras instancias están encima)
+
+Instancia C — tests:
+  ✅ Solo crear archivos *.test.ts
+  ❌ NO modificar código de producción para que pasen tests
+```
+
+Cada instancia recibe este scope en su `CLAUDE.md` local (sí, podés tener un `CLAUDE.md` distinto por worktree porque viven en carpetas separadas).
+
+<Callout type="warning" title="Sin scope = caos">
+Si las tres instancias modifican `src/lib/db/schema.ts` "porque cada una lo necesita", merge hell garantizado. La asignación de scope es lo único que hace que el paralelismo no se transforme en pérdida de tiempo.
+</Callout>
+
+---
+
+## Patrón A — Exploración paralela
+
+Esto es lo más interesante y subutilizado. Querés saber cuál es el mejor approach para algo complejo. Le das **la misma tarea** a 2-3 instancias y comparás resultados.
+
+```bash
+git worktree add ../mi-app-opt-a explore/opt-a
+git worktree add ../mi-app-opt-b explore/opt-b
+git worktree add ../mi-app-opt-c explore/opt-c
+```
+
+En cada uno, abrís Claude y le das el mismo prompt:
+
+```
+> Necesito agregar cache a las queries de pedidos. Las queries más frecuentes
+  son listar últimos 30 días y buscar por customer_id.
+
+  Implementá la solución que vos elijas (Redis, in-memory, DB-level, etc.).
+  Documentá en docs/cache-decision.md por qué elegiste eso.
+```
+
+Tres soluciones distintas en paralelo. Después vos las comparás:
+- Una usa Redis externo → escala pero suma infra
+- Otra usa LRU en memoria → simple pero limitado
+- Otra usa materialized views → cero código de cache pero más complejidad en DB
+
+Decidís cuál mergear, descartás las otras. Esto en 30 minutos te da lo que normalmente te toma 3 días explorando una a una.
+
+---
+
+## Patrón B — "Asistente vs Crítico"
+
+Una instancia hace, otra critica. Útil para PRs sensibles.
+
+```
+Instancia "Hacedora":
+  Trabaja en feature/new-checkout
+  Implementa la feature
+
+Instancia "Crítica":
+  Lee el diff cada cierto tiempo
+  Busca bugs, vulnerabilidades, violaciones
+  Deja notas en un archivo review-notes.md
+```
+
+La instancia crítica corre **sin contexto previo** sobre la implementación → su feedback es más imparcial que el de la hacedora que ya está "casada" con su solución.
+
+Implementación práctica: hacés `git diff main...feature/new-checkout > /tmp/diff.patch` y pegás eso en la instancia crítica.
+
+---
+
+## Patrón C — Pipeline
+
+Una instancia hace la primera fase, pasa al worktree de la siguiente, etc.
+
+```
+Worktree 1 (research):
+  Investiga la lib X, escribe docs/x-evaluation.md
+
+Worktree 2 (implementación):
+  Lee docs/x-evaluation.md
+  Implementa siguiendo la recomendación
+
+Worktree 3 (tests):
+  Lee la implementación, escribe los tests
+
+Worktree 4 (docs):
+  Documenta la API pública
+```
+
+Cada uno con contexto fresco y misión clara. El "estado" pasa entre worktrees vía archivos versionados.
+
+---
+
+## Gestión del costo
+
+Tres Claude Code en paralelo = 3× el consumo de tokens. Cosas para tener en cuenta:
+
+| Truco | Ahorro |
+|-------|--------|
+| Usar Haiku en las instancias mecánicas (tests, refactor sencillo) | ~70% en esas tareas |
+| `/clear` agresivo cuando una sub-tarea termina | Evita acumular tokens muertos |
+| Tareas mecánicas en batch, no de a una | Menos overhead por request |
+| Worktrees con `CLAUDE.md` específico (scope limitado) | Menos contexto cargado |
+
+Para uso ocasional no importa. Para uso intenso diario, prestale atención al `/cost` de cada instancia.
+
+---
+
+## Problemas comunes
+
+### "Los worktrees ven cambios uncommitted de otros"
+
+No, no los ven. Cada worktree tiene su propio working tree. Lo que **sí comparten** es la lista de branches. Si en uno hacés `git branch -D X`, en los otros también desaparece.
+
+### "Me confundo qué terminal es qué tarea"
+
+Renombrá las pestañas/ventanas. En zsh:
+
+```bash
+echo -ne "\033]0;notifs\007"
+```
+
+O usá [tmux](https://github.com/tmux/tmux) con paneles nombrados.
+
+### "Las tres instancias me preguntan permisos para lo mismo"
+
+Configurá `permissions.allow` en `.claude/settings.json` **del repo principal** (lo heredan todos los worktrees).
+
+---
+
+## Próximos pasos
+
+- Para tareas que no requieren paralelismo, la [guía completa de Claude Code](/boveda/guia-claude-code-completa) es suficiente.
+- Si vas a combinar con Codex, mirá el [patrón Claude + Codex](/boveda/claude-codex-equipo) que es similar pero con dos herramientas distintas.
+- Setup de hooks compartidos entre worktrees: [hooks de Claude Code](/boveda/hooks-automatizacion).

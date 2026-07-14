@@ -1,0 +1,304 @@
+---
+title: "4 superpoderes para Claude Code — ver videos, scrapear, leer noticias, navegar"
+description: "4 herramientas que abren 4 ventanas al mundo exterior para Claude: Supadata (ve videos de TikTok/IG/YouTube), Apify (scrapea internet), Last 30 Days (lee noticias de tu nicho), Playwright (navegador propio). Setup completo con keys."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "supadata", "apify", "playwright"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["navega-y-automatiza", "investigador-automatico", "apify-clientes-ilimitados"]
+---
+
+## La idea
+
+Claude es persona muy inteligente **encerrada en un cuarto**. Estas 4 herramientas le abren **4 ventanas al mundo**:
+
+| Superpoder | Para qué |
+|------------|----------|
+| **Supadata** | Ve y entiende videos de cualquier red social |
+| **Apify** | Busca y extrae datos de toda internet |
+| **Last 30 Days** | Lee últimas noticias de cualquier nicho |
+| **Playwright CLI** | Navegador propio para investigar web |
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado
+- **Node.js 18+**
+- **Supadata** cuenta gratis (supadata.ai)
+- **Apify** cuenta gratis (apify.com)
+
+---
+
+## Superpoder 1 — Supadata (ver videos)
+
+### Qué hace
+
+API que **transcribe videos completos** + da métricas (vistas, likes, comentarios). Soporta YouTube, TikTok, Instagram, prácticamente cualquier red.
+
+Le pasás link → Claude obtiene todo el contenido del video en texto, listo para analizar.
+
+### Setup
+
+1. Cuenta gratis en `supadata.ai`
+2. Copiá API key del dashboard
+3. Configurá en `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "supadata": {
+      "command": "npx",
+      "args": ["-y", "@supadata/mcp"],
+      "env": {
+        "SUPADATA_API_KEY": "tu-key"
+      }
+    }
+  }
+}
+```
+
+### Casos de uso
+
+- **Analizar videos de competencia**: qué dicen, cómo, qué funciona
+- **Estructura de videos virales**: descomponer hooks + body + payoff
+- **Extraer ideas de tutoriales**
+- **Métricas sin abrir la plataforma**
+
+```
+> Analizá este video viral: [URL TikTok]
+
+  Decime:
+  1. Estructura (hook + body + payoff)
+  2. Por qué funciona psicológicamente
+  3. Cómo podría replicar en mi nicho [TEMA]
+```
+
+---
+
+## Superpoder 2 — Apify (scrapear internet)
+
+### Qué hace
+
+1500+ scrapers ya armados (actors) para Google Maps, LinkedIn, Instagram, Facebook, Amazon, etc. Conectado a Claude por MCP.
+
+Ver [Apify clientes ilimitados](/boveda/apify-clientes-ilimitados) para profundizar.
+
+### Setup rápido
+
+URL del MCP: `mcp.apify.com`
+
+Settings → Connectors → Add MCP → pegás URL + tu API token.
+
+### Casos de uso
+
+- **Listas de leads** (Google Maps, LinkedIn)
+- **Monitor de competencia** (precios, posts, ads)
+- **Research masivo** estructurado
+
+```
+> Sacame 50 [profesión] de [ciudad] con teléfono y email
+  usando Apify Google Maps Scraper.
+```
+
+---
+
+## Superpoder 3 — Last 30 Days (research de noticias)
+
+### Qué hace
+
+Skill que busca en **8 plataformas** (Reddit, Hacker News, Polymarket, YouTube, X, Bluesky, TikTok, Instagram) lo más nuevo de cualquier tema en últimos 30 días.
+
+Ver [investigador automático](/boveda/investigador-automatico) para detalles.
+
+### Instalación
+
+```
+> /plugin marketplace add mvanhorn/last30days-skill
+> /plugin install last30days@last30days-skill
+```
+
+### Casos de uso
+
+```
+> /last30days inteligencia artificial
+```
+
+```
+> /last30days --compare "React vs Vue"
+```
+
+```
+> /last30days --days 7 startups en LATAM
+```
+
+---
+
+## Superpoder 4 — Playwright CLI (navegador propio)
+
+### Qué hace
+
+Le da a Claude **navegador real** (Chrome). Puede:
+- Visitar URLs
+- Hacer clicks
+- Llenar forms
+- Tomar screenshots
+- Scrolear, hover, etc.
+
+### Instalación
+
+```bash
+claude mcp add playwright -- npx -y @anthropic-ai/playwright-mcp@latest
+```
+
+100% gratis sin API key.
+
+### Casos de uso
+
+```
+> Abrí [URL] con Playwright. Hacé login con [credenciales].
+  Navegá a /dashboard. Exportá CSV de "Last 30 days". Guardalo
+  en /data/.
+```
+
+```
+> Probá flow de signup de mi propio site http://localhost:3000.
+  Hacé screenshots de cada paso. Reportá si algo se rompe.
+```
+
+Ver [navega y automatiza](/boveda/navega-y-automatiza) para Firecrawl + Playwright combinados.
+
+---
+
+## Los 4 combinados
+
+Cuando los tenés activos, Claude puede:
+
+```
+> Quiero entender qué está pasando con [TEMA] en redes esta semana.
+
+  1. Last 30 Days: buscá menciones en las 8 plataformas
+  2. Supadata: transcribí los 5 videos más virales
+  3. Apify: scrapeá los top 20 posts de IG/TikTok
+  4. Playwright: visitá los blogs/sites más mencionados
+
+  Sintetizá todo en reporte: qué se dice, qué funciona, qué
+  hueco hay para mi nicho.
+```
+
+**Research de campo profundo** en 30 minutos.
+
+---
+
+## Casos de uso por tipo de usuario
+
+### Creator
+
+```
+- Supadata: descomponer videos virales
+- Last 30 Days: encontrar temas trending
+- Combinación: replicar formato con mi nicho
+```
+
+### Founder
+
+```
+- Apify: leads y monitor competencia
+- Playwright: research de mercado profundo
+- Last 30 Days: pulse de industria
+```
+
+### Researcher / Analyst
+
+```
+- Los 4 combinados: campo entero
+- Sintetizar en reportes ejecutivos
+```
+
+### Agencia
+
+```
+- Para cada cliente:
+  - Apify: leads del nicho
+  - Last 30 Days: tendencias industria
+  - Supadata: analizar competencia en video
+  - Playwright: auditar sites
+```
+
+---
+
+## Anti-patrones
+
+### 1. Instalar 4 y no usar 3
+
+Cada herramienta tiene costo de mantenimiento mental. **Instalá según necesidad real**.
+
+### 2. Abusar de Supadata/Apify gratis
+
+Tier free tiene límites. Si lo usás mucho, **upgradeá** o vas a tener throttling.
+
+### 3. Esperar precisión perfecta
+
+Supadata transcribe **muy bien** pero no perfecto. Apify scrape **muy bien** pero algunos sites bloquean. Aceptá la realidad.
+
+### 4. No respetar ToS
+
+Scrapear sites comerciales puede violar terms. **Validá antes** de operar a escala.
+
+### 5. Sin disclosure cuando uses data scraped
+
+Si publicás insights basados en data de competencia, **anonimizá** o pedí permiso si vas a citarlos.
+
+---
+
+## Costos estimados
+
+| Tool | Plan gratis | Paid típico |
+|------|-------------|-------------|
+| Supadata | 100 transcripciones/mes | $19-49/mes |
+| Apify | $5 crédito/mes | $39+/mes |
+| Last 30 Days | Gratis (open source) | $0 |
+| Playwright | Gratis (open source) | $0 |
+
+**Total típico**: $20-50/mes si activás los 4 con tier paid.
+
+Para uso casual: free tier de los 2 paid + 2 gratis = **$0**.
+
+---
+
+## Combinaciones potentes
+
+### Con Vibe Voice
+
+```
+> Supadata transcribió video largo en inglés.
+> Pasalo por [Vibe Voice](/boveda/vibe-voice) si necesitás traducir +
+  re-narrar con tu voz clonada.
+```
+
+### Con Stack Creator
+
+[Stack IA Creador](/boveda/stack-ai-contenido) usa varias de estas piezas como engranajes.
+
+### Con humanizer
+
+Cualquier output de research que vayas a publicar, pasalo por [humanizalo](/boveda/humanizalo).
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Trabajo 100% offline | Los superpoderes son online |
+| Compliance estricto | Scraping puede tener issues |
+| Sin paciencia para configurar | 4 setups separados |
+
+---
+
+## Próximos pasos
+
+- Para profundizar en Apify para leads, [Apify clientes ilimitados](/boveda/apify-clientes-ilimitados)
+- Para Playwright combinado con Firecrawl, [navega y automatiza](/boveda/navega-y-automatiza)
+- Para research de tendencias específicamente, [investigador automático](/boveda/investigador-automatico)

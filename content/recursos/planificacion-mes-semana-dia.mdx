@@ -1,0 +1,85 @@
+---
+title: "Planificá tu mes, semana y día con Claude + Google Calendar"
+description: "Tres prompts de productividad para organizar tu mes, tu semana y tu día conectados con Google Calendar. Claude te hace las preguntas con botones, separa eventos (van al calendar) de tareas (checklist en el chat) y crea todo por vos tras tu OK. Copiá el prompt que necesites."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "google-calendar"]
+publishedAt: "2026-06-26"
+readingTime: "6 min"
+badge: "nuevo"
+relatedSlugs: ["hablarle-a-claude", "cual-plan-claude"]
+---
+
+## Qué son
+
+Tres prompts para organizar tu **mes, tu semana y tu día**, conectados con tu **Google Calendar**. Cada uno te hace las preguntas de forma interactiva (con botones) y crea los eventos por vos.
+
+La gracia está en cómo separa lo que va al calendario de lo que no:
+
+<Callout type="info" title="Eventos vs. Tareas">
+- **Eventos** (trabajo, reuniones, citas médicas, actividades) → se crean en tu **Google Calendar** (calendario principal).
+- **Tareas** (pendientes sin horario fijo) → te quedan como **checklist en el chat**, con un horario sugerido según los huecos libres del día. No ocupan el calendar.
+- **Preguntas híbridas:** las categorías, prioridades y confirmaciones son con **botones**; solo escribís lo abierto (horarios puntuales, tu lista de tareas).
+- Antes de crear cualquier evento, siempre ves un **resumen** y esperás tu **"OK"**.
+</Callout>
+
+---
+
+## Antes de empezar
+
+<Checklist storageKey="planificacion-setup" items={["Tener Claude a mano (app o web)", "Google Calendar conectado a Claude", "Ajustar la zona horaria del prompt si no estás en Buenos Aires"]} />
+
+---
+
+## Cómo usarlos: de lo más grande a lo más chico
+
+<Step number={1} title="El mes — el día 1">
+
+Pegá el **Prompt Mensual** para tener la vista de pájaro: fechas importantes, deadlines, vencimientos y tus objetivos del mes.
+
+</Step>
+
+<Step number={2} title="La semana — el lunes">
+
+Pegá el **Prompt Semanal** al arrancar la semana. Bajás el mes a la semana: cargás los eventos fijos (trabajo, reuniones, actividades) y te quedan las tareas como checklist.
+
+</Step>
+
+<Step number={3} title="El día — cada mañana" last>
+
+Pegá el **Prompt Diario** para armar la jornada: la agenda con horarios arriba y las tareas con horario sugerido abajo, en los huecos libres.
+
+</Step>
+
+<Callout type="tip" title="Automatizalo (opcional)">
+Podés programar **avisos automáticos** para que Claude te escriba solo: uno **diario** (todas las mañanas) y uno **mensual** (el día 1). Así no tenés que acordarte de pegar el prompt.
+</Callout>
+
+---
+
+## Los 3 prompts
+
+Elegí el que necesitás y copialo con un clic:
+
+<PlanningPrompts />
+
+---
+
+## Ajustes que podés pedir
+
+Estos prompts son un punto de partida. En cualquier momento le podés pedir a Claude que:
+
+- **Cambie la hora de los avisos** automáticos, o que los pause.
+- **Mande las tareas al calendar** como bloques de tiempo, en vez de dejarlas solo en el chat.
+- **Mande las tareas a Notion** (si lo tenés conectado) en lugar del chat.
+- **Use otro calendario** (por ejemplo "Familia") para cierto tipo de eventos.
+- **Sume un cierre del día**: a la tarde te pregunta qué quedó pendiente y lo pasa a mañana.
+
+Decile *"quiero cambiar X"* y lo ajusta.
+
+---
+
+## Próximos pasos
+
+- Aprendé a pedirle las cosas bien: [hablarle a Claude](/boveda/hablarle-a-claude)
+- ¿Qué plan necesitás? [cuál plan Claude](/boveda/cual-plan-claude)

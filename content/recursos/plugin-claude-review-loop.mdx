@@ -1,0 +1,108 @@
+---
+title: "Claude Review Loop — code review automatizado con Codex como segundo cerebro"
+description: "Plugin de hamelsmu (619⭐) que arma un loop de code review automatizado usando Codex de OpenAI como reviewer. Claude implementa, Codex critica, Claude itera. Hasta que Codex apruebe o vos cortes."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["claude-codex-equipo", "codex-plugin-hack", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-review-loop"
+github: "https://github.com/hamelsmu/claude-review-loop"
+---
+
+## Qué es
+
+Hamel Husain armó algo simple y muy útil: cuando Claude termina de implementar algo, en vez de declarar "listo", arma un loop donde Codex le hace code review. Si Codex encuentra issues, Claude itera. Si Codex aprueba, Claude declara done.
+
+El patrón se llama "review loop". La diferencia con un code review manual es que vos no estás ahí — el loop corre solo hasta convergencia. La diferencia con que Claude se autorevise es que tener un modelo externo (Codex de OpenAI) baja el bias y cubre puntos ciegos.
+
+Es plugin único, con `commands` y `hooks`. La instalación es directa y el efecto es palpable: bajan los "se ve que ya está pero falta algo" típicos de generación autónoma.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | hamelsmu (Hamel Husain) |
+| Stars | 619 |
+| Tipo | Plugin único |
+| Componentes | commands, hooks |
+| Reviewer | Codex CLI (OpenAI) |
+| Marketplace | `hamelsmu/claude-review-loop` |
+| Requiere | Codex CLI instalado y autenticado |
+
+## Cómo se instala
+
+```bash
+# 1) Pre-requisito: Codex CLI funcionando
+# Instalá Codex desde OpenAI y verificá con: codex --version
+
+# 2) Plugin
+/plugin marketplace add hamelsmu/claude-review-loop
+/plugin install claude-review-loop@hamelsmu-claude-review-loop
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalá claude-review-loop del marketplace hamelsmu. Verificá que tengo Codex
+CLI disponible. Después mostrame cómo se invoca el loop sobre un cambio que
+acabo de hacer.
+```
+
+## Qué podés hacer con esto
+
+### Code review automático antes de cerrar tarea
+
+Implementás un feature, lanzás el review loop. Codex critica:
+- Bugs visibles
+- Edge cases no cubiertos
+- Inconsistencias con el resto del código
+- Cuestiones de claridad
+
+Claude itera el código hasta que Codex aprueba (o hasta un cap razonable de iteraciones).
+
+### Validación cruzada para PRs
+
+Antes de pushear un PR, el loop te da una pasada extra. No reemplaza al reviewer humano, pero filtra los errores triviales que humanos pierden tiempo señalando.
+
+### Catch de "Claude declaró done pero no estaba"
+
+El típico problema de generación autónoma: Claude dice "listo y funcionando" cuando todavía falta. El loop con Codex como external validator detecta esto.
+
+### Trabajo nocturno más confiable
+
+Si dejás Claude corriendo de noche en una tarea larga (con [/goal](/boveda/goal-claude-code) o un orquestador), agregar review loop hace que el output de la mañana sea más confiable.
+
+## Beneficios reales
+
+- **Catch de bias propio** — Claude tiende a aprobar su propio código. Codex no.
+- **Convergencia automática** — el loop corre hasta el done real, no el done declarado.
+- **Cross-tool** — explota que tengas Codex pago. Es el patrón base de [Claude + Codex en equipo](/boveda/claude-codex-equipo).
+- **Liviano** — un solo plugin, pocos hooks.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no tenés Codex CLI:** sin Codex el plugin no sirve. Hay que pagar el sub o usar la versión free limitada de OpenAI.
+- **Si tu cuota de tokens es ajustada:** el loop puede iterar 3-5 veces. Multiplica el consumo de ambos modelos.
+- **Para tareas triviales:** review loop sobre un fix de typo es ridículo. Usá criterio.
+- **Si querés solo una opinión externa, sin iterar:** mirá [Adversarial Spec](/boveda/plugin-adversarial-spec) o el patrón `consult` de Agentsys — más one-shot.
+- **Codex puede ser sobre-pedante:** algunas iteraciones agregan ruido más que valor. Tené un cap de loops max.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Claude Review Loop](https://www.aitmpl.com/plugins/claude-review-loop) — comando exacto.
+- **Repo en GitHub:** [hamelsmu/claude-review-loop](https://github.com/hamelsmu/claude-review-loop) — código, hooks, ejemplos.
+
+## Recursos relacionados
+
+- [Claude + Codex en equipo](/boveda/claude-codex-equipo) — el patrón base del que este plugin es una implementación específica.
+- [Codex Plugin Hack](/boveda/codex-plugin-hack) — la matemática de por qué combinar planes baratos te sale mejor que uno caro.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — cuándo conviene un review loop vs review humano vs hooks de validación.

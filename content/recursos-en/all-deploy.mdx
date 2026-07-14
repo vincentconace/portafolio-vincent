@@ -1,0 +1,261 @@
+---
+title: "All Deploy — the skill that ships your project to production with one command"
+description: "You built your project with Claude Code but it's stuck on your machine. All Deploy detects what type it is, audits it, shows you a preview, ships it to Vercel/Railway/VPS as appropriate, and leaves you the rollback command ready to go. The closer of the combo The Architect + Plan Mode + Cyber Neo."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "vercel", "railway"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["the-architect", "cyber-neo", "planea-audita-construye"]
+---
+
+## The problem
+
+You built your project with Claude Code. It ended up sitting in your local folder. No domain, nobody who can see it, **no way to show it to a client**.
+
+The problem wasn't building it. It was **shipping it**.
+
+**All Deploy** closes that gap. You tell it *"ship this"* and it handles everything:
+
+- Detects what type of project you built
+- Picks the right platform (Vercel/Railway/VPS)
+- Runs a **pre-deploy security review**
+- Lets you see a **preview**
+- Hands you the **rollback command** ready to go
+
+It's the 3rd piece of the combo for going from **idea to live without depending on anyone**.
+
+Repo: `Hainrixz/all-deploy`. Open source.
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed (the official app). The `/all-deploy` command **does NOT work in a plain terminal** or other editors. Only in Claude Code.
+
+---
+
+## Installation
+
+### Option A — Ask Claude
+
+```
+> Install this deploy skill in my Claude Code:
+  https://github.com/Hainrixz/all-deploy
+
+  Clone it into ~/.claude/skills/all-deploy
+```
+
+### Option B — Manual
+
+```bash
+git clone https://github.com/Hainrixz/all-deploy.git \
+  ~/.claude/skills/all-deploy
+```
+
+### Why `~/.claude/skills/`
+
+Claude Code looks for skills automatically in that folder. Once it's there, Claude recognizes it and `/all-deploy` works. **No extra config**.
+
+---
+
+## How to use it
+
+Inside Claude Code, in your project's folder:
+
+```
+/all-deploy
+```
+
+Claude:
+1. Detects the project type (Next.js, Astro, Node, Python, etc.)
+2. Picks the appropriate platform
+3. Runs a security check
+4. Shows a preview
+5. Asks you to confirm
+6. Deploys
+7. Hands you the rollback command
+
+---
+
+## The 3 platforms it detects
+
+| Platform | When |
+|------------|--------|
+| **Vercel** | Next.js, Astro, static frontend, SvelteKit |
+| **Railway** | Apps with an integrated DB (Postgres, Redis), fullstack Node, Python apps |
+| **VPS** | When you need full control (Docker, custom infra) |
+
+All Deploy chooses based on the detected stack.
+
+---
+
+## The security flow
+
+Before shipping, All Deploy checks:
+
+- ✅ `.env` NOT committed
+- ✅ No hardcoded secrets
+- ✅ Clean build (compiles with no critical warnings)
+- ✅ Dependencies with no known CVEs
+- ✅ HTTPS configured
+- ✅ Basic security headers
+
+If something fails, it warns you **before** deploying. You decide whether to keep going or fix it first.
+
+---
+
+## The preview
+
+Before the final deploy:
+
+- Vercel: preview deployment with a temporary URL
+- Railway: staging environment
+- VPS: description of what it's going to deploy + dry-run
+
+You validate → confirm → production.
+
+---
+
+## Rollback
+
+If something goes wrong post-deploy, All Deploy gives you the command to go back to the previous version:
+
+```bash
+# Vercel
+vercel rollback [deployment-id]
+
+# Railway
+railway down --force && railway up [previous-commit]
+
+# VPS
+all-deploy rollback --target [snapshot-id]
+```
+
+No thinking. No hunting through docs.
+
+---
+
+## Use cases
+
+### 1. Closing the combo
+
+```
+Plan Mode → audit the approach
+The Architect → project blueprint
+Build (with Claude Code)
+Cyber Neo → security audit
+All Deploy → production
+```
+
+**Idea → live** without skipping steps.
+
+### 2. Quick MVP
+
+Your Saturday side-project. You build it in 3h. **You don't want to lose 1h configuring the deploy**:
+
+```
+> /all-deploy
+```
+
+20 min later, **public URL**.
+
+### 3. Client demo
+
+The client wants to see your prototype. Instead of "let me show you on a shared screen":
+
+```
+> /all-deploy
+```
+
+You send them the URL.
+
+### 4. Fast iteration
+
+Every important change:
+
+```
+> /all-deploy
+```
+
+Deploy + preview + rollback ready. **Effortless**.
+
+---
+
+## Anti-patterns
+
+### 1. Skipping the security check
+
+If All Deploy warns you about a problem, **fix it before deploying**. Even if it seems minor.
+
+### 2. Not reading the preview
+
+Sometimes what All Deploy detects as "the same project" is a **different version**. Verify the preview matches your expectations.
+
+### 3. Environment variables not configured
+
+All Deploy detects your local `.env` but **does not upload secrets**. Configure the variables in Vercel/Railway/VPS **before** deploying.
+
+### 4. Deploying straight to critical production
+
+For SaaS with real users, **better to go through staging first**. All Deploy supports it, but you pick the flag.
+
+### 5. Ignoring rollback
+
+Having a rollback command **doesn't mean you'll remember it**. **Save** the command All Deploy gives you somewhere accessible.
+
+---
+
+## The full trilogy
+
+| # | Piece | For what |
+|---|-------|----------|
+| 1 | [Plan Mode](/boveda/planea-audita-construye) | Audit before touching anything |
+| 2 | [The Architect](/boveda/the-architect) | 16-section blueprint |
+| 3 | **All Deploy** (this one) | Ships to production |
+| 4 | [Cyber Neo](/boveda/cyber-neo) | Audits security pre-deploy |
+
+---
+
+## Powerful combinations
+
+### With The Architect
+
+The Architect has **section 12 (Deploy)** in the blueprint. All Deploy implements that section.
+
+### With Cyber Neo
+
+```
+> /cyber-neo (full security audit)
+> /all-deploy (after the audit is OK)
+```
+
+Audit + deploy in sequence.
+
+### With scheduled tasks
+
+[Cowork scheduled tasks](/boveda/claude-cowork-workflow):
+
+```
+> Every Friday 6pm, /all-deploy from the main branch to Vercel's
+> staging. Send me the preview URL.
+```
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Critical enterprise production | You need formal pipelines (CI/CD) |
+| Very custom stack, not detected | Manual still wins |
+| Strict compliance (audit logs) | All Deploy abstracts too much |
+| Complex multi-region | You need fine-grained control |
+
+---
+
+## Next steps
+
+- For designing the blueprint before building, [The Architect](/boveda/the-architect)
+- For a security audit pre-deploy, [Cyber Neo](/boveda/cyber-neo)
+- To audit the plan before anything else, [Plan Mode](/boveda/planea-audita-construye)

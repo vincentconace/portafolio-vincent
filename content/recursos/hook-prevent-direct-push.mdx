@@ -1,0 +1,84 @@
+---
+title: "Hook Prevent Direct Push — bloquea push directo a main/develop (317 installs)"
+description: "Hook que bloquea git push directo a branches protegidas (main, develop) para enforce Git Flow. Para teams que merge solo via PR y no toleran direct push."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-force-push-blocker", "hook-conventional-commits", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/git/prevent-direct-push"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/prevent-direct-push.json"
+---
+
+## Qué es
+
+Cuando Claude intenta `git push` a `main` o `develop`, el hook bloquea. Enforce el patrón Git Flow: cambios entran via PR/MR, no via push directo.
+
+Hook event: `PreToolUse` (Bash).
+
+317 installs lo posicionan como protección sólida para teams que ya trabajan con branch protection.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `git` |
+| Installs | 317 |
+| Hook event | `PreToolUse` (Bash) |
+| Branches bloqueadas | main, develop (configurables) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook git/prevent-direct-push
+```
+
+Para Claude:
+
+```
+Instalé el hook git/prevent-direct-push. Probá: pedile a Claude que
+haga `git push origin main` — debería bloquearse. Después con branch
+feature, debería pasar.
+```
+
+## Qué podés hacer con esto
+
+### Local enforcement de Git Flow
+
+Antes de que tu push pegue contra branch protection en GitHub/GitLab, el hook ya lo paró local.
+
+### Para teams que enforcement es importante
+
+PR es mandatory en tu workflow. El hook actúa como recordatorio local.
+
+### Sesiones autónomas
+
+`/goal` largos: Claude no rompe el flow porque no puede pushear a main.
+
+### Combo con [Force Push Blocker](/boveda/hook-force-push-blocker)
+
+Prevent Direct Push para branches protegidas. Force Push Blocker para force pushes. Triple red.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si trabajás solo y mergeás directo a main:** el hook te bloquea.
+- **Para hotfixes urgentes:** override necesario.
+- **Si tu branch protection en server ya bloquea:** este hook duplica.
+- **Si tus branches productivas son otras** (production, release/*): configurá las correctas.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Prevent Direct Push Hook](https://www.aitmpl.com/component/hooks/git/prevent-direct-push) — comando exacto.
+- **Config JSON:** [prevent-direct-push.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/prevent-direct-push.json).
+
+## Recursos relacionados
+
+- [Force Push Blocker Hook](/boveda/hook-force-push-blocker) — para force pushes, complementario.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — para enforce format de mensaje.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — git workflow patterns.

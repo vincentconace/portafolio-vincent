@@ -1,0 +1,437 @@
+---
+title: "Prompting 101 — los 10 pilares de Anthropic destilados al español"
+description: "El equipo Applied AI de Anthropic (Hannah + Christian) enseña sus 10 pilares con un caso real: un parte de accidente sueco que en v1 Claude confunde con accidente de esquí, y en v5 entrega el veredicto en XML listo para tu DB. Plus: los 3 cambios de Opus 4.7 y 4 plantillas copy-paste."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "13 min"
+relatedSlugs: ["hablarle-a-claude", "guia-claude-opus-47", "comando-de-sistema"]
+---
+
+## Por qué importa
+
+Prompt engineering es **la práctica de escribir instrucciones claras** dándole a Claude el contexto necesario, pensando cómo estructurás esa info para el mejor resultado. **No es magia. Es ciencia empírica**: lanzás, leés el output, identificás qué falló, volvés a lanzar.
+
+Esta página destila la clase **Prompting 101** del Applied AI Team de Anthropic con el caso real que usaron: parte de accidente sueco con 17 filas de checkboxes + sketch a mano. La v1 termina diciendo que es **accidente de esquí**. La v5 entrega veredicto en `<final_verdict>` listo para parsear.
+
+---
+
+## Actualización 2026 — los 3 cambios de Opus 4.7
+
+Si sentís que Claude se volvió **más tonto**, no es tu imaginación. Opus 4.7 cambió cómo hay que pedir las cosas — y casi nadie se enteró. **No se volvió peor — dejó de adivinar**.
+
+### Cambio 1 — Es más literal
+
+**Antes**: "limpiame este texto" → Claude adivinaba qué querías (ortografía + frases + etc).
+
+**Ahora**: hace **literal** lo que pedís. No generaliza ni infiere.
+
+**Qué hacer**: dale pasos exactos. "Arreglá la ortografía Y partí las frases largas". Si querés que aplique a todo, decí el alcance: "aplicalo a TODAS las secciones, no solo la primera".
+
+### Cambio 2 — Calibra el largo solo
+
+**Antes**: respuesta consistente.
+
+**Ahora**: juzga complejidad. "Resumime esto" → 1 línea (porque cree que eso querías).
+
+**Qué hacer**: pedí nivel de detalle. "Dame resumen A DETALLE" o "respuestas concisas sin relleno". **Ejemplos en positivo** funcionan mejor que prohibiciones.
+
+### Cambio 3 — Deja de gritar
+
+**Antes**: "CRÍTICO: TENÉS que hacer X" funcionaba.
+
+**Ahora**: con lenguaje agresivo **responde peor**. Anthropic recomienda lo contrario.
+
+**Qué hacer**: hablale normal, como a persona. Mejor: **dale el motivo**.
+
+❌ "Nunca uses puntos suspensivos"
+✅ "Esto lo lee un lector de voz que no los pronuncia, por eso nunca los uses"
+
+Claude **generaliza desde la explicación**.
+
+### El patrón común
+
+Los 3 cambios son lo mismo: **dale contexto y dile exacto lo que querés**.
+
+---
+
+## Los 10 pilares — en orden
+
+Anthropic recomienda construir el prompt como **una sola pieza con 10 elementos en orden**. No todos aplican siempre, pero si lo armás en este orden te asegurás que cuando falte algo sea **por decisión, no por descuido**.
+
+Los **primeros 6** normalmente viven en el system prompt. Los **últimos 4** modelan la respuesta.
+
+### 1. Task description / role
+
+Le decís qué papel toma y para qué está. Sin esto, **adivina el dominio** (en el demo, terminó hablando de accidente de esquí).
+
+Ejemplo: "Sos asistente AI de un ajustador humano de seguros que revisa partes de accidente en sueco y determina responsabilidad."
+
+### 2. Tone context
+
+Cómo debe sonar. Para tareas factuales: **confiado, conciso, sin adivinar**. Si no está seguro, lo dice — no rellena con creatividad.
+
+### 3. Background data, documents & images
+
+Lo que **NO cambia** entre llamadas. Estructura del formulario, glosario, ejemplos del dominio. Va al system prompt y es ideal para **prompt caching**.
+
+### 4. Detailed task description & rules
+
+Paso a paso de cómo razonar. **El ORDEN importa**: en el demo, leer primero el formulario y después el sketch sube la calidad (el sketch sin contexto es solo cajas y líneas).
+
+### 5. Examples (few-shot)
+
+Casos en gris donde tu intuición humana ya tiene la verdad. Los pasás a Claude con su input y output esperado.
+
+### 6. Conversation history
+
+Solo si hay historia que cargue contexto real. En batch jobs, normalmente no aplica.
+
+### 7. Immediate task description
+
+El recordatorio del **aquí-y-ahora** al final del prompt. Después de toda la preamble, le decís qué querés EN ESTA llamada. **Reduce la deriva**.
+
+### 8. Thinking step-by-step
+
+Chain of thought explícito o extended thinking. Pedís que muestre razonamiento **antes de concluir**. Sube calidad en multi-paso y te da **traza para diagnosticar errores**.
+
+### 9. Output formatting
+
+Cómo querés el resultado. JSON, XML, Markdown, longitud, tipo. Si lo dejás libre, Claude elige — y **rara vez coincide con lo que tu parser espera**.
+
+### 10. Prefilled response
+
+Empezar a hablar por Claude. Ponés primera palabra (o tag) en su mensaje y obligás la forma sin tener que pedirla en prosa.
+
+Ejemplo: pre-llenás con `{` → fuerza JSON. Con `<final_verdict>` → fuerza el tag.
+
+### Regla de pulgar
+
+Si tu app llama a Claude **más de una vez** con misma estructura, **pilares 1-6 = system prompt + prompt caching**. Pilares 7-10 modelan la respuesta y van en el último mensaje del usuario o como prefill del assistant.
+
+---
+
+## El demo — v1 → v5
+
+Un solo prompt evolucionando. Cada versión **añade un pilar y resuelve el error de la anterior**.
+
+### v1 — Prompt vago
+
+Solo: "revisá este parte y decime quién tuvo la culpa".
+
+**Output**: Claude lo confunde con **accidente de esquí** en calle sueca. Sin rol/tono/background, adivina el dominio entero.
+
+### v2 — Task + tone context (pilares 1+2)
+
+Agregamos: rol (asistente de ajustador, revisa partes en sueco), tono (no adivines si no estás seguro).
+
+**Output**: identifica que es choque vehicular. Lee correctamente filas. Pero responde **inseguro y sin veredicto** — aún no sabe qué significa cada fila.
+
+### v3 — Background data (pilar 3)
+
+Agregamos: estructura del formulario en system prompt (17 filas, 2 columnas, humanos marcan con X/círculos/tachones, propósito).
+
+**Output**: lee con confianza, **veredicto: vehículo B responsable**. Aprovecha que system prompt es estático y se cachea.
+
+**Aún falla**: output libre, narra de más, **no parseable por sistema downstream**.
+
+### v4 — Detailed rules + orden (pilares 4+7+8)
+
+Agregamos: reglas paso a paso (leer formulario fila por fila, listar marcas, cruzar con sketch, emitir veredicto solo si consistente).
+
+**Output**: razonamiento ordenado. Primero lista cada checkbox, después cruza con sketch, después veredicto. **Calidad sube en casos difíciles**.
+
+**Aún falla**: sigue narrando demasiado. Útil para humanos, no para máquinas.
+
+### v5 — Output formatting + prefill (pilares 9+10)
+
+Agregamos: regla de output (envolver veredicto en XML). Opcional: prefill con `<final_verdict>`.
+
+**Output**: veredicto envuelto en `<final_verdict>...</final_verdict>`. Listo para parser. Toda la preamble se ignora.
+
+### La lección operativa
+
+**No salgas a producción con v1**. Pero tampoco intentes escribir v5 de un golpe. **Empezá simple → observá el error → añadí UN pilar → volvé a correr**.
+
+La calidad sube por capas y **queda evidencia escrita de por qué cada parte está ahí**.
+
+---
+
+## XML tags vs prosa
+
+Claude está **fine-tuneado para reconocer bloques XML** como secciones con propósito distinto. No es decoración: cuando envolvés en `<background>`, `<rules>`, `<output_format>`, Claude los trata como **intenciones separadas**.
+
+### System prompt con XML — template completo
+
+```
+<role>
+Sos asistente AI de un ajustador humano de seguros.
+Revisás partes de accidente de auto en sueco y determinás
+responsabilidad.
+</role>
+
+<tone>
+Mantenete factual y confiado. Si no podés determinar algo con
+certeza, decilo. NO adivines.
+</tone>
+
+<background>
+El formulario es parte sueco estándar con 17 filas numeradas y 2
+columnas (vehículo A, vehículo B). Los humanos marcan con X,
+círculos o tachones — NO esperes formato perfecto. Cada fila
+representa una acción del vehículo en el momento del accidente.
+</background>
+
+<rules>
+1) Leé el formulario fila por fila. Listá qué vehículo marcó qué.
+2) Cruzá esa lista con el sketch del accidente.
+3) Solo si la evidencia es consistente, emití veredicto.
+   Si no, marcá "insuficiente".
+</rules>
+
+<output_format>
+Razoná dentro de <thinking>...</thinking>.
+Tu veredicto final va dentro de <final_verdict>...</final_verdict>.
+Lo demás se ignora.
+</output_format>
+
+<task>
+Para este parte específico, ejecutá el flujo de <rules> y
+respetá <output_format>.
+</task>
+```
+
+### Cuándo NO usar XML
+
+- Tareas muy cortas (una pregunta directa)
+- Chat-mode con Claude para explorar
+
+En esos casos XML solo agrega ruido.
+
+---
+
+## Extended thinking — la muleta del prompt engineer
+
+Claude 4.x permite **extended thinking**: escribe razonamiento en tags `<thinking>` antes de responder. Christian (Anthropic) lo dice sin rodeos: extended thinking es **la muleta del prompt engineer**.
+
+### El flow
+
+1. Activás thinking
+2. Leés transcript del scratchpad
+3. Ves en qué paso Claude se desliza
+4. Metés esa intuición de regreso al system prompt
+
+Después de iteraciones, tu prompt está tan afilado que **ya no necesitás thinking** — el razonamiento vive escrito como reglas explícitas.
+
+### Cuándo NO prenderlo
+
+Tareas simples (clasificación, extracción directa). Pensar de más mete latencia y costo sin mejorar resultado.
+
+---
+
+## Prefill + caching
+
+### Prefill — pone palabras en boca de Claude
+
+Cuando el modelo te responde, **continúa el texto que vos le ponés** en su mensaje.
+
+| Prefill | Para qué |
+|---------|----------|
+| `{` | Fuerza JSON sin preamble |
+| `<final_verdict>` | Fuerza wrapping XML directo |
+| `1.` | Fuerza lista numerada sin intro |
+| `[Como ajustador senior]:` | Mantener personaje |
+
+### Prompt caching
+
+El bloque grande de background + role + rules es **idéntico en cada llamada**. Activá prompt caching:
+- Pagás costo completo de tokens la primera vez
+- ~10% en las siguientes
+
+Para apps batch (procesar 1000 partes), el ahorro es **órdenes de magnitud**.
+
+---
+
+## Las 5 reglas de oro 2026
+
+### 1. Decí lo que SÍ querés, no lo que NO
+
+❌ "No uses markdown"
+✅ "Escribí en prosa fluida, en párrafos completos"
+
+### 2. Dale el motivo de cada instrucción
+
+Cuando explicás **por qué importa**, Claude entiende tu objetivo y **generaliza a casos que no nombraste**.
+
+### 3. Enseñá con ejemplos, no solo reglas
+
+3-5 ejemplos bien armados moldean formato/tono/estructura **mejor que cualquier párrafo de instrucciones**. Envolvé cada uno en `<example>`.
+
+### 4. "Hacelo" vs "¿podés sugerir?"
+
+❌ "¿Podés sugerir mejoras a esta función?"
+✅ "Cambiá esta función para que corra más rápido"
+
+El modelo ahora sigue tu instrucción **al pie de la letra**.
+
+### 5. Pedí la voz que querés
+
+Opus 4.7 por defecto es **más directo y opinionado**. Si tu marca necesita tono cálido, **pedilo explícito**.
+
+---
+
+## 4 plantillas copy-paste
+
+### Plantilla 1 — System prompt con los 10 pilares
+
+```
+<role>
+[Pilar 1] Sos un [rol específico] que [misión clara, 1 línea].
+</role>
+
+<tone>
+[Pilar 2] Mantenete [factual / cálido / técnico]. Si [condición
+de incertidumbre], [acción explícita en lugar de adivinar].
+</tone>
+
+<background>
+[Pilar 3] Contexto que NO cambia entre llamadas:
+- Estructura del input que vas a recibir
+- Glosario o convenciones del dominio
+- Reglas de negocio fijas
+</background>
+
+<examples>
+[Pilar 5] Casos difíciles ya resueltos por humanos:
+<example>
+  <input>...</input>
+  <output>...</output>
+</example>
+</examples>
+
+<rules>
+[Pilar 4] Cómo razonar paso a paso:
+1) [Primer paso, el más simple]
+2) [Segundo paso, depende del primero]
+3) [Veredicto / output, solo si pasos previos consistentes]
+</rules>
+
+<output_format>
+[Pilar 9] Envolvé el resultado dentro de [<tag>...</tag> o JSON].
+[Pilar 8] Antes del resultado, razoná dentro de <thinking>.
+</output_format>
+
+<task>
+[Pilar 7] Para este input específico, ejecutá el flujo de <rules>.
+</task>
+
+<!-- Pilar 10 (prefill): empezá el assistant message con
+"{" o "<...>" según formato deseado. -->
+```
+
+### Plantilla 2 — Auditá tu prompt actual
+
+```
+Voy a pegarte mi prompt actual. Quiero que lo audites contra
+los 10 pilares de Prompting 101 de Anthropic Applied AI.
+
+PROMPT ACTUAL:
+"""
+[pegá tu prompt completo]
+"""
+
+CASO DE USO:
+[describí en 1-2 líneas qué hace en producción]
+
+ENTREGAME:
+1. Tabla con los 10 pilares marcando ✅ presente / ⚠️ débil /
+   ❌ ausente y una línea de evidencia.
+2. Los 3 pilares con mayor impacto al añadirlos en este prompt
+   específico — y qué mejora esperás.
+3. La versión afilada del prompt, listo para copiar, con XML
+   tags si aplica.
+4. Una línea de estrategia: qué cambió y por qué.
+```
+
+### Plantilla 3 — Aplicá el flow v1→v5 a tu caso
+
+```
+Quiero aplicar el flujo iterativo V1 → V5 de Prompting 101 a
+MI caso de uso.
+
+MI TAREA:
+"""
+[describí en 2-3 líneas qué querés que Claude haga, qué inputs
+recibe y qué output esperás]
+"""
+
+ENTREGAME LAS 5 VERSIONES:
+
+v1 — Prompt vago, una sola línea. Para mostrar el modo error.
+v2 — v1 + role + tone context.
+v3 — v2 + background data (estructura del input, glosario, reglas).
+v4 — v3 + reglas paso a paso de cómo razonar, en orden.
+v5 — v4 + output formatting (XML o JSON) + sugerencia de prefill.
+
+Para cada versión:
+- Marcá qué pilar añadiste vs la previa
+- Pegá el prompt completo en bloque copiable
+- Una línea: qué error de v(n-1) corrige
+
+Cerrá con: cuál recomendás correr en producción y por qué.
+```
+
+### Plantilla 4 — Refactor a system + user
+
+```
+Tengo este prompt todo en un solo mensaje de usuario. Quiero
+refactorizarlo a la estructura system + user que recomienda
+Anthropic.
+
+PROMPT ACTUAL (todo junto):
+"""
+[pegá entero]
+"""
+
+ENTREGAME:
+
+1) SYSTEM PROMPT — lo que NO cambia entre llamadas:
+- <role>...</role>
+- <tone>...</tone>
+- <background>...</background>
+- <rules>...</rules>
+- <examples>...</examples> (si los hay)
+- <output_format>...</output_format>
+
+2) USER MESSAGE TEMPLATE — lo que SÍ cambia por llamada:
+- Placeholders {{...}} marcados
+- Pilar 7 (immediate task) al inicio o al final
+
+3) NOTA DE PROMPT CACHING — qué bloque conviene cachear
+
+4) PREFILL SUGERIDO — qué meter en el assistant para forzar formato
+```
+
+---
+
+## Cómo encadenar las plantillas
+
+- **Arrancás de cero** → plantilla 1 (10 pilares) + flow v1→v5
+- **Ya tenés algo corriendo** → auditá primero, refactorizá después, finalmente v5 con prefill
+
+---
+
+## Para quién NO aplica
+
+Si solo usás Claude en chat-mode para explorar, **los 10 pilares son overkill**. Esta metodología es para cuando un prompt **entra a producción** y corre cientos o miles de veces.
+
+En esos casos, cada pilar pagado = menos errores, menos tokens, outputs que tu sistema downstream sí parsea.
+
+---
+
+## Próximos pasos
+
+- Para principios básicos de hablar con Claude (no production), [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para profundizar en Opus 4.7 específicamente, [guía Claude Opus 4.7](/boveda/guia-claude-opus-47)
+- Para meta-prompt que diseña system prompts, [comando de sistema](/boveda/comando-de-sistema)

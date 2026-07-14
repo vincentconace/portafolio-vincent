@@ -1,0 +1,220 @@
+---
+title: "4400+ free prompts to generate images with ChatGPT (curated with Claude)"
+description: "Open-source repo with thousands of prompts for YouTube thumbnails, product photography, posters, infographics, video game sprites and more. The winning workflow: use Claude to personalize the prompt before pasting it into ChatGPT."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "chatgpt", "gpt-image-2"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["higgsfield-mcp", "stack-ia-creador", "huashu-design"]
+---
+
+## The resource
+
+If you generate images with ChatGPT (GPT Image 2), **you're writing prompts by hand every time**. An open-source repo curated by the YouMind community has **4400+ prompts** organized by category:
+
+| Category | Covers |
+|-----------|-------|
+| YouTube thumbnails | Visual hooks, vertical/horizontal format |
+| Amazon-style product photography | White background, soft shadows |
+| Luxury / brand product photography | Editorial, premium mood |
+| Posters | Events, launches, announcements |
+| Flyers | Promotions, discounts |
+| Infographics | Data structured visually |
+| Social posts (square) | Instagram, Facebook |
+| Social posts (vertical) | TikTok, Stories, Reels |
+| Comics / storyboard | For sequential content creators |
+| Avatars | Profiles, OC characters |
+| Video game sprites | Pixel art, vector |
+| App/web mockups | UI/UX presentations |
+
+Each category has **dozens to hundreds** of tested prompts.
+
+> Bonus: the repo is being used by the Anthropic team in their training runs (literally, it's in the commits of some models).
+
+---
+
+## The winning workflow — no direct copy-paste
+
+The typical mistake: copy a prompt from the repo → paste into ChatGPT → mediocre output.
+
+The trick: **personalize with Claude first** before pasting.
+
+```
+Repo prompt →  Claude (personalizes it to your case) →  ChatGPT (generates)
+```
+
+### Why Claude in the middle
+
+The repo prompt is generic ("product photo, white background, studio lighting"). Your product / brand has its own specs (palette, preferred angle, mood). Claude **adapts** the generic prompt to your context before sending it to GPT.
+
+### Workflow example
+
+#### Step 1 — grab the base prompt from the repo
+
+Category: "Amazon-style product photography"
+
+```
+Photo of {product} on white background, professional studio lighting,
+soft shadow, sharp focus, photorealistic, commercial photography style
+```
+
+#### Step 2 — Claude personalizes it
+
+```
+[In Claude]
+> Personalize this prompt for my product: running shoes.
+  
+  My brand: minimalist, eco-friendly, audience runners 25-40.
+  Product: unisex shoe, green + cream palette.
+  I need 3 variants for an A/B test.
+
+Claude:
+  Variant 1 (Amazon-style standard):
+  "Photo of minimalist eco-friendly running shoe, green and cream colorway,
+  on pure white background, professional studio lighting from upper-left,
+  soft shadow under shoe, 45-degree angle, sharp focus, photorealistic,
+  commercial photography for e-commerce, 4K"
+
+  Variant 2 (editorial):
+  "[same shoe] photographed on textured natural canvas background, golden
+  hour lighting, slightly elevated angle showing sole detail, magazine
+  editorial style, depth of field, premium feel"
+
+  Variant 3 (action/lifestyle):
+  "[same shoe] photographed on running trail at dawn, slight motion blur
+  suggesting movement, soft natural lighting, environmental context,
+  authentic lifestyle photography, Nike Sandtrap meets Allbirds style"
+```
+
+3 variants with their own personality from a generic prompt.
+
+#### Step 3 — Paste into ChatGPT
+
+Each variant is generated separately in GPT Image 2. You compare outputs. Iterate on the one that gets closest.
+
+---
+
+## The 10 most useful categories
+
+### 1. YouTube thumbnails
+
+The pack includes:
+- Face + extreme reaction (high CTR)
+- "Before / after" comparison
+- Big bold text overlay
+- Cinematic moody style
+- Tutorial style with stepped numbers
+
+### 2. E-commerce product photography
+
+For Shopify, MercadoLibre, Amazon. The pack includes:
+- Pure white background (Amazon spec)
+- Color background (branded)
+- Lifestyle (in-context)
+- Detail shots (closeups)
+- Comparison shots
+
+### 3. Posters / Flyers
+
+The pack includes:
+- Events (concert, conference, launch)
+- Promotions (discounts, offers)
+- Typographic (text-heavy)
+- Minimalist vs maximalist
+- Brutalist / contemporary
+
+### 4. Infographics
+
+The pack includes:
+- Step-by-step processes
+- Statistics with visualization
+- Comparisons (vs)
+- Timelines
+- Mind maps
+
+### 5. Social posts
+
+The pack includes:
+- Quote cards
+- Visual listicles
+- Carousels (slides)
+- Memes (watch out for copyright)
+- Behind-the-scenes
+
+### 6-10
+
+Comics, avatars, video game sprites, app mockups — each with its specific set.
+
+---
+
+## When the repo beats Higgsfield or Midjourney
+
+| Case | Approach |
+|------|----------|
+| Massive tasks at low cost | **GPT Image 2 + repo** (cheaper, good enough quality) |
+| Maximum cinematic quality | Higgsfield / Midjourney |
+| Variety of styles covered | Repo (the 4400 prompts cover a lot) |
+| Fast iteration | Midjourney (Discord is more fluid) |
+| Integration with your Claude workflow | Repo + Claude (this pattern) |
+
+For operational marketing production (thumbnails, product photos, posts), **GPT Image 2 + personalized Claude** is the sweet spot.
+
+---
+
+## Anti-patterns
+
+### 1. Direct copy-paste without personalizing
+
+The repo prompt is a **base**. Without Claude personalizing it, you end up with an image "that looks like a stock photo brand".
+
+### 2. Trying 1 prompt and giving up
+
+GPT Image 2 (like any image gen) **requires iteration**. The first output of a new prompt is rarely the final one. Iterate 3-5 times.
+
+### 3. Not saving what works
+
+When you find a prompt that gives you perfect output, **save it**. For recurring use, keep your own `mis-prompts/` folder with the winners.
+
+### 4. Ignoring the difference between models
+
+A prompt that works in GPT Image 2 may not work the same in Midjourney or Flux. **The prompt is model-specific**. For Claude / Anthropic: they have different tags, better to ask Claude to adapt it.
+
+---
+
+## The Claude component that adds value
+
+The most important part of the workflow isn't the repo (4400 prompts is a lot but you can find them elsewhere). **It's Claude personalizing them**.
+
+Without Claude:
+- You apply the generic prompt → generic output
+
+With Claude:
+- You give it context about your brand, audience, constraints
+- It generates 3-5 variants thinking about your specific case
+- You compare and pick the best base
+- You iterate more easily because you have a strong starting point
+
+**80% of the value is in this intermediate step**, not in the repo or in GPT.
+
+---
+
+## Combining it with your brand book
+
+If you have a brand book in Claude (loaded as a [project in Claude Chat](/boveda/claude-3-modos-app)):
+
+```
+[In your Project with the brand loaded]
+> Take this generic prompt from the repo and personalize it to our brand.
+  Automatically apply our palette, font, mood and visual tone.
+```
+
+Claude **already knows your brand**, you don't have to repeat it. Output: prompts adapted automatically.
+
+---
+
+## Next steps
+
+- For more sophisticated generation (cinematic + video), [Higgsfield MCP](/boveda/higgsfield-mcp)
+- For a complete content creation stack, [Stack IA Creador](/boveda/stack-ia-creador)
+- For visual design with code + Claude, [Huashu Design](/boveda/huashu-design)

@@ -1,0 +1,279 @@
+---
+title: "Claude Opus 4.7 — when to use it, when not to (and how to avoid burning your plan)"
+description: "Opus 4.7 thinks harder by default, which means every prompt eats twice as many tokens. Use it wrong and you'll hit the 5-hour limit in just a few prompts. A guide to knowing when to use Opus 4.7 vs Opus 4.6 vs Sonnet 4.6. Plus: 6 prompting rules from the official docs and 4 template prompts."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["cual-plan-claude", "cambia-de-modelo", "hablarle-a-claude"]
+---
+
+## The problem
+
+You get excited about the new **Opus 4.7**. You switch it on, write 3-4 prompts, and up pops the message:
+
+> "You've hit your usage limit. Come back in 5 hours."
+
+Your whole day, gone.
+
+Why does this happen? Anthropic set Opus 4.7 to **think harder** by default. Every prompt eats **twice as much** of your plan. You don't notice until the message is already there.
+
+This guide is the map so it **doesn't happen to you**.
+
+---
+
+## The 3 models as employees
+
+Think of them as 3 employees on your team:
+
+| Model | Personality | Cost |
+|--------|--------------|-------|
+| **Sonnet 4.6** | Your everyday worker. Fast, efficient, does 80% of the work without complaining | Barely costs you anything |
+| **Opus 4.6** | The one who really thinks. Deep analysis, strategy, mid-sized code | Spends nicely but won't bankrupt you |
+| **Opus 4.7** | Expensive genius. Long-horizon code, heavy agents, 3x better vision | Eats **twice** as much |
+
+### Anthropic's official numbers
+
+- **Code**: Opus 4.7 writes 13% better than 4.6 (CursorBench: 70% vs 58%)
+- **Vision**: reads images **3x better** (XBOW: 98.5% vs 54.5%)
+- **Instructions**: follows them more literally — the good and the bad (it no longer assumes what you didn't say)
+
+### API costs (if you use the API instead of a subscription)
+
+| Model | Input ($/1M tokens) | Output ($/1M tokens) |
+|--------|---------------------|------------------------|
+| Opus 4.7 | $5 | $25 |
+| Opus 4.6 | $4 | $20 |
+| Sonnet 4.6 | $3 | $15 |
+
+On the API there's no 5-hour limit message — you pay for what you use.
+
+---
+
+## The map — when to use each model
+
+### Case 1 — Day to day
+
+| Tasks | Model |
+|--------|--------|
+| Automation | Sonnet 4.6 |
+| Writing / editing text | Sonnet 4.6 |
+| Light research | Sonnet 4.6 |
+| Answering emails | Sonnet 4.6 |
+
+**Sonnet 4.6 by default.** Barely costs you anything.
+
+### Case 2 — Serious thinking
+
+| Tasks | Model |
+|--------|--------|
+| Strategic analysis | Opus 4.6 |
+| Mid-sized code | Opus 4.6 |
+| Important decisions that need judgment | Opus 4.6 |
+
+**Opus 4.6** when Sonnet 4.6 falls short. Your plan gets some breathing room.
+
+### Case 3 — Something big + $100/$200 plan
+
+| Tasks | Model |
+|--------|--------|
+| Long-horizon code (massive refactors, big features) | Opus 4.7 |
+| Complex multi-step agents | Opus 4.7 |
+| Heavy image analysis | Opus 4.7 |
+| Serious end-to-end builds | Opus 4.7 |
+
+**Opus 4.7** ONLY if you have the Max $100 or $200 plan. It can keep up with the pace.
+
+### Case 4 — Pro $20 plan
+
+**Don't even touch Opus 4.7.**
+
+You'll hit the limit message in **just a few prompts**. Period.
+
+If you need Opus, drop down to 4.6.
+
+---
+
+## The mental rule
+
+> The person who uses Claude best isn't the one who pays the most.
+> It's the one who learned NOT to burn their plan.
+
+Learn to use **Sonnet 4.6** and **Opus 4.6** thoroughly — that's where 90% of the real work lives. And when they can't handle something anymore, when the problem is **so big** you need the expensive genius, that's when you call in Opus 4.7.
+
+That's what it's for.
+
+---
+
+## 6 prompting rules (from Anthropic's official docs)
+
+They apply equally to Sonnet 4.6, Opus 4.6, and Opus 4.7. If you write prompts like this, you'll save half your plan.
+
+### 1. Be clear and direct
+
+Think of it like talking to a **brilliant employee who has no context** about your business. The more specific, the better.
+
+❌ "Build me a dashboard"
+✅ "Build me a sales dashboard with a monthly filter, a line chart on top and a product table below"
+
+### 2. Give it the why
+
+❌ "Don't use ellipses"
+✅ "Don't use ellipses because this will be read aloud and ellipses don't get pronounced well"
+
+Claude **generalizes from the why** and applies the rule even in cases you didn't think of.
+
+### 3. Give it examples
+
+2-3 well-crafted examples are worth more than 1000 words of instructions. Wrap them in tags:
+
+```
+<example>
+Input: ...
+Output: ...
+</example>
+```
+
+Claude tells examples apart from the rest of the prompt.
+
+### 4. Tell it WHAT TO DO, not what NOT to do
+
+❌ "Don't use markdown"
+✅ "Write in flowing prose with complete paragraphs"
+
+Claude responds **better to positive instructions** than to negations.
+
+### 5. Give it a role
+
+One line at the start:
+
+```
+You are a Python expert who explains things to beginners
+```
+
+It changes the tone and the depth. **It's the cheapest thing to do and the most impactful.**
+
+### 6. If it's something simple, lower the effort
+
+By default Opus 4.7 thinks at **xhigh** level (the maximum). If you ask it for something short or routine:
+
+```
+Use effort medium for this task (not xhigh).
+```
+
+Don't burn extra tokens.
+
+---
+
+## 4 template prompts (in English on purpose)
+
+These are in **English** because that's how they come from the official docs and that's how they perform best (training). Copy and paste them.
+
+### 1. Short responses (anti-verbosity)
+
+When Claude goes on too long:
+
+```
+Provide concise, focused responses. Skip non-essential context,
+and keep examples minimal.
+```
+
+### 2. Confirm before risky actions
+
+For coding agents — so it won't delete files, run `git push --force`, or push changes without asking:
+
+```
+Consider the reversibility and potential impact of your actions.
+You are encouraged to take local, reversible actions like editing
+files or running tests, but for actions that are hard to reverse,
+affect shared systems, or could be destructive, ask the user
+before proceeding.
+```
+
+### 3. No over-engineering
+
+So it won't invent files, helpers, or abstractions you didn't ask for:
+
+```
+Avoid over-engineering. Only make changes that are directly
+requested or clearly necessary. Keep solutions simple and focused.
+Don't add features, refactor code, or make improvements beyond
+what was asked.
+```
+
+### 4. Investigate before answering
+
+Against code hallucinations — it forces it to **read the real files** before making claims:
+
+```
+Never speculate about code you have not opened. If the user
+references a specific file, you MUST read the file before
+answering. Make sure to investigate and read relevant files
+BEFORE answering questions about the codebase.
+```
+
+---
+
+## Recommended combination — a smart workflow
+
+| Time of day | Model |
+|-----------------|--------|
+| Morning — emails, planning, writing | Sonnet 4.6 |
+| Midday — regular coding, small refactors | Sonnet 4.6 |
+| Afternoon — architecture decisions, complex debugging | Opus 4.6 |
+| Big critical task of the month | Opus 4.7 (if you have the Max plan) |
+
+**80% of the time on Sonnet.** 15% on Opus 4.6. 5% (or less) on Opus 4.7.
+
+---
+
+## Anti-patterns specific to Opus 4.7
+
+### 1. Turning it on "just in case"
+
+If you set Opus 4.7 as your default, **every prompt** eats 2x. In 4-5 prompts on Pro $20, hello limit message.
+
+**Default: Sonnet 4.6.** Bump it up when you need to.
+
+### 2. Using it for mechanical tasks
+
+Reformatting code, writing simple docs, renaming variables → **Sonnet or Haiku are enough**. Opus 4.7 charges you genius rates to do junior work.
+
+### 3. Long sessions without context management
+
+Opus 4.7 thinks a lot **per turn**. If your session has 30 turns with Opus 4.7, you spent the equivalent of 60 turns on Sonnet.
+
+For long sessions: **Sonnet 4.6** as the base + call in Opus 4.7 only for the critical moments.
+
+### 4. Massive code generation
+
+Generating 500 lines of boilerplate → Sonnet. Generating complex core logic of 50 lines → Opus 4.7.
+
+### 5. Not lowering effort when it applies
+
+If you ask for something simple in Opus 4.7 and don't say "low effort," it thinks at maximum anyway. **Be explicit** about the effort based on the task.
+
+---
+
+## Powerful combinations
+
+### With [switch models](/boveda/cambia-de-modelo)
+
+When you notice Opus 4.7 is slow or overloaded, drop down to Opus 4.6.
+
+### With [token efficient](/boveda/claude-token-efficient)
+
+The Token Efficient CLAUDE.md reduces verbose output from any model. Combined with Opus 4.7, it makes **the premium model affordable** for more prompts.
+
+### With [five repos don't burn your account](/boveda/cinco-repos-no-quemar-cuenta)
+
+Context Mode + Opus 4.7 = sessions 6x longer with the most powerful model.
+
+---
+
+## Next steps
+
+- To understand which plan you need based on your usage, [which Claude plan](/boveda/cual-plan-claude)
+- To switch between models based on the task, [switch models](/boveda/cambia-de-modelo)
+- For general principles of good prompting, [talking to Claude](/boveda/hablarle-a-claude)

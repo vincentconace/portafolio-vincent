@@ -1,0 +1,192 @@
+---
+title: "The 5 skills that make Claude Code work almost on its own"
+description: "The combo that closes the loop: a skill that finds and installs other skills (meta-skill), one that connects to your tools (MCP builder), one that browses the internet, one that audits design, and one that designs frontend. With the right order to install them."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-21"
+readingTime: "10 min"
+relatedSlugs: ["anatomia-claude", "skill-code-reviewer", "trio-skills-claude-code"]
+---
+
+## The combo
+
+Claude Code out of the box is powerful, but it's missing hands for specific tasks. These 5 skills aren't the ones getting all the buzz on Twitter — they're the ones that, **together**, close a complete work loop: finding what you're missing, connecting your tools, browsing the internet, reviewing your output, and making it look good.
+
+Each one covers a different gap. And the order matters: the first one installs the rest.
+
+| # | Skill | What for | Where from |
+|---|-------|----------|------------|
+| 1 | `find-skills` | Finds and installs other skills from the catalog | Vercel Labs |
+| 2 | `mcp-builder` | Builds MCPs by talking, without writing code | Anthropic |
+| 3 | `agent-browser` | Browses the internet with real clicks, not scraping | Vercel Labs |
+| 4 | `web-design-guidelines` | Audits your UI against 100+ rules | Vercel Labs |
+| 5 | `frontend-design` | Generates UI that doesn't look AI-made | Anthropic |
+
+---
+
+## 1. `find-skills` — the meta-skill
+
+This is the one that **finds and installs the others**. You tell it in plain language what you need:
+
+```
+> I need something to audit my design
+> I want to connect Claude to Notion
+> a skill that writes automated tests would help me
+```
+
+And `find-skills` digs into the catalog, finds the right one, and installs it for you on its own. No more browsing GitHub copying commands.
+
+**Why it goes first**: with it installed, the other 4 install themselves. Without it, you have to find each one by hand, read the README, run the install, and so on.
+
+**When it's worth the setup**: always. It's the skill that multiplies the value of every skill that comes after.
+
+---
+
+## 2. `mcp-builder` — connect without code
+
+You describe in words a tool you use (your internal CRM, a private API, whatever), and the skill **writes the MCP server** that connects Claude to that tool.
+
+Example usage:
+
+```
+> mcp-builder, I need to connect Claude to our internal orders
+  system. It's a REST API with bearer token auth. The functions I
+  want to expose are: list orders by date, get the detail of an
+  order, and mark as shipped.
+```
+
+The skill puts together the MCP code, tests it, and shows you how to register it in `settings.json`. **You didn't write any code** — but there is code, generated and reviewable.
+
+**Common trap**: trusting what it generated without reviewing the auth. Verify that tokens aren't hardcoded in the generated code.
+
+**When it's worth it**: if you have internal systems you want Claude to reach. If everything of yours is public via API, you can use `Bash + curl` directly and don't need this.
+
+---
+
+## 3. `agent-browser` — the eyes and hands on the internet
+
+Claude's eyes and hands on the internet. It goes to pages, makes **real clicks** (not HTML scraping), pulls info, and tests your site like a person would.
+
+The difference from a simple fetch:
+
+| Need | Fetch + parse | agent-browser |
+|-----------|---------------|---------------|
+| Download the HTML of a static page | ✅ fast | ⚠️ overkill |
+| Log in and navigate | ❌ can't | ✅ |
+| Test an end-to-end flow | ❌ | ✅ |
+| Sites with heavy JS / SPA | ❌ sees the shell | ✅ sees the rendered app |
+| Token cost | High (huge HTML) | Lower (only what's relevant) |
+
+**When it's worth it**: testing real flows (signup, checkout, etc.), visual QA, scraping JS-heavy sites, automating tasks that require interaction.
+
+**When NOT**: if you only need to download static HTML, `curl` + a parser is 10× simpler.
+
+---
+
+## 4. `web-design-guidelines` — the auditor
+
+It takes a large collection of web design rules (spacing, typography, contrast, visual hierarchy, accessibility) and **reviews your page** against all of them.
+
+It doesn't design. **It critiques.** It hands you:
+
+```
+- Insufficient contrast on footer links (4.1:1, accessible minimum 4.5:1)
+- Text line too long in hero (95 characters, recommended 50-75)
+- Broken hierarchy: H2 has the same size as H3
+- Inconsistent padding between sections (varies between 48px and 80px with no pattern)
+- Primary and secondary buttons with almost the same visual weight
+```
+
+**When it's worth it**: after putting together a first version of the UI with `frontend-design` (skill #5), run it through this auditor before showing it to anyone.
+
+**Trap**: the rules are guides, not laws. If every page follows exactly the same rules, they all end up looking the same. Use the audit as **input for a decision**, not as a verdict.
+
+---
+
+## 5. `frontend-design` — design that doesn't look like AI
+
+The generator. It's the one that **kills the AI look** — that generic "default Tailwind UI" aesthetic that every app built with LLMs without guidance has.
+
+It brings **aesthetic directions with font pairings already set up**:
+
+- Editorial variants (Inter + Lora, Geist + Source Serif)
+- Minimalist variants (Inter alone, different weights)
+- Brutalist variants (Space Grotesk + monospace)
+- Brand-heavy variants (custom fonts, saturated colors)
+
+When you ask it to "design the landing", it doesn't generate "another Tailwind UI". It gives you a proposal with personality.
+
+**When it's worth it**: kicking off a project where the aesthetic matters. If you're building an internal dashboard, this skill is overkill — use shadcn directly.
+
+---
+
+## The flow of the 5
+
+How they fit together in a typical work cycle:
+
+```
+1. find-skills installs whatever you need
+2. frontend-design proposes the initial aesthetic
+3. (you code with Claude Code as usual)
+4. agent-browser tests the flow end-to-end as a user
+5. web-design-guidelines audits visually
+6. (you iterate)
+7. mcp-builder connects you to the private API the app needs
+```
+
+A sequence that covers everything from kickoff to having something tested and connected.
+
+---
+
+## Installation
+
+Each one installs with its own command. But if you already have `find-skills`, you don't need to:
+
+```
+> /skill install find-skills
+```
+
+And then:
+
+```
+> find-skills, install the most-used skills from Vercel Labs and Anthropic
+```
+
+It goes off on its own to find and install them all. That's the whole idea of the meta-skill.
+
+---
+
+## Anti-patterns — when NOT to install all 5
+
+### 1. You're pure backend and don't touch UI
+
+`frontend-design` and `web-design-guidelines` don't add anything for you. Save yourself the install.
+
+### 2. You have no internal systems to connect
+
+`mcp-builder` shines when there are private APIs. If everything you use is public, `Bash` + `curl` or `fetch` directly is enough.
+
+### 3. You only build CLIs / scripts
+
+`agent-browser` is for the web. If you live in the terminal, you don't need it.
+
+### 4. You're still learning Claude Code
+
+Installing 5 skills before you really understand what a basic skill does is counterproductive. Start with [a skill of your own](/boveda/skill-code-reviewer), get the concept down well, and then add more.
+
+---
+
+## The general pattern
+
+These 5 illustrate a broader idea: **skills are tools that extend Claude for your workflow**. The difference from writing complex prompts every time is that skills **invoke themselves** when Claude detects that they apply.
+
+If your work involves something repetitive (auditing design, connecting APIs, testing flows), there's a good chance a **skill already exists** for it. `find-skills` shows them to you.
+
+---
+
+## Next steps
+
+- If you haven't written your first skill yet, [skill code-reviewer](/boveda/skill-code-reviewer) is the clearest example
+- To understand what a skill is vs an MCP vs a plugin, [anatomy of Claude](/boveda/anatomia-claude)
+- For a specific combination of 3 more opinionated skills, [trio of skills](/boveda/trio-skills-claude-code)

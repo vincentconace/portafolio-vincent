@@ -1,0 +1,257 @@
+---
+title: "Spec-driven development with Claude — specs before code"
+description: "The pattern of writing detailed specs BEFORE Claude ships any code. It cuts iterations, improves quality and gives you a reusable artifact. When to apply it, how to structure effective specs and a ready-to-copy template."
+difficulty: "avanzado"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-13"
+readingTime: "13 min"
+relatedSlugs: ["skill-code-reviewer", "prompts-prd-ejecutivo", "comando-tests-automaticos"]
+---
+
+## The problem with "just ship code"
+
+The natural flow with Claude is: "implement X for me." It works for small tasks. For medium and large tasks, it fails like this:
+
+- Claude infers an approach and starts coding
+- You see the code halfway through and want to change direction
+- Claude redoes it, but it has already burned context and gets confused by its own history
+- Result: 3 iterations when it could have been 1
+
+The **spec-first** pattern flips the order: first you discuss the **what** and the **how** without writing code. Once you're aligned, only then does Claude code — and because it has a clear spec, it nails it in one go.
+
+---
+
+## The flow in three phases
+
+### Phase 1 — Spec (no code yet)
+
+You **explicitly** ask Claude NOT to write code. Just discuss the design.
+
+```
+> I need to add pagination to the orders list. Don't write code yet.
+
+Before coding, write me a spec in docs/specs/pedidos-pagination.md with:
+- What API it exposes (endpoint, params, response shape)
+- How it composes with the frontend
+- Edge cases: empty page, filters that change, navigation with browser back
+- Expected performance: target latency, indexes the DB needs
+- Out of scope: what this feature does NOT include
+```
+
+Claude writes the `.md`. You read it. You change what you don't like. **You iterate on the document**, not on code.
+
+### Phase 2 — Validation
+
+Once the spec is OK, you ask for an implementation plan:
+
+```
+> Perfect. Now list the files you're going to touch and in what order you'll
+  make the changes. Don't start yet.
+```
+
+Claude gives you something like:
+
+```
+1. lib/db/queries/orders.ts — add limit/offset args
+2. lib/api/orders/route.ts — expose params in the endpoint
+3. components/OrdersList.tsx — pagination UI
+4. components/OrdersList.test.tsx — tests
+5. migrations/202605_orders_index.sql — index if needed
+```
+
+If something sounds off (e.g. a file is missing), you discuss it. Once you're aligned, **phase 3**.
+
+### Phase 3 — Implementation
+
+```
+> Go for it, implement following the spec and the plan. Make the changes in the
+  order you listed. After each file, tell me "done X" and move to the next one.
+```
+
+Now Claude codes with a clear north star. Iterations drop dramatically.
+
+---
+
+## Why it works
+
+| Without spec | With spec |
+|----------|----------|
+| Claude infers what you want and starts | Claude reads the spec and knows what you want |
+| Mid-flight changes break the context | Pre-code changes are cheap |
+| The code is the first artifact | The spec is the first artifact, it stays in the repo |
+| If Claude goes off the rails, you lost time | If the spec goes off the rails, it's 5 minutes of editing |
+| Hard to review later what was decided | The `.md` stays for future reference |
+
+The most underrated part of the pattern: the spec **survives the session**. Three months from now, you or anyone on the team can read `docs/specs/pedidos-pagination.md` and understand why it was built this way.
+
+---
+
+## Spec template
+
+Save this in `.claude/templates/spec-template.md` (or wherever you keep your templates):
+
+```markdown
+# Spec: [Feature]
+
+## 1. Problem
+2-3 lines. What problem does it solve and for whom?
+
+## 2. Proposed solution
+1 paragraph describing the approach. Include "why this approach and not other considered ones".
+
+## 3. API / Interface
+If backend: endpoints, params, response shape.
+If frontend: component props, states it manages.
+If lib: exported functions with their signatures.
+
+## 4. Data model (if applicable)
+- New tables / new columns
+- Relationships
+- Required migrations
+
+## 5. End-to-end flow
+Step by step of the happy path. What the flow looks like from user input to observable effect.
+
+## 6. Edge cases
+List. For each one: expected behavior.
+- Empty input
+- Insufficient permissions
+- Timeouts
+- Corrupted data
+- Race conditions
+
+## 7. Performance / scale
+- Target latency
+- Expected throughput
+- Indexes/cache it needs
+- What happens if it grows 10×
+
+## 8. Security
+- What input is validated
+- Required permissions
+- Logging / auditing
+
+## 9. Out of scope
+Explicit list of things this spec does NOT include. This keeps Claude (or you) from adding features without thinking.
+
+## 10. Tests
+- Critical unit tests
+- Integration tests if there's a multi-component flow
+- E2E if the feature touches UI
+```
+
+When you pass this to Claude as input ("follow this template for the spec"), you get specs that are comparable across features. Useful when several people are writing them.
+
+---
+
+## When to use this pattern and when not to
+
+### Yes, it's worth it
+
+- Features that touch >3 files
+- Changes that affect the data model
+- New APIs that others will consume
+- Work where the "what" isn't obvious
+- When you're going to delegate the implementation to someone (human or AI) who wasn't in the discussion
+
+### No, it's overkill
+
+- 1-file / 1-function changes
+- Clear bugs with an identified cause
+- Mechanical refactors (renaming, moving files)
+- Spikes / early exploration where the spec would be a lie
+
+Rule of thumb: **if the feature would take you more than 1 hour of human implementation, the spec is worth it**.
+
+---
+
+## The skill that automates it
+
+So you don't have to type out the whole flow every time, build a skill:
+
+`.claude/skills/spec-first/SKILL.md`:
+
+```markdown
+---
+name: spec-first
+description: For large features (>3 files or structural changes), force
+  writing a spec before touching code. Use it when the user says
+  "I need to implement", "add feature X for me" or describes something that will
+  require several files.
+---
+
+# Spec-first workflow
+
+When the user asks to implement something non-trivial, do NOT write code.
+
+## Protocol
+
+### Step 1
+Detect the scope. If it's small (1 file, < 30 minutes), proceed normally.
+If it's large, move to step 2.
+
+### Step 2
+Ask me to confirm that I want spec-first mode. If I say yes:
+
+a) Generate a spec in `docs/specs/<slug>.md` following the template:
+   [paste the template from above here]
+
+b) Show me the draft. Wait for feedback. Do NOT touch code.
+
+### Step 3
+Once the spec is approved, list the files to modify in order
+of dependency (model first, then logic, then UI, then tests).
+Wait for confirmation of the plan.
+
+### Step 4
+Only now, implement. File by file. After each one, pause
+and report "done X". Wait for ok before the next one.
+
+## Rules
+
+- Don't propose an approach radically different from the spec without warning
+- If you discover a problem with the spec while coding, stop and discuss it
+- The spec gets merged into the repo along with the code
+```
+
+With this, when you say "I need to implement pagination", Claude **automatically** enters spec-first mode.
+
+---
+
+## Real example: before and after
+
+### Without spec (~ 6 iterations, 90 minutes)
+
+```
+> Add pagination to the orders list for me.
+Claude implements it with cursor pagination.
+> But I want offset, not cursor.
+Claude redoes it, but leaves the cursor in some places.
+> Remove the cursor.
+Claude removes it, but breaks the tests.
+> Fix the tests.
+Claude fixes them, but the new pagination doesn't respect the filters.
+...
+```
+
+### With spec (~ 2 iterations, 35 minutes)
+
+```
+> I need to add pagination to orders. Do the spec first.
+[Claude writes docs/specs/pedidos-pagination.md]
+> Change "cursor" to "offset", and clarify that it respects the active filters.
+[Claude updates the spec]
+> Perfect. Go for it, implement.
+[Claude implements it in one shot]
+```
+
+Time invested in the spec: 10 minutes. Time saved on iterations: 50 minutes. Ratio 5×.
+
+---
+
+## Next steps
+
+- Combine it with the [code-reviewer skill](/boveda/skill-code-reviewer) that validates the changes after implementing
+- If your feature touches tests, the [automated tests command](/boveda/comando-tests-automaticos) uses the same philosophy: enumerate cases before writing
+- For executive (non-technical) PRDs, check out the [PRD prompts](/boveda/prompts-prd-ejecutivo)

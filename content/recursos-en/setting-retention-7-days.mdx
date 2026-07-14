@@ -1,0 +1,79 @@
+---
+title: "Setting Retention 7 Days — auto-cleanup of transcripts every 7 days"
+description: "Setting with 87 installs. Configure `cleanupPeriodDays: 7`. Chat transcripts are deleted automatically after 7 days. For strict privacy and sensitive data."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-retention-90-days", "setting-privacy-focused", "setting-disable-telemetry"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/cleanup/retention-7-days"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/cleanup/retention-7-days.json"
+---
+
+## What it is
+
+`cleanupPeriodDays: 7` — Claude Code deletes chat transcripts older than 7 days automatically.
+
+For strict privacy or orgs with data minimization policies.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `cleanup` |
+| Installs | 87 |
+| Setting | `cleanupPeriodDays: 7` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting cleanup/retention-7-days
+```
+
+For Claude:
+
+```
+I installed the cleanup/retention-7-days setting. Verify that transcripts
+>7 days will be deleted on the next cleanup cycle.
+```
+
+## What you can do with this
+
+### Strict privacy
+
+Recent sessions only. Old history goes away.
+
+### Data minimization compliance
+
+For GDPR/CCPA, keep only the necessary data. 7 days is aggressive but compliant.
+
+### For projects with NDAs
+
+If you work under an NDA, keeping transcripts minimal reduces risk.
+
+### Opposite of [Retention 90 Days](/boveda/setting-retention-90-days)
+
+90 days = extended history. 7 days = strict privacy. Choose based on your case.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you value extensive history:** old transcripts can be useful as a reference.
+- **If your workflow is long projects:** transcripts older than 7 days may hold relevant context.
+- **Combined with auditing:** if your org requires long audit logs, 7 days is too little.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Retention 7 Days Setting](https://www.aitmpl.com/component/settings/cleanup/retention-7-days) — exact command.
+- **JSON config:** [retention-7-days.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/cleanup/retention-7-days.json).
+
+## Related resources
+
+- [Retention 90 Days Setting](/boveda/setting-retention-90-days) — extended alternative.
+- [Privacy Focused Setting](/boveda/setting-privacy-focused) — privacy bundle.
+- [Disable Telemetry Setting](/boveda/setting-disable-telemetry) — network privacy.

@@ -1,0 +1,352 @@
+---
+title: "Plan Mode — el momento donde auditás lo que Claude va a instalar"
+description: "Plan Mode no es solo un atajo. Es la feature oficial de Claude Code donde Claude propone todo el plan ANTES de tocar nada. Vos auditás, pedís alternativas, aprobás solo cuando convence. 4 fases (Explorar → Planear → Construir → Guardar) + 4 preguntas de auditoría + 5 formas de aprobar."
+difficulty: "intermedio"
+category: "guides"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-piloto-automatico", "crea-agentes-con-claude", "guia-claude-opus-47"]
+---
+
+## La verdad incómoda
+
+Todos los que usamos Claude Code para armar proyectos acabamos **instalando herramientas que ni conocemos**, solo porque Claude las recomendó.
+
+Síntomas que ya viviste:
+- Decís que sí a una skill que Claude te recomendó y nunca volvés a ver qué hace
+- Tu `package.json` empieza a tener librerías que no sabés quién metió
+- Dos meses después borrás el proyecto porque ya no entendés sus dependencias
+- Cuando algo se rompe, no sabés si fue tu código o herramienta que aceptaste sin leer
+
+### Por qué pasa
+
+Cuando Claude te recomienda algo, literalmente **suena como anuncio**. No es a propósito — aprendió leyendo cómo esas herramientas se promocionan **solas** en sus páginas, READMEs y blogs.
+
+**La salida**: Plan Mode. El intervalo oficial donde Claude te dice **qué va a hacer + qué va a instalar + con qué justificación**. Vos auditás. Después aprobás.
+
+---
+
+## Qué es Plan Mode
+
+Le pedís a un amigo armar mueble de IKEA. Sin Plan Mode: abre la caja, saca el taladro, empieza. Media hora después puso la puerta al revés.
+
+Con Plan Mode: **primero te enseña el dibujo**. Te dice qué piezas va a usar, en qué orden, dónde podría salir mal. Vos revisás. Vos decís sí. **Hasta entonces empieza a armar**.
+
+### Lo que SÍ hace
+
+- ✅ Lee tus archivos para entender qué hay
+- ✅ Corre comandos que solo investigan (`ls`, `grep`, `git log`, `cat`)
+- ✅ Escribe plan paso a paso con archivos exactos que va a tocar
+- ✅ Te pregunta antes de asumir (con AskUserQuestion)
+- ✅ Espera tu aprobación
+
+### Lo que NO hace
+
+- ❌ Editar archivos
+- ❌ Instalar paquetes
+- ❌ Correr comandos que cambian tu sistema (`npm install`, `rm`, `git commit`)
+- ❌ Llamar APIs que modifiquen data remota
+- ❌ Aprobar algo por vos
+
+**En una línea**: Plan Mode es el modo **solo lectura** donde Claude piensa en voz alta y vos decidís.
+
+---
+
+## 4 maneras de activar Plan Mode
+
+### 1. En la terminal — atajo
+
+```
+Shift + Tab (dos veces)
+```
+
+Cambia entre default → acceptEdits → plan. Cuando veas `⏸ plan mode on` abajo, estás adentro.
+
+### 2. Empezar sesión directo en plan mode
+
+```bash
+claude --permission-mode plan
+```
+
+Útil cuando sabés desde antes que querés pensar antes de tocar nada.
+
+### 3. Solo un prompt en plan mode
+
+```
+/plan armá un login con Clerk para esta app
+```
+
+El prefijo `/plan` fuerza plan mode para **ese mensaje**. Al terminar, volvés a modo normal.
+
+### 4. Editar el plan a mano antes de aprobar
+
+```
+Ctrl + G
+```
+
+Abre el plan en tu editor por default. Quitás, agregás, reordenás pasos, guardás. Claude sigue con tu versión.
+
+### Cómo salir sin aprobar
+
+`Shift+Tab` una vez más. Cerrás plan mode sin tocar nada, perdiendo el plan. Para cuando la propuesta no convenció ni después del refinamiento.
+
+---
+
+## El método oficial — 4 fases
+
+Anthropic lo escribe así: dejar que Claude se vaya directo a escribir código produce **soluciones que resuelven el problema equivocado**.
+
+### Fase 1 — Explorar
+
+Como entrar a cocina nueva: primero abrís cajones, ves qué ingredientes hay, qué cuchillos, qué sartenes. Acá Claude lee tus archivos, revisa estructura, entiende qué hay.
+
+**Pro tip**: pedile *"Explorá el proyecto y decime qué entendés antes de proponer nada"*.
+
+### Fase 2 — Planear
+
+Arma la ruta paso a paso. **No toca nada todavía**.
+
+Como cuando el amigo del IKEA primero saca el instructivo y te dice: "voy a necesitar estas piezas, en este orden, la parte del espejo al final porque se rompe fácil".
+
+**Pro tip**: en este momento `Shift+Tab` dos veces o agregá `ultrathink` al final para forzar razonamiento profundo.
+
+### Fase 3 — Construir
+
+Hasta ahora empieza a escribir código. Con el plano aprobado, el amigo prende el taladro.
+
+**Pro tip**: si algo del plan ya no te gusta a medio camino, decí "alto" y volvé a plan mode. **No dejes que improvise**.
+
+### Fase 4 — Guardar
+
+Commit con mensaje claro de lo que cambió. Como tomar foto del mueble terminado.
+
+**Pro tip**: pedile que el mensaje explique el **PORQUÉ**, no solo el QUÉ. *"Agrega login con Clerk porque el endpoint /api/me pide sesión"*.
+
+---
+
+## Aviso importante (abril 2026)
+
+`ultrathink` SIGUE funcionando para razonamiento profundo. **Pero "think hard", "think harder" y "think more" YA NO**.
+
+Los docs oficiales dicen literal que se interpretan como **texto normal** y no reservan tokens de razonamiento.
+
+Si querés más fondo: `/effort` o `Option+T` (Alt+T en Windows).
+
+---
+
+## Las 4 preguntas de auditoría
+
+Plan Mode te abre la ventana. Estas 4 preguntas te enseñan a asomarte bien. Pegalas dentro de plan mode. Si Claude no puede contestar alguna, **bandera roja**.
+
+### 1. Pedí TRES opciones, no una
+
+```
+Antes de elegir la herramienta que proponés, dame TRES alternativas
+para lograr lo mismo:
+
+1. La más SIMPLE (menos dependencias)
+2. La más RÁPIDA de implementar hoy
+3. La más SEGURA y mantenible a largo plazo
+
+Para cada una decime:
+- Nombre exacto del paquete o skill
+- Pros REALES (no de marketing)
+- Contras que nadie menciona
+- Qué tan activo está su mantenimiento (último commit, estrellas,
+  issues abiertos)
+
+NO elijas por mí. Cuando termines la tabla, esperá a que yo te
+diga cuál usamos.
+```
+
+### 2. Preguntá qué pasa si NO instalás nada
+
+```
+Antes de proponer instalar algo nuevo, hacé este análisis:
+
+1. ¿Qué librerías y tools YA tengo en este proyecto? Listalas.
+2. ¿Alguna de las que ya tengo puede resolver lo que pedí?
+   Si sí, mostrame cómo.
+3. Si tuviera que resolverlo con código puro de librería estándar,
+   ¿cómo se vería? Dame versión cero-dependencias.
+4. Compará contra la herramienta externa que ibas a proponer:
+   ¿vale la pena la dependencia nueva?
+
+Si la respuesta corta es 'sí vale la pena', explicá el porqué
+en una línea. Si es 'no', dejamos el código simple.
+```
+
+### 3. Compará en 3 ejes: simple, rápido, seguro
+
+```
+De las opciones que propusiste, armá tabla con columnas:
+
+- Cuál es la más SIMPLE (menos líneas de código, menos conceptos)
+- Cuál es la más RÁPIDA (tiempo hasta tener algo funcionando)
+- Cuál es la más SEGURA (menos riesgos de bug, vulnerabilidad,
+  deprecación)
+
+Marcá claramente los tradeoffs. Si la simple NO es la más segura,
+decilo. Si la rápida te compromete a largo plazo, decilo.
+
+Al final, recomendá UNA basándote en que mi proyecto es:
+[DESCRIBÍ EN UNA LÍNEA]. NO elijas en genérico.
+```
+
+### 4. Pedí los permisos que va a necesitar
+
+```
+Para cada paquete, skill o MCP que proponés instalar, dame lista
+clara:
+
+1. Qué archivos de mi sistema va a leer o modificar
+2. Qué comandos shell va a ejecutar
+3. Qué red va a usar (endpoints externos, puertos abiertos)
+4. Qué permisos necesita (sudo, acceso a .env, credenciales)
+5. Qué telemetría manda al servidor (si alguna)
+
+Si algo no podés verificar leyendo código o README, decímelo como
+'no verificable' y NO asumas que es seguro.
+
+Cuando tenga la lista completa, yo decido.
+```
+
+### La regla de la bandera roja
+
+Si pedís tres alternativas y Claude te da **solo una**, o las otras dos son claramente de relleno, **asumí que la primera está viciada** por cómo el entrenamiento vio promociones de esa herramienta.
+
+Pedí otra ronda, o tomá la decisión por fuera.
+
+---
+
+## 5 maneras de aprobar
+
+Al aprobar, Claude no te saca a un solo modo. Te da 5 caminos. Cada uno tiene **costo distinto si el plan tenía error**.
+
+### 1. Aprobar + Auto Mode
+
+**Cuándo**: plan claro, tarea repetitiva, confiás en alcance. Claude corre del principio al fin sin pedir permiso.
+
+**Riesgo**: si el plan tenía error de diseño, **daño mayor** porque no hay pausas. NO la uses primera vez.
+
+### 2. Aprobar + Accept Edits
+
+**Cuándo**: querés que Claude edite archivos sin pedir confirmación cada vez, pero que siga preguntando para comandos shell, instalaciones, llamadas externas.
+
+**Riesgo**: balance bueno para cambios en tu código. Malo si el plan incluye scripts/instalaciones grandes.
+
+### 3. Aprobar + revisar cada edición
+
+**Cuándo**: primera vez con el proyecto, código crítico, plan tocaba archivos sensibles.
+
+**Riesgo**: **lento**. Usalo cuando costo de equivocarse es alto, no para tareas chicas.
+
+### 4. Seguir planeando con feedback
+
+**Cuándo**: plan tiene huecos, faltan casos, solución no es la que tenías en mente. Le das retro y arma v2.
+
+**Riesgo**: casi ninguno. **El riesgo real es aprobar un plan malo por no tomarte este paso**.
+
+### 5. Refinar con Ultraplan
+
+**Cuándo**: plan grande, querés revisar en navegador con calma. Lo mandás a Claude Code web, revisás sección por sección, decidís si ejecutar ahí o volver a terminal.
+
+**Riesgo**: nada grave. Requiere conexión. Mejor ambiente de revisión si plan es complejo.
+
+### Regla simple de elección
+
+| Situación | Modo |
+|-----------|------|
+| Primera vez con algo | Aprobar + revisar cada edición |
+| Proyecto que ya conocés | Aprobar + Accept Edits |
+| Tarea corrida varias veces, confiás en alcance | Auto Mode |
+
+---
+
+## Del plan a producción — Plan → Build → Deploy → Protect
+
+Planear sin ejecutar no sirve. Ejecutar sin planear es cómo terminás con 4 dependencias que no recordás haber instalado.
+
+| # | Pieza | Para qué |
+|---|-------|----------|
+| 1 | **Plan Mode** | Aquí. Audit antes de tocar nada |
+| 2 | **The Architect** | Genera blueprint de 16 secciones para construir |
+| 3 | **All Deploy** | Sube a Vercel/Railway/VPS con preview + rollback |
+| 4 | **Cyber Neo** | Audita 11 dominios de seguridad con 5 subagentes |
+
+Cada eslabón existe para que no improvises en el siguiente. **Si saltás uno, el siguiente paga la cuenta**.
+
+---
+
+## 4 errores comunes (con fix)
+
+### Error 1 — Aprobar el plan sin leerlo
+
+❌ "Sonó bien, aprobado"
+✅ Leelo entero, marcá pasos que no entendés, pedile que explique cada uno en 1 línea
+
+**Por qué importa**: 90% de las herramientas que terminamos instalando sin querer entran por un plan que **nadie leyó**.
+
+### Error 2 — Quedarte en plan mode para siempre
+
+❌ Refinando el plan sin ejecutar nunca
+✅ Cuando el plan resuelve 80% del problema, aprobá y ajustá en el camino
+
+**Por qué importa**: planear para no construir es **procrastinación con traje de productividad**.
+
+### Error 3 — Creer que "think hard" activa razonamiento
+
+❌ "Think hard" / "think harder" / "think more"
+✅ `ultrathink` al final, o `/effort` en terminal
+
+**Por qué importa**: los docs oficiales dicen literal que se interpretan como texto normal. **Cero efecto**.
+
+### Error 4 — Arrastrar contexto sucio
+
+❌ Empezar tarea nueva con conversación previa de otra tarea
+✅ `/clear` entre tareas no relacionadas. `/compact` con instrucciones específicas para conservar lo útil
+
+**Por qué importa**: contexto sucio contamina el plan con decisiones viejas que ya no aplican.
+
+---
+
+## Combinaciones potentes
+
+### Con Crear Agentes
+
+[Crear agentes](/boveda/crea-agentes-con-claude) usa Plan Mode como primer paso oficial. Aprendé Plan Mode para crear agentes mejor.
+
+### Con piloto automático
+
+[Claude piloto automático](/boveda/claude-piloto-automatico) es lo contrario: trabajar sin permisos. **Necesitás Plan Mode para diseñar bien antes de soltar el piloto automático**.
+
+### Con Opus 4.7
+
+[Opus 4.7](/boveda/guia-claude-opus-47) sigue instrucciones más literal. Plan Mode + Opus 4.7 = plan más fiel a lo que pediste.
+
+---
+
+## Cuándo NO usar Plan Mode
+
+| Caso | Por qué |
+|------|---------|
+| Tareas triviales (1-2 archivos cambiados) | Overhead no compensa |
+| Chat exploratorio sin commit | Querés iterar libre |
+| Vos ya sabés exactamente qué hacer | Plan agrega ceremonia innecesaria |
+
+---
+
+## Resumen en una línea
+
+> **Que la IA te sugiera. Pero VOS decidís.**
+>
+> Plan Mode es la puerta. Explorar → Planear → Construir → Guardar es el método. La trilogía Architect + All Deploy + Cyber Neo es la ruta hasta producción.
+
+---
+
+## Próximos pasos
+
+- Para usar Plan Mode como parte del flow de crear agentes, [crear agentes con Claude](/boveda/crea-agentes-con-claude)
+- Para piloto automático sin permisos (lo opuesto), [Claude piloto automático](/boveda/claude-piloto-automatico)
+- Para entender los cambios de Opus 4.7 que afectan Plan Mode, [guía Claude Opus 4.7](/boveda/guia-claude-opus-47)

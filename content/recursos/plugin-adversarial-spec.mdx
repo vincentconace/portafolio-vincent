@@ -1,0 +1,92 @@
+---
+title: "Adversarial Spec — plugin que debate tus specs hasta consenso"
+description: "Plugin de Claude Code (zscole, 516⭐) que refina specs de producto haciendo debatir varios LLMs entre sí hasta que todos los modelos coinciden. Útil cuando un solo cerebro de IA te dice que sí a todo."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["spec-kit", "claude-code-setup", "trifecta-perfecta"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/adversarial-spec"
+github: "https://github.com/zscole/adversarial-spec"
+---
+
+## Qué es
+
+Cuando le pasás un spec a Claude y le pedís que lo critique, el modelo tiende a quedarse en lo blando: "buena idea, contemplá X y listo". Es el [sesgo de complacencia](/boveda/spec-kit) que arruina specs antes de que se conviertan en código.
+
+Adversarial Spec, del autor `zscole`, hace lo contrario. Cuando lo invocás dentro de Claude Code, lanza una mesa de debate entre varios LLMs que se chocan entre sí ronda por ronda hasta que todos coinciden. Si uno encuentra un gap, los demás lo defienden o lo dan por válido. Cuando la discusión converge, lo que sale ya pasó por varios filtros.
+
+No es magia: es un loop de refinamiento iterativo. Pero te ahorra horas de "le falta esto, le falta lo otro" porque la propia IA se cuestiona antes de devolverte el spec final.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | zscole |
+| Stars | 516 |
+| Tipo | Plugin único (single) |
+| Componentes | Skills |
+| Marketplace | `zscole/adversarial-spec` |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add zscole/adversarial-spec
+/plugin install adversarial-spec@zscole-adversarial-spec
+```
+
+O abrí `/plugin` en Claude Code y andá a la pestaña Discover.
+
+Si no querés copiar comandos, pegale esto a Claude Code y que lo haga por vos:
+
+```
+Instalá el plugin adversarial-spec del marketplace zscole/adversarial-spec
+y mostrame los comandos que quedan disponibles después.
+```
+
+## Qué podés hacer con esto
+
+### Refinar un PRD antes de programarlo
+
+Pasale tu PRD inicial y dejá que los modelos lo destrocen ronda tras ronda. Cuando el debate converge, tenés un documento mucho más limpio que el original, con los huecos cubiertos y las decisiones explicitadas.
+
+### Validar specs técnicos
+
+Para specs de arquitectura, APIs o esquemas de base de datos. Cada ronda discute trade-offs hasta que se acuerda una decisión justificada, no una opinión solitaria.
+
+### Pulir RFC internos
+
+Antes de mandar un RFC al equipo, hacelo pasar por el debate. Los puntos débiles aparecen antes que los humanos pierdan tiempo señalándolos.
+
+## Beneficios reales
+
+- **Disminuye el "yes-bias"** que tiene un solo LLM, porque otros lo contradicen.
+- **Hace explícitas las suposiciones** ocultas — cuando dos modelos piensan distinto, alguien tiene que justificar.
+- **Te devuelve un documento con razonamiento incluido**, no solo el resultado final.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Specs triviales:** si el problema es chico, el debate suma fricción, no claridad.
+- **Si tu cuota es ajustada:** debatir entre LLMs consume tokens en serio. Cada ronda son varias respuestas largas.
+- **Si ya tenés un proceso humano de review:** la IA no reemplaza al senior que conoce tu negocio. Funciona como pre-filtro, no como reemplazo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+El plugin no es nuestro — lo creó `zscole` y vive como repo independiente. Para instalarlo, ver el código o reportar issues, andá directo:
+
+- **Ficha en aitmpl.com:** [Adversarial Spec](https://www.aitmpl.com/plugins/adversarial-spec) — el comando exacto que copiás a Claude Code.
+- **Repo en GitHub:** [zscole/adversarial-spec](https://github.com/zscole/adversarial-spec) — código fuente, issues, instrucciones de contribución.
+
+Núcleo IA solo te explica qué hace, cómo encaja con otros plugins y cuándo conviene. La descarga vive en el repo del autor.
+
+## Recursos relacionados
+
+- [Spec Kit](/boveda/spec-kit) — el toolkit oficial de GitHub para Spec-Driven Development. Mejor camino si todavía no tenés un spec y arrancás de cero.
+- [Claude Code Setup](/boveda/claude-code-setup) — el plugin oficial de Anthropic que escanea tu repo y recomienda qué automatizar. Buen punto de partida antes de adoptar plugins de la comunidad.
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — combo de tres herramientas (The Architect, Cyber Neo, All Deploy) que diseñan, auditan y publican. Adversarial Spec encaja en la fase de diseño.

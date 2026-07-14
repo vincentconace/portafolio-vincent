@@ -1,0 +1,237 @@
+---
+title: "3 trucos para ahorrar tu cuenta de Claude — skills, limpieza y organización"
+description: "Tu cuenta es una cubeta de agua. Cada vez que Claude busca por todo tu proyecto, lee chats largos o no encuentra archivos, deja la llave abierta. 3 trucos para cerrar la llave: crear skills (atajos), limpiar chats y organizar archivos. Setup en 5 min, plan rinde 2x."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["cinco-errores-claude", "configura-claude-ahorra", "claude-token-efficient"]
+---
+
+## El problema
+
+Tu cuenta de Claude es **cubeta de agua**. Cada vez que Claude:
+- Busca por todo tu proyecto
+- Lee conversaciones largas
+- No sabe dónde están tus archivos
+
+…es como **dejar la llave abierta**. Se vacía sin que te des cuenta.
+
+Estos 3 trucos = **cerrar la llave**. No usás menos Claude — dejás de **desperdiciar** lo que ya tenés.
+
+| Setup | Plan rinde |
+|-------|-----------|
+| 5 min | 2x |
+
+---
+
+## Truco 1 — Crear tus propios skills (atajos)
+
+### Lo que hacés mal
+
+Le pedís algo. Claude **busca por todo tu proyecto** cómo hacerlo. Abre archivos, lee carpetas, prueba.
+
+Como pedir aguja en pajar... **todos los días**. **Gasta mitad de tu cuenta sin necesidad**.
+
+### La solución
+
+Un **skill** es atajo personalizado. En lugar de "buscá cómo hacer deploy", le decís: **"ya tenés esta skill, usala"**.
+
+Claude va **directo** a lo que tiene que hacer.
+
+### Cómo
+
+1. Abrí Claude Code
+2. Usá **Skill Creator** ([5 skills equipo trabajo](/boveda/5-skills-equipo-trabajo))
+3. Nombrá tu skill (ej: "deploy", "test", "review")
+4. Escribí pasos exactos
+5. Guardá
+
+### Ejemplo
+
+```
+> Creame skill "deploy-vercel":
+
+  Cuando se invoque:
+  1. Correr npm run build
+  2. Si falla, mostrame el error y parate
+  3. Si pasa, npm run test
+  4. Si tests pasan, vercel --prod
+  5. Mostrame URL final
+```
+
+Próxima vez:
+```
+> /deploy-vercel
+```
+
+Sin que Claude tenga que **descubrir** cómo deployar.
+
+### Ahorro estimado
+
+40-60% en sesiones repetitivas.
+
+---
+
+## Truco 2 — Limpiá tus chats
+
+### Lo que hacés mal
+
+Tenés conversación de 80 mensajes. Cada mensaje nuevo, Claude **relee los 80**.
+
+```
+Mensaje 1 → procesa 1 mensaje
+Mensaje 50 → procesa 50 mensajes
+Mensaje 80 → procesa 80 mensajes
+```
+
+Costo **crece exponencial**. Tu cuota se va en releer lo viejo.
+
+### La solución
+
+`/clear` o `/compact`:
+
+**`/clear`** — borra **TODO**. Empezás de cero. Antes de borrar, **destila el aprendizaje** en CLAUDE.md o nota.
+
+**`/compact`** — resume conversación + mantiene lo crítico. Menos radical.
+
+### Cuándo
+
+- Después de 25-30 mensajes
+- Al cambiar de tema completamente
+- Cuando notes Claude "olvidando" decisiones viejas
+
+Ver [mejores prácticas Claude](/boveda/claude-mejores-practicas) (regla de las 2 correcciones).
+
+### Ahorro estimado
+
+50-70% en sesiones largas.
+
+---
+
+## Truco 3 — Organizá tus archivos
+
+### Lo que hacés mal
+
+Carpeta principal con 47 archivos sueltos. Claude **abre todos buscando** lo que necesita.
+
+### La solución
+
+Estructura clara:
+
+```
+mi-proyecto/
+├── CLAUDE.md            ← reglas + mapa
+├── src/                 ← código
+├── docs/                ← documentación
+├── tests/               ← tests
+├── scripts/             ← utilities
+└── data/                ← data files
+```
+
+Y `CLAUDE.md` con **mapa** del proyecto:
+
+```markdown
+## Estructura
+
+- `src/` — código principal
+  - `lib/` — utilities
+  - `components/` — UI components
+  - `api/` — endpoints
+- `docs/` — docs internas
+- `tests/` — unitarios + e2e
+
+## Convenciones
+
+- Files en kebab-case
+- Tests al lado del file (no en /tests/)
+- Stories en /stories/
+
+## Dónde buscar:
+- "Algo de auth" → src/lib/auth/
+- "Algo de payments" → src/lib/payments/
+- "Estilo de componentes" → src/components/_styles/
+```
+
+Claude **va directo** al lugar correcto.
+
+### Ahorro estimado
+
+20-30% en sesiones de búsqueda.
+
+---
+
+## Combinados
+
+Aplicar los 3:
+
+| Sin trucos | Con trucos |
+|------------|------------|
+| Plan Pro $20: 70-100h/mes | 140-200h/mes |
+| Frustración constante | Flow fluido |
+| Re-explicar contexto | Claude ya sabe |
+
+---
+
+## Tabla resumen
+
+| Truco | Para qué | Ahorro |
+|-------|----------|--------|
+| 1. Skills atajos | Tareas repetidas | 40-60% |
+| 2. /clear o /compact | Sesiones largas | 50-70% |
+| 3. Organizar + CLAUDE.md mapa | Búsqueda en proyecto | 20-30% |
+
+---
+
+## Anti-patrones
+
+### 1. Crear 50 skills sin usarlas
+
+Skills no usadas = ruido + contexto. **Creá solo las que repetís 5+ veces**.
+
+### 2. Limpiar chat mid-task
+
+`/clear` en mitad de tarea = perdés contexto crítico. **Limpiá entre tareas**, no durante.
+
+### 3. Sobre-estructurar el proyecto
+
+10 niveles de carpetas anidados = Claude se pierde igual. **Estructura clara pero plana**.
+
+### 4. CLAUDE.md desactualizado
+
+Tu estructura cambió pero CLAUDE.md está viejo = Claude busca donde no está. **Mantenelo updateado**.
+
+### 5. Aplicar 1 truco solo
+
+Los 3 trucos **se complementan**. Aplicar solo 1 te da ahorro parcial. **Los 3 → multiplicación**.
+
+---
+
+## Combinaciones potentes
+
+### Con configura Claude y ahorrá
+
+[Configura Claude y ahorrá](/boveda/configura-claude-ahorra) tiene 5 configuraciones complementarias. Setup total: 10 min para 4x.
+
+### Con Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) corta el OUTPUT verboso. Los 3 trucos cortan INPUT innecesario. **Los 2 lados**.
+
+### Con cinco errores Claude
+
+[5 errores Claude](/boveda/cinco-errores-claude) son hábitos básicos. Estos 3 trucos son **técnicas**. Combinados = uso pro.
+
+---
+
+## Cuándo NO importa optimizar
+
+Si usás Claude **2-3 veces por semana**, tu cuota sobra. Estos trucos son para **uso intensivo** (>15h/mes con Claude Code).
+
+---
+
+## Próximos pasos
+
+- Para más configuraciones que duplican rendimiento, [configura Claude y ahorrá](/boveda/configura-claude-ahorra)
+- Para CLAUDE.md que corta verbosity, [Claude Token Efficient](/boveda/claude-token-efficient)
+- Para hábitos básicos que afectan tu cuenta, [5 errores Claude](/boveda/cinco-errores-claude)

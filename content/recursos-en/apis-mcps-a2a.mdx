@@ -1,0 +1,253 @@
+---
+title: "APIs, MCPs and A2A — the 3 protocols moving AI today"
+description: "Three protocols, three layers, one stack. API connects your app to the AI, MCP connects the AI to your tools, A2A connects one AI to another AI. Explained with simple analogies, real examples, and when to pick each one."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude", "claude-api", "mcp"]
+publishedAt: "2026-05-27"
+readingTime: "8 min"
+relatedSlugs: ["mcp-server-propio", "anatomia-claude", "ecosistema-de-agentes"]
+---
+
+## The key question
+
+Whenever you talk about "integrating AI," always ask yourself: **who's talking to whom?**
+
+| Question | Protocol |
+|----------|-----------|
+| Does your app talk to the AI? | **API** |
+| Does the AI talk to your tools / data? | **MCP** |
+| Does one AI talk to another AI? | **A2A** |
+
+All 3 are **distinct layers** of the modern stack. People confuse them because they all have 3-letter acronyms and they all have to do with AI. But they solve **different problems**.
+
+---
+
+## API — your app talks to the AI
+
+### What it is
+
+An API (Application Programming Interface) is the "traditional" way to connect two systems. For AI:
+
+```
+Your code → HTTP request → the model's API (Claude, GPT, etc.) → response
+```
+
+### Analogy
+
+An API is like **having the model's phone number**. You call it, tell it what you need, it answers, you hang up.
+
+### Example
+
+```ts
+import Anthropic from '@anthropic-ai/sdk'
+
+const client = new Anthropic()
+
+const response = await client.messages.create({
+  model: 'claude-sonnet-4-6',
+  max_tokens: 1000,
+  messages: [
+    { role: 'user', content: 'What is the capital of France?' }
+  ]
+})
+
+console.log(response.content[0].text)
+// "Paris"
+```
+
+Your code calls the Anthropic API. It gets a response. Done.
+
+### When you use an API
+
+✅ When you're building an app that needs AI capabilities
+✅ Asking the model to do something specific (classify, summarize, generate)
+✅ Your app is the "frontend"; the AI is the "backend"
+
+### When NOT to
+
+❌ When what you need is for the AI to access your data / systems — for that you need MCP
+
+---
+
+## MCP — the AI talks to your tools
+
+### What it is
+
+MCP (Model Context Protocol) is an **open** protocol (created by Anthropic, adopted by many models) that gives the AI **controlled access to external tools**.
+
+```
+AI → invokes a "tool" → MCP server (that you build) → executes action → result
+```
+
+### Analogy
+
+MCP is like **giving the AI a remote control with specific buttons**. Each button does something (query a DB, send an email, read a file). The AI decides when to press each button.
+
+### Example
+
+You build an MCP server with a `consultar_pedidos` tool. You register it with Claude. Then:
+
+```
+[Your input to Claude]:
+"How many pending orders do I have from customer Acme?"
+
+[Claude internally]:
+1. Detects it needs data → invokes tool consultar_pedidos(cliente="Acme", status="pendiente")
+2. Your MCP server receives the call → runs a query against your DB → returns the result
+3. Claude receives the data → uses it to answer
+
+[Response to you]:
+"You have 3 pending orders from Acme: #1234 ($500), #1235 ($800), #1236 ($300)."
+```
+
+### When you use MCP
+
+✅ You want the AI to query your systems (DB, CRM, internal APIs)
+✅ You want the AI to perform actions (send an email, create a ticket)
+✅ Your AI needs live context (data that changes)
+
+### When NOT to
+
+❌ If your AI only needs to answer from its general knowledge → you don't need MCP, an API is enough
+❌ If what you want is to coordinate several LLMs → A2A
+
+Details on building MCPs in [your own MCP server](/boveda/mcp-server-propio).
+
+---
+
+## A2A — one AI talks to another AI
+
+### What it is
+
+A2A (Agent-to-Agent) is the protocol where **one LLM coordinates or converses with another LLM** to split up work or validate outputs.
+
+```
+AI #1 (orchestrator) → calls → AI #2 (specialist) → result → AI #1 → final response
+```
+
+### Analogy
+
+A2A is like **a manager delegating to specialists**. The manager (AI #1) receives the request, decides which specialist (AI #2, #3...) can help, hands off the work, and integrates the results.
+
+### Example
+
+You have a system where:
+
+- AI #1 (Claude Opus) → handles the conversation with the user
+- AI #2 (Claude Haiku) → translates messages into other languages
+- AI #3 (GPT-4) → generates images
+- AI #4 (Specialized fine-tuned) → medical diagnosis
+
+When the user sends "show me a healthy kidney, and the description in German too":
+
+```
+1. AI #1 (Opus) receives the message
+2. AI #1 delegates:
+   - To AI #3 → generates the kidney image
+   - To AI #4 → generates a precise medical description
+   - To AI #2 → translates the description into German
+3. AI #1 integrates everything → unified response to the user
+```
+
+### When you use A2A
+
+✅ When no single model covers all your needs on its own
+✅ When you can delegate to a cheap model (Haiku, mini) and reserve the expensive one for reasoning
+✅ When you have fine-tuned models for specific domains
+✅ Complex multi-agent systems
+
+### When NOT to
+
+❌ If a single model covers everything for you → A2A adds unnecessary complexity
+❌ For simple cases → API + MCP are enough
+
+---
+
+## Quick comparison
+
+| Protocol | Who? | For what? | Complexity |
+|-----------|---------|-------------|-------------|
+| **API** | App ↔ AI | App uses AI capabilities | Low |
+| **MCP** | AI ↔ Tools | AI accesses your data / actions | Medium |
+| **A2A** | AI ↔ AI | AIs collaborate with each other | High |
+
+---
+
+## How they combine in a real app
+
+A typical SaaS app with AI:
+
+```
+[User in browser]
+   ↓ HTTP
+[Your Next.js app]
+   ↓ API call
+[Claude API]
+   ↓ tool call
+[Your MCP server]
+   ↓ DB query
+[Your Postgres]
+   ↓ result
+[MCP] → [Claude API] → [Your app] → [User]
+```
+
+- **API**: your app talks to Claude
+- **MCP**: Claude queries your DB
+
+If you later add another model (e.g. for images):
+
+```
+[Claude] → (A2A) → [GPT-4 image] → image → [Claude] → unified response
+```
+
+Now all 3 are in play.
+
+---
+
+## The classic mistake
+
+> "I need the AI to talk to my DB. Do I use API or MCP?"
+
+An API is for **your app to talk to the AI**. MCP is for **the AI to talk to your DB**. They're different things.
+
+If you say "I want the AI to have access to my orders so it can answer customer inquiries":
+- API → your app calls the model
+- MCP → the model accesses the DB
+- **You need both**
+
+---
+
+## When you need which
+
+| Your need | What you use |
+|--------------|----------|
+| "I want to ask Claude to write something" | API |
+| "I want Claude to read my docs" | MCP |
+| "I want Claude to search my Drive" | MCP |
+| "I want my app to use Claude to summarize comments" | API |
+| "I want Claude to query my orders DB" | MCP |
+| "I want Claude to orchestrate an image model + a text one" | API + A2A |
+| "I want Claude to do code review using another specialized LLM" | A2A |
+
+---
+
+## The standard that won
+
+MCP is **open and multi-vendor**. Anthropic created it, but **OpenAI, Google, and others adopted it**. That means:
+
+- An MCP server you built for Claude works with GPT
+- Your investment in MCPs isn't locked in with one vendor
+- The industry is converging on this protocol
+
+Unlike each model's "proprietary plugins" (which fragmented things), MCP is the single protocol.
+
+A2A is earlier stage — there's still no single standard (each framework has its own way: LangGraph, the Anthropic SDK with multi-agent, etc.). It will converge eventually.
+
+---
+
+## Next steps
+
+- To build your first MCP server, [your own MCP server](/boveda/mcp-server-propio)
+- To use the Claude API with best practices, check the official docs + [claude code API](/boveda/empezar-con-claude) (part of getting started)
+- For multi-agent systems with coordination (A2A in practice), [agent ecosystem](/boveda/ecosistema-de-agentes)

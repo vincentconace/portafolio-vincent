@@ -1,0 +1,251 @@
+---
+title: "Humanizer — skill que detecta 24 patrones de escritura IA y los reescribe"
+description: "Skill open source basado en la guía de Wikipedia 'Signs of AI writing'. Detecta 24 patrones que delatan texto de Claude/ChatGPT, agrupados en 5 categorías. Hace 2 pasadas: limpieza obvia + auditoría sutil. Cómo instalarlo y armar agentes copywriter que producen texto que sí pasa como humano."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["cinco-habilidades-marketing", "mejores-practicas-claude", "skill-code-reviewer"]
+---
+
+## El problema del "tono IA"
+
+Tu lector no necesita ser experto para detectar texto de IA. Lo siente. Lee 3 párrafos y piensa "esto lo escribió ChatGPT". Resultado:
+
+- Emails de venta que se ignoran
+- Landings que pierden confianza
+- Posts que tu audiencia scrollea
+- Google empieza a penalizar AI content de baja calidad
+- Editores humanos rechazan colaboraciones
+
+Y el problema **no es que Claude escriba mal**. Es que **escribe siempre igual**. Las mismas palabras, las mismas estructuras, los mismos tics.
+
+**Humanizer** es un skill que detecta esos tics en el texto que Claude (o vos) producís, y lo reescribe.
+
+Repo: `blader/humanizer`.
+
+---
+
+## Cómo funciona
+
+Humanizer está basado en la guía pública de Wikipedia *"Signs of AI writing"* — el mismo recurso que usan editores humanos profesionales para detectar texto generado por IA.
+
+Detecta **24 patrones** en **5 categorías**:
+
+| Categoría | Cantidad | Ejemplos |
+|-----------|----------|----------|
+| Contenido inflado | 6 | "revolucionario", "sin precedentes", "panorama" |
+| Lenguaje robótico | 6 | "sirve como", "funciona como", "testimonio de" |
+| Estilo cargado | 6 | Guiones largos, negritas excesivas, emojis decorativos |
+| Comunicación falsa | 3 | "Espero que sea útil", tono excesivamente amable |
+| Relleno | 3 | "con el fin de", "podría potencialmente" |
+
+---
+
+## Instalación
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
+```
+
+Verificar:
+
+```
+> /humanizer
+```
+
+Si responde pidiendo texto para humanizar, está activo.
+
+---
+
+## El proceso de 2 pasadas
+
+A diferencia de "humanizers" típicos que hacen una sola pasada superficial, este hace **2**:
+
+### Pasada 1 — Limpieza obvia
+
+Eliminá palabras infladas, estructuras repetitivas, tono de robot. Es el patrón más visible:
+
+```
+Antes: "En el dinámico panorama del marketing digital, el copywriting
+ha experimentado una transformación sin precedentes."
+
+Después pasada 1: "El copywriting está cambiando rápido. Los formatos
+nuevos no dejan de aparecer."
+```
+
+### Pasada 2 — Auditoría sutil
+
+Acá está la magia. La pasada 2 se pregunta: **"¿qué hace que esto AÚN suene a IA?"** y reescribe con criterio más fino:
+
+```
+Después pasada 1: "El copywriting está cambiando rápido. Los formatos
+nuevos no dejan de aparecer."
+
+Después pasada 2: "El copywriting cambió. Antes escribías un anuncio,
+lo publicabas y esperabas. Ahora tenés datos en tiempo real de qué
+funciona. La diferencia entre buen copy y mediocre ya no es talento
+— es saber leer los números."
+```
+
+La pasada 2 mete **lo que Claude por defecto no hace**: especificidad, contraste, opinión.
+
+---
+
+## Los 5 grupos de patrones
+
+### Grupo 1 — Inflar todo
+
+Claude tiende a hacer todo "revolucionario", "sin precedentes", "transformador". Cero textos tienen esa intensidad en la realidad.
+
+**Síntoma**:
+
+> "Esta poderosa herramienta no solo sirve como catalizador para el engagement — también funciona como el pilar fundamental de cualquier estrategia exitosa."
+
+**Fix**:
+
+> "Esta herramienta ayuda a mejorar el engagement. La usás como parte de tu estrategia."
+
+### Grupo 2 — Palabras-tic
+
+Palabras que Claude ama y humanos casi no usan:
+
+- "panorama" (en lugar de "situación", "contexto")
+- "testimonio de" (en lugar de "prueba", "ejemplo")
+- "catalizador" (en lugar de "impulsor", "motor")
+- "sirve como" (en lugar de "es")
+- "funciona como" (en lugar de "es")
+
+### Grupo 3 — Estilo cargado
+
+- **Guiones largos** en cada párrafo
+- **Negritas** en mitad de cada oración
+- Listas con formato "Etiqueta: contenido"
+- Emojis decorativos en texto profesional
+
+### Grupo 4 — Comunicación falsa
+
+- "Espero que esto te sea útil"
+- "Según mis fuentes limitadas..."
+- Tono excesivamente amable que acuerda con todo
+- "Como modelo de lenguaje..."
+
+### Grupo 5 — Relleno
+
+- "con el fin de" → "para"
+- "debido al hecho de que" → "porque"
+- "podría potencialmente" → "puede"
+- "el futuro se ve prometedor" → (eliminar)
+
+---
+
+## Casos de uso — agentes copywriter
+
+El verdadero valor no es usar `/humanizer` una vez. Es **integrarlo en agentes** que producen texto automáticamente humanizado.
+
+### Agente — secuencia de emails
+
+```
+> Sos copywriter experto. Usá /humanizer en CADA email.
+
+  Creá secuencia de 3 emails de bienvenida para mi SaaS de
+  inventario para retail mediano LATAM:
+
+  Email 1 — Presentación (quién soy, qué hago, por qué importa)
+  Email 2 — Valor (1 tip práctico aplicable hoy)
+  Email 3 — Invitación (CTA suave hacia trial)
+
+  Reglas:
+  - Cada email máximo 150 palabras
+  - Tono conversacional, mensaje de colega
+  - CERO "revolucionario", "sin precedentes", "panorama"
+  - Pasá CADA email por /humanizer antes de entregarlo
+  - Si /humanizer marca patrones, reescribí hasta que pase limpio
+```
+
+### Agente — landing page
+
+```
+> Copy para landing page de mi SaaS. Estructura:
+
+  1. Hero: headline + subtítulo + CTA (headline max 20 palabras)
+  2. Problema: 2-3 oraciones de dolor real del usuario
+  3. Solución: cómo lo resuelve (sin hipérboles)
+  4. Beneficios: 3 concretos con números si es posible
+  5. Social proof: estructura para testimonios
+  6. CTA final: urgencia real, no artificial
+
+  Pasá cada sección por /humanizer. Si detecta patrones, reescribí
+  hasta limpio.
+```
+
+### Agente — redes sociales
+
+```
+> Posts para LinkedIn + Twitter + Instagram sobre mi lanzamiento.
+
+  - LinkedIn: profesional pero cercano, sin buzzwords
+  - Twitter: directo, con opinión, max 280 chars
+  - Instagram: visual, hook en primera línea
+
+  5 posts por red. Pasá CADA UNO por /humanizer.
+  Si suena a "contenido de marca genérico", reescribí.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Humanizar texto que NO es de IA
+
+Si tu texto ya lo escribió un humano y lo pasás por humanizer, **puede empeorarlo**. Humanizer asume que el input tiene patrones IA. Si no los tiene, va a "corregir" cosas que estaban bien.
+
+### 2. Confiar en una sola pasada manual
+
+Humanizer hace 2 pasadas automáticas. Si pedís "humanizá esto" sin que el skill ejecute las 2, perdés el 50% del valor. Verificá que Claude esté ejecutando ambas.
+
+### 3. Humanizar al final, no durante
+
+Si generás 10 emails y al final los pasás por humanizer, gastás más tokens y el resultado es peor. **Pasá CADA email a medida que se genera**, no al final.
+
+### 4. No leer el output
+
+Humanizer **no es infalible**. A veces sobre-corrige, otras subcorrige. **Leé el output** antes de publicar. El skill es asistente, no validador final.
+
+### 5. Usarlo para esconder pereza
+
+Si tu texto base es **genérico**, humanizer no lo va a salvar. Va a ser texto genérico que **suena más humano**, pero sigue sin decir nada. La base tiene que tener ideas reales.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Documentación técnica | El tono "IA" en docs técnicas es **bueno** (precisión, repetición). Humanizar puede romper claridad |
+| Mensajes legales / contratos | Necesitan precisión, no "voz" |
+| Texto académico formal | Algunos "tics IA" coinciden con estilo académico válido |
+| Transcripciones de voz | Ya son humanas por definición |
+
+---
+
+## Comparación rápida
+
+| Approach | Velocidad | Calidad | Costo |
+|----------|-----------|---------|-------|
+| Humanizer skill | Rápido (segundos) | Alta (2 pasadas) | Gratis |
+| Editar a mano | Lento (10-30 min/pieza) | Muy alta | Tu tiempo |
+| Servicios web "humanizer" | Medio | Variable | $10-30/mes |
+| Generar de cero con prompt afinado | Lento | Variable | Tokens |
+
+Sweet spot: **humanizer + revisión humana light** = mejor calidad/tiempo ratio.
+
+---
+
+## Próximos pasos
+
+- Para suite completa de marketing skills, [5 skills marketing](/boveda/cinco-habilidades-marketing)
+- Para principios generales de buen output con Claude, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para code review con similar filosofía de "patrón + fix", [skill code-reviewer](/boveda/skill-code-reviewer)

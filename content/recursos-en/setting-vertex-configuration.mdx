@@ -1,0 +1,91 @@
+---
+title: "Setting Vertex Configuration — Claude via Google Vertex AI (999 installs)"
+description: "Setting with 999 installs. Configures Claude Code to use Google Vertex AI as its provider. Access Claude models through Google Cloud billing and compliance. For GCP enterprise shops."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "vertex-ai", "gcp"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-bedrock-configuration", "setting-aws-credentials", "setting-custom-model"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/api/vertex-configuration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/vertex-configuration.json"
+---
+
+## What it is
+
+A setting that points Claude Code to use **Google Vertex AI** as the model provider. Anthropic also publishes Claude on Vertex — this setting lets you consume it from your GCP project.
+
+It configures several vars:
+- `CLAUDE_CODE_USE_VERTEX: 1`
+- `ANTHROPIC_VERTEX_PROJECT_ID` = your GCP project
+- `CLOUD_ML_REGION: global`
+- Per-model regions (3.5 Sonnet, 3.5 Haiku, 3.7 Sonnet, 4.0 Opus, 4.0 Sonnet, 4.1 Opus, 4.5 Sonnet)
+- Model defaults
+
+It's equivalent to [Bedrock Configuration](/boveda/setting-bedrock-configuration) but for GCP instead of AWS.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `api` |
+| Installs | 999 |
+| Provider | Google Vertex AI |
+| Models | 3.5/3.7/4.0/4.1/4.5 Sonnet + Haiku + Opus |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting api/vertex-configuration
+```
+
+Set `ANTHROPIC_VERTEX_PROJECT_ID` to your real GCP project.
+
+For Claude:
+
+```
+I installed the api/vertex-configuration setting. Configure my GCP project
+ID. Verify that I'm using Claude via Vertex and not via the direct API.
+```
+
+## What you can do with this
+
+### Centralized billing in GCP
+
+Your org has a GCP contract. Claude via Vertex bills there.
+
+### GCP compliance
+
+HIPAA BAA with Google + data residency in GCP regions. For regulated enterprises.
+
+### Combo with [AWS Credentials Setting](/boveda/setting-aws-credentials)
+
+If your stack is hybrid AWS + GCP, you have patterns for both.
+
+### Multi-version models
+
+The setting exposes variants from 3.5 to 4.5 — for testing model versions.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before enabling">
+
+- **No GCP account / Vertex enabled:** prerequisite steps are required.
+- **Anthropic Claude not available on Vertex in your region:** validate availability.
+- **Pricing comparison:** Vertex may differ from the direct API. Check your usage.
+- **Auth:** you need Google credentials configured (gcloud auth).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Vertex Configuration Setting](https://www.aitmpl.com/component/settings/api/vertex-configuration) — exact command.
+- **Config JSON:** [vertex-configuration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/vertex-configuration.json).
+- **Vertex AI docs:** [cloud.google.com/vertex-ai](https://cloud.google.com/vertex-ai).
+
+## Related resources
+
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — AWS equivalent.
+- [AWS Credentials Setting](/boveda/setting-aws-credentials) — for AWS hybrid.
+- [Custom Model Setting](/boveda/setting-custom-model) — for granular override.

@@ -1,0 +1,110 @@
+---
+title: "PG AIGuide — Timescale's official plugin for getting Claude to write better PostgreSQL"
+description: "Official Timescale MCP server and plugin (1.7k⭐) with Postgres skills and documentation. It makes Claude (and other AI coding tools) generate PostgreSQL code that is more accurate, idiomatic, and performant."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "postgresql"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["claude-code-best-practices", "anatomia-claude", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/pg-aiguide"
+github: "https://github.com/timescale/pg-aiguide"
+---
+
+## What it is
+
+PG AIGuide is an official plugin from Timescale (the company behind TimescaleDB and several popular Postgres extensions). It solves a concrete problem: LLMs tend to generate SQL that "works" but isn't idiomatic, isn't performant, or ignores modern Postgres features.
+
+The plugin ships with:
+- An **MCP server** that gives Claude direct access to the official Postgres documentation (semantic queries over the docs)
+- **Skills** with serious Postgres patterns: indexing, query optimization, JSON ops, window functions, CTEs, etc.
+
+The result: Claude goes from "writing SQL like it's 2010" to "writing SQL like it actually knows how Postgres works under the hood".
+
+1.7k stars and Timescale's official backing = this is the go-to reference for Postgres with AI coding tools.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | Timescale (official) |
+| Stars | 1.7k |
+| Type | Single plugin (MCP server + skills) |
+| Components | MCPs |
+| Marketplace | `timescale/pg-aiguide` |
+
+## How to install it
+
+```bash
+/plugin marketplace add timescale/pg-aiguide
+/plugin install pg-aiguide@timescale-pg-aiguide
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install pg-aiguide from the timescale marketplace. I have a Postgres
+[version X.Y] with [extensions you use: TimescaleDB, pgvector,
+PostGIS, etc.]. Show me examples of how your output changes with
+and without the plugin for a query of [use case].
+```
+
+## What you can do with it
+
+### Queries that leverage modern features
+
+Without the plugin, Claude tends to write conservative SQL (classic joins, simple aggregations). With PG AIGuide, it proposes recursive CTEs, window functions, lateral joins, JSON path operators — the features that make Postgres powerful.
+
+### Optimization with EXPLAIN
+
+The plugin knows how to read execution plans (`EXPLAIN ANALYZE`) and propose concrete changes: indexes to create, queries to rewrite, joins to flip. Not just "your query is slow" — concretely how to fix it.
+
+### Smart indexing
+
+When you add a new field or the query pattern changes, Claude proposes the right indexes (B-tree, GIN, GiST, BRIN depending on the case). It distinguishes when a normal, partial, expression, or covering index is the better fit.
+
+### Working with extensions
+
+If you use TimescaleDB (obviously, it's Timescale's), pgvector (vector search for AI), PostGIS (geo), pg_partman, etc. — the plugin knows their quirks. Something like "for this geo proximity query, use `<->` with a GiST index".
+
+### Serious JSONB
+
+JSON in Postgres has lots of operators (`->`, `->>`, `@>`, `?`, `?|`, `#>`, JSON path). The plugin knows them all and proposes the right one for your case.
+
+### Zero-downtime migrations
+
+Patterns for `ALTER TABLE` on large tables without locking: adding columns with a default, changing types, moving data — all with zero-downtime strategies.
+
+## Real benefits
+
+- **Official from Timescale** — a company with proven Postgres expertise.
+- **Covers pure Postgres + extensions** — including TimescaleDB, pgvector.
+- **Connects the official docs via MCP** — Claude doesn't make things up, it consults.
+- **Idiomatic queries, not MySQL translations**.
+- **Optimization with real plans** — not generic advice.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If you don't use Postgres:** obvious, but just in case. If your DB is MySQL, SQLite, MongoDB, etc., this plugin adds nothing.
+- **If your Postgres is on a very old version** (9.x or earlier): many modern features won't apply.
+- **If you already have a DBA who knows Postgres inside out:** the plugin helps Claude, it doesn't replace human expertise.
+- **Overlap with the `prisma` plugin or the Neon one:** all three touch Postgres. Check which one covers your case.
+- **Token cost:** consulting the docs for every query costs more than working from memory.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Pg AIGuide](https://www.aitmpl.com/plugins/pg-aiguide) — exact command.
+- **Repo on GitHub:** [timescale/pg-aiguide](https://github.com/timescale/pg-aiguide) — code, MCP server, skills.
+
+## Related resources
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — to combine with good practices on how to use MCPs.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place PG AIGuide as an MCP server + skills (the deepest part of the stack).
+- [All Deploy](/boveda/all-deploy) — to ship to production once your Postgres schema is polished.

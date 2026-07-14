@@ -1,0 +1,258 @@
+---
+title: "Animaciones — pipeline Remotion + Codex con un solo comando"
+description: "Proyecto operativo para crear videos animados con Remotion + Codex desde cero. Un comando instala todo: Codex CLI, deps base, skills (video-generator + remotion-best-practices), proyecto Remotion inicial, preview local + URL pública por túnel. De cero a iterar en vivo en 5 min."
+difficulty: "intermedio"
+category: "skills"
+tools: ["codex", "remotion"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["editor-pro-max", "stack-ai-contenido", "viral-script-combo"]
+---
+
+## Qué es
+
+Proyecto operativo para crear videos animados con **Remotion + Codex** desde cero.
+
+Ejecutás un solo comando → el sistema instala dependencias, prepara proyecto, levanta preview, te deja listo para **iterar en vivo**.
+
+---
+
+## Pre-requisitos
+
+### Si recién empezás
+
+Solo terminal abierta. El script hace el resto.
+
+### Si sos experto
+
+Te conviene saber que el bootstrap es **idempotente**: instala solo lo faltante, reusa setup existente.
+
+---
+
+## Setup en 3 pasos
+
+### Paso 1 — Abrí terminal
+
+| OS | Cómo |
+|----|------|
+| macOS | `Cmd + Space` → escribí `terminal` |
+| Windows | Buscá `PowerShell`, click derecho → ejecutar como admin |
+| Linux | `Ctrl + Alt + T` o desde aplicaciones |
+
+### Paso 2 — Ejecutá un comando
+
+**macOS / Linux / WSL**:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Hainrixz/tododeia-animaciones/main/install.sh)
+```
+
+**Windows PowerShell**:
+
+```powershell
+irm https://raw.githubusercontent.com/Hainrixz/tododeia-animaciones/main/install.ps1 | iex
+```
+
+### Paso 3 — Qué instala automático
+
+- **Codex CLI** (si ya lo tenés, se saltea)
+- **Dependencias base**: git, node, npm, cloudflared
+- **Skills necesarias**: `video-generator` + `remotion-best-practices`
+- **Proyecto inicial Remotion** en `output/agent-video-starter`
+- **Preview local + URL pública** por túnel para revisión
+
+5 min después, tenés:
+- `localhost:3000` con preview en vivo
+- URL pública para mandar a quien quieras (cliente, equipo)
+- Estructura Remotion lista para iterar
+
+---
+
+## Cómo iterar
+
+Después del setup, dentro del proyecto:
+
+```
+> Generame video de 30 segundos con [DESCRIPCIÓN DETALLADA].
+  Estilo: [REFERENCIA].
+  Aspect ratio: [9:16 / 16:9 / 1:1].
+```
+
+Codex modifica los archivos Remotion. Preview se **actualiza en tiempo real**.
+
+### Iteración típica
+
+```
+1. Generás v1 → ves preview
+2. "El texto sale muy rápido en segundo 5, ralentizá"
+3. v2 → preview
+4. "Cambiá color principal a azul"
+5. v3 → preview
+6. Cuando estás contento → renderizás MP4
+```
+
+---
+
+## Por qué Remotion + Codex
+
+### Remotion
+
+Framework de React para video programático. Todo el video es código → **reproducible, versionable, iterable**.
+
+### Codex
+
+CLI de OpenAI integrado a Claude Code / VS Code. Genera código Remotion bien estructurado.
+
+### El combo
+
+| Solo Codex | Solo Remotion | Codex + Remotion |
+|------------|---------------|-------------------|
+| Genera código pero sin contexto Remotion | Necesitás programar manual | Codex genera Remotion correcto |
+| Output inconsistente | Curva de aprendizaje | Preview en vivo + iteración natural |
+
+---
+
+## Casos de uso
+
+### 1. Reels educativos en cantidad
+
+```
+> Generá 5 Reels de 30s, cada uno explicando uno de estos tips:
+  1. [Tip 1]
+  2. [Tip 2]
+  ...
+  Estilo consistente: dark mode, texto grande, transiciones suaves.
+```
+
+Output: 5 MP4 con estética consistente.
+
+### 2. Animaciones para landing
+
+```
+> Generá hero animation para mi landing.
+  Concepto: data flowing through nodes (red neural).
+  Duración: loop perfecto de 8 segundos.
+  Color: gradiente azul → violeta.
+  Resolución: 1920×1080.
+```
+
+Embebés en `<video autoplay loop muted>` en tu site.
+
+### 3. Explicar concepto visual
+
+```
+> Animación de 45s explicando "cómo funciona blockchain":
+  - 0-5s: hook (problema actual con confianza)
+  - 5-25s: 3 puntos clave con visualización
+  - 25-40s: ejemplo concreto
+  - 40-45s: tagline final
+```
+
+### 4. Promo de feature de producto
+
+```
+> Promo 20s de mi nueva feature [DESCRIBÍ].
+  Mostrar UI screenshots con animación de transición.
+  Texto destaca beneficios clave.
+  CTA al final: "Probalo gratis 14 días".
+```
+
+---
+
+## Diferencia con Editor Pro Max
+
+| Aspecto | **Animaciones** (esta) | [Editor Pro Max](/boveda/editor-pro-max) |
+|---------|-----------------------|------------------------------------------|
+| Setup | Un comando + Codex | Repo + setup manual |
+| Backend | Codex CLI | Claude Code |
+| Templates | Foco animations | Templates por plataforma (TikTok, Reels, etc) |
+| Curva | Más DIY | Más guiado |
+| Uso típico | Animations específicas custom | Producción de contenido en cantidad |
+
+Ambos usan Remotion. Diferencia es **el workflow**.
+
+---
+
+## Estructura del proyecto
+
+```
+output/agent-video-starter/
+├── package.json
+├── src/
+│   ├── compositions/        ← tus videos
+│   │   ├── HelloWorld.tsx
+│   │   └── MyAnimation.tsx
+│   ├── components/          ← elementos reutilizables
+│   │   ├── AnimatedText.tsx
+│   │   └── Background.tsx
+│   └── Root.tsx             ← registra compositions
+└── remotion.config.ts
+```
+
+Codex modifica `src/compositions/` y `src/components/` según pidas.
+
+---
+
+## Anti-patrones
+
+### 1. Querer pixel-perfect first try
+
+Remotion + Codex genera **buena base**. Iterás 3-5 veces para finalizar. **Aceptá el proceso**.
+
+### 2. Sin describir el "porqué"
+
+❌ "Generá animación de logo"
+✅ "Generá animación de logo para landing de SaaS B2B, mood profesional pero moderno, 5 segundos, loop perfecto"
+
+### 3. Pedir mucho de una
+
+❌ "Generá 30 segundos con 10 animaciones distintas"
+✅ "Generá 30 segundos. Primero el hero (0-10s) con [X]. Después agrego el resto."
+
+### 4. Ignorar performance
+
+Remotion permite cosas muy pesadas. Si tu animación tarda 20 min en renderear, **simplificá** efectos.
+
+### 5. No versionar
+
+`output/` está en git. **Versioná** cada versión que te gusta. Sin esto, perdés iteraciones que funcionaban.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás edición de video tradicional (cortes, overlays manuales) | CapCut/Premiere |
+| Video con muchas tomas reales | Filmación + edición tradicional |
+| Producción enterprise crítica | Stack profesional |
+| Sin paciencia para iterar | Es proceso |
+
+---
+
+## Combinaciones potentes
+
+### Con Editor Pro Max
+
+```
+> Generá animaciones complejas custom con este proyecto.
+> Para Reels/TikTok estándar de cantidad, usá Editor Pro Max.
+```
+
+[Editor Pro Max](/boveda/editor-pro-max).
+
+### Con stack creator
+
+Animaciones es **pieza dentro** del [stack IA creador](/boveda/stack-ai-contenido).
+
+### Con humanizer
+
+Si tus animaciones tienen texto narrativo, pasalo por [humanizalo](/boveda/humanizalo) antes.
+
+---
+
+## Próximos pasos
+
+- Para producción de Reels/TikToks en cantidad, [Editor Pro Max](/boveda/editor-pro-max)
+- Para stack completo de creator con varias herramientas, [Stack IA Creador](/boveda/stack-ai-contenido)
+- Para combo Awesome Skills + UltraThink + VoxCPM, [Viral Script Combo](/boveda/viral-script-combo)

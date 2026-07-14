@@ -1,0 +1,196 @@
+---
+title: "Replicate web designs with UI UX Pro Max — one prompt and Claude builds it"
+description: "You combine 2 pieces: the UI UX Pro Max Skill (67 styles + 161 palettes + 57 fonts + 161 industry rules) + the replication prompt. You paste the URL of any page you like, and Claude replicates the layout/colors/typography/animations in your project with your content."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills", "tailwind"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["clonador-de-paginas", "claude-disenador-web", "cult-ui"]
+---
+
+## The combination
+
+Replicating the design of any web page requires 2 pieces:
+
+| Piece | Role |
+|-------|-----|
+| **UI UX Pro Max Skill** | Knowledge — 161 design rules by industry |
+| **The replication prompt** | Instruction — analyze the URL and replicate everything |
+
+Result: you paste a URL → Claude analyzes layout/colors/fonts/animations → rebuilds it in your project with **your content**.
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed ([install Claude Code](/boveda/instalar-claude-code))
+- **Frontend project** (Next.js, React, etc.)
+
+---
+
+## Install UI UX Pro Max
+
+```bash
+claude install-skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+```
+
+### What it includes
+
+| Component | Amount |
+|------------|----------|
+| UI styles | 67 (Glassmorphism, Neumorphism, Brutalism, AI-Native, and more) |
+| Color palettes | 161 (by product category) |
+| Font combos | 57 (with Google Fonts) |
+| Reasoning rules | 161 across 8 domains (tech, finance, health, e-commerce, and more) |
+
+---
+
+## The replication prompt
+
+```
+This is the landing page [URL].
+
+Replicate:
+- Layout and spacing
+- Typography
+- Animation patterns
+- Colors and palette
+
+Use the UI UX Pro Max skill and Tailwind CSS to build a
+fully responsive site.
+
+The templates should be applicable to other pages/landings,
+so that my landing looks like this site but with my
+content and copy.
+
+If you don't have images or graphics, use NanoBanana to generate them.
+```
+
+---
+
+## How to use it
+
+| Step | Action |
+|------|--------|
+| 1 | Find a page you like, copy the URL |
+| 2 | Open Claude Code in your project |
+| 3 | Paste the prompt with your URL |
+| 4 | Claude analyzes + builds the replica with YOUR content |
+
+---
+
+## NanoBanana optional
+
+If you don't have your own images, **NanoBanana** generates them with AI (Gemini models). It's an MCP server that Claude uses automatically when it needs graphics.
+
+See [restore your photos](/boveda/restaura-tus-fotos) for setup.
+
+---
+
+## Use cases
+
+### 1. Draw inspiration from the competition
+
+```
+Your current landing falls flat. You paste the URL of a successful competitor.
+Claude replicates the structure + style, and you fill it with your copy.
+```
+
+### 2. Modernize an old landing
+
+```
+Your 2020 WordPress landing. You paste the URL of a modern site
+(Stripe, Linear, Vercel). Claude brings it into 2026.
+```
+
+### 3. A specific style you don't know how to pull off
+
+```
+You want a "minimalist editorial" look but don't know how.
+You paste the URL of an editorial reference site. You learn
+by reading the code.
+```
+
+### 4. Quick prototype for a client
+
+Client: "I want something like this" + URL. In 20 min you have a prototype in your stack.
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **Replicate Designs** (this one) | Replicate structure + aesthetics while keeping YOUR content |
+| [Page cloner](/boveda/clonador-de-paginas) | Clone more literally with a real Playwright browser |
+| [Claude web designer](/boveda/claude-disenador-web) | New design from scratch with in-browser review |
+| [Cult UI](/boveda/cult-ui) | Premium components so it does NOT look generic |
+
+---
+
+## Anti-patterns
+
+### 1. Replicating without legal permission
+
+Even though the code you generate is 100% yours, **cloning protected designs from big brands** is a gray area. For personal use/experimentation, OK. For a commercial product, **draw inspiration, don't copy literally**.
+
+### 2. Expecting pixel-perfect
+
+The skill replicates **patterns and aesthetics**, not an exact copy. If you need pixel-perfect, use the [Cloner](/boveda/clonador-de-paginas) or do it by hand.
+
+### 3. Not using your own brand
+
+Replicating and leaving the **original's colors and fonts** = your brand looks generic. Change it afterwards to your palette.
+
+### 4. Replicating without understanding what you're replicating
+
+The skill generates code. **Read it**. If you don't understand something, ask Claude to explain. It's **learning**, not just copy-paste.
+
+### 5. Ignoring the original's performance
+
+Sometimes the original site is **pretty but heavy**. If you replicate everything including the weight, **you'll have the same problem**. Optimize whatever applies.
+
+---
+
+## Powerful combinations
+
+### With Cult UI
+
+```
+> Replicate the site's structure with the Replication prompt.
+> Then replace the generic components with [Cult UI](/boveda/cult-ui).
+```
+
+### With humanizer
+
+```
+> The copy Claude generates to fill the replica → run it through
+  /humanizalo. Make sure it doesn't sound like AI.
+```
+
+### With Brand Guidelines
+
+```
+> Load my brand pack.
+> Replicate the site's structure but apply MY palette and MY typography,
+  not the original's.
+```
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Very custom, non-replicable design | Sites with unique motion design |
+| You want to be unique in the industry | Replicating = not standing out |
+| Enterprise product with compliance | You need legal validation |
+
+---
+
+## Next steps
+
+- For a more literal clone with a real browser, [Page cloner](/boveda/clonador-de-paginas)
+- For a new design with in-browser validation, [Claude web designer](/boveda/claude-disenador-web)
+- For premium components after replicating, [Cult UI](/boveda/cult-ui)

@@ -1,0 +1,242 @@
+---
+title: "Las 5 preguntas antes de meterle IA a tu negocio (no necesitás la Mac Mini)"
+description: "El hype dice que para 'entrar a la IA' necesitás hardware caro. Es mentira. Lo que necesitás es claridad sobre tu propio negocio. 5 preguntas que ningún gurú te explica, con un prompt para responder cada una y la trampa del 'tools-first' que todos cometen."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["manual-fundador-ia", "tres-errores-con-ia", "prompts-prd-ejecutivo"]
+---
+
+## El error que todos cometen
+
+> "Me voy a meter a la IA. ¿Compro la Mac Mini de $1500? ¿Qué herramienta es la mejor?"
+
+**Empezás por el lado equivocado.** El equipamiento y las herramientas son el 5% del problema. El 95% es **claridad sobre tu propio negocio** — qué produce resultados, qué se puede automatizar sin perder calidad, qué deberías eliminar antes de "optimizar".
+
+Quien arranca por las tools termina con suite de IA carísima resolviendo problemas que no eran los reales.
+
+Estas 5 preguntas resuelven el orden. Respondelas primero. Después decidís tools.
+
+---
+
+## Pregunta 1 — ¿Qué te da el resultado?
+
+### Por qué importa
+
+La mayoría de la gente no sabe **qué actividades específicas generan los resultados** de su negocio. Tienen intuición ("vender es importante") pero no granularidad ("la primera llamada con cliente nuevo es lo que predice si cierra o no").
+
+Sin esa granularidad, **automatizás lo equivocado**. Le pedís a IA que escriba emails de bienvenida cuando lo que importaba era la primera llamada.
+
+### Prompt
+
+```
+Sos consultor de negocios senior. Te paso info de mi negocio.
+
+INFO:
+- Industria: [...]
+- Tipo de cliente: [...]
+- Ticket promedio: [...]
+- Ciclo de venta típico: [...]
+- Equipo: [N personas haciendo qué]
+
+PREGUNTA:
+De TODO lo que hacemos en una semana típica, ¿cuáles son las 3-5
+actividades que MÁS impactan en cerrar venta / retener cliente?
+
+REGLAS:
+- No me digas "marketing" o "ventas" (es muy genérico)
+- Sí me decí actividades específicas: "primera demo con cliente",
+  "follow-up al día 3", "responder objeción de precio dentro de 1h"
+- Si no podés saberlo sin más info, decime QUÉ preguntarme
+```
+
+Lo que sale te puede sorprender. Y eso que sale, **es lo que NO querés automatizar al 100%** — querés mejorarlo, escalarlo, no reemplazarlo.
+
+---
+
+## Pregunta 2 — ¿Dónde está escrito?
+
+### Por qué importa
+
+Todo lo que sabés sobre tu negocio — pero que no está escrito — **no se puede compartir, escalar ni automatizar**. Vive en tu cabeza.
+
+Si querés que la IA te ayude, primero **necesitás que la info esté en algún lado que la IA pueda leer**. No tiene que ser perfecto. Pero tiene que existir.
+
+### Auditoría
+
+Listá qué tenés documentado y qué no:
+
+| Pregunta | ¿Existe? | Dónde |
+|----------|----------|-------|
+| Quién es tu cliente ideal | | |
+| Cómo se ven los clientes que **no** te convienen | | |
+| Tu proceso de venta paso a paso | | |
+| Las objeciones más comunes y cómo responderlas | | |
+| Tus precios y cuándo varían | | |
+| Tu tono de marca / cómo escribir como tu empresa | | |
+| Tus competidores principales y diferenciadores | | |
+
+**Si más de 4 dicen "no existe / en mi cabeza"**: ese es tu primer trabajo. Antes de IA, **escribilo**.
+
+### Prompt para acelerar
+
+```
+Necesito documentar [X aspecto de mi negocio]. Hacéme una entrevista
+estructurada — preguntas precisas que me obliguen a ser específico —
+y al final compilame las respuestas en un doc usable.
+
+ASPECTO A DOCUMENTAR: [ej: "mi cliente ideal"]
+
+Hacéme 8-12 preguntas. No genéricas. Una por mensaje. Esperá mi
+respuesta antes de la siguiente. Al final, compilá un doc estructurado.
+```
+
+Pasás 30 min respondiendo. Te quedás con un doc real que sirve para infinitas cosas después.
+
+---
+
+## Pregunta 3 — ¿Qué ya no debería existir?
+
+### Por qué importa
+
+**Antes de optimizar algo, considerá eliminarlo.** Mucha gente automatiza tareas que no deberían hacerse.
+
+Ejemplos clásicos:
+
+- Reportes semanales que nadie lee → automatizarlos no resuelve nada. **Cancelalos.**
+- Reuniones recurrentes con poco valor → automatizar el agenda no las salva. **Eliminalas.**
+- Procesos burocráticos que existen "porque siempre fue así" → automatizar burocracia es **burocracia automatizada**, sigue siendo burocracia.
+
+### Prompt
+
+```
+Te paso una lista de tareas/procesos recurrentes de mi negocio:
+
+[lista]
+
+Para cada uno, evaluá:
+1. ¿Genera valor directo o es overhead?
+2. Si lo eliminamos hoy, ¿qué se rompe?
+3. Si lo eliminamos, ¿qué hace falta para que NADIE LO EXTRAÑE?
+
+Ordená los procesos de "más fácil de eliminar" a "necesario, hay que
+optimizar".
+
+REGLAS:
+- Sé brutal, no diplomático
+- Si algo es overhead disfrazado, decilo
+- No me sugieras "optimizar" lo que se puede eliminar
+```
+
+A veces sale que **40-60% de tus procesos sobran**. Eliminar gana 10× a automatizar.
+
+---
+
+## Pregunta 4 — ¿Cuál es la versión más simple?
+
+### Por qué importa
+
+La gente quiere "agentes que hagan todo". El error: complejidad alta antes de probar que la versión chica funciona.
+
+**Empezá por el MVP del MVP.** El agente que hace **una sola cosa** y la hace bien. Después escalás.
+
+### Ejemplos
+
+❌ "Quiero un agente que gestione mi negocio entero"
+✅ "Quiero un agente que cada mañana lea mis emails sin responder y me arme draft de respuesta para los 3 más urgentes"
+
+❌ "Quiero IA que automatice ventas"
+✅ "Quiero un prompt que cuando llega un lead nuevo, lo enriquezca con info pública y clasifique en hot/warm/cold"
+
+### Prompt para decidir el MVP
+
+```
+Tengo esta visión grande de lo que quiero hacer con IA en mi negocio:
+
+[visión grande]
+
+Descomponé eso en el MVP más chico posible:
+- ¿Cuál es la versión que se puede armar en 1-2 horas?
+- ¿Qué deja afuera explícitamente?
+- ¿Cómo mido si funciona?
+- Si funciona, ¿cuál es el siguiente bloque (no todo, el SIGUIENTE)?
+
+REGLAS:
+- Si me proponés algo que toma más de 4h armar, no es MVP
+- Si requiere data que no tengo lista, no es MVP
+- Si depende de coordinar 3 sistemas, no es MVP
+```
+
+El MVP que sale es **el que vas a construir esta semana**. La visión grande queda como roadmap, no como entregable inmediato.
+
+---
+
+## Pregunta 5 — ¿Qué te toca vos hacer todavía?
+
+### Por qué importa
+
+La gente subestima lo que **vos** seguís teniendo que hacer aún con IA. Termina pensando que la IA es "manos libres" y se desilusiona.
+
+**La IA es palanca, no autopiloto.** Saber qué te toca a vos te ahorra expectativas mal seteadas.
+
+### Las cosas que NO se delegan a IA
+
+| Área | Lo que sigue siendo tuyo |
+|------|--------------------------|
+| **Visión estratégica** | Decidir hacia dónde va el negocio |
+| **Decisiones críticas** | Contratar, despedir, pivotear |
+| **Relaciones clave** | Llamadas con clientes top, reuniones con socios |
+| **Criterio** | Saber cuándo el output de IA es bueno o basura |
+| **Validación con humanos reales** | Hablar con clientes, no extrapolar de data |
+| **Aprendizaje del oficio** | Tu skill subiendo, no atrofiándose |
+
+### Prompt para clarificarlo
+
+```
+Estoy implementando IA para [X áreas] de mi negocio. Antes de hacerlo,
+quiero clarificar qué cosas DEBO SEGUIR HACIENDO YO.
+
+Devolveme una lista honesta de:
+1. Las decisiones que NO debería delegar a IA (con razones)
+2. Las actividades donde la IA hace 80% pero el 20% es crítico que sea yo
+3. Las habilidades que seguiré necesitando manualmente (las que voy a
+   perder si no las practico)
+4. Los riesgos de delegar demasiado
+
+REGLA: no me digas "todo necesita supervisión humana" (obvio).
+Sé específico con QUÉ supervisión y dónde.
+```
+
+---
+
+## La trampa del tools-first
+
+Después de las 5 preguntas, podés decidir tools con criterio:
+
+- ¿Qué resultado querés mover? (pregunta 1)
+- ¿Qué info ya tenés escrita? (pregunta 2)
+- ¿Qué eliminar antes de optimizar? (pregunta 3)
+- ¿Cuál es el MVP de la solución? (pregunta 4)
+- ¿Qué te toca seguir haciendo? (pregunta 5)
+
+**Con esas respuestas, elegir herramienta es trivial.** Sin esas respuestas, cualquier herramienta que elijas es probable que sea la equivocada.
+
+---
+
+## El error #1 que la gente comete
+
+Saltarse las preguntas y comprar la Mac Mini.
+
+3 meses después: máquina cara, suscripciones múltiples, agentes random configurados, y el negocio en el mismo lugar. Porque el problema no era el procesamiento — era la falta de claridad.
+
+**Las 5 preguntas se responden en una tarde.** Después de eso, el resto es ejecución informada.
+
+---
+
+## Próximos pasos
+
+- Para profundizar la estrategia general de IA en startup, [Manual del fundador IA](/boveda/manual-fundador-ia)
+- Si caés en errores típicos al usar IA, [3 errores con IA](/boveda/tres-errores-con-ia)
+- Para tu primer prompt estructurado serio, [PRD ejecutivo](/boveda/prompts-prd-ejecutivo)

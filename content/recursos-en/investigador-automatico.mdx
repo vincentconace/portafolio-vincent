@@ -1,0 +1,325 @@
+---
+title: "Last30Days — the skill that researches 8 platforms in 5 minutes"
+description: "Open source skill for Claude Code that finds the latest on any topic across Reddit, Hacker News, Polymarket, YouTube, X, Bluesky, TikTok and Instagram over the last 30 days. It hands you a structured report with links. 1-minute setup, 3 platforms work with no API keys."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["agent-browser", "5-skills-equipo-dev", "cinco-habilidades-marketing"]
+---
+
+## What it is
+
+A digital detective that **hits 8 different platforms**, reads everything said about your topic over the last 30 days, and hands you a **structured report** as if it were an expert analyst.
+
+Before:
+- 30 min on Reddit
+- 30 min on X
+- 30 min on YouTube
+- 30 min cross-referencing info
+- 2h total per topic
+
+With Last30Days: **5-8 min**, same output. Topic in, report out.
+
+Repo: `mvanhorn/last30days-skill`. Open source and free.
+
+---
+
+## The 8 platforms it researches
+
+| Platform | Works out-of-the-box | Needs API key |
+|------------|--------------------------|-------------------|
+| **Reddit** | ✅ | ❌ |
+| **Hacker News** | ✅ | ❌ |
+| **Polymarket** | ✅ | ❌ |
+| **YouTube** | ❌ | ✅ (free) |
+| **X / Twitter** | ❌ | ✅ |
+| **Bluesky** | ❌ | ✅ |
+| **TikTok** | ❌ | ✅ |
+| **Instagram Reels** | ❌ | ✅ |
+
+3 platforms work **right away**. The other 5 require some initial config (the skill walks you through it).
+
+For 80% of research, Reddit + Hacker News is enough.
+
+---
+
+## Prerequisites
+
+- Claude Code installed ([install Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Installation
+
+### Recommended — plugin marketplace
+
+```
+> /plugin marketplace add mvanhorn/last30days-skill
+> /plugin install last30days@last30days-skill
+```
+
+### Alternative — ClawHub
+
+```bash
+clawhub install last30days-official
+```
+
+### Manual — clone the repo
+
+```bash
+git clone https://github.com/mvanhorn/last30days-skill.git \
+  ~/.claude/skills/last30days
+```
+
+### Verify
+
+```
+> /last30days
+```
+
+If it asks you for a topic, it's active.
+
+---
+
+## Basic usage
+
+```
+> /last30days artificial intelligence
+```
+
+Claude:
+1. Hits the 8 platforms
+2. Filters relevant content from the last 30 days
+3. Identifies patterns
+4. Synthesizes key points
+5. Hands you a report with **links to sources**
+
+Time: 2-8 min depending on the topic (more popular = more data = more time).
+
+---
+
+## Command variants
+
+### Compare 2 topics
+
+```
+> /last30days --compare "React vs Vue"
+```
+
+Side-by-side output: what each community says about each topic, where they're strong, final comparison.
+
+Ideal for deciding between tools, strategies, niches.
+
+### Quick search
+
+```
+> /last30days --quick cryptocurrencies
+```
+
+Light version: less depth, more speed. Gives you **the essentials** without the detail.
+
+When: you want a general overview in 1-2 min, not a deep analysis.
+
+### Time window
+
+```
+> /last30days --days 7 startups          # last week
+> /last30days --days 14 gen AI            # last 2 weeks
+> /last30days --days 30 web3             # default
+> /last30days --days 90 SaaS market     # last quarter
+```
+
+Default: 30 days. For fast-moving topics (crypto, AI), 7-14 days is more useful.
+
+---
+
+## Use cases
+
+### 1. Decide what to learn next
+
+```
+> /last30days --compare "Rust vs Go" --days 30
+```
+
+You know what's moving each community before investing 6 months.
+
+### 2. Monitor your industry
+
+```
+> /last30days "AI agents for marketing"
+```
+
+You find out about new tools, success stories, common problems.
+
+### 3. Pre-research for content creation
+
+```
+> /last30days "no-code in LATAM"
+```
+
+Output: what's being discussed, what hurts, what's missing. **Your next post writes itself** with that data.
+
+### 4. Validate a product idea
+
+```
+> /last30days "problems with inventory management software"
+```
+
+You look for real pain reported by users. If there are constant complaints, there's opportunity.
+
+### 5. Keep your competitive edge
+
+Scheduled task (with [Cowork](/boveda/claude-cowork-workflow)):
+
+```
+> Every Monday at 9am, run /last30days on these 3 topics:
+  1. [topic 1 — direct competition]
+  2. [topic 2 — your industry]
+  3. [topic 3 — emerging trends in your vertical]
+
+  Email me the 3 reports.
+```
+
+You stay up to date without thinking about it.
+
+### 6. Light academic research
+
+```
+> /last30days "computer use Claude vs OpenAI" --days 60
+```
+
+It doesn't replace academic papers, but it gives you **the real pulse** of what's happening.
+
+### 7. Sales intel — understand a prospect
+
+```
+> /last30days "[prospect's company]"
+```
+
+Before the call, you know what's going on with them, what their industry is saying, what pain they might have.
+
+### 8. Curation for a newsletter
+
+```
+> /last30days "[your niche]"
+```
+
+5 min later you have a brief to write your weekly newsletter.
+
+---
+
+## What each platform brings
+
+| Platform | Strong for |
+|------------|-------------|
+| **Reddit** | Real use cases, frustrations, honest comparisons |
+| **Hacker News** | Technical trends, senior dev opinions, important releases |
+| **Polymarket** | Predictions (what the market thinks will happen) |
+| **YouTube** | Tutorials, demos, creator opinions |
+| **X / Twitter** | Immediate hot takes, virality |
+| **Bluesky** | Deeper conversations than X (in some niches) |
+| **TikTok** | Mainstream trends, Gen Z |
+| **Instagram Reels** | Aesthetic + lifestyle of a topic |
+
+For technical research: Reddit + HN + YouTube.
+For trend research: X + TikTok.
+For market research: Polymarket + Reddit.
+
+---
+
+## Anti-patterns
+
+### 1. Topic too broad
+
+❌ `/last30days technology`
+✅ `/last30days "AI agents for B2B SaaS"`
+
+More specific = better synthesis.
+
+### 2. Not checking the sources
+
+The report synthesizes but **always check the main sources**. Sometimes Claude weighs things wrong by volume vs quality.
+
+### 3. Trusting 100% without context
+
+Last30Days tells you **what's being said now**. It doesn't tell you if that opinion will hold up for 6 months. For long-term decisions, complement it with more stable sources.
+
+### 4. Using the default 30 days for stable topics
+
+If you're researching something that doesn't change much (e.g. Italian cooking, gardening), 30 days gives you little new data. Bump it up to 90+ days.
+
+### 5. Same topic 5x a day
+
+The platforms have rate limits. If you run it many times in a row with the same topic, you can get throttled.
+
+---
+
+## Powerful combinations
+
+### With Agent Browser
+
+After the research, go deeper:
+
+```
+> /last30days "Cursor IDE vs Claude Code"
+> Then, with [Agent Browser](/boveda/agent-browser), go into
+  the 3 most relevant Reddit posts and pull the 5 best
+  responses verbatim from each one.
+```
+
+### With the NotebookLM Skill
+
+```
+> /last30days "[my industry]" --days 90
+> Save it in my NotebookLM notebook "industry-watch".
+  Every 30 days, do another run and add it.
+```
+
+[NotebookLM Skill](/boveda/cinco-habilidades-marketing) gives you historical memory.
+
+### With scheduled tasks
+
+[Cowork scheduled tasks](/boveda/claude-cowork-workflow) to automate recurring research.
+
+### With humanizer
+
+```
+> Take the /last30days report and rewrite it in a
+  humanized newsletter format (run it through /humanizer).
+```
+
+[Claude Copywriter](/boveda/claude-copywriter) to turn research into content.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| Rigorous academic research | You need papers, not opinions |
+| Critical legal/financial decisions | Validate with human experts |
+| Topics with very little online activity | If nobody's talking, there's no data |
+| Strict compliance | The platforms have unverified content |
+
+---
+
+## Expected performance
+
+| Search type | Typical time |
+|------------------|----------------|
+| `--quick` one topic | 1-2 min |
+| Standard one topic | 3-5 min |
+| `--compare` two topics | 5-8 min |
+| `--days 90` deep analysis | 8-15 min |
+
+Times vary based on topic popularity (more popular = more data = more time).
+
+---
+
+## Next steps
+
+- To browse yourself after the research, [Agent Browser](/boveda/agent-browser)
+- For a team skills suite, [5 dev team skills](/boveda/5-skills-equipo-dev)
+- For a marketing suite that includes NotebookLM, [5 marketing skills](/boveda/cinco-habilidades-marketing)

@@ -1,0 +1,106 @@
+---
+title: "Claude HUD — statusline en tiempo real de lo que está pasando en Claude Code"
+description: "Plugin de jarrodwatts (14k⭐, top trending) que muestra context usage, tools activos, agents corriendo y progreso de todos en vivo. 2 commands: setup y configure."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["agent-view", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-hud"
+github: "https://github.com/jarrodwatts/claude-hud"
+---
+
+## Qué es
+
+Claude HUD resuelve algo que la mayoría no nota hasta que lo prueba: cuando Claude Code está trabajando, vos no ves qué está usando, cuánto contexto le queda, qué sub-agents corrieron o cuánto del todo ya completó. Es un puente entre "lanzá la tarea y esperá" y "veo en vivo qué está pasando".
+
+El plugin agrega un statusline (la barra inferior) que en tiempo real muestra:
+- **Context usage** — cuánto del context window ya consumió
+- **Tool activity** — qué herramienta está usando ahora mismo
+- **Agent tracking** — qué sub-agents están corriendo o terminaron
+- **Todo progress** — cuántos items del todo list ya completó
+
+Es liviano — son solo 2 commands (setup + configure). No es un framework ni un marketplace; es un add-on visual.
+
+14k stars: es uno de los plugins top del ecosistema. La gente lo instala porque "no sabía que necesitaba esto hasta que lo probó".
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | jarrodwatts |
+| Stars | 14k |
+| Tipo | Plugin único (commands) |
+| Componentes | 2 commands (setup, configure) |
+| Marketplace | `jarrodwatts/claude-hud` |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add jarrodwatts/claude-hud
+/plugin install claude-hud@jarrodwatts-claude-hud
+```
+
+Después corré el setup:
+
+```
+/hud-setup
+```
+
+(El nombre exacto del slash command se ve después de instalar — chequealo con `/help` o pedile a Claude que te lo diga.)
+
+Para Claude:
+
+```
+Instalá claude-hud del marketplace jarrodwatts/claude-hud y configúralo
+con los 4 indicadores activos (contexto, tools, agents, todos).
+```
+
+## Qué podés hacer con esto
+
+### Saber cuánto contexto te queda antes de que rompa
+
+Cuando una sesión larga se queda sin contexto, Claude empieza a olvidar cosas. El HUD te avisa antes — cuando ves que el indicador llegó a 80%, sabés que es momento de hacer un resumen o cortar.
+
+### Ver qué tool está usando en tiempo real
+
+Útil para entender por qué Claude está tardando. ¿Está leyendo archivos? ¿Está en Bash? ¿Llamó a un MCP que demora? El HUD te lo muestra.
+
+### Tracking de agents en paralelo
+
+Si lanzaste varios sub-agents (con [Agent View](/boveda/agent-view) o un orquestador), el HUD te lista cuáles siguen activos y cuáles terminaron. Sin tener que abrir vistas separadas.
+
+### Progress visual del todo list
+
+Cuando Claude usa `TodoWrite` para trackear tareas, el HUD te muestra "3/7 completos" sin tener que mirar la lista cada vez.
+
+## Beneficios reales
+
+- **No tenés que adivinar** qué está pasando — lo ves.
+- **Te avisa antes** de quedarte sin contexto, en vez de descubrirlo cuando ya rompió.
+- **Súper liviano** — 2 commands, instalación en segundos.
+- **Es lo que un IDE-grade te daría** sin pagar nada extra.
+- **14k stars** = mantenimiento activo y comunidad probando.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si trabajás con Claude Code en terminales muy chicas:** el HUD ocupa espacio. En pantallas chicas puede tapar contexto útil.
+- **Si tu uso es de tareas cortas (menos de 5 minutos):** el HUD no aporta — la tarea termina antes de que mires.
+- **Si ya tenés `agent-view` corriendo con su propio panel:** hay solapamiento en el tracking de agents.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Claude HUD](https://www.aitmpl.com/plugins/claude-hud) — comando exacto + componentes.
+- **Repo en GitHub:** [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud) — código, issues, screenshots.
+
+## Recursos relacionados
+
+- [Agent View — varios Claude Code en paralelo](/boveda/agent-view) — la otra mitad del paneo: HUD para una sesión, Agent View para varias.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas que se complementan con tener el HUD activo (sesiones cortas, context budget, etc.).
+- [Anatomía de Claude](/boveda/anatomia-claude) — para entender por qué este plugin se llama "plugin" y no "skill" ni "agent".

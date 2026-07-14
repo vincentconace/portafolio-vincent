@@ -1,0 +1,87 @@
+---
+title: "Hook Context Timeline — live browser visualization of Claude's context"
+description: "A hook with 389 installs that opens a real-time web visualization of Claude Code's context window, subagent activity, and tool usage. Like a HUD, but in a separate browser window with history."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["plugin-claude-hud", "hook-command-logger", "hook-change-tracker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/monitoring/context-timeline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/context-timeline.json"
+---
+
+## What it is
+
+It opens a browser window where you visualize, in real time:
+- The current **context window** (how much Claude is consuming)
+- **Subagent activity** and orchestration
+- Sequential **tool usage**
+- The full session **timeline**
+
+Hook events: `SessionStart`, `PreToolUse`, `PostToolUse`, `Stop`. It captures the whole cycle.
+
+Compared to [Claude HUD](/boveda/plugin-claude-hud) (a statusline integrated into the editor): Timeline is a separate window with complete visual history. HUD is an inline bar; Timeline is a dashboard.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `monitoring` |
+| Installs | 389 |
+| Hook events | SessionStart + PreToolUse + PostToolUse + Stop |
+| Output | Real-time web visualization |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook monitoring/context-timeline
+```
+
+For Claude:
+
+```
+I installed the monitoring/context-timeline hook. Start a new session and
+show me which local URL serves the visualization.
+```
+
+## What you can do with it
+
+### Visual monitor for long sessions
+
+For autonomous `/goal` or `/loop` runs: you leave the browser open on another screen and watch what Claude does in real time.
+
+### Orchestration debugging
+
+If your session uses subagents, watching the timeline helps you understand what triggers what and how long each step takes.
+
+### Live demos
+
+To present Claude Code to someone, the visual timeline is more impressive than staring at the terminal.
+
+### Post-mortem analysis
+
+After a session, you can review the timeline to see where time or tokens were spent.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you work on a small screen:** a separate browser + editor compete for space.
+- **For short tasks:** it doesn't help — it finishes before you even look.
+- **If you already use [Claude HUD](/boveda/plugin-claude-hud):** overlap.
+- **For CI / servers:** Timeline needs a browser. It doesn't work headless.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Context Timeline Hook](https://www.aitmpl.com/component/hooks/monitoring/context-timeline) — the exact command.
+- **JSON config:** [context-timeline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/context-timeline.json).
+
+## Related resources
+
+- [Claude HUD Plugin](/boveda/plugin-claude-hud) — an inline alternative instead of a separate browser.
+- [Command Logger Hook](/boveda/hook-command-logger) — a textual log of tool usage.
+- [Change Tracker Hook](/boveda/hook-change-tracker) — a simple log of mutations.

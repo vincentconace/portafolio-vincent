@@ -1,0 +1,435 @@
+---
+title: "Official Meta Ads CLI — Facebook's official connector for Claude (April 29, 2026)"
+description: "Meta launched Ads AI Connectors on April 29, 2026: a remote MCP server (mcp.facebook.com/ads) + a command-line Ads CLI. The official way for Claude/ChatGPT to manage Facebook/Instagram campaigns. Campaigns always start in PAUSED. Setup in under 1 min."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude", "chatgpt", "meta"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-meta-ads", "claude-ads", "andromeda-rules-for-claude"]
+---
+
+## The announcement
+
+On **April 29, 2026**, Meta released its **Ads AI Connectors** framework with 2 products:
+
+1. **Remote MCP server** — the URL `https://mcp.facebook.com/ads` that you paste into Claude or ChatGPT
+2. **Ads CLI** — a command line for Claude Code and other terminal-based agents
+
+It's the first time Meta has opened its Marketing API directly to an AI agent in an official MCP format.
+
+| Feature | Detail |
+|----------------|---------|
+| Launch | April 29, 2026 |
+| MCP URL | `https://mcp.facebook.com/ads` |
+| CLI | `meta ads [command]` |
+| Status of created campaigns | **PAUSED by default** |
+| Supported agents | Claude, ChatGPT, others via MCP/CLI |
+| Connector cost | Free (you spend on the ads themselves) |
+
+---
+
+## The 4 superpowers
+
+### 1. Build campaigns from a brief
+
+> "I want to sell my new collection to women 25-40 in Mexico City, $5000/day. Build it for me."
+
+The agent creates: campaign + ad sets + creatives + ads. **All in PAUSED**. You hit the final play button.
+
+### 2. Pull clear reports
+
+> "Give me a report for last week: which ad converted the most, which one burned budget without converting, and why."
+
+It delivers structured analysis with numbers and conclusions.
+
+### 3. Upload full catalogs
+
+> "Take this CSV with 80 products and create a 'Summer-2026' catalog for dynamic ads."
+
+No more going product by product in Commerce Manager.
+
+### 4. Audit the pixel
+
+> "Check the pixel: is it connected to active campaigns? Are purchase events being recorded correctly?"
+
+What agencies charge a fortune for, now you can do yourself.
+
+---
+
+## The golden rule
+
+> **Resources are created in PAUSED status by default, so nothing goes live until you are ready.**
+
+Everything the CLI creates **stays paused**. To activate it, **you** run explicitly:
+
+```bash
+meta ads campaign update CAMPAIGN_ID --status ACTIVE
+```
+
+It's the most important safety net. **Claude doesn't turn campaigns on by itself**.
+
+---
+
+## Setup via MCP (fast, under 1 min)
+
+### Step 1 — Settings → Connectors
+
+In Claude (claude.ai or desktop), go to Settings → Connectors.
+
+### Step 2 — Custom connector (Remote MCP)
+
+Click **➕** → "Custom connectors" (Remote MCP).
+
+### Step 3 — Paste the URL
+
+| Field | Value |
+|-------|-------|
+| Name | Meta Ads |
+| URL | `https://mcp.facebook.com/ads` |
+
+### Step 4 — Authorize
+
+Click "Connect". Claude asks you to authorize access to your Meta account. You confirm.
+
+### Verify
+
+In any chat with Claude:
+
+```
+> List my active campaigns in Meta Ads.
+```
+
+If it responds with your real list, you're **connected**.
+
+---
+
+## For ChatGPT
+
+Same URL, different UI. OpenAI documents the setup in its **Developer Mode**:
+
+`developers.openai.com/api/docs/guides/developer-mode`
+
+You paste the same URL `https://mcp.facebook.com/ads`.
+
+---
+
+## Setup via CLI (more control, terminal)
+
+If the visual connector doesn't show up for you (staged rollout), the CLI is already available for everyone.
+
+### Requirements
+
+- **Python 3.12+**
+- **pip or uv** (uv is the fast installer recommended by Meta)
+- **Meta Business Manager** with admin access to an ad account
+- **App registered on Meta Developers** with an approved Marketing API
+
+### Installation
+
+Exact command in the official docs:
+`developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started`
+
+### Authentication
+
+The CLI reads your token and IDs from **environment variables**:
+
+```bash
+export META_ADS_ACCESS_TOKEN="..."
+export META_ADS_ACCOUNT_ID="act_..."
+```
+
+It's the standard way to keep keys out of your history and your Git.
+
+---
+
+## The 9 CLI commands
+
+### 1. Explore what you already have
+
+```bash
+meta ads campaign list
+```
+
+The first thing you run. So Claude doesn't create duplicates.
+
+### 2. Create a campaign (PAUSED)
+
+```bash
+meta ads campaign create \
+  --name "Summer Sale" \
+  --objective OUTCOME_SALES \
+  --daily-budget 5000
+```
+
+### 3. Create an ad set
+
+```bash
+meta ads adset create CAMPAIGN_ID \
+  --name "My Ad Set" \
+  --optimization-goal LINK_CLICKS \
+  --billing-event IMPRESSIONS \
+  --bid-amount 500 \
+  --targeting-countries US
+```
+
+### 4. Upload a creative
+
+```bash
+meta ads creative create \
+  --name "Hero Banner" \
+  --page-id 111222333 \
+  --image ./banner.jpg \
+  --body "50% off everything!" \
+  --title "Shop Now" \
+  --link-url https://example.com/sale \
+  --call-to-action SHOP_NOW
+```
+
+### 5. Create an ad (joins creative + ad set)
+
+```bash
+meta ads ad create ADSET_ID \
+  --name "Hero Banner Ad" \
+  --creative-id CREATIVE_ID
+```
+
+### 6. Turn on a campaign (manual step)
+
+```bash
+meta ads campaign update CAMPAIGN_ID --status ACTIVE
+```
+
+**Only you** run this. Not Claude.
+
+### 7. Request a report
+
+```bash
+meta ads insights get \
+  --campaign_id COMPAIGN_ID \
+  --date-preset last_7d \
+  --fields conversions,impressions
+```
+
+**Important**: it's written `COMPAIGN_ID` with a typo in the official docs. **Don't fix it** — that's how they accept it.
+
+### 8. Create a pixel (Meta now calls it a dataset)
+
+```bash
+meta ads dataset create --name "Website Pixel"
+```
+
+### 9. Connect a pixel to an account and catalog
+
+```bash
+meta ads dataset connect 111222 \
+  --ad-account-id 333444 \
+  --catalog-id 555666
+```
+
+---
+
+## 3 copy-paste prompts
+
+### 1. From brief to PAUSED campaign
+
+```
+You are my media buyer. You have access to the official Meta Ads CLI.
+
+Brief:
+- Product: [WHAT I SELL]
+- Offer: [PRICE OR DISCOUNT]
+- Audience: [AGE, GENDER, CITY/COUNTRY, INTERESTS]
+- Daily budget: $[X] USD
+- Objective: [SALES / LEADS / TRAFFIC]
+- Landing: [URL]
+- FB Page ID: [PAGE_ID]
+
+Please:
+1. Create the campaign with `meta ads campaign create`. Objective
+   OUTCOME_SALES (or whichever fits best).
+2. Create 2 ad sets with different audiences for A/B testing —
+   explain in 1 line why you built each audience.
+3. Create 3 different creatives (varying the angle: benefit,
+   social proof, urgency). Full copy + CTA + link.
+4. Create the 3 ads joining creatives with ad sets.
+5. At the end, list EVERYTHING created with its IDs.
+
+Non-negotiable rules:
+- Campaigns stay in PAUSED. Do NOT use
+  `meta ads campaign update --status ACTIVE` for any reason.
+- ONE CLI call at a time. If one fails, stop and let me know.
+- Do NOT upload images — use placeholders, that part is on me.
+- If you have to assume something, flag it with [VERIFY] at the end.
+```
+
+### 2. Weekly report
+
+```
+You are my Meta Ads analyst. You have access to the official CLI.
+
+Account: act_[ID]
+Period: last 7 days
+
+Please:
+1. Run `meta ads insights get` for active campaigns with
+   --date-preset last_7d.
+   Fields: spend, impressions, clicks, ctr, cpc, conversions,
+   cost_per_action_type.
+2. A structured 1-page report like this:
+   (a) The good: 2 ads with the best ROAS or conversions,
+       with numbers
+   (b) The bad: 2 worst, what sank them
+   (c) Your diagnosis: why (creative, audience, offer,
+       landing)
+   (d) Next week's plan: 3 concrete actions by impact
+3. Close with a traffic light (green/yellow/red) on overall health.
+
+Rules:
+- Do NOT touch ANYTHING. READ-ONLY. If anything tempts you to pause,
+  stop and let me know.
+- ONE CLI call at a time.
+- If the numbers look off, stop and say "this doesn't look
+  right" before making things up.
+- Simple language — I show the report to a non-expert client.
+```
+
+### 3. Pixel audit
+
+```
+You are my tracking auditor. You have access to the official CLI.
+
+Account: act_[ID]
+Pixel/Dataset ID: [DATASET_ID]
+Catalog: [CATALOG_ID or "none"]
+
+Please:
+1. List active campaigns with `meta ads campaign list`.
+2. Verify that dataset [DATASET_ID] is connected to the
+   account — use `meta ads dataset connect` with --ad-account-id
+   if you need to validate.
+3. Confirm that purchase and add-to-cart events are coming through
+   (check insights if there are conversions).
+4. Report:
+   (a) Pixel status: green / yellow / red + reason
+   (b) Active campaigns that do NOT leverage the pixel for
+       optimization
+   (c) Missing or badly connected events (specific)
+   (d) What I need to fix, with priority and difficulty
+
+Rules:
+- Do NOT create, modify, or delete ANYTHING. Read-only.
+- If you find something urgent, write it in (d) and let me decide.
+- ONE CLI call at a time.
+- Clear language — I'm a marketer, NOT a developer.
+```
+
+---
+
+## The 2 rules to ALWAYS repeat
+
+### 1. One CLI call at a time
+
+If Claude fires off many in parallel, **Meta reads it as an abusive bot** and can take down your ad account.
+
+**Better slow and alive than fast and banned**.
+
+### 2. Do NOT turn on campaigns without my permission
+
+The CLI leaves everything in PAUSED by design. The rule: **only you** run `meta ads campaign update --status ACTIVE`. **Never the agent**.
+
+---
+
+## Difference vs Claude Meta Ads (unofficial skill)
+
+| Aspect | Official Meta Ads CLI | [Claude Meta Ads](/boveda/claude-meta-ads) |
+|---------|----------------------|--------------------------------------------|
+| By whom | **Meta official** | Community (`AgriciDaniel/claude-ads`) |
+| Setup | MCP URL / CLI | Install script + Meta token |
+| Guardrails | PAUSED default | PAUSED + budget cap + content checks |
+| Update | Meta maintains | Community maintains |
+| Multi-platform | Meta only | Yes (includes others) |
+
+**When to use official vs community**:
+- Official: if your use is Meta-only and you want a stable Meta stack
+- Community: if you want extra guardrails + multi-platform
+
+You can combine them: use official to execute, [Claude Ads](/boveda/claude-ads) for auditing.
+
+---
+
+## Anti-patterns
+
+### 1. Without the 2 hard rules in your prompts
+
+If your prompts don't include "one call at a time" and "don't activate without permission", Claude **will improvise** and can get your account banned.
+
+### 2. Activating campaigns automatically
+
+Even if it's tempting to have "Claude activate if everything looks good", **NO**. It's the main safety net.
+
+### 3. Uploading media via API
+
+Even though the CLI has `--image`, **do NOT use it for multipart upload**. Generate an image brief and upload it yourself from Ads Manager.
+
+### 4. "Fixing" CLI typos
+
+`COMPAIGN_ID` is in the real docs. Do NOT fix it to `CAMPAIGN_ID`. Meta accepts it that way.
+
+### 5. Assuming the feature is available to you
+
+The connector is rolling out in stages. If you see "You may not have access to this feature yet" in the UI, use the CLI in the meantime.
+
+---
+
+## Powerful combinations
+
+### Audit → execution pipeline
+
+```
+1. [Claude Ads](/boveda/claude-ads) audits your account:
+   /ads audit
+   /ads next
+
+2. The Official Ads CLI executes the fixes:
+   "Pause the 3 ad sets with the worst CPA according to the audit"
+```
+
+Auditor + specialized executor.
+
+### With Andromeda
+
+[Andromeda rules](/boveda/andromeda-rules-for-claude) are a conceptual framework. The official CLI is technical execution.
+
+```
+> Apply the 8 Andromeda rules to design my new
+  creatives. Then use the Meta Ads CLI to create the campaigns
+  in PAUSED.
+```
+
+### With Claude Copywriter
+
+```
+> Generate copy for the 5 ads.
+  Run it through /humanizer (Claude Copywriter).
+  Then upload the creatives with the Meta Ads CLI.
+```
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|-----|
+| You've never run ads | Learn the fundamentals first |
+| Enterprise budgets (>$50k/month) | A complement, not a replacement for the paid team |
+| You need multi-platform | This is Meta-only |
+| Strict compliance with human audit | Validate your flows first |
+
+---
+
+## Next steps
+
+- For a community alternative with extra guardrails, [Claude Meta Ads](/boveda/claude-meta-ads)
+- For multi-platform auditing (Meta + Google + TikTok), [Claude Ads](/boveda/claude-ads)
+- For a conceptual Meta Ads framework, [Andromeda — 8 rules](/boveda/andromeda-rules-for-claude)

@@ -1,0 +1,88 @@
+---
+title: "Hook Telegram Error Notifications — Telegram cuando algo demora o falla"
+description: "Hook con 170 installs. Manda notifications a Telegram cuando Claude encuentra long-running operations o errors. Para detectar problems remotos sin spam de successes."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "telegram"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-telegram-detailed-notifications", "hook-slack-error-notifications", "hook-discord-error-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/telegram-error-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-error-notifications.json"
+---
+
+## Qué es
+
+Equivalente a Discord/Slack Error pero para Telegram. Avisa cuando:
+- Long-running operations
+- Tools toman tiempo significativo
+- Notifications de Claude Code internas
+
+Hook events: `PreToolUse` + `PostToolUse` + `Notification`.
+
+Pre-requisito: bot Telegram + chat ID.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 170 |
+| Hook events | `PreToolUse` + `PostToolUse` + `Notification` |
+| Requiere | Telegram bot + chat ID |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/telegram-error-notifications
+```
+
+Pre-requisitos: bot via @BotFather + chat ID.
+
+Para Claude:
+
+```
+Instalé el hook automation/telegram-error-notifications. Configurá
+TELEGRAM_BOT_TOKEN y TELEGRAM_CHAT_ID. Mostrame thresholds.
+```
+
+## Qué podés hacer con esto
+
+### Stuck session detection
+
+Cuando Claude se cuelga 5+ min en una op, te avisa al celular.
+
+### Errors al mobile
+
+Si Claude dispara error notification interna, llega a Telegram. Catch desde cualquier lado.
+
+### Para sesiones autónomas
+
+`/goal` largos overnight: si algo se rompe, te llega.
+
+### Combo con [Telegram Detailed](/boveda/hook-telegram-detailed-notifications)
+
+Detailed para success + Error para problems = canal completo de tracking.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin Telegram:** usá Slack/Discord variants.
+- **Para tareas que SIEMPRE son lentas:** false positives constantes.
+- **Sin bot setup:** no funciona.
+- **Si querés también success:** este es errors-only.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Telegram Error Notifications Hook](https://www.aitmpl.com/component/hooks/automation/telegram-error-notifications) — comando exacto.
+- **Config JSON:** [telegram-error-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-error-notifications.json).
+
+## Recursos relacionados
+
+- [Telegram Detailed Notifications Hook](/boveda/hook-telegram-detailed-notifications) — para success con context.
+- [Slack Error Notifications Hook](/boveda/hook-slack-error-notifications) — equivalente Slack.
+- [Discord Error Notifications Hook](/boveda/hook-discord-error-notifications) — equivalente Discord.

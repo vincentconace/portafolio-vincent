@@ -1,0 +1,264 @@
+---
+title: "Claude Code Best Practices — 83 tips from the people who built the tool"
+description: "A curated repo by Boris Cherny and Thariq (Anthropic) with 83 tips grouped into 14 categories. It covers everything you learn in your first 6 months of use: prompts, CLAUDE.md, workflows, agents, hooks. How to navigate it without getting lost and the 10 highest-ROI tips."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "14 min"
+relatedSlugs: ["trucos-basicos-claude", "seis-trucos-boris", "guia-claude-code-completa"]
+---
+
+## What it is
+
+[claude-code-best-practices](https://github.com/anthropics/claude-code) is the repo curated by **Boris Cherny** (creator of Claude Code) and **Thariq** (Anthropic) with **83 tips grouped into 14 categories**.
+
+It's not a blog post of generic tips — it's the archive of things you learn in your first 6 months of real use, **written by the people who built the tool**. If you're getting started with Claude Code, this is the reference point.
+
+> ~50k+ stars on GitHub, MIT license. Updated regularly.
+
+---
+
+## The 14 categories
+
+| Category | Covers |
+|-----------|-------|
+| 1. Talking to Claude | How to write prompts that don't get misread |
+| 2. Planning | Building plans before coding |
+| 3. Context and sessions | Managing context without it getting polluted |
+| 4. CLAUDE.md | How to build the file that changes everything |
+| 5. Agents and subagents | When and how to divide work |
+| 6. Custom (slash) commands | Your library of personal commands |
+| 7. Skills | Reusable behaviors |
+| 8. Hooks | Event-driven automations |
+| 9. MCPs | Connecting Claude to external systems |
+| 10. Team workflow | How Claude Code operates in a team |
+| 11. Git | Commit, branch, and PR conventions with Claude |
+| 12. Debugging | How to investigate when something isn't working |
+| 13. Utilities | Useful commands / scripts |
+| 14. Daily use | Routines, habits, anti-patterns |
+
+---
+
+## How to navigate it without getting lost
+
+83 tips is **a lot**. The trap: reading them all linearly, trying to implement them all, and getting paralyzed.
+
+The right way:
+
+### Option A — By level
+
+- **Beginner**: start with categories 1, 3, 4. Those give you a foundation.
+- **Intermediate**: add 6, 7, 11. That's where you start really using the tool.
+- **Advanced**: 5, 8, 9, 10. This is where the power user begins.
+- **Pro**: 12, 13, 14 — fine-tuning your day-to-day.
+
+### Option B — By current pain
+
+What's your concrete problem?
+
+| Pain | Category that tackles it |
+|-------|---------------------|
+| Claude doesn't understand my request | 1 (talking to Claude) |
+| Large tasks get away from it | 2 (planning) |
+| Context fills up fast | 3 (context and sessions) |
+| I repeat the same explanations | 4 (CLAUDE.md) |
+| Repetitive work | 6 (commands) or 7 (skills) |
+| I want to automate | 8 (hooks) |
+| I need to connect systems | 9 (MCPs) |
+| It makes changes without warning | 4 + 1 (permissions + rules) |
+| My team doesn't use it consistently | 4 + 10 (shared CLAUDE.md) |
+
+Start with the biggest pain. Once it's solved, move on to the next.
+
+### Option C — The magic prompt
+
+What the authors recommend: hand the repo to Claude and ask for recommendations:
+
+```
+> Read this repo: https://github.com/anthropics/claude-code
+
+  My level: [beginner / intermediate / advanced]
+  My use case: [solo dev / team / freelance consultant / etc]
+  What I struggle with most: [context / configuring permissions / building skills / etc]
+
+  Recommend the 5 HIGHEST-ROI tips for me right now.
+  Justify each one with 1 line.
+```
+
+Claude gives you a prioritized list for your specific context. Much better than trying to read all 83.
+
+---
+
+## The 10 highest-ROI tips (my distillation)
+
+Out of the 83, these are the ones that move the needle most:
+
+### 1. Actually write CLAUDE.md
+
+80% of people generate it with `/init` and never edit it. **Edit it**:
+- Stack with exact versions
+- Team conventions
+- Constraints ("don't touch X")
+- Project-specific custom commands
+
+See the details in the [complete Claude Code guide](/boveda/guia-claude-code-completa).
+
+### 2. `/clear` between different tasks
+
+Long sessions with many topics → polluted context. **Clear between one task and the next**.
+
+### 3. Permissions allow for repeated commands
+
+```json
+{ "permissions": { "allow": ["Bash(npm:*)", "Bash(git log:*)", "Read", "Edit"] } }
+```
+
+Saves you ~30 confirmations per session.
+
+### 4. Ask for plans before code on large tasks
+
+```
+> Before coding, propose the plan: which files you'll touch, in what order,
+  which tests you'll update. Do NOT start until I approve.
+```
+
+Cuts iterations by 4×.
+
+### 5. Auto-verification before "done"
+
+```markdown
+[in CLAUDE.md]
+Before declaring a task complete:
+- Reread the original request
+- Run the relevant tests
+- List what was delivered vs what was requested
+```
+
+This alone prevents 70% of the "oh, but this was missing" moments.
+
+### 6. One skill for your most repeated task
+
+If you do something more than 3 times a week, make it a skill. More detail in the [skills guide](/boveda/guia-skills-claude).
+
+### 7. PostToolUse hook for automatic format/lint
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      { "matcher": "Edit|Write", "hooks": [{ "type": "command", "command": "npx prettier --write \"$CLAUDE_FILE_PATHS\"" }] }
+    ]
+  }
+}
+```
+
+Permanent format on save. See [Claude Code hooks](/boveda/hooks-automatizacion).
+
+### 8. Pick the right model
+
+- Haiku: mechanical tasks
+- Sonnet: default
+- Opus: big refactors, hard debugging
+
+Detail in [the 3 models](/boveda/claude-tres-modelos).
+
+### 9. Point specifically, not generically
+
+❌ "Look at this file"
+✅ "Look at the `validateOrder` function in `src/orders/validate.ts:120` — what does it do if the cart is empty?"
+
+With file:line it goes straight to the spot. Faster and more precise.
+
+### 10. Git with judgment, not automatic
+
+NEVER enable automatic commits. Verify every commit yourself. Branches per feature, not straight to main. A consistent message convention.
+
+---
+
+## Anti-patterns from the repo
+
+The authors call out common mistakes:
+
+### 1. A 5000-word CLAUDE.md
+
+More is NOT better. You load unnecessary context. **A concise CLAUDE.md** (300-800 words) beats a giant one.
+
+### 2. Generic skills
+
+"This skill helps you with code" is useless. Useful skills are **specific to your context**: your product, your codebase, your conventions.
+
+### 3. Hooks that hide errors
+
+If your hook has `|| true` at the end so it "doesn't break the session," you might be **hiding real errors**. Better to fail visibly than silently.
+
+### 4. Top model for everything
+
+Default Opus = you burn through your quota. Default Haiku = it fails on complex things. **Default to Sonnet, adjust case by case.**
+
+### 5. 6-hour sessions with no clear
+
+The context gets polluted. Mediocre output. **Short sessions with a good CLAUDE.md** beat endless ones.
+
+---
+
+## The recommended path for someone starting out
+
+If you have to start tomorrow without having read anything:
+
+**Day 1**:
+- Install Claude Code ([guide](/boveda/claude-code-setup-zero))
+- Run `/init` in your project
+- Edit the CLAUDE.md with stack + conventions + constraints
+
+**Week 1**:
+- Use it on real day-to-day tasks
+- Notice what friction shows up
+- Every friction → check the best practices repo for that category
+
+**Month 1**:
+- Configure permissions allow
+- Create your first skill (the one for the task you repeat most)
+- Try basic hooks (format on save)
+
+**Months 2-3**:
+- More sophisticated skills
+- MCPs if your work justifies it
+- Team workflow if you work with others
+
+Don't read all 83 tips on day 1. That's the recipe for getting confused.
+
+---
+
+## Why this repo is different
+
+Repos of "productivity tips" are legion. This one stands out because:
+
+1. **Curated by the creators**: Boris built the tool — he knows which tips are solid and which are just trends
+2. **Updated alongside Claude Code**: the tips evolve with the tool
+3. **MIT license**: you can fork it, adapt it, share it with your team
+4. **Structured by category**: it's not a flat list, you can navigate by need
+
+If your team is going to use Claude Code, consider:
+
+- Forking the repo
+- Adding your team's specific tips
+- Sharing it as an internal reference
+
+Better than building your own "Notion with best practices" from scratch.
+
+---
+
+## The takeaway
+
+83 tips don't get applied overnight. **3 every couple of weeks** for 6 months gives you mature use of the tool.
+
+The key thing: keep this repo as a **reference to consult** when friction shows up. Not as content to "finish reading."
+
+---
+
+## Next steps
+
+- For Boris's 6 most recent tips specific to Opus 4.7, [6 Boris tricks](/boveda/seis-trucos-boris)
+- For the 4 fundamental tricks, [basic tricks](/boveda/trucos-basicos-claude)
+- For a well-built initial setup, [complete Claude Code guide](/boveda/guia-claude-code-completa)

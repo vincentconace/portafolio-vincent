@@ -1,0 +1,119 @@
+---
+title: "Gmickel Marketplace — Flow-Next + Ralph autonomous mode for reliable coding"
+description: "Gordon Mickel's marketplace (554⭐) with Flow-Next: plan-first workflows + Ralph autonomous mode (overnight coding) + multi-model review gates via Codex/RepoPrompt + re-anchoring against drift."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["goal-claude-code", "claude-codex-equipo", "spec-kit"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/gmickel-claude-marketplace"
+github: "https://github.com/gmickel/gmickel-claude-marketplace"
+---
+
+## What it is
+
+Gordon Mickel built a marketplace with two plugins (`flow-next` and `flow`) focused on one very concrete thing: **reliable AI coding**. The narrative he pursues is "less magic, more predictability" — and to achieve it he combines four mechanisms:
+
+1. **Plan-first** — before touching code, define what you're going to do.
+2. **Ralph autonomous mode** — overnight coding with fresh context (the Ralph Wiggum technique: iterating over the same problem with fresh eyes).
+3. **Multi-model review gates** — gates that only get crossed if Codex or RepoPrompt approve.
+4. **Re-anchoring** — the plugin re-orients Claude back to the original spec when it detects drift.
+
+`flow-next` (16 skills, 20 agents) is the current version; `flow` (7 skills, 6 agents) is the simple version. If you're just starting out, recommended: `flow`. If you want the full arsenal: `flow-next`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | Gordon Mickel (gmickel) |
+| Stars | 554 |
+| Type | Marketplace (2 plugins) |
+| Components | 23 skills, 26 agents, 2 commands, 1 hook |
+| Marketplace | `gmickel/gmickel-claude-marketplace` |
+| Official site | [mickel.tech/apps/flow-next](https://mickel.tech/apps/flow-next) |
+
+### The 2 plugins
+
+| Plugin | Author | Components | When to use |
+| --- | --- | --- | --- |
+| `flow-next` | Gordon Mickel | 16 skills, 20 agents, 1 commands, 1 hooks | Full setup: planning + execution + Ralph mode + multi-model gates |
+| `flow` | Gordon Mickel | 7 skills, 6 agents, 1 commands | Simple version: two steps (plan → execute) + optional Beads integration |
+
+## How to install it
+
+```bash
+# 1) Marketplace
+/plugin marketplace add gmickel/gmickel-claude-marketplace
+
+# 2) Simple version to get started
+/plugin install flow@gmickel-gmickel-claude-marketplace
+
+# or the full version with Ralph
+/plugin install flow-next@gmickel-gmickel-claude-marketplace
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install gmickel/gmickel-claude-marketplace. If I'm just starting out, which
+plugin is best for me (flow vs flow-next) and why. Then show me the
+multi-model gates it ships with and how to configure Codex as a review gate.
+```
+
+## What you can do with it
+
+### Plan-first without it breaking during execution
+
+Flow forces you to plan before touching code. The difference from [native /plan mode](/boveda/goal-claude-code) or [Spec Kit](/boveda/spec-kit) is that the plan persists in `.flow/` and execution is then tied to that plan. If Claude starts to drift, the re-anchoring hook brings it back.
+
+### Ralph autonomous mode — overnight coding with context resets
+
+Ralph is a technique where Claude iterates over the same problem repeatedly, seeing its previous work with fresh context. Each iteration resets the context but sees the prior outputs. It helps prevent it from getting stuck on a bad initial decision. Compare with Anthropic's official `ralph-loop` in [Claude Plugins Official](/boveda/plugin-claude-plugins-official).
+
+### Multi-model review gates
+
+The gates won't let you move to the next step unless the plugin receives approval from a second model (Codex or RepoPrompt). Similar to [Claude Review Loop](/boveda/plugin-claude-review-loop) but as a gate, not an infinite loop.
+
+### Worker subagent per task (in flow-next)
+
+Each task runs in an isolated subagent, with its own context. This prevents parallel tasks from stepping on each other — useful when you launch several features at once.
+
+### Re-anchoring against drift
+
+When a long session starts drifting from the original plan ("Claude is implementing something else"), the plugin detects the drift and re-centers. It's the most typical problem of long autonomous sessions.
+
+## Real benefits
+
+- **Reliable coding, not magic** — the author's central promise.
+- **Ralph mode with context reset** — the key difference from loops that keep the context.
+- **Multi-model gates with Codex** — leverages your sub if you have it.
+- **Worker subagents** — parallelism without collisions.
+- **Its own site with docs** ([mickel.tech/apps/flow-next](https://mickel.tech/apps/flow-next)).
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't want "plan-first":** Flow forces you to plan. If you want to jump straight to code, you'll hit friction.
+- **Without Codex / RepoPrompt:** the multi-model gates lose value. It still works, but half the value is in that.
+- **Ralph mode burns tokens seriously:** iterating many times over the same problem multiplies the cost. For small tasks it doesn't add much.
+- **Confusion flow vs flow-next:** they're two different plugins. If you install both, you'll get duplicate slash commands.
+- **Not for beginners:** the learning curve is serious. Start with simple `flow` before jumping to `flow-next`.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Gmickel Claude Marketplace](https://www.aitmpl.com/plugins/gmickel-claude-marketplace) — the 2 plugins.
+- **GitHub repo:** [gmickel/gmickel-claude-marketplace](https://github.com/gmickel/gmickel-claude-marketplace) — code, issues.
+- **Official site:** [mickel.tech/apps/flow-next](https://mickel.tech/apps/flow-next) — docs and demos.
+
+## Related resources
+
+- [/goal — the goal Claude won't let go of](/boveda/goal-claude-code) — Claude's native primitive for autonomous execution. Compare with Ralph mode before adopting one.
+- [Claude + Codex as a team](/boveda/claude-codex-equipo) — the cross-tool pattern that multi-model gates are a specific implementation of.
+- [Spec Kit](/boveda/spec-kit) — GitHub's official Spec-Driven Development. Compare Flow plan-first vs Spec Kit before adopting one.

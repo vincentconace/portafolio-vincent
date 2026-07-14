@@ -1,0 +1,77 @@
+---
+title: "Setting Enable Telemetry — opt-in explícito a usage analytics"
+description: "Setting con 151 installs. Activa telemetry de Claude Code para usage analytics + improvements. Opt-in explícito. Para users que quieren contribuir a feature improvements via signal."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-disable-telemetry", "setting-custom-telemetry", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/telemetry/enable-telemetry"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/enable-telemetry.json"
+---
+
+## Qué es
+
+`CLAUDE_CODE_ENABLE_TELEMETRY=1` — Claude Code manda usage analytics a Anthropic.
+
+Para users que opt-in explícito. Anthropic usa esa data para identificar bugs, patterns de uso, y feature improvements.
+
+Anti vs [Disable Telemetry](/boveda/setting-disable-telemetry).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `telemetry` |
+| Installs | 151 |
+| Env var | `CLAUDE_CODE_ENABLE_TELEMETRY=1` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting telemetry/enable-telemetry
+```
+
+Para Claude:
+
+```
+Instalé el setting telemetry/enable-telemetry. Confirma que telemetry
+está activo y mostrame qué tipo de data exactamente se envía (alta level).
+```
+
+## Qué podés hacer con esto
+
+### Contribuir a improvements
+
+Tu uso pattern ayuda a Anthropic a priorizar features.
+
+### Explicitness sobre defaults
+
+Si tu policy es "opt-in todo explicit", este setting documenta que telemetry está activo intencionalmente.
+
+### Para Anthropic API users sin issues de privacy
+
+Si tu workflow no tiene constraints de privacy, telemetry es positivo.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu workflow requires privacy:** usá [Disable Telemetry](/boveda/setting-disable-telemetry).
+- **Si tu org bloquea data sharing:** este setting choca con policy.
+- **Para data altamente sensible:** ni activar.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Enable Telemetry Setting](https://www.aitmpl.com/component/settings/telemetry/enable-telemetry) — comando exacto.
+- **Config JSON:** [enable-telemetry.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/enable-telemetry.json).
+
+## Recursos relacionados
+
+- [Disable Telemetry Setting](/boveda/setting-disable-telemetry) — opt-out.
+- [Custom Telemetry Setting](/boveda/setting-custom-telemetry) — endpoint propio.
+- [Anatomía de Claude](/boveda/anatomia-claude) — privacy options.

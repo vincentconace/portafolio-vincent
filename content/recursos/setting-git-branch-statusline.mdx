@@ -1,0 +1,84 @@
+---
+title: "Setting Git Branch Statusline — model + dir + branch + uncommitted (1,545 installs)"
+description: "Setting con 1,545 installs (#3 de statuslines). Display de model name, folder, active branch, count of uncommitted changes. La opción serious para git-aware statusline."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-context-monitor", "setting-colorful-statusline", "setting-git-flow-settings"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/git-branch-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/git-branch-statusline.json"
+---
+
+## Qué es
+
+**#3 de statuslines (1,545 installs).** Statusline funcional que muestra:
+- **Model** name actual
+- **Directory** del proyecto
+- **Git branch** activa
+- **Change indicators** (count de uncommitted changes)
+
+Sin gimmick. Info útil para devs con workflow git intenso.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | **1,545 (#3 de statuslines)** |
+| Type | Bash script |
+| Muestra | Model + dir + branch + uncommitted |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/git-branch-statusline
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/git-branch-statusline. Mostrame el
+output actual.
+```
+
+## Qué podés hacer con esto
+
+### Git context constante
+
+Saber en qué branch estás y si tenés uncommitted sin tener que `git status` cada vez.
+
+### Anti "ay, estoy en main"
+
+Cuando ves "main" en el statusline, frena de editar antes de hacer un mess.
+
+### Combo con [Validate Branch Name](/boveda/hook-validate-branch-name) o [Prevent Direct Push](/boveda/hook-prevent-direct-push)
+
+Statusline + hooks de protección git = workflow git seguro y visible.
+
+### Combo con [Git Flow Settings](/boveda/setting-git-flow-settings)
+
+Git Flow Settings cubre permissions + hooks + statusline para Git Flow completo. Comparable a este pero más opinionado.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás git:** no aporta.
+- **Si querés más info** ([Context Monitor](/boveda/setting-context-monitor) cubre context + cost también).
+- **Si tu terminal es muy estrecho:** el statusline puede no caber.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Git Branch Statusline Setting](https://www.aitmpl.com/component/settings/statusline/git-branch-statusline) — comando exacto.
+- **Config JSON:** [git-branch-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/git-branch-statusline.json).
+
+## Recursos relacionados
+
+- [Context Monitor Setting](/boveda/setting-context-monitor) — #1 con más métricas.
+- [Colorful Statusline Setting](/boveda/setting-colorful-statusline) — alternativa más liviana con color.
+- [Git Flow Settings](/boveda/setting-git-flow-settings) — Git Flow completo todo-en-uno.

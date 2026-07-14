@@ -1,0 +1,258 @@
+---
+title: "Syncthing — sync your ~/.claude across all your computers (no cloud)"
+description: "You build an agent on the desktop, get to your laptop, and it's not there. Syncthing connects your computers peer-to-peer and your ~/.claude folder (with agents, skills, projects) lives on all 3 at once. Free, open source, no accounts, no middleman server. Your files NEVER pass through someone else's cloud."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["obsidian-claude", "ecosistema-de-agentes", "configura-claude-ahorra"]
+---
+
+## The problem
+
+The reality of using Claude on several computers:
+
+1. You create an awesome agent on your home PC
+2. You head to the café with your laptop, **the agent doesn't exist**
+3. You get to work, **it's not there either**
+4. On every machine you start from scratch or copy/paste prompts over WhatsApp
+
+**The worst part**: there are services that charge **$140+/year** to sync files. They make you create an account, trust their server, and accept that your data passes through machines that aren't yours.
+
+All of that just to move **files that already live on your disks**.
+
+---
+
+## The solution — Syncthing
+
+A **free, open source, peer-to-peer** tool that connects your computers directly. Your files **never pass through someone else's server**.
+
+| Feature | Detail |
+|----------------|---------|
+| Cost | **$0** |
+| Type | Peer-to-peer (no middleman server) |
+| Accounts | Not required |
+| Encryption | Yes, end-to-end |
+| OS | macOS, Windows, Linux |
+| Data in the cloud | **Zero** |
+
+Official URL: `syncthing.net`.
+
+---
+
+## How it works
+
+Each computer runs Syncthing in the background. When you modify a file in the shared folder:
+
+1. Syncthing detects it
+2. Encrypts it
+3. Sends it to the other authorized machines
+
+If one is off, it **waits**. When you turn it on, it syncs on its own.
+
+### Vs Dropbox
+
+| Dropbox | Syncthing |
+|---------|-----------|
+| Uploads to their servers | Machine-to-machine |
+| Account required | No account |
+| Storage limit (paid) | No limit |
+| Your data in the cloud | Only on your disks |
+
+---
+
+## Setup — 3 computers
+
+### Step 1 — Install on the first computer (the "source of truth")
+
+You start with the machine where **you already have your ~/.claude the way you want it** (your favorite agents and skills).
+
+**macOS (Homebrew)**:
+```bash
+brew install syncthing && brew services start syncthing
+```
+
+**Windows (Chocolatey)**:
+```powershell
+choco install syncthing
+```
+
+**Linux (Debian/Ubuntu)**:
+```bash
+sudo apt install syncthing && systemctl --user enable --now syncthing.service
+```
+
+Or ask Claude:
+
+```
+> Install Syncthing on my computer. Detect my OS, install it, start
+  the service. Show me the local URL for the UI.
+```
+
+### Step 2 — Share the ~/.claude folder
+
+1. Open the Syncthing UI (typically `localhost:8384`)
+2. **Add Folder** → select `~/.claude/`
+3. Note down the generated **Folder ID**
+
+### Step 3 — Install on computer 2
+
+Same method for your laptop.
+
+### Step 4 — Connect the 2 computers
+
+On PC 1: copy your **Device ID** (the Syncthing UI shows it).
+
+On the laptop: **Add Device** → paste PC 1's Device ID.
+
+You accept the connection on PC 1.
+
+### Step 5 — Sync the folder
+
+On the laptop: accept sharing the `~/.claude` folder that PC 1 offered.
+
+Within a few minutes: **your ~/.claude** is on the laptop too.
+
+### Step 6 — Third computer (work)
+
+Same flow. Once connected, all 3 computers have the same ~/.claude.
+
+---
+
+## What gets synced
+
+Everything inside `~/.claude/`:
+
+- **Agents** (`~/.claude/agents/`)
+- **Global skills** (`~/.claude/skills/`)
+- **Settings** (`~/.claude/settings.json`)
+- **Hooks**
+- **MCP configs**
+- **Memory** (if you use claude-mem)
+
+**Not synced**: anything **outside** of `~/.claude/`. Your projects in `~/proyectos/` stay separate (unless you add them as a separate folder in Syncthing).
+
+---
+
+## Use cases
+
+### 1. Founder with a home setup + a laptop for travel
+
+```
+Setup on the home PC (24/7).
+You head out with the laptop. Pre-trip: the laptop syncs.
+On the trip: you have everything. You change something → when you get back,
+the home PC updates.
+```
+
+### 2. Devs with a personal computer + a company one
+
+```
+Home: personal ~/.claude with your skills.
+Company: ~/.claude with team skills + your personal ones.
+
+Sync only personal skills. Team skills stay local
+on the company machine.
+```
+
+### 3. A team sharing skills
+
+```
+3 devs share the ~/.claude/skills/team-skills/ folder
+- You modify a skill on your computer
+- Your teammates get the update automatically
+- No going through GitHub manually every time
+```
+
+### 4. Mac mini + personal laptop
+
+[Agent ecosystem](/boveda/ecosistema-de-agentes) on a Mac mini 24/7. Laptop for focused work. Syncthing keeps the 2 in sync.
+
+---
+
+## Anti-patterns
+
+### 1. Syncing ALL of ~/.claude
+
+If you have sensitive data (tokens, .env), **filter them out** before syncing:
+
+```
+~/.claude/.stignore:
+.env
+*.token
+secrets/*
+```
+
+Syncthing respects `.stignore`.
+
+### 2. Forgetting that peer-to-peer needs 2 machines on
+
+If the sync goes home PC → work laptop, both need to be **on at the same time at some point**. Otherwise, it won't sync.
+
+### 3. Simultaneous changes on 2 machines
+
+If you edit the same file on 2 offline computers → when they reconnect, there's a **conflict**. Syncthing has resolution but **check it**.
+
+### 4. No additional backup
+
+Syncthing is **NOT a backup**. If you delete something on one machine → it's deleted on all of them. For a real backup, use Time Machine, Backblaze, etc.
+
+### 5. Expecting instant sync on small files
+
+Sync is **eventual**, not immediate. Change + 1-30 seconds to propagate depending on the network.
+
+---
+
+## File versioning (optional)
+
+Syncthing has versioning: if you modify a file, the **previous version stays saved for N days**.
+
+Enable it in each folder's config. Handy against accidental changes.
+
+---
+
+## Powerful combinations
+
+### With Obsidian
+
+If your [Obsidian](/boveda/obsidian-claude) vault has CLAUDE.md and skills, **Syncthing syncs the vault across computers too**.
+
+### With claude-mem
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) stores memory in `~/.claude/`. Syncthing keeps it on all your computers.
+
+### With the agent ecosystem
+
+[Agent ecosystem](/boveda/ecosistema-de-agentes) on a Mac mini + Syncthing = control from your laptop with the same setup.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| You only use 1 computer | You don't need sync |
+| Computers never on at the same time | Sync never happens |
+| Strict compliance | Dropbox Business's audit trail is better |
+| You want a real backup | Syncthing replicates, it doesn't back up |
+
+---
+
+## Quick comparison
+
+| Tool | When |
+|------|--------|
+| **Syncthing** | Free sync without cloud between your machines |
+| Dropbox | If you want cloud + sharing with outsiders |
+| Private GitHub | If git versioning is what's critical |
+| iCloud Drive | If you're in the closed Apple ecosystem |
+| Resilio Sync | A similar paid alternative |
+
+---
+
+## Next steps
+
+- For a notes vault + Claude synced, [Obsidian + Claude](/boveda/obsidian-claude)
+- For a Mac mini with 24/7 agents synced to your laptop, [agent ecosystem](/boveda/ecosistema-de-agentes)
+- For configurations that double your performance (Profile, Projects), [configure Claude and save](/boveda/configura-claude-ahorra)

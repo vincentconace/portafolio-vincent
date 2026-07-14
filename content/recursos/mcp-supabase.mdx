@@ -1,0 +1,112 @@
+---
+title: "MCP Supabase — Postgres + Auth + Storage + Realtime desde Claude (2,815 installs)"
+description: "MCP server con 2,815 installs (top adoption) que conecta Claude Code a Supabase. Operar Postgres, Auth, Storage, Edge Functions, Realtime — todo el stack BaaS desde el editor."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "supabase"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-postgresql-integration", "agente-pagokit", "plugin-claude-code-plugins-plus-skills"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/supabase"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/supabase.json"
+---
+
+## Qué es
+
+Supabase es el BaaS más adoptado del ecosistema open-source: Postgres managed + Auth + Storage + Realtime + Edge Functions, todo con SDKs serios. Si tu stack es Next/React/Vue con backend serverless, hay buenas chances de que estés en Supabase.
+
+Este MCP conecta tu Claude Code a Supabase. 2,815 installs lo posicionan como el segundo MCP de database más adoptado, solo detrás de [PostgreSQL Integration](/boveda/mcp-postgresql-integration).
+
+Cubre:
+- **Postgres queries** y schema management
+- **Auth** (users, roles, sessions)
+- **Storage** (buckets, files)
+- **Realtime** (channels, subscriptions)
+- **Edge Functions** (deploy, logs)
+- **RPC** (funciones Postgres expuestas)
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | **2,815** |
+| Servidor MCP | `supabase` |
+| Cuenta requerida | Sí — Supabase + service role / anon keys |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/supabase
+```
+
+Pre-requisitos: proyecto Supabase + URL + keys (anon para lectura pública, service_role para admin).
+
+Para Claude:
+
+```
+Instalé el MCP database/supabase. Configurá SUPABASE_URL +
+SUPABASE_SERVICE_KEY. Listame las tablas del schema public, los buckets
+de storage y las edge functions deployed.
+```
+
+## Qué podés hacer con esto
+
+### Postgres serio sobre Supabase
+
+Como [PostgreSQL Integration MCP](/boveda/mcp-postgresql-integration) pero con awareness de las extensiones que Supabase activa por default (`pgvector`, `postgis`, `pgcrypto`, etc.).
+
+### Auth ops asistidas
+
+"Listame los users que se signupearon en los últimos 7 días, agrupados por provider (email vs OAuth). Identificá users que no confirmaron email".
+
+### Storage management
+
+"En el bucket `avatars`, listame archivos sin owner_id válido (huérfanos). Sugerime cleanup".
+
+### Edge Functions
+
+"Mostrame los logs de la edge function `webhook-handler` de las últimas 24h. Identificá errores recurrentes".
+
+### Realtime channels
+
+"Listame canales activos con sus subscribers. Si hay alguno con suscripciones colgadas, dame el broker info".
+
+### RPC functions
+
+"Listame las funciones Postgres expuestas como RPC. Para cada una, dame signature y permisos".
+
+### Combo con [Agente PagoKit](/boveda/agente-pagokit)
+
+PagoKit puede armar tu setup de pagos sobre Supabase. Este MCP te deja operarlo después.
+
+## Pre-requisitos
+
+- **Proyecto Supabase** activo (Free tier alcanza para empezar)
+- **Service role key** (para admin ops) y/o anon key (read público)
+- **Network access** a tu proyecto
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="CRÍTICO — service_role key tiene poder total">
+
+- **Service role key bypassea RLS:** podés leer/escribir todo. Si compartís esa key en sesiones de Claude poco protegidas, es vector serio.
+- **Operaciones destructivas:** `delete user`, `drop bucket`, `delete table`. Hooks de aprobación SIEMPRE.
+- **Para Auth con users reales:** un prompt que altere passwords de users productivos es catastrófico. Restringí scope.
+- **Si tu stack no es Supabase:** no aplica. Para Postgres genérico usá [PostgreSQL Integration](/boveda/mcp-postgresql-integration).
+- **Costos:** Supabase tiene tiers. Operaciones masivas (egress de storage, queries pesadas) pueden generar bill.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Supabase MCP](https://www.aitmpl.com/component/mcps/database/supabase) — comando exacto.
+- **Config JSON:** [supabase.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/supabase.json).
+- **Supabase oficial:** [supabase.com](https://supabase.com).
+
+## Recursos relacionados
+
+- [PostgreSQL Integration MCP](/boveda/mcp-postgresql-integration) — para Postgres puro cuando no querés Supabase-specific.
+- [Agente PagoKit](/boveda/agente-pagokit) — scaffolding de pagos que se integra bien con Supabase.
+- [Plugins Plus Skills](/boveda/plugin-claude-code-plugins-plus-skills) — incluye `supabase-pack` con 30 skills verticalizadas.

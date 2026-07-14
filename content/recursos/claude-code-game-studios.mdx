@@ -1,0 +1,284 @@
+---
+title: "Claude Code Game Studios — un estudio de videojuegos dentro de tu terminal"
+description: "49 agentes y 72 comandos para idear, diseñar, programar e ilustrar videojuegos en Godot, Unity o Unreal. Cuándo realmente sirve para construir un juego completo y cuándo te conviene aprender los fundamentos primero."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "godot", "unity", "unreal"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["agency-agents", "gstack-equipo-ia", "claude-trabajo-creativo"]
+---
+
+## Qué es
+
+Un repo open-source con **49 agentes especializados + 72 comandos** que convierten Claude Code en un estudio de videojuegos. Cubre todo el pipeline:
+
+| Rol | Cuántos agentes |
+|-----|-----------------|
+| **Directores** | 3 (game director, art director, narrative director) |
+| **Líderes** | 8 (lead programmer, lead designer, etc.) |
+| **Especialistas programación** | 12 (gameplay, AI, networking, UI, audio, etc.) |
+| **Especialistas arte** | 10 (concept, 3D modeling, animation, VFX, etc.) |
+| **Especialistas diseño** | 8 (level design, mechanics, balancing, etc.) |
+| **QA / Testing** | 4 (playtest, bug hunter, balance tester, perf) |
+| **Producción / Negocio** | 4 (producer, business analyst, marketing, monetization) |
+
+Soporta los 3 engines principales: **Godot, Unity, Unreal**.
+
+> 9.5k+ estrellas en GitHub, licencia MIT.
+
+---
+
+## Lo honesto antes que el hype
+
+> ¿Podés hacer un videojuego sin saber programar?
+
+Respuesta corta: **sí pero con asteriscos enormes**.
+
+| Lo que sí podés | Lo que NO podés |
+|-----------------|-----------------|
+| Prototipos jugables (Pong, Snake, runners simples) | AAA / multiplayer competitivo |
+| Juegos 2D con mecánicas claras | Sistemas de física custom complejos |
+| Pixel art games | Photorealistic 3D environments |
+| Game jams (48-72h projects) | Juegos comerciales que aspiren a >$5 |
+| Aprender qué es game dev | Convertirte en game dev profesional |
+
+**Para arrancar y aprender el oficio**: oro.
+**Para producir un juego serio sin oficio**: te vas a estrellar.
+
+---
+
+## Los engines soportados
+
+### Godot
+
+- Open-source, gratis, BSD
+- **Mejor opción para arrancar** con este repo
+- Lenguaje: GDScript (Python-like)
+- 2D y 3D
+- Comunidad creciente
+
+**El repo está más afinado para Godot** que para Unity / Unreal.
+
+### Unity
+
+- Industria estándar para muchos
+- C# como lenguaje
+- Curva más empinada que Godot
+- Royalties confusos (cambios polémicos recientes)
+
+### Unreal
+
+- AAA / 3D realista
+- C++ + Blueprints visual scripting
+- Curva más empinada
+- Para proyectos donde la calidad gráfica es prioritaria
+
+**Recomendación si nunca hiciste juego**: empezá con **Godot + este repo**.
+
+---
+
+## Los 72 comandos por fase
+
+El repo organiza los comandos en fases típicas de game dev:
+
+### Fase 1 — Idea / Concepto
+
+```
+/idea           Genera concept inicial desde brief
+/genre-pick     Te ayuda a elegir género
+/pillars        Define los 3-5 pilares de diseño
+/elevator       Pitch en 1 minuto
+/tone           Tono y atmósfera
+```
+
+### Fase 2 — Pre-producción
+
+```
+/gdd            Game Design Document
+/mechanics      Diseño de mecánicas core
+/loops          Loops de gameplay (acción → reward → progresión)
+/scope          Análisis de scope realista vs ambición
+/timeline       Estimación de timeline
+```
+
+### Fase 3 — Producción
+
+```
+/prototype      Genera prototipo en Godot/Unity/Unreal
+/level <num>    Diseña nivel N
+/enemy <name>   Crea enemy con stats balanceados
+/item <name>    Crea item con efectos
+/dialogue       Genera diálogo en tu estilo
+/audio          Sugiere SFX y música
+```
+
+### Fase 4 — Arte
+
+```
+/sprite <name>   Genera prompt para sprite
+/3d-model        Plan de modelado 3D
+/animation       Frames de animación clave
+/vfx             Effect description para shaders
+/ui              UI design pasa a engine
+```
+
+### Fase 5 — QA
+
+```
+/playtest       Plan de playtest estructurado
+/balance        Análisis de balance
+/bug-hunt       Test de bugs comunes
+/perf           Performance audit
+```
+
+### Fase 6 — Lanzamiento
+
+```
+/marketing      Plan de marketing pre-launch
+/steam-page     Optimizar página de Steam
+/trailer        Plan del trailer
+/monetization   Estrategia de pricing
+```
+
+---
+
+## El flow para un juego chico (game jam)
+
+Para un game jam de 48-72h, el flow típico:
+
+### Hora 0-2 — Idea + GDD
+
+```
+> /idea Quiero un juego corto para game jam. Tema: "ecos".
+
+[Genera 5 concepts]
+
+[Elegís uno: "Echo Hunter — un sound designer perdido busca recuperar
+sus loops de un mundo silencioso"]
+
+> /gdd Echo Hunter
+[Genera GDD de 2-3 páginas con mecánicas, controls, UX flow]
+```
+
+### Hora 2-12 — Prototipo
+
+```
+> /prototype Godot 2D Echo Hunter siguiendo el GDD
+
+[Claude arma el proyecto Godot con:
+- Player movement
+- Mecánica de sound capture
+- Nivel placeholder
+- UI básica]
+
+[Vos lo abrís en Godot, lo testeás]
+```
+
+### Hora 12-36 — Iteración
+
+```
+> /level 1 — easy intro level (5 min de gameplay)
+> /level 2 — twist mecánica nueva
+> /level 3 — final challenge
+> /sprite Player
+> /audio Capture sound, ambient music suggestions
+```
+
+### Hora 36-60 — Polish + balance
+
+```
+> /balance Echo Hunter
+> /playtest Genera plan de playtest
+> /bug-hunt Common Godot 2D issues
+```
+
+### Hora 60-72 — Submit
+
+```
+> /steam-page  (o jam.itch.io)
+> /trailer Hacé plan de 30s trailer
+```
+
+**Juego jugable** al final del jam. No será obra maestra, pero **funciona**.
+
+---
+
+## Cuándo este repo gana
+
+✅ Game jam de fin de semana
+✅ Prototipos para validar mecánicas
+✅ Aprender game dev (con guardrails)
+✅ Side projects no comerciales
+✅ Pixel art / juegos 2D
+
+❌ Producción comercial seria con equipo
+❌ AAA o multiplayer online complejo
+❌ Cuando ya tenés flow profesional con tu equipo
+❌ Si no abriste Godot/Unity nunca (instalá engine, hacé tutorial básico primero, después esto)
+
+---
+
+## Anti-patrones específicos de game dev
+
+### 1. Scope creep masivo
+
+El error #1 en game dev. Querés "el GTA pero con magia". El repo va a generar **todo lo que le pidas** sin necesariamente pararte. Vos sos el guardia del scope.
+
+Regla: **si tu primer juego tarda >2 semanas, scope demasiado grande**.
+
+### 2. Querer arte AAA
+
+Los outputs visuales con IA siguen siendo limitados. Para **estética pixelada / minimalista / abstracta**, IA funciona excelente. Para **3D realista de calidad AAA**, no.
+
+Aceptá la limitación o el resultado va a frustrar.
+
+### 3. Ignorar playtesting con humanos
+
+El repo puede simular playtesting. **No reemplaza humanos reales jugando**. Sin testers humanos, tu juego es predeciblemente plano.
+
+### 4. Saltarse fundamentos
+
+Aunque el repo automatiza mucho, **necesitás saber**:
+- Qué hace un game loop
+- Qué es una state machine básica
+- Diferencia entre fixed update y normal update
+- Conceptos de game feel
+
+Sin esos fundamentos, vas a entender 0 lo que Claude te genera.
+
+---
+
+## Lo que va a pasar (realista)
+
+Si arrancás con este repo sin experiencia:
+
+**Día 1**: Estás emocionado, generás conceptos hermosos
+**Día 2-3**: Prototipo funciona pero se siente "raro" (game feel)
+**Día 4-7**: Te trabas con algo específico de Godot/Unity
+**Día 8-14**: Aprendés a leer el código generado, fixás cosas
+**Día 15+**: Sabés bastante de game dev. Bueno o malo, **aprendiste**.
+
+El verdadero valor del repo: **acelera el camino para aprender**, no te lo evita.
+
+---
+
+## Comparación con otras herramientas
+
+| Herramienta | Cuándo |
+|-------------|--------|
+| **Claude Code Game Studios** | Prototipos, jams, aprender |
+| **GameMaker** | 2D arcade-style, sin programar |
+| **Construct** | 2D no-code, aprendizaje rápido |
+| **Unreal Blueprints** | 3D no-code parcial |
+| **RPG Maker** | Solo RPGs |
+
+Game Studios brilla en **flexibilidad + integración con tu workflow Claude**. Si ya trabajás con Claude para otro código, sumar Game Studios es natural.
+
+---
+
+## Próximos pasos
+
+- Para entender el patrón "agencia de 144 especialistas" más general, [Agency Agents](/boveda/agency-agents)
+- Si tu workflow general no es game dev pero querés inspiración del patrón, [G Stack](/boveda/gstack-equipo-ia)
+- Para integrar Blender (modelado 3D) al flow, [Blender MCP](/boveda/blender-mcp)

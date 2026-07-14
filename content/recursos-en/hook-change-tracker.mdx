@@ -1,0 +1,78 @@
+---
+title: "Hook Change Tracker — a simple log of which files Claude modifies (1,127 installs)"
+description: "A hook with 1,127 installs (top of development-tools) that records which files were modified and when. The simple version of [Change Logger](/boveda/hook-change-logger) — enough for activity tracking."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-change-logger", "hook-command-logger", "hook-context-timeline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/change-tracker"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/change-tracker.json"
+---
+
+## What it is
+
+The simple version of [Change Logger](/boveda/hook-change-logger): it records which files were modified and when. No structured CSV, no details — just the basic log.
+
+Its 1,127 installs make it the most-adopted hook in the `development-tools` category. Why: it covers 80% of casual use without the extra complexity.
+
+Hook event: `PostToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `development-tools` |
+| Installs | **1,127 (top of development-tools)** |
+| Hook event | `PostToolUse` |
+| Output | Simple log |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook development-tools/change-tracker
+```
+
+For Claude:
+
+```
+I installed the development-tools/change-tracker hook. Show me where the
+log lives and a sample of the format after a few edits.
+```
+
+## What you can do with it
+
+### Basic tracking
+
+Know which files Claude touched in the current session. Handy when you lose track.
+
+### Combined with [Conventional Commits](/boveda/hook-conventional-commits)
+
+If you commit every session, the log helps you put together a complete commit message by reminding you what changed.
+
+### For autonomous sessions
+
+You launch Claude with `/goal` and walk away. When you come back, the log tells you what it touched.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you want more structure:** use [Change Logger](/boveda/hook-change-logger) with CSV.
+- **If git is already enough:** `git status` + `git log` have the same and more.
+- **For serious audits:** this hook is informational, not compliance-grade.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Change Tracker Hook](https://www.aitmpl.com/component/hooks/development-tools/change-tracker) — exact command.
+- **JSON config:** [change-tracker.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/change-tracker.json).
+
+## Related resources
+
+- [Change Logger Hook](/boveda/hook-change-logger) — the full version with structured CSV.
+- [Command Logger Hook](/boveda/hook-command-logger) — for logging commands instead of mutations.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — browser-based, real-time visualization of the context.

@@ -1,0 +1,89 @@
+---
+title: "Hook Lint On Save — ESLint/Pylint/RuboCop automático post-edit (2,329 installs, top)"
+description: "Hook con 2,329 installs — el #2 del catálogo entero. Corre lint automático después de cada file modification: ESLint para JS/TS, Pylint para Python, RuboCop para Ruby. La red de seguridad de calidad post-edit."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "eslint", "pylint"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-format-javascript-files", "hook-format-python-files", "hook-dependency-checker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/lint-on-save"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/lint-on-save.json"
+---
+
+## Qué es
+
+**2,329 installs — el segundo hook más adoptado del catálogo aitmpl** (solo detrás de [Dependency Checker](/boveda/hook-dependency-checker)). Razón: cubre el caso #1 que querés cuando AI edita código — que respete las reglas de tu linter.
+
+Después de cada modification, el hook detecta el lenguaje y corre el linter apropiado:
+- **JS/TS** → ESLint
+- **Python** → Pylint
+- **Ruby** → RuboCop
+
+Hook event: `PostToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `development-tools` |
+| Installs | **2,329 (#2 del catálogo)** |
+| Hook event | `PostToolUse` (Edit) |
+| Linters | ESLint, Pylint, RuboCop |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook development-tools/lint-on-save
+```
+
+Pre-requisito: el linter de tu lenguaje instalado (`eslint`, `pylint`, `rubocop`).
+
+Para Claude:
+
+```
+Instalé el hook development-tools/lint-on-save. Verificá que tengo
+ESLint configurado. Después editá un archivo TS con un error obvio
+(unused var) — debería aparecer el warning del lint.
+```
+
+## Qué podés hacer con esto
+
+### Catch issues que format no resuelve
+
+Format arregla whitespace. Lint catch unused imports, magic numbers, complexity issues, security smells.
+
+### Combo con format
+
+Format primero ([Format JS](/boveda/hook-format-javascript-files) o [Format Python](/boveda/hook-format-python-files)), lint después. Pipeline limpio.
+
+### Para teams con lint estricto
+
+Si tu CI rechaza PR con lint errors, este hook te avisa antes de commitear. Catch local vs catch en CI.
+
+### Para sesiones autónomas
+
+`/goal` largo: Claude no introduce lint errors sin que vos notes.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin linter configurado:** el hook necesita config válida (`.eslintrc.*`, `.pylintrc`, `.rubocop.yml`).
+- **Si tu linter es lento:** cada edit dispara lint. Para projects grandes con linter pesado, fricción notable.
+- **Si tu workflow usa otros linters** (Ruff para Python, Standard para Ruby): verificá compatibility.
+- **Para archivos no-soportados:** este hook cubre 3 lenguajes. Para Go, Rust, etc., otros hooks o ninguno.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Lint On Save Hook](https://www.aitmpl.com/component/hooks/development-tools/lint-on-save) — comando exacto.
+- **Config JSON:** [lint-on-save.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/lint-on-save.json).
+
+## Recursos relacionados
+
+- [Format JavaScript Files Hook](/boveda/hook-format-javascript-files) — format antes de lint para JS/TS.
+- [Format Python Files Hook](/boveda/hook-format-python-files) — format antes de lint para Python.
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — el #1 del catálogo, complementario para code quality.

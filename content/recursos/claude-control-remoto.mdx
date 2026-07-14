@@ -1,0 +1,326 @@
+---
+title: "Computer Use — Claude controla tu compu (mouse, teclado, pantalla)"
+description: "Claude ahora ve tu pantalla, mueve tu mouse y escribe por vos. Disponible en Cowork (Claude Desktop) y Claude Code, macOS. Sirve para apps sin API, QA automático y testing. Combinado con Dispatch podés cerrar la laptop y Claude sigue trabajando desde tu celular."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude", "cowork", "computer-use"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["claude-dispatch", "claude-piloto-automatico", "agent-view"]
+---
+
+## Qué cambia
+
+Antes de Computer Use, Claude podía:
+- Leer y escribir archivos
+- Ejecutar comandos en terminal
+- Usar APIs y MCPs
+
+Pero **no podía operar apps sin API**. Esos CRMs viejos, sistemas internos de la empresa, software desktop legacy — Claude no llegaba.
+
+**Computer Use** cambia eso. Claude ahora **ve tu pantalla, mueve tu mouse, hace click y escribe**. Si vos podés usar la app, Claude también.
+
+Disponible en macOS (research preview) en:
+- **Cowork** (Claude Desktop)
+- **Claude Code** (terminal)
+
+---
+
+## Lo que ahora puede hacer
+
+### 1. Apps sin API
+
+| Caso | Antes | Con Computer Use |
+|------|-------|------------------|
+| CRM viejo sin API | Manual | Claude llena clientes uno por uno |
+| Sistema interno de la empresa | Imposible | Claude ejecuta procesos |
+| App desktop legacy | Imposible | Claude la opera como humano |
+| Software web sin export | Copy-paste manual | Claude extrae y migra |
+
+### 2. QA / Testing automático
+
+Claude puede:
+- Abrir tu app en navegador
+- Navegar todas las páginas
+- Hacer click en cada botón
+- Verificar que funcione lo que debería
+- Detectar errores visuales (imágenes rotas, layouts mal)
+- Revisar console del navegador por errores
+- Generar reporte priorizado
+
+### 3. Migración de datos
+
+Sistema A → Sistema B sin API entre ellos:
+- Claude abre A, lee datos
+- Abre B, los inserta
+- Pantalla por pantalla, sin errores humanos
+- Logs de qué migró + qué falló
+
+### 4. Reportes manuales que se hacían a mano
+
+Esos workflows tipo "abrir dashboard → exportar CSV → pegar en Excel → mandar por email":
+- Claude los hace de punta a punta
+- En el momento que vos digas
+- Reproducible
+
+---
+
+## Setup — Cowork (Desktop)
+
+### Paso 1 — Abrí Claude Desktop
+
+### Paso 2 — Settings → Computer Use
+
+### Paso 3 — Activá toggle
+
+### Paso 4 — Permisos de accesibilidad (macOS)
+
+macOS te va a pedir dar permisos de accesibilidad a Claude. Es **requerido** para que pueda controlar mouse/teclado.
+
+System Preferences → Security & Privacy → Privacy → Accessibility → marcar Claude.
+
+### Paso 5 — Probar
+
+```
+> Abrí Spotlight, buscá "Calculator", abrila, y calculá 23 × 47.
+```
+
+Si funciona, ya está activo.
+
+---
+
+## Setup — Claude Code
+
+```bash
+claude --computer-use
+```
+
+Lanza sesión con Computer Use habilitado. Misma capacidad.
+
+---
+
+## Casos de uso prácticos
+
+### 1. Llenar formulario en app sin API
+
+```
+> Abrí la aplicación CRM-Viejo (está en mi dock).
+  Andá a "Nuevo cliente".
+  Llená los datos:
+    Nombre: María López
+    Email: maria@empresa.com
+    Teléfono: 55-1234-5678
+    Plan: Profesional
+  Revisá que esté correcto antes de guardar.
+  Después tomá screenshot de confirmación.
+```
+
+### 2. QA automatizado de tu app
+
+```
+> Abrí http://localhost:3000.
+  Navegá por todas las páginas del menú principal.
+
+  En cada página:
+  1. Verificá que no haya errores en consola
+  2. Confirmá que todos los botones son clickeables
+  3. Validá que imágenes cargan correctamente
+  4. Probá formulario de contacto con datos de prueba
+
+  Generá reporte en /tmp/qa-report.md con:
+  - Issues encontrados
+  - Sugerencias de fix
+  - Prioridad (alta/media/baja)
+```
+
+### 3. Migración cliente por cliente
+
+```
+> Migrá los clientes del CRM viejo al nuevo.
+
+  Pasos:
+  1. Abrí CRM-Viejo, navegá a la lista de clientes
+  2. Para cada cliente:
+     a. Abrí su ficha
+     b. Copiá: nombre, email, teléfono, dirección
+     c. Abrí CRM-Nuevo en otra ventana
+     d. Creá cliente con esos datos
+     e. Pegá un tag "migrado-2026-05" para tracking
+
+  Procesá de a 10. Después del lote, mostrame log y esperá
+  confirmación para continuar con el siguiente.
+
+  Si encontrás dato faltante o ambiguo, marcá ese cliente
+  como "necesita revisión" en lugar de inventar.
+```
+
+### 4. Reporte de cierre de mes
+
+```
+> Cada mes hago este flow manual:
+  1. Abrí dashboard Shopify (admin.shopify.com)
+  2. Andá a Reportes > Ventas totales
+  3. Filtrá por "mes pasado"
+  4. Exportá CSV
+  5. Abrí ese CSV en Numbers
+  6. Calculá: total, promedio por día, top 5 productos
+  7. Creá presentación con esos 4 datos
+  8. Mandala por email a contadora@empresa.com
+
+  Hacé todo eso ahora. Reportame al final.
+```
+
+---
+
+## Computer Use + Dispatch — laptop cerrada, Claude sigue
+
+Si combinás Computer Use con [Claude Dispatch](/boveda/claude-dispatch):
+
+1. Tu laptop queda en casa, prendida
+2. Vos vas al gym/café/calle
+3. Desde tu celular le mandás tareas a Claude
+4. Claude ejecuta en tu compu remota
+5. Vos volvés, trabajo hecho
+
+### Ejemplo
+
+Desde celular, mandás:
+
+```
+> Abrí el Excel "reporte-ventas-marzo.xlsx" en mi desktop.
+  Extraé totales por región.
+  Creá gráfica de barras comparativa.
+  Guardala como PNG en la misma carpeta.
+
+  Después abrí Slack y mandá la imagen al canal #reportes con
+  el mensaje "Reporte de marzo listo".
+
+  Cuando termines, mandame mensaje a este chat confirmando.
+```
+
+Te bajás del subte, ves la confirmación en tu celular. **Trabajo hecho mientras paseabas**.
+
+---
+
+## Anti-patrones
+
+### 1. Tareas críticas sin supervisión
+
+Claude puede equivocarse haciendo clicks. Si la app tiene botones "ELIMINAR TODO" cerca de "Guardar", **un click mal puesto es catastrófico**.
+
+**Regla**: para tareas con acciones destructivas, **mirá mientras trabaja** las primeras veces.
+
+### 2. Operar producción
+
+Computer Use es para **automatizar lo que vos harías**. No para deployar a prod sin supervisión. Para producción: usá pipelines normales, no Computer Use.
+
+### 3. Confiar en pixel positions exactas
+
+Si la UI cambia (botón se movió, dialog cambió de orden), Claude puede **clickear donde no debe**. Para UIs cambiantes, considerá MCP/API en lugar de Computer Use.
+
+### 4. Apps con CAPTCHA / anti-bot
+
+Sitios con CAPTCHA (banks, gov, etc.) **detectan automation**. Claude va a chocar con eso. No es bypass legal — usá flows oficiales (APIs) o hacelo manual.
+
+### 5. No establecer límites de tiempo
+
+Sin límite, Claude puede quedarse trabado en una pantalla 30 minutos. Setealo:
+
+```
+> Si una acción no funciona después de 3 intentos,
+  parate y reportame qué pasó. NO sigas intentando ciegamente.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| App tiene API decente | API es más rápida y robusta |
+| Tarea es one-shot | Setup no compensa |
+| Compu compartida con otras personas | Otros pueden ver/interrumpir |
+| Tareas que requieren juicio humano complejo | Click correcto != decisión correcta |
+| Compliance estricto / auditoría | Computer Use deja menos trace que API calls |
+
+---
+
+## Comparación con alternativas
+
+| Approach | Para qué |
+|----------|----------|
+| **Computer Use** | Apps sin API, QA visual, migración entre sistemas |
+| **MCP servers** | Apps con API integrable (Notion, Gmail, GitHub) |
+| **Playwright** | Solo navegación web, sin desktop |
+| **Selenium** | Web automation tradicional, más rígido |
+| **AppleScript** | Macs, scripts específicos rígidos |
+| **GenericAgent** | Open source equivalente, más control |
+
+Computer Use sweet spot: **automatización de UIs heterogéneas** sin tiempo para hacer integraciones API formales.
+
+---
+
+## Tips de seguridad
+
+### 1. Empezá en sandbox
+
+Si nunca usaste Computer Use, **probá en VM o cuenta de prueba** primero. Familiarizate con cómo se siente que la compu se mueva sola.
+
+### 2. Revisá cada acción inicialmente
+
+Las primeras 5-10 sesiones, **observá** mientras trabaja. Vas a notar patrones (a veces clickea donde no, a veces se confunde con dialogs).
+
+### 3. Limitá scope explícitamente
+
+```
+> SOLO operá en la ventana del Chrome con tab "miapp.com".
+  NO toques otras apps. NO abras Finder. NO uses Spotlight.
+```
+
+Más estricto = más seguro.
+
+### 4. Logs
+
+Pedile que vaya logueando:
+
+```
+> Cada acción que hagas, registrala en /tmp/computer-use-log.md
+  con timestamp + descripción.
+```
+
+Si algo sale mal, podés auditar.
+
+### 5. Desactivá cuando no usás
+
+`Settings → Computer Use → off`. No dejes activo "por las dudas".
+
+---
+
+## Combinaciones potentes
+
+### Con Agent View
+
+[Agent View](/boveda/agent-view) (varios agentes paralelos) + Computer Use:
+- Agente 1: opera tu CRM con Computer Use
+- Agente 2: procesa datos en background
+- Agente 3: monitorea y reporta
+
+Vos ves todos en el panel.
+
+### Con piloto automático
+
+[Claude piloto automático](/boveda/claude-piloto-automatico) + Computer Use = autonomía total. Hooks para protección + YOLO + Computer Use = Claude trabaja horas tocando tu compu sin permisos por cada click.
+
+**Cuidado mayor** porque potencial de daño es mayor.
+
+### Con Memory
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) recuerda qué clicks dieron buenos resultados en sesiones pasadas. Claude se vuelve más rápido en flows repetidos.
+
+---
+
+## Próximos pasos
+
+- Para operar tu compu desde tu celular, [Claude Dispatch](/boveda/claude-dispatch)
+- Para piloto automático sin permisos manuales, [Claude piloto automático](/boveda/claude-piloto-automatico)
+- Para multi-agente paralelo, [Agent View](/boveda/agent-view)

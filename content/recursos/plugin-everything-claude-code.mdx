@@ -1,0 +1,120 @@
+---
+title: "Everything Claude Code — el agent harness más estrellado del catálogo (113k⭐)"
+description: "Plugin de affaan-m con 113k stars (el más estrellado del catálogo aitmpl.com). 'The agent harness performance optimization system': skills, instincts, memory, security y research-first development cross-tool."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex", "cursor"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["memoria-claude-code", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/everything-claude-code"
+github: "https://github.com/affaan-m/everything-claude-code"
+---
+
+## Qué es
+
+113k stars: es el plugin más estrellado del catálogo aitmpl.com. Por encima de Claude Mem (42k), por encima de Claude HUD (14k), por encima de cualquier marketplace. Cuando una sola pieza junta esa cantidad de respaldo, hay que prestarle atención.
+
+El subtítulo del autor es preciso: "The agent harness performance optimization system". No es un marketplace ni un workflow completo — es un **sistema** que optimiza cómo el agent harness (la capa que conecta el LLM con las tools y el entorno) opera. Trae cinco ejes:
+
+- **Skills** — capacidades específicas
+- **Instincts** — comportamientos por default que evitan errores típicos
+- **Memory** — persistencia inteligente entre sesiones
+- **Security** — guards y validaciones
+- **Research-first development** — el patrón de investigar antes de implementar
+
+Funciona en Claude Code, Codex, Opencode, Cursor "and beyond". El autor (affaan-m) tiene una web propia en [ecc.tools](https://ecc.tools) con docs detalladas.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | affaan-m |
+| Stars | **113k** (top absoluto del catálogo) |
+| Tipo | Plugin único (sistema completo) |
+| Componentes | skills, agents, commands, hooks |
+| Cross-tool | Claude Code, Codex, Opencode, Cursor |
+| Marketplace | `affaan-m/everything-claude-code` |
+| Web oficial | [ecc.tools](https://ecc.tools) |
+
+### Los 5 ejes del sistema
+
+| Eje | Qué resuelve |
+| --- | --- |
+| Skills | Capacidades reutilizables |
+| Instincts | Comportamientos default — evita decisiones erradas típicas |
+| Memory | Contexto persistente entre sesiones (compará con [Claude Mem](/boveda/plugin-claude-mem)) |
+| Security | Guards que bloquean operaciones riesgosas |
+| Research-first | Investiga antes de implementar — anti "Claude inventó algo que no compila" |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add affaan-m/everything-claude-code
+/plugin install everything-claude-code@affaan-m-everything-claude-code
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalá everything-claude-code del marketplace affaan-m. Después leé los docs
+en ecc.tools y resumime qué hacen los 5 ejes (skills, instincts, memory,
+security, research-first) en un párrafo cada uno.
+```
+
+## Qué podés hacer con esto
+
+### Tener un Claude Code que "piense antes de actuar"
+
+El eje **research-first** es probablemente el más impactante: antes de empezar a editar, Claude investiga la zona del código que va a tocar. Menos "implementó algo que no se conecta con el resto" y más "entendió el contexto, después actuó".
+
+### Memoria persistente sin pelearte con el setup
+
+Memoria entre sesiones, igual que [Claude Mem](/boveda/plugin-claude-mem) pero integrada con los otros 4 ejes. Si vas a instalar uno solo, comparalos antes — ambos resuelven el mismo problema con filosofías distintas.
+
+### Instincts que cubren los errores típicos
+
+El concepto de "instincts" es interesante: comportamientos default que Claude aplica sin pedir permiso, basados en lo que la comunidad ya identificó como errores frecuentes. Tipo "antes de borrar un archivo, fijate si está versionado", o "antes de pushear, corre los tests".
+
+### Cross-tool real
+
+Si mañana cambiás de Claude Code a Cursor o Codex, los 5 ejes te siguen. Para equipos heterogéneos esto es valioso.
+
+### Performance optimization
+
+El autor lo llama "performance optimization system" no por casualidad. El sistema reduce iteraciones inútiles, evita re-leer archivos, prioriza skills relevantes, etc. Menos tokens consumidos para el mismo resultado.
+
+## Beneficios reales
+
+- **113k stars** — la comunidad votó masivamente.
+- **Cross-tool** — no quedás atado a un harness específico.
+- **Filosofía clara** (los 5 ejes) — sabés qué te está dando.
+- **Memoria + security + research integrados** — no tenés que combinar 3 plugins.
+- **Web propia con docs** ([ecc.tools](https://ecc.tools)) — soporte sólido.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si recién arrancás con Claude Code:** instalar un "sistema completo" sin entender Claude Code primero te puede tapar el aprendizaje básico. Empezá por [Claude Code Setup](/boveda/claude-code-setup) oficial y un par de skills.
+- **Solapamiento con `claude-mem`:** los dos cubren memoria. No los instales ambos al toque — elegí.
+- **Solapamiento con hooks de seguridad propios:** si ya configuraste hooks de seguridad a mano, los "instincts" pueden duplicar reglas.
+- **No es un toolkit, es un sistema opinionado:** vas a heredar las decisiones del autor. Si discrepás, lo vas a tener que tunear.
+- **Costo de tokens del research-first:** investigar antes de actuar gasta más. La eficiencia gana a largo plazo, pero la primera corrida es más cara.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Everything Claude Code](https://www.aitmpl.com/plugins/everything-claude-code) — comando exacto.
+- **Repo en GitHub:** [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) — código, issues.
+- **Web oficial:** [ecc.tools](https://ecc.tools) — docs completos.
+
+## Recursos relacionados
+
+- [Memoria Claude Code](/boveda/memoria-claude-code) — la memoria nativa. Útil para comparar contra el eje memory de Everything.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — para evaluar si los "instincts" alinean con lo que la doc oficial recomienda.
+- [Agency Agents](/boveda/agency-agents) — para entender la diferencia entre agents y los "instincts" que propone este sistema.

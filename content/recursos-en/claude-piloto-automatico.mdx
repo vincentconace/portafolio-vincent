@@ -1,0 +1,350 @@
+---
+title: "Claude on Autopilot — YOLO mode + hooks + GSD/Superpowers"
+description: "By default, Claude asks permission for EVERYTHING. I'll show you how to enable YOLO mode (no permissions), protect yourself with hooks (safety rules), and use GSD for new projects or Superpowers for existing ones. 15-minute setup, massive savings in clicks."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "hooks"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["hooks-automatizacion", "5-skills-equipo-dev", "agent-view"]
+---
+
+## The problem
+
+Claude asks permission for **everything**:
+
+- Read a file → permission
+- Run a command → permission
+- Install a package → permission
+- Create a folder → permission
+- Edit a file → permission
+
+And there you are, clicking "accept" 50 times per session. You lose the flow, you lose the rhythm, **Claude can't work autonomously**.
+
+---
+
+## The solution — 3 pieces
+
+| Piece | What it's for |
+|-------|----------|
+| **YOLO Mode** | Disables confirmations (Claude works without interruptions) |
+| **Protection hooks** | Safety rules that block dangerous actions |
+| **GSD or Superpowers** | Frameworks that leverage autonomy for complete projects |
+
+Combined: Claude works **for hours on its own** without touching anything it shouldn't.
+
+---
+
+## Piece 1 — YOLO Mode
+
+### What it is
+
+A mode that disables **all confirmations**. You enable it with a flag and Claude reads/writes/executes without asking permission.
+
+### Command
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+### Why it's called "dangerously"
+
+The name is **intentional**. Without additional protections, Claude can:
+- Delete files it shouldn't
+- Run `rm -rf`
+- Do a `git push --force` to main
+- Drop tables in production
+
+It's like handing over the keys to your house without telling it which doors NOT to open. **That's why you need the hooks**.
+
+### When to use it
+
+✅ You have hooks configured
+✅ Project in a VM, container, or isolated repo
+✅ Long tasks where autonomy is worth more than the risk
+
+❌ Your main machine with critical files and no hooks
+❌ Production
+❌ First time using Claude (learn without YOLO first)
+
+---
+
+## Piece 2 — Protection hooks
+
+### What they are
+
+Automatic rules that run **before** each of Claude's actions. If the action is dangerous, it gets blocked.
+
+It's like a security guard: Claude shows up with a task, the guard reviews it, and **only lets through what's safe**.
+
+### Basic setup
+
+File: `~/.claude/settings.json`
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/proteger.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Protection script
+
+File: `.claude/hooks/proteger.sh`
+
+```bash
+#!/bin/bash
+# Reviews each command before Claude runs it
+
+COMMAND=$(echo "$TOOL_INPUT" | jq -r '.command')
+
+# Block rm -rf
+if echo "$COMMAND" | grep -q 'rm -rf'; then
+  echo "Dangerous command blocked: $COMMAND" >&2
+  exit 2
+fi
+
+# Block drop table
+if echo "$COMMAND" | grep -qi 'drop table'; then
+  echo "Database operation blocked" >&2
+  exit 2
+fi
+
+# Block force push to main
+if echo "$COMMAND" | grep -qE 'git push.*--force.*main'; then
+  echo "Force push to main blocked" >&2
+  exit 2
+fi
+
+# Block sudo
+if echo "$COMMAND" | grep -q '^sudo'; then
+  echo "sudo blocked — escalate manually if you need to" >&2
+  exit 2
+fi
+
+# Everything else, allow
+exit 0
+```
+
+Make it executable:
+
+```bash
+chmod +x .claude/hooks/proteger.sh
+```
+
+### The 3 exit codes that matter
+
+| Exit code | What it means |
+|-----------|-----------|
+| `0` | Allow (all good) |
+| `2` | Block (dangerous) |
+| Other | Warn but continue |
+
+### Types of hooks
+
+| Type | What it's for |
+|------|----------|
+| `command` | Runs a script on your machine (the most common) |
+| `http` | Calls a URL (useful if you have a validation server) |
+| `prompt` | Asks another AI whether the action is safe |
+| `agent` | Uses an agent with tools to verify |
+
+For most cases, `command` with a bash script is enough. See [automation hooks](/boveda/hooks-automatizacion) to dig deeper.
+
+---
+
+## Piece 3a — GSD (new projects)
+
+### What it is
+
+GSD ("Get Shit Done") is a skill that takes you from **idea → deploy** with a structured methodology. Each step runs in a clean context (it doesn't get confused by large tasks).
+
+### Installation
+
+```bash
+npx get-shit-done-cc@latest
+```
+
+### The 6 commands
+
+| Command | What it's for |
+|---------|----------|
+| `/gsd:new-project` | Kicks off a new project from scratch |
+| `/gsd:discuss-phase` | Discusses and defines what you're going to build |
+| `/gsd:plan-phase` | Creates an execution plan |
+| `/gsd:execute-phase` | Executes the plan automatically |
+| `/gsd:verify-work` | Verifies that everything works |
+| `/gsd:ship` | Pushes and deploys |
+
+### When to use GSD
+
+✅ You're starting a project from scratch
+✅ You want structured guidance (idea → product)
+✅ You don't have architecture decisions defined yet
+
+❌ You're modifying an existing project
+❌ You know exactly what you want (GSD adds ceremony)
+
+---
+
+## Piece 3b — Superpowers (existing projects)
+
+### What it is
+
+A framework that spins up **sub-agents** working in parallel. Each sub-agent has a clean context. They work **for hours without losing the thread**.
+
+### Installation
+
+```bash
+npx superpowers@latest init
+```
+
+### The 7-step flow
+
+1. **Brainstorm** — Claude asks you questions to understand
+2. **Design** — Designs the solution before coding
+3. **Plan** — Splits into small tasks (2–5 min each)
+4. **Implement** — Sub-agents execute each task in parallel
+5. **Test** — Automated tests
+6. **Review** — Like a senior dev would
+7. **Complete** — Closes the branch and delivers
+
+### When to use Superpowers
+
+✅ Existing project with changes/features
+✅ Large tasks (>2h) that you want to delegate
+✅ A codebase that requires coordinating changes
+
+❌ Quick fixes (overkill)
+❌ Trivial projects
+
+Learn more in [top 10 April 2026](/boveda/top-10-claude-abril-2026) and [5 skills for a dev team](/boveda/5-skills-equipo-dev).
+
+---
+
+## The full combo
+
+### Initial setup (one time)
+
+```bash
+# 1. Create hooks
+mkdir -p ~/.claude/hooks
+mkdir -p .claude/hooks
+
+# 2. Configure settings.json (see code above)
+# 3. Create proteger.sh (see code above)
+# 4. chmod +x
+
+# 5. Install one of the frameworks
+npx get-shit-done-cc@latest   # new project
+# or
+npx superpowers@latest init    # existing project
+```
+
+### Daily workflow
+
+```bash
+# Start Claude on autopilot
+claude --dangerously-skip-permissions
+
+# Inside:
+> /gsd:new-project
+# or
+> Use superpowers to add a recurring payments feature
+```
+
+Claude works **for hours on its own**. You come back to review the result, not to click "accept" 50 times.
+
+---
+
+## Anti-patterns
+
+### 1. YOLO without hooks
+
+**A real risk**. Any destructive command runs without a check. A bad vibe from the model + an `rm -rf` = catastrophe.
+
+**Rule**: hooks FIRST, YOLO afterward.
+
+### 2. Hooks that block too much
+
+If your hooks are so restrictive that they block legitimate things, **you're going to disable them** and go back to square one. Find the balance: block what's catastrophic (`rm -rf`, force push to main, drop table), let recoverable things through.
+
+### 3. Hooks without testing
+
+If you never test your hooks, you don't know whether they work. **Test manually**:
+
+```bash
+echo '{"command": "rm -rf /"}' | TOOL_INPUT="$(cat)" .claude/hooks/proteger.sh
+echo $?  # Should be 2
+```
+
+### 4. GSD for small tasks
+
+GSD adds ceremony (brainstorm, design, plan). For "add me this button," it's overhead. For "build me this whole app," it shines.
+
+### 5. YOLO on your personal repo without a backup
+
+If something goes wrong and you don't have a git remote + frequent pushes, you can lose work. **Keep git clean** before going YOLO.
+
+---
+
+## Autonomy levels
+
+There's a spectrum, not just "YOLO yes or no":
+
+| Level | Setup | When |
+|-------|-------|--------|
+| **0 — Default** | Nothing | Learning Claude |
+| **1 — Selective permissions** | `permissions.allow` in settings.json | Known workflows |
+| **2 — Passive hooks** | Hooks that warn (exit ≠ 0/2) but don't block | Auditing |
+| **3 — Active hooks** | Hooks that block dangerous actions | Serious work |
+| **4 — YOLO + hooks** | `--dangerously-skip-permissions` + hooks | Autopilot |
+| **5 — Agent View + YOLO + hooks** | Multiple parallel agents without permissions | Heavy production |
+
+Start at 0, advance one level every 2–4 weeks. **Don't jump to 4 without understanding the previous ones**.
+
+---
+
+## Powerful combinations
+
+### With Agent View
+
+[Agent View](/boveda/agent-view) (several parallel agents) + YOLO + hooks = **multi-agent on autopilot**. Each agent works without asking you for permission, protected by hooks.
+
+### With persistent Memory
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) remembers across sessions what you learned from the hooks you applied. Better calibration over time.
+
+### With Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) in CLAUDE.md makes Claude work **without fluff** during the autonomous session. More useful work per dollar spent.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Production / critical repos without staging | The risk doesn't justify the autonomy |
+| Teams sharing without a protocol | Different hooks = chaos |
+| Learning Claude | YOLO hides what Claude is doing |
+| Exploratory creative work | You want to see every step, not autonomy |
+
+---
+
+## Next steps
+
+- To dig deeper into hooks specifically, [automation hooks](/boveda/hooks-automatizacion)
+- For multi-agent in parallel on autopilot, [Agent View](/boveda/agent-view)
+- For a suite of skills that complement autonomy, [5 skills for a dev team](/boveda/5-skills-equipo-dev)

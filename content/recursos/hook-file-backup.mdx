@@ -1,0 +1,81 @@
+---
+title: "Hook File Backup — backups timestampeados en .backups/ (746 installs)"
+description: "Hook con 746 installs. Antes de cada edit, crea un backup timestampeado en .backups/ directory. Versión más prolija que [Backup Before Edit](/boveda/hook-backup-before-edit) — agrupa en una carpeta."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-backup-before-edit", "hook-file-protection", "hook-dependency-checker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/file-backup"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/file-backup.json"
+---
+
+## Qué es
+
+Antes de modificar un archivo, el hook crea una copia en una carpeta `.backups/` con timestamp. Diferencia con [Backup Before Edit](/boveda/hook-backup-before-edit) (`filename.backup.TIMESTAMP` al lado del original): este agrupa todos los backups en una sola carpeta, más prolijo.
+
+Hook event: `PreToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `development-tools` |
+| Installs | 746 |
+| Hook event | `PreToolUse` (Edit) |
+| Output | `.backups/<timestamped-files>` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook development-tools/file-backup
+```
+
+Para Claude:
+
+```
+Instalé el hook development-tools/file-backup. Editá un archivo y
+mostrame el contenido de `.backups/`.
+```
+
+## Qué podés hacer con esto
+
+### Restore con `.backups/`
+
+Si Claude rompe algo, vas a `.backups/` y copiás el último timestamp encima del original.
+
+### Mantener el repo limpio
+
+A diferencia de backups al lado de cada archivo, todos quedan agrupados en una carpeta. Más fácil de gitignorear.
+
+### Audit con ls
+
+`ls -lt .backups/` te muestra qué archivos se editaron en qué orden — útil para timelines.
+
+### Combo con [File Protection](/boveda/hook-file-protection)
+
+File Protection bloquea edits a critical files. File Backup hace red si algo igual pasa.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si versionás todo en git:** git ya da history. El hook duplica.
+- **Para repos con archivos enormes:** `.backups/` se llena rápido.
+- **Acordate de gitignore:** agregá `.backups/` a `.gitignore`.
+- **Cleanup periódico:** los backups acumulan. Considerá rotación.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [File Backup Hook](https://www.aitmpl.com/component/hooks/development-tools/file-backup) — comando exacto.
+- **Config JSON:** [file-backup.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/file-backup.json).
+
+## Recursos relacionados
+
+- [Backup Before Edit Hook](/boveda/hook-backup-before-edit) — alternativa que guarda al lado de cada archivo.
+- [File Protection Hook](/boveda/hook-file-protection) — para evitar edits a critical files directamente.
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — el top del catálogo, complementa con supply chain.

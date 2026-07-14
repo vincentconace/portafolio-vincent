@@ -1,0 +1,305 @@
+---
+title: "Cowork — persistent projects, instructions, and scheduled tasks in Claude Desktop"
+description: "Cowork is the space inside Claude Desktop where Claude already knows you. Projects with persistent context, instructions that apply to every chat, smart context (folders + files + URLs), and scheduled tasks that run while you sleep. Plus: Keep Awake."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude", "cowork"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-dispatch", "claude-code-loop", "agentes-managed-claude"]
+---
+
+## The problem it solves
+
+If every time you open Claude you have to **explain from scratch** who you are, what you do, and how you want it to respond — you're wasting time.
+
+The first 5 sentences of every chat, repeated over and over:
+- "I'm a B2B SaaS founder"
+- "My target is retail CTOs"
+- "Professional but approachable tone"
+- "Reply in Latin American Spanish"
+- "No emojis in formal docs"
+
+**Cowork solves that**. It's a space inside Claude Desktop where Claude **already knows** who you are and how you want it to work.
+
+| Without Cowork | With Cowork |
+|------------|------------|
+| Every chat starts from scratch | Claude remembers your project |
+| You repeat context every time | Persistent instructions |
+| No memory between chats | Context always available |
+| Solo work | Autonomous scheduled tasks |
+
+---
+
+## Prerequisites
+
+- **Claude Desktop** (not the web chat)
+- Pro or Max plan
+
+---
+
+## 1. Create your first project
+
+### Step by step
+
+1. Claude Desktop → **Cowork** section in the left panel
+2. **Projects** → **"+"** button
+3. Choose a type:
+   - **From scratch**: empty project, you define everything
+   - **From folder**: Claude reads the structure of a local folder
+
+### When to use each type
+
+**From scratch**: when you're starting something new with no prior context. You manually define instructions, context, and files.
+
+**From folder**: when you already have organized code/files. Claude **reads the structure automatically**. Ideal for existing projects.
+
+---
+
+## 2. Project instructions
+
+Instructions **shape Claude's behavior** across **ALL** the project's conversations. They're the rules of the game.
+
+### Example
+
+```
+You are my marketing assistant for the agency DigitalLAB.
+
+Format:
+- Always reply in Latin American Spanish
+- Bullet points, no long paragraphs
+- Include metrics when relevant
+
+Rules:
+- NEVER make up data — if you don't know, ask
+- Prioritize concrete actions over theory
+- When you propose copy, give me 3 variants
+
+DO NOT:
+- Use emojis in formal docs
+- Assume the client's budget without asking
+- Recommend tools I haven't validated first
+```
+
+### Tips
+
+**1. Be specific**:
+✅ "Reply in Latin American Spanish"
+❌ "Reply in my language"
+
+**2. Include the "DO NOT" list**:
+Claude respects clear restrictions. "Don't do X" is **more effective** than hoping it will infer.
+
+**3. Iterate on the instructions**:
+They're not permanent. When you notice something recurring that's missing, add it. Improve them every week.
+
+---
+
+## 3. Smart context
+
+Beyond instructions, you can add **context** to the project:
+
+### Local folders
+
+Link a folder from your computer. Claude reads the files inside **on demand**.
+
+Useful for:
+- Brand assets
+- Business data
+- Templates
+- Internal documentation
+
+### Individual files
+
+Upload PDFs, spreadsheets, or specific images to the project.
+
+### URLs
+
+Paste a link → Claude extracts the relevant content.
+
+Useful for:
+- Official documentation for your stack
+- Competitor references
+- Articles relevant to the project
+
+### Important — isolation
+
+Each project is an **isolated space**. What you discuss in project A **doesn't reach** project B. Contexts don't get mixed.
+
+---
+
+## 4. Scheduled tasks — the most powerful feature
+
+Here's the paradigm shift. You tell Claude:
+
+> "Every Monday at 9am, review this folder and give me a summary"
+
+You set a schedule + model + task. Claude **does it on its own**.
+
+### Example — weekly summary
+
+```
+Every Monday at 9:00 AM:
+
+1. Review /Documents/Reports/
+2. Identify files added or modified in the last 7 days
+3. Read each file and extract the key points
+4. Generate an executive summary in
+   /Documents/Summaries/weekly-summary.md
+5. If you find anything urgent, put it at the top marked
+   as URGENT
+```
+
+### Example — competitor monitoring
+
+```
+Every Wednesday at 8:00 AM:
+
+1. Visit the 3 pages:
+   - competitor1.com
+   - competitor2.com
+   - competitor3.com
+2. Extract current prices for the main products
+3. Compare against /Documents/current-prices.csv
+4. Generate a diff report in
+   /Documents/competition/weekly-report.md
+5. If any competitor dropped >10%, flag it as ALERT
+```
+
+### Task options
+
+| Option | Detail |
+|--------|---------|
+| **Frequency** | Hourly / daily / weekly / custom cron |
+| **Model** | Haiku (mechanical) / Sonnet (reasoning) / Opus (critical) |
+| **Missed runs** | If the computer was off, it runs the most recent one from the last 7 days |
+
+---
+
+## 5. Keep Awake
+
+### Enable it
+
+`Claude Desktop → Settings → General → Keep computer awake`
+
+Prevents your computer from going to sleep.
+
+### Important
+
+Scheduled tasks **only run** while:
+- Your computer is on
+- Claude Desktop is open
+
+Keep Awake **prevents sleep**, but it **doesn't turn on** your computer if you shut it down.
+
+### If a run was missed
+
+Claude checks the last 7 days and runs **the most recent** missed one. **Only one** — it doesn't recover all the missed runs.
+
+---
+
+## The paradigm shift
+
+> You NO longer open Claude to tell it what to do.
+> You open Claude to see WHAT IT DID.
+
+| Piece | What it's for |
+|-------|----------|
+| **Projects** | Your space. Claude knows you. |
+| **Persistent instructions** | You don't repeat anything |
+| **Smart context** | All your info accessible |
+| **Scheduled tasks** | Claude works while you sleep |
+
+---
+
+## Real use cases
+
+### Solo founder
+
+**"Daily business" project**:
+- Brand pack as context
+- Instructions: "You are my operations assistant"
+- Scheduled task: every morning at 7am, a brief of email + calendar + KPIs
+
+You wake up → your brief is already prepared.
+
+### Marketing team
+
+**"Client X" project**:
+- Folder with assets, briefs, contracts
+- URLs for the client's social accounts
+- Instructions: the client's tone, restrictions
+- Task: Friday at 5pm, automatic weekly report
+
+### Ongoing research
+
+**"AI research watch" project**:
+- URLs: Arxiv, relevant blogs
+- Instructions: "Filter by relevance to my vertical"
+- Task: daily at 9am, top 5 new papers with a summary
+
+### Business operations
+
+**"Sales analysis" project**:
+- Folder with historical sales CSVs
+- Instructions: business-specific KPIs
+- Task: every Monday, report vs. the previous week
+
+---
+
+## Anti-patterns
+
+### 1. A single "everything" project
+
+If you cram marketing + dev + finance into one project, **the instructions contradict** each other across domains. Better: **one project per domain**.
+
+### 2. 50-line instructions
+
+Past a certain size, Claude partially ignores them. Keep them **focused**: 10-20 rules max, the most important ones.
+
+### 3. Scheduled tasks with no verifiable output
+
+If your task does something but produces no reviewable output, **you don't know whether it worked**. Always send output to a file / email / Slack.
+
+### 4. A computer that sleeps + critical tasks
+
+If important tasks depend on Keep Awake and your computer sleeps anyway (battery, reboot, etc.), you'll miss runs. For TRULY critical tasks: [Managed Agents](/boveda/agentes-managed-claude) instead of Cowork.
+
+### 5. Not iterating on instructions
+
+The initial instructions are never perfect. **Review them every 2 weeks** based on the problems you spotted.
+
+---
+
+## Powerful combinations
+
+### With Dispatch
+
+[Dispatch](/boveda/claude-dispatch) lets you **interact with your Cowork project from your phone**. Same context.
+
+### With Managed Agents
+
+For tasks that need to run even when your computer is off, use [Managed Agents](/boveda/agentes-managed-claude) instead of Cowork scheduled tasks.
+
+### With Claude Code /loop
+
+[Claude Code /loop](/boveda/claude-code-loop) is the terminal equivalent for devs. Same idea of recurring tasks but more programmable.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| You only use the web | Cowork is a Desktop feature |
+| Free plan | Not included |
+| Critical tasks / SLA | A computer being on isn't reliable |
+| Highly variable work | The value is in recurring patterns |
+
+---
+
+## Next steps
+
+- To work from your phone on the same project, [Claude Dispatch](/boveda/claude-dispatch)
+- For a programmable terminal equivalent, [Claude Code /loop](/boveda/claude-code-loop)
+- For autonomous tasks without your computer on, [Managed Agents](/boveda/agentes-managed-claude)

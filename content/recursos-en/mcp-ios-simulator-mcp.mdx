@@ -1,0 +1,114 @@
+---
+title: "MCP iOS Simulator — control the iOS Simulator from Claude Code"
+description: "MCP server with 820 installs for the iOS Simulator. Launch apps, take screenshots, manage device states, and operate simulators from Claude. The counterpart to [mcp-android-mcp](/boveda/mcp-android-mcp) for the iOS side."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "xcode"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-android-mcp", "plugin-playwright-skill", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/ios-simulator-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/ios-simulator-mcp.json"
+---
+
+## What it is
+
+iOS Simulator MCP gives you programmatic control over the iOS Simulator from Claude Code. If you work on mobile apps for iOS, Xcode ships with the Simulator — this MCP operates it via `xcrun simctl` and similar tools under the hood.
+
+With 820 installs, it ranks among the most widely adopted mobile MCPs. The iOS counterpart to [mcp-android-mcp](/boveda/mcp-android-mcp).
+
+Typical capabilities:
+- **Launch apps** in the Simulator
+- **Take screenshots**
+- **Manage states** (lock, rotate, change locale, etc.)
+- **Record video** of the session
+- **Install / uninstall** apps
+- **Simulate notifications, location, biometrics**
+
+It's macOS-only (Xcode requires a Mac).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 820 |
+| MCP server | `ios-simulator` |
+| Platform | macOS (requires Xcode) |
+| Key requirement | Simulator installed via Xcode |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/ios-simulator-mcp
+```
+
+Prerequisites:
+- macOS
+- Xcode installed with a Simulator runtime
+- `xcrun simctl` available
+
+For Claude:
+
+```
+I installed the devtools/ios-simulator-mcp MCP. List the available
+simulators, open one with iPhone 15 Pro / iOS 17, and take a screenshot
+of the home screen.
+```
+
+## What you can do with it
+
+### Screenshots and screen recordings of the app
+
+"Launch my app, go to the Settings screen, and take a screenshot. Then rotate to landscape and take another screenshot." For documentation or visual QA.
+
+### Assisted manual testing
+
+"Go to Login, fill the form with test data, tap the Submit button, and show me which screen appears. If there's an error, show me the toast." Semi-automated reproduction of flows.
+
+### Notification simulation
+
+"Simulate a push notification with title X and body Y. Show me how it looks in the Simulator." To preview copy without having to send a real push.
+
+### Localization testing
+
+"Switch the Simulator locale to `es-AR` and open the app. Show me which texts appear and whether any label overflows." For localization QA.
+
+### Permissions testing
+
+"Run a permissions reset on the Simulator and open my app. Show me which dialogs appear." Useful for testing the onboarding/permissions flow.
+
+### Compared to [android-mcp](/boveda/mcp-android-mcp)
+
+They're counterparts: this one is for iOS, that one is for Android. If you build cross-platform apps, install both.
+
+## Prerequisites
+
+- **macOS** (required for Xcode + Simulator)
+- **Xcode** with a Simulator runtime for the target OS
+- **Disk space** — simulators are heavy. Having several runtimes = several GB
+- **App signed in debug mode** if you want to inspect internal state
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **You're not on macOS:** the Simulator requires a Mac. It doesn't apply to Windows/Linux.
+- **For cross-platform RN/Flutter apps:** some workflows are better covered by `flutter run` / `expo` directly. The MCP shines when you need finer control over the Simulator.
+- **Serious automated E2E testing:** use Detox, Appium, or XCUITest. The MCP is for ad-hoc tasks.
+- **Real iOS device testing:** this MCP is Simulator-only. For physical devices, use other tools (Xcode → Devices, ios-deploy).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [iOS Simulator MCP](https://www.aitmpl.com/component/mcps/devtools/ios-simulator-mcp) — the exact command.
+- **JSON config:** [ios-simulator-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/ios-simulator-mcp.json).
+- **Apple docs:** `man simctl` or [developer.apple.com](https://developer.apple.com).
+
+## Related resources
+
+- [Android MCP](/boveda/mcp-android-mcp) — the counterpart for Android. For cross-platform apps.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — for web testing. If your app has a web version, complementary.
+- [Agency Agents](/boveda/agency-agents) — to orchestrate agents that automate cross-platform QA (iOS + Android + web in parallel).

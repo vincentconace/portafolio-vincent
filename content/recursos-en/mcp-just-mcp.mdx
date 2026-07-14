@@ -1,0 +1,94 @@
+---
+title: "MCP Just — run Just commands and task runners from Claude"
+description: "MCP server with 193 installs that plugs Just (the modern task runner) into Claude Code. List tasks from your Justfile, run them, automate dev workflows without leaving the editor."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "just"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["claude-code-best-practices", "all-deploy", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/just-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/just-mcp.json"
+---
+
+## What it is
+
+[Just](https://github.com/casey/just) is "modern make": a simple, fast task runner with friendly syntax and support for variables, scripts, and dependencies between tasks. Many people use it instead of Make or loose scripts.
+
+This MCP connects it to Claude Code: it lists the tasks in your Justfile, runs them, and shows you the output. Handy when you have a Justfile with lots of tasks (build, test, deploy, lint, format, db-migrate, etc.) and you want Claude to orchestrate them.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 193 |
+| MCP server | `just-mcp` |
+| Requirement | Just installed + Justfile in the project |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/just-mcp
+```
+
+Prerequisite: Just installed (`brew install just`, `cargo install just`, etc.).
+
+For Claude:
+
+```
+I installed the devtools/just-mcp MCP. List the available tasks in this
+project's Justfile and run the `test` task. Give me back the output.
+```
+
+## What you can do with this
+
+### Task discovery
+
+"List the Justfile tasks with their description." Handy when you come back to a project and can't remember what's there.
+
+### Running pipelines
+
+"Run `lint`, then `test`, then `build`." Claude runs them in order and reports any failure.
+
+### Project onboarding
+
+For a newcomer to the repo: "Show me what each Justfile task does and which one I run first to get going." Living documentation.
+
+### Combining with analysis
+
+"If the `test` task fails, read the output, identify the tests that break, and propose a fix." Claude orchestrates execution + diagnosis.
+
+### Local CI-style workflow
+
+"Run the whole pre-commit chain (lint + format-check + typecheck + test) and report what passed/failed." Cleaner than writing a bash script.
+
+## Prerequisites
+
+- **Just installed** on your system
+- **Justfile** in the project's root directory (or wherever Claude is working)
+- **Well-named and documented tasks:** the MCP doesn't invent anything; it reads what's there
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you use Make or npm scripts:** this MCP is Just-only. For Make there are equivalents, or you can run `make X` straight from bash.
+- **Destructive operations:** some tasks (`db:reset`, `deploy:prod`) can be destructive. Use approval hooks.
+- **If your project has no Justfile:** you can create one, but the MCP itself doesn't set up a Justfile for you.
+- **Tasks that require credentials:** tasks that depend on env vars/secrets require those secrets to be available in the session where Claude runs the MCP.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Just MCP](https://www.aitmpl.com/component/mcps/devtools/just-mcp) — exact command.
+- **JSON config:** [just-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/just-mcp.json).
+- **Official Just:** [github.com/casey/just](https://github.com/casey/just) — installation and reference.
+
+## Related resources
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices for combining task runners with AI.
+- [All Deploy](/boveda/all-deploy) — for deploys. Combine with Just for a "deploy task" that invokes All Deploy.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place this MCP as a connector to an external task runner.

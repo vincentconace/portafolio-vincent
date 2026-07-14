@@ -1,0 +1,101 @@
+---
+title: "MCP MongoDB Official — el server oficial de MongoDB para Claude Code"
+description: "MCP oficial de MongoDB para conectarse a databases y Atlas clusters. Querying, aggregation, gestión de collections. Menos installs (23) que el de comunidad, pero con respaldo de MongoDB Inc."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "mongodb"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-mongodb", "mcp-dbhub", "plugin-pg-aiguide"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/mongodb-official"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mongodb-official.json"
+---
+
+## Qué es
+
+Es la versión **oficial** del MCP de MongoDB, mantenida por MongoDB Inc. Capabilities similares al [MCP MongoDB de comunidad](/boveda/mcp-mongodb) (319 installs): conexión a databases y Atlas clusters, querying, aggregation, gestión de collections.
+
+La pregunta natural: ¿por qué solo 23 installs si es oficial? Probable razón: salió más reciente y la comunidad aún se está moviendo al oficial. Si valorás el respaldo oficial, este. Si valorás madurez de comunidad, el otro.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | 23 |
+| Servidor MCP | `mongodb-official` |
+| Autor | MongoDB Inc. |
+| Soporte | Self-hosted + Atlas |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/mongodb-official
+```
+
+Pre-requisitos: connection string + credenciales.
+
+Para Claude:
+
+```
+Instalé el MCP database/mongodb-official. Configurá las credenciales y
+listame los tools que expone. Después mostrame los databases de mi
+cluster Atlas.
+```
+
+## Qué podés hacer con esto
+
+Lo mismo que con la [versión community](/boveda/mcp-mongodb), con el plus del respaldo oficial. Los casos de uso son similares:
+
+- Exploración de schemas inferidos
+- Queries en lenguaje natural
+- Aggregations complejas
+- Optimization de índices
+- Atlas-specific operations
+
+Mirá los ejemplos en [MongoDB MCP comunidad](/boveda/mcp-mongodb) — aplican casi 1:1.
+
+## Diferencias con la versión community
+
+- **Mantenido por MongoDB Inc.** — releases alineados con MongoDB y Atlas
+- **Menos installs (23 vs 319)** — comunidad probando reducida todavía
+- **Soporte directo de MongoDB** si tenés plan
+- **Updates predictibles** — sale feature nueva de Mongo, sale update del MCP
+
+## Cuándo elegir cuál
+
+| Caso | Recomendación |
+| --- | --- |
+| Querés soporte oficial y respaldo de Mongo | **Official** |
+| Querés más comunidad y más tools probadas | **Community** |
+| Recién arrancás y no te importa | **Cualquiera — empezá con community por madurez** |
+| Stack enterprise crítico | **Official** |
+
+## Pre-requisitos
+
+- **Connection string** a tu MongoDB
+- **Credenciales** correctas
+- **Verificá compatibilidad** de versión Mongo con el MCP
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si ya tenés [`mongodb`](/boveda/mcp-mongodb) community instalado y funcionando:** no migrés a la fuerza. Probá antes en sandbox.
+- **No los instales ambos:** colisión de tools.
+- **23 installs es bajo:** menos issues conocidos públicamente. Para producción crítica, validá vos.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [MongoDB Official MCP](https://www.aitmpl.com/component/mcps/database/mongodb-official) — comando exacto.
+- **Config JSON:** [mongodb-official.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mongodb-official.json).
+- **MongoDB oficial:** [mongodb.com](https://www.mongodb.com).
+
+## Recursos relacionados
+
+- [MongoDB MCP (community)](/boveda/mcp-mongodb) — versión de comunidad, más adoptada. Compará antes de elegir.
+- [DBHub MCP](/boveda/mcp-dbhub) — para relacionales (combo si tu stack es híbrido).
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — para Postgres con expertise vertical de Timescale.

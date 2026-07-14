@@ -1,0 +1,93 @@
+---
+title: "Setting Enable Specific Servers — granular MCP allowlist"
+description: "Setting with 114 installs. Enables only specific MCP servers from .mcp.json. Granular control: only the listed ones are activated, the rest stay disabled. Allowlist approach for enterprise."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-enable-all-project-servers", "setting-disable-risky-servers", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/mcp/enable-specific-servers"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/enable-specific-servers.json"
+---
+
+## What it is
+
+`enabledMcpjsonServers: ["memory", "github", "filesystem"]` — only the listed servers are activated. The rest defined in `.mcp.json` stay disabled.
+
+Allowlist approach. More restrictive than [Enable All Project Servers](/boveda/setting-enable-all-project-servers) (which activates everything).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `mcp` |
+| Installs | 114 |
+| Setting key | `enabledMcpjsonServers` (array) |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting mcp/enable-specific-servers
+```
+
+Edit the list with your real MCPs:
+
+```json
+{
+  "enabledMcpjsonServers": [
+    "memory",
+    "github",
+    "filesystem",
+    "context7"
+  ]
+}
+```
+
+For Claude:
+
+```
+I installed the mcp/enable-specific-servers setting. List the MCPs
+from .mcp.json and give me the array of the ones worth enabling for my
+use. The rest stay disabled.
+```
+
+## What you can do with this
+
+### Granular enterprise control
+
+Your org has an approved list of MCPs. This setting enforces that only those run.
+
+### Small set vs broad catalog
+
+`.mcp.json` may have 20 MCPs defined. If you only need 5, list them.
+
+### Combo with [Disable Risky Servers](/boveda/setting-disable-risky-servers)
+
+Enable Specific + Disable Risky = belt and suspenders. Either one blocks.
+
+### For autonomous sessions
+
+Long `/goal` runs: if Claude tries to use an unauthorized MCP, it won't work.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your legitimate workflow varies:** an allowlist can be restrictive when you switch tasks.
+- **For devs experimenting with MCPs:** an allowlist requires updating the setting every time.
+- **If you don't use .mcp.json:** the setting is pointless.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Enable Specific Servers Setting](https://www.aitmpl.com/component/settings/mcp/enable-specific-servers) — exact command.
+- **JSON config:** [enable-specific-servers.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/enable-specific-servers.json).
+
+## Related resources
+
+- [Enable All Project Servers Setting](/boveda/setting-enable-all-project-servers) — the opposite auto-approve all.
+- [Disable Risky Servers Setting](/boveda/setting-disable-risky-servers) — complementary blacklist.
+- [Anatomy of Claude](/boveda/anatomia-claude) — the MCP model.

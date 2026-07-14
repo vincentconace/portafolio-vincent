@@ -1,0 +1,102 @@
+---
+title: "MCP Apify — extract data from social, search engines, maps and e-commerce"
+description: "The official Apify MCP server. Gives you access to 5000+ pre-built scrapers (Actors) for Instagram, TikTok, Amazon, Google Maps, LinkedIn, etc. The most direct way to scrape complex sites without writing the scraper yourself."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "apify"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["apify-mcp", "apify-clientes-ilimitados", "browser-harness"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web-data/apify"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/apify.json"
+---
+
+## What it is
+
+Apify is a cloud scraping platform. Its core value are the "Actors": thousands of pre-built, maintained scrapers for specific sites — Instagram, TikTok, Amazon, Google Maps, LinkedIn, Twitter, YouTube and many more.
+
+The problem without Apify: every time you want to scrape LinkedIn, you run into bot detection, IP rotation, captchas, layouts that change. It takes weeks and breaks often.
+
+With this MCP, Claude calls Apify's Actors for you. You say "get me the last 50 posts from Instagram profile X" and Claude runs the corresponding Actor, waits for the result and returns clean data in JSON.
+
+It's probably the most direct shortcut for serious scraping without building your own infrastructure.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web-data` |
+| Installs | 39 |
+| MCP server | `apify` |
+| Account required | Yes — Apify (free tier available) |
+| Actor catalog | 5,000+ pre-built |
+| Model | Pay-as-you-go (Apify charges per usage) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp web-data/apify
+```
+
+You need an Apify API token (free with the free account).
+
+For Claude:
+
+```
+Install the web-data/apify MCP. Then tell me how to set the APIFY_TOKEN
+and show me how to call a specific Actor (for example the
+Instagram profile scraper).
+```
+
+## What you can do with this
+
+### Scrape complex sites without writing a scraper
+
+"Get me the last 30 products in the laptops category on Amazon US sorted by reviews". Claude calls the Amazon Actor and returns the data. No fighting with captchas or IP rotation.
+
+### Lead generation from LinkedIn
+
+"Find CTO profiles at SaaS startups with 50-200 employees in LATAM and export name, company, URL". The LinkedIn Actor handles throttling and the session.
+
+### Social analysis
+
+"Pull the last 100 tweets from user X and the last 200 comments from their latest YouTube video". You combine several Actors in a single session.
+
+### Google Maps data
+
+"Show me all the vegetarian restaurants in Buenos Aires with a rating above 4 and a review count above 50". The Maps Actor does it.
+
+### E-commerce price tracking
+
+"Every day at 10am get me the price of these 50 SKUs from Mercado Libre and let me know if they dropped by more than 10%". Combined with a scheduler (cron, hooks) you build a price monitor.
+
+## Prerequisites
+
+- **Apify account**: [apify.com](https://apify.com) — free tier with monthly credits
+- **API token** from the dashboard
+- **Knowing which Actor to use** (or asking Claude to look it up in the catalog)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before using">
+
+- **Costs can escalate:** Apify charges for compute. For massive scraping, check the pricing first.
+- **Legal and the TOS of the scraped sites:** scraping LinkedIn, Instagram, etc. may violate their terms. The legal responsibility is yours, not Apify's nor the MCP's.
+- **For simple scrapes (a single HTML page):** a Playwright script or `curl` + `pup` is more lightweight. The MCP shines with protected sites.
+- **Private sites with your own login:** the MCP uses Apify's Actors; it doesn't automate your personal session. For that, check [Browser Harness](/boveda/browser-harness).
+- **Sensitive data:** results pass through Apify's servers. If your use involves regulated PII, read their data policy.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Apify MCP](https://www.aitmpl.com/component/mcps/web-data/apify) — the exact command.
+- **JSON config:** [apify.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/apify.json) — the server definition.
+- **Official Apify:** [apify.com](https://apify.com) — account, Actors, pricing.
+
+## Related resources
+
+- [Apify MCP — base guide](/boveda/apify-mcp) — the foundational resource on Apify in the vault.
+- [Apify for unlimited clients](/boveda/apify-clientes-ilimitados) — a usage pattern for lead generation at scale.
+- [Browser Harness](/boveda/browser-harness) — an alternative when you need your own logged-in personal session instead of generic scrapers.

@@ -1,0 +1,259 @@
+---
+title: "Supabase MCP Plugin — Claude talks to your database"
+description: "Production-ready MCP server that connects Claude Code to your Supabase project. It enables SELECT queries, schema inspection and controlled migrations, with fine-grained permissions per operation type. Open-source, ready to use."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "mcp", "supabase", "postgres"]
+badge: "nuevo"
+version: "v0.4"
+publishedAt: "2026-05-20"
+readingTime: "12 min"
+github: "https://github.com/supabase-community/supabase-mcp"
+relatedSlugs: ["mcp-server-propio", "comando-tests-automaticos"]
+---
+
+## What it solves
+
+Working with Supabase from Claude has friction points:
+
+- To inspect the schema you have to open the dashboard
+- Test queries go through the SQL Editor, copy-paste, back to Claude
+- Migrations are written in one place and applied in another
+- If Claude doesn't know the exact shape of your tables, it invents columns
+
+This plugin (MCP server) gives Claude controlled access to your Supabase project, with fine-grained permissions: it can read the entire schema and run SELECTs, but it CANNOT modify data or run migrations unless you explicitly enable it.
+
+---
+
+## Tools it exposes
+
+| Tool | What it does | Required permission |
+|------|----------|-------------------|
+| `list_tables` | Lists all tables with their columns and types | always active |
+| `describe_table` | Full detail of a table: indexes, FKs, RLS policies | always active |
+| `query` | Runs a SELECT (read-only, parses the SQL first) | always active |
+| `apply_migration` | Applies a SQL migration | requires `WRITE_MIGRATIONS=true` |
+| `generate_types` | Regenerates the `database.types.ts` file | always active |
+| `inspect_rls` | Inspects RLS policies for a table | always active |
+| `list_functions` | Lists Postgres functions and exposed RPC | always active |
+
+---
+
+## Installation
+
+<Checklist
+  storageKey="supabase-mcp-prereqs"
+  items={[
+    "Active Supabase project (cloud or self-hosted)",
+    "Project connection string (not the pooler, the direct one)",
+    "Service role key (NOT the anon key — the service role has permissions for introspection)",
+    "Claude Code v1.5+ installed",
+  ]}
+/>
+
+<Step number={1} title="Install the package">
+
+```bash
+npx -y @supabase/mcp-server-supabase --help
+```
+
+If it prints help, the package is accessible. No global install needed — `npx -y` fetches it on-demand.
+
+</Step>
+
+<Step number={2} title="Configure it in Claude Code">
+
+Edit the project's `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}",
+        "WRITE_MIGRATIONS": "false"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Service role on local, not in CI">
+The service role key gives you admin permissions. **Only use it on your machine, never commit it**. For CI use the runner's environment variables, and consider whether you really need an MCP server in pipelines (probably not).
+</Callout>
+
+</Step>
+
+<Step number={3} title="Verify" last>
+
+Open Claude Code in the project and try:
+
+```
+> What tables do I have in Supabase?
+```
+
+Claude should invoke `list_tables` and return a summary. If it doesn't detect the server, check:
+
+```bash
+claude --debug 2>&1 | grep -i supabase
+```
+
+</Step>
+
+---
+
+## Real use cases
+
+### 1. Inspect before writing code
+
+Before asking Claude to write a `select` with joins, let it see the schema:
+
+```
+> Show me the tables related to users and their relationships
+```
+
+Claude will use `list_tables` + `describe_table` and give you the real schema, not an invented one. Then you can ask:
+
+```
+> Write me a query that fetches active users with their last 3 orders
+```
+
+And it will use the correct column names and FKs.
+
+### 2. Generate types after a change
+
+After applying a migration:
+
+```
+> Regenerate the TypeScript types
+```
+
+Claude invokes `generate_types` and updates your `database.types.ts`. Useful because you forget to do it by hand.
+
+### 3. Debugging RLS
+
+If you get a "permission denied" on a query and don't understand why:
+
+```
+> What RLS policies does the orders table have?
+```
+
+`inspect_rls` returns the active policies. Much faster than opening the dashboard.
+
+### 4. Migration with confirmation
+
+With `WRITE_MIGRATIONS=true` (use it only when you need it):
+
+```
+> I need to add a `notes` column (text, nullable) to the orders table
+```
+
+Claude will:
+1. Verify the table exists
+2. Generate the SQL: `ALTER TABLE orders ADD COLUMN notes text NULL;`
+3. **Show it to you and ask for confirmation** before running it
+4. If you say yes, apply it and return the result
+
+---
+
+## Fine-grained permissions
+
+If you work in production, **NEVER enable `WRITE_MIGRATIONS=true`** without a review workflow. The recommended pattern:
+
+```json
+{
+  "mcpServers": {
+    "supabase-prod": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL_PROD}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_KEY_PROD}",
+        "WRITE_MIGRATIONS": "false",
+        "READ_ONLY": "true"
+      }
+    },
+    "supabase-staging": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL_STAGING}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_KEY_STAGING}",
+        "WRITE_MIGRATIONS": "true"
+      }
+    }
+  }
+}
+```
+
+This way you have two "environments" with different permissions. When you ask Claude for something destructive, you specify the environment:
+
+```
+> Apply this migration on supabase-staging
+```
+
+---
+
+## Useful patterns
+
+### A skill that combines MCP + tests
+
+A skill that, before approving a PR with changes to queries, runs the queries against staging:
+
+```markdown
+---
+name: verify-queries
+description: Verifies SQL queries from the current diff by running them on Supabase staging and reporting whether they fail or return 0 rows.
+---
+
+For each SQL query modified in the diff:
+1. Identify the query
+2. Run it against the `supabase-staging` MCP with `query`
+3. If it throws an error, mark it as blocking
+4. If it returns 0 rows in a context where it shouldn't, mark it as a warning
+```
+
+### Hook on session close
+
+If your team always regenerates types after migrations:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          { "type": "command", "command": "test -f .claude/migration-applied && npx supabase gen types typescript --local > database.types.ts && rm .claude/migration-applied || true" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+(The plugin drops the `.claude/migration-applied` file when it applies a migration.)
+
+---
+
+## Plugin roadmap
+
+Things in development (as of May 2026):
+
+- **Edge Functions deploy** — invoke function deploys from Claude
+- **Auth admin** — user management (creation, removal, password resets)
+- **Storage** — list and move bucket files
+- **Realtime channels inspection** — view active subscriptions
+
+To suggest features or report bugs: [github.com/supabase-community/supabase-mcp](https://github.com/supabase-community/supabase-mcp).
+
+---
+
+## Alternatives
+
+If you don't use Supabase but do use Postgres directly, take a look at `@modelcontextprotocol/server-postgres` — Anthropic's official one, more limited but it works with any Postgres.
+
+For Firebase and others: there are community MCP servers, of variable quality. If your need is critical, consider building your own following the [own MCP server guide](/boveda/mcp-server-propio).

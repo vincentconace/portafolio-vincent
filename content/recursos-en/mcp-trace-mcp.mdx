@@ -1,0 +1,102 @@
+---
+title: "MCP Trace — framework-aware code intelligence with 99% accuracy"
+description: "MCP server (just published, 7 installs) for framework-aware code intelligence. Semantic navigation, impact analysis and refactoring across 60 framework integrations and 81 languages with up to 99% accuracy."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-serena", "plugin-claude-code-lsps", "mcp-deepgraph-react"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/trace-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/trace-mcp.json"
+---
+
+## What it is
+
+Trace MCP positions itself as a **framework-aware** code intelligence layer: it understands not just the language (TypeScript, Python, etc.) but also the framework (Next.js, Django, Rails, etc.) and applies that awareness to its analysis.
+
+The author's claims:
+- **60 framework integrations**
+- **81 supported languages**
+- **Up to 99% accuracy** in semantic navigation, impact analysis and refactoring
+
+It's new (only 7 installs at the time of scraping), but the claims are ambitious. If it works as promised, it's the most complete option in the catalog for code intelligence.
+
+Compare it with:
+- [Serena](/boveda/mcp-serena) (689 installs) — semantic retrieval + editing
+- [DeepGraph](/boveda/mcp-deepgraph-react) — framework-specific structural analysis
+- [Claude Code LSPs](/boveda/plugin-claude-code-lsps) — one LSP per language
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 7 (just published) |
+| MCP server | `trace-mcp` |
+| Coverage | 60 frameworks + 81 languages |
+| Accuracy claim | Up to 99% |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/trace-mcp
+```
+
+For Claude:
+
+```
+I installed the devtools/trace-mcp MCP. Show me the frameworks it detects
+in my project. For my Next.js + tRPC + Prisma codebase, do an impact
+analysis if I change the signature of `getUserById` in my router.
+```
+
+## What you can do with it
+
+### Framework-aware impact analysis
+
+"If I change the shape of this Prisma `User` model, which files in the codebase break? Cover tRPC routers, React components that use derived types, Zod schemas."
+
+### Safe cross-framework refactoring
+
+"Rename `apiClient` to `httpClient` across the entire codebase. Respect the names in docs, imports, JSDoc, and the names in `package.json` scripts if they appear."
+
+### Semantic navigation
+
+"Find all the functions that handle auth across the stack. Identify the ones that cross boundaries (the frontend uses a backend auth function via tRPC)."
+
+### Pattern detection
+
+"Identify React components that improperly mix client + server state." Trace can detect framework-specific smells.
+
+### Compared with [Serena](/boveda/mcp-serena)
+
+Serena does generic semantic retrieval + editing. Trace adds framework awareness. For a monolithic project with one dominant framework, Trace can add extra value. For generic multi-language work, Serena.
+
+## Prerequisites
+
+- **A project with an identifiable stack** (Trace works best when it recognizes the framework)
+- **Languages and frameworks within the 60+/81 supported** — check the list in the JSON or the official docs
+
+## When NOT to use it
+
+<Callout type="warning" title="Before installing">
+
+- **Only 7 installs:** very little community. The claims are high but haven't been proven at scale yet. Try it in a sandbox.
+- **For small projects:** [LSPs](/boveda/plugin-claude-code-lsps) are enough.
+- **Very niche stack:** verify that your framework is on the supported list.
+- **"99% accuracy" is the author's claim:** there's no public benchmark yet. Take it with a grain of salt.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Trace MCP](https://www.aitmpl.com/component/mcps/devtools/trace-mcp) — exact command.
+- **Config JSON:** [trace-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/trace-mcp.json).
+
+## Related resources
+
+- [Serena MCP](/boveda/mcp-serena) — a more battle-tested alternative for semantic retrieval + editing.
+- [Claude Code LSPs](/boveda/plugin-claude-code-lsps) — individual LSPs per language.
+- [DeepGraph React MCP](/boveda/mcp-deepgraph-react) — structural analysis specific to React/Next/Vue stacks.

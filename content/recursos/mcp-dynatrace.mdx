@@ -1,0 +1,95 @@
+---
+title: "MCP Dynatrace — observability y monitoring real-time desde Claude Code"
+description: "MCP server para integrar Dynatrace con Claude Code. Observability, métricas, traces, y monitoring en tiempo real desde tu editor. Para equipos enterprise que usan Dynatrace como su platform de APM."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "dynatrace"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-elasticsearch", "all-deploy", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/dynatrace"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/dynatrace.json"
+---
+
+## Qué es
+
+Dynatrace es una de las plataformas APM (Application Performance Monitoring) más usadas en enterprise. Cubre observability completa: métricas, traces distribuidos, logs, RUM (Real User Monitoring), sintéticos. La data está, el problema es que viaja entre dashboards.
+
+Este MCP trae esa observability a Claude Code. En vez de abrir el dashboard de Dynatrace para diagnosticar un incidente, le preguntás a Claude y consulta por vos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 77 |
+| Servidor MCP | `dynatrace-mcp-server` |
+| Cuenta requerida | Sí — Dynatrace (enterprise) |
+| Autenticación | API token / OAuth |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/dynatrace
+```
+
+Pre-requisito: cuenta Dynatrace y API token con permisos sobre los environments que querés consultar.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/dynatrace. Después de setear las credenciales,
+mostrame los services con SLO en breach en el environment de prod en
+las últimas 2 horas.
+```
+
+## Qué podés hacer con esto
+
+### Diagnóstico de incidentes
+
+"Servicio `payments-api` está respondiendo lento. Mostrame los traces más lentos de los últimos 30 minutos, los errores agrupados por endpoint, y la lista de deploys recientes". Sin tener que armar el dashboard a mano.
+
+### Análisis de SLO
+
+"¿Qué servicios están breach del SLO en prod hoy? Cuál es el error budget restante?". Útil para revisión de Sprint o standup.
+
+### Root cause asistido
+
+"El error rate subió 3x a las 14:30. ¿Qué cambió en infra o deploy alrededor de esa hora?". Cruzá métricas con eventos.
+
+### Performance bottlenecks
+
+"En el trace del request más lento de la última hora, mostrame el span dominante y qué servicio lo procesa". Útil para identificar el cuello de botella exacto.
+
+### Correlación logs + traces
+
+"Buscame los logs que coincidan con los traces del request X que falló". Bridge entre observability streams.
+
+## Pre-requisitos
+
+- **Cuenta Dynatrace** con plan apto
+- **API token** con scopes correctos para los datos que vas a consultar
+- **Permisos** sobre los environments relevantes
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu observability es otra** (New Relic, Datadog, Honeycomb, Grafana): este MCP es Dynatrace-only.
+- **Sin acceso enterprise:** Dynatrace tiene free tier limitado. Para uso real necesitás plan.
+- **Para tareas muy ad-hoc de un single query:** el dashboard nativo puede ser más rápido. El MCP brilla cuando combinás con otros flujos (escribir post-mortem en Claude, correlacionar con deploys, etc.).
+- **Token con scope amplio:** si tu cuenta tiene acceso a todo, Claude hereda. Usá token con scope mínimo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Dynatrace MCP](https://www.aitmpl.com/component/mcps/devtools/dynatrace) — comando exacto.
+- **Config JSON:** [dynatrace.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/dynatrace.json).
+
+## Recursos relacionados
+
+- [Elasticsearch MCP](/boveda/mcp-elasticsearch) — para consultas a logs/data en ES, complementario.
+- [All Deploy](/boveda/all-deploy) — Dynatrace para observar lo que está corriendo; All Deploy para publicar.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que reaccionen a alertas (autohealing, scaling).

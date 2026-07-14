@@ -1,0 +1,82 @@
+---
+title: "Setting Neon Database Resources — statusline with storage + compute + cost"
+description: "Setting with 81 installs. Resource-focused variant of the Neon statusline. Storage usage, compute consumption, cost tracking. For monitoring billing and resources."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "neon"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-neon-database-context", "setting-neon-database-dev", "mcp-neon"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/neon-database-resources"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-resources.json"
+---
+
+## What it is
+
+Resource-focused variant of the Neon statusline. It shows:
+- **Storage usage** (GBs)
+- **Compute consumption** (CU hours)
+- **Cost tracking** (how much this month's bill is running)
+
+For teams that need constant awareness of Neon billing — useful because serverless billing is variable.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 81 |
+| Focus | Storage + compute + cost |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/neon-database-resources
+```
+
+For Claude:
+
+```
+I installed the statusline/neon-database-resources setting. Set up the Neon
+API key. Show me the current storage + compute + cost.
+```
+
+## What you can do with this
+
+### Preventive cost awareness
+
+You see the bill going up before the invoice arrives.
+
+### Detecting expensive queries
+
+If a dev started running heavy queries, the cost spike is visible.
+
+### Combo with [Neon Database Dev](/boveda/setting-neon-database-dev)
+
+Dev shows runtime perf. Resources shows cost. They cover different angles, but you can only have one statusline active.
+
+### For startups optimizing budget
+
+If the budget is tight, cost awareness in the statusline helps discipline.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **No Neon paid plan:** the free tier doesn't apply.
+- **If you don't care about costs:** [Neon Context](/boveda/setting-neon-database-context) or [Dev](/boveda/setting-neon-database-dev) cover it better.
+- **Single statusline:** pick a variant.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Neon Database Resources Setting](https://www.aitmpl.com/component/settings/statusline/neon-database-resources) — exact command.
+- **Config JSON:** [neon-database-resources.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-resources.json).
+
+## Related resources
+
+- [Neon Database Context Setting](/boveda/setting-neon-database-context) — project info.
+- [Neon Database Dev Setting](/boveda/setting-neon-database-dev) — daily dev work.
+- [Neon MCP](/boveda/mcp-neon) — operations on-demand.

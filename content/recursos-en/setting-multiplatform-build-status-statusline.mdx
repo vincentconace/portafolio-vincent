@@ -1,0 +1,84 @@
+---
+title: "Setting Multiplatform Build Statusline — iOS + Android + PC + WebGL builds"
+description: "Setting with 63 installs. Custom statusline for game dev with multi-platform builds. Completion tracking on iOS, Android, PC, WebGL. Build progress per platform in real time."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-game-performance-monitor-statusline", "setting-asset-pipeline-controller-statusline", "setting-context-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/multiplatform-build-status-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/multiplatform-build-status-statusline.json"
+---
+
+## What it is
+
+A statusline for game devs who compile to multiple platforms simultaneously. It shows build progress per platform:
+- iOS
+- Android
+- PC (Windows/Mac/Linux)
+- WebGL
+
+Real-time completion tracking. For shops that fire builds in parallel and want awareness of their status.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 63 |
+| Platforms | iOS, Android, PC, WebGL |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/multiplatform-build-status-statusline
+```
+
+For Claude:
+
+```
+I installed the statusline/multiplatform-build-status-statusline setting.
+Show me which builds it detects as active.
+```
+
+## What you can do with this
+
+### Parallel builds made visible
+
+You fire builds for 4 platforms — you see the progress of all 4 in the statusline.
+
+### For Unity/Unreal shops with CI
+
+If your game compiles for several platforms automatically, this awareness is useful.
+
+### Combo with [Game Performance Monitor Statusline](/boveda/setting-game-performance-monitor-statusline)
+
+Game Performance for runtime. Multiplatform Build for builds. Combine them if you want both contexts.
+
+### Combo with [Asset Pipeline Controller](/boveda/setting-asset-pipeline-controller-statusline)
+
+Asset Pipeline for processing. Multiplatform Build for final builds. A complete game dev stack.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't do multi-platform game dev:** it doesn't apply.
+- **If your builds run on cloud CI:** the statusline may not see them locally.
+- **For web dev only:** [Context Monitor](/boveda/setting-context-monitor) is the option.
+- **Only 63 installs:** niche.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Multiplatform Build Status Statusline Setting](https://www.aitmpl.com/component/settings/statusline/multiplatform-build-status-statusline) — the exact command.
+- **JSON config:** [multiplatform-build-status-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/multiplatform-build-status-statusline.json).
+
+## Related resources
+
+- [Game Performance Monitor Statusline](/boveda/setting-game-performance-monitor-statusline) — game dev combo.
+- [Asset Pipeline Controller Statusline](/boveda/setting-asset-pipeline-controller-statusline) — complementary asset processing.
+- [Context Monitor Setting](/boveda/setting-context-monitor) — general alternative.

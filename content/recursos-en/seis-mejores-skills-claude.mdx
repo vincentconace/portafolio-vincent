@@ -1,0 +1,273 @@
+---
+title: "6 Best Claude Code Skills — Curated After Testing 100+"
+description: "Skill Creator, Superpowers, GSD, /review, Context Mode, and Claude Mem. The 6 that actually change how you work with Claude Code, filtered from 100+. Each one with the exact command and the install path for your level."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["creador-de-habilidades", "4-superpoderes-claude", "completa-tu-claude"]
+---
+
+## The criteria
+
+100+ skills tested. Most are noise. These 6 are the ones that **fill real gaps** in Claude by default:
+
+- Plan before writing
+- Don't get lost in big projects
+- Don't run out of context
+- Review what it does
+- Remember between sessions
+- Create what's missing
+
+| # | Skill | Function |
+|---|-------|---------|
+| 01 | Skill Creator | Skill factory |
+| 02 | Superpowers | Plans like a senior before coding |
+| 03 | GSD | Parallel subagents with fresh context |
+| 04 | /review | Built-in senior-level code review |
+| 05 | Context Mode | Compresses context (56KB → 299 bytes) |
+| 06 | Claude Mem | Permanent memory |
+
+---
+
+## 01 — Skill Creator (the factory)
+
+### What it is
+
+Official plugin from the `claude-plugins-official` marketplace. You tell it what you want it to do, **like talking to a teammate**, and it builds the skill ready to go.
+
+Zero fighting with files from the internet.
+
+### Installation
+
+```
+/plugin install skill-creator@claude-plugins-official
+```
+
+Inside Claude Code, not in the terminal. Requires v2.1.86+.
+
+See [skill creator](/boveda/creador-de-habilidades) for a deep dive.
+
+---
+
+## 02 — Superpowers (plans like a senior)
+
+### What it is
+
+100k+ stars on GitHub. Before building, it **starts planning, asking you questions, and structuring**. Fewer mistakes, less fixing after the fact.
+
+### Installation
+
+```
+/plugin install superpowers@claude-plugins-official
+```
+
+Restart the session after installing so the reinforced plan-mode loads.
+
+See [4 Claude superpowers](/boveda/4-superpoderes-claude) for the full guide.
+
+---
+
+## 03 — GSD (Get Shit Done)
+
+### What it is
+
+It takes a big job, **splits it into pieces**, and assigns a fresh Claude instance to each one. Every subagent starts with its own context — they don't contaminate each other.
+
+No more "half an hour in and it forgot what I asked for."
+
+### Careful
+
+Use it **when it's actually needed**. For small tasks, it's overkill.
+
+### Installation
+
+```bash
+npx get-shit-done-cc --claude --global
+```
+
+In the terminal.
+
+---
+
+## 04 — /review (built-in)
+
+### What it is
+
+A **built-in command in Claude Code 2.1.86+**. You don't have to install it.
+
+Before you call something done, you hit `/review` and it reviews your whole project like a senior. Bugs, errors, structure, everything.
+
+### Usage
+
+```
+/review
+```
+
+If it doesn't work, update Claude Code to 2.1.86+.
+
+### What matters most
+
+It's **free and built-in**. People ignore it because it's not flashy, but it's one of the most valuable features Claude Code has shipped.
+
+---
+
+## 05 — Context Mode (sessions that last hours)
+
+### What it does
+
+It compresses logs, data, and chat noise. What used to be **56 KB becomes 299 bytes**. Your session lasts 3 hours instead of dying after 30 min.
+
+### Why it matters
+
+Context is money. When your chat fills up with irrelevant logs, you **burn tokens** on every response. Context Mode crushes that.
+
+### Installation
+
+```
+/plugin marketplace add mksglu/context-mode
+/plugin install context-mode@context-mode
+```
+
+Both lines pasted inside Claude Code, one after the other. Restart the session when you're done.
+
+---
+
+## 06 — Claude Mem (permanent memory)
+
+### What it does
+
+It captures what happens in each session, generates AI summaries, and retrieves them when you come back to the project. **Claude no longer forgets anything.**
+
+### The shift
+
+Before: you explain to Claude what you were working on every time. After: it remembers on its own.
+
+### Installation
+
+```bash
+npx claude-mem@latest init
+```
+
+In the terminal. Restart Claude Code afterward. Open `http://localhost:37777` for the web viewer of your memory.
+
+See [complete your Claude](/boveda/completa-tu-claude) for context on the combo.
+
+---
+
+## What to install first — 3 paths
+
+### If you just installed Claude Code
+
+```
+Claude Mem → Skill Creator → /review
+```
+
+1. **Memory** so you don't lose context between sessions
+2. **Factory** to start customizing
+3. **/review** as a safety net before you finish
+
+### If you already use Claude Code daily
+
+```
+Superpowers → Context Mode → Claude Mem
+```
+
+1. **Superpowers** takes away your planning mistakes
+2. **Context Mode** gives you sessions that last hours
+3. **Claude Mem** closes the loop between sessions
+
+### If you build big things
+
+```
+GSD → Superpowers → /review
+```
+
+1. **GSD** splits work into parallel pieces
+2. **Superpowers** forces you to plan first
+3. **/review** reviews everything like a senior
+
+---
+
+## Compare: which one to install by symptom
+
+| Symptom | Skill |
+|---------|-------|
+| "Claude forgets everything" | Claude Mem |
+| "My session dies after 30 min" | Context Mode |
+| "It starts coding without thinking" | Superpowers |
+| "I need a skill that doesn't exist" | Skill Creator |
+| "Big projects overflow" | GSD |
+| "I don't know if what it delivered is right" | /review |
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 6 on day 1
+
+Each one changes the flow. **One per week** is a healthy pace. Any faster and you get confused.
+
+### 2. GSD for everything
+
+If the task doesn't need parallelism, GSD adds complexity without value. **It's for projects with several pieces.**
+
+### 3. Ignoring /review
+
+It's free and built-in. **You have no excuse** not to use it before closing out tasks.
+
+### 4. Context Mode without understanding what it compresses
+
+If it compresses context that's critical to your current session, it can break threads in progress. **Try it on a small project** first.
+
+### 5. Claude Mem on a shared machine
+
+The viewer runs on localhost by default. **Check the config** if you share a network.
+
+---
+
+## Powerful combinations
+
+### The base stack
+
+```
+Claude Mem + Skill Creator + /review
+```
+
+Memory + the ability to create + review. For any user.
+
+### The productivity stack
+
+```
+Superpowers + Context Mode + Claude Mem
+```
+
+Planning + long sessions + memory between sessions. For anyone using Claude daily.
+
+### The big-projects stack
+
+```
+GSD + Superpowers + /review
+```
+
+Parallelism + planning + review. For refactors or multi-feature systems.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Only chat.claude.ai | They're specific to Claude Code |
+| Team with restrictions | External plugins may not be allowed |
+| One-shot projects | Not worth the setup |
+| Just learning Claude Code | Foundations first, skills later |
+
+---
+
+## Next steps
+
+- For a Skill Creator deep dive, [skill creator](/boveda/creador-de-habilidades)
+- For Superpowers detail, [4 Claude superpowers](/boveda/4-superpoderes-claude)
+- For patches to base Claude, [complete your Claude](/boveda/completa-tu-claude)

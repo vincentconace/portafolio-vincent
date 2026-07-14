@@ -1,0 +1,114 @@
+---
+title: "Awesome Claude Code Plugins — 118 curated plugins (includes Anthropic's official ones)"
+description: "ccplugins marketplace (649⭐) with 118 curated plugins in 'awesome list' style. Includes Anthropic's official plugins (pr-review-toolkit, commit-commands, agent-sdk-dev) plus community curation."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["5-claude-skills-necesarias", "claude-code-setup", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/ccplugins-awesome-claude-code-plugins"
+github: "https://github.com/ccplugins/awesome-claude-code-plugins"
+---
+
+## What it is
+
+"Awesome Claude Code Plugins" is the "awesome list" for Claude Code: a curated collection of slash commands, subagents, MCP servers and hooks. The key difference from other large marketplaces is that here the curation is more careful — it's not "everything out there," it's "what's actually worth it."
+
+The most important part: it includes Anthropic's official plugins in the catalog. If you want to try what Anthropic publishes as a reference without having to hunt for it in separate repos, this is the shortcut.
+
+It covers 118 plugins in total, with a focus on PR workflows, code review, debugging, git, planning, security, and a solid set of agents.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | ccplugins |
+| Stars | 649 |
+| Type | Marketplace (118 plugins) |
+| Components | 34 commands, 16 agents |
+| Marketplace | `ccplugins/awesome-claude-code-plugins` |
+| Web | [claudecodeplugins.dev](https://claudecodeplugins.dev) |
+
+### Anthropic's official plugins inside
+
+| Plugin | What it's for |
+| --- | --- |
+| `agent-sdk-dev` | Official development kit for working with the Claude Agent SDK |
+| `pr-review-toolkit` | PR review with specialized agents (comments, tests, error handling, type design, code quality, simplification) |
+| `commit-commands` | Official git workflow: commit, push, PR creation |
+
+### Other strong plugins
+
+- `feature-dev` (Siddharth Bidasaria) — full workflow with agents for exploration, architecture and review
+- `security-guidance` (David Dworken) — hook that warns about vulns while editing (command injection, XSS, insecure code)
+- The plugins by Galen Ward (`plan`, `explore`), Michael Galpert (studio agents), Anand Tyagi (code-review, optimize, audit)
+
+## How to install it
+
+```bash
+# 1) Add the marketplace
+/plugin marketplace add ccplugins/awesome-claude-code-plugins
+
+# 2) Install the base "official Anthropic" set
+/plugin install pr-review-toolkit@ccplugins-awesome-claude-code-plugins
+/plugin install commit-commands@ccplugins-awesome-claude-code-plugins
+/plugin install agent-sdk-dev@ccplugins-awesome-claude-code-plugins
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the ccplugins/awesome-claude-code-plugins marketplace. Show me only
+the plugins signed by Anthropic and give me the recommended order to install them.
+```
+
+## What you can do with it
+
+### Start with the official ones
+
+If you haven't installed anything from the community yet and want to play it safe, the three Anthropic plugins (`agent-sdk-dev`, `pr-review-toolkit`, `commit-commands`) are the most conservative base set. You can layer others on top afterward if you want.
+
+### PR review from six angles
+
+`pr-review-toolkit` runs six different agents over your PR: one reviews comments, another tests, another error handling, another type design, another code quality, another simplification. It's more thorough than asking Claude to "review this PR" in a single pass.
+
+### Passive security hook
+
+`security-guidance` stays in the background and warns you if an edit introduces something risky (command injection, XSS, insecure patterns). It doesn't block — it alerts. A good guardrail so you don't ship obvious mistakes to prod.
+
+### Combine with Galen Ward's planning
+
+`plan` and `explore` set up the Explore → Plan → Execute pattern. Combine them with `pr-review-toolkit` at the end and you get a guided feature → review → merge workflow.
+
+## Real benefits
+
+- **Careful curation** — it's not the giant catch-all drawer.
+- **Anthropic's official plugins inside** — the best-maintained reference.
+- **Its own site** ([claudecodeplugins.dev](https://claudecodeplugins.dev)) with docs and filters.
+- **118 isn't overwhelming** compared to marketplaces with 340+ — more manageable.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you've already run [Claude Code Setup](/boveda/claude-code-setup),** you already received Anthropic-style recommendations. This marketplace expands on that but partially overlaps.
+- **Overlap with `cc-marketplace`:** both share many plugins (Anand's, Galen's, Galpert's). If you're going to use one, don't install both.
+- **Don't expect a single thematic curation.** It's a mix of areas — an advantage if you want variety, a disadvantage if you're looking for a single focus.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Awesome Claude Code Plugins](https://www.aitmpl.com/plugins/ccplugins-awesome-claude-code-plugins) — full list.
+- **Repo on GitHub:** [ccplugins/awesome-claude-code-plugins](https://github.com/ccplugins/awesome-claude-code-plugins) — code, issues, curation criteria.
+- **Official site:** [claudecodeplugins.dev](https://claudecodeplugins.dev) — search and filters by category.
+
+## Related resources
+
+- [5 essential Claude Skills](/boveda/5-claude-skills-necesarias) — the base set. A good pairing with this marketplace's official Anthropic plugins.
+- [Claude Code Setup](/boveda/claude-code-setup) — Anthropic's official scanner. Run it first to see what it recommends before adopting this marketplace.
+- [Agency Agents](/boveda/agency-agents) — to understand when an agent, a command, or a hook is the right call among the 118 available.

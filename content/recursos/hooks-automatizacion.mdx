@@ -1,0 +1,212 @@
+---
+title: "Hooks de Claude Code — automatizá lo que haces 10 veces al día"
+description: "Los hooks son la pieza que pasa de 'IDE con IA' a 'agente que ejecuta tu workflow'. Aprendé a configurar PreToolUse, PostToolUse y SessionStart con casos reales: format-on-save, validación previa, notificaciones."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "bash"]
+featured: false
+badge: "nuevo"
+version: "v1.0"
+publishedAt: "2026-05-15"
+readingTime: "14 min"
+relatedSlugs: ["claude-code-setup-zero", "comando-tests-automaticos"]
+---
+
+## Qué son los hooks (y por qué importan)
+
+Los hooks son **comandos shell que Claude Code ejecuta automáticamente** en momentos específicos de su ciclo de vida. No son acciones que Claude decide; son comportamientos garantizados que el harness corre por vos.
+
+La diferencia es clave: si le pedís a Claude "corré los tests después de cada cambio", lo va a hacer **a veces**. Si lo configurás como hook `PostToolUse`, se va a hacer **siempre**, sin pedírselo.
+
+---
+
+## Los 5 eventos disponibles
+
+| Evento | Cuándo dispara | Para qué sirve |
+|--------|----------------|----------------|
+| `SessionStart` | Al abrir Claude Code en un proyecto | Cargar contexto, mostrar dashboard, leer estado de CI |
+| `PreToolUse` | Antes de ejecutar una tool (Edit, Bash, etc.) | Validación, bloqueo de comandos peligrosos |
+| `PostToolUse` | Después de ejecutar una tool con éxito | Format-on-save, regenerar types, recargar dev server |
+| `UserPromptSubmit` | Cuando vos mandás un mensaje | Inyectar contexto extra, traducir, parsear comandos custom |
+| `Stop` | Cuando Claude termina su turno | Notificaciones, persistir estado, trigger de CI |
+
+---
+
+## Configuración base
+
+Los hooks van en `~/.claude/settings.json` (global) o en `.claude/settings.json` (por proyecto). El segundo formato es el recomendado — viaja con tu repo:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "npx prettier --write \"$CLAUDE_FILE_PATHS\"" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="info" title="Variables de entorno disponibles">
+Claude Code expone variables que podés usar en tus hooks:
+- `$CLAUDE_FILE_PATHS` — archivos tocados en la operación
+- `$CLAUDE_TOOL_NAME` — nombre de la tool ejecutada
+- `$CLAUDE_TOOL_INPUT_JSON` — el input completo de la tool
+</Callout>
+
+---
+
+## Caso 1 — Format on save
+
+El más común. Después de cada Edit o Write, formatea el archivo automáticamente.
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$CLAUDE_FILE_PATHS\" | xargs -n1 npx prettier --write 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+El `|| true` al final es importante: si Prettier falla (archivo sin formateador), no rompe la sesión.
+
+---
+
+## Caso 2 — Bloquear comandos peligrosos
+
+Evitá que Claude ejecute cosas que no querés, sin tener que confirmarlas manualmente.
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/block-dangerous.js"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Y el script `.claude/hooks/block-dangerous.js`:
+
+```js
+const input = JSON.parse(process.env.CLAUDE_TOOL_INPUT_JSON || '{}')
+const cmd = input.command || ''
+
+const banned = [
+  /rm\s+-rf\s+\//,
+  /git\s+push\s+--force.*main/,
+  /DROP\s+TABLE/i,
+  /:\(\)\{:\|:&\};:/,  // fork bomb
+]
+
+const hit = banned.find((re) => re.test(cmd))
+if (hit) {
+  console.error(`Comando bloqueado por hook: matched ${hit}`)
+  process.exit(2)  // exit code 2 = bloqueo
+}
+process.exit(0)
+```
+
+<Callout type="warning" title="Exit code = control">
+Un hook que sale con código `0` permite continuar. Código `2` **bloquea** la operación. Cualquier otro código se considera error y muestra el output al usuario.
+</Callout>
+
+---
+
+## Caso 3 — SessionStart con contexto del CI
+
+Cuando abrís Claude Code en un repo, mostrale el estado de la última corrida de tests:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "gh run list --limit 1 --json status,conclusion,workflowName | jq -r '.[] | \"CI último: \\(.workflowName) → \\(.conclusion // .status)\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+El output del hook se inyecta en el contexto inicial. Claude lo ve antes de responderte el primer mensaje.
+
+---
+
+## Caso 4 — Notificación al terminar (Stop)
+
+Si dejaste a Claude haciendo algo largo y querés que te avise cuando termina:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude terminó\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+En Linux usá `notify-send`. En Windows, PowerShell con `New-BurntToastNotification`.
+
+---
+
+## Debugging de hooks
+
+Si un hook no se ejecuta o tira error silencioso:
+
+```bash
+claude --debug
+```
+
+Te muestra cada hook que dispara, su exit code, stdout y stderr. Es la única forma sana de iterar sobre hooks complejos.
+
+<Callout type="tip" title="Empezá simple">
+La trampa más común es escribir un hook ambicioso (5 cosas encadenadas en un one-liner) y que falle silenciosamente. Empezá con `echo "hook fired"` para confirmar que dispara, después agregale lógica.
+</Callout>
+
+---
+
+## Próximos pasos
+
+Una vez que dominás los hooks básicos, vale la pena mirar:
+
+- **Slash commands custom** en `.claude/commands/` — para flujos repetitivos
+- **MCP servers locales** — para darle herramientas custom a Claude
+- **Skills** — para empaquetar comportamientos reutilizables (mirá la [guía de skills](/boveda/skill-code-reviewer))

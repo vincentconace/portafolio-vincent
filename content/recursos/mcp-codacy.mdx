@@ -1,0 +1,96 @@
+---
+title: "MCP Codacy — code quality, coverage y security desde Claude Code"
+description: "MCP server para integrar Codacy con Claude Code. Acceso a repos, files, métricas de calidad, coverage, alertas de seguridad. Útil para equipos que usan Codacy como gate de calidad."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "codacy"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["claude-code-best-practices", "plugin-claude-plugins-official", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/codacy"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/codacy.json"
+---
+
+## Qué es
+
+Codacy es una de las plataformas más usadas para análisis automático de código: cobertura de tests, métricas de calidad, detección de duplicación, alertas de seguridad. Funciona como gate en CI/CD para muchos equipos.
+
+Este MCP conecta Claude Code a la API de Codacy. En vez de cambiar de pestaña al dashboard de Codacy para chequear el último análisis, Claude lo consulta por vos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 87 |
+| Servidor MCP | `codacy` |
+| Cuenta requerida | Sí — Codacy (free tier disponible) |
+| Autenticación | API token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/codacy
+```
+
+Pre-requisito: API token de Codacy.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/codacy. Después de setear CODACY_TOKEN,
+mostrame los issues abiertos del repo X con severity Critical, agrupados
+por categoría.
+```
+
+## Qué podés hacer con esto
+
+### Triage de issues de calidad
+
+"Mostrame los top 20 issues de calidad del repo, ordenados por severity y antigüedad. Para los 5 más críticos, dame contexto del archivo y propone fix". Claude lee Codacy + entra a tu código.
+
+### Coverage por módulo
+
+"¿Qué módulos tienen menos del 50% de coverage en el repo principal? Sugerime cuáles priorizar para subir tests". Combina la métrica de Codacy con tu juicio de criticidad.
+
+### Alertas de seguridad
+
+"Listame las vulnerabilidades de dependencias detectadas por Codacy en la última semana, con CVE y suggested fix". Útil para sprints de security.
+
+### Comparación temporal
+
+"Compará la cantidad de issues abiertos vs hace un mes. ¿Estamos mejorando o empeorando?". Health check del proyecto.
+
+### Integración con PR review
+
+Combinado con [pr-review-toolkit](/boveda/plugin-claude-plugins-official), antes de mergear un PR Claude puede consultar Codacy para validar que no introduce nuevas issues.
+
+## Pre-requisitos
+
+- **Cuenta Codacy** con acceso a los repos que querés consultar
+- **API token** del Account Settings de Codacy
+- **Repos ya conectados a Codacy** (el MCP no los conecta automáticamente)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás otra plataforma** (SonarQube, CodeClimate, etc.): este MCP es Codacy-only.
+- **Si Codacy no es tu source of truth:** algunos equipos usan Codacy como secundario y la calidad real la miden de otra forma. Verificá que el MCP te traiga datos accionables.
+- **Costos de API:** Codacy tiene límites por plan. Mirá si el uso del MCP cabe en tu cuota.
+- **Permisos amplios:** el token hereda lo que tu usuario ve. Considerá token con scope mínimo si manejás varios orgs.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Codacy MCP](https://www.aitmpl.com/component/mcps/devtools/codacy) — comando exacto.
+- **Config JSON:** [codacy.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/codacy.json) — definición.
+- **Codacy oficial:** [codacy.com](https://www.codacy.com) — para cuenta y API tokens.
+
+## Recursos relacionados
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — para complementar el análisis automático de Codacy con buenos prácticas que Claude aplica.
+- [Claude Plugins Official](/boveda/plugin-claude-plugins-official) — incluye varios plugins de code review (CodeRabbit, autofix-bot) que se combinan bien con Codacy.
+- [Agency Agents](/boveda/agency-agents) — para automatizar agents que actúen sobre los hallazgos de Codacy (auto-fix de issues low-severity, por ejemplo).

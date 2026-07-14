@@ -1,0 +1,342 @@
+---
+title: "9 prompts para Claude Cowork — el catálogo que sobrevivió a 30 días de uso real"
+description: "Los 9 slash-commands que sobrevivieron a un experimento de 30 días contra 21 prompts descartados. Brief mañanero, detective de competencia, prep de junta, reporte semanal y 5 más. Con las 3 propiedades que los hacen funcionar y los 4 anti-patrones."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-cowork"]
+publishedAt: "2026-05-14"
+readingTime: "15 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "mejora-prompts-plugin", "prompting-10-pilares"]
+---
+
+## El experimento
+
+30 días. 30 prompts probados contra hacer las tareas a mano. **9 sobrevivieron**. Los otros 21 se descartaron por dos razones que vamos a ver al final — son tan importantes como los prompts que sí funcionan.
+
+Los 9 cubren tareas operativas que un fundador / operador de PyME hace todos los días: brief mañanero, prep de reuniones, reporte semanal, lectura de docs largos, limpieza de inbox, etc. **No son prompts de marketing**, son herramientas de oficina.
+
+> Nota: estos prompts asumen Claude Cowork (la superficie con conectores y memoria persistente). Algunos requieren Gmail + Calendar conectados; otros son agnósticos.
+
+---
+
+## Los 5 que más impacto tienen
+
+### 1. Brief mañanero
+
+Lo que tomaba 47 min al humano → ~4 min con el prompt corriendo en automático.
+
+**Qué hace**: cada mañana, te entrega un resumen ejecutivo con:
+- Reuniones del día con contexto de cada una
+- Emails que requieren tu respuesta hoy (filtrados, no listado entero del inbox)
+- Pendientes de ayer que no cerraron
+- 1-2 cosas a las que prestar atención por contexto reciente
+
+```
+Sos mi jefe de gabinete. Cada mañana a las 7am armás mi brief del día.
+
+INPUTS:
+- Calendar del día (próximas 12h)
+- Emails sin responder de las últimas 24h
+- Tareas no cerradas de mi to-do
+- Memoria de Cowork: contexto persistente del proyecto
+
+OUTPUT (en este orden exacto):
+
+## 🎯 Hoy en una línea
+[la prioridad #1 del día, sin diplomacia]
+
+## 📅 Agenda
+[cada reunión con: hora, con quién, objetivo, prep necesaria]
+
+## 📧 Requieren tu respuesta
+[emails que requieren TU decisión, NO el ruido. Máximo 5.]
+
+## 🔥 Pendientes de ayer
+[lo que quedó sin cerrar y por qué importa]
+
+## ⚠️ A monitorear
+[1-2 cosas con contexto que pueden requerir intervención]
+
+REGLAS:
+- Si un email puede esperar, NO lo incluyas
+- Si una reunión es recurrente irrelevante, NO la describas en detalle
+- Sé corto. Mi tiempo de leer es 3 minutos máximo.
+```
+
+Schedule en Cowork: corre a las 7:00 cada día hábil.
+
+### 2. Detective de competencia
+
+Lo que tomaba 3h → ~18 min.
+
+**Qué hace**: investigación a fondo sobre un competidor. No "qué hacen" genérico, sino análisis táctico.
+
+```
+Sos analista de inteligencia competitiva. Te paso un nombre de competidor
+y armás un dossier accionable.
+
+COMPETIDOR: $1
+
+INVESTIGÁ Y DEVOLVEME:
+
+## Producto
+- Lo que venden (en 3 líneas)
+- Cómo se posicionan vs el resto del mercado
+- Precios públicos si los hay
+
+## Cambios recientes (últimos 60 días)
+- Lanzamientos / cambios de pricing / cambios de equipo
+- Movidas que indican estrategia (hire específico, pivote de mensaje)
+
+## Su fortaleza estructural
+- 1 cosa que hacen claramente mejor que nosotros
+- 1 cosa donde son débiles y se puede atacar
+
+## Movida recomendada para nuestra próxima review
+- 1 acción concreta basada en lo encontrado
+
+REGLAS:
+- NO inventes. Si no encontrás info, escribí "no encontré".
+- Citá la fuente de cada dato relevante.
+- Si todo es público y disponible, está OK. No quiero inteligencia ilegal.
+```
+
+### 3. Prep de junta
+
+30 min → 3 min.
+
+```
+Sos jefe de gabinete. Te paso título y participantes de una reunión que
+tengo hoy. Armás el prep.
+
+REUNIÓN: $1 (título)
+PARTICIPANTES: $2 (lista)
+DURACIÓN: $3 (min)
+
+DEVOLVEME:
+
+## Objetivo
+[en 1 línea: qué tengo que sacar de esta reunión]
+
+## Contexto sobre cada participante
+[para cada uno: rol, última interacción con vos según emails, qué les
+importa según historial]
+
+## Agenda propuesta
+[con tiempos por punto, sumando lo que dura la reunión]
+
+## Las 3 preguntas que tengo que hacer
+[acotadas, accionables, no genéricas]
+
+## Riesgos / temas calientes
+[si hay tensión histórica con algún participante o tema, avisame]
+```
+
+### 4. Reporte semanal del viernes
+
+2h → 7 min.
+
+```
+Sos mi chief of staff. Es viernes 5pm. Armás el reporte semanal del equipo.
+
+ALCANCE: la semana que cierra hoy.
+
+DEVOLVEME (en formato compartible):
+
+## Resumen ejecutivo
+[3 líneas: qué pasó esta semana, qué fue bien, qué se quedó atrás]
+
+## Métricas
+[tabla con: métrica, este viernes, viernes pasado, delta, comentario corto]
+
+## Lo que avanzó
+[bullets con: qué, quién lo movió, por qué importa]
+
+## Lo que está stuck
+[bullets con: qué, quién lo tiene, qué necesita para destrabarse]
+
+## Lo que viene la semana próxima
+[3 prioridades, no 15]
+
+REGLAS:
+- Tono directo, sin diplomacia innecesaria
+- Si una métrica empeoró, dilo
+- Si alguien está bloqueando algo, mencionalo (con cuidado pero sin ocultarlo)
+```
+
+### 5. Multiplicador de contenido
+
+90 min → 12 min. Tomás una pieza larga (post de LinkedIn, ensayo, transcript de podcast) y la multiplicás en formatos para distintos canales.
+
+```
+Sos editor de contenido. Te paso una pieza original y la multiplicás
+para canales distintos sin perder la esencia.
+
+PIEZA ORIGINAL:
+$1
+
+GENERAME:
+
+## Tweet thread (8-10 tweets)
+[un thread completo con la idea, manteniendo voz del original]
+
+## Post de LinkedIn
+[~300 palabras, formato LinkedIn con saltos de línea estratégicos]
+
+## Newsletter blurb (~150 palabras)
+[para meter en la newsletter del lunes con CTA claro al original]
+
+## Short de YouTube (script de 60 segundos)
+[hook fuerte primeros 3 segundos, cierre claro]
+
+## 3 títulos alternativos para SEO
+[que la misma idea pero optimizados para search]
+
+REGLAS:
+- No cambies argumentos. Solo formato.
+- Mantené la voz del original (si es informal, formal, etc.).
+- Si la pieza original es mala, decímelo en lugar de adaptarla.
+```
+
+---
+
+## Los 4 adicionales
+
+Menos famosos pero útiles para casos específicos:
+
+### 6. Limpiar bandeja
+
+90 min → 11 min. Tritura tu inbox de emails sin responder.
+
+```
+Sos mi asistente. Tengo el inbox lleno. Tritúralo y devolveme acciones.
+
+EMAILS SIN RESPONDER: [lista]
+
+CLASIFICÁ CADA UNO EN:
+
+🔴 Responder vos hoy (con borrador de respuesta de 2-3 líneas)
+🟡 Delegar a [equipo]
+🟢 Solo leer / archivar
+⚫ Spam o irrelevante (justificá)
+
+DEVOLVEME EN ESE ORDEN. Empezá por los 🔴.
+```
+
+### 7. Auditor de inversiones
+
+45 min → 3 min. Para revisar oportunidades de inversión rápido.
+
+### 8. Investigador profundo con sub-agentes
+
+4h → 28 min. Para investigaciones complejas multi-fuente.
+
+### 9. Lector de documentos largos
+
+90 min → 9 min. Resumen estructurado de PDFs largos (contratos, papers, reportes).
+
+---
+
+## Las 3 propiedades que los hacen funcionar
+
+Los 9 prompts que sobrevivieron tienen **3 propiedades en común**. Los 21 descartados fallaban en al menos una.
+
+### Propiedad 1 — Criterio de terminación chequeable
+
+Cada prompt define **objetivamente cuándo está listo**. No "hasta que esté bien" — algo verificable.
+
+✅ "Devolveme JSON con keys A, B, C"
+✅ "Listame exactamente 5 emails"
+✅ "Máximo 3 minutos de lectura para el output"
+
+❌ "Hacelo lo mejor posible"
+❌ "Resumime esto"
+
+### Propiedad 2 — Output con shape estructurada nombrada
+
+El formato del output está **declarado** con headers, secciones, o schema. No texto libre.
+
+✅ "Devolveme con esta estructura: ## Objetivo, ## Agenda, ## Preguntas"
+✅ "JSON con `{summary, items[], action}`"
+
+❌ "Devolveme un resumen"
+
+### Propiedad 3 — ROL en la primera línea
+
+El primer mensaje del prompt asigna un rol específico, no genérico.
+
+✅ "Sos mi jefe de gabinete"
+✅ "Sos analista de inteligencia competitiva"
+✅ "Sos editor de contenido"
+
+❌ "Ayudame con..."
+❌ "Hacé..."
+
+El rol funciona como **lente de interpretación**. Claude no responde igual como "asistente genérico" que como "jefe de gabinete" — el segundo aplica filtros distintos.
+
+---
+
+## Las 2 razones por las que se descartaron 21 prompts
+
+### Razón 1 — Sin criterio de terminación
+
+Prompts del estilo "ayudame a pensar X" entregan algo, pero no sabés si terminó o si Claude se quedó corto. Sin "listo cuando..." vivimos en limbo.
+
+### Razón 2 — Output amorfo
+
+Prompts que devuelven texto libre fueron descartados porque su valor depende de leerlo entero. **La gracia de un slash-command es que el output sea procesable de un vistazo.** Texto largo sin estructura no se procesa, se procastina.
+
+---
+
+## Anti-patrones — cuándo NO te sirven
+
+### 1. No tenés Cowork (o sus conectores)
+
+Algunos prompts (brief mañanero, limpia inbox) requieren Gmail + Calendar conectados. Sin eso, son cáscaras vacías.
+
+### 2. Tu trabajo no genera estos inputs
+
+Si no tenés reuniones diarias, no necesitás prep de junta. Si no escribís contenido, no necesitás multiplicador. **Adoptá solo los que matchean tu workflow real.**
+
+### 3. Esperás outputs perfectos el día 1
+
+Cada prompt necesita 2-3 semanas de tuning para tu contexto específico. El primer brief mañanero va a fallar en algunas cosas. Ajustás → mejorás. Quien abandona en la semana 1 no llega al ROI.
+
+### 4. Vas a confiar en outputs sin revisar
+
+Estos prompts son **drafts del 80%**. Vos sos el 20% que falta. Si confiás ciego en un brief mañanero y mandás el reporte semanal sin leer, te vas a quemar.
+
+---
+
+## Cómo se instalan en Cowork
+
+3 pasos:
+
+1. **Abrí tu proyecto en Cowork** (no en chat suelto — Cowork porque querés que tenga memoria persistente)
+2. **Guardá el prompt como slash-command**: nombrarlo `/brief-manana`, `/prep-junta`, etc.
+3. **Schedulealo** con scheduled tasks. Brief mañanero corre 7am cada hábil. Reporte de viernes corre 5pm cada viernes.
+
+Después no tipeás nada — los outputs aparecen solos.
+
+---
+
+## El cálculo honesto del titular
+
+> "34 horas/semana ahorradas"
+
+Es real **pero con asteriscos**:
+
+- Asume que las 9 tareas las hacías a mano antes (no todos las hacen)
+- Asume que el tuning ya está hecho (~3 semanas)
+- Asume que aceptás drafts del 80% (no perfeccionismo)
+- Asume Cowork + conectores funcionando bien
+
+Si tu situación es la primera (operador con muchas tareas operativas + algo de tolerancia a "no perfecto"), el ROI es enorme. Si sos developer puro que toca código todo el día, los prompts de Code te van a servir más que estos.
+
+---
+
+## Próximos pasos
+
+- Para mejorar la calidad de cualquier prompt antes de usarlo, [Prompting 101 — 10 pilares](/boveda/prompting-10-pilares)
+- Si necesitás escribir prompts más complejos, [PRD ejecutivo](/boveda/prompts-prd-ejecutivo) cubre patrones de prompts estructurados
+- Si tus prompts caseros suelen ser vagos, el [evaluador de prompts](/boveda/mejora-prompts-plugin) te avisa antes de mandar

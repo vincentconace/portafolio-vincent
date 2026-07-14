@@ -1,0 +1,76 @@
+---
+title: "Hook Build On Change — disparar build automático cuando cambian archivos"
+description: "Hook con 293 installs que dispara el build process automáticamente cuando Claude edita archivos source. Detecta el build tool de tu proyecto (npm, vite, etc.) y corre el comando apropiado."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-auto-git-add", "hook-deployment-health-monitor", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/build-on-change"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/build-on-change.json"
+---
+
+## Qué es
+
+Cuando Claude edita un archivo source, este hook detecta el build tool de tu proyecto (npm, pnpm, yarn, vite, tsc, etc.) y corre el comando de build correspondiente automáticamente. Hook event: `PostToolUse`.
+
+Útil para feedback rápido durante development asistido: editás → build corre → ves si rompiste algo sin tener que pedirlo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 293 |
+| Hook event | `PostToolUse` |
+| Acción | Detecta build tool + ejecuta build |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/build-on-change
+```
+
+Para Claude:
+
+```
+Instalé el hook automation/build-on-change. Probá: editá un archivo TS
+y verificá que dispara el build. Si falla, mostrame los errores.
+```
+
+## Qué podés hacer con esto
+
+### Feedback continuo de errores
+
+Cada edit dispara build. Si Claude introduce un type error o syntax error, lo ves inmediatamente.
+
+### Combo con type checking
+
+Para proyectos TS estrictos, el build corre `tsc --noEmit`. Catch type issues en el momento, no en CI.
+
+### Watch sin watch
+
+Para proyectos sin watch mode armado, este hook simula uno: edit → build automático.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Builds lentos:** si tu build tarda 30+ segundos, cada edit traba la sesión. Mirá si conviene editar varios archivos antes de buildear.
+- **Para edición masiva:** Claude edita 20 archivos en una pasada = 20 builds. Probablemente querés debouncing manual.
+- **Para no-build languages:** Python interpretado, Bash, etc. — el hook no aporta.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Build On Change Hook](https://www.aitmpl.com/component/hooks/automation/build-on-change) — comando exacto.
+- **Config JSON:** [build-on-change.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/build-on-change.json).
+
+## Recursos relacionados
+
+- [Auto Git Add Hook](/boveda/hook-auto-git-add) — combo natural: edit → build → stage.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — para monitorear el deploy después del build.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para automation.

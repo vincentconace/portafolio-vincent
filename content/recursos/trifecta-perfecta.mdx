@@ -1,0 +1,247 @@
+---
+title: "Trifecta perfecta — diseñar, blindar y deployar con 3 herramientas encadenadas"
+description: "El patrón de 3 herramientas open-source que se usan en orden: una te entrevista y arma el blueprint de la app, otra audita seguridad en paralelo con sub-agentes, la tercera detecta tu stack y deploya. Para construir apps sin saltarte ningún paso crítico."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-20"
+readingTime: "13 min"
+relatedSlugs: ["trio-skills-claude-code", "spec-kit", "ecosistema-de-agentes"]
+---
+
+## La idea de la trifecta
+
+Tres dolores reales de cualquier proyecto que querés publicar:
+
+1. **Empezar bien** — armar el blueprint de la app sin saltarte decisiones críticas
+2. **No salir con la puerta abierta** — auditar seguridad antes del deploy
+3. **Subir sin pelearte con consolas** — deploy sin configurar Vercel/Railway a mano
+
+La "trifecta" es **3 herramientas que se encadenan en ese orden exacto**. No son una sola herramienta inteligente — son 3 pasos disciplinados que la mayoría se saltea.
+
+La analogía: vas a construir una casa. Necesitás un **arquitecto** que haga el plano, alguien que **revise las cerraduras** antes de mudarte, y un **camión de mudanza** que te traslade sin romper nada.
+
+| Paso | Para qué | Output |
+|------|----------|--------|
+| 1. Architect | Diseñar el blueprint de la app | Markdown de 16 secciones con stack, DB, rutas, diseño |
+| 2. Cyber Neo | Auditar seguridad antes del deploy | Reporte de secretos expuestos, deps vulnerables, problemas de infra |
+| 3. All Deploy | Detectar stack y publicar | Deploy preview + promoción a producción |
+
+---
+
+## Paso 1 — The Architect
+
+### Qué hace
+
+Te entrevista en **4 fases** antes de escribir una línea de código:
+
+| Fase | Qué cubre |
+|------|-----------|
+| **Discovery** | Qué construís, para quién, problema que resuelve |
+| **Deep Dive** | Casos de uso específicos, edge cases, restricciones |
+| **Architecture** | Stack, base de datos, integraciones, hosting |
+| **Generate** | Output del blueprint markdown |
+
+El output final es un archivo markdown de **~16 secciones** que cubre:
+
+- Visión y objetivos del producto
+- Personas / audiencia
+- User stories priorizadas
+- Stack técnico justificado
+- Schema de base de datos
+- Rutas y endpoints
+- Decisiones de diseño UX
+- Stack de seguridad
+- Plan de deployment
+- Métricas a trackear
+
+Es como un PRD + tech spec consolidado.
+
+### Por qué funciona
+
+Lo bueno no es la herramienta — es **forzar el flujo**. Cuando le pedís a Claude "armá la app X" directo, salta a codear con todo asumido. Cuando lo metés en una entrevista de 4 fases, **vos** te das cuenta de las decisiones que no habías tomado.
+
+Esto se relaciona con el patrón de [spec-driven development](/boveda/spec-kit) — la diferencia es que The Architect es **conversacional** (te entrevista) en lugar de pedirte que escribas la spec.
+
+### Cuándo conviene
+
+✅ Proyecto nuevo, partís de cero
+✅ Sabés QUÉ querés pero no cómo estructurarlo
+✅ No es un script de 1 archivo — es una app real
+
+❌ Edits/refactors sobre un proyecto existente
+❌ Spike rápido para validar una idea
+❌ Cuando ya tenés blueprint y solo necesitás implementar
+
+---
+
+## Paso 2 — Cyber Neo
+
+### Qué hace
+
+Antes de deployar, audita seguridad lanzando **5 sub-agentes en paralelo**:
+
+| Sub-agente | Qué busca |
+|------------|-----------|
+| **Secrets scanner** | API keys, tokens, passwords hardcodeados o en `.env` que no debería |
+| **Dependency auditor** | Deps con CVEs conocidos, versiones outdated críticas |
+| **Infra reviewer** | Configs de hosting, env vars expuestas, CORS abierto |
+| **Supply chain checker** | Paquetes con typosquatting, repos sospechosos |
+| **Code patterns** | SQL injection, XSS, validación faltante en endpoints |
+
+Cada sub-agente tira su reporte; un coordinator los consolida.
+
+### Por qué sub-agentes en paralelo
+
+Una sola pasada secuencial chequeando todo es más lenta y se confunde — cada chequeo requiere mentalidad distinta. Sub-agentes especializados:
+
+- Cada uno tiene su prompt afinado para su dominio
+- Corren en paralelo → tiempo total = max(5), no sum(5)
+- Errores en uno no contaminan los otros
+
+Este es el patrón de [memory palace / agentes especializados](/boveda/memory-palace-agentes) aplicado a auditoría.
+
+### El output
+
+```
+🔴 BLOQUEANTES (no deployar)
+- AWS access key en .env.example (línea 4)
+- Endpoint /api/admin sin auth check
+- Dep `lodash@4.17.10` con CVE-2020-8203
+
+🟡 ALTOS (fix recomendado)
+- CORS abierto a *
+- Pasword reset endpoint sin rate limiting
+
+🟢 MEDIOS (mejorables)
+- 12 deps con minor versions desactualizadas
+- Logs incluyen body de requests con datos sensibles
+
+⚪ INFO
+- 3 sub-deps de baja confianza (repos con <50 stars, mantenedor único)
+```
+
+### Anti-patrón típico
+
+**Saltearse este paso porque "es solo MVP"**. Los MVPs leakean secretos igual que los productos maduros. La auditoría dura 2-5 minutos. **Hacela siempre.**
+
+---
+
+## Paso 3 — All Deploy
+
+### Qué hace
+
+Detecta tu stack automáticamente (Next.js, Astro, FastAPI, Rails, etc.), elige el hosting que mejor le queda y deploya:
+
+| Tu stack | Hosting que elige |
+|----------|-------------------|
+| Next.js, Astro, Remix | Vercel |
+| Python (FastAPI, Django) | Railway o Fly.io |
+| Rails, Laravel | Railway |
+| Static (HTML/CSS/JS) | Cloudflare Pages |
+| Edge functions pesados | Cloudflare Workers |
+
+Después de detectar:
+
+1. Genera los configs necesarios (`vercel.json`, `Dockerfile`, etc.)
+2. Setea env vars (te pregunta qué pasar)
+3. Hace deploy **preview** primero (no producción)
+4. Te muestra la URL para que valides
+5. Si decís OK, promueve a producción
+
+### Por qué preview primero
+
+Errores de config no aparecen en local. Vercel/Railway pueden interpretar tu app distinto a tu `npm run dev`. **El preview deploy es el verdadero test de configuración**.
+
+Promover a producción es 1 comando una vez que el preview funciona.
+
+### Cuándo está bien y cuándo no
+
+✅ Stacks comunes y bien soportados
+✅ Apps que no requieren infra muy custom
+✅ Cuando querés deployar rápido sin aprender la consola de cada provider
+
+❌ Apps con requisitos específicos (GPU para inference, geo-replicación custom)
+❌ Setups híbridos (parte en AWS, parte en Vercel)
+❌ Compliance regulatorio que requiere control granular
+
+---
+
+## El orden importa
+
+La trifecta se llama así porque **los 3 se usan en orden**. Saltarse el orden anula el valor:
+
+### Si saltás Architect → Cyber Neo
+
+Sin blueprint, no sabés qué endpoints existen → la auditoría se pierde cosas.
+
+### Si saltás Cyber Neo → All Deploy
+
+Deployás sin saber qué secretos quedaron expuestos. **Una vez deployado, los secretos están en logs, caches, y posiblemente en commits**. Es muy difícil revertir totalmente.
+
+### Si saltás Architect y vas directo a Deploy
+
+Cae bien para spikes/prototipos. **Pero no para nada que mire un usuario real.**
+
+---
+
+## Cuándo el setup completo te sobra
+
+Tres casos:
+
+### 1. Hobby projects descartables
+
+Si construís algo que va a vivir 2 días y solo lo vas a ver vos, los 3 pasos son overkill. Codeá y deployá directo.
+
+### 2. Apps existentes con flow definido
+
+Si ya tenés tu pipeline de CI/CD, agregar esta trifecta es duplicar trabajo. Los principios (blueprint + audit + deploy controlado) ya están en tu pipeline.
+
+### 3. Cuando no tenés tiempo para revisar outputs
+
+La trifecta te da drafts del 80%. Si vas a aplicar todo sin revisar, no la uses — vas a romper algo y no entender qué.
+
+---
+
+## Patrón general que aprendés
+
+Más allá de estas 3 herramientas específicas, el patrón es:
+
+> **Para tareas críticas, encadená herramientas especializadas en orden disciplinado en lugar de una herramienta genérica que "hace todo".**
+
+Mismo principio en otras combinaciones:
+- Spec → Tests → Implementación → Review ([trío de skills](/boveda/trio-skills-claude-code))
+- Pensar → Planear → Pulir
+- Reseñas → Awareness → Brief → Landing ([Andromeda Meta Ads](/boveda/andromeda-meta-ads))
+
+La trifecta es ejemplo concreto del meta-patrón.
+
+---
+
+## Cómo armar tu propia trifecta
+
+Si querés replicar el patrón con tus herramientas:
+
+1. **Identificá los 3 dolores principales** de tu workflow (diseño, calidad, deploy / etc.)
+2. **Por cada uno, una herramienta o skill dedicada** (no una "mega-skill")
+3. **Definí el orden y el handoff** entre ellas (qué archivo / output pasa a la siguiente)
+4. **Documentá el flujo** en `CLAUDE.md` del proyecto para que el equipo lo siga
+
+Ejemplo aplicado a un equipo backend:
+
+```
+1. PRD-bot → genera spec a partir del brief del PM
+2. Schema-bot → propone migración de DB + valida contra schema actual
+3. Test-bot → genera tests del endpoint con happy path + edge cases
+4. Deploy-bot → corre tests + lint + audit + deploy a staging
+```
+
+Cada uno una skill / slash command separado, encadenados.
+
+---
+
+## Próximos pasos
+
+- Para entender el patrón "pensar antes de codear" más abstracto, [spec-driven development](/boveda/spec-kit)
+- Si querés un trío más enfocado en código (no en arquitectura), [trío de skills para Claude Code](/boveda/trio-skills-claude-code)
+- Para auditorías de seguridad como parte de tu flow de PRs, [skill code-reviewer](/boveda/skill-code-reviewer)

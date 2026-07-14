@@ -1,0 +1,104 @@
+---
+title: "MCP n8n — construir workflows de n8n desde Claude Code (con docs offline)"
+description: "MCP server que conecta n8n a Claude Code. Construye y maneja workflows directamente desde Claude, con una base de datos pre-armada con docs de todos los nodes de n8n para que Claude no invente integraciones."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "n8n"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-n8n-mcp", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/integration/n8n-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/n8n-mcp.json"
+---
+
+## Qué es
+
+[n8n](https://n8n.io) es el Zapier open-source / Make alternativo: workflows visuales conectando APIs, scheduled tasks, triggers. Self-hostable, sin pagar por step.
+
+Este MCP enchufa n8n a Claude Code con un feature crítico: trae una **base de datos pre-armada con docs de todos los nodes de n8n**. Eso evita que Claude invente integraciones que no existen — si pedís "armame un workflow que conecte Slack con Notion", Claude consulta los docs de cada node antes de armar la config.
+
+Para gente que vive en n8n, es la forma más directa de armar workflows en lenguaje natural sin pelearse con la UI visual.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `integration` |
+| Installs | 77 |
+| Servidor MCP | `n8n-mcp` |
+| Sacada clave | Pre-built DB con docs de todos los n8n nodes |
+| Requiere | n8n self-hosted o cloud + API key |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp integration/n8n-mcp
+```
+
+Pre-requisitos: instancia n8n alcanzable + API key.
+
+Para Claude:
+
+```
+Instalé el MCP integration/n8n-mcp. Configurá la URL y API key de mi
+n8n. Listame los workflows existentes. Después generame un workflow
+nuevo que dispare cada lunes 9 am: pull Slack messages del canal X,
+resumirlos con Claude, mandar resumen por email.
+```
+
+## Qué podés hacer con esto
+
+### Construir workflows en lenguaje natural
+
+"Armame un workflow que: 1) escuche un webhook de Stripe, 2) si el evento es `payment_succeeded`, agregue una row en Google Sheets con datos del cobro, 3) mande un mail interno notificando". Claude arma la config respetando docs reales.
+
+### Modificar workflows existentes
+
+"En el workflow `Daily Reports`, cambiame el output del step `Format` para que en vez de markdown me devuelva CSV". Edits puntuales sin abrir la UI.
+
+### Audit de workflows
+
+"Listame todos mis workflows activos. Para cada uno, decime cuándo se ejecutó por última vez y cuál fue su status. Identificá los que fallaron en las últimas 24 horas".
+
+### Troubleshooting
+
+"El workflow `Sync CRM` falló ayer. Leé el execution log y dame el step que rompió, el error, y proponé fix".
+
+### Generación de workflows desde brief
+
+"Necesito automatizar: cuando un cliente firma un contrato en HelloSign, crear contacto en HubSpot, agregar tarea en Asana al CSM, mandar mail de bienvenida". Claude arma el workflow completo.
+
+### Comparado con [plugin-n8n-mcp](/boveda/plugin-n8n-mcp)
+
+El plugin tiene la guía fundacional de n8n MCP en nuestra bóveda. Este MCP es el conector práctico. Combinalos: leé el plugin para entender el patrón, instalá el MCP para ejecutar.
+
+## Pre-requisitos
+
+- **Instancia n8n** corriendo (self-hosted con docker, o n8n.io Cloud)
+- **API key** desde Settings → API
+- **URL alcanzable** desde donde corre Claude Code
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu automation es Zapier:** este MCP es n8n-only. Para Zapier hay otros MCPs.
+- **Si tu uso es uno o dos workflows simples:** la UI de n8n es buena. El MCP brilla cuando construís/manejás muchos workflows.
+- **Operaciones destructivas:** delete workflow, disable activo en prod. Hooks de aprobación.
+- **Costos:** n8n self-hosted es gratis si tenés infra. Cloud cobra. Mirá tu plan.
+- **Si tu workflow toca credenciales sensibles:** entendé dónde están almacenadas (en n8n) antes de operarlos via Claude.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [n8n MCP](https://www.aitmpl.com/component/mcps/integration/n8n-mcp) — comando exacto.
+- **Config JSON:** [n8n-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/n8n-mcp.json).
+- **n8n oficial:** [n8n.io](https://n8n.io) — cuenta cloud, self-host docs.
+
+## Recursos relacionados
+
+- [Plugin n8n MCP](/boveda/plugin-n8n-mcp) — guía fundacional de n8n con Claude. Leélo antes de instalar el MCP.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que construyan workflows en n8n basados en eventos.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector a un servicio de automation.

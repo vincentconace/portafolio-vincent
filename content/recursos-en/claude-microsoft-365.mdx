@@ -1,0 +1,233 @@
+---
+title: "Claude for Microsoft 365 — the 2 surfaces people confuse"
+description: "Claude inside Excel, PowerPoint, Word (GA) and Outlook (beta). There are 2 distinct surfaces — add-ins in Office and connectors in Claude.ai — that people mix up all the time. A clear breakdown of which to use, how each one installs, and 3 tested prompts."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude", "excel", "powerpoint", "word", "outlook"]
+publishedAt: "2026-05-09"
+readingTime: "10 min"
+relatedSlugs: ["claude-finanzas", "nueve-prompts-cowork", "anatomia-claude"]
+---
+
+## What changed and what's confusing
+
+Anthropic turned on Claude inside the Office suite. **Excel, PowerPoint, Word** are in GA. **Outlook** is still in public beta. That's the important part.
+
+What most people confuse: **there are 2 distinct surfaces** that live in different places and solve different problems. If you don't tell them apart, you'll set up the wrong one and think "it doesn't work."
+
+| Surface | Where it lives | What it's for |
+|------------|------------|----------|
+| **Office add-ins** | Sidebar inside Excel/Word/PPT/Outlook | Producing and transforming specific files |
+| **Connectors in Claude.ai** | Settings → Connectors on claude.ai web | Researching and deciding with context from your Outlook/OneDrive/SharePoint |
+
+Both require a paid Claude plan (Pro $20+/mo). There's no free tier for this.
+
+---
+
+## Surface 1 — Office add-ins
+
+### What it is
+
+Claude lives as a **sidebar inside** Excel, PowerPoint, Word, or Outlook. It reads the open cell/slide/document and applies real changes with **tracked changes** (in Word) or review (in Excel/PowerPoint).
+
+It's not a separate chat. It's Claude operating on your file, without pulling you out of the app.
+
+### When it's the right fit
+
+When the work is to **produce or transform a specific file**:
+
+- Build a financial model in Excel
+- Fill out a Board template in PowerPoint
+- Draft a memo in Word
+- Triage your inbox in Outlook
+
+### How it installs
+
+From Microsoft AppSource. There are two listings:
+
+1. **"Claude for Microsoft 365"** — the add-in for Excel, PowerPoint, Word
+2. **"Claude for Outlook"** — a separate listing, in beta
+
+After installing, inside the Office app:
+
+1. Open the file
+2. Go to the add-ins tab
+3. Enable Claude → it prompts you to log in with your Claude account
+4. The sidebar appears on the right
+
+### What it does well in each app
+
+**Excel**:
+- Explains existing formulas
+- Generates new formulas from natural language
+- Fixes errors like `#REF!` or `#VALUE!` by looking at the context
+- Builds complete financial models on request
+
+**PowerPoint**:
+- Respects your template, colors, and fonts
+- Creates native slides (editable charts, not screenshots)
+- Helps you reorganize a presentation's flow
+
+**Word**:
+- Edits with **tracked changes** — every change shows up to accept/reject
+- Responds to colleagues' comments
+- Reformats long documents
+
+**Outlook (beta)**:
+- Organizes the inbox into 3 buckets: "yours," "Claude's," "junk"
+- Generates drafts in **your voice** (learned from the sent folder)
+- **Never sends without you hitting send** — everything stays in draft
+
+### What it does NOT do
+
+- It doesn't send emails without your explicit approval
+- It doesn't support Office 2016/2019 (it does support Microsoft 365 desktop and web)
+- iPad/Android have reduced functionality
+
+---
+
+## Surface 2 — Connectors in Claude.ai
+
+### What it is
+
+In Claude's web chat (claude.ai), you go to **Settings → Connectors** and connect:
+
+- Outlook (email + calendar)
+- OneDrive
+- SharePoint
+
+With OAuth, nothing to install. After that, the chat can **read** your mail and your drives to answer with real context.
+
+### When it's the right fit
+
+When the work is to **research or decide with context from Microsoft**:
+
+- "Summarize the last 30 days of emails from client X"
+- "Find me every contract signed in 2025 on OneDrive"
+- "What meetings do I have with the pricing team this week?"
+- "Compare the Q1 board deck with the Q2 one"
+
+It doesn't produce files — it **reads** the ones you already have.
+
+### How it installs
+
+1. Open claude.ai
+2. Settings → Connectors
+3. Click "Connect" on the connector you want
+4. OAuth with your Microsoft account
+5. Done, the chat can now query it
+
+---
+
+## The clear split
+
+| You need to... | Use... |
+|--------------|--------|
+| Build/edit an Office file | Add-in (Surface 1) |
+| Search info in your Outlook/Drive | Connector (Surface 2) |
+| Have Claude reply to emails (drafts) | Outlook add-in |
+| Have Claude read emails and summarize them | Connector (faster for this) |
+| Work in Excel without leaving Excel | Add-in |
+| Cross-reference info across files | Connector |
+
+**The two are complementary.** The common setup is to have both configured and use whichever fits the task.
+
+---
+
+## 3 tested prompts
+
+These are examples to get started with each surface.
+
+### Prompt 1 — Excel model (Add-in)
+
+You're in Excel with an empty file. You open the Claude sidebar and:
+
+```
+Build me a revenue projection model for a B2B SaaS:
+
+- 12 months
+- 3 scenarios: pessimistic, expected, optimistic
+- Inputs: monthly price, CAC, monthly churn, initial MRR, growth rate
+- Outputs per month: new customers, churn, net MRR, projected ARR
+- Sensitivity table below: what happens if we raise price 10%, 20%, 30%?
+
+Use colors: inputs in yellow, outputs in gray, scenarios in different shades of blue.
+```
+
+Claude builds the entire model — cells with real formulas, sensitivity table, colors applied.
+
+### Prompt 2 — Cross research (Connector)
+
+On claude.ai web, with Outlook and OneDrive connected:
+
+```
+I need to prep for a meeting with the client Acme on Friday.
+
+Find:
+1. All emails with the domain @acme.com from the last 90 days
+2. Any document in OneDrive that mentions "Acme" or their project name
+3. The meetings we had with them in the last 6 months (calendar)
+
+Give me back:
+- Summary of the relationship (status, tone, pain points)
+- The last thing we promised and whether we delivered
+- The 3 questions they're most likely to ask us
+- 1 thing we should prepare before the meeting
+```
+
+Claude queries the 3 systems and returns an integrated brief.
+
+### Prompt 3 — Inbox triage (Outlook add-in)
+
+Inside Outlook, Claude sidebar:
+
+```
+Triage my inbox from the last 3 days. Classify each email into:
+
+🔴 I respond (with a draft in my voice, 2-3 lines)
+🟡 Delegate to [team X or person]
+🟢 Just read / archive
+⚫ Spam or irrelevant
+
+Show me the reds first. For each one, a draft ready in my learned voice
+but do NOT send anything until I hit send.
+```
+
+---
+
+## For companies — deployment
+
+If you want to roll this out to a team, the flow is:
+
+1. **Microsoft 365 admin**: approve the add-in under **Integrated apps** in the Admin Center
+2. **Define scopes**: especially for Outlook (reading mail, drafts) the permissions are sensitive
+3. **Claude plan**: you need Claude Team or Enterprise for centralized management (not just individual Pro)
+4. **Training**: a 30-min demo for the team separating the 2 surfaces (otherwise half of them will set it up wrong)
+
+---
+
+## Anti-patterns
+
+### 1. Setting up both but always using the same one
+
+If you have the add-in + connector but only use one, you miss half the value. The "produce vs. research" split is the key.
+
+### 2. Expecting it to send emails on its own
+
+The Outlook add-in **never sends without your confirmation**. If you were expecting an AI agent that answers inboxes automatically, this isn't it. It's a draft generator + organizer.
+
+### 3. Office 2016/2019
+
+Not supported. If your company still runs legacy Office, this combo doesn't work. Migrate first, then turn Claude on.
+
+### 4. Free plan
+
+There's no free tier for this. If you're trying Claude.ai for free, the add-in won't activate.
+
+---
+
+## Next steps
+
+- If you want finance agents that live in Excel + Cowork, see [Claude Finance](/boveda/claude-finanzas)
+- To automate reports from Cowork (without Office), [9 prompts for Cowork](/boveda/nueve-prompts-cowork)
+- To understand what Claude Cowork vs. Code vs. Chat is, [anatomy of Claude](/boveda/anatomia-claude)

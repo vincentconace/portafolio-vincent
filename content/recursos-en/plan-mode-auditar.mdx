@@ -1,0 +1,248 @@
+---
+title: "Plan Mode — the moment where YOU decide, not Claude"
+description: "Plan Mode isn't a shortcut: it's the phase where Claude proposes the full plan before touching anything and you audit it. Four questions to validate the plan, how to chain it with the Architect/Deploy/Security-Auditor trilogy, and when not to use it."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["trifecta-perfecta", "spec-kit", "trio-skills-claude-code"]
+---
+
+## The problem it solves
+
+You ask Claude to build something. Claude says "I'll use lib X" and runs `npm install X`. You don't know what X is. Three days later you've got 47 installed dependencies you never read — some with vulnerabilities, others discontinued, others you already handle by hand with native code.
+
+**Plan Mode breaks that cycle**: Claude builds the plan **before** touching anything. You audit it. You ask for alternatives if you don't like something. **You only approve once you understand what's going to happen**.
+
+> Plan Mode is an official Anthropic feature, not a trick. It works in Claude Code (terminal), the desktop app, and the web (with Ultraplan).
+
+---
+
+## How to activate it
+
+### In the terminal
+
+Inside Claude Code: **`Shift + Tab` twice**. A "PLAN MODE" indicator appears on screen.
+
+From that point, Claude **does not run tools** — it only proposes the plan in text.
+
+### In the desktop app / web
+
+There's a "Plan Mode" toggle in the UI. Same behavior.
+
+### Verify you're in Plan Mode
+
+```
+> [command that normally executes something]
+```
+
+If you're in Plan Mode, Claude responds with the proposed plan instead of executing it. If it runs it directly, the mode isn't active.
+
+---
+
+## The 4 phases of well-used Plan Mode
+
+### Phase 1 — Explore
+
+You tell Claude what you want to do at a high level. It **reads the context** (codebase, CLAUDE.md, relevant files) without touching anything.
+
+```
+> I need to add authentication to the project. Before proposing a plan,
+  explore the codebase to understand:
+  - What's there currently (if there's any auth)
+  - What framework we use
+  - What DB patterns
+  - What deps are already there
+
+  Don't install anything. Just read.
+```
+
+### Phase 2 — Plan
+
+With the context, Claude proposes the plan:
+
+```
+> Now propose the full plan:
+  - Which libs we'll use (with reasons)
+  - Which files you'll create / modify
+  - In what order
+  - What tests you'll add
+  - What risks you identify
+
+  DON'T execute anything. Just the plan in text.
+```
+
+Expected output:
+
+```
+PROPOSED PLAN:
+
+Stack: Clerk (vs alternatives: Supabase Auth, Auth.js, Lucia)
+Why Clerk:
+- Your DB is pure Postgres → Supabase Auth would tie you to Supabase
+- Auth.js covers it, but its DX has more friction
+- Lucia is simpler but you have to implement the UI yourself
+- Clerk has ready-made UI, JWT sessions, and built-in MFA
+
+Files to touch:
+1. package.json — add @clerk/nextjs
+2. middleware.ts — protect routes
+3. app/sign-in/page.tsx — login screen
+4. app/sign-up/page.tsx — registration
+5. lib/auth/get-user.ts — server-side helper
+6. lib/db/schema.ts — add users table (optional, Clerk manages it)
+
+Order:
+1. Install dep (1 min)
+2. Create middleware (5 min)
+3. Create pages (15 min)
+4. User helper (5 min)
+5. Schema (10 min)
+6. E2E tests of the flow (20 min)
+
+Tests:
+- Sign-up works
+- Sign-in with persistent session
+- Logout
+- Protected routes redirect if not authenticated
+
+Risks:
+🟡 Migrating existing users (if any) requires manual mapping
+🟡 Switching provider later requires a refactor (Clerk isn't trivially portable)
+🟢 The integration is standard, low chance of weird bugs
+
+Do you approve the plan or change something?
+```
+
+### Phase 3 — Audit (the critical part)
+
+People skip this phase. **It's the most important one.**
+
+For each proposal, ask these 4 questions:
+
+#### 1. Why this lib and not another?
+
+```
+> Why Clerk and not Auth.js? Give me the pros/cons of each for
+  MY specific case (not generic).
+```
+
+If Claude has a good justification, OK. If it says "because it's popular", **ask for alternatives with real analysis**.
+
+#### 2. What breaks if I want to change later?
+
+```
+> If in 6 months I want to migrate from Clerk to Lucia, how costly is it?
+  Point out the concrete lock-in points.
+```
+
+You identify vendor lock-in before adopting it.
+
+#### 3. What's NOT included in the plan?
+
+```
+> List the features I'd commonly expect from "auth" but that
+  this plan does NOT include:
+  - Magic links? OAuth? MFA? Password recovery?
+  - Multi-device sessions?
+  - Audit log?
+
+  For each one: if it's NOT included, tell me whether Clerk supports it
+  anyway or it requires another solution.
+```
+
+You avoid the "oh but I forgot I needed X".
+
+#### 4. What's the real total cost?
+
+```
+> For medium scale (10k active users):
+  - Cost of Clerk
+  - Maintenance cost (how many hrs/month you expect)
+  - Compared to Auth.js (self-hosted, free but requires infra)
+
+  Comparison table.
+```
+
+### Phase 4 — Build (only when everything is clear)
+
+```
+> OK, I approve the plan. Exit Plan Mode and execute it in the
+  proposed order. After each step, pause and report back to me.
+```
+
+You exit Plan Mode (Shift+Tab twice again or toggle off). Claude executes with the validated plan.
+
+---
+
+## The execution trilogy
+
+Some workflows chain Plan Mode with 3 more tools:
+
+| Phase | Tool | For what |
+|------|-------------|----------|
+| 1. Plan | Plan Mode | The plan |
+| 2. Design | [The Architect](/boveda/trifecta-perfecta) | The blueprint |
+| 3. Build | Regular Claude Code | Implementation |
+| 4. Security audit | Cyber Neo (from Trifecta) | Pre-deploy audit |
+| 5. Deploy | All Deploy (from Trifecta) | Controlled deploy |
+
+Plan Mode + [Trifecta Perfecta](/boveda/trifecta-perfecta) is basically "plan → design → code → audit → deploy" without skipping a single step.
+
+---
+
+## When Plan Mode shines
+
+✅ Tasks that touch >3 files
+✅ Tool / library decisions
+✅ When you're going to delegate the code to Claude without continuous supervision
+✅ If you've been burned by random installs before
+✅ Teams with the discipline of spec before code
+
+---
+
+## When NOT to use Plan Mode
+
+❌ Small edits: "add a comment for me" → doesn't need a plan
+❌ Clear mechanical refactors: "rename this variable" → go direct
+❌ Exploration / prototypes where the plan is precisely what you don't know
+❌ When you already have a detailed external spec → the plan is redundant
+
+---
+
+## Anti-patterns
+
+### 1. Approving the plan without reading it
+
+If Claude throws you a 30-point plan and you reply "OK, go ahead", **you lose the entire value**. It's like reading the bank contract before signing — yes, it's boring. Yes, you have to do it.
+
+### 2. Not asking for alternatives
+
+Accepting Claude's first proposal without asking "what else are you considering" → you end up with the most obvious option, not necessarily the best.
+
+### 3. Plan Mode for everything
+
+For small tasks it's unnecessary friction. **Use it for what justifies it** — structural decisions.
+
+### 4. Exiting Plan Mode before finishing the audit
+
+If you activate Plan Mode but after 1 minute you get bored and exit, **you didn't get the most out of it**. The audit takes 5-15 minutes. That time is the investment.
+
+---
+
+## The question that makes all the difference
+
+> "Why this option and not the others?"
+
+That question alone, asked 3 times over the plan, eliminates 80% of the bad decisions that come from "Claude picked the first one that sounded reasonable".
+
+It's not about distrusting Claude. It's about **forcing it to justify** — and sometimes, in justifying, it discovers its choice wasn't the best.
+
+---
+
+## Next steps
+
+- To implement the spec-before-code pattern in a more structured way, [spec-driven development](/boveda/spec-kit)
+- For the full flow of plan → build → harden → deploy, [trifecta perfecta](/boveda/trifecta-perfecta)
+- For the trio of skills focused on "think → plan → polish", [trio of skills](/boveda/trio-skills-claude-code)

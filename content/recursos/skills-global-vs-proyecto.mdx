@@ -1,0 +1,234 @@
+---
+title: "Skills global vs por proyecto — la regla para decidir correctamente"
+description: "No es cuántas skills tenés, es dónde las tenés. La regla simple para decidir cuáles van global y cuáles por proyecto, más la diferencia entre skill, herramienta y plugin que casi todos confunden."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["guia-skills-claude", "anatomia-claude", "cinco-skills-equipo-trabajo"]
+---
+
+## El error de la mayoría
+
+> "Instalá muchas skills y Claude se confunde."
+
+**Falso**. El problema no es **cuántas** tenés — es **dónde** las tenés.
+
+Si TODO está en `~/.claude/skills/` (global), Claude **abre cada sesión cargando** habilidades que no necesita. Para un proyecto Next.js no necesitás la skill de Django; para coding no necesitás la skill de email triage.
+
+La fix es simple: **separá global de proyecto**.
+
+---
+
+## La regla simple
+
+> **Si la skill aplica a TODOS tus proyectos → global.**
+> **Si la skill aplica a UN proyecto específico → por proyecto.**
+
+Sin excepciones. Aplicada bien, resuelve el 90% del problema.
+
+### Ejemplos
+
+| Skill | ¿Aplica a todos los proyectos? | Dónde va |
+|-------|-------------------------------|----------|
+| `code-reviewer` (genérico) | ✅ Sí | Global |
+| `voice-writer` (tu voz personal) | ✅ Sí | Global |
+| `brief-manana` | ✅ Sí | Global |
+| `prd-template` | ✅ Sí | Global |
+| `our-stripe-checkout` (skill para el flow de checkout TU proyecto) | ❌ Solo el proyecto X | Por proyecto |
+| `deploy-staging-corp` (TU pipeline) | ❌ Solo este proyecto | Por proyecto |
+| `our-i18n-strings` (convención del equipo) | ❌ Solo este proyecto | Por proyecto |
+
+---
+
+## Dónde van físicamente
+
+### Global
+
+```
+~/.claude/skills/
+├── code-reviewer/
+├── voice-writer/
+├── brief-manana/
+└── prd-template/
+```
+
+Se cargan en **toda sesión, cualquier proyecto**.
+
+### Por proyecto
+
+```
+mi-proyecto/
+├── .claude/
+│   └── skills/
+│       ├── stripe-checkout/
+│       ├── deploy-staging/
+│       └── i18n-strings/
+├── src/
+└── ...
+```
+
+Se cargan **solo cuando trabajás en este proyecto**.
+
+---
+
+## La diferencia entre skill, herramienta y plugin
+
+Tres conceptos que **casi todo el mundo confunde**:
+
+### Skill
+
+**Un comportamiento**. Conjunto de instrucciones (`SKILL.md`) que Claude sigue cuando detecta que aplica.
+
+Ejemplo: `code-reviewer` — Claude revisa código cuando vos decís "review".
+
+### Herramienta (Tool / MCP)
+
+**Un acceso a algo externo**. Función que Claude puede invocar para obtener data o ejecutar acción.
+
+Ejemplo: MCP de Supabase — Claude consulta tu DB.
+
+### Plugin
+
+**Un combo empaquetado**. Junta skills + tools + comandos para resolver un caso de uso.
+
+Ejemplo: Claude Small Business — junta 15 skills + 15 flujos + 7 conectores para PyMEs.
+
+| | Skill | Herramienta | Plugin |
+|---|-------|--------------|--------|
+| **Qué es** | Comportamiento | Función externa | Combo empaquetado |
+| **Cuándo usar** | Reglas de cómo actuar | Acceso a sistemas | Caso de uso completo |
+| **Dónde vive** | `.md` con frontmatter | MCP server | Repo + config |
+
+Detalle en [anatomía de Claude](/boveda/anatomia-claude).
+
+---
+
+## El test rápido
+
+Antes de instalar una skill, preguntate:
+
+### 1. ¿La voy a usar en >1 proyecto?
+
+**Sí** → Global
+**No** → Por proyecto
+
+### 2. ¿Tiene info específica de mi proyecto?
+
+**Sí** (paths, nombres de archivos del proyecto, etc.) → **Por proyecto, sí o sí**
+**No** → Puede ser global
+
+### 3. ¿Otro dev de mi equipo se beneficia?
+
+**Sí** → Por proyecto (versionado en git, compartida)
+**No** → Global (queda en tu compu)
+
+---
+
+## El error opuesto — todo por proyecto
+
+El otro extremo también es problema: **todo por proyecto** significa:
+
+- Recreás `code-reviewer` en cada repo → trabajo duplicado
+- Tus convenciones personales (voseo, tono) se pierden en proyectos nuevos
+- Skills que mejoraste en un proyecto no se aprovechan en otros
+
+**Lo personal y lo genérico va global. Lo específico al proyecto va por proyecto.**
+
+---
+
+## Cómo auditar lo que ya tenés
+
+Si tu `~/.claude/skills/` tiene 20+ skills:
+
+```
+> Auditá ~/.claude/skills/. Por cada una:
+  1. ¿Esta skill es específica a algún proyecto? (sí/no)
+  2. Si es específica, ¿a cuál?
+  3. ¿Vale moverla a `.claude/skills/` de ese proyecto?
+  4. Si es genérica, ¿se está activando correctamente o se confunde con otras?
+
+  Devolveme lista priorizada de movimientos sugeridos.
+```
+
+Después de auditar, hacés los moves. Resultado: global limpio, proyectos con su contexto, Claude más certero.
+
+---
+
+## Patrón típico de power user
+
+Lo que termina en cada lado para alguien con uso maduro:
+
+### En `~/.claude/skills/` (global, 5-10 skills)
+
+- `code-reviewer` — para todo proyecto
+- `voice-writer` — tu voz personal
+- `brief-manana` — workflow diario
+- `prd-template` — generador de PRDs
+- `prompt-clarifier` — detecta prompts vagos
+- `commit-message` — genera commits formateados
+- 1-2 más según tu workflow
+
+### En cada proyecto, `.claude/skills/`
+
+- `deploy-<proyecto>` — pipeline específico
+- `<dominio>-conventions` — convenciones del dominio
+- `<integraciones>-helpers` — Stripe, Auth0, etc. de ESTE proyecto
+- 2-4 más según necesite
+
+---
+
+## Anti-patrones
+
+### 1. Skill global con paths específicos
+
+```markdown
+# ❌ Skill genérica con paths específicos
+
+Cuando hagas deploy, ejecutá:
+- npm run build
+- gsutil cp dist/ gs://mi-bucket-X/  ← ESPECÍFICO A UN PROYECTO
+```
+
+**Mal**. Esta skill global se va a activar en otros proyectos donde no aplica. **Movela a por proyecto** o **parametrizala** (lee config del proyecto).
+
+### 2. Sobreinstalación global
+
+20 skills global = Claude carga 20 descriptions al inicio de cada sesión. **Tarda más y se confunde**. Si tenés >15 globales, considerá mover algunas.
+
+### 3. No versionar skills de proyecto
+
+`.claude/skills/` de proyecto **debe estar en git**. Sino tu compañero no las tiene cuando clona el repo.
+
+### 4. Skills personales en repo de equipo
+
+Tu skill `voice-writer` con TU voz no debería estar en el repo de la empresa. **Esas van a global**.
+
+---
+
+## La trampa de los plugins
+
+Algunos plugins instalan **decenas de skills global**. Mirá [Agency Agents](/boveda/agency-agents) (144 agentes) o [40 skills Claude](/boveda/skills-catalogo-40).
+
+**No los instales todos**. Elegí los 5-10 que matchean tu trabajo real, descartá el resto. Sino caés en sobreinstalación.
+
+---
+
+## El cambio mental
+
+| Antes | Después |
+|-------|---------|
+| "Cuantas más skills, mejor" | "Cuanto más curado, mejor" |
+| Todo en `~/.claude/` | Global = lo personal/universal. Proyecto = lo específico. |
+| Skills crecen sin auditoría | Audit periódica para sacar lo que no usás |
+
+15 minutos de organización mensual → Claude funciona mejor el resto del mes.
+
+---
+
+## Próximos pasos
+
+- Para la guía completa de skills (qué son, cómo armarlas), [guía completa de skills](/boveda/guia-skills-claude)
+- Para entender skill vs MCP vs plugin a fondo, [anatomía de Claude](/boveda/anatomia-claude)
+- Si querés un combo opinado de 5 skills globales para arrancar, [5 skills necesarias](/boveda/cinco-skills-necesarias)

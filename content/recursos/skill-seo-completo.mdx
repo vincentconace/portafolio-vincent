@@ -1,0 +1,235 @@
+---
+title: "Skill SEO completa — auditoría técnica, contenido y fix automático"
+description: "Patrón de una skill que convierte Claude Code en un especialista SEO: auditoría técnica del sitio, optimización de contenido por keywords y un agente que aplica los fixes priorizados. Sin saltar entre herramientas externas — todo desde tu terminal."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-25"
+readingTime: "8 min"
+relatedSlugs: ["skill-code-reviewer", "cinco-skills-necesarias", "andromeda-meta-ads"]
+---
+
+## Para qué sirve
+
+SEO típicamente significa saltar entre 5 herramientas: Screaming Frog para crawl, Search Console para indexación, PageSpeed Insights para velocidad, un keyword research tool, y tu editor para implementar los cambios.
+
+Cada cambio requiere: detectar el problema en una herramienta, copiarlo a un doc, ir al editor, implementar, volver a la herramienta a verificar. **El trabajo real es el saltar entre apps**, no el SEO.
+
+Una **skill SEO** consolida todo esto en Claude Code: corrés un comando, Claude audita tu sitio (con las herramientas relevantes invocadas vía MCP / `Bash`), te tira el reporte priorizado, y opcionalmente aplica los fixes él mismo.
+
+---
+
+## Las 3 áreas que cubre
+
+Una skill SEO completa debería cubrir:
+
+| Área | Qué chequea |
+|------|-------------|
+| **Auditoría técnica** | Velocidad, errores 4xx/5xx, estructura URL, sitemap, robots.txt, hreflang, schema markup |
+| **Contenido** | Keywords objetivo vs presencia real, meta tags, jerarquía de headings, alt text, internal linking |
+| **Fix automático** | Aplicar los fixes priorizados directo al código |
+
+Las primeras dos son **diagnóstico**. La tercera es **acción**. La mayoría de las herramientas paid solo te dan diagnóstico — la skill te resuelve ambos.
+
+---
+
+## La estructura — 13 comandos típicos
+
+Una skill SEO bien armada tiene comandos como:
+
+### Auditoría técnica
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-audit` | Auditoría completa, devuelve reporte priorizado |
+| `/seo-speed` | Test de velocidad (PageSpeed, Core Web Vitals) |
+| `/seo-crawl` | Crawlear el sitio, detectar 404s, redirects en cadena |
+| `/seo-sitemap` | Verificar sitemap.xml: completitud, validez, last-modified |
+| `/seo-schema` | Validar schema markup (JSON-LD) y proponer mejoras |
+
+### Contenido
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-keywords <página>` | Analizar keywords presentes, gaps vs competencia |
+| `/seo-meta <página>` | Revisar meta title + description, proponer alternativas |
+| `/seo-headings <página>` | Auditar jerarquía H1/H2/H3 |
+| `/seo-internal-links` | Detectar oportunidades de internal linking |
+| `/seo-content <tema>` | Generar contenido optimizado para un tema |
+
+### Automatización
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-fix` | Aplicar los fixes priorizados automáticamente |
+| `/seo-report` | Reporte ejecutivo para stakeholders |
+| `/seo-monitor` | Schedule chequeos recurrentes (con [hooks](/boveda/hooks-automatizacion)) |
+
+---
+
+## Cómo armar la skill (estructura básica)
+
+`.claude/skills/seo/SKILL.md`:
+
+```markdown
+---
+name: seo
+description: Auditoría y optimización SEO completa del proyecto. Activate
+  cuando el usuario diga "seo", "audit del sitio", "optimizar contenido",
+  o use cualquiera de los comandos /seo-*.
+---
+
+# Skill SEO
+
+Sos un especialista SEO. Tu trabajo es auditar y mejorar el SEO del sitio
+del proyecto actual.
+
+## Protocolo
+
+Antes de empezar cualquier auditoría:
+1. Verificá que el sitio tenga sitemap.xml accesible
+2. Identificá la URL base del proyecto (preguntá si no está claro)
+3. Detectá el stack (Next.js, Astro, WordPress, etc.) para usar las
+   herramientas apropiadas
+
+## Comandos
+
+### /seo-audit
+Auditoría completa. Generá un reporte priorizado en `seo-report.md`:
+
+## 🔴 Críticos (bloquean indexación o rankings)
+- [item con archivo:línea o URL afectada]
+
+## 🟡 Altos (impacto significativo, fix recomendado)
+- [items]
+
+## 🟢 Medios (mejoras incrementales)
+- [items]
+
+## ⚪ Bajos (nice-to-have)
+- [items]
+
+[etc — un protocolo claro por cada comando]
+
+## Reglas
+
+- NO modifiques código en /seo-audit (solo reportá)
+- En /seo-fix, ANTES de aplicar cambios, mostrá el plan y esperá ok
+- Para cambios estructurales (URLs, redirects), advertí riesgos
+- Cuando uses APIs externas (PageSpeed, Lighthouse), respetá rate limits
+```
+
+---
+
+## El comando estrella — `/seo-fix`
+
+Es el que diferencia esta skill de una herramienta de auditoría tradicional. Después de hacer `/seo-audit`:
+
+```
+> /seo-fix
+
+Claude:
+  Tengo el reporte de auditoría con 23 problemas detectados.
+  
+  Voy a proponer aplicar los 🔴 críticos y 🟡 altos. Los 🟢 medios y ⚪ bajos
+  los dejo para revisión manual.
+  
+  Plan:
+  
+  CRÍTICOS (8):
+  1. app/products/[slug]/page.tsx → falta meta description
+     Acción: agregar generateMetadata() con desc derivada del producto
+  2. public/sitemap.xml → incluye URLs que devuelven 404
+     Acción: regenerar sitemap excluyendo productos discontinuados
+  3. ...
+  
+  ALTOS (12):
+  9. components/Header.tsx → H1 duplicado en homepage
+     Acción: cambiar el H1 del menú a H2
+  10. ...
+  
+  ¿Aplicar? (yes / yes-criticos-solamente / cancelar)
+```
+
+Te muestra el plan completo **antes** de tocar nada. Aplicás todo, solo los críticos, o cancelás. Después de aplicar, te muestra los archivos modificados para que vos revises antes de commitear.
+
+---
+
+## Integración con hooks — chequeo automático en cada deploy
+
+Un patrón que aporta mucho: combinar la skill con [hooks de Claude Code](/boveda/hooks-automatizacion) para que SE verifique solo cuando hacés cambios relevantes.
+
+`.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_FILE_PATHS\" | grep -qE '(app/|pages/|src/content/)'; then claude --no-interactive '/seo-audit fast' 2>&1 | head -30; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Después de editar archivos de páginas/contenido, corre auto un mini-audit. Si detecta problemas, te avisa antes de seguir.
+
+---
+
+## Anti-patrones
+
+### 1. Esperar que la skill reemplace a un consultor SEO senior
+
+Para un sitio chico (1-100 páginas) la skill cubre el 90%. Para un e-commerce con 50k productos, las decisiones de arquitectura SEO requieren criterio humano. **Usá la skill para implementación, no para estrategia.**
+
+### 2. Aplicar `/seo-fix` sin revisar
+
+Algunos cambios SEO son **destructivos** (redirects en cadena, cambio de URLs canónicas). La skill te muestra el plan antes — leelo.
+
+### 3. Optimizar para keywords sin contexto
+
+Si pedís "optimizá para la keyword X", la skill puede meter la keyword 10 veces en la página y empeorar la lectura. **La calidad del contenido es prerequisito**, la skill optimiza un buen contenido — no convierte mal contenido en bueno.
+
+### 4. Sin instrumentación de fondo
+
+La skill audita lo que ve. Si no tenés Google Search Console conectado o analytics decente, **no podés validar** si los cambios mejoraron los rankings. Setup la instrumentación antes de optimizar.
+
+---
+
+## Cuándo conviene esta skill
+
+✅ Sitios de menos de 500 páginas
+✅ Stacks modernos (Next.js, Astro, Remix) donde el SEO se controla por código
+✅ Equipos sin SEO dedicado pero con consciencia del tema
+✅ Trabajo iterativo donde corrés audit + fix seguido
+
+❌ E-commerce gigantes con miles de URLs (necesitás herramientas dedicadas)
+❌ Sitios sobre WordPress sin custom theme (usá Yoast / Rank Math)
+❌ Si nunca hiciste SEO básico — primero leé fundamentos, después automatizá
+
+---
+
+## El patrón general
+
+Esta skill es ejemplo de **vertical especializada**: en lugar de pedirle a Claude "ayudame con SEO" suelto cada vez, encapsulás el dominio entero en una skill que:
+
+1. Sabe el protocolo (qué chequear primero, qué priorizar)
+2. Tiene las herramientas integradas
+3. Aplica fixes con criterio
+
+El mismo patrón funciona para otros verticales: accesibilidad (`a11y`), performance (`perf`), seguridad (`sec`), i18n. Si tu equipo hace estos chequeos seguido, encapsularlos en skills es la mejor inversión.
+
+---
+
+## Próximos pasos
+
+- Para entender qué es una skill en profundidad, [anatomía de Claude](/boveda/anatomia-claude)
+- Para tu primera skill propia desde cero, [skill code-reviewer](/boveda/skill-code-reviewer) es el ejemplo más claro
+- Para automatizar la ejecución de skills, [hooks de Claude Code](/boveda/hooks-automatizacion)

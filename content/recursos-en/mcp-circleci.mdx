@@ -1,0 +1,100 @@
+---
+title: "MCP CircleCI — build and deploy pipelines from Claude Code"
+description: "MCP server to integrate CircleCI with Claude Code. Monitor builds, trigger deployments, access project insights without leaving the editor. For teams that live in CircleCI."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "circleci"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["all-deploy", "anatomia-claude", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/circleci"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/circleci.json"
+---
+
+## What it is
+
+If your CI/CD lives in CircleCI, this MCP saves you the constant trip to the dashboard. It gives Claude access to your CircleCI account to:
+
+- **Monitor builds** in real time
+- **Trigger deployments** from the editor
+- **Read insights** (durations, failure rates, flaky tests)
+- **Access logs** from jobs
+
+Handy when you're workflow-debugging and want Claude to read the logs of the build that just failed without having to copy-paste everything.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 122 |
+| MCP server | `circleci-mcp-server` |
+| Account required | Yes — CircleCI (free tier available) |
+| Authentication | Personal API token |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/circleci
+```
+
+Prerequisite: a CircleCI API token generated from [User Settings](https://app.circleci.com/settings/user/tokens).
+
+For Claude:
+
+```
+I installed the devtools/circleci MCP. After setting CIRCLECI_TOKEN,
+show me the last 10 builds of project X, with status and duration.
+```
+
+## What you can do with this
+
+### Debugging failing builds
+
+"Build #234 of project X failed. Read the logs and tell me which step broke and what error it throws." Faster than opening the dashboard, navigating to the job, and scrolling through logs.
+
+### Flaky test insights
+
+"Show me the tests that failed at least 3 times in the last week on project Y, sorted by frequency." The MCP queries the insights API and Claude structures it.
+
+### Triggering deploys manually
+
+"Trigger a deploy to staging of the `release-stg` workflow with the current branch." Claude calls the corresponding endpoint.
+
+### Duration comparison
+
+"Which jobs in the `build-and-test` workflow got slower over the last week? Compare against the previous week." Identifies performance regressions in CI.
+
+### Usage audit
+
+"List all projects that run more than 1 build per hour on average, grouped by team." Useful for cost optimization.
+
+## Prerequisites
+
+- **CircleCI account** with access to the projects you're going to query
+- **Personal API token** from User Settings
+- **Correct permissions**: the token inherits your user's permissions
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you use GitHub Actions / GitLab CI:** this MCP is CircleCI-only. For other CI/CD there are specific MCPs.
+- **Destructive operations:** triggering production deploys from Claude requires approval hooks. Don't do it without a gate.
+- **Broad permissions:** the personal token inherits everything. If you have access to 50 projects, so does Claude. Consider a token with minimal scope if the API allows it.
+- **Only for casual monitoring:** if your use is watching builds all day, the native dashboard is better UX than the MCP. The MCP shines when you integrate it with other Claude flows.
+
+</Callout>
+
+## Download it from the source
+
+- **Listing on aitmpl.com:** [CircleCI MCP](https://www.aitmpl.com/component/mcps/devtools/circleci) — exact command.
+- **JSON config:** [circleci.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/circleci.json) — definition.
+- **CircleCI API tokens:** [app.circleci.com/settings/user/tokens](https://app.circleci.com/settings/user/tokens).
+
+## Related resources
+
+- [All Deploy](/boveda/all-deploy) — for deploys to hosting (Vercel, Railway). CircleCI is the orchestrator, All Deploy is the publisher.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to understand this MCP as an external connector (not a skill or agent).
+- [Agency Agents](/boveda/agency-agents) — to orchestrate agents that react to failed builds automatically.

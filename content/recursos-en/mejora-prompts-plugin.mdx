@@ -1,0 +1,251 @@
+---
+title: "Plugin: prompt evaluator — if it's vague, it asks you before executing"
+description: "A plugin that intercepts your prompts and, if it detects they're vague or ambiguous, asks you 2-3 concrete questions before sending them. It reduces the 'no, that's not it' ping-pong and the tokens wasted on wrong answers."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-07"
+readingTime: "7 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "prompting-10-pilares", "comando-tests-automaticos"]
+---
+
+## The problem
+
+New Claude Code users write things like:
+
+- *"Improve this file"*
+- *"Optimize the performance"*
+- *"Make it cleaner"*
+- *"Add tests"*
+
+These prompts are **open to interpretation**. Claude produces something reasonable, but it's rarely what you wanted. The result:
+
+1. Claude implements one interpretation
+2. You: "no, not like that"
+3. Claude redoes it with another interpretation
+4. You: "not that either"
+5. ... 4-5 back-and-forths, tokens burned, frustration piling up
+
+The "prompt evaluator" plugin adds a layer in front: **it detects the vagueness and asks you before executing**.
+
+---
+
+## How it works
+
+It's a slash command (or a high-priority skill) that you trigger at the start of tasks:
+
+```
+> /eval-prompt "improve the auth file"
+
+I detected that your request is ambiguous. Before I start:
+
+1. What kind of "improvement"? Options I see:
+   a) Performance (seems OK for now — auth isn't a bottleneck)
+   b) Readability (there are 80+ line functions that could be split)
+   c) Security (no obvious issues, but I can audit)
+   d) Test coverage (current coverage: 34%)
+   e) Error handling (several catches that swallow errors)
+
+2. Does it apply to all of src/auth/ or a specific file?
+
+3. Any constraints? (e.g. don't break the public API, don't change existing tests)
+
+Answer these 3 points and I'll get going.
+```
+
+You reply with the missing info. Claude has precise context. It implements without back-and-forth.
+
+---
+
+## The plugin / command
+
+`~/.claude/commands/eval-prompt.md`:
+
+```markdown
+---
+description: Evaluates the user's prompt before executing. If it's ambiguous, ask for clarification. If it's clear, proceed.
+argument-hint: <original prompt>
+---
+
+# Prompt evaluator
+
+The user asked: $ARGUMENTS
+
+## Your task
+
+BEFORE executing anything, analyze the quality of the prompt. Use this heuristic:
+
+### Signs of a vague prompt
+
+- Generic verbs with no clear object: "improve", "optimize", "clean up", "fix"
+- Adjectives with no metric: "faster", "cleaner", "better"
+- Missing the "what" or the "why"
+- Doesn't mention a specific file/function when it clearly applies to something concrete
+- Doesn't mention a success criterion
+
+### Signs of a clear prompt
+
+- Verb + object + criterion: "add tests with >80% coverage for src/auth/login.ts"
+- Specific file/function mentioned
+- Explicit constraints
+- Expected output described
+
+## Protocol
+
+### If the prompt is clear (3+ clear signs):
+Proceed directly, no questions. Just confirm: "OK, I'm going to do X, Y, Z."
+
+### If the prompt has ambiguity (2+ vague signs):
+DO NOT execute. Instead:
+
+1. Identify the 2-3 main ambiguities
+2. For each one, propose concrete options (not open-ended questions like "what do you want?")
+3. Ask me to confirm each one
+
+Format:
+```
+I detected ambiguity in the request. Before I start:
+
+1. [concrete question]
+   Options: a) ..., b) ..., c) ...
+
+2. [concrete question]
+   ...
+
+Confirm these points and I'll get going.
+```
+
+### If there's only 1 ambiguity:
+Ask the question and propose your most likely interpretation.
+
+## Rules
+
+- DO NOT make up options. If you can't list 2-3 reasonable alternatives, ask open-ended.
+- Questions must be **specific and answerable in 1 line**. Avoid "what kind of improvement do you want?" → ask "performance, readability, or security?"
+- If the user insists on proceeding with vagueness ("do whatever you think is best"), go ahead but warn that you'll be using your own judgment.
+```
+
+---
+
+## Automatic activation (the skill version)
+
+To make it trigger **always**, not just when you invoke it, set it up as a skill with a broad description:
+
+`~/.claude/skills/prompt-evaluator/SKILL.md`:
+
+```markdown
+---
+name: prompt-evaluator
+description: Evaluates the quality of the user's requests before executing.
+  Triggers at the start of any non-trivial task, especially when the
+  user asks to "improve", "optimize", "fix", "clean up" or uses generic
+  verbs with no clear object.
+---
+
+[same content as the command, adapted to a skill]
+```
+
+With this, any vague request fires the skill before Claude does anything.
+
+---
+
+## Trade-off: friction vs precision
+
+The plugin adds a pause before every ambiguous task. It's **intentional friction**.
+
+| Without the plugin | With the plugin |
+|---------------|---------------|
+| 1 prompt → 5 iterations → result | 1 prompt → 3 questions → 1 execution → result |
+| 5 minutes answering "no, not like that" | 30 seconds answering concrete questions |
+| Tokens spent on wrong answers | Tokens spent on cheap questions |
+
+The friction of the questions is **less** than the friction of iterating over wrong code.
+
+---
+
+## When to disable it
+
+There are moments where the pause is counterproductive:
+
+- **Exploration / spike**: you want Claude to try something random, and the questions kill the flow
+- **Clear but short tasks**: if you say "add a comment to function X", the plugin should detect that it's clear and not ask (if it does anyway, that's a bug)
+- **Fast iteration on something familiar**: when you already share context, the questions feel unnecessary
+
+For those cases, you use `/no-eval` or disable the skill for the session:
+
+```
+> /skill-off prompt-evaluator
+```
+
+---
+
+## The pattern is generalizable
+
+The "prompt evaluator" is a case of an **interceptor**: a skill that sits between the user's request and execution. Other useful interceptors:
+
+| Interceptor | What it intercepts |
+|-------------|----------------|
+| **Cost-checker** | If Claude detects the task will cost a lot, it warns you and proposes a reduced scope |
+| **Risk-checker** | If the task touches sensitive code (auth, payments, prod), it asks for double confirmation |
+| **Time-estimator** | Before starting, it estimates how long it'll take and warns you if it looks like >1h |
+| **Dependency-checker** | If the task requires something that isn't installed, it lists what's missing before starting |
+
+They're all skills similar to the prompt evaluator. The pattern: **intercept → analyze → confirm or pass through**.
+
+---
+
+## Before-and-after example
+
+### Without the plugin
+
+```
+> Make the checkout code better.
+
+[Claude produces 200 lines of changes across 3 files]
+
+> No, this wasn't it. I only wanted you to optimize the performance, not rebuild the UI.
+
+[Claude redoes it, now optimizes, but breaks a test]
+
+> And fix that test.
+
+[Claude fixes the test...]
+```
+
+15 minutes, ~8k tokens.
+
+### With the plugin
+
+```
+> Make the checkout code better.
+
+I detected ambiguity. Before I start:
+
+1. What kind of improvement?
+   a) Performance (I see 2 N+1 queries in the checkout flow)
+   b) UX / UI (didn't analyze, give me context if this was it)
+   c) Error handling (several generic catches)
+   d) Testing (current coverage 41%)
+
+2. Just the checkout.tsx file or also the /api/checkout endpoint?
+
+3) Anything I should NOT touch?
+```
+
+```
+> a) and the N+1 query. Just the endpoint. Don't touch the existing tests.
+
+OK. I'm going to optimize the 2 N+1 queries in the /api/checkout endpoint. I'll start
+with the shipping-cost calculation that hits 1 query per item. I won't touch
+checkout.tsx or the tests. Getting started.
+```
+
+5 minutes, ~2k tokens.
+
+---
+
+## Next steps
+
+- If you liked the pattern, check out the [code-reviewer skill](/boveda/skill-code-reviewer) that applies a similar philosophy (verify before approving)
+- For the [PRD prompts](/boveda/prompts-prd-ejecutivo), the "explicit gaps with ❓" pattern is related
+- If your prompts are consistently vague, reading [Prompting 101 — 10 pillars](/boveda/prompting-10-pilares) helps improve the input, not just filter it

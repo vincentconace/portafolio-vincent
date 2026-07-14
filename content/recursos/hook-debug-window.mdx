@@ -1,0 +1,78 @@
+---
+title: "Hook Debug Window — abre live-tailing del debug log al inicio de sesión"
+description: "Hook con 114 installs. Cuando arrancás Claude Code con `--debug` o `-d`, abre una ventana de log live-tailing en background. Se cierra automáticamente al terminar la sesión."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-context-timeline", "hook-command-logger", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/debug-window"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/debug-window.json"
+---
+
+## Qué es
+
+Cuando arrancás Claude Code en modo debug (flag `--debug` o `-d`), este hook abre automáticamente una ventana auxiliar que hace tail -f del debug log en vivo. Cuando termina la sesión, la ventana se cierra sola.
+
+Hook events: `SessionStart` (abre) + `SessionEnd` (cierra).
+
+Útil cuando estás diagnosticando un bug de Claude Code o de tu setup de hooks/MCPs. El log debug tiene mucha info; tener una ventana siempre visible te ahorra el `tail -f` manual.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `development-tools` |
+| Installs | 114 |
+| Hook events | `SessionStart` + `SessionEnd` |
+| Trigger | Solo si se inició Claude con `--debug` o `-d` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook development-tools/debug-window
+```
+
+Después arrancá Claude con debug:
+
+```bash
+claude --debug
+```
+
+## Qué podés hacer con esto
+
+### Diagnostic en vivo
+
+Durante una sesión con bugs, vas viendo qué está pasando en debug log sin tener que pausar y abrir terminal nueva.
+
+### Aprender qué hace Claude por dentro
+
+Si querés entender el flujo interno (cómo invoca tools, cómo aplica hooks), tener el debug log a la vista enseña mucho.
+
+### Para developers de plugins/hooks
+
+Si estás desarrollando un plugin o hook custom, el debug window te muestra exactamente cómo se está invocando.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Solo se activa con `--debug`:** sin el flag, no hace nada. No es un hook que aplica siempre.
+- **Para sesiones productivas normales:** debug log es ruido. No corras Claude siempre en debug mode.
+- **Pantalla pequeña:** la ventana extra compete por espacio.
+- **Si no necesitás ver debug en vivo:** podés revisar el log post-mortem.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Debug Window Hook](https://www.aitmpl.com/component/hooks/development-tools/debug-window) — comando exacto.
+- **Config JSON:** [debug-window.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/debug-window.json).
+
+## Recursos relacionados
+
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización web vs ventana de log textual.
+- [Command Logger Hook](/boveda/hook-command-logger) — log persistente vs vista live.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — debugging buenas prácticas.

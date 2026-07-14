@@ -1,0 +1,94 @@
+---
+title: "Hook Vercel Auto Deploy — trigger deploys automáticos en Vercel post-commit"
+description: "Hook con 295 installs. Dispara deploys de Vercel automáticamente cuando se commiten cambios. Soporta estrategias por environment y rollback on failure."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-vercel-environment-sync", "hook-deployment-health-monitor", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/vercel-auto-deploy"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/vercel-auto-deploy.json"
+---
+
+## Qué es
+
+Después de cada commit, el hook dispara automáticamente un deploy a Vercel. Soporta:
+- **Environment-specific strategies** (dev → staging → prod según branch)
+- **Rollback on failure** automático
+
+Hook event: `PostToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 295 |
+| Hook event | `PostToolUse` |
+| Plataforma | Vercel |
+| Soporta | Multi-env + rollback |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/vercel-auto-deploy
+```
+
+Pre-requisitos:
+- Vercel CLI instalado y autenticado
+- Proyecto vinculado (`vercel link`)
+- Tokens configurados
+
+Para Claude:
+
+```
+Instalé el hook automation/vercel-auto-deploy. Verificá que tengo
+vercel CLI autenticado. Hacé un commit y debería disparar deploy
+con la strategy de mi branch.
+```
+
+## Qué podés hacer con esto
+
+### Deploy continuo sin tocar dashboard
+
+Commit → deploy. Sin pasos manuales.
+
+### Strategies por branch
+
+`main` → producción. `develop` → staging. `feature/*` → preview.
+
+### Rollback automático
+
+Si el deploy falla healthchecks, rollback al deployment anterior. Mitigación rápida.
+
+### Combo con [Vercel Environment Sync](/boveda/hook-vercel-environment-sync)
+
+Auto Deploy publica. Env Sync mantiene env vars consistentes entre local y Vercel.
+
+### Combo con [Deployment Health Monitor](/boveda/hook-deployment-health-monitor)
+
+Auto Deploy lanza. Health Monitor observa post-deploy.
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de auto-deploy a producción">
+
+- **Sin CI tests primero:** auto-deploy sin tests = manda código roto a prod. Combinalo con [Run Tests After Changes](/boveda/hook-run-tests-after-changes).
+- **Para repos sin Vercel:** el hook es Vercel-only. Para Netlify, Railway, otros, alternativas.
+- **Si no querés auto-deploy:** override siempre que necesités review humano.
+- **Tokens con scope amplio:** un Vercel token con acceso a producción es serio. Restringí.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Vercel Auto Deploy Hook](https://www.aitmpl.com/component/hooks/automation/vercel-auto-deploy) — comando exacto.
+- **Config JSON:** [vercel-auto-deploy.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/vercel-auto-deploy.json).
+
+## Recursos relacionados
+
+- [Vercel Environment Sync Hook](/boveda/hook-vercel-environment-sync) — combo natural.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — observability post-deploy.
+- [All Deploy](/boveda/all-deploy) — para multi-platform deploys.

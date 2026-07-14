@@ -8,6 +8,10 @@ export const navItems = [
     key: 'work',
   },
   {
+    href: '/nucleo-de-la-ia',
+    key: 'nucleo',
+  },
+  {
     href: '/about',
     key: 'about',
   },

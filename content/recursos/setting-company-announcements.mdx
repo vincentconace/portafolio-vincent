@@ -1,0 +1,88 @@
+---
+title: "Setting Company Announcements — mensajes custom en Claude Code"
+description: "Setting con 32 installs. Configura announcements custom de tu empresa que aparecen en Claude Code. Para enterprises que quieren reminders, links a docs internas o policies."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-additional-directories", "setting-corporate-proxy", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/global/company-announcements"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/company-announcements.json"
+---
+
+## Qué es
+
+Define un array de mensajes (`companyAnnouncements`) que Claude Code muestra al usuario. Útil para enterprises que quieren:
+
+- Reminders de policies internas
+- Links a docs propias
+- Anuncios de tools nuevos del equipo
+- Welcome messages para devs nuevos
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `global` |
+| Installs | 32 |
+| Setting key | `companyAnnouncements` (array) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting global/company-announcements
+```
+
+Después editás el array con tus mensajes reales:
+
+```json
+{
+  "companyAnnouncements": [
+    "Para PRs urgentes, ping a #dev-emergency",
+    "Convención de naming: feature/JIRA-123-descripcion",
+    "Docs internas: confluence.miempresa.com"
+  ]
+}
+```
+
+## Qué podés hacer con esto
+
+### Onboarding asistido
+
+Dev nuevo ve reminders al arrancar Claude Code. Reduces preguntas repetidas.
+
+### Policies frequents
+
+"No commitear secrets" puede aparecer hasta que se interiorice.
+
+### Links a docs internas
+
+Reemplaza "donde estaba esa doc?" con un announcement persistente.
+
+### Para teams distribuidos
+
+Si tu equipo está en zonas horarias distintas, announcements aseguran que info crítica llegue a todos.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para devs solo:** no aporta a personal use.
+- **Si tus announcements rotan rápido:** mantenerlos al día puede ser overhead.
+- **Solo 32 installs:** muy nicho. Validá implementación.
+- **Para info crítica:** el dev puede dismiss los announcements. No reemplaza training real.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Company Announcements Setting](https://www.aitmpl.com/component/settings/global/company-announcements) — comando exacto.
+- **Config JSON:** [company-announcements.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/company-announcements.json).
+
+## Recursos relacionados
+
+- [Additional Directories Setting](/boveda/setting-additional-directories) — para docs internas en filesystem.
+- [Corporate Proxy Setting](/boveda/setting-corporate-proxy) — otro setting enterprise.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de configuración.

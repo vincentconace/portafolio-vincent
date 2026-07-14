@@ -1,0 +1,305 @@
+---
+title: "5 meta skills — Claude becomes 5 people (Skill Creator + Write-a-Skill + Find + Grill + PRD)"
+description: "Claude becomes 5 people at once. Skill Creator (official Anthropic) builds skills from scratch. Write-a-Skill builds them well. Find Skills (skillsmp.com) finds the existing ones. Grill Me interrogates your idea. Write-a-PRD lays out the full plan. The meta stack for building tools."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["crea-claude-skills", "skill-vault", "40-skills-claude"]
+---
+
+## The idea
+
+Claude can become **5 people at the same time**. All you need are 5 skills **that almost nobody knows exist**:
+
+| # | Skill | What it's for |
+|---|-------|----------|
+| 1 | **Skill Creator** | Builds skills **from scratch** |
+| 2 | **Write a Skill** | Builds **well-structured** skills |
+| 3 | **Find Skills** | Finds **existing** skills |
+| 4 | **Grill Me** | **Interrogates** you about your idea |
+| 5 | **Write a PRD** | Lays out the project's **full plan** |
+
+A **meta** stack: these skills create other skills + projects.
+
+---
+
+## Skill 1 — Skill Creator (official Anthropic, 105k+)
+
+### What it does
+
+Imagine you do the same thing every day: you generate a report, send an email in a certain format, review data in a certain way.
+
+With **Skill Creator** you tell Claude exactly what you do. Claude runs through it step by step. In the end it packs it into a file for you.
+
+**The next time you need that task → Claude already knows**. Never forgetting.
+
+### Why it matters
+
+- **Official from Anthropic** (not some random project)
+- Anyone can create skills without programming
+- You describe it in plain language, Claude builds it
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/skill-creator
+```
+
+### Usage
+
+```
+> I want to create a skill that automates my weekly report:
+  1. Every Monday, read my Notion DB "Tareas Q3"
+  2. Generate an executive summary
+  3. Email the team with highlights + blockers
+
+  Build me the skill that does this.
+```
+
+Claude puts together the SKILL.md, tests it with you, and saves it.
+
+---
+
+## Skill 2 — Write a Skill (Matt Pocock)
+
+### What it does
+
+While Skill Creator is generic, **Write a Skill** is focused on **structural quality**: it applies best practices, naming conventions, correct frontmatter, scalability.
+
+### When to use Write a Skill vs Skill Creator
+
+- **Skill Creator**: quick prototypes
+- **Write a Skill**: skills you'll use long-term + possibly share
+
+### Installation
+
+```bash
+claude install-skill https://github.com/mattpocock/skills/tree/main/write-a-skill
+```
+
+---
+
+## Skill 3 — Find Skills (skillsmp.com)
+
+### What it does
+
+A marketplace with **66k+ indexed skills**. You search by name, category, popularity.
+
+URL: `skillsmp.com` (no install required — it runs in your browser).
+
+### When to use it
+
+**Before creating your own skill**, check whether it already exists. It probably does.
+
+### Flow
+
+1. You think "I need a skill that does X"
+2. `skillsmp.com` → search for X
+3. If it exists → install it directly
+4. If not → use Skill Creator or Write a Skill
+
+It saves you from creating duplicates.
+
+See [Vercel Skills](/boveda/vercel-skills) and [Antigravity](/boveda/agencia-digital-completa) for discovery alternatives.
+
+---
+
+## Skill 4 — Grill Me (Matt Pocock)
+
+### What it does
+
+It **interrogates** you about your idea BEFORE building anything. Claude asks you questions until it understands:
+
+- What problem you're solving
+- For whom
+- Why the current solution isn't enough
+- What success means
+- What constraints you have
+
+It's like having a **senior product manager taking your brief**.
+
+### Why it matters
+
+90% of projects fail because **the creator didn't really understand the problem**. Grill Me prevents that.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/mattpocock/skills/tree/main/grill-me
+```
+
+### Usage
+
+```
+> I have an idea: an app for [X]. Before building, grill me.
+```
+
+Claude asks you 8-15 questions. Your answers refine the idea.
+
+---
+
+## Skill 5 — Write a PRD
+
+### What it does
+
+After grill-me, with the idea clear, **Write a PRD** puts together a complete **Product Requirements Document**.
+
+### Typical structure
+
+- Vision
+- Problem
+- Users + use cases
+- Features (must-have, nice-to-have)
+- Stack
+- Roadmap by phases
+- Success metrics
+- Risks
+
+### Installation
+
+```bash
+claude install-skill https://github.com/mattpocock/skills/tree/main/write-a-prd
+```
+
+### Usage
+
+```
+> With the info you got from grill-me, put together a complete PRD
+  for this project.
+```
+
+You come out with an **executable plan**.
+
+---
+
+## The full flow — all 5 together
+
+### Day 1 — Idea
+
+```
+> I have a fuzzy idea: [VAGUE DESCRIPTION]
+> Grill me (Grill Me)
+```
+
+Claude asks you questions. You refine.
+
+### Day 1 — PRD
+
+```
+> With everything we talked about, put together a PRD (Write a PRD)
+```
+
+You come out with a structured doc.
+
+### Day 2 — Find tools
+
+```
+> To implement the PRD, are there existing skills that would help me?
+> Search for them on skillsmp.com.
+```
+
+You find 2-3 that apply.
+
+### Day 2 — Build what's missing
+
+```
+> For [features I didn't find a skill for], create custom skills for me.
+> Use Write a Skill to make them robust.
+```
+
+You come out with a full stack.
+
+### Day 3+ — Build
+
+With a clear PRD + installed skills, Claude builds the project.
+
+---
+
+## Use cases
+
+### 1. Founder validating an idea
+
+```
+- Grill Me: clarify the problem
+- Write a PRD: document it
+- Find Skills: see what's already been built
+- Skill Creator: create the parts specific to you
+- Then build
+```
+
+### 2. Agency onboarding a new client
+
+```
+- Grill Me: understand the client
+- Write a PRD: document the project
+- Skill Creator: create custom skills for that client
+- Reuse for future ones
+```
+
+### 3. Dev building an internal tool
+
+```
+- Find Skills: is there anything similar?
+- If not, Write a Skill to build it well
+- Share with the team
+```
+
+---
+
+## Anti-patterns
+
+### 1. Skipping Grill Me
+
+"I already know what I want." OK, but **try** Grill Me — you'll discover things you were assuming.
+
+### 2. Creating a skill before searching
+
+Without checking skillsmp.com, you **reinvent the wheel**. Search first.
+
+### 3. A 20-page PRD
+
+A good PRD is **2-5 pages**. If your PRD is 20, there's too much info.
+
+### 4. Super-specific, non-reusable skills
+
+If your skill only works for "this specific case of this one client," it's **not a useful skill**. Generalize it a bit.
+
+### 5. Forgetting these 5 are meta
+
+All 5 are for creating OTHER skills/projects. **Don't use them as operational skills**.
+
+---
+
+## Powerful combinations
+
+### With 40 LATAM skills
+
+[40 Claude skills](/boveda/40-skills-claude) are operational skills. These 5 **create / find / improve** them.
+
+### With Skill Vault
+
+[Skill Vault](/boveda/skill-vault) organizes your skills (the ones created with these 5 + the external ones).
+
+### With The Architect
+
+[The Architect](/boveda/the-architect) generates a technical blueprint. These 5 generate a **product + skills**.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You don't create new skills | It's not for you |
+| You use 1 project with no reuse | Overhead |
+| No patience for Grill Me | The interrogation frustrates you |
+
+---
+
+## Next steps
+
+- To create custom skills from scratch (without Skill Creator), [create claude skills](/boveda/crea-claude-skills)
+- To organize your skill library, [Skill Vault](/boveda/skill-vault)
+- For 40 ready-to-use LATAM skills, [40 Claude skills](/boveda/40-skills-claude)

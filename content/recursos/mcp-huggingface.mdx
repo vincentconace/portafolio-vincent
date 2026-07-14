@@ -1,0 +1,105 @@
+---
+title: "MCP Hugging Face — modelos, datasets, Spaces y papers desde Claude"
+description: "MCP server que conecta Claude Code con el ecosistema Hugging Face: modelos, datasets, Spaces, papers y collections. Para research de ML, prototipado y consumo de modelos OSS directamente."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "huggingface"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-arxiv-mcp-server", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/huggingface"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/huggingface.json"
+---
+
+## Qué es
+
+Hugging Face es el centro del ecosistema open-source de ML/AI: catálogo gigante de modelos pre-entrenados, datasets, Spaces (apps demo), papers y collections. Si trabajás con LLMs, vision, audio o ML clásico, casi seguro pasaste por ahí.
+
+Este MCP conecta esa data a Claude Code. Le pedís "buscame los 10 modelos de embedding más usados, con tamaño y benchmarks" y Claude consulta el Hub.
+
+Útil para research, comparación de modelos, prototipado y descubrimiento.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 357 |
+| Servidor MCP | `huggingface` |
+| Cuenta requerida | Para inferencia, sí. Para browsing, opcional |
+| Recursos cubiertos | Models, Datasets, Spaces, Papers, Collections |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/huggingface
+```
+
+Pre-requisito: HF API token (gratis con cuenta) para inferencia y acceso a recursos gated.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/huggingface. Buscame los 10 modelos open-source
+más populares para embeddings de texto en inglés y español, con tamaño,
+licencia y benchmark si está disponible.
+```
+
+## Qué podés hacer con esto
+
+### Discovery de modelos
+
+"Modelos de speech-to-text open-source con licencia permisiva (Apache, MIT), tamaño menor a 5GB, soporte español". Filtros que el browser web hace, pero conversacional.
+
+### Comparación de benchmarks
+
+"Comparame Whisper Large v3 vs Faster-Whisper Large v3 vs Distil-Whisper: tamaño, WER, latencia". Útil para decisión técnica.
+
+### Búsqueda de datasets
+
+"Datasets de QA en español con licencia abierta, al menos 10k ejemplos, no contaminados con benchmarks comunes". Para fine-tuning o eval.
+
+### Papers + Spaces
+
+"Buscame el paper más reciente sobre RAG con evidencia experimental sólida, y un Space que demuestre la técnica para que pueda probarlo en vivo".
+
+### Combinación con [arXiv MCP](/boveda/mcp-arxiv-mcp-server)
+
+HF + arXiv = pipeline de research completo. arXiv para papers, HF para implementaciones y demos.
+
+### Inferencia directa
+
+Algunas implementaciones del MCP permiten ejecutar el modelo via Inference API. Verificá en la config.
+
+## Pre-requisitos
+
+- **Cuenta Hugging Face** (gratis) si vas a:
+  - Acceder a modelos gated
+  - Usar Inference API
+- **API token** si necesitás más rate limit que el anónimo
+- **Para inferencia local:** los modelos los bajás vos; el MCP es discovery + Hub API
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu uso es 100% modelos cerrados** (Claude, GPT, Gemini): el MCP no aporta.
+- **Inferencia local pesada:** correr modelos grandes (Llama 70B, Flux, etc.) requiere GPU/RAM seria. El MCP es para discovery, no setup de infra.
+- **Información sensible en prompts a Inference API:** la API mainstream procesa data tuya. Para casos sensibles, usá inferencia local o endpoints dedicados.
+- **Licencias variables:** algunos modelos populares son non-commercial. Validá licencia antes de usar en producción.
+- **Modelos gated:** algunos requieren aprobación previa (Llama, etc.). El MCP no la solicita por vos.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Hugging Face MCP](https://www.aitmpl.com/component/mcps/devtools/huggingface) — comando exacto.
+- **Config JSON:** [huggingface.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/huggingface.json).
+- **Hugging Face Hub:** [huggingface.co](https://huggingface.co) — cuenta, tokens, modelos.
+
+## Recursos relacionados
+
+- [arXiv MCP Server](/boveda/mcp-arxiv-mcp-server) — pipeline papers + implementaciones cuando se combinan.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que usen el MCP en pipelines de ML research.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector externo.

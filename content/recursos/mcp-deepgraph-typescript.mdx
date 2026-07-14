@@ -1,0 +1,95 @@
+---
+title: "MCP DeepGraph TypeScript — type mapping y dependencias de módulos como grafo"
+description: "MCP server con 706 installs para análisis profundo de TypeScript. Type mapping, relaciones entre interfaces, y dependency tracking entre módulos. Esencial para refactors grandes en TS estricto."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "typescript"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-deepgraph-react", "mcp-deepgraph-nextjs", "plugin-claude-code-lsps"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-typescript"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-typescript.json"
+---
+
+## Qué es
+
+DeepGraph TypeScript se enfoca en lo que el TypeScript compiler entiende: tipos, interfaces, módulos. Mapea relaciones que `tsc --noEmit` ve pero que vos no notás hasta el error en compilación.
+
+Es complementario con [Claude Code LSPs](/boveda/plugin-claude-code-lsps): el LSP responde queries puntuales ("definición de esta función"); DeepGraph te da la vista global ("todas las interfaces que extienden de `BaseUser`").
+
+Útil cuando tu TS es estricto (strict mode, no-implicit-any, etc.) y los cambios chicos en tipos rompen cosas en lugares inesperados.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `deepgraph` |
+| Installs | 706 |
+| Servidor MCP | `DeepGraph TypeScript MCP` |
+| Capacidades | Type mapping, interfaces, module deps |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp deepgraph/deepgraph-typescript
+```
+
+Pre-requisito: proyecto TS con `tsconfig.json` válido.
+
+Para Claude:
+
+```
+Instalé el MCP deepgraph/deepgraph-typescript. Buscame todos los tipos
+que extienden `BaseUser` y mostrame en qué módulos están definidos.
+```
+
+## Qué podés hacer con esto
+
+### Mapa de tipos
+
+"Listame todos los tipos que usan `Date` en su shape, agrupados por módulo". Útil cuando estás migrando a `Date` → `string ISO` o viceversa.
+
+### Análisis de impact en refactor de interfaces
+
+"Si agrego un campo opcional a `User`, qué módulos lo consumen y dónde está el destructuring que se podría romper?". Lista exacta de los lugares.
+
+### Detección de tipos duplicados
+
+"Buscame interfaces que tengan el mismo shape pero distinto nombre". Candidatos a unificar.
+
+### Module dependency graph
+
+"Dame los módulos con más imports salientes (alto fan-out) y entrantes (alto fan-in). Los de high fan-in son críticos". Para identificar coupling.
+
+### Soporte a migraciones
+
+"Identificá todos los `any` y agrupalos por módulo, con la línea exacta. Priorizá por cuántos otros tipos podrían beneficiarse de resolverlos". Roadmap para subir el strict level.
+
+## Pre-requisitos
+
+- **Proyecto TypeScript** con `tsconfig.json`
+- **Node.js + Claude Code**
+- **Recursos:** el análisis puede ser pesado en repos gigantes; mirá RAM disponible
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu proyecto es JavaScript puro sin tipos:** no aporta.
+- **Para queries puntuales** (definición de un símbolo, references): un LSP es más rápido. Usá [Claude Code LSPs](/boveda/plugin-claude-code-lsps).
+- **Análisis runtime de bundles:** este es estático. Para tree-shaking o tamaño de bundle, otros tools.
+- **Sin strict mode activo:** mucho del valor está en TS estricto. Sin eso, los hallazgos son menos accionables.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [DeepGraph TypeScript MCP](https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-typescript) — comando exacto.
+- **Config JSON:** [deepgraph-typescript.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-typescript.json).
+
+## Recursos relacionados
+
+- [DeepGraph React MCP](/boveda/mcp-deepgraph-react) — combina bien si tu proyecto es React + TS estricto.
+- [DeepGraph Next.js MCP](/boveda/mcp-deepgraph-nextjs) — para Next.js con TS.
+- [Claude Code LSPs](/boveda/plugin-claude-code-lsps) — para queries puntuales en tiempo real; combinalos.

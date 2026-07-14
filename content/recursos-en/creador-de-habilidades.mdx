@@ -1,0 +1,253 @@
+---
+title: "Skill Creator — the meta-skill that creates all the others"
+description: "A skill that teaches you how to create all the rest. You download the SKILL.md, install it in Claude (web or Code), and start building custom skills for any domain. Part of Composio's awesome-claude-skills."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "4 min"
+relatedSlugs: ["crea-claude-skills", "5-skills-equipo-trabajo", "40-skills-claude"]
+---
+
+## The idea
+
+**Skill Creator** is the ultimate meta-skill: **a skill that teaches you how to create all the others**.
+
+You describe in plain language what you want Claude to do. Skill Creator walks you through it step by step to package it as a reusable `SKILL.md`.
+
+Part of `ComposioHQ/awesome-claude-skills`. Open source.
+
+---
+
+## Why it matters
+
+If you find yourself retyping the same prompt every day, **that prompt should be a skill**.
+
+Skill Creator is **the factory** that turns repetitive prompts into reusable skills without you having to learn any technical format.
+
+---
+
+## Installation
+
+### Option A — Claude web (claude.ai)
+
+1. Open your project in `claude.ai`
+2. Click the gear icon (Settings)
+3. Go to the **Skills** section (or "Tools → Skills")
+4. **Add skill** → upload the `SKILL.md`
+
+### Option B — Claude Code
+
+```bash
+git clone https://github.com/ComposioHQ/awesome-claude-skills.git \
+  /tmp/awesome
+cp /tmp/awesome/skill-creator/SKILL.md \
+  ~/.claude/skills/skill-creator/
+```
+
+Or just ask Claude:
+
+```
+> Install skill-creator from ComposioHQ/awesome-claude-skills
+  in my Claude Code.
+```
+
+---
+
+## How to use it
+
+Once installed, you ask:
+
+```
+> I want to create a skill for [TASK YOU REPEAT].
+```
+
+Skill Creator guides you with questions:
+
+1. What is the exact task?
+2. What inputs do you typically receive?
+3. What outputs do you expect?
+4. Are there recurring edge cases?
+5. What should it NOT do?
+
+At the end it packages everything as a `SKILL.md` with:
+- A polished `name` + `description` frontmatter
+- Structured instructions
+- Examples
+- Edge cases
+
+---
+
+## Example — creating a custom skill
+
+### Vague input
+
+```
+> I want a skill to write my Reels.
+```
+
+### The questions it asks you
+
+```
+1. What niche/topic do you cover?
+2. Main platform? (TikTok / Reels / Shorts)
+3. Typical length? (15s / 30s / 60s)
+4. Preferred structure? (listicle / story / educational)
+5. Your voice? (casual / technical / authoritative)
+6. Typical CTA?
+```
+
+### Output
+
+```markdown
+---
+name: reels-creator-saas-b2b
+description: Use it when I want to write a script for a Reel/TikTok
+  in my B2B SaaS niche (audience: early-stage founders).
+---
+
+You are a copywriter specialized in educational content for founders.
+
+When invoked:
+
+1. Confirm the specific topic
+2. Generate a hook (3 sec) with a counterintuitive fact
+3. 3 key points (listicle style)
+4. Payoff with an actionable insight
+5. Soft CTA: "Are you in this space? Drop your biggest challenge in the comments"
+
+Tone: direct, jargon-free, with examples from my world (early-stage B2B SaaS).
+
+NEVER use:
+- AI words (landscape, navigate, delve)
+- Empty phrases
+- Empty promises ("you won't believe this")
+```
+
+You save it. **Next time** you invoke it, Claude **already knows**.
+
+---
+
+## Use cases
+
+### 1. Operational workflows
+
+Tasks you repeat 5+ times a week:
+- Weekly KPI summary
+- Client brief
+- Inbox triage
+- Code review in style X
+
+### 2. Company knowledge
+
+Your company has a specific process. Turn it into a skill:
+- "New client onboarding"
+- "Monthly report generation"
+- "Competitor analysis"
+
+### 3. Personal brand style
+
+If you produce content at volume:
+- A skill that understands your voice
+- A skill that respects your brand rules
+- A skill that applies your specific framework
+
+### 4. Learn from your mistakes
+
+Every time Claude gets something wrong in a recurring way, **document it in a skill**. Next time it won't get it wrong.
+
+---
+
+## Differences from the alternatives
+
+| Tool | When |
+|------|--------|
+| **Skill Creator** (this one) | Create custom skills from scratch with guidance |
+| [Write a Skill](/boveda/5-skills-equipo-trabajo) | Build well-structured skills (Matt Pocock) |
+| [create claude skills](/boveda/crea-claude-skills) | Mental model + manual structure |
+| Buy a prefab skill | If what you need already exists |
+
+---
+
+## Anti-patterns
+
+### 1. Creating a skill for a one-off task
+
+If a task happens **once**, it doesn't need a skill. Just a prompt.
+
+### 2. Skills that are too specific
+
+Your skill only works for "this specific case of this one unique client." Generalize a bit so it's reusable.
+
+### 3. No clear description
+
+`description: "For writing well"` → Claude won't trigger it correctly. Use the "Use it when..." pattern.
+
+### 4. Forgetting that skills evolve
+
+Your first version is a **baseline**. Every time you use the skill and spot something to improve, **edit** the SKILL.md.
+
+### 5. Not sharing with your team
+
+If your team uses Claude, **share your skills**. Collective efficiency.
+
+---
+
+## Recommended workflow
+
+### Day 1 — Spot the pattern
+
+You notice you've repeated a prompt 3 times. **Skill candidate**.
+
+### Day 2 — Create it with Skill Creator
+
+```
+> Use skill-creator. I want a skill for [PATTERN].
+```
+
+You answer the questions. Skill generated.
+
+### Days 3-7 — Iterate
+
+Every time you use it:
+- Did it fail at anything?
+- Was something missing?
+- You edit `SKILL.md` and add it
+
+### Day 30+ — Share
+
+If it works consistently, consider publishing it to public repos.
+
+---
+
+## Powerful combinations
+
+### With find skills (skillsmp.com)
+
+BEFORE creating one with Skill Creator, **check** whether it already exists on `skillsmp.com`. Don't reinvent the wheel.
+
+### With Skill Vault
+
+[Skill Vault](/boveda/skill-vault) organizes the skills you create. A complete stack.
+
+### With 40 skills
+
+[40 LATAM skills](/boveda/40-skills-claude) are the baseline. Skill Creator adds **the custom ones for your business**.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| A workflow you never repeat | Skills pay off through repetition |
+| Highly variable work | Skills would be too specific |
+| No patience for the guided flow | Skill Creator asks a lot of questions |
+
+---
+
+## Next steps
+
+- To understand skill architecture more deeply, [create claude skills](/boveda/crea-claude-skills)
+- For the 5 meta skills (Skill Creator + Write a Skill + Find + Grill + PRD), [5 skills for your team](/boveda/5-skills-equipo-trabajo)
+- For 40 ready-made LATAM skills, [40 Claude skills](/boveda/40-skills-claude)

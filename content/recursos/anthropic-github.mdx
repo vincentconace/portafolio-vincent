@@ -1,0 +1,247 @@
+---
+title: "El GitHub de Anthropic — los 73+ repos open-source que vale la pena conocer"
+description: "Anthropic mantiene SDKs, cookbook, quickstarts y hasta el código fuente de Claude Code en GitHub. Qué hay, qué priorizar según tu rol y los repos que de verdad cambian cómo construís con Claude."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude", "github"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["awesome-llm-apps", "mcp-server-propio", "guia-claude-code-completa"]
+---
+
+## La idea
+
+Anthropic mantiene **73+ repos open-source** en `github.com/anthropics`. La mayoría de la gente solo conoce los 2 más populares (Claude Code, el SDK). Los otros 71 cubren cosas muy útiles que **no aparecen en marketing**.
+
+Esta guía no enumera los 73. Lista **los que de verdad vale la pena tener en el radar** según tu rol.
+
+---
+
+## Los 10 que más impacto tienen
+
+### 1. `claude-code`
+
+El CLI más usado. Si codeás con Claude, lo conocés.
+
+**Por qué tenerlo a mano**:
+- Código fuente revisable (transparencia)
+- Issues activos (ves qué bugs / features están en discusión)
+- Releases con changelog detallado
+
+### 2. `anthropic-sdk-typescript` / `anthropic-sdk-python`
+
+SDKs oficiales para Claude API en TS y Python. Si construís app con Claude API, **acá está la fuente**.
+
+Ejemplos del repo cubren:
+- Streaming
+- Tool calling
+- Prompt caching
+- Extended thinking
+- Files API
+- Batch processing
+
+### 3. `anthropic-cookbook`
+
+**Joya escondida**. Una colección curada de **patrones de prompts probados** + código de ejemplo para casos reales:
+
+- Citaciones / references en outputs
+- Routing entre modelos según complejidad
+- RAG patterns
+- Agents con multi-step reasoning
+- Evaluación de outputs
+
+Si vas a construir con Claude API y querés saber **cómo lo hacen los profesionales**, este es **el repo**.
+
+### 4. `quickstarts`
+
+Templates listos para clonar. Cada uno es un proyecto **funcional** que podés correr en 5 minutos:
+
+- Customer support agent
+- Research assistant
+- Financial advisor
+- Code review bot
+
+Útil como **punto de partida** en lugar de armar desde cero.
+
+### 5. `mcp` (Model Context Protocol)
+
+El protocolo abierto que conecta IAs a herramientas externas. Repos relacionados:
+
+- Spec del protocolo
+- SDKs en varios lenguajes
+- Server templates
+- Ejemplos de MCPs oficiales
+
+Si querés construir tu propio MCP, **arrancás acá** (ver [tu propio MCP server](/boveda/mcp-server-propio)).
+
+### 6. `claude-code-action`
+
+GitHub Action oficial para Claude Code. Te deja correr Claude **en CI/CD**:
+- Code review automático en PRs
+- Generación de docs
+- Análisis de seguridad
+- Triage de issues
+
+Si tu equipo usa GitHub Actions, esto integra Claude directo.
+
+### 7. `prompt-caching`
+
+Documentación + ejemplos de prompt caching — la feature que **baja el costo 90%** en apps con system prompts repetidos. Esencial para apps en producción.
+
+### 8. `evals`
+
+Framework para evaluar outputs de LLM. Útil cuando construís app y necesitás medir si las respuestas son buenas con criterios objetivos.
+
+### 9. `interpretability`
+
+Repos de research sobre **cómo piensan los modelos internamente**. Más académico, pero **útil para entender por qué Claude se comporta como se comporta** en casos raros.
+
+### 10. `skills` (community)
+
+Colección de skills oficiales / community-curated. Si vas a usar [skills](/boveda/guia-skills-claude), acá encontrás base templates.
+
+---
+
+## Por rol — qué priorizar
+
+### Si sos developer arrancando
+
+1. `claude-code` — clonalo, leelo, entendé cómo funciona
+2. `quickstarts` — clonate un template para arrancar
+3. `anthropic-sdk-<tu-lenguaje>` — leé la doc oficial
+
+### Si construís app con Claude API
+
+1. `anthropic-cookbook` — patrones probados
+2. `prompt-caching` — esencial para producción
+3. `evals` — para validar calidad
+
+### Si te interesan agentes / herramientas
+
+1. `mcp` — el protocolo
+2. `claude-code-action` — agentes en CI/CD
+3. `skills` — comportamientos reutilizables
+
+### Si sos investigador / curioso
+
+1. `interpretability` — cómo piensan los modelos
+2. `safety` — repos sobre safety + RLHF
+3. Papers publicados (no en GitHub pero linkeados)
+
+---
+
+## Cómo navegarlo sin perderte
+
+73+ repos es mucho. Estrategia:
+
+### 1. Star los relevantes para vos
+
+GitHub te deja "starrear" repos. Star los 5-10 que matchean tu rol → te aparecen en tu home, te enterás de releases.
+
+### 2. Suscribite a releases (no a todo)
+
+"Watch → Releases only" en los repos críticos (claude-code, los SDKs). Te avisa cuando hay versión nueva, **no de cada PR**.
+
+### 3. RSS de releases
+
+Si preferís RSS, GitHub tiene feeds:
+```
+https://github.com/anthropics/<repo>/releases.atom
+```
+
+Sumá los 5-10 que te interesan a tu RSS reader.
+
+### 4. El changelog de Claude Code
+
+`claude-code/CHANGELOG.md` es el log más activo. Si quisieras estar al día con UNA sola cosa, es esa.
+
+---
+
+## Lo que NO encontrás en el GitHub
+
+Importante saber qué NO está:
+
+❌ **Pesos de los modelos** (Anthropic no libera weights — modelos cerrados)
+❌ **Training code de los modelos** (cerrado)
+❌ **Configs internos de safety / RLHF** (parcialmente cerrado)
+❌ **Roadmap detallado** (mencionan general en blog, no en GitHub)
+
+Lo que **sí** está: todo lo de **infraestructura, herramientas, SDKs, docs, ejemplos**. Que es el 80% de lo que un dev/builder necesita.
+
+---
+
+## Cómo aprovechar el code source de Claude Code
+
+El repo de `claude-code` es **todo el CLI**. Cosas que podés hacer:
+
+### 1. Entender cómo funcionan las skills internamente
+
+Leé `src/skills/` (o equivalente). Ver cómo decide Claude cuándo activar una skill.
+
+### 2. Personalizar tu fork
+
+Si tenés necesidad muy específica que el oficial no cubre, **forkealo y modificá**. Mantenés tu fork.
+
+### 3. Contribuir
+
+PRs bienvenidos. Si encontraste bug o tenés mejora, el camino formal:
+- Issue describiendo el problema / propuesta
+- Discusión con maintainers
+- PR si dan luz verde
+
+### 4. Aprender patrones de código
+
+Es código TypeScript profesional. Para alguien aprendiendo TS/Node serio, **es buena referencia**.
+
+---
+
+## La comparación con OpenAI
+
+Para context: OpenAI también tiene GitHub público.
+
+| Anthropic GitHub | OpenAI GitHub |
+|------------------|---------------|
+| 73+ repos | 100+ repos |
+| Claude Code completo open | Codex CLI parcialmente open |
+| Cookbook activo | Cookbook gigante también |
+| MCP spec abierto | Plugins propietarios |
+| SDKs en TS, Python | SDKs en TS, Python, Go, Java, etc. |
+| Más "construir con" | Más "research papers" |
+
+Cada uno tiene su sabor. Ambos vale la pena seguir si trabajás con LLMs.
+
+---
+
+## Anti-patrones
+
+### 1. Clonar 30 repos "por si los uso"
+
+Cada repo ocupa espacio + cognitive load. **Star los que importan**, clonate solo cuando los vas a usar.
+
+### 2. Quedarte solo con docs oficiales
+
+Las docs en `docs.anthropic.com` son curadas. **El GitHub tiene cosas más experimentales y avanzadas**. Si tu necesidad es no estándar, GitHub gana.
+
+### 3. No revisar issues antes de implementar
+
+Si vas a usar feature X, **lee issues abiertos** sobre X primero. A veces hay bug conocido que cambia tu decisión.
+
+### 4. Forkearlos sin necesidad
+
+"Voy a forkear el SDK por las dudas". **No**. Si después actualiza el oficial, tu fork queda atrás. Solo forkeá si vas a modificar.
+
+---
+
+## El cierre
+
+Conocer el GitHub de Anthropic **no es opcional** para alguien que construye con Claude en serio. Es **donde está la verdad** sobre cómo funcionan las cosas, qué viene, qué bugs existen.
+
+20 minutos navegándolo cada 2-3 meses te mantiene al día mejor que cualquier newsletter.
+
+---
+
+## Próximos pasos
+
+- Para inspirarte con apps construidas con LLM (no solo Claude), [awesome-llm-apps](/boveda/awesome-llm-apps)
+- Si vas a construir MCP, empezás por el repo `mcp` + [tu propio MCP server](/boveda/mcp-server-propio)
+- Para guías más profundas sobre el ecosistema, [Claude Code best practices](/boveda/claude-code-best-practices)

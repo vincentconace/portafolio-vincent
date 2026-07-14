@@ -1,0 +1,189 @@
+---
+title: "Ultra Plan — Claude planea en la nube, vos revisás en el navegador"
+description: "Le decís a Claude qué construir, se va a la nube a armar el plan, tu terminal queda libre para otra cosa. Cuando termina, abrís el plan en navegador, comentás cada sección, iterás. Cuando aprobás, ejecutás en la nube (PR auto) o mandás a tu terminal."
+difficulty: "intermedio"
+category: "guides"
+tools: ["claude-code", "github"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["planea-audita-construye", "the-architect", "agent-view"]
+---
+
+## La idea
+
+Le decís a Claude qué construir → **se va a la nube a armar el plan** → tu terminal queda libre. Cuando termina, te avisa.
+
+Vos abrís el plan **en tu navegador**, revisás sección por sección. Si algo no te gusta, **dejás comentario** ahí mismo y Claude lo arregla. Iterás las veces que quieras.
+
+Cuando ya está perfecto, **vos decidís**:
+- Ejecutar en la nube → te abre **Pull Request automático**
+- Mandar de vuelta a tu terminal → lo corrés local
+
+Se acabó gastar tu cuenta de Claude en algo que al final no era lo que querías.
+
+---
+
+## Pre-requisitos
+
+- **Claude Code 2.1.91 o superior**
+- Cuenta de **Claude Code on the web** activa
+- Repositorio de **GitHub conectado**
+
+### Limitaciones
+
+- ❌ NO disponible en Amazon Bedrock
+- ❌ NO disponible en Google Vertex AI
+- ❌ NO disponible en Microsoft Foundry
+- ⚠️ Está en **research preview** — comportamiento puede cambiar
+
+---
+
+## Cómo se usa
+
+```
+/ultraplan migrar la autenticación de sesiones a JWT
+```
+
+Eso es todo. Variantes:
+
+```
+/ultraplan [QUÉ HACER]
+```
+
+O incluí la palabra **ultraplan** dentro de cualquier prompt normal.
+
+### El flow
+
+1. **Vos**: `/ultraplan [tarea]`
+2. **Claude**: abre sesión en la nube, empieza a planear. **Tu terminal queda libre**.
+3. **Vos**: seguís trabajando en otra cosa.
+4. **Claude**: cuando termina muestra `◆ ultraplan ready` en el indicador.
+5. **Vos**: abrís el link en navegador.
+6. **Vos**: revisás plan sección por sección, comentás lo que no te gusta.
+7. **Claude**: ajusta basado en tus comentarios.
+8. **Vos**: iterás hasta que esté perfecto.
+9. **Vos**: aprobás → elegís ejecutar en nube (PR auto) o terminal (local).
+
+---
+
+## Casos de uso
+
+### 1. Migración de auth
+
+```
+/ultraplan migrar autenticación de sesiones a JWT manteniendo
+usuarios existentes, sin romper sesiones activas, actualizando tests
+```
+
+Cambio crítico → planeás MUY bien antes de tocar.
+
+### 2. Rediseño de feature
+
+```
+/ultraplan rediseñar dashboard para mostrar métricas custom por
+usuario en lugar de las globales actuales
+```
+
+Vos revisás cómo va a quedar antes de invertir 2 días construyendo.
+
+### 3. Refactor masivo
+
+```
+/ultraplan refactorizar el módulo de pagos para soportar 3 gateways
+(Stripe, PayPal, MercadoPago) manteniendo backward compat
+```
+
+Refactor grande con muchas piezas. Plan en navegador con comentarios = sin sorpresas.
+
+### 4. Nueva feature compleja
+
+```
+/ultraplan agregar sistema de notificaciones in-app con websockets,
+historial persistente, marcar como leído, agrupación por tipo
+```
+
+Feature que toca muchas partes del código.
+
+### 5. Optimización de performance
+
+```
+/ultraplan optimizar queries del dashboard que están tardando 4s
+para que estén bajo 500ms manteniendo accuracy de datos
+```
+
+Performance work donde **el plan importa más que la ejecución**.
+
+---
+
+## Por qué Ultra Plan vs Plan Mode regular
+
+| Aspecto | Plan Mode | Ultra Plan |
+|---------|-----------|------------|
+| Dónde planea | Tu compu | Nube |
+| Tu terminal | Bloqueada | Libre |
+| Review | En terminal | En navegador con UI |
+| Comentarios | Texto en chat | UI por sección |
+| Iteración | Conversacional | Visual + estructurada |
+| Output final | Ejecuta en terminal | PR auto o terminal |
+
+**Plan Mode** para tareas chicas-medianas.
+**Ultra Plan** para tareas grandes donde el review estructurado importa.
+
+---
+
+## Anti-patrones
+
+### 1. Ultra Plan para tareas chicas
+
+`/ultraplan agregar console.log` = overhead innecesario. Para esto, prompt directo.
+
+### 2. Aprobar sin revisar todas las secciones
+
+El UI te deja revisar sección por sección **a propósito**. Si aprobás sin scrollear, perdés el valor.
+
+### 3. No usar comentarios
+
+Si solo aprobás o rechazás, **estás en modo plan normal**. El power-feature son los comentarios por sección.
+
+### 4. Iterar infinitamente
+
+Después de 3-4 iteraciones, **decidí**. El plan perfecto no existe — el plan suficientemente bueno sí.
+
+### 5. Confiar en research preview para producción crítica
+
+Es research preview. Para deploys ultra-críticos, **doble-checkeá** con humano.
+
+---
+
+## Combinaciones potentes
+
+### Con Plan Mode regular
+
+Plan Mode para tareas chicas, Ultra Plan para grandes. **Stack completo de planning**.
+
+### Con The Architect
+
+[The Architect](/boveda/the-architect) genera blueprint. **Después ejecutás secciones con Ultra Plan** una por una.
+
+### Con Agent View
+
+[Agent View](/boveda/agent-view) te permite ver múltiples agentes en paralelo. **Ultra Plan corre en background**, lo ves en Agent View mientras hacés otra cosa.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Tareas simples | Plan Mode regular alcanza |
+| Sin GitHub conectado | Requisito técnico |
+| Stack no soportado por Claude Web | Limitación |
+| Necesitás producción crítica al instante | Research preview |
+
+---
+
+## Próximos pasos
+
+- Para Plan Mode regular (no nube), [Plan Mode](/boveda/planea-audita-construye)
+- Para blueprint completo de proyecto nuevo, [The Architect](/boveda/the-architect)
+- Para ver agentes paralelos incluyendo Ultra Plan, [Agent View](/boveda/agent-view)

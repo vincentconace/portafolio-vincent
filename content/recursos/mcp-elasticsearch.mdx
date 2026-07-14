@@ -1,0 +1,100 @@
+---
+title: "MCP Elasticsearch — queries, mappings, ES|QL y shards desde lenguaje natural"
+description: "MCP server para Elasticsearch. Soporta search queries, mappings, ES|QL y shard information. Le saca el SQL-talk a tus logs y data en ES sin pelearte con la DSL."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "elasticsearch"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-dynatrace", "mcp-dbhub", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/elasticsearch"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/elasticsearch.json"
+---
+
+## Qué es
+
+Elasticsearch es el motor de búsqueda y analytics más usado para logs, full-text search y series temporales. El problema clásico: su DSL es verbose y aprender ES|QL toma tiempo.
+
+Este MCP conecta Claude a tu cluster de ES. Vos hacés preguntas en lenguaje natural y Claude genera el query DSL o ES|QL correcto, lo ejecuta, y te devuelve resultados estructurados.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 163 |
+| Servidor MCP | `elasticsearch-mcp-server` |
+| Cluster requerido | Sí — Elasticsearch alcanzable |
+| Lenguajes soportados | Query DSL + ES|QL |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/elasticsearch
+```
+
+Pre-requisitos: URL del cluster + credenciales con permisos para los índices que vas a consultar.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/elasticsearch. Después de setear ES_URL y
+credenciales, listame los índices con tamaño y mostrame los 10 errores
+más frecuentes en el índice `logs-app-prod` en las últimas 24h.
+```
+
+## Qué podés hacer con esto
+
+### Búsqueda en logs en lenguaje natural
+
+"En el índice de logs, buscame todas las requests con status 500 del servicio `auth-api` entre las 14:00 y 15:00 hoy". Sin tener que escribir el DSL.
+
+### Análisis de mappings
+
+"Mostrame el mapping del índice `products`. ¿Qué fields están como `text` cuando deberían ser `keyword` para aggregations?". Útil para diagnóstico de queries lentas.
+
+### ES|QL para queries SQL-like
+
+ES|QL es el lenguaje SQL-like más nuevo de Elastic. El MCP lo soporta nativo. "Top 10 products by revenue agrupados por category en el último mes" se traduce a ES|QL legible.
+
+### Shard health
+
+"¿Hay shards unassigned o relocating? ¿Qué nodos están desbalanceados?". Para ops de cluster.
+
+### Aggregations complejas
+
+"Distribución de tiempos de response del endpoint `/checkout` por percentil (p50, p95, p99) en la última semana". Claude arma el aggregation correcto.
+
+### Cross-index queries
+
+"Buscame correlaciones entre el índice `logs-frontend` y `logs-backend`: cuando hay un 500 en backend, qué errores aparecen en frontend en los siguientes 30 segundos?".
+
+## Pre-requisitos
+
+- **Cluster Elasticsearch** alcanzable
+- **Credenciales** con permisos sobre los índices
+- **URL del cluster**
+- **Saber qué índices existen** (o pedirle al MCP que los liste)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para writes en producción:** queries de write (re-indexing, delete by query) ejecutadas por error son peligrosas. Usá hooks de aprobación.
+- **Permisos amplios:** un usuario con `superuser` deja a Claude operar sobre todo. Usá rol con scope mínimo.
+- **Si tu stack es OpenSearch:** mucho compatible, algunas diferencias. Verificá.
+- **Para queries triviales:** Kibana puede ser más rápido. El MCP brilla cuando combinás con otras tareas (correlación, escritura de post-mortems, debugging asistido).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Elasticsearch MCP](https://www.aitmpl.com/component/mcps/devtools/elasticsearch) — comando exacto.
+- **Config JSON:** [elasticsearch.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/elasticsearch.json).
+
+## Recursos relacionados
+
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — observability complementaria; Dynatrace es APM, ES es logs/search.
+- [DBHub](/boveda/mcp-dbhub) — para bases relacionales; cuando tu data no está en ES.
+- [Anatomía de Claude](/boveda/anatomia-claude) — el MCP es el conector; este recurso ayuda a entender el rol.

@@ -1,0 +1,249 @@
+---
+title: "Huashu Design — 7 types of design in Claude Code with a single command"
+description: "Open-source skill that packs 7 design capabilities into Claude Code: clickable prototypes, PPTX slide decks, motion design with audio, print-quality infographics, 3 versions per request, and visual critique. For designing without burning quota explaining the format every time."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["cult-ui-claude", "claude-design", "claude-trabajo-creativo"]
+---
+
+## The problem
+
+You ask Claude to "build me a slide deck," "design this infographic," "make a clickable prototype." Every time:
+
+1. You explain the expected format (10-15 lines of prompt)
+2. You spell out dimensions, palette, typography
+3. You iterate until something decent comes out
+
+**You burn tokens repeating the setup**. By the 5th deck, you've already repeated yourself 50 times.
+
+A skill like **Huashu Design** (~14k stars, MIT, author `@AlchainHust`) encapsulates that setup. You ask in your own words, it knows the format. **You only describe content**, not format.
+
+---
+
+## The 7 capabilities
+
+### 1. Clickable iPhone prototypes
+
+```
+> Build me a clickable prototype of an app for booking sports courts:
+  - Screen 1: list of courts with photo
+  - Screen 2: detail with a calendar to pick a time
+  - Screen 3: booking confirmation
+  - Screen 4: card payment
+
+  Style: native iOS. Navigable between screens by click.
+```
+
+Output: working HTML+CSS+JS, an iPhone mockup with the screens connected. You open it in a browser and show it to the client.
+
+### 2. Editable slide decks (PPTX)
+
+```
+> Make me a Q3 board update deck with:
+  - Executive summary (1 slide)
+  - Metrics (2 slides with charts)
+  - Quarter highlights (3 slides)
+  - Q4 plan (2 slides)
+  - Appendix (3 slides)
+
+  Professional but approachable tone. Corporate palette: navy + gold.
+```
+
+Output: a real `.pptx` file. You open it in PowerPoint/Keynote/Google Slides. **Editable**, not a static image.
+
+### 3. Motion design (MP4 + GIF with audio)
+
+```
+> Make me a 6-second GIF explaining "how the product works":
+  Frame 1-2: problem (customer frustrated with a manual process)
+  Frame 3-4: solution (uses our app)
+  Frame 5-6: result (happy customer)
+
+  Style: minimalist motion graphics. No text, just visuals.
+```
+
+Output: GIF + MP4. Much faster than building it in After Effects.
+
+### 4. Print-quality infographics (PDF/PNG/SVG)
+
+```
+> Design a vertical infographic for Instagram (1080x1350):
+  - Title: "The B2B collections process in 5 steps"
+  - 5 numbered sections with icons
+  - Palette: your brand (green + cream)
+  - Output in SVG (editable) and PNG (publishable)
+```
+
+### 5. 3 versions per request
+
+For every design you ask for, **it returns 3 different variants**. You pick which one to keep iterating on.
+
+It avoids the classic "I asked for 1 and got 1 mediocre one, now I have to iterate 4 times." With 3 variants from the start, **you begin from the best one**.
+
+### 6. Visual direction advisor
+
+```
+> I have this brief: [brief]. Before designing, advise me:
+  - What visual direction would fit best?
+  - What palette?
+  - What typography?
+  - What market references?
+
+  After your proposal, I decide and you build the design.
+```
+
+The skill acts as an "art director" — it proposes direction before executing.
+
+### 7. 5-dimension critique
+
+For existing designs:
+
+```
+> Critique this design across 5 dimensions:
+  1. Visual hierarchy
+  2. Legibility
+  3. Palette and contrast
+  4. Spacing / rhythm
+  5. Coherence with the brief
+
+  For each one: a 1-10 score + 1-2 concrete improvements.
+```
+
+---
+
+## Installation
+
+### Path A — direct command
+
+```bash
+npx huashu-design install
+```
+
+It downloads the SKILL.md to `~/.claude/skills/huashu-design/`.
+
+### Path B — ask Claude Code
+
+```
+> Go to the @AlchainHust/huashu-design repo, read the README, and
+  install the skill for me following its instructions.
+```
+
+Claude handles it.
+
+---
+
+## Real-world use cases
+
+### Case 1 — Founder building an investor deck
+
+Without the skill: you spend 6-8 hours in Figma/Slides building the deck.
+
+With the skill:
+
+```
+> I need a deck for a seed round. Company: inventory management SaaS
+  for mid-sized retailers in LATAM. Current ARR $180k, 12% MoM growth.
+  Team: 4.
+
+  Audience: early-stage LATAM VCs.
+  Slides needed: cover, problem, solution, market, traction,
+  competition, team, ask.
+
+  Style: clean, no startup-bro. Few colors. Prominent data.
+  Output: editable PPTX.
+```
+
+It returns the deck. You edit the final copy. **3 hours** instead of 8.
+
+### Case 2 — Operator building LinkedIn infographics
+
+```
+> Every Monday I'll ask you for an infographic with the data from the
+  weekly report. Fixed format:
+  - Vertical 1080x1350 (LI post)
+  - Headline + 3-4 data points + final insight
+  - My brand: [colors] + [font]
+
+  Today's data is: [...]
+```
+
+You ask once, configure the format. Every Monday you just pass the data.
+
+### Case 3 — Product team prototyping UI
+
+```
+> Before sending to design, a clickable prototype to validate UX:
+
+  App: notification settings for a SaaS
+
+  Screens:
+  1. List of notification types with a toggle
+  2. Detail of each type with options (email/push/in-app)
+  3. Do-not-disturb schedule settings
+
+  Style: shadcn/ui standard (we'll take it to the real product).
+  Navigable with real clicks between the 3.
+```
+
+You validate with real users in 30 min what would have taken 2 days in Figma.
+
+---
+
+## Anti-patterns
+
+### 1. Expecting pixel-perfect results on the first prompt
+
+Like any visual AI, **it requires iteration**. The first version is for seeing direction. You keep adjusting.
+
+### 2. Asking for things that require advanced designer skill
+
+Complete brand identity, a production-grade design system, custom illustrations — for this, **a human designer**. The skill is for **operational production**.
+
+### 3. Not customizing your brand
+
+If you never load your brand (palette, fonts, examples), it gives you generic design. **Create it in CLAUDE.md** once, then reference it.
+
+### 4. Skipping the 3 variants
+
+The skill returns 3 for a reason. If you only look at the first one, you lose the feature. **Compare all 3 before choosing**.
+
+---
+
+## vs official Claude Design
+
+| Feature | Huashu Design | Official [Claude Design](/boveda/claude-design) |
+|----------------|----------------|---------------------|
+| Cost | Free (skill) | Included in Pro+ |
+| Formats | 7 (prototype, PPTX, motion, infographic, etc.) | 3 (slides, web, clickable apps) |
+| Motion / GIF | ✅ | ❌ |
+| Editable PPTX output | ✅ | Partial |
+| Lives in | Claude Code (terminal) | claude.ai/design (web) |
+| Learning curve | Requires learning the skill | Direct conversational UI |
+
+For technical use from Claude Code, **Huashu wins on breadth**. For quick conversational use without touching a terminal, **Claude Design** is easier.
+
+Many people use both depending on the context.
+
+---
+
+## When this pattern is worth it
+
+✅ You produce operational design regularly (decks, infographics, mockups)
+✅ You already use Claude Code and want to add capability
+✅ You don't have an in-house designer
+✅ You're fine iterating to reach the good output
+
+❌ You need a complete brand identity
+❌ Highly custom / artistic design work
+❌ Strict compliance that requires total ownership of the process
+
+---
+
+## Next steps
+
+- For premium components that improve any UI you build, [Cult UI with Claude](/boveda/cult-ui-claude)
+- For Anthropic's official visual tool (not a skill), [Claude Design](/boveda/claude-design)
+- For integration with your professional creative stack (Adobe, Blender, Ableton), [Claude for creative work](/boveda/claude-trabajo-creativo)

@@ -1,0 +1,89 @@
+---
+title: "Hook AGENTS.md Loader — load agent config at session start (937 installs)"
+description: "Hook with 937 installs that automatically loads the contents of AGENTS.md when a Claude Code session starts. Ensures Claude follows the agent-specific behavior defined in the project."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["claude-code-best-practices", "anatomia-claude", "memoria-claude-code"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/agents-md-loader"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/agents-md-loader.json"
+---
+
+## What it is
+
+`AGENTS.md` is an emerging convention for defining a project's agent-specific behavior — similar to the role `CLAUDE.md` plays but more focused on multi-agent setups or the agent SDK. If your project has an `AGENTS.md`, this hook loads it automatically at the start of every Claude Code session.
+
+Hook event: `SessionStart`. It only runs if `AGENTS.md` exists in the project. If it doesn't, it does nothing (nothing breaks).
+
+It's one of the most useful automations for maintaining cross-session consistency. Its 937 installs make it one of the most widely adopted hooks in the catalog.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 937 |
+| Hook event | `SessionStart` |
+| Trigger | Only if `AGENTS.md` exists |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/agents-md-loader
+```
+
+For Claude:
+
+```
+I installed the automation/agents-md-loader hook. Verify that it's active
+in my SessionStart hooks. To test it, create a sample AGENTS.md for me
+with specific instructions and restart a session.
+```
+
+## What you can do with it
+
+### Automatic cross-session consistency
+
+Every time you open a new session in the project, Claude reads AGENTS.md without you asking. The preferences and behaviors stay applied.
+
+### Multi-agent setups
+
+If your project uses multiple agents (orchestrator + workers), AGENTS.md can define the expected behavior of each one. This hook ensures it gets applied.
+
+### Instant onboarding
+
+A new dev clones the repo, opens Claude Code → AGENTS.md loads and Claude operates according to the team's rules from the very first interaction.
+
+### Combo with CLAUDE.md
+
+CLAUDE.md is the general one; AGENTS.md can be more specific for agent SDK flows. Having both covers the two levels.
+
+## Prerequisites
+
+- **A project with `AGENTS.md`** (create one if you don't have it)
+- **Claude Code** with hooks enabled
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use AGENTS.md and don't plan to:** the hook does nothing useful. Don't install it just in case.
+- **If your CLAUDE.md covers everything:** you don't need to duplicate.
+- **A very long AGENTS.md:** loads tokens on every session. Keep it concise.
+- **If your workflow is 100% one-shot:** session start hooks add less value.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [AGENTS.md Loader Hook](https://www.aitmpl.com/component/hooks/automation/agents-md-loader) — exact command.
+- **JSON config:** [agents-md-loader.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/agents-md-loader.json).
+
+## Related resources
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — what to put in CLAUDE.md and AGENTS.md.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place this hook on the mental map.
+- [Claude Code Memory](/boveda/memoria-claude-code) — pairs well with session start hooks.

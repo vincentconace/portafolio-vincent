@@ -1,0 +1,424 @@
+---
+title: "5 skills de Claude que reemplazan Office entero (PDF, Excel, Word, PPT)"
+description: "PDF, XLSX, DOCX, PPTX y Doc Co-Authoring. Son 5 skills oficiales de Anthropic, todas gratis. Juntas reemplazan Adobe Acrobat + Excel + Word + PowerPoint. Cómo instalarlas, qué hace cada una y cuándo realmente conviene sobre los originales."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["5-skills-equipo-dev", "5-skills-diseno-claude", "cinco-habilidades-marketing"]
+---
+
+## La premisa
+
+Office 365 cuesta $7-22/mes. Adobe Acrobat $15/mes. Google Workspace $6/mes. Si los sumás, **$30-50/mes** para tareas de oficina rutinarias.
+
+5 skills oficiales de Anthropic reemplazan **la mayoría de esos casos de uso**. **Todas gratis**.
+
+| Skill | Reemplaza | Para qué |
+|-------|-----------|----------|
+| **PDF** | Adobe Acrobat | Extraer, llenar, combinar, crear PDFs |
+| **XLSX** | Excel para análisis | Fórmulas, gráficos, análisis de datos |
+| **DOCX** | Word | Documentos profesionales con formato |
+| **PPTX** | PowerPoint / Google Slides | Presentaciones completas |
+| **Doc Co-Authoring** | Escribir solo | Escritura colaborativa estructurada |
+
+---
+
+## Pre-requisitos
+
+- Claude Code instalado ([setup zero](/boveda/claude-code-setup-zero))
+
+Eso es todo.
+
+---
+
+## Skill 1 — PDF
+
+### Qué hace
+
+Operaciones completas sobre PDFs:
+
+- **Extrae** texto, tablas, formularios
+- **Llena** formularios automáticamente
+- **Combina** múltiples PDFs en uno
+- **Divide** PDFs grandes
+- **Crea** PDFs profesionales desde cero
+- **Convierte** entre formatos
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/pdf
+```
+
+### Casos típicos
+
+**Extraer tablas de PDF a Excel**:
+
+```
+> Extraé todas las tablas de este PDF (reporte-2025.pdf) y
+  creá Excel con una hoja por tabla.
+```
+
+**Llenar formulario de contrato**:
+
+```
+> Tengo este PDF (contrato-template.pdf) con 23 campos.
+  Llenalos con los datos del cliente que están en
+  cliente-data.json. Mostrame preview antes de guardar.
+```
+
+**Combinar PDFs**:
+
+```
+> Combiná todos los PDFs en /facturas/2026-Q1/ en un solo
+  PDF llamado facturas-Q1-consolidado.pdf, ordenados por
+  fecha.
+```
+
+### Cuándo brilla
+
+- Procesar PDFs en bulk (cientos de facturas, contratos)
+- Llenar formularios repetitivos
+- Generar reports en PDF con datos dinámicos
+
+### Cuándo NO
+
+- Edición visual fina (mover elementos pixel-perfect) — usá Acrobat
+- PDFs con OCR mal hecho (texto escaneado borroso)
+- Formularios con lógica compleja JavaScript
+
+---
+
+## Skill 2 — XLSX
+
+### Qué hace
+
+Crea y manipula hojas de cálculo:
+
+- Fórmulas automáticas (le decís qué calcular, te arma la fórmula)
+- Gráficos y visualizaciones
+- Análisis de datos (limpieza, restructuración)
+- Formato profesional (colores, estilos, conditional formatting)
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/xlsx
+```
+
+### Casos típicos
+
+**Reporte mensual de ventas**:
+
+```
+> Creá Excel con reporte de ventas mensual. Tomá data de
+  ventas.csv. Incluí:
+  - Hoja "Resumen" con totales y comparativa vs mes anterior
+  - Hoja "Por categoría" con tabla dinámica
+  - Hoja "Gráficos" con barras + líneas comparativas
+  - Conditional formatting: verde en crecimiento, rojo en caída
+```
+
+**Análisis sin saber Excel**:
+
+```
+> Tengo 5000 filas de transacciones (transacciones.xlsx).
+  Quiero:
+  - Detectar outliers (transacciones >3 sigmas de la media)
+  - Agrupar por mes
+  - Calcular crecimiento mes a mes
+  - Identificar el top 10% de clientes por valor
+
+  Generá Excel con cada análisis en una hoja.
+```
+
+### Cuándo brilla
+
+- Análisis ad-hoc sin saber fórmulas complejas
+- Reportes recurrentes (automatizá generación)
+- Limpieza/restructuración de datos antes de análisis
+
+### Cuándo NO
+
+- Hojas con macros complejos VBA
+- Trabajo colaborativo real-time (usá Google Sheets)
+- Modelos financieros con dependencias inter-hojas complejas
+
+---
+
+## Skill 3 — DOCX
+
+### Qué hace
+
+Documentos Word profesionales:
+
+- Formato consistente (estilos)
+- Tablas, imágenes, encabezados, pies
+- Índice automático
+- Conversión entre formatos
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/docx
+```
+
+### Casos típicos
+
+**Propuesta de servicios**:
+
+```
+> Creá propuesta Word profesional para cliente CompañíaX.
+  Incluí:
+  - Portada con logo
+  - Resumen ejecutivo
+  - Descripción de servicios (3 paquetes)
+  - Pricing con tabla
+  - Timeline
+  - Próximos pasos
+  - Footer con info de contacto
+
+  Estilo: profesional pero moderno, no aburrido.
+```
+
+**Contrato desde template**:
+
+```
+> Tomá contrato-master.docx. Reemplazá los placeholders
+  [NOMBRE_CLIENTE], [FECHA], [MONTO] con datos de
+  cliente-actual.json. Generá versión final lista para firmar.
+```
+
+### Cuándo brilla
+
+- Documentos repetitivos con formato consistente
+- Generar docs desde data estructurada
+- Conversión PDF ↔ DOCX
+
+### Cuándo NO
+
+- Documentos con tracked changes complejos
+- Trabajo colaborativo en tiempo real
+- Formatos muy específicos (académicos, legales) que requieren tooling especializado
+
+---
+
+## Skill 4 — PPTX
+
+### Qué hace
+
+Presentaciones completas con una descripción:
+
+- Layouts reales (no plantillas genéricas)
+- Gráficos y tablas integrados
+- Notas del presentador en cada slide
+- Master slides con branding
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/pptx
+```
+
+### Casos típicos
+
+**Plan de marketing Q2**:
+
+```
+> Creá presentación 10 slides sobre plan de marketing Q2.
+
+  Estructura:
+  1. Cover con objetivos Q2
+  2. Recap Q1 (qué funcionó, qué no)
+  3-7. 5 iniciativas principales (una por slide)
+  8. Budget asignado por iniciativa (gráfico)
+  9. Timeline gantt
+  10. KPIs y próximos pasos
+
+  Incluí gráficos y notas del presentador para cada slide.
+  Estilo corporate pero limpio.
+```
+
+**Pitch para inversores**:
+
+```
+> Pitch deck 15 slides para Serie A de mi startup.
+
+  Datos en startup-metrics.json.
+
+  Estructura clásica YC pitch:
+  - Problem
+  - Solution
+  - Market size
+  - Traction (con gráficos de crecimiento)
+  - Business model
+  - Team
+  - Ask
+
+  Estilo: moderno, mucho espacio en blanco, datos protagonistas.
+```
+
+### Cuándo brilla
+
+- Presentaciones recurrentes (weekly stand-ups, board updates)
+- Pitches que querés iterar rápido
+- Generar deck desde data ya estructurada
+
+### Cuándo NO
+
+- Diseños muy creativos / fuera de templates corporativos
+- Presentaciones con animaciones complejas (mejor Keynote/PowerPoint manual)
+- Deck para concurso de pitch (necesitás storytelling humano)
+
+---
+
+## Skill 5 — Doc Co-Authoring
+
+### Qué hace
+
+A diferencia de los otros 4 (que **generan** docs), este **escribe CON vos**.
+
+- Te pregunta antes de escribir
+- Desarrolla sección por sección
+- Pide tu feedback iterativo
+- Sugiere ediciones contextuales
+
+Es el más "humano" de los 5.
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/blob/main/skills/doc-coauthoring/SKILL.md
+```
+
+### Casos típicos
+
+**Editar borrador propio**:
+
+```
+> Revisemos juntos este borrador (mi-paper.docx).
+
+  Mejorá la introducción.
+  Sugerí cambios en la sección de conclusiones.
+  NO reescribas todo — sugerí ediciones puntuales que yo
+  apruebe una por una.
+```
+
+**Escribir paper técnico desde cero**:
+
+```
+> Necesito escribir paper técnico sobre [tema].
+
+  Trabajemos colaborativamente:
+  1. Vos proponés outline, yo apruebo
+  2. Sección por sección, vos escribís draft
+  3. Yo reviso y comento
+  4. Iterás con mi feedback antes de pasar a la siguiente
+
+  Nivel: técnico para audiencia industry, no academic puro.
+```
+
+### Cuándo brilla
+
+- Documentos donde **vos sos el autor** pero querés asistencia
+- Trabajo de pensamiento profundo (no batch generation)
+- Iteración con feedback contextual
+
+### Cuándo NO
+
+- Doc que querés generar rápido sin iterar (usá DOCX skill directo)
+- Edición ligera (overhead de "co-authoring" es excesivo)
+
+---
+
+## Instalar las 5 de un saque
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/pdf && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/xlsx && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/docx && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/pptx && \
+claude install-skill https://github.com/anthropics/skills/blob/main/skills/doc-coauthoring/SKILL.md
+```
+
+---
+
+## ROI estimado
+
+| Software | Costo (anual) |
+|----------|---------------|
+| Office 365 Personal | $84 |
+| Adobe Acrobat Pro | $180 |
+| Google Workspace Business | $144 |
+| **Total para uso individual** | **~$200-400/año** |
+
+Las 5 skills: **gratis**.
+
+Para uso casual o medio, las skills te cubren 80%+ de casos. Para enterprise con compliance específico, no reemplazan al stack oficial pero **sí lo complementan**.
+
+---
+
+## Anti-patrones
+
+### 1. Pretender que reemplazan 100%
+
+Para uso casual sí. Para escritor profesional / contador / diseñador corporativo, **siguen necesitando** las herramientas originales para casos específicos.
+
+### 2. Sin verificar el output
+
+Skills no son infalibles. Una factura mal generada puede causar problemas reales. **Revisá** outputs críticos (legales, financieros, contratos).
+
+### 3. Co-Authoring para todo
+
+No todo doc necesita co-authoring. Para email rápido o memo corto, **es overhead**. Usalo para documentos donde **el pensamiento importa**.
+
+### 4. Compartir docs generados sin disclosure
+
+En algunos contextos (académicos, journalism), tenés obligación de declarar uso de IA. **Conocé las normas** de tu industria.
+
+### 5. Esperar diseño visual perfecto
+
+Para PPTX, los layouts son buenos pero no de agencia. Si necesitás presentación **memorable visualmente**, mejor diseñador humano o herramienta especializada.
+
+---
+
+## Combinaciones potentes
+
+### Stack completo de gestión de negocio
+
+- **PDF** para procesar facturas/contratos
+- **XLSX** para reportes financieros
+- **DOCX** para propuestas/contratos
+- **PPTX** para presentaciones a clientes
+- **Co-Authoring** para docs estratégicos importantes
+
+Todo desde Claude.
+
+### Con Brand Guidelines
+
+Si cargás brand pack (de [5 skills marketing](/boveda/cinco-habilidades-marketing)), los outputs de DOCX/PPTX respetan tu identidad visual automáticamente.
+
+### Con Sequential Thinking
+
+[Sequential Thinking](/boveda/claude-fabrica-a-pro) antes de Co-Authoring asegura mejor estructura del doc antes de escribir.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Trabajo colaborativo en tiempo real | Google Workspace gana |
+| Compliance estricto | Stack oficial mejor auditado |
+| Diseños visuales premium | Necesitás diseñador humano |
+| Documentos legales sensibles | Verificación humana obligatoria |
+
+---
+
+## Próximos pasos
+
+- Para suite de skills para devs, [5 skills equipo dev](/boveda/5-skills-equipo-dev)
+- Para suite de diseño visual, [5 skills diseño](/boveda/5-skills-diseno-claude)
+- Para suite de marketing, [5 skills marketing](/boveda/cinco-habilidades-marketing)

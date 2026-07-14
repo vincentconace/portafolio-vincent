@@ -1,0 +1,83 @@
+---
+title: "Hook Notify Before Bash — a simple notification before every bash command"
+description: "A hook with 160 installs. Shows a simple notification (echo) before running any Bash command. Passive awareness without blocking — you see what's about to run before it runs."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-dangerous-command-blocker", "hook-ai-bash-guard", "hook-command-logger"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/pre-tool/notify-before-bash"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/notify-before-bash.json"
+---
+
+## What it is
+
+Before running any Bash command, the hook shows a simple notification (an echo of the command that's about to run). It doesn't block, it just informs.
+
+Useful when you want "always-on" awareness of which commands Claude runs, without the friction of blocking every time.
+
+Hook event: `PreToolUse` (Bash).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `pre-tool` |
+| Installs | 160 |
+| Hook event | `PreToolUse` (Bash) |
+| Action | echo the command (doesn't block) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook pre-tool/notify-before-bash
+```
+
+For Claude:
+
+```
+I installed the pre-tool/notify-before-bash hook. Ask Claude to
+run any command — it should echo the command before
+running it.
+```
+
+## What you can do with this
+
+### Passive awareness
+
+For sessions where you don't want active blocking (which [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) or [AI Bash Guard](/boveda/hook-ai-bash-guard) provide) but you do want to see every bash command.
+
+### For debugging
+
+Why is Claude taking so long? You see the commands live and understand what it's doing.
+
+### For teaching / demos
+
+If you're showing Claude Code to someone, this hook makes it explicit which tools it uses.
+
+### Combo with monitoring
+
+On top of [Command Logger](/boveda/hook-command-logger) (which persists to a file), it adds the live information.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you want real security:** this hook informs, it doesn't block. Use [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) or [AI Bash Guard](/boveda/hook-ai-bash-guard) if you want blocking.
+- **For heavy production use:** lots of commands = lots of notifications = noise.
+- **If you already log with [Command Logger](/boveda/hook-command-logger):** overlap.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Notify Before Bash Hook](https://www.aitmpl.com/component/hooks/pre-tool/notify-before-bash) — exact command.
+- **JSON config:** [notify-before-bash.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/notify-before-bash.json).
+
+## Related resources
+
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — for deterministic blocking.
+- [AI Bash Guard Hook](/boveda/hook-ai-bash-guard) — for AI-driven blocking.
+- [Command Logger Hook](/boveda/hook-command-logger) — to persist a log.

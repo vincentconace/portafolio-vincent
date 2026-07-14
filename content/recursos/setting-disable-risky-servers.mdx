@@ -1,0 +1,98 @@
+---
+title: "Setting Disable Risky Servers — blacklist de MCP servers específicos"
+description: "Setting con 236 installs. Disable specific MCP servers que pueden ser security risk o no necesarios. Blacklist approach: allow most, deny specific. Útil para enterprise enforcement."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-enable-specific-servers", "setting-enable-all-project-servers", "setting-deny-sensitive-files"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/mcp/disable-risky-servers"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/disable-risky-servers.json"
+---
+
+## Qué es
+
+Lista de MCP servers que NO querés que se activen — typical examples del catálogo:
+- `web-scraper` (potencial misuse)
+- `system-admin` (acceso muy amplio)
+- `network-tools` (network access)
+
+Setting `disabledMcpjsonServers` con array de names. Si están definidos en `.mcp.json` del proyecto, igual quedan disabled.
+
+Blacklist approach: la mayoría passa, solo specific se bloquean.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `mcp` |
+| Installs | 236 |
+| Setting key | `disabledMcpjsonServers` (array) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting mcp/disable-risky-servers
+```
+
+Editá la lista con los servers reales a bloquear:
+
+```json
+{
+  "disabledMcpjsonServers": [
+    "web-scraper",
+    "system-admin",
+    "network-tools",
+    "any-other-you-want"
+  ]
+}
+```
+
+Para Claude:
+
+```
+Instalé el setting mcp/disable-risky-servers. Mostrame los servers
+disabled actualmente. Si encuentro un MCP nuevo riesgoso para mi
+caso, mostrame cómo agregarlo a la blacklist.
+```
+
+## Qué podés hacer con esto
+
+### Enterprise policy enforcement
+
+Tu org dice "no usar MCPs de scraping". El setting lo enforce sin depender de cada dev.
+
+### Bloquear MCPs experimentales
+
+MCP nuevo en alpha que querés evitar — agrégalo a la lista.
+
+### Para teams con .mcp.json compartido
+
+Si tu repo define MCPs en `.mcp.json`, el setting permite override defensive.
+
+### Combo con [Enable Specific Servers](/boveda/setting-enable-specific-servers)
+
+Disable Risky es blacklist (la mayoría passa). Enable Specific es allowlist (solo los listados). Estrategias opuestas — elegí según preferencia.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás MCPs:** no aporta.
+- **Si tu workflow legítimo necesita los servers blocked:** override constante.
+- **Para approach "deny by default":** [Enable Specific](/boveda/setting-enable-specific-servers) es más restrictivo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Disable Risky Servers Setting](https://www.aitmpl.com/component/settings/mcp/disable-risky-servers) — comando exacto.
+- **Config JSON:** [disable-risky-servers.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/disable-risky-servers.json).
+
+## Recursos relacionados
+
+- [Enable Specific Servers Setting](/boveda/setting-enable-specific-servers) — allowlist alternative.
+- [Enable All Project Servers Setting](/boveda/setting-enable-all-project-servers) — auto-approve all.
+- [Deny Sensitive Files Setting](/boveda/setting-deny-sensitive-files) — para files (no MCPs).

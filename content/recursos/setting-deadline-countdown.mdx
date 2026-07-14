@@ -1,0 +1,89 @@
+---
+title: "Setting Deadline Countdown — timer hasta tu deadline en el statusline"
+description: "Setting con 16 installs. Statusline con git branch, files changed y countdown a deadline configurable. Color-coded urgency. Para sprints con deadline duro."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-context-monitor", "setting-colorful-statusline", "setting-command-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/deadline-countdown"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/deadline-countdown.json"
+---
+
+## Qué es
+
+Statusline que muestra:
+- **Git branch** actual
+- **Files changed** count
+- **Countdown timer** a tu deadline (configurado con `DEADLINE_TIME` env var)
+
+Color-coded urgency: verde lejos del deadline, amarillo cerca, rojo crítico.
+
+Útil para sprints con deadline duro o demos en horario fijo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 16 |
+| Env var | `DEADLINE_TIME` |
+| Type | Python3 script |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/deadline-countdown
+```
+
+Configurá:
+
+```bash
+export DEADLINE_TIME="2026-12-31T23:59:59"
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/deadline-countdown. Configurá deadline
+para fin de mes. Mostrame el countdown actual y los colors thresholds.
+```
+
+## Qué podés hacer con esto
+
+### Presión visual de tiempo
+
+Si tenés deadline real, el statusline te recuerda constante.
+
+### Para demos en horario fijo
+
+"Demo a las 4pm" — el countdown te dice cuántas horas quedan exactamente.
+
+### Sprint endings
+
+Último día del sprint: countdown te muestra horas restantes.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin deadlines reales:** countdown irrelevante.
+- **Si la urgencia te estresa más que motiva:** evítalo.
+- **Para uso casual:** el setting es nicho.
+- **Solo 16 installs:** muy nicho. Validá implementación.
+- **Para trabajo creativo profundo:** el reloj constante puede ser disruptivo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Deadline Countdown Setting](https://www.aitmpl.com/component/settings/statusline/deadline-countdown) — comando exacto.
+- **Config JSON:** [deadline-countdown.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/deadline-countdown.json).
+
+## Recursos relacionados
+
+- [Context Monitor Setting](/boveda/setting-context-monitor) — el statusline general más adoptado.
+- [Colorful Statusline Setting](/boveda/setting-colorful-statusline) — color simple.
+- [Command Statusline Setting](/boveda/setting-command-statusline) — para custom scripts (podés agregar countdown a uno propio).

@@ -1,0 +1,252 @@
+---
+title: "Construí con estructura — el prompt maestro que convierte ideas sueltas en productos terminados"
+description: "Prompt maestro de 5 fases (descubrimiento, planeación, construcción, pulido, entrega) que obliga a la IA a actuar como cofundador técnico. Separa lo crítico de lo opcional, te da checkpoints, entrega documentación. Pegás contexto, ejecutás por fases."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "codex", "chatgpt"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["de-idea-a-codigo", "comienza-a-construir", "mejores-practicas-claude"]
+---
+
+## El problema
+
+Le pedís a una IA "construime una app de X" y te entrega:
+
+- Algo **genérico** que no usa tu contexto
+- Sin priorización entre features críticas y nice-to-have
+- Sin checkpoints para corregir antes de que sea tarde
+- Sin documentación para mantenerlo después
+
+Resultado: producto que **no podés usar** ni mostrar.
+
+**Construí con estructura** es prompt maestro tropicalizado al español que convierte ese caos en **ruta de ejecución clara**.
+
+---
+
+## Qué resuelve
+
+| Problema típico | Cómo lo resuelve |
+|-----------------|------------------|
+| Construir "a ciegas" | Obliga a definir alcance real de v1 |
+| Mezclar críticas con ideas | Separa explícito v1 vs futuro |
+| Perder control de producto | Vos sos product owner, la IA ejecuta |
+| Entrega genérica | Cierra con build + validación + pulido + handoff |
+
+---
+
+## Cómo usarlo
+
+```
+1. Copiás el prompt completo
+2. Reemplazás placeholders con tu contexto real
+3. Pegás como contexto de arranque en Claude/Codex/ChatGPT/Gemini
+4. Respondés decisiones clave
+5. Ejecutás por fases, no todo de golpe
+```
+
+---
+
+## El prompt maestro
+
+```
+# Construí con Estructura
+
+## Rol
+Actuá como mi cofundador técnico. Tu trabajo es ayudarme a construir 
+un producto real que yo pueda usar, compartir o lanzar.
+Vos ejecutás la construcción, pero yo mantengo el control de decisiones.
+
+## Contexto Inicial (rellená antes de ejecutar)
+- Idea del producto: {{IDEA_DEL_PRODUCTO}}
+- Usuario objetivo: {{USUARIO_OBJETIVO}}
+- Problema que resuelve: {{PROBLEMA_A_RESOLVER}}
+- Nivel de seriedad: {{EXPLORAR | USO_PERSONAL | COMPARTIR | LANZAR}}
+- Tiempo y recursos disponibles: {{TIEMPO_Y_RECURSOS}}
+- Restricciones y preferencias: {{RESTRICCIONES_Y_PREFERENCIAS}}
+
+## Marco de Trabajo (obligatorio)
+
+### Fase 1: Descubrimiento
+- Hacé preguntas para entender lo que realmente necesito.
+- Cuestioná mis supuestos si detectás contradicciones.
+- Separá lo crítico para v1 vs lo que puede esperar.
+- Si mi idea es muy amplia, reducí alcance y proponé punto de partida.
+
+### Fase 2: Planeación
+- Definí exactamente qué construiremos en v1.
+- Explicá el enfoque técnico en lenguaje simple.
+- Estimá complejidad: baja, media o alta.
+- Listá dependencias (cuentas, servicios, APIs).
+- Mostrame bosquejo funcional del producto terminado.
+
+### Fase 3: Construcción
+- Construí por etapas visibles para revisar rápido.
+- Explicá brevemente qué hacés y por qué.
+- Probá lo que implementes antes de avanzar.
+- Detenete en puntos de decisión para validar conmigo.
+- Si hay bloqueo, dame opciones con trade-offs.
+
+### Fase 4: Pulido
+- Llevá el resultado a estándar de producto real, no demo.
+- Manejá errores y casos límite con elegancia.
+- Asegurá buena experiencia en desktop y mobile.
+- Agregá detalles de cierre para que se perciba terminado.
+
+### Fase 5: Entrega
+- Si quiero publicarlo, incluí paso de deploy.
+- Entregá instrucciones claras para usar, mantener, modificar.
+- Documentá decisiones importantes.
+- Cerrá con mejoras recomendadas para v2.
+
+## Reglas de Colaboración
+- Tratame como product owner: yo tomo decisiones de negocio.
+- Hablá claro y directo; traducí tecnicismos.
+- Señalá cuando esté sobrecomplicando.
+- Sé honesto con limitaciones y riesgos.
+- Avanzá rápido, pero con visibilidad.
+
+## Formato de Respuesta Obligatorio
+SIEMPRE en este orden:
+1. Diagnóstico inicial
+2. Plan de v1 (in-scope / out-of-scope)
+3. Enfoque técnico explicado simple
+4. Construcción por etapas
+5. Dependencias y decisiones requeridas
+6. Validación y pruebas mínimas
+7. Plan de entrega y v2
+
+## Resultado esperado
+No quiero solo "algo que funciona". Quiero producto funcional, 
+claro y presentable, construido con estructura.
+```
+
+---
+
+## Las 5 fases en detalle
+
+### Fase 1 — Descubrimiento
+
+La IA **te entrevista** antes de codear. Cuestiona supuestos. Reduce alcance si tu idea es muy amplia.
+
+**Output esperado**: documento que separa "v1 crítico" de "v2+".
+
+### Fase 2 — Planeación
+
+Define exactamente **qué se construye**. Enfoque técnico en simple. Lista dependencias. Estima complejidad.
+
+**Output esperado**: bosquejo funcional del producto terminado.
+
+### Fase 3 — Construcción
+
+Por **etapas visibles**. La IA te explica qué hace y por qué. Se detiene en puntos de decisión.
+
+**Output esperado**: código que vos podés revisar a medida que sale.
+
+### Fase 4 — Pulido
+
+De "demo" a "producto real". Maneja edge cases. Responsive. Detalles de cierre.
+
+**Output esperado**: algo que **podrías mostrar** al cliente sin vergüenza.
+
+### Fase 5 — Entrega
+
+Deploy. Documentación. Próximos pasos para v2.
+
+**Output esperado**: producto + manual + roadmap.
+
+---
+
+## Casos de uso
+
+### 1. MVP de SaaS
+
+```
+- Idea: app SaaS para gestión de inventario
+- Usuario: COOs de retail mediano LATAM
+- Problema: control de stock entre sucursales
+- Nivel: LANZAR
+- Tiempo: 4 semanas
+- Restricciones: budget AWS limitado
+```
+
+### 2. Tool interna de empresa
+
+```
+- Idea: dashboard de KPIs internos
+- Usuario: equipo de management de mi empresa
+- Problema: visibilidad de métricas mensuales
+- Nivel: USO_PERSONAL (equipo)
+- Tiempo: 2 semanas
+- Restricciones: tiene que usar SSO con Okta
+```
+
+### 3. Side project
+
+```
+- Idea: app de tracking de hábitos
+- Usuario: yo y mi entorno
+- Problema: probar si me sirve
+- Nivel: EXPLORAR
+- Tiempo: 1 fin de semana
+- Restricciones: stack simple
+```
+
+---
+
+## Anti-patrones
+
+### 1. Saltar la Fase 1
+
+La tentación es ir directo a "construí". **No funciona**. La fase de descubrimiento es la que evita rehacer todo después.
+
+### 2. Aceptar todo en Fase 2
+
+Si el plan que te muestra es muy amplio, **pedile recortar a MVP de 7 días**. La IA tiende a sobrecomplicar.
+
+### 3. No detenerte en checkpoints
+
+La Fase 3 tiene **puntos de decisión**. Si los saltás, perdés control. Detenete, revisá, decidí.
+
+### 4. Saltar Fase 4
+
+"Funciona, listo". NO. Pulido es lo que separa demo de producto. **Hacelo siempre**.
+
+### 5. No documentar (Fase 5)
+
+Sin docs, en 3 meses no entendés tu propio producto. La IA puede documentar — **pedíselo**.
+
+---
+
+## Combinaciones potentes
+
+### Con [de idea a código](/boveda/de-idea-a-codigo)
+
+Workflow Haiku → Sonnet → Opus para usar Claude eficiente en cada fase.
+
+### Con [comenzá a construir](/boveda/comienza-a-construir)
+
+Stack gratis para ejecutar el plan que sale.
+
+### Con [Claude Code best practices](/boveda/claude-code-best-practices)
+
+Las 83 prácticas para refinar la ejecución.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Script de 20 líneas | Overkill — pedile directo |
+| Algo que ya tenés claro | Las preguntas son ruido |
+| Crisis productiva | No hay tiempo para 5 fases |
+| Sin product owner claro | Sin decisiones, el prompt no jala |
+
+---
+
+## Próximos pasos
+
+- Para workflow de modelos, [de idea a código](/boveda/de-idea-a-codigo)
+- Para stack gratis, [comenzá a construir](/boveda/comienza-a-construir)
+- Para refinar ejecución, [mejores prácticas Claude](/boveda/mejores-practicas-claude)

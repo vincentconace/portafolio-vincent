@@ -1,0 +1,242 @@
+---
+title: "The 5 questions to ask before adding AI to your business (you don't need the Mac Mini)"
+description: "The hype says that to 'get into AI' you need expensive hardware. That's a lie. What you need is clarity about your own business. 5 questions no guru explains to you, with a prompt to answer each one and the 'tools-first' trap everyone falls into."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["manual-fundador-ia", "tres-errores-con-ia", "prompts-prd-ejecutivo"]
+---
+
+## The mistake everyone makes
+
+> "I'm going to get into AI. Should I buy the $1500 Mac Mini? Which tool is the best?"
+
+**You're starting from the wrong end.** Equipment and tools are 5% of the problem. The other 95% is **clarity about your own business** — what produces results, what can be automated without losing quality, what you should eliminate before "optimizing".
+
+Whoever starts with the tools ends up with an expensive AI suite solving problems that weren't the real ones.
+
+These 5 questions get the order right. Answer them first. Then you decide on tools.
+
+---
+
+## Question 1 — What gives you the result?
+
+### Why it matters
+
+Most people don't know **which specific activities generate the results** in their business. They have intuition ("selling is important") but not granularity ("the first call with a new client is what predicts whether they close or not").
+
+Without that granularity, **you automate the wrong thing**. You ask AI to write welcome emails when what actually mattered was the first call.
+
+### Prompt
+
+```
+You're a senior business consultant. I'm giving you info about my business.
+
+INFO:
+- Industry: [...]
+- Type of client: [...]
+- Average ticket: [...]
+- Typical sales cycle: [...]
+- Team: [N people doing what]
+
+QUESTION:
+Of EVERYTHING we do in a typical week, which are the 3-5
+activities that MOST impact closing a sale / retaining a client?
+
+RULES:
+- Don't tell me "marketing" or "sales" (too generic)
+- Do tell me specific activities: "first demo with client",
+  "day-3 follow-up", "answer a price objection within 1h"
+- If you can't know it without more info, tell me WHAT to ask you
+```
+
+What comes out might surprise you. And what comes out **is what you do NOT want to automate 100%** — you want to improve it, scale it, not replace it.
+
+---
+
+## Question 2 — Where is it written down?
+
+### Why it matters
+
+Everything you know about your business — but that isn't written down — **can't be shared, scaled, or automated**. It lives in your head.
+
+If you want AI to help you, first **you need the info to be somewhere the AI can read it**. It doesn't have to be perfect. But it has to exist.
+
+### Audit
+
+List what you have documented and what you don't:
+
+| Question | Does it exist? | Where |
+|----------|----------------|-------|
+| Who your ideal client is | | |
+| What clients who are **not** a good fit look like | | |
+| Your sales process step by step | | |
+| The most common objections and how to answer them | | |
+| Your prices and when they vary | | |
+| Your brand tone / how to write like your company | | |
+| Your main competitors and differentiators | | |
+
+**If more than 4 say "doesn't exist / in my head"**: that's your first job. Before AI, **write it down**.
+
+### Prompt to speed it up
+
+```
+I need to document [X aspect of my business]. Interview me in a
+structured way — precise questions that force me to be specific —
+and at the end compile the answers into a usable doc.
+
+ASPECT TO DOCUMENT: [e.g. "my ideal client"]
+
+Ask me 8-12 questions. Not generic ones. One per message. Wait for my
+answer before the next one. At the end, compile a structured doc.
+```
+
+You spend 30 min answering. You end up with a real doc that's useful for endless things afterward.
+
+---
+
+## Question 3 — What shouldn't exist anymore?
+
+### Why it matters
+
+**Before optimizing something, consider eliminating it.** A lot of people automate tasks that shouldn't be done at all.
+
+Classic examples:
+
+- Weekly reports nobody reads → automating them solves nothing. **Cancel them.**
+- Recurring meetings with little value → automating the agenda doesn't save them. **Eliminate them.**
+- Bureaucratic processes that exist "because that's how it's always been" → automating bureaucracy is **automated bureaucracy**, still bureaucracy.
+
+### Prompt
+
+```
+I'm giving you a list of recurring tasks/processes in my business:
+
+[list]
+
+For each one, evaluate:
+1. Does it generate direct value or is it overhead?
+2. If we eliminate it today, what breaks?
+3. If we eliminate it, what's needed so that NOBODY MISSES IT?
+
+Order the processes from "easiest to eliminate" to "necessary, needs
+to be optimized".
+
+RULES:
+- Be brutal, not diplomatic
+- If something is overhead in disguise, say so
+- Don't suggest I "optimize" what can be eliminated
+```
+
+Sometimes it turns out **40-60% of your processes are unnecessary**. Eliminating beats automating 10×.
+
+---
+
+## Question 4 — What's the simplest version?
+
+### Why it matters
+
+People want "agents that do everything". The mistake: high complexity before proving the small version works.
+
+**Start with the MVP of the MVP.** The agent that does **one single thing** and does it well. Then you scale.
+
+### Examples
+
+❌ "I want an agent that manages my entire business"
+✅ "I want an agent that every morning reads my unanswered emails and drafts a reply for the 3 most urgent ones"
+
+❌ "I want AI that automates sales"
+✅ "I want a prompt that, when a new lead comes in, enriches it with public info and classifies it as hot/warm/cold"
+
+### Prompt to decide the MVP
+
+```
+I have this big vision of what I want to do with AI in my business:
+
+[big vision]
+
+Break that down into the smallest possible MVP:
+- What's the version that can be built in 1-2 hours?
+- What does it explicitly leave out?
+- How do I measure whether it works?
+- If it works, what's the next block (not everything, the NEXT one)?
+
+RULES:
+- If you propose something that takes more than 4h to build, it's not an MVP
+- If it requires data I don't have ready, it's not an MVP
+- If it depends on coordinating 3 systems, it's not an MVP
+```
+
+The MVP that comes out is **the one you're going to build this week**. The big vision stays as a roadmap, not as an immediate deliverable.
+
+---
+
+## Question 5 — What's still on you to do?
+
+### Why it matters
+
+People underestimate what **you** still have to do even with AI. They end up thinking AI is "hands-free" and get disappointed.
+
+**AI is leverage, not autopilot.** Knowing what's on you saves you from badly set expectations.
+
+### The things that are NOT delegated to AI
+
+| Area | What stays yours |
+|------|------------------|
+| **Strategic vision** | Deciding where the business is headed |
+| **Critical decisions** | Hiring, firing, pivoting |
+| **Key relationships** | Calls with top clients, meetings with partners |
+| **Judgment** | Knowing when AI output is good or garbage |
+| **Validation with real humans** | Talking to clients, not extrapolating from data |
+| **Learning the craft** | Your skill growing, not atrophying |
+
+### Prompt to clarify it
+
+```
+I'm implementing AI for [X areas] of my business. Before I do it,
+I want to clarify what things I SHOULD KEEP DOING MYSELF.
+
+Give me an honest list of:
+1. The decisions I should NOT delegate to AI (with reasons)
+2. The activities where AI does 80% but the 20% is critical that it be me
+3. The skills I'll keep needing manually (the ones I'll lose
+   if I don't practice them)
+4. The risks of delegating too much
+
+RULE: don't tell me "everything needs human supervision" (obvious).
+Be specific about WHAT supervision and where.
+```
+
+---
+
+## The tools-first trap
+
+After the 5 questions, you can decide on tools with real criteria:
+
+- What result do you want to move? (question 1)
+- What info do you already have written down? (question 2)
+- What to eliminate before optimizing? (question 3)
+- What's the MVP of the solution? (question 4)
+- What do you have to keep doing? (question 5)
+
+**With those answers, choosing a tool is trivial.** Without those answers, whatever tool you pick is likely the wrong one.
+
+---
+
+## The #1 mistake people make
+
+Skipping the questions and buying the Mac Mini.
+
+3 months later: expensive machine, multiple subscriptions, random agents configured, and the business in the same place. Because the problem wasn't the processing power — it was the lack of clarity.
+
+**The 5 questions can be answered in an afternoon.** After that, the rest is informed execution.
+
+---
+
+## Next steps
+
+- To dig deeper into overall AI strategy for a startup, [The AI Founder's Manual](/boveda/manual-fundador-ia)
+- If you fall into the typical mistakes when using AI, [3 mistakes with AI](/boveda/tres-errores-con-ia)
+- For your first serious structured prompt, [Executive PRD](/boveda/prompts-prd-ejecutivo)

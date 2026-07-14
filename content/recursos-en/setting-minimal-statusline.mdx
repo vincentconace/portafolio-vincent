@@ -1,0 +1,75 @@
+---
+title: "Minimal Statusline Setting — model + directory only (no noise)"
+description: "Setting with 72 installs. A simple statusline: just the model name and current directory. Clean and distraction-free. For focused dev sessions where you don't want any extra info."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-context-monitor", "setting-colorful-statusline", "setting-git-branch-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/minimal-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/minimal-statusline.json"
+---
+
+## What it is
+
+The simplest statusline option: it only shows the model name and the current directory. No git info, no context bars, no gimmicks.
+
+For devs who want maximum focus on the content, without distractions.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 72 |
+| Shows | Model + directory only |
+| Focus | Distraction-free |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/minimal-statusline
+```
+
+For Claude:
+
+```
+I installed the statusline/minimal-statusline setting. Show me how it looks.
+```
+
+## What you can do with it
+
+### Maximum focus
+
+No extra info to distract you from the content.
+
+### For users who already know their context
+
+If you keep a mental track of which branch you're on and your context %, you don't need to see it all the time.
+
+### Intentionally minimalist statusline
+
+For devs who prefer a clean UI — orthogonal to the gimmicky or info-rich ones.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you want context % awareness:** use [Context Monitor](/boveda/setting-context-monitor).
+- **If you want git awareness:** [Git Branch Statusline](/boveda/setting-git-branch-statusline).
+- **If having NO info bothers you:** the other statuslines may be a better choice.
+
+</Callout>
+
+## Download it from the source
+
+- **Listing on aitmpl.com:** [Minimal Statusline Setting](https://www.aitmpl.com/component/settings/statusline/minimal-statusline) — exact command.
+- **JSON config:** [minimal-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/minimal-statusline.json).
+
+## Related resources
+
+- [Context Monitor Setting](/boveda/setting-context-monitor) — the #1 info-rich option.
+- [Colorful Statusline Setting](/boveda/setting-colorful-statusline) — color without clutter.
+- [Git Branch Statusline Setting](/boveda/setting-git-branch-statusline) — git aware.

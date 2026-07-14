@@ -1,0 +1,92 @@
+---
+title: "Auto Git Add Hook — automatic staging of modified files (870 installs)"
+description: "A hook with 870 installs that automatically runs git add on files edited by Claude. Keeps your git workflow clean without having to stage each change by hand."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["claude-code-best-practices", "mcp-github-integration", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/git-workflow/auto-git-add"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git-workflow/auto-git-add.json"
+---
+
+## What it is
+
+When Claude edits a file, it usually shows up in `git status` as "modified, not staged for commit". You have to stage it by hand before committing.
+
+This hook makes it automatic. Every time Claude edits a file (via the Edit tool), it runs `git add` on that file right after the modification.
+
+Hook event: `PostToolUse` (Edit). No human intervention.
+
+870 installs make it one of the most adopted hooks in the `git-workflow` category.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `git-workflow` |
+| Installs | 870 |
+| Hook event | `PostToolUse` (Edit) |
+| Action | automatic `git add` of the edited file |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook git-workflow/auto-git-add
+```
+
+For Claude:
+
+```
+I installed the git-workflow/auto-git-add hook. Try it out: edit any
+file in my project and then run `git status` to verify that it was
+staged automatically.
+```
+
+## What you can do with it
+
+### Clean git workflow with no overhead
+
+You edit 20 files in a session. They all get staged automatically. When you go to commit, you don't have to remember which ones to add.
+
+### Easy-to-read diff
+
+`git diff --staged` shows you everything Claude touched. `git diff` (unstaged) stays clean for changes you make by hand on top of that.
+
+### Combo with the [Conventional Commits hook](https://www.aitmpl.com/hooks)
+
+Auto-stage + conventional commits = a semi-automatic git workflow. Claude edits → automatic stage → you commit following the convention.
+
+### For long agentic sessions
+
+If you leave Claude running in `/goal` or `/loop`, this hook keeps the repo in a clean state without your intervention.
+
+## Prerequisites
+
+- **An initialized git project** (`.git` exists)
+- **Claude Code** with hooks enabled
+- **Edits via the Edit tool** (does not apply to files created with Write directly — verify the behavior)
+
+## When it's NOT a good idea
+
+<Callout type="warning" title="Before installing">
+
+- **If you want a manual review before staging:** this hook stages everything automatically. If your workflow is to review each change before staging, don't install it.
+- **For experimental edits:** staged files are what you're going to commit. If Claude experiments and breaks things, they end up staged.
+- **For repos with a misconfigured `.gitignore`:** you might stage files you don't want to commit (logs, build outputs, secrets). Validate your `.gitignore` first.
+- **If you work with worktrees / complex submodules:** verify that the hook respects the correct directory.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Auto Git Add Hook](https://www.aitmpl.com/component/hooks/git-workflow/auto-git-add) — exact command.
+- **JSON config:** [auto-git-add.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git-workflow/auto-git-add.json).
+
+## Related resources
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices for git workflow with AI.
+- [GitHub Integration MCP](/boveda/mcp-github-integration) — to combine automatic staging with PR creation.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place hooks as an automation layer.

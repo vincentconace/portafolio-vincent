@@ -1,0 +1,104 @@
+---
+title: "MCP Microsoft Dev Box — gestión de Dev Boxes via lenguaje natural"
+description: "MCP server para Microsoft Dev Box. Operaciones de developer-focused: manejo de Dev Boxes, configurations y pools desde lenguaje natural. Para equipos Azure que viven en Dev Box."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "azure", "dev-box"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-azure-kubernetes-service", "all-deploy", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/microsoft-dev-box"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/microsoft-dev-box.json"
+---
+
+## Qué es
+
+Microsoft Dev Box son entornos de desarrollo cloud-hosted (Windows VMs preconfiguradas) que muchas empresas usan en lugar de máquinas físicas para devs. La sacada: nuevo developer se onboardea en minutos con un entorno listo en vez de pasar 2 días configurando local.
+
+Este MCP da operación natural language sobre Dev Boxes: crear, suspender, configurar, manejar pools. Útil para admins de Dev Box y para devs que querés operar tu box sin abrir el Azure portal.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 124 |
+| Servidor MCP | `DevBox` |
+| Cuenta requerida | Sí — Azure con Dev Box |
+| Permisos | Azure RBAC apropiados |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/microsoft-dev-box
+```
+
+Pre-requisitos:
+- Azure CLI autenticado (`az login`)
+- Permisos en la suscripción para Dev Box
+- Dev Box ya configurado en tu org
+
+Para Claude:
+
+```
+Instalé el MCP devtools/microsoft-dev-box. Listame mis Dev Boxes
+disponibles con su pool, status y last used. Si alguno lleva más de
+7 días sin uso, decime si conviene suspenderlo para ahorrar costo.
+```
+
+## Qué podés hacer con esto
+
+### Manejo de Dev Boxes personales
+
+"Suspendéme mi Dev Box principal (no lo voy a usar el finde) y restaurémelo el lunes a las 9 am". Operaciones bursátiles para ahorrar.
+
+### Onboarding asistido
+
+"Aprovisioná un Dev Box nuevo para [nombre], con el pool `frontend-team`. Una vez listo, mandame el RDP/URL para que se conecte". Operación admin.
+
+### Audit de uso y costos
+
+"Listame Dev Boxes inactivos (sin uso por más de 14 días). Identificá el costo estimado de cada uno y candidate to delete".
+
+### Gestión de pools
+
+"Para el pool `data-team`, ¿cuál es la utilización actual? ¿Conviene escalar el cap up o down?".
+
+### Configurations
+
+"Crear una nueva configuration para devs Java: incluyendo IntelliJ, Maven, JDK 17 y Docker. Aplícala a un nuevo pool `java-team`".
+
+### Combinación con [AKS MCP](/boveda/mcp-azure-kubernetes-service)
+
+Si tu infra Azure es Dev Box + AKS, los dos MCPs te dan operación cross-stack desde Claude.
+
+## Pre-requisitos
+
+- **Cuenta Azure** con plan apto para Dev Box
+- **Permisos Azure** (Dev Box Project Admin o equivalentes según operación)
+- **Pools y configurations** ya definidos (el MCP no setea infra desde cero)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Dev Box:** obvio. Para devboxes en otro cloud (GitHub Codespaces, Gitpod, Replit), MCPs distintos o nada.
+- **Operaciones destructivas:** delete Dev Box, delete pool. Hooks de aprobación.
+- **Permisos amplios:** Dev Box Admin tiene poder serio. Si tu role permite delete de pools enteros, Claude hereda eso.
+- **Para devs casuales:** el portal Azure puede ser más cómodo. El MCP brilla en admin tasks o cuando combinás con automatización.
+- **Costos:** Dev Box no es gratis. Operaciones que aprovisionen recursos generan facturación.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Microsoft Dev Box MCP](https://www.aitmpl.com/component/mcps/devtools/microsoft-dev-box) — comando exacto.
+- **Config JSON:** [microsoft-dev-box.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/microsoft-dev-box.json).
+- **Dev Box docs:** [docs.microsoft.com/azure/dev-box](https://docs.microsoft.com/azure/dev-box).
+
+## Recursos relacionados
+
+- [Azure Kubernetes Service MCP](/boveda/mcp-azure-kubernetes-service) — para clusters K8s en Azure. Combo Azure stack.
+- [All Deploy](/boveda/all-deploy) — para deploy a hosting. Dev Box es donde codeás, All Deploy publica.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector a infra cloud.

@@ -1,0 +1,115 @@
+---
+title: "Claude Forge — the 'oh-my-zsh' of Claude Code (11 agents, 36 commands, 15 skills)"
+description: "A plugin from sangrokjung (612⭐) that sets up a complete framework for Claude Code in 5 minutes. 11 AI agents, 36 commands, 15 skills, and 6 layers of security hooks. Inspired by oh-my-zsh."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["trifecta-perfecta", "5-claude-skills-necesarias", "claude-code-setup"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-forge"
+github: "https://github.com/sangrokjung/claude-forge"
+---
+
+## What it is
+
+Claude Forge is the closest thing to a "complete framework" for Claude Code that you'll find in a single install. The pitch is straightforward: what oh-my-zsh did for zsh (a bunch of things pre-assembled, sane defaults, a 5-minute install), Forge does for Claude Code.
+
+It ships with:
+- **11 specialized AI agents**
+- **36 ready-to-use slash commands**
+- **15 preconfigured skills**
+- **6 layers of security hooks** (explicit security layers)
+
+Five-minute install and you're off. If you don't want to spend two weeks comparing marketplaces, installing 8 separate plugins, and wiring up hooks, this shortcut gets you productive fast.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | sangrokjung |
+| Stars | 612 |
+| Type | Single plugin (framework) |
+| Components | 11 agents, 36 commands, 15 skills, hooks, rules |
+| Marketplace | `sangrokjung/claude-forge` |
+| Web | [sangrokjung.github.io/claude-forge](https://sangrokjung.github.io/claude-forge) |
+
+### The 6 security layers (the most interesting part)
+
+The author calls them "6-layer security hooks." Without seeing the exact code, the pattern is defense in depth: hooks that run at different moments (pre-edit, post-edit, pre-bash, etc.) blocking or warning about:
+
+- Destructive commands outside the project
+- Editing sensitive files (`.env`, credentials)
+- Unauthorized network operations
+- Modifications to git history without confirmation
+- Pushing to protected branches
+- Accessing paths outside the workspace
+
+(The exact details are in the repo — the number "6" is the author's claim.)
+
+## How to install it
+
+```bash
+/plugin marketplace add sangrokjung/claude-forge
+/plugin install claude-forge@sangrokjung-claude-forge
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the claude-forge plugin from sangrokjung/claude-forge. Then
+show me which agents, commands, and skills I now have available, grouped
+by category.
+```
+
+## What you can do with this
+
+### A productive setup in 5 minutes
+
+If you just installed Claude Code and don't want to spend days picking plugins, Forge gives you a solid base in one run. Later, once you understand what you need, you expand with specific plugins.
+
+### Getting security hooks without writing them
+
+The 6 security layers are the most valuable part for someone just starting out. Without them, an autonomous agent can delete files, commit secrets, or push to main by accident. Forge covers the typical gaps by default.
+
+### Trying agents without picking a giant marketplace
+
+Forge's 11 agents cover the typical cases. If you've never used agents, this is a far less intimidating entry point than [`alirezarezvani/claude-skills`](https://www.aitmpl.com/plugins/alirezarezvani-claude-skills) (28 packs) or [`buildwithclaude`](https://www.aitmpl.com/plugins/buildwithclaude) (53 plugins).
+
+### A base you can layer on later
+
+Forge is a good base — it's not the ceiling. As you grow, you layer specific plugins on top (HashiCorp for Terraform, LSPs for your language, vertical packs by provider). Forge doesn't get in the way of that.
+
+## Real benefits
+
+- **Time to productive: 5 minutes.** The claim sounds like marketing, and it's real.
+- **Security hooks by default**, not optional.
+- **Coherent structure** — all 11 agents follow a common pattern; they're not from 11 different authors.
+- **Its own website with docs** ([sangrokjung.github.io/claude-forge](https://sangrokjung.github.io/claude-forge)).
+- **Not overwhelming** — 11 agents instead of 234.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If you already have your setup dialed in:** the 6 security layers and 11 agents may clash with what you've already configured. Look at the hooks before enabling.
+- **If your use is specific** (e.g. only Terraform or only data engineering): a vertical pack from the corresponding marketplace serves you better.
+- **Strict security hooks = friction.** If the layers block legitimate operations, you may end up disabling them and missing the point.
+- **Trust in a single author:** all of Forge comes from `sangrokjung`. If at some point they stop maintaining it, you depend on that.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Forge](https://www.aitmpl.com/plugins/claude-forge) — the exact command.
+- **GitHub repo:** [sangrokjung/claude-forge](https://github.com/sangrokjung/claude-forge) — code, hooks, agents.
+- **Official site:** [sangrokjung.github.io/claude-forge](https://sangrokjung.github.io/claude-forge) — docs, examples.
+
+## Related resources
+
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — a lighter combo (3 tools) if Forge already feels like too much. Another way to start.
+- [5 essential Claude Skills](/boveda/5-claude-skills-necesarias) — a minimal set that pairs well on top of Forge.
+- [Claude Code Setup](/boveda/claude-code-setup) — Anthropic's official scanner. Run it after installing Forge to see if it recommends more.

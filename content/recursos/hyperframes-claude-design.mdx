@@ -1,0 +1,290 @@
+---
+title: "Hyperframes + Claude Design — videos animados sin After Effects"
+description: "HeyGen liberó Hyperframes (CLI open-source) que toma HTML/CSS/JS y lo convierte en MP4 con alpha. Combinado con Claude Design, describís el video y Claude lo diseña + programa la animación. Sin Premiere, sin AE, sin saber editar."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-design", "hyperframes", "ffmpeg"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-design", "stack-ia-creador", "higgsfield-mcp"]
+---
+
+## La combinación
+
+Hay dos piezas:
+
+1. **Hyperframes** (HeyGen, Apache 2.0) — CLI que toma HTML/CSS/JS y lo convierte en MP4/MOV/WebM con alpha channel, usando FFmpeg por debajo
+2. **Claude Design** (Anthropic, en `claude.ai/design`) — la superficie que arma artefactos visuales conversacionales
+
+Por separado:
+- Hyperframes solo es un renderer — necesitás escribir el HTML/CSS/JS animado a mano
+- Claude Design genera HTML pero no lo renderiza a video
+
+**Juntas**: vos describís el video. Claude Design genera el HTML/CSS con animaciones GSAP. Hyperframes renderiza a MP4. **Resultado: motion graphics decente sin tocar After Effects.**
+
+---
+
+## Lo que podés hacer realista
+
+| Tipo de video | Funciona bien | Cuándo no |
+|---------------|---------------|-----------|
+| **Intro de canal** (5-10s con logo + tagline) | ✅ | – |
+| **Demo de SaaS** (mockup animado del producto) | ✅ | Si necesita gameplay real (necesitás screen recording) |
+| **Anuncio Instagram/TikTok** (15-30s) | ✅ | Si requiere personas reales (necesitás Higgsfield o filmación) |
+| **Logo reveal** | ✅ | – |
+| **Explainer** (motion graphics + texto + transiciones) | ✅ | Si pasa de ~60s (mejor con timeline editor) |
+| **Citas / quotes animadas** | ✅ | – |
+| **Character animation** | ❌ | Usá herramientas dedicadas |
+| **Video con actores reales** | ❌ | Esto es generación visual / filmación |
+
+**Sweet spot**: motion graphics 5-60s con texto, gráficos, logos, animaciones. No reemplaza After Effects para producción de cine; sí reemplaza AE para 80% del contenido de marketing y social.
+
+---
+
+## Setup
+
+### Requisitos
+
+- Claude Pro+ (para Claude Design)
+- Node.js 18+ (para Hyperframes CLI)
+- FFmpeg instalado (Hyperframes lo usa por debajo)
+
+### Instalar Hyperframes
+
+```bash
+npm install -g hyperframes
+hyperframes --version
+```
+
+Si FFmpeg no está instalado:
+
+```bash
+# Mac
+brew install ffmpeg
+
+# Linux
+sudo apt install ffmpeg
+```
+
+---
+
+## Flow típico
+
+<Step number={1} title="Describir el video en Claude Design">
+
+Andá a `claude.ai/design`. Decile algo como:
+
+```
+> Necesito un anuncio Instagram para mi SaaS de gestión de inventario.
+
+Specs:
+- Duración: 15 segundos
+- Vertical 9:16 (1080x1920)
+- Animación con GSAP
+
+Estructura:
+- 0-3s: hook visual — texto grande "¿Perdés stock por no saber?" con
+  shake sutil
+- 3-7s: dashboard del producto animando (números cambiando, gráficos)
+- 7-12s: testimonio aparece con fade — "Recuperé 8h por semana - Juan"
+- 12-15s: CTA "Probá gratis" + URL
+
+Paleta: verde corporativo (#10b981) + crema (#fef3c7) + negro suave (#1f2937)
+Tipografía: Inter Display
+
+Generame el HTML/CSS/JS listo para renderizar con Hyperframes.
+```
+
+Claude Design genera el código. Lo previsualizás en el browser. Iterás hasta que esté bien.
+
+</Step>
+
+<Step number={2} title="Descargar el ZIP">
+
+Cuando esté listo, Claude Design te empaqueta el código en ZIP:
+
+```
+mi-video/
+├── index.html
+├── style.css
+├── animation.js
+└── assets/
+    └── (cualquier imagen / font)
+```
+
+</Step>
+
+<Step number={3} title="Renderizar a MP4" last>
+
+```bash
+cd mi-video/
+npx hyperframes render --duration 15 --output mi-anuncio.mp4
+```
+
+Hyperframes:
+1. Lanza headless Chrome
+2. Carga tu HTML
+3. Captura frames a 60fps (o el que pidas)
+4. Compila con FFmpeg
+5. Output: `mi-anuncio.mp4`
+
+**~30 segundos** para un video de 15s. Listo para subir a redes.
+
+</Step>
+
+---
+
+## 6 prompts listos
+
+### 1. Intro de canal (10s)
+
+```
+Intro de canal YouTube de 10 segundos:
+- 0-2s: fade in del logo en centro, escala 0.8 → 1
+- 2-7s: tagline "Sobre productividad sin culpa" aparece debajo con
+  typewriter effect
+- 7-10s: fade out a negro
+
+Paleta: minimalista, fondo blanco hueso, texto negro.
+Tipografía: serif editorial (Lora o similar).
+Aspecto: 16:9, 1920x1080.
+
+Usá GSAP para todas las animaciones.
+```
+
+### 2. Demo SaaS (30s)
+
+```
+Demo de SaaS de [tu producto] en 30 segundos:
+- 0-5s: hook visual (problema que resolvés)
+- 5-15s: mockup de la app — UI animada navegando 3 pantallas
+- 15-25s: 3 beneficios clave aparecen como cards
+- 25-30s: CTA "Probá gratis" + URL
+
+Para los mockups, usá Tailwind para que las cards y UI se vean bien.
+Que se sienta como Apple Health ads — limpio, suave, profesional.
+
+Vertical 9:16 para Stories / Reels.
+```
+
+### 3. Logo reveal
+
+```
+Logo reveal cinemático para [marca]:
+- Duración: 5 segundos
+- 0-1s: fondo negro, partículas doradas apareciendo
+- 1-3s: logo se forma desde las partículas (effect de magnet)
+- 3-4s: logo se asienta, brillo sutil pasa de izquierda a derecha
+- 4-5s: tagline aparece debajo, fade out
+
+Estilo: premium, sutil, no spam.
+```
+
+### 4. Explainer animado (60s)
+
+```
+Explainer de mi producto en 60 segundos:
+- 0-10s: presentar el problema con escena visual
+- 10-25s: el "antes" — cómo es trabajar SIN nosotros
+- 25-40s: el "después" — con nosotros
+- 40-55s: 3 features clave con iconos animados
+- 55-60s: CTA fuerte
+
+Estilo: motion graphics minimalista, paleta de 3 colores, transiciones
+suaves entre escenas.
+```
+
+### 5. Plantilla de citas
+
+```
+Cita animada para LinkedIn/Twitter:
+- Duración: 8 segundos
+- Texto: [pegás la cita]
+- Autor: [nombre]
+
+Animación:
+- 0-2s: comillas aparecen
+- 2-6s: cita aparece letra por letra (typewriter)
+- 6-8s: autor aparece debajo con dash
+- Fondo: gradient sutil
+
+Cuadrado 1080x1080.
+```
+
+### 6. Anuncio TikTok
+
+```
+Anuncio TikTok 15 segundos:
+- 0-3s: HOOK fuerte. Pregunta directa o stat impactante.
+- 3-10s: desarrollo — beneficio principal del producto
+- 10-13s: prueba social (testimonio o stat)
+- 13-15s: CTA "Link en bio"
+
+Estilo: nativo TikTok — no se vea anuncio corporativo. Texto grande,
+movimientos rápidos, una sola idea principal.
+
+Vertical 9:16. Subtítulos quemados para mute.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Querer videos largos
+
+Hyperframes brilla en 5-60s. Para videos de 2+ minutos, el approach se complica (timeline manejo se vuelve denso, render lento). Para largos: editor profesional.
+
+### 2. Animar TODO
+
+Claude Design tiende a animar cada elemento si no lo limitás. Pedile **menos**:
+
+```
+Animá SOLO:
+- El título (entrada)
+- El CTA final (entrada + énfasis)
+- Las transiciones entre secciones
+
+El resto debe quedar estático. Movimiento que llama atención debe
+ser deliberado.
+```
+
+### 3. No iterar el código generado
+
+El HTML/CSS/JS generado puede tener detalles que no funcionan en tu marca. **Editalo** (o pedile a Claude que lo ajuste). El primer output rara vez es final.
+
+### 4. Saltarse el preview
+
+Antes de renderizar a MP4, **abrí el HTML en el browser**. Si la animación se ve mal en preview, en MP4 también. Iterá en HTML primero.
+
+---
+
+## Lo honesto — qué NO funciona aún
+
+- **3D**: Hyperframes no renderiza Three.js bien (alta carga, lento)
+- **Audio**: agregás audio después con FFmpeg manual o editor
+- **Animaciones física-realistas**: GSAP es para tweens, no para física
+- **60fps sostenido en escenas pesadas**: caen frames en HTML complejo
+
+Si necesitás esto, complementá con After Effects o herramientas dedicadas.
+
+---
+
+## Comparación
+
+| Approach | Cuándo |
+|----------|--------|
+| **Hyperframes + Claude Design** | Motion graphics 5-60s, control sobre el código |
+| **Higgsfield / Veo** | Video cinematográfico generativo |
+| **CapCut / Premiere** | Edición de video filmado |
+| **After Effects** | Motion graphics profesional avanzado |
+| **Lottie** | Animaciones livianas para web (no MP4) |
+
+Cada uno tiene su nicho. Hyperframes gana en **control granular sin curva de AE**.
+
+---
+
+## Próximos pasos
+
+- Si querés video generativo (no motion graphics), [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para entender qué hace Claude Design por separado, [Claude Design](/boveda/claude-design)
+- Para stack completo de creación con voz, imagen, video, [Stack IA Creador](/boveda/stack-ia-creador)

@@ -1,0 +1,237 @@
+---
+title: "Getting Started with Claude — an ABC guide for ChatGPT users"
+description: "If you came from ChatGPT and want to understand what makes Claude different, which plans exist, how to get started without getting lost, and when the switch is worth it. For beginners — no technical jargon."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["anatomia-claude", "claude-tres-modelos", "claude-code-setup-zero"]
+---
+
+## The most common question
+
+> "I already use ChatGPT. Why switch to Claude?"
+
+Short answer: Claude and ChatGPT are **cousins**, not enemies. Each has its own profile. For some things Claude wins, for others ChatGPT wins, and for many they're interchangeable.
+
+What **does** set Claude apart:
+
+1. **It has real access to your computer** (with Claude Code) and to your files (with Cowork)
+2. **Reasoning in code** tends to be stronger
+3. **Long context** — it can handle huge conversations and files without losing the thread
+4. **It's more honest when it doesn't know** (it hallucinates less, in general)
+5. **An open ecosystem of skills + MCPs** to extend it
+
+What ChatGPT does better:
+
+1. **Image generation** (built-in DALL-E) — Claude doesn't generate images
+2. **Native voice / audio** is more mature
+3. **Consumer plugins** are more established
+4. **A slightly gentler learning curve** for non-technical users
+
+**If you work with code, long docs, or automation**: Claude probably adds value. **If you use it for casual questions and generating images**: ChatGPT is enough.
+
+---
+
+## The 3 ways to use Claude
+
+This is the first source of confusion. Claude isn't "one app" — it's 3 distinct surfaces:
+
+| Form | Where it lives | What it's for |
+|-------|-----------|----------|
+| **Claude (chat)** | `claude.ai` or desktop app | Conversations, questions, brainstorms |
+| **Claude Cowork** | Desktop app (not web) | Working with your files, calendar, email |
+| **Claude Code** | Terminal / CLI | Serious coding, technical automation |
+
+Most people start with chat. Then, depending on their needs, they add Cowork or Code.
+
+More detail on when to use each in [Claude's anatomy](/boveda/anatomia-claude).
+
+---
+
+## The plans — which one is right for you
+
+| Plan | Cost | Who it's for |
+|------|-------|------------|
+| **Free** | $0 | Trying it out. Limited on messages and models |
+| **Pro** | $20/month | Daily individual use. Access to Opus, basic connectors |
+| **Max 5×** | $100/month | Heavy use. 5× Pro's capacity |
+| **Max 20×** | $200/month | Very heavy use or professional work |
+| **Team** | $25/user/month (5+) | Small teams, centralized management |
+| **Enterprise** | Custom quote | Large companies, SSO, compliance, SLAs |
+
+**Recommendation**: start with **Free to try it for 1 week**. If you use it every day and want Opus + Cowork, move to **Pro**. Most people stay comfortably there.
+
+---
+
+## Your first day
+
+<Step number={1} title="Create an account">
+
+[claude.ai](https://claude.ai) → sign up. Email or Google.
+
+</Step>
+
+<Step number={2} title="Try the chat for 30 min">
+
+Ask the questions you'd ask ChatGPT and look at the answers. Some good prompts to start with:
+
+```
+> Explain [a topic you know well] to me. I want to see how accurate it is.
+
+> Rewrite this text in a more concise tone: [paste some text].
+
+> I have this problem: [describe something from your work]. Suggest
+  3 different approaches to solve it.
+```
+
+Calibrate: is it accurate? does it get close to what you want? does it hallucinate or tell you when it doesn't know?
+
+</Step>
+
+<Step number={3} title="If you liked it, download the desktop app">
+
+[claude.ai/download](https://claude.ai/download). Mac or Windows.
+
+The desktop app gives you access to:
+- Cowork (if you moved to Pro)
+- Connectors (Gmail, Calendar, Drive, etc.)
+- Partial offline mode
+- Quick model switching
+
+</Step>
+
+<Step number={4} title="(Optional) Try Claude Code" last>
+
+Only if you work with code:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude
+```
+
+More detail in the [full setup guide](/boveda/claude-code-setup-zero).
+
+</Step>
+
+---
+
+## What confuses people most at first
+
+### 1. "Which model do I pick?"
+
+Claude has 3:
+
+- **Haiku 4.5**: fast and cheap, for small questions
+- **Sonnet 4.6**: the default, for almost everything
+- **Opus 4.7**: the most powerful, for complex things
+
+Detail on when to use each in [the 3 models](/boveda/claude-tres-modelos).
+
+**If in doubt, use Sonnet** (the default). You'll adjust with experience.
+
+### 2. "Why does it sometimes refuse to do something?"
+
+Claude has **safety guidelines** — it refuses things like helping with malicious code, dangerous content, etc. If it refuses something that seems reasonable, **rephrase** it, explaining the context (defensive use, educational, etc.).
+
+Sometimes it gets it wrong and refuses something perfectly fine. It's frustrating but it happens. Rephrasing usually solves it.
+
+### 3. "Is my data private?"
+
+Anthropic's current policy (check the up-to-date version):
+
+- **They don't train on your conversations by default** (consumer)
+- **You delete conversations** from the dashboard
+- **For enterprise** there are stronger guarantees (BAAs, retention policies)
+
+If your data is very sensitive: **read the terms** before pasting it. And consider Claude Code local with your own MCPs if you need zero external data.
+
+### 4. "Why does it hallucinate sometimes?"
+
+All LLMs hallucinate sometimes. Claude does it **less than others but still does**. Especially with:
+- Specific numbers
+- Quotes / references
+- Recent events
+- Niche trivia
+
+**Rule**: for verifiable info, **check it** or ask Claude to flag what it's NOT sure about.
+
+More on this in [three mistakes with AI](/boveda/tres-errores-con-ia).
+
+---
+
+## Typical adoption pattern
+
+How usage evolves for someone just starting out:
+
+### Week 1 — exploratory chat
+
+You ask it a variety of questions and see how useful it is. You decide whether to pay for Pro.
+
+### Weeks 2-4 — daily use
+
+You bring it in as a tool. You start to notice what it's most useful for and what it isn't.
+
+### Month 2 — genuinely productive
+
+You learn to write better prompts. You start using advanced features (artifacts, connectors).
+
+### Month 3 — you build a workflow
+
+If you work with code, you add Claude Code. If you work with docs, you add Cowork. You connect Gmail/Calendar.
+
+### Month 6 — a system
+
+You have your own skills, configured MCPs, automatic hooks. **Claude goes from "a tool I use" to "the infrastructure of my work".**
+
+Most people do NOT reach month 6. Those who do never go back to working the same way.
+
+---
+
+## When it's NOT worth it
+
+Honesty: it's not for everyone.
+
+❌ **If you never use it more than 1-2 times a week**: the paid plan isn't justified
+❌ **If your work is very specific and the outputs don't apply**: research first
+❌ **If you're not willing to iterate on your prompts**: the first versions are always mediocre
+❌ **If you expect magic that "does it all on its own"**: that's not how it works, it requires participation
+
+For anyone who does work with docs, code, or recurring decisions, **the ROI is real**.
+
+---
+
+## Typical first-month mistakes
+
+### 1. Requests that are too open-ended
+
+❌ "Help me with the code"
+✅ "Explain what src/lib/db.ts does in 5 lines"
+
+The more specific, the better.
+
+### 2. Accepting answers without reading them
+
+Claude proposes something, and you copy-paste it to production without looking. **Bad**. Always review.
+
+### 3. Endless sessions
+
+Leaving the session open for 4 hours across 15 different topics. The context gets contaminated. **Use `/clear` between different tasks**.
+
+### 4. Not using the right model
+
+Everything on Sonnet → you burn through your quota. Everything on Opus → you burn through more. Learn the 3 models.
+
+### 5. Expecting immediate perfection
+
+The first 10 prompts of your life with Claude are going to be mediocre. **Don't get frustrated** — you iterate and they improve.
+
+---
+
+## Next steps
+
+- If you want to go deeper on when to use each model, [Claude's 3 models](/boveda/claude-tres-modelos)
+- To understand what a skill, MCP, plugin, or agent is, [Claude's anatomy](/boveda/anatomia-claude)
+- If you're going to bring in Claude Code, [Claude Code setup](/boveda/claude-code-setup-zero) — 10 minutes
+- To avoid the typical mistakes when asking it for things, [three mistakes with AI](/boveda/tres-errores-con-ia)

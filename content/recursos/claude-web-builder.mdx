@@ -1,0 +1,350 @@
+---
+title: "Claude Web Builder — landing pages profesionales en 6 fases automatizadas"
+description: "Generador no-code de landing pages. Respondés preguntas sobre tu negocio en 4 rondas y Claude construye todo: Next.js 15 + Tailwind 4 + shadcn/ui + Framer Motion + SEO + deploy a Vercel. 13 skills pre-instaladas funcionan automáticamente."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude-code", "nextjs", "vercel"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["instant-landing", "claude-disenador-web", "clonador-de-paginas"]
+---
+
+## Qué es
+
+Imaginate un amigo arquitecto. Le decís "quiero casa bonita con 3 cuartos". Te hace preguntas: "¿De qué color? ¿Cuántas ventanas? ¿Con jardín?". Después construye toda la casa mientras tomás café.
+
+**Claude Web Builder** es eso pero para landing pages. Vos respondés preguntas sobre tu negocio, Claude construye **todo**: diseño, animaciones, SEO, deploy a Vercel.
+
+Repo: `Hainrixz/claude-webkit`. Open source.
+
+| Característica | Detalle |
+|----------------|---------|
+| Code requerido | Cero |
+| Idioma de las preguntas | Español |
+| Stack que usa | Next.js 15 + Tailwind 4 + shadcn/ui + TS + Framer Motion |
+| Deploy | Vercel automático |
+| Skills incluidas | 13 pre-instaladas |
+| Tiempo total | 10-30 min |
+
+---
+
+## Las 6 fases automatizadas
+
+| Fase | Qué pasa | Tu trabajo |
+|------|----------|------------|
+| 1 — Preguntas | Claude te entrevista (4 rondas) | Responder en español |
+| 2 — Diseño | Te muestra plan visual | Aprobar o ajustar |
+| 3 — Construcción | Genera componentes | Mirar (opcional) |
+| 4 — Vista previa | Ves la página en navegador | Revisar |
+| 5 — Refinamiento | Pedís cambios | Decir qué cambiar |
+| 6 — Deploy | Publica a Vercel | Un clic |
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado ([instalar Claude Code](/boveda/instalar-claude-code))
+- **Node.js 18+**
+- **Git**
+
+### Verificar
+
+```bash
+node -v && git --version && claude --version
+```
+
+Si los 3 te devuelven versión, estás listo.
+
+---
+
+## Setup en 3 comandos
+
+```bash
+# 1. Descargar
+git clone https://github.com/Hainrixz/claude-webkit.git
+
+# 2. Entrar
+cd claude-webkit
+
+# 3. Iniciar
+claude
+```
+
+Al ejecutar `claude`, detecta automáticamente las 13 habilidades del proyecto y empieza a hacerte preguntas.
+
+---
+
+## Las 6 fases en detalle
+
+### Fase 1 — Preguntas de descubrimiento
+
+4 rondas de preguntas simples:
+
+**Ronda 1 — Negocio**:
+- ¿Qué hacés?
+- ¿Para quién?
+- ¿Cuál es tu propuesta única?
+
+**Ronda 2 — Marca**:
+- ¿Qué tono querés? (profesional, cercano, técnico, divertido)
+- ¿Qué colores te representan?
+- ¿Tenés logo?
+
+**Ronda 3 — Contenido**:
+- ¿Qué secciones necesitás?
+- ¿Tenés copy o que lo genere?
+- ¿CTA principal?
+
+**Ronda 4 — Técnico**:
+- ¿Subdominio o dominio propio?
+- ¿Analytics? (GA4, Plausible)
+- ¿Formulario va a algún endpoint específico?
+
+### Fase 2 — Aprobación de diseño
+
+Antes de codear, Claude te muestra el **plan**:
+- Paleta de colores propuesta
+- Combinación tipográfica
+- Estilo general (clean / bold / editorial)
+- Estructura de secciones
+
+Si te gusta → seguís.
+Si no → "cambiá X por Y" → ajusta → mostra nuevo plan.
+
+### Fase 3 — Construcción automática
+
+Claude empieza a generar:
+- Header / Navbar
+- Hero con CTA principal
+- Sección de servicios/features
+- Testimonios o proof
+- Pricing (si aplica)
+- FAQ
+- Footer
+
+Lo ves construirse **en tiempo real** en el editor. Cada componente sale completo y consistente.
+
+### Fase 4 — Vista previa local
+
+```bash
+npm run dev
+```
+
+Abrís `localhost:3000` y ves tu página completa:
+- Responsive (probá mobile/tablet/desktop)
+- Animations funcionando
+- Forms (modo dev)
+
+### Fase 5 — Refinamiento iterativo
+
+Si algo no convence:
+
+```
+> Cambiá el color del CTA principal a verde
+> Movés la sección de testimonios arriba de pricing
+> Achicá el padding del hero
+```
+
+Claude lo ajusta al instante. Iterás cuantas veces quieras.
+
+### Fase 6 — Deploy a Vercel
+
+```
+> Deploy a Vercel
+```
+
+Claude:
+1. Verifica que el build funcione
+2. Crea cuenta de Vercel si no tenés (te guía)
+3. Configura el proyecto
+4. Deploya
+5. Te entrega URL pública
+
+**Tu página queda en internet con URL real**. Lista para compartir.
+
+---
+
+## Las 13 skills pre-instaladas
+
+Estas se cargan automáticamente al abrir el proyecto:
+
+| Skill | Para qué |
+|-------|----------|
+| Design Methodology | Sistemas de diseño coherentes |
+| Component Architecture | Componentes reutilizables |
+| Performance Optimization | Core Web Vitals |
+| Deployment Automation | Deploy auto a Vercel |
+| Humanizer | Copy que no suena IA |
+| SEO Fundamentals | Meta tags, Open Graph, structured data |
+| Accessibility | A11y, WCAG |
+| Responsive Design | Mobile/tablet/desktop |
+| Animation System | Framer Motion fluido |
+| Content Strategy | Estructura para conversiones |
+| Color Theory | Paletas profesionales |
+| Typography System | Combos tipográficas legibles |
+| Code Quality | Código limpio mantenible |
+
+**Son automáticas**. No las invocás manualmente — Claude las usa cuando las necesita.
+
+---
+
+## Stack que genera
+
+| Tech | Para qué |
+|------|----------|
+| **Next.js 15+** | Framework moderno (lo usan Netflix, Nike) |
+| **Tailwind CSS 4** | Estilos profesionales |
+| **shadcn/ui** | Componentes pre-armados |
+| **TypeScript** | Type safety, menos bugs |
+| **Framer Motion** | Animaciones fluidas |
+
+Es el stack moderno **estándar** para landings premium en 2026.
+
+---
+
+## Casos de uso
+
+### 1. Landing de freelance / consultor
+
+```
+Brief: Soy growth marketer freelance para SaaS.
+Necesito landing que cuente:
+- Mi propuesta
+- Casos pasados
+- Cómo trabajo
+- Cómo contactarme
+
+Estilo: profesional moderno (no corporate aburrido).
+```
+
+20 min después: landing publicable.
+
+### 2. MVP para validar idea
+
+```
+Brief: Idea de SaaS para gestión de inventario.
+Necesito landing para validar interés:
+- Pitch claro del problema
+- Mi solución (sin entrar en detalles técnicos)
+- Form para capturar emails de interesados
+- Sin pricing aún (estamos validando)
+
+Stack: minimalista, fast loading.
+```
+
+### 3. Promo / Black Friday
+
+```
+Brief: Curso de Notion en Black Friday 50% off.
+Landing single-purpose:
+- Hero con countdown
+- Beneficios del curso (5 bullets)
+- 3 testimonios
+- CTA gigante con precio
+- FAQ corto
+
+Sin distracciones. Optimizado para conversión.
+```
+
+### 4. Portfolio personal
+
+```
+Brief: Mi portfolio como UX designer.
+- Hero con statement bold
+- 6 proyectos destacados (case studies)
+- Sobre mí
+- Contacto
+
+Estilo: editorial, mucho whitespace, fuentes serif grandes.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Responder vago a las preguntas
+
+❌ "Una landing bonita"
+✅ Brief específico con audiencia, tono, restricciones
+
+Las preguntas de descubrimiento son **lo más importante** del flow. Si respondés flojo, el output es flojo.
+
+### 2. No iterar
+
+La primera versión es 80%. El 20% final viene de feedback específico. **No aceptes la primera** si no es lo que querés.
+
+### 3. Saltearse la vista previa
+
+Antes de deploy, **siempre** mirá la vista previa. A veces se ve perfecto en desktop pero roto en mobile. Validá los 3 breakpoints.
+
+### 4. Deploy sin verificar formulario
+
+El form de contacto sale **funcional pero conecta a console.log** por default. Si vas a usarlo real, configurá el endpoint **antes** de hacer público.
+
+### 5. Querer multi-página complejo
+
+Web Builder está diseñado para **landing**. Si necesitás site multi-page con muchas rutas (blog, app interna, dashboards), necesitás otro approach.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **Claude Web Builder** | Landing completa con flow no-code |
+| [Instant Landing](/boveda/instant-landing) | Más rápido, una sola ejecución |
+| [Claude diseñador web](/boveda/claude-disenador-web) | Más control, con Playwright validando |
+| [Clonador de páginas](/boveda/clonador-de-paginas) | Si querés clonar diseño existente |
+| Webflow / Framer | Si preferís UI visual no-code paid |
+| Vercel templates | Para devs que prefieren empezar de template |
+
+Sweet spot de Claude Web Builder: **non-devs que quieren landing profesional sin Webflow/Framer**.
+
+---
+
+## Combinaciones potentes
+
+### Con Humanízalo
+
+```
+> Antes de finalizar, pasá todo el copy generado por /humanizalo
+  para que no suene a IA.
+```
+
+[Humanízalo](/boveda/humanizalo) cierra el ciclo.
+
+### Con Claude Banana
+
+```
+> Para las imágenes del hero y secciones, usá [Claude Banana](/boveda/claude-banana)
+  para generar prompts de imagen pro. Después generá las
+  imágenes en Flow y volvemos a integrarlas.
+```
+
+### Con Claude SEO
+
+```
+> Después de deploy, corré /seo-audit en mi nueva landing.
+  Aplicá los quick wins automáticos.
+```
+
+[Claude SEO](/boveda/claude-seo) post-build.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás multi-page complejo | Es para landing |
+| Funcionalidades dinámicas reales (e-commerce, app) | Solo página estática + form |
+| Diseño muy custom fuera de tendencia | Tiende a mainstream moderno |
+| Branding crítico estricto | Para fidelidad total necesitás diseñador |
+
+---
+
+## Próximos pasos
+
+- Para versión más rápida (una sola ejecución), [Instant Landing](/boveda/instant-landing)
+- Para diseño con browser real revisando, [Claude diseñador web](/boveda/claude-disenador-web)
+- Para humanizar el copy post-build, [Humanízalo](/boveda/humanizalo)

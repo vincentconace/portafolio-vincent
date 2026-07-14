@@ -1,0 +1,79 @@
+---
+title: "Setting Disable Telemetry — total privacy (715 installs)"
+description: "Setting with 715 installs. Disables Claude Code telemetry for privacy. Setting `DISABLE_TELEMETRY=1`. Simple and effective for users who don't want data sharing."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-enable-telemetry", "setting-custom-telemetry", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/telemetry/disable-telemetry"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/disable-telemetry.json"
+---
+
+## What it is
+
+A single simple line: `DISABLE_TELEMETRY=1`. Claude Code stops sending usage analytics to Anthropic.
+
+715 installs is high for something so simple — it reflects that many people prefer total privacy.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `telemetry` |
+| Installs | 715 |
+| Env var | `DISABLE_TELEMETRY=1` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting telemetry/disable-telemetry
+```
+
+For Claude:
+
+```
+I installed the telemetry/disable-telemetry setting. Check that the
+env var is set and telemetry isn't being sent.
+```
+
+## What you can do with this
+
+### Total privacy
+
+Your usage stays local. Anthropic doesn't see your patterns.
+
+### Compliance
+
+Some countries / orgs require not sending metrics to external services. This setting complies.
+
+### For sensitive data
+
+If you work with regulated projects, you avoid any risk of metrics leaking info.
+
+### Anti vs [Enable Telemetry](/boveda/setting-enable-telemetry)
+
+These two settings are opposites. Only install one depending on your preference.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you want to help improve Claude Code:** telemetry gives signal to Anthropic. Trade-off privacy vs feature improvements.
+- **If your org requires telemetry:** this setting conflicts.
+- **For users who appreciate opt-in transparency:** [Enable Telemetry](/boveda/setting-enable-telemetry) makes it explicit that you're opting in.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Disable Telemetry Setting](https://www.aitmpl.com/component/settings/telemetry/disable-telemetry) — exact command.
+- **JSON config:** [disable-telemetry.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/disable-telemetry.json).
+
+## Related resources
+
+- [Enable Telemetry Setting](/boveda/setting-enable-telemetry) — the opposite opt-in.
+- [Custom Telemetry Setting](/boveda/setting-custom-telemetry) — to send to your own endpoint instead of Anthropic.
+- [Anatomy of Claude](/boveda/anatomia-claude) — privacy patterns.

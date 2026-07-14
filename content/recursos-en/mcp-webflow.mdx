@@ -1,0 +1,100 @@
+---
+title: "MCP Webflow — operate Webflow sites from Claude Code"
+description: "MCP server with 141 installs for the Webflow API. Lets Claude operate Webflow sites: items, collections, pages, publishing. For shops that live in Webflow and want AI orchestrating content."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "webflow"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-notion", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/webflow"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/webflow.json"
+---
+
+## What it is
+
+[Webflow](https://webflow.com) is a visual no-code site builder widely used for marketing sites, landing pages and portfolios. Its API allows programmatic management of the CMS, collections, items and publishing.
+
+This MCP connects that API to Claude Code. Useful when your Webflow site is the source of truth for content and you want Claude to operate without opening the designer.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 141 |
+| MCP server | `webflow` |
+| Account required | Yes — Webflow + API key |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/webflow
+```
+
+Prerequisite: a Webflow account + API token from [webflow.com/dashboard/account/integrations](https://webflow.com/dashboard/account/integrations).
+
+For Claude:
+
+```
+I installed the devtools/webflow MCP. Configure the API token. List my
+sites. For site X, show me the collections and a sample of items for
+each one.
+```
+
+## What you can do with this
+
+### CMS automation
+
+"For my site Y, add these 20 items to the `Blog Posts` collection from my CSV." Bulk import without opening the designer.
+
+### Sync with code
+
+"From the PRs I closed with the `release-notes` label, generate an item in the `Changelog` collection with a title, date and summary of the change."
+
+### Mass update
+
+"In the `Products` collection, update the `price` field by multiplying it by 1.15 (a 15% increase) for the items in category X."
+
+### Programmatic publishing
+
+"After updating items, publish the changes to the live domain." No manual clicking.
+
+### Content audit
+
+"List items in the `Blog Posts` collection with no featured image or no meta description. For SEO matters."
+
+### Sync between [Notion](/boveda/mcp-notion) and Webflow
+
+A "draft in Notion, publish in Webflow" pipeline. The MCP makes it easy.
+
+## Prerequisites
+
+- **Active Webflow account**
+- **API token** with the correct scopes
+- **Sites and collections** already structured
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Webflow:** for WordPress, Ghost, Sanity, use other MCPs.
+- **Destructive operations:** delete items / collections / sites. Use approval hooks.
+- **API rate limits:** Webflow has quotas. Bulk ops can get you blocked.
+- **If your use is design only:** the MCP is for the CMS and API. To touch things visually, use the designer.
+- **For small sites:** Webflow's UI is good. The MCP shines when you manage many items or sites.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Webflow MCP](https://www.aitmpl.com/component/mcps/devtools/webflow) — exact command.
+- **JSON config:** [webflow.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/webflow.json).
+- **Webflow API:** [developers.webflow.com](https://developers.webflow.com).
+
+## Related resources
+
+- [Notion MCP](/boveda/mcp-notion) — for content sync. Notion drafting → Webflow publishing.
+- [Agency Agents](/boveda/agency-agents) — for orchestrating cross-platform content pipelines.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place this MCP as an external connector.

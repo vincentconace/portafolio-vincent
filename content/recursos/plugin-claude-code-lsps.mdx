@@ -1,0 +1,133 @@
+---
+title: "Claude Code LSPs — language servers reales adentro de Claude Code"
+description: "Marketplace de Piebald-AI (357⭐) con 26 plugins que meten LSP servers (vtsls, rust-analyzer, pyright, gopls, clangd, ruby-lsp, dart, etc.) dentro de Claude Code. Code intelligence de verdad, no adivinanza."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["instalar-claude-code", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-code-lsps"
+github: "https://github.com/Piebald-AI/claude-code-lsps"
+---
+
+## Qué es
+
+Claude Code, por default, no usa un Language Server Protocol propio. Cuando pregunta por tipos, definiciones o referencias, lo hace leyendo archivos y dedduciendo — funciona, pero a veces se equivoca o pierde tiempo buscando lo que un LSP daría en milisegundos.
+
+Este marketplace de Piebald-AI mete LSP de verdad. 26 plugins, uno por cada language server importante. Cuando los activás, Claude consulta el LSP igual que VS Code, JetBrains o Neovim: tipos exactos, definiciones reales, referencias precisas, diagnostics en tiempo real.
+
+El resultado: Claude Code deja de "adivinar" qué hace una función y empieza a "consultar" el LSP. Si tu lenguaje tiene type system serio (TypeScript, Rust, Go, C++, Java, C#), es un cambio cualitativo grande.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | Piebald-AI |
+| Stars | 357 |
+| Tipo | Marketplace (26 plugins) |
+| Componentes | 29 LSPs |
+| Marketplace | `Piebald-AI/claude-code-lsps` |
+
+### Los language servers disponibles
+
+| Lenguaje | LSP | Plugin |
+| --- | --- | --- |
+| TypeScript/JavaScript | vtsls | `vtsls` |
+| Rust | rust-analyzer | `rust-analyzer` |
+| Python (typing estricto) | pyright | `pyright` |
+| Python (más estricto) | basedpyright | `basedpyright` |
+| Go | gopls (oficial) | `gopls` |
+| Java | Eclipse JDT | `jdtls` |
+| C / C++ | clangd | `clangd` |
+| Ruby | ruby-lsp (Shopify) | `ruby-lsp` |
+| HTML / CSS | vscode-langservers | `vscode-langservers` |
+| PHP | phpactor | `phpactor` |
+| C# / .NET | omnisharp | `omnisharp` |
+| PowerShell | PS Editor Services (oficial) | `powershell-editor-services` |
+| Kotlin | kotlin-lsp (JetBrains) | `kotlin-lsp` |
+| LaTeX | texlab | `texlab` |
+| Vue | Volar | `vue-volar` |
+| Svelte | svelte-lsp | `svelte-lsp` |
+| Dart / Flutter | dart | `dart` |
+| Solidity | solidity-ls (Foundry) | `solidity-language-server` |
+| Scala | metals | `metals` |
+| OCaml | ocaml-lsp | `ocaml-lsp` |
+| Julia | LanguageServer.jl | `julia-lsp` |
+| Ada / SPARK / GPR | ada-language-server | `ada-language-server` |
+| Lean 4 (Lake) | lake-lsp | `lean4-lake-lsp` |
+| Lean 4 (standalone) | lean-lsp | `lean4-lean-lsp` |
+| 1C:Enterprise / OneScript | BSL LSP | `bsl-lsp` |
+| mdbase | mdbase-lsp | `mdbase-lsp` |
+
+## Cómo se instala
+
+```bash
+# 1) Agregar el marketplace
+/plugin marketplace add Piebald-AI/claude-code-lsps
+
+# 2) Instalar solo los LSPs de los lenguajes que usás
+/plugin install vtsls@Piebald-AI-claude-code-lsps
+/plugin install rust-analyzer@Piebald-AI-claude-code-lsps
+/plugin install pyright@Piebald-AI-claude-code-lsps
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalé el marketplace Piebald-AI/claude-code-lsps. Mi stack principal es
+[TypeScript / Rust / Python / Go / etc.]. Decime qué LSPs de los 26 me
+convienen instalar y por qué.
+```
+
+## Qué podés hacer con esto
+
+### Refactor de TypeScript que no rompe nada
+
+Con `vtsls` activo, cuando pedís a Claude renombrar un símbolo o cambiar un type, el LSP le dice exactamente dónde está usado. Renames atómicos de verdad, no "find and replace con suerte".
+
+### Rust serio con borrow checker honesto
+
+`rust-analyzer` es el LSP de referencia para Rust. Cuando Claude propone un cambio, ya sabe si va a chocar con borrow checker antes de proponerlo. Te ahorra muchas iteraciones "ah, esto no compila".
+
+### Python con tipos exactos
+
+`pyright` o `basedpyright` te dan inferencia de tipos al nivel de Pylance. Para codebases con `mypy`/`pyright` estricto, es la única forma de que Claude no escupa código que pase el linter humano pero falle el type-check.
+
+### Go, Java, C#, C++ con su LSP oficial
+
+Cada uno trae el LSP que la empresa o comunidad mantiene como referencia: `gopls` (oficial Go), `jdtls` (Eclipse), `omnisharp` (.NET), `clangd` (LLVM). No son adaptaciones — son los servidores reales.
+
+## Beneficios reales
+
+- **Code intelligence real**, no aproximada.
+- **Renames seguros** en lenguajes tipados.
+- **Diagnostics en tiempo real** — Claude sabe que algo está roto antes de proponerlo.
+- **LSPs oficiales / canonical** de cada comunidad, no forks raros.
+- **Granular** — instalás solo los lenguajes que usás.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu proyecto es JavaScript puro sin tipos:** vtsls igual sirve, pero el valor cae. El LSP brilla con tipos.
+- **Si tu lenguaje no está en la lista:** no inventes — no hay nada que reemplace. Esperá o pedí un PR al repo.
+- **Recursos:** algunos LSPs (rust-analyzer, jdtls, clangd) consumen RAM. Si tu máquina ya está apretada, andá uno por vez.
+- **Setup inicial:** cada LSP puede requerir el binario instalado en el sistema (rustup, java, go). El plugin lo conecta, no lo descarga por vos.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Claude Code LSPs](https://www.aitmpl.com/plugins/claude-code-lsps) — listado completo de los 26 plugins.
+- **Repo en GitHub:** [Piebald-AI/claude-code-lsps](https://github.com/Piebald-AI/claude-code-lsps) — código, issues, instalación de prereqs.
+- **Anuncio en Reddit:** [r/ClaudeAI · LSP is coming to Claude Code](https://www.reddit.com/r/ClaudeAI/comments/1otdfo9/lsp_is_coming_to_claude_code_and_you_can_try_it/) — contexto del proyecto.
+
+## Recursos relacionados
+
+- [Instalar Claude Code](/boveda/instalar-claude-code) — los pasos previos. LSPs requieren Claude Code 2.x o superior.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — qué meter en `CLAUDE.md` para sacarle jugo a los LSPs cuando ya están activos.
+- [Anatomía de Claude](/boveda/anatomia-claude) — ubica los LSPs como "plugins" en el mapa mental general.

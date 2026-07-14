@@ -1,0 +1,325 @@
+---
+title: "Claude as a web designer — 4 tools that give it its own eyes"
+description: "Combine the Frontend Design Skill (aesthetic rules), Magic UI MCP (animated components), shadcn/ui MCP (accessible components) and Playwright CLI (gives it eyes). Claude designs, looks at its own work in a real browser, and fixes itself. Setup in 4 steps."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills", "mcp", "playwright"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["5-skills-diseno-claude", "stitch-diseno-ia", "claude-animador-web"]
+---
+
+## The premise
+
+Claude can generate UI out of the box, but:
+
+- **It doesn't know how to design something beautiful** without specific aesthetic context
+- **It has no catalog** of components to choose from
+- **It can't see what it generates** (it writes code blind)
+
+Four tools combined solve all three problems:
+
+| Tool | Role |
+|-------------|-----|
+| **Frontend Design Skill** | Gives it good design rules (typography, color, motion, composition, details) |
+| **Magic UI MCP** | Catalog of animated components (marquees, blur-fades, hero sections) |
+| **shadcn/ui MCP** | Catalog of accessible components (buttons, forms, cards) |
+| **Playwright CLI** | Gives it EYES — opens a real browser to review its work |
+
+The result: Claude designs, opens a browser, evaluates, fixes itself. It iterates until it matches.
+
+---
+
+## Prerequisites
+
+- **Claude Code installed** ([setup zero](/boveda/claude-code-setup-zero))
+- **Node 18+** (`node --version`)
+- **Frontend project** (Next.js, React, Vue, etc.)
+
+---
+
+## Step 1 — Frontend Design Skill
+
+Teaches Claude **how to design something beautiful**. Without this skill, the designs are generic.
+
+```bash
+claude plugin add anthropics/claude-code/plugins/frontend-design
+```
+
+### What it adds
+
+Deep knowledge across 5 aesthetic dimensions:
+
+| Dimension | Covers |
+|-----------|-------|
+| **Typography** | Hierarchy, spacing, fonts |
+| **Color** | Palettes, contrast, harmony |
+| **Motion** | Transitions, micro-interactions |
+| **Spatial composition** | Grids, whitespace, balance |
+| **Details** | Borders, shadows, textures |
+
+Without this, Claude uses "basic Tailwind class + gray" defaults. With it, **it proposes aesthetic decisions with taste**.
+
+---
+
+## Step 2 — Magic UI MCP
+
+Catalog of premium animated components:
+
+- **Marquee** (text/images scrolling horizontally)
+- **Blur Fade** (smooth entrances)
+- **Hero sections** with interaction
+- **Bento Grid** (grids with asymmetric cards)
+- **Animated Beam** (lines connecting elements)
+- 50+ more components
+
+```bash
+npx @magicuidesign/cli@latest install claude
+```
+
+Manual configuration in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "magicuidesign-mcp": {
+      "command": "npx",
+      "args": ["-y", "@magicuidesign/mcp@latest"]
+    }
+  }
+}
+```
+
+**After adding it, restart Claude Code**. Verify with `/mcp` that Magic UI shows up as connected.
+
+---
+
+## Step 3 — shadcn/ui MCP
+
+Another catalog — **accessible components**:
+
+- Complete forms with validation
+- Buttons with variants
+- Cards, dialogs, popovers
+- Tables, data display
+- Navigation
+
+Both catalogs combined = a huge catalog. shadcn complements the "accessible/functional" side, Magic UI the "aesthetic/animated" side.
+
+```bash
+pnpm dlx shadcn@latest mcp init --client claude
+```
+
+Or manually in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    }
+  }
+}
+```
+
+---
+
+## Step 4 — Playwright CLI
+
+Without this, Claude **writes code blind**. It has no idea whether what it built actually looks the way it should.
+
+Playwright lets it:
+- Open pages in a real Chrome
+- Take snapshots and screenshots
+- Click, scroll, hover
+- Fill out forms to test
+- Compare before vs after
+
+```bash
+npm install -g @anthropic-ai/claude-code-playwright
+npx playwright install chromium
+```
+
+---
+
+## The full flow
+
+### Example 1 — Design a landing from scratch
+
+```
+> Design me a modern landing page for an AI startup.
+
+  Use:
+  - Magic UI for the hero and feature section animations
+  - shadcn for buttons, forms, footer
+
+  When you're done:
+  1. Open http://localhost:3000 with Playwright
+  2. Take a screenshot
+  3. Evaluate it against your own good-design criteria
+  4. If something doesn't look good, fix it
+  5. Iterate up to 3 rounds max
+
+  Project stack: Next.js 16 + Tailwind v4
+```
+
+Claude:
+1. Applies the Frontend Design Skill (plans palette, typography, hierarchy)
+2. Builds with Magic UI + shadcn components
+3. Opens Playwright → takes a screenshot
+4. **Self-evaluates**: "the hero looks good, but the features section has weak hierarchy"
+5. Fixes it
+6. Re-screenshots
+7. Repeats until satisfied
+
+### Example 2 — Improve an existing design
+
+```
+> Open http://localhost:3000 with Playwright. Review the current
+  design.
+
+  Improve the hero section using animated components from Magic UI.
+  Keep the current copy.
+
+  Verify the result with another screenshot. If your change makes
+  something worse, revert it.
+```
+
+### Example 3 — Migrate the UI to a new aesthetic
+
+```
+> My current app has a "generic B2B SaaS" look (blue + Inter +
+  flat cards).
+
+  I want to migrate to a "Linear" aesthetic (black + monochrome +
+  keyboard-first + subtle animations).
+
+  Steps:
+  1. Open each main route with Playwright + screenshot
+  2. For each one, propose a migration
+  3. Apply the changes while preserving functionality
+  4. Verify each change with a new screenshot
+```
+
+---
+
+## Why the combination is powerful
+
+### Without Playwright
+
+Claude designs → you open the browser → you judge → you tell it what to change → manual loop.
+
+### With Playwright
+
+Claude designs → Claude opens the browser → Claude judges → Claude changes → you only validate at the end.
+
+**The multiplier isn't 2x. It's 10x**, because each iteration goes from "5 min of your time" to "30s of the agent's".
+
+---
+
+## Tips for better results
+
+### 1. Use Plan Mode before designing
+
+`Shift+Tab` before the prompt → Claude plans **structure, palette, components** before generating. A better design than improvising.
+
+### 2. Specificity wins
+
+Bad: "make a landing"
+
+Good: "landing for an **API security** startup, audience **B2B CTOs**, colors **dark with toxic-green accents**, mood **authoritative but approachable**, visual references: **Linear + the Tailwind site**"
+
+More context → better output.
+
+### 3. Tell it to iterate autonomously
+
+```
+> ...After generating, open Playwright, evaluate it yourself,
+  do 2-3 rounds of corrections without asking me for approval.
+```
+
+If you don't spell it out, Claude tends to ask you for feedback every round (unnecessarily).
+
+### 4. Combine catalogs explicitly
+
+```
+> Use Magic UI for animations and shadcn for forms.
+  NEVER mix components (no shadcn marquee, no Magic UI form).
+```
+
+Each catalog shines in its own area. Mixing badly creates inconsistencies.
+
+### 5. Set budgets
+
+```
+> Max 3 iteration rounds. If after 3 something still looks
+  ugly, stop and tell me what's blocking you.
+```
+
+Without a budget, Claude may iterate 8+ times over minor details.
+
+---
+
+## Anti-patterns
+
+### 1. Starting without Plan Mode
+
+Without a plan first, Claude **starts coding without a coherent aesthetic**. The result is inconsistent across sections.
+
+### 2. Not reading the screenshots
+
+Claude takes screenshots and judges them, but **always review it yourself at the end**. Self-evaluation is good but not perfect — sometimes it thinks something looks fine when it doesn't.
+
+### 3. Asking for "make it pixel perfect with this reference"
+
+Pixel perfect requires manual intervention or specialized tools. Claude gets to 80-90%, not 100%.
+
+### 4. Mixing 4 different catalogs
+
+Magic UI + shadcn is balanced. If you add 2 more (Aceternity, Headless UI), visual coherence breaks.
+
+### 5. Ignoring the project context
+
+If your app is a serious financial B2B product and you ask for a "bento brutalist" aesthetic, **it's going to clash with your audience**. The skill doesn't judge whether your request is coherent with your product — you have to.
+
+---
+
+## Powerful combinations
+
+### With the Page Cloner
+
+First you clone the structure:
+
+```
+> /clone-website https://stripe.com
+```
+
+The [Page Cloner](/boveda/clonador-de-paginas) gives you the scaffold. Then you use the **web designer** setup to adapt it to your brand with your catalogs.
+
+### With Stitch MCP
+
+[Stitch](/boveda/stitch-diseno-ia) generates designs from text (Google models). You use it to **explore concepts** quickly, then the **web designer** setup implements it in code.
+
+### With humanizer
+
+If your landing copy came from Claude, run it through [Claude Copywriter](/boveda/claude-copywriter) before finalizing.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| Highly custom / experimental design | Claude tends toward "consensus design" |
+| App with an established unusual visual identity | The catalogs assume mainstream trends |
+| UX research required | It's visual design, not research |
+| Collaborative work with a senior designer | More friction than value |
+
+---
+
+## Next steps
+
+- For the full design suite inside Claude, [5 design skills](/boveda/5-skills-diseno-claude)
+- For animations specifically, [Claude as a web animator](/boveda/claude-animador-web)
+- For designs from Google Stitch, [Stitch MCP](/boveda/stitch-diseno-ia)

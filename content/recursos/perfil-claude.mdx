@@ -1,0 +1,290 @@
+---
+title: "Perfil de Claude — system prompt permanente para todos tus chats"
+description: "Claude tiene un lugar (Settings → Profile) donde le decís UNA VEZ quién sos, qué hacés y cómo querés que responda. Lo aplica a TODAS las conversaciones, en todos los planes (hasta free). Setup en 30 segundos + plantilla copy-paste."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "4 min"
+relatedSlugs: ["hablarle-a-claude", "configura-claude-ahorra", "claude-cowork-workflow"]
+---
+
+## Qué es
+
+Claude tiene un lugar donde **una vez** le decís:
+- Quién sos
+- Qué hacés
+- Cómo querés que te responda
+
+Lo aplica a **TODAS** tus conversaciones. Es como **system prompt permanente** que Claude respeta en cada chat.
+
+Funciona en **todos los planes**, hasta en el gratis.
+
+---
+
+## Setup en 30 segundos
+
+1. Abrí `claude.ai` en el navegador
+2. Click en el **ícono abajo a la izquierda** (tu nombre/avatar)
+3. **Settings** (o Configuraciones)
+4. Sección **Profile** (Perfil)
+5. Escribí tu perfil → **Guardar**
+
+---
+
+## Qué incluir
+
+### Quién sos
+
+- Nombre y rol
+- Industria o nicho
+- Nivel técnico
+
+### Cómo querés las respuestas
+
+- Idioma
+- Tono (formal, casual, directo)
+- Largo (cortas, detalladas)
+- Formato (bullets, párrafos, código comentado)
+
+### Qué NO hacer
+
+- "No uses 'excelente pregunta'"
+- "No repitas mi pregunta"
+- "Sin tecnicismos innecesarios"
+- "Sin frases de relleno"
+
+### Código (opcional)
+
+- Stack principal
+- Estilo de código preferido
+- Si querés comentarios en el código
+
+---
+
+## Lo más poderoso — las restricciones
+
+Las reglas de lo que **NO** debe hacer son lo que **más transforma la experiencia**.
+
+Claude respeta restricciones **mejor que** instrucciones positivas. Si le decís "no empieces con 'excelente pregunta'", obedece al 100%.
+
+---
+
+## Plantilla copy-paste
+
+```
+Sobre mí:
+- Soy [TU NOMBRE], [TU ROL] en industria de [TU INDUSTRIA]
+- Nivel técnico: [básico / intermedio / avanzado / experto]
+- Trabajo con: [TU STACK / HERRAMIENTAS]
+
+Cómo responderme:
+- Idioma: español [neutro / Latam / España]
+- Tono: directo, profesional pero cercano
+- Formato: bullets para listas, párrafos cortos para explicaciones
+- Largo: conciso por default, detallado si pido "a fondo"
+- Código: comentado solo donde el "por qué" no sea obvio
+
+NO hagas:
+- NO empieces con "claro", "excelente pregunta" ni preámbulos
+- NO repitas mi pregunta antes de responder
+- NO uses emojis en respuestas técnicas
+- NO uses frases de relleno tipo "como puedes ver"
+- NO termines con "espero que esto te haya sido útil"
+- NO uses puntos suspensivos
+- NO uses guiones largos (—)
+
+Cuando dude:
+- Si falta info, preguntame en lugar de inventar
+- Si hay 2-3 enfoques válidos, mostrame los tradeoffs en vez
+  de elegir uno
+- Si lo que pido tiene problemas obvios, decímelo antes de
+  implementar
+```
+
+Adaptá los `[corchetes]` a tu caso.
+
+---
+
+## Ejemplos según rol
+
+### Para dev senior
+
+```
+- Soy dev backend senior en SaaS B2B
+- Stack: TypeScript + Node + Postgres + Vercel
+- 8 años de experiencia, no necesito explicaciones básicas
+
+Respuestas:
+- Asumí que conozco patrones comunes (DI, Repository, etc.)
+- Mostrame código directo, sin pseudo-código preliminar
+- Si recomendás librería, justificá por qué vs alternativas
+- TypeScript strict mode siempre
+
+NO hagas:
+- NO me expliques conceptos de programación básica
+- NO me digas "según las mejores prácticas..." — decime CUÁL
+  práctica y por qué
+- NO uses any en TypeScript
+```
+
+### Para founder no-técnico
+
+```
+- Founder de [NICHO], no programo
+- Uso Claude para investigación, escritura, estrategia
+- Mi audiencia: [TARGET]
+
+Respuestas:
+- Lenguaje claro sin tecnicismos
+- Si necesitás términos técnicos, explicalos en 1 línea
+- Estructura: TL;DR primero + detalles después
+- Ejemplos concretos > teoría
+
+NO hagas:
+- NO uses jerga sin explicar
+- NO me sugieras herramientas paid sin avisar el costo
+- NO hagas asunciones sobre mi stack tech (no tengo)
+```
+
+### Para creator de contenido
+
+```
+- Creator de contenido [NICHO], LATAM
+- 50k followers Instagram, 20k TikTok
+- Vendo curso de [TEMA]
+
+Respuestas:
+- Español Latam, sin formalismos
+- Foco en lo accionable
+- Cuando propongas algo, dame el "por qué" en 1 línea
+- Métricas reales cuando aplique
+
+NO hagas:
+- NO uses palabras de IA (panorama, navegar, profundizar)
+- NO me digas "esto va a ser viral" sin razón concreta
+- NO sugieras tools premium sin alternativa gratis
+```
+
+### Para marketer
+
+```
+- Soy Head of Growth de SaaS B2B Series A
+- Stack: HubSpot + Mixpanel + Stripe + Webflow
+- Foco actual: bajar CAC, subir LTV
+
+Respuestas:
+- Conciso, profesional
+- Bullet points para acciones
+- Si proponés experimento, dame: hipótesis + métrica + duración
+- Si referenciás benchmarks, citá fuente
+
+NO hagas:
+- NO me digas "depende" sin proponer opciones
+- NO copies playbooks genéricos sin adaptar a mi contexto
+- NO uses lenguaje motivacional
+```
+
+---
+
+## Por proyecto vs global
+
+### Perfil global (claude.ai Settings)
+
+Aplica a TODAS las conversaciones. Para preferencias **personales** generales.
+
+### Proyecto específico ([Projects](/boveda/configura-claude-ahorra))
+
+Aplica solo dentro de ese Project. Para contexto **específico de un cliente / producto / tema**.
+
+**Combinar**: perfil global con tus preferencias generales + Project con contexto específico = override fino.
+
+---
+
+## Anti-patrones
+
+### 1. Perfil vago
+
+❌ "Soy dev, me gusta el código limpio"
+✅ "Soy dev backend Node + TS, estilo: sin abstracciones prematuras, tests obligatorios para business logic"
+
+### 2. Solo instrucciones positivas
+
+Las restricciones (NO hacer) son MÁS efectivas. Incluí mínimo 5.
+
+### 3. Perfil de 500 palabras
+
+Después de cierto largo, **Claude lo procesa parcialmente**. Mantenelo en 100-300 palabras.
+
+### 4. Olvidar actualizar
+
+Tu rol/stack/preferencias cambian. **Revisá cada 3-6 meses** y actualizá.
+
+### 5. Conflictos con CLAUDE.md de proyecto
+
+Si Perfil dice "responde en inglés" y CLAUDE.md de proyecto dice "responde en español", Claude se confunde. **Coordiná los 2**.
+
+---
+
+## Casos donde el Perfil cambia TODO
+
+### Antes (sin perfil afinado)
+
+```
+> ¿Cuál es la mejor librería para validación?
+
+Claude: ¡Excelente pregunta! Existen varias librerías para
+validación en JavaScript. Cada una tiene sus pros y contras.
+Vamos a explorar las opciones más populares:
+
+1. Zod - Una librería moderna y type-safe...
+[3 párrafos más]
+
+Espero que esto te haya ayudado. ¿Necesitás más información?
+```
+
+### Después (con perfil afinado)
+
+```
+> ¿Cuál es la mejor librería para validación?
+
+Claude: Zod. Type-safe, integra con TS strict, runtime + compile
+checks. Alternativas: yup (menos type-safe), valibot (más rápido,
+inmaduro).
+```
+
+**80% menos tokens, 100% más útil**.
+
+---
+
+## Combinaciones potentes
+
+### Con CLAUDE.md por proyecto
+
+Perfil global + CLAUDE.md específico = reglas en capas. Lo más general en perfil, lo específico en CLAUDE.md.
+
+### Con Hablarle a Claude
+
+[Hablarle a Claude](/boveda/hablarle-a-claude) son los 4 elementos por prompt. El Perfil los **pre-aplica** a todos tus chats.
+
+### Con 5 configuraciones
+
+[Configura Claude y ahorrá](/boveda/configura-claude-ahorra) — Perfil es 1 de las 5. **Empezá por ahí**.
+
+---
+
+## Por qué la mayoría no lo usa
+
+- **No saben que existe** (Settings está escondido)
+- **Asumen que solo funciona en Pro** (funciona en Free también)
+- **Piensan que es solo "personalización cosmética"** (es system prompt funcional)
+
+**Después de configurarlo, no querés Claude sin perfil**.
+
+---
+
+## Próximos pasos
+
+- Para más configuraciones que duplican rendimiento, [configura Claude y ahorrá](/boveda/configura-claude-ahorra)
+- Para entender por qué un buen prompt importa por interaction, [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para usar Cowork con tus perfiles, [Cowork workflow](/boveda/claude-cowork-workflow)

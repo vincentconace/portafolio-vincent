@@ -1,0 +1,240 @@
+---
+title: "A trio of skills for Claude Code — think, plan, polish"
+description: "Three skills used in order that cover the gaps where AI-built apps break: one interrogates you before writing any code, another builds the plan and isolates each function, another strips the AI look off the design. The sequence matters."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-15"
+readingTime: "11 min"
+relatedSlugs: ["cinco-skills-necesarias", "spec-kit", "skill-code-reviewer"]
+---
+
+## Why three
+
+Almost everyone who uses Claude Code goes through the same thing: the app starts off fine, and two days later it breaks. It's not that Claude programs badly — it's that **it's missing 3 skills it doesn't ship with**, and the three gaps are different:
+
+1. **The misunderstanding at the start** — Claude understands something different from what you wanted
+2. **New code that clobbers the old** — the changes break what was already working
+3. **The design that screams "an AI made this"** — purple gradients, Inter everywhere, nested cards
+
+There are 3 skills, each one covering one of those gaps. The key point: **you use them in order**. Think → Plan → Polish. Skipping steps means the later ones can't deliver their value.
+
+| Step | Skill | Gap it covers |
+|------|-------|----------------|
+| 1. Think | Grill Me | The misunderstanding at the start |
+| 2. Plan | OpenSpec | New code that breaks the old |
+| 3. Polish | Impeccable | The AI look in the design |
+
+---
+
+## 1. Think — Grill Me
+
+Before writing a single line, you run the skill and Claude **interrogates you**. It asks one question at a time:
+
+- What exactly do you want to build?
+- Who is it for?
+- What are the edge cases?
+- **What should it NOT do?** ← the most important one
+
+It doesn't write code until the scope is clear **to you** and put into words.
+
+### Why it works
+
+If you skip this step, Claude doesn't sit still: it builds what **it imagined**. Most projects don't get ruined during programming — they get ruined in the misunderstanding of the first minute.
+
+When you answer the questions, two things happen:
+
+1. **You close your own ambiguity** — you realize you didn't have a clear answer. Better to find out before coding than after.
+2. **You hand the context to Claude in a structured way** — everything answered becomes formal input for the spec, not lost in a free-form paragraph.
+
+### When it's overkill
+
+Small, obvious tasks ("add a comment to this function") don't need an interrogation. The skill is for **the start of a new feature or module**, not for trivial edits.
+
+### Mental pattern
+
+It's the skill version of the [executive PRD](/boveda/prompts-prd-ejecutivo) at a small scale. Same principle: **clarify before executing**.
+
+---
+
+## 2. Plan — OpenSpec
+
+Once the scope is clear (thanks to Grill Me), `openspec` builds a **folder** with:
+
+- The plan in numbered steps
+- The specs per function / module
+- Proposed tests per unit
+- An expected file structure
+
+And most importantly: **it isolates each function** so new changes don't clobber the old ones.
+
+### How it isolates
+
+The pattern: each unit of change has a declared "contract" (input/output) and a set of tests. When Claude implements unit N, it's forced to **not modify units 1..N-1 that already have their tests passing**.
+
+If it needs to change something in an earlier unit, it has to:
+
+1. Explicitly declare that it's going to do so
+2. Verify that the new change doesn't break the existing tests
+3. Update the corresponding spec
+
+It sounds heavy, but it **prevents the classic problem**: "I added feature B and it broke feature A, which was already working."
+
+### When it helps most
+
+- Projects with several features built sequentially
+- Work where the initial spec is small but grows (without this, the spec becomes a patch on top of patches)
+- Teams where more than one person touches the same module
+
+### When NOT to
+
+One-shot scripts, quick prototypes, exploration. The overhead of maintaining structured specs isn't justified.
+
+### It complements the spec-kit
+
+If you already read [spec-driven development with Claude](/boveda/spec-kit), OpenSpec is **an opinionated implementation** of the same principle. The difference: the spec-kit is a mental pattern; OpenSpec is a skill that applies the pattern with its own folder structure.
+
+---
+
+## 3. Polish — Impeccable
+
+The final part. It brings **20+ commands** to clean up the visual tells that give away that the code came from AI.
+
+### What it fixes
+
+| AI tell | What Impeccable does |
+|-------------|----------------------|
+| Everything in Inter | Suggests typography combinations |
+| Generic purple/blue gradients | Proposes more interesting palettes |
+| Cards nested inside cards | Flattens the hierarchy |
+| Inconsistent padding | Standardizes with a scale (4/8/12/16/24/32) |
+| Rounded corners to the LLM's taste | Defines a coherent radius system |
+| Buttons with almost the same visual weight | Differentiates primary/secondary/ghost |
+| Emojis in every section | Asks you which one is necessary |
+| Glassmorphism everywhere | Reserves it for where it adds value |
+
+### How to use it
+
+It's not a single command — there are 20+. Some are automatic ("audit and fix everything"), others are specific ("remove emojis from the header", "unify the typography system").
+
+```
+> /impeccable audit
+[lists the detected problems]
+
+> /impeccable fix typography
+[unifies the typography system]
+
+> /impeccable fix radius
+[standardizes border-radius]
+```
+
+### Common trap
+
+If you didn't do step 1 (Grill Me) and step 2 (OpenSpec), polishing is makeup over a broken skeleton. If the app works badly, it doesn't matter that it has nice typography.
+
+---
+
+## The full flow — an example
+
+Imagine you're going to build a new landing page for your SaaS product. The ideal sequence:
+
+### Day 1: Think
+
+```
+> /grill-me
+
+Claude:
+  What's the main goal of this landing page?
+  > Convert visitors into trial signups.
+
+  What action do you define as a conversion, exactly?
+  > Email submit in the hero form.
+
+  What should the landing page NOT do?
+  > Don't show pricing (that goes on the /pricing page). No heavy navbar
+    that distracts. Don't use technical language.
+
+  Who is the primary visitor?
+  > Early-stage startup founder, wants speed, non-technical.
+
+  ... [15 minutes of interrogation]
+```
+
+At the end you have a written brief that Claude understands, and so do you.
+
+### Day 2: Plan
+
+```
+> /openspec plan landing
+
+Claude:
+  I'm going to structure the work into these steps:
+  1. Hero with email capture (specs: ...)
+  2. Social proof section (specs: ...)
+  3. Features block (3 max)
+  4. Testimonial
+  5. Final CTA
+
+  I'll generate the folder docs/specs/landing/ with each one separated.
+  I'll isolate the components — the hero doesn't touch the rest, the
+  features block doesn't touch the hero, etc.
+```
+
+### Days 3-4: Implement
+
+Here there's no special skill — it's regular Claude Code, but **guided by the specs** from the previous step. Each implemented feature respects its contract.
+
+### Day 5: Polish
+
+```
+> /impeccable audit landing/
+
+Claude:
+  I found:
+  - Hero: Inter typography throughout, I propose Inter + Lora to differentiate
+  - 4 different shadows on cards, we'll unify them
+  - Padding between sections varies 48px–96px with no pattern
+  - Primary and secondary buttons almost identical
+
+> /impeccable fix all
+```
+
+And you end up with a landing page that doesn't look "made by AI in 4 hours."
+
+---
+
+## When the trio is more than you need
+
+Three cases:
+
+### 1. Trivial edits
+
+If you're going to rename a variable or add a comment, you don't need interrogation + plan + polish. Just ask for the change and you're done.
+
+### 2. Throwaway prototypes
+
+If what you're building is to demo it in a meeting tomorrow and never look at it again, the trio's overhead doesn't pay off. Code-and-throw is OK here.
+
+### 3. A team with no spec discipline
+
+If no one on the team is going to read the specs OpenSpec generates, you end up with unused artifacts. Before installing it, make sure real people will actually use the flow.
+
+---
+
+## The general pattern
+
+The trio encapsulates a broader idea that applies to any work with AI:
+
+> **Think. Plan. Build. Polish. In that order.**
+
+The universal mistake is jumping straight to "build." AI enables that mistake because it's trained to be immediately useful. Skills like Grill Me and OpenSpec are **intentional friction** that force you not to jump.
+
+If you resist the overhead, remember: the apps that break two days later are **always** the ones built by skipping the first two steps.
+
+---
+
+## Next steps
+
+- If you want more skills from the catalog, [the 5 essential ones](/boveda/cinco-skills-necesarias) cover a different combo
+- To understand the spec-first philosophy without OpenSpec specifically, [spec-driven development](/boveda/spec-kit)
+- For automatic review of the output, [the code-reviewer skill](/boveda/skill-code-reviewer) closes the loop

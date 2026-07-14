@@ -1,0 +1,260 @@
+---
+title: "4 basic tricks to get more out of Claude Code"
+description: "Ultra Think + Plan Mode, parallel sub-agents, /init for CLAUDE.md, and customizing CLAUDE.md so Claude verifies its own work and keeps memory. The 4 that actually change how you work. No cheap tricks."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-26"
+readingTime: "8 min"
+relatedSlugs: ["guia-claude-code-completa", "memoria-claude-code", "agent-view-paralelo"]
+---
+
+## Why these 4 and not others
+
+There are "20 tricks for Claude Code" lists that mix obvious stuff with marginal tips. Here are the 4 that **actually** move the needle:
+
+1. **Ultra Think + Plan Mode** — think deeply before acting
+2. **Parallel sub-agents** — split big tasks into pieces
+3. **`/init` done right** — the CLAUDE.md that changes everything
+4. **Customizing CLAUDE.md** — memory + self-verification
+
+If you use none of these, your Claude is running at 40% of its real capacity.
+
+---
+
+## Trick 1 — Ultra Think + Plan Mode
+
+### What it is
+
+**Ultra Think** is explicitly asking Claude to "think harder" before responding. The trigger word `ultrathink` (or variants like `think hard`) makes it use extended thinking — it spends more tokens reasoning before generating the answer.
+
+**Plan Mode** is a mode inside Claude Code where Claude **proposes a plan** before executing anything. It shows you the plan, you approve or adjust it, then it executes.
+
+### Combining them
+
+For complex tasks, the combo wins:
+
+```
+> ultrathink
+
+I need to refactor the auth module from Supabase Auth to Clerk.
+There are ~12 files involved and the app has 8 authenticated endpoints.
+
+Before touching anything, enter Plan Mode and propose the full plan:
+- Which files you'll touch and in what order
+- How you'll handle migrating existing users
+- How you'll avoid breaking the app during the change
+- Tests you'll update
+```
+
+Claude:
+1. Activates extended thinking (`ultrathink`)
+2. Activates Plan Mode ("I propose a plan, I don't execute" mode)
+3. Hands you a detailed 8-15 step plan
+4. Waits for your approval / changes
+5. Executes
+
+**The difference**: without this, Claude spits out code and you discover problems halfway through. With this, problems show up in the plan phase where they're cheap to fix.
+
+### When to use it
+
+- Tasks with >5 files
+- Structural refactors
+- Architecture decisions
+- Anything with a risk of "oh, I hadn't thought about X"
+
+**When NOT to**: small obvious tasks. Firing up ultrathink for "rename this variable for me" is overkill.
+
+---
+
+## Trick 2 — Parallel sub-agents
+
+### What it is
+
+Instead of asking Claude to do one big sequential task, **break it into independent sub-tasks** and delegate them to sub-agents that run in parallel.
+
+```
+> I need you to research 3 things for an architecture decision.
+  Launch 3 sub-agents in parallel:
+
+  Sub-agent 1: research the pros/cons of using Postgres as a vector DB
+  Sub-agent 2: research the pros/cons of pgvector vs Pinecone vs Weaviate
+  Sub-agent 3: research which companies similar to ours use each option
+
+  When all 3 finish, synthesize the conclusions into a recommendation.
+```
+
+Claude launches all 3, each works independently, results come back in parallel, then the synthesis.
+
+### Why it matters
+
+| Without sub-agents | With sub-agents |
+|------------------|------------------|
+| Sequential time: T1 + T2 + T3 | Parallel time: max(T1, T2, T3) |
+| Context contaminated across tasks | Each sub-agent has clean context |
+| If one sub-task goes off the rails, it affects the others | Isolation — one failure doesn't break the rest |
+
+For tasks with distributed research, **the speedup is real** (typically 3-5×).
+
+### When to use it
+
+- Research with multiple independent angles
+- Batch processing (analyze 10 files where each one is independent)
+- Comparison between options (each option looked at by a different sub-agent)
+
+**When NOT to**: tasks with sequential dependency. If B needs the output of A, running them in parallel adds nothing.
+
+More on parallel sub-agents in [multiple Claude Code in parallel](/boveda/agent-view-paralelo).
+
+---
+
+## Trick 3 — `/init` done right
+
+### What it is
+
+`/init` is the command that generates your `CLAUDE.md` by analyzing the codebase. **80% of people run it once at the start and never again**. That wastes the trick.
+
+### How to use it well
+
+#### When starting on a project
+
+```
+> /init
+```
+
+Generates the initial `CLAUDE.md`. **But now the important part**: read it. Edit it. Add what it doesn't know:
+
+- Team conventions (tabs vs spaces, naming, which patterns we use)
+- What must NOT be touched (legacy, generated files)
+- Useful commands (`npm run dev`, custom scripts)
+- Architecture decisions ("why Drizzle and not Prisma")
+
+#### When the project changes significantly
+
+`/init` isn't just for day one. When:
+- You switch stack or major framework version
+- You add a big new module
+- You refactor something structural
+
+**Run `/init` again** (or ask Claude to update CLAUDE.md specifically). The old file may have stale info that confuses things.
+
+#### Selective mode
+
+If you only want it to look at part of the project:
+
+```
+> /init src/lib/payments/
+```
+
+It generates context specific to that module. Useful when the project is huge and you need focus.
+
+### What to put in CLAUDE.md (and what NOT)
+
+| Yes ✅ | No ❌ |
+|------|------|
+| Stack with exact versions | "We use JavaScript" (obvious) |
+| Team conventions | Documentation of every function (Claude reads it from the code) |
+| Custom commands | `npm install` (obvious) |
+| Restrictions ("don't touch X") | Current sprint status (changes too fast) |
+| Architecture decisions with the why | Detailed project history |
+
+Rule of thumb: if Claude can read it from the code in 30 seconds, it doesn't go in CLAUDE.md. If it requires historical context that isn't in the code, it does.
+
+---
+
+## Trick 4 — Customizing CLAUDE.md
+
+### The 2 lines that change everything
+
+In your `CLAUDE.md`, add at the end:
+
+```markdown
+## Expected behavior
+
+- After making any significant change, run the relevant tests
+  and show me the output. Do NOT declare "done" without verifying.
+
+- Keep notes of important learnings in docs/learnings.md.
+  When you discover something non-obvious about the project, add it there
+  before ending the session.
+```
+
+Those two lines do 2 things:
+
+#### 1. Self-verification
+
+Without this: Claude implements something, says "done," you discover it broke tests. With this: Claude implements, runs tests itself, shows you they pass **before** declaring it done.
+
+It's the difference between "a junior dev who asks for a heavy review" and "a senior dev who validates before asking for review."
+
+#### 2. Memory across sessions
+
+Without this: every new session starts from scratch, you lose accumulated learnings ("oh, I hadn't realized endpoint X throws a 500 if you don't pass header Y"). With this: Claude keeps jotting down in `docs/learnings.md` every time it discovers something non-obvious.
+
+3 months later, that file has **the real operational knowledge of the project** accumulated. Worth its weight in gold.
+
+### Variants depending on your workflow
+
+#### If you work on a team
+
+```markdown
+- Before proposing a major change, validate against docs/decisions.md
+  in case the decision was already made (either way).
+
+- If you're going to make a new decision (choosing between 2+ options),
+  document it in docs/decisions/<date>-<topic>.md with: options
+  evaluated, criteria, decision, reasons.
+```
+
+#### If you're worried about token cost
+
+```markdown
+- For mechanical tasks (renaming, formatting), use the Haiku model.
+- For reasoning, Sonnet.
+- Opus only for architecture decisions.
+- If you're unsure about the model, ask me.
+```
+
+#### If you care about performance
+
+```markdown
+- After changes to hot path code, run the benchmark
+  (npm run bench) and compare against baseline. Report a regression
+  if latency goes up >10%.
+```
+
+---
+
+## Combining all 4
+
+The real ROI comes from combining them:
+
+```
+1. Well-built /init with a customized CLAUDE.md (tricks 3+4)
+2. For big tasks: ultrathink + plan mode (trick 1)
+3. Complex research: parallel sub-agents (trick 2)
+4. CLAUDE.md stores learnings that help the next sessions
+```
+
+It's not magic — it's discipline. Your Claude operates 2-3× better just by following these 4.
+
+---
+
+## What is NOT on this list (and why)
+
+Many "tricks" lists include things like:
+
+- **"Use emojis to clarify"** — marginal, depends on the model
+- **"Ask in English, it's better"** — false for modern models
+- **"Tell it it's an expert"** — old prompt engineering, little effect today
+- **"Ask it to think step by step"** — it already does this internally (extended thinking)
+
+Those belonged to the era of small models. The 4 I did include are in any mature Claude Code flow.
+
+---
+
+## Next steps
+
+- If you're just getting started with Claude Code, the [complete guide](/boveda/guia-claude-code-completa) covers what comes before these tricks
+- To go deeper into persistent memory across sessions, [infinite memory for Claude Code](/boveda/memoria-claude-code)
+- To really use sub-agents in parallel, [multiple Claude Code in parallel](/boveda/agent-view-paralelo)

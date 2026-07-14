@@ -1,0 +1,89 @@
+---
+title: "Hook Smart Commit — auto-generate commit messages (2,577 installs, #2 overall)"
+description: "Hook with 2,577 installs — the second most adopted in the catalog. Auto-generates commit messages with validation. Creates commits with meaningful messages based on file changes."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-conventional-commits", "hook-auto-git-add", "hook-simple-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/git-workflow/smart-commit"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git-workflow/smart-commit.json"
+---
+
+## What it is
+
+**#2 overall in the catalog (2,577 installs).** Only behind [Simple Notifications](/boveda/hook-simple-notifications) (6,810).
+
+The hook intercepts `git commit` and generates the message automatically based on the changed files. Before committing, it validates the message.
+
+Hook event: `PostToolUse`.
+
+It's the #1 use case you want when you code with AI: having the commit message reflect the changes without you having to write it.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `git-workflow` |
+| Installs | **2,577 (#2 overall)** |
+| Hook event | `PostToolUse` |
+| Action | Generates message + validates |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook git-workflow/smart-commit
+```
+
+For Claude:
+
+```
+I installed the git-workflow/smart-commit hook. Try it: make some edits and
+then run `git commit` with an empty message — it should auto-generate a
+descriptive one based on the changes.
+```
+
+## What you can do with it
+
+### Automatic descriptive commits
+
+Instead of a generic "fix" or "update", the hook generates "fix: handle null email in registration form" based on the actual change.
+
+### Combo with [Conventional Commits](/boveda/hook-conventional-commits)
+
+Smart Commit generates. Conventional Commits validates the format. Double safety net.
+
+### Combo with [Auto Git Add](/boveda/hook-auto-git-add)
+
+Auto Git Add stages. Smart Commit commits with a descriptive message. Semi-automatic git workflow.
+
+### For autonomous sessions
+
+Long `/goal` runs: every auto commit gets a useful message. No thousands of "wip".
+
+### Catching weak messages
+
+If you write "fix", the hook can suggest something more descriptive based on the diff.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your team has a strict message convention:** auto-generate may not follow it. Combine it with [Conventional Commits](/boveda/hook-conventional-commits) if you need a specific format.
+- **For commits that need a human reason:** auto-generate doesn't know the "why", only the "what".
+- **If your workflow is committing very often:** the overhead of generating can be noticeable.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Smart Commit Hook](https://www.aitmpl.com/component/hooks/git-workflow/smart-commit) — the exact command.
+- **JSON config:** [smart-commit.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git-workflow/smart-commit.json).
+
+## Related resources
+
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — complementary format enforcement.
+- [Auto Git Add Hook](/boveda/hook-auto-git-add) — automatic staging, a natural combo.
+- [Simple Notifications Hook](/boveda/hook-simple-notifications) — the #1 in the catalog; combinable.

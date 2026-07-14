@@ -1,0 +1,91 @@
+---
+title: "Hook LangSmith Tracing — manda traces de Claude Code a LangSmith"
+description: "Hook con 118 installs que envía automáticamente traces de conversación de Claude Code a LangSmith para monitoring y análisis. Para teams que ya viven en LangSmith para observability de LLM."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "langsmith"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-context-timeline", "mcp-logfire", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/monitoring/langsmith-tracing"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/langsmith-tracing.json"
+---
+
+## Qué es
+
+[LangSmith](https://www.langchain.com/langsmith) es la plataforma de observability para LLM apps de LangChain. Trazas, evals, debugging — está pensado para aplicaciones AI seriamente productivas.
+
+Este hook manda automáticamente traces de las conversaciones Claude Code a LangSmith cuando una sesión termina. Hook event: `Stop`.
+
+Pre-requisitos: `jq` instalado + API key de LangSmith.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `monitoring` |
+| Installs | 118 |
+| Hook event | `Stop` |
+| Requiere | `jq` (CLI) + LangSmith API key |
+| Cuenta | LangSmith |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook monitoring/langsmith-tracing
+```
+
+Pre-requisitos:
+- `brew install jq` (macOS) o `sudo apt-get install jq` (Linux)
+- LangSmith account + API key
+
+Para Claude:
+
+```
+Instalé el hook monitoring/langsmith-tracing. Configurá
+LANGSMITH_API_KEY. Hacé una sesión corta y verificá que aparezca el
+trace en mi project de LangSmith.
+```
+
+## Qué podés hacer con esto
+
+### Observability de uso de Claude Code
+
+LangSmith te muestra qué hacés con Claude: tools usados, latency, tokens. Útil para optimizar workflows.
+
+### Eval de productividad
+
+¿Cuántas sesiones por día? ¿Tareas típicas? ¿Cuáles tardan más? LangSmith te da los charts.
+
+### Compare workflows
+
+Si probás dos approaches (ej. con vs sin un plugin), LangSmith te ayuda a comparar.
+
+### Para teams con LangSmith ya adoptado
+
+Si tu org usa LangSmith para otras LLM apps, sumar Claude Code centraliza la observability.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin cuenta LangSmith:** este hook es LangSmith-only.
+- **Sin jq instalado:** el hook falla.
+- **Para uso casual de Claude Code:** observability es overkill si solo usás unas horas semana.
+- **Privacy:** los traces incluyen conversaciones. Para data sensible, mirá tu policy.
+- **Costos de LangSmith:** plan free tiene cap. Para uso volumétrico, vas a pagar.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [LangSmith Tracing Hook](https://www.aitmpl.com/component/hooks/monitoring/langsmith-tracing) — comando exacto.
+- **Config JSON:** [langsmith-tracing.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/langsmith-tracing.json).
+- **LangSmith oficial:** [langchain.com/langsmith](https://www.langchain.com/langsmith).
+
+## Recursos relacionados
+
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización local en vez de cloud.
+- [Logfire MCP](/boveda/mcp-logfire) — alternativa de observability con OTel.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — observability defaults.

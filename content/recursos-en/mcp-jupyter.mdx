@@ -1,0 +1,103 @@
+---
+title: "MCP Jupyter — run notebooks and Python code from Claude Code"
+description: "MCP server for Jupyter notebooks. Run code in kernels, manage notebooks, interact from Claude. Handy for data scientists and analysts who code in notebooks and want AI right there."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "jupyter", "python"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-huggingface", "mcp-arxiv-mcp-server", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/jupyter"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jupyter.json"
+---
+
+## What it is
+
+If your work lives in Jupyter notebooks (data analysis, ML research, prototyping), this MCP lets you operate notebooks from Claude Code: run cells, view outputs, add code, manage kernels.
+
+The difference from writing Python by hand in Claude Code: the MCP keeps **kernel state**. A variable loaded in an earlier cell stays available. This is valuable for exploration workflows where you load a dataset once and then iterate queries over it.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 23 |
+| MCP server | `jupyter` |
+| Requires | Jupyter server (local or remote) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/jupyter
+```
+
+Prerequisites:
+- A running Jupyter server (`jupyter notebook` or `jupyter lab`)
+- A token or credentials if the server requires auth
+- A Python environment with the appropriate kernels
+
+For Claude:
+
+```
+I installed the devtools/jupyter MCP. The Jupyter server is at
+http://localhost:8888 with token X. List the available notebooks and
+open `analysis.ipynb`. Run the first cell and show me the output.
+```
+
+## What you can do with this
+
+### Exploratory analysis with a persistent kernel
+
+"Load `sales_2026.csv` into a DataFrame `df`. Show me info(), describe() and null counts". The kernel keeps `df` loaded. The next questions don't reload the file.
+
+### Fast iteration over data
+
+"Filter `df` for the last quarter. Do a groupby by product and sum revenue. Plot it". Claude writes the code, runs it, and returns the plot inline.
+
+### Assisted ML workflow
+
+"Load the dataset, split it train/test, train a random forest with default params, evaluate accuracy and the confusion matrix". A typical ML pipeline in a notebook.
+
+### Bridge with [Hugging Face](/boveda/mcp-huggingface)
+
+"Download model X from HF, load it into a kernel, run inference over these 100 samples and return metrics". A discovery (HF) + execution (Jupyter) combo.
+
+### Literate documentation
+
+"For each cell in this notebook, add a markdown cell above it explaining what it does". Turn a raw notebook into a reproducible explanation.
+
+### Paper analysis
+
+"For the arXiv papers I downloaded, read them and put together a notebook that has a markdown cell with a summary of each one + a code cell that reproduces the main plot if it's replicable".
+
+## Prerequisites
+
+- **A running Jupyter server** (local or remote)
+- **A token** if the server requires auth (default Jupyter asks for one)
+- **A Python environment** with the libs you're going to use (pandas, numpy, etc.)
+- **Knowing where your notebooks live** or creating new ones
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If your workflow is 100% terminal Python:** Claude Code already runs Python. The MCP adds value when you want to persist a kernel and work in notebook format.
+- **For production:** notebooks are for exploration, not for prod. You move to `.py` for deploy.
+- **Only 23 installs:** a small community testing it. Verify the specific tools in the JSON.
+- **Heavy kernel in RAM:** some analyses load huge datasets. Check whether your machine can handle it before batching.
+- **Network and tokens:** if your remote Jupyter is exposed, the token has to be strong.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Jupyter MCP](https://www.aitmpl.com/component/mcps/devtools/jupyter) — the exact command.
+- **JSON config:** [jupyter.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jupyter.json).
+
+## Related resources
+
+- [Hugging Face MCP](/boveda/mcp-huggingface) — a natural combo: HF for model discovery, Jupyter to run them.
+- [arXiv MCP Server](/boveda/mcp-arxiv-mcp-server) — a research combo: arXiv for papers, Jupyter to reproduce them.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices when you combine Claude with external runtimes.

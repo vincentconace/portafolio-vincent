@@ -1,0 +1,98 @@
+---
+title: "MCP Mermaid — diagramas y flowcharts generados dinámicamente"
+description: "MCP server que genera diagramas Mermaid via AI: flowcharts, sequence diagrams, class diagrams, ER, state machines y más. Útil para documentar arquitectura sin abrir herramientas dedicadas."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "mermaid"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-deepgraph-react", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/mermaid"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mermaid.json"
+---
+
+## Qué es
+
+[Mermaid](https://mermaid.js.org) es el lenguaje de diagramas que se renderiza en muchos editores (GitHub, Notion, VS Code, Obsidian). Sintaxis simple, output visual decente, sin Photoshop ni diagramación pesada.
+
+Este MCP le da a Claude la capacidad de generar diagramas Mermaid según tu pedido: flowcharts, sequence diagrams, class diagrams, ER diagrams, Gantt charts, state machines, mindmaps, etc.
+
+42 installs lo posicionan como nicho, pero útil cuando lo usás.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 42 |
+| Servidor MCP | `mermaid` |
+| Tipos de diagrama | Flowcharts, sequence, class, ER, state, Gantt, mindmap |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/mermaid
+```
+
+Para Claude:
+
+```
+Instalé el MCP devtools/mermaid. Generame un sequence diagram que
+muestre el flow de OAuth 2.0 entre Usuario, Frontend, Backend y
+Authorization Server. Devolveme el código Mermaid en bloque.
+```
+
+## Qué podés hacer con esto
+
+### Diagramas de arquitectura on-demand
+
+"Para mi proyecto actual, generame un diagrama de arquitectura mostrando: Frontend Next.js → API Routes → Postgres + Redis. Marcá las dependencias asíncronas y los caches".
+
+### Sequence diagrams para flows complejos
+
+"Para el flow de checkout que acabás de codear, generame el sequence diagram con todos los actores: User, Frontend, Stripe, Backend, Database, Webhook handler".
+
+### ER diagrams desde schema
+
+Si combinás con MCPs de DB ([DBHub](/boveda/mcp-dbhub) o [pg-aiguide](/boveda/plugin-pg-aiguide)), Claude puede leer el schema y generar el ER diagram correspondiente.
+
+### State machines para auth flows
+
+"Generame un state machine para los estados de un user: anonymous → pending verification → active → banned. Incluí las transiciones y eventos".
+
+### Gantt para roadmaps
+
+"Generame un Gantt chart de las 5 features que voy a lanzar en Q1: nombres, duración estimada, dependencias entre ellas".
+
+### Output ready para README
+
+Como Mermaid se renderiza en GitHub README, podés pedirle al MCP que genere el código y pegarlo directo en docs.
+
+## Pre-requisitos
+
+- **Editor o renderizador Mermaid-compatible** (GitHub, Obsidian, etc.) para visualizar el output
+- **Conocer las primitives de Mermaid** ayuda para iterar mejor (o pedirle ejemplos a Claude)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para diagramas pixel-perfect** (presentaciones): usá Figma o equivalentes. Mermaid es para docs.
+- **Para diagramas muy complejos** (muchos nodos, edges): Mermaid se vuelve ilegible. Excalidraw o draw.io son alternativas.
+- **42 installs es bajo:** podés pedirle a Claude que genere Mermaid sin el MCP directamente. La diferencia es que este MCP puede validar la syntax o sumar templates específicos.
+- **Para mockups de UI:** no es Mermaid. Usá tools de diseño.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Mermaid MCP](https://www.aitmpl.com/component/mcps/devtools/mermaid) — comando exacto.
+- **Config JSON:** [mermaid.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mermaid.json).
+- **Mermaid docs:** [mermaid.js.org](https://mermaid.js.org).
+
+## Recursos relacionados
+
+- [DeepGraph React](/boveda/mcp-deepgraph-react) — para grafos de codebase reales, complementario a Mermaid (que es para documentación).
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas de documentación que combinan con Mermaid.
+- [Agency Agents](/boveda/agency-agents) — para automatizar generación de diagramas en pipelines de docs.

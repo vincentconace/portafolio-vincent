@@ -1,0 +1,104 @@
+---
+title: "Pinion OS — x402 micropayments on Base for Claude Code"
+description: "Plugin by chu2bard (357⭐) that brings the Pinion protocol into Claude Code: client SDK + plugin + skill framework to make micropayments via x402 on the Base network (Ethereum L2)."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "base", "x402"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["agente-pagokit", "anatomia-claude", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/pinion-os"
+github: "https://github.com/chu2bard/pinion-os"
+---
+
+## What it is
+
+Pinion OS implements the Pinion protocol inside Claude Code. Pinion uses x402 (an HTTP standard for micropayments) running on Base (Coinbase's Ethereum L2). The result: your app can request and receive crypto micropayments without going through a classic processor.
+
+Why does it matter? There are cases where:
+- Charging cents per API request is unfeasible with Stripe (minimum fee)
+- You want your AI agents to be able to pay each other for services rendered
+- Your app sells content or services with a very low unit cost
+
+The plugin ships 1 MCP server that connects Claude Code to the protocol. Your Claude can issue, receive, and validate x402 payments without you having to write the protocol code.
+
+It's niche. It's not for everyone. But if your case fits, it's the tool.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | chu2bard |
+| Stars | 357 |
+| Type | Single plugin (MCP server) |
+| Components | 1 MCP |
+| Protocol | x402 (HTTP micropayments) |
+| Network | Base (Coinbase's Ethereum L2) |
+| Marketplace | `chu2bard/pinion-os` |
+
+## How to install it
+
+```bash
+/plugin marketplace add chu2bard/pinion-os
+/plugin install pinion-os@chu2bard-pinion-os
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+I installed pinion-os by chu2bard. My use case is [API that charges micropayments /
+agents that pay each other / low-cost content]. Show me how to
+issue an x402 payment and how to validate it on the server side.
+```
+
+## What you can do with this
+
+### API that charges cents per request
+
+Your endpoint can return `402 Payment Required` with x402 headers that indicate how much it charges and to which wallet. The client pays, retries with proof of payment in the headers, and receives the response. No Stripe, no minimum fees.
+
+### Agents that pay each other
+
+If you have agents that provide services to other agents (for example: a scraping agent charges a research agent for each extraction), Pinion makes it possible. The agents settle the payment among themselves without human intervention.
+
+### Very low-cost content
+
+Selling an article for 5 cents USD with Stripe is unfeasible (the fee is larger than the price). With x402 on Base, on-chain fees are fractions of a cent.
+
+### Integration with your Base wallet
+
+The plugin assumes you already have a wallet (Coinbase, Metamask configured for Base, etc.). The client SDK signs payments with your key.
+
+## Real benefits
+
+- **Viable micropayments** — where Stripe fails due to the minimum fee.
+- **Agents can transact with each other** — an emerging use case with AI.
+- **Base = ultra-low fees** — fractions of a cent on-chain.
+- **Standard HTTP protocol** (x402) — it's not proprietary, you can integrate with any x402-compatible client.
+
+## When it's NOT worth it
+
+<Callout type="danger" title="Before installing — serious caveats">
+
+- **If your business doesn't need micropayments:** Stripe / [Mercado Pago](/boveda/plugin-mercadopago-claude-marketplace) / [agente-pagokit](/boveda/agente-pagokit) are the right choice for common payments. Don't add crypto just for the sake of it.
+- **Crypto risk:** payments live on-chain on Base. If the chain has problems or the asset's price changes, your flow is affected.
+- **Uncertain regulation:** in many countries, charging via crypto sits in a regulatory gray area. Verify before going to prod.
+- **UX for non-crypto users:** mainstream users don't have a Base wallet. If your target isn't crypto-native, you lose a large part of the market.
+- **Your own audit:** you're connecting Claude to a wallet with funds. Any malicious command could drain it. A secure setup is CRITICAL — don't share keys, use dedicated wallets with small balances for testing.
+- **Single-author plugin (chu2bard):** you depend on individual maintenance.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Pinion Os](https://www.aitmpl.com/plugins/pinion-os) — exact command.
+- **Repo on GitHub:** [chu2bard/pinion-os](https://github.com/chu2bard/pinion-os) — code, MCP server, examples.
+
+## Related resources
+
+- [Agente PagoKit](/boveda/agente-pagokit) — for classic payments (Stripe, Mercado Pago, Wompi, Lemon Squeezy). 99% of cases.
+- [Anatomía de Claude](/boveda/anatomia-claude) — to place Pinion as an MCP server, not as a skill or an agent.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — security best practices when connecting Claude to sensitive resources like wallets.

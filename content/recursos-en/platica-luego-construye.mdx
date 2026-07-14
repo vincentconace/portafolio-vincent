@@ -1,0 +1,276 @@
+---
+title: "Talk first, build second — the 3 things to do BEFORE touching code"
+description: "If you open Claude Code and start building right away, you've already messed up. There are 3 practices that separate apps that turn out well from those that turn out broken: separating talk from building, a structured blueprint, and delegation between Claudes. With principles for beginners and the theory behind it."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["spec-kit", "plan-mode-auditar", "trifecta-perfecta"]
+---
+
+## The most common trap
+
+You open Claude Code. You tell it "build me X". Claude starts coding within seconds.
+
+**You feel unstoppable.** In 3 hours you have something that works. In 3 days something breaks and you don't know why. In 3 weeks the project is technical debt that costs more to maintain than to rebuild.
+
+This happens because you **skipped 3 critical practices** that really do make the difference:
+
+| Practice | What it does |
+|----------|----------|
+| 1. Separate talk from building | You decide WHAT to build before deciding HOW |
+| 2. Structured blueprint | The plan lives in a document, not in your head |
+| 3. Delegation between Claudes | One thinks, another implements |
+
+---
+
+## Practice 1 — Separate talk from building
+
+### The mistake
+
+When you ask Claude to "build me the dashboard", it's mixing 4 things at the same time:
+
+1. **What** you're going to build (the feature)
+2. **Who for** (audience, context)
+3. **How** (stack, libraries, patterns)
+4. **Implementing the code**
+
+If Claude does all 4 simultaneously, **it trips over itself**. Quality drops.
+
+### The fix
+
+Separate the **talking phase** from the **building phase**:
+
+```
+[Talking phase — Claude #1 or session #1]
+- You discuss what to build
+- Why it matters
+- Who it serves
+- Edge cases
+- What NOT to include
+- The stack that makes sense
+- Risks
+
+OUTPUT: project blueprint
+
+[Building phase — Claude #2 or clean session #2]
+- Receives the blueprint
+- Implements WITHOUT asking about the WHAT (already decided)
+- Asks for clarifications only about the technical HOW
+```
+
+The difference: when the building phase starts, **the WHAT is no longer up for debate**. That frees up context and lets you focus on doing the how well.
+
+### Beginner-level analogy
+
+It's like building a house:
+
+- **Talking**: you speak with the architect, decide how many rooms, where the windows go, what materials
+- **Building**: the builder takes the plans and builds
+
+If the builder also has to decide where the doors go while laying the bricks, **the result is a disaster**.
+
+---
+
+## Practice 2 — Structured blueprint
+
+### What it is
+
+A markdown document that captures **all the decisions from the talking phase**. It's not a long email — it's **formal structure**:
+
+```markdown
+# Blueprint: [Project name]
+
+## 1. Vision (1 paragraph)
+What we're building and why it matters.
+
+## 2. Target user
+Who they are, what problem they have today, what this solves.
+
+## 3. User stories (3-5)
+As [X] I want [Y] so that [Z].
+
+## 4. Technical stack
+- Framework: ...
+- DB: ...
+- Auth: ...
+- Hosting: ...
+[Each decision with a reason]
+
+## 5. Data model
+Tables / collections with their fields.
+
+## 6. Routes and endpoints
+Exhaustive list.
+
+## 7. UX design
+Main flow in 4-6 steps.
+
+## 8. Out of scope
+What this blueprint does NOT include (explicit).
+
+## 9. Critical tests
+What has to pass to consider it "works".
+
+## 10. Identified risks
+3-5 with their mitigation.
+
+[... up to 16 sections depending on the case]
+```
+
+### Why the blueprint matters
+
+| Without blueprint | With blueprint |
+|---------------|----------------|
+| Context in the founder's head | Context in a versioned file |
+| If someone else joins the project, they don't understand | Anyone reads the blueprint and understands |
+| Decisions change without a trace | Changes to the blueprint are recorded |
+| Claude starts from scratch each session | Claude reads the blueprint, operates with full context |
+
+It's **the artifact** that survives across sessions. Your codebase may change 10 times; the blueprint remains as a reference.
+
+### How to generate it
+
+A tool like "The Architect" automates the generation (it interviews you, fills in the template). Or you build it by hand with a template.
+
+See the details in [perfect trifecta](/boveda/trifecta-perfecta) — where the first piece is exactly this Architect.
+
+---
+
+## Practice 3 — Delegation between Claudes
+
+### The concept
+
+The Claude that **thinks** and the Claude that **builds** are **different sessions**.
+
+```
+Session 1: ARCHITECT
+- You are a senior software architect
+- Your only task: produce a structured blueprint
+- You do NOT write code in this session
+
+[You generate blueprint.md]
+
+Session 2: BUILDER  
+- You are a senior developer
+- Input: blueprint.md
+- Build according to the blueprint
+- If you're missing technical detail, you ask
+- If you're missing product detail, you do NOT ask (you assume what's in the blueprint)
+```
+
+### Why two sessions
+
+- **Clean context**: the Builder isn't distracted by the Architect's conversation
+- **Clear roles**: each one knows its lens
+- **Artifact in the middle**: the blueprint stands as the contract
+
+### How it's done in practice
+
+#### Option A — Two sessions in the same Claude
+
+```
+[Session 1]
+> You are an architect. Let me explain the idea: [...]
+[You discuss until you have a blueprint]
+> Save the blueprint in docs/blueprint.md
+[/clear]
+```
+
+```
+[Session 2 — fresh context]
+> You are a developer. Read docs/blueprint.md and build it step by step.
+```
+
+#### Option B — Claude + Codex split
+
+If you have the [Claude + Codex hack](/boveda/codex-plugin-hack):
+- Claude (better reasoning) → architect
+- Codex (better mechanical execution) → builder
+
+Each with its own separate tokens.
+
+---
+
+## The opposite mistake — over-talking
+
+There are extremes:
+
+- ❌ You go straight to building → the app breaks
+- ❌ You spend 2 weeks "talking" → you never build anything
+
+The balance lies in **talk proportional to the complexity**:
+
+| Task | Justified talking |
+|-------|---------------------|
+| 1-file edit | 0 minutes |
+| Small feature (3-5 files) | 10-20 min |
+| New module (10+ files) | 1-2 hours |
+| Complete product | 1-3 days |
+
+**If your talking takes more than 20% of the total estimated time, you're getting stuck**.
+
+---
+
+## Anti-patterns
+
+### 1. Talk that produces no artifact
+
+You talk for 2 hours with Claude, **no blueprint comes out**. The talk stays in ephemeral history. When the session closes, **everything is lost**.
+
+**Rule**: every talking session must end with a saved file.
+
+### 2. Generic blueprint
+
+"The product has auth, dashboard, API". **Too abstract**. A useful blueprint has specificity: "the dashboard shows these 7 KPIs in this order, with these filters".
+
+### 3. Builder that ignores the blueprint
+
+Sometimes the Builder "interprets" the blueprint and drifts. **Force** it back to the blueprint:
+
+```
+> Before implementing the next feature, re-read blueprint.md section 6
+  to confirm how it should be. If you're going to deviate from the blueprint, tell me and
+  justify it BEFORE coding.
+```
+
+### 4. Blueprint that isn't updated
+
+You build the feature, you discover that something in the blueprint was wrong. **Update the blueprint**. Otherwise the blueprint ends up out of sync with the code and stops being useful.
+
+---
+
+## The simple test
+
+Before your next feature, ask yourself:
+
+> **If tomorrow another person on the team joins the project, will they be able to understand what we're building WITHOUT asking me anything?**
+
+If the answer is no → you're missing a blueprint.
+If the answer is yes → go ahead with building.
+
+That test, applied consistently, marks the difference between projects that last and projects that drown in technical debt.
+
+---
+
+## For beginners — the minimum viable version
+
+If you've never done this, **start with the minimal version**:
+
+1. Before asking Claude to "build me X", spend 15 min writing in a .md:
+   - What exactly it is
+   - Who uses it
+   - What it does and what it doesn't do
+   - Base stack
+2. Then, in Claude: "read this file, build according to what it says"
+
+That alone, without any special tools, **already improves the quality of the output by 50%**.
+
+---
+
+## Next steps
+
+- For spec-driven development as a structured pattern, [spec-driven development](/boveda/spec-kit)
+- For Plan Mode that applies this philosophy built-in, [Plan Mode](/boveda/plan-mode-auditar)
+- For the trio of tools that bring the pattern to life, [perfect trifecta](/boveda/trifecta-perfecta)

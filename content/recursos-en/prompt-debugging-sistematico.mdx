@@ -1,0 +1,178 @@
+---
+title: "Prompt: systematic debugging with Claude (no more 'let's see what happens')"
+description: "A structured prompt that turns Claude into a methodical debugging assistant: it forms hypotheses, prioritizes them by likelihood, proposes experiments to validate each one, and only then suggests a fix. For bugs that aren't obvious."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-11"
+readingTime: "8 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "skill-code-reviewer"]
+---
+
+## Why it matters
+
+A dev's reflex when there's a weird bug is to try things: "what if I change this here", "what if I drop a log there". Sometimes it works. Most of the time you spend 2 hours making random changes that get you nowhere.
+
+The same thing happens to Claude if you tell it "I have a bug, help me". It throws fixes blindly. The difference with a good human debugger is **the method**: hypotheses → prioritization → validation → fix.
+
+This prompt forces that method. It's slower than a loose "help me with this bug", but it leads you to the correct fix instead of iterating 5 times over symptoms.
+
+---
+
+## The prompt
+
+```
+You're a senior engineer doing systematic debugging. DO NOT write fix code until we finish the analysis phase.
+
+BUG CONTEXT:
+<DESCRIPTION>
+[1-3 paragraphs: what happens, when it started, what you did to reproduce it, what error/output you see]
+</DESCRIPTION>
+
+RELEVANT CODE:
+<CODE>
+[Paste the files / functions the bug touches. No more than 200 lines.]
+</CODE>
+
+ERROR LOGS / OUTPUT:
+<LOGS>
+[If you have logs, stack traces, console output — paste them whole, don't summarize]
+</LOGS>
+
+WHAT I ALREADY TRIED:
+<ATTEMPTS>
+[Short list of things you tried that didn't work. This avoids suggesting the same thing.]
+</ATTEMPTS>
+
+ANALYSIS PROTOCOL:
+
+## Step 1 — Reproduce mentally
+Before hypothesizing, describe to me in 3-4 lines what you understand is happening. If anything in the context is unclear to you, ask BEFORE continuing.
+
+## Step 2 — Hypotheses (at least 3)
+List 3-5 concrete hypotheses about what could cause this bug. For each one:
+- **Hypothesis [N]**: clear explanation
+- **Likelihood**: high / medium / low, with reason
+- **How to validate**: specific experiment (a log, a breakpoint, a query, a quick test)
+- **How to rule out**: what observation would prove it's NOT this
+
+Sort them by likelihood (highest first).
+
+## Step 3 — Validation plan
+Propose the order of the experiments, optimizing for:
+1. **Low cost**: start with the ones that take 2 minutes
+2. **Information that separates hypotheses**: experiments that rule out several hypotheses at once are worth more than ones that validate just one
+
+List the first 2-3 concrete steps to do RIGHT NOW.
+
+## Step 4 — Wait for results
+DO NOT write the fix. Wait for me to run the experiments and give you the results. Then we iterate.
+
+RULES:
+- If a hypothesis is "it's a cache problem" or "it's timing", **specify which cache and what timing**. Vagueness = useless.
+- If three hypotheses are in the same area (e.g. all 3 say "it's the auth"), consider whether you're getting fixated on one zone of the code. Force 1 hypothesis outside that zone.
+- Don't skip Step 1. Half of bugs get solved when someone forces you to explain them out loud.
+```
+
+---
+
+## Real-world usage example
+
+### Bug
+
+> "My `/api/orders` endpoint sometimes returns 200 with `[]` even though I know there are orders. Not always. I restart the server and it works again. It reappears after a few hours."
+
+### What the prompt extracts
+
+**Step 1 — Reproduce mentally:**
+
+> I understand your endpoint returns the list of orders and sometimes returns an empty array with no error. The behavior seems related to the server's uptime. Are you using a persistent DB connection (pool)? Do you have any in-memory caching (Redis, Map, etc.)?
+
+(It asked something critical before inventing hypotheses. You say: "Postgres pool with `pg`, no Redis, no deliberate in-memory Map.")
+
+**Step 2 — Hypotheses:**
+
+> 1. **Connection pool with stale connections** — high. If a connection ends up in a bad state, the pool may hand back a connection that fails silently. Validation: log `pool.totalCount` and `pool.idleCount` every minute. Rule out: if the counts are stable and healthy, it's not this.
+>
+> 2. **Tenant/org filter applied incorrectly** — high. If your query filters by org_id and the session loses it after a while (cookie expires but no error), you end up with WHERE org_id = NULL. Validation: log the org_id in the query right before executing it. Rule out: if the org_id is correct and the query with that org returns rows in psql, it's not this.
+>
+> 3. **Race with migration / replication lag** — medium. If you have a read replica and write to the primary, there can be lag. Validation: do you use DATABASE_URL with replicas? Rule out: if the query runs against primary, it's not this.
+>
+> 4. **Pagination bug with a stale cursor** — low. If your endpoint uses cursor pagination and the cursor is cached client-side... Validation: does the client send `?cursor=`? Rule out: if the request has no cursor, it's not this.
+
+**Step 3 — Plan:**
+
+> Start with (2): it's 30 seconds of work. Add `console.log('org_id query', orgId)` right before the query. Reproduce the bug and check whether org_id is null when it returns []. If it IS null, we have the culprit and we move to the fix. If it's valid, you go to (1).
+
+(You run it, you see that `org_id` is `undefined` when it returns []. You found the bug in 30 seconds.)
+
+**Step 4:**
+
+Only now does Claude propose the fix:
+
+> The problem is that after ~1h your auth middleware isn't populating `req.org_id`. Remember to [...] The fix is [...]
+
+---
+
+## Prompt variants
+
+### When the bug is in the UI
+
+Add to the context:
+
+```
+## Step 1.5 — Reproduce visually
+Before hypothesizing, describe in 3-4 lines what should be seen vs what is seen. Ask me for a screenshot if it's unclear. Don't continue without having the "visual delta" clear.
+```
+
+### When it's a performance issue
+
+Change Step 2:
+
+```
+## Step 2 — Bottleneck hypotheses
+List 3-5 hypotheses about where the bottleneck could be:
+- DB: slow queries, N+1, locks, missing indexes
+- App: heavy serialization, nested loops, blocking sync calls
+- Network: large payloads, external calls without caching, latency between services
+- Client: re-renders, heavy bundles, fetch waterfall
+
+For each one, tell me what metric/tool to use to validate it (Chrome DevTools timeline, EXPLAIN ANALYZE, etc.).
+```
+
+### When it's an intermittent / flaky bug
+
+Add:
+
+```
+## Step 1.5 — Temporal pattern
+Before hypothesizing, ask me:
+- Frequency: 1 in 10? 1 in 1000?
+- Pattern: does it happen more at peak hours? after N amount of time? only in CI?
+- Success rate locally vs in production
+
+Without this data you can't prioritize hypotheses. Half of flakies are race conditions and the other half are cache/timing — you need the pattern to tell them apart.
+```
+
+---
+
+## When NOT to use this prompt
+
+<Callout type="warning" title="For obvious bugs, you waste time">
+
+If the error is:
+- A clear stack trace pointing to a line with `undefined.foo`
+- A variable typo
+- A missing import
+- Broken syntax
+
+**Don't use this prompt**. Paste the error and you're done. This prompt shines when you've already investigated for a while and can't figure it out.
+
+</Callout>
+
+---
+
+## Next steps
+
+- Combine it with [Skill code-reviewer](/boveda/skill-code-reviewer): the reviewer catches bugs before they reach production.
+- If your team has a postmortem template, add the Step 2 output (sorted hypotheses) as a section of the postmortem — it's valuable for learning.

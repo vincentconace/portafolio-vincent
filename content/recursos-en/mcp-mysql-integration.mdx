@@ -1,0 +1,101 @@
+---
+title: "MCP MySQL Integration — connect Claude to MySQL (1,081 installs)"
+description: "MCP server with 1,081 installs to connect Claude Code to MySQL. Queries, schema management, and data exploration in natural language. The second most-adopted database MCP, right behind Postgres setups."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "mysql"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-dbhub", "plugin-pg-aiguide", "mcp-mongodb"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/mysql-integration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mysql-integration.json"
+---
+
+## What it is
+
+MySQL is the most widely used relational database after Postgres. Lots of legacy stack, lots of WordPress, lots of PHP/LAMP ecosystem. This MCP connects Claude Code to your MySQL for queries, schema management, and data exploration.
+
+At 1,081 installs, it's one of the most-adopted DB MCPs in the catalog. For shops that live in MySQL, it's Claude's way in.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `database` |
+| Installs | 1,081 |
+| MCP server | `mysql` |
+| Compatibility | MySQL 5.7+, MariaDB |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp database/mysql-integration
+```
+
+Prerequisites: a connection string to MySQL + credentials with the right permissions.
+
+For Claude:
+
+```
+I installed the database/mysql-integration MCP. Configure the connection
+string. List the tables in database X and show me the schema of the
+`users` table.
+```
+
+## What you can do with this
+
+### Schema exploration
+
+"Show me all the tables, their columns with types, and the foreign keys. Identify the central table and the ones that depend on it." Onboarding to an unfamiliar DB.
+
+### Ad-hoc queries
+
+"Find me the 10 best-selling products in the last quarter, with their revenue and units. Group them by category." Claude translates to SQL.
+
+### Performance analysis
+
+"Show me the 20 slowest queries according to `slow_query_log` (if enabled) or `performance_schema`. Suggest indexes that might help."
+
+### Migration helper
+
+"Generate an ALTER TABLE script to add a `tenant_id` column (varchar 50) to 15 tables. Backfill from the `org_slug` column with an UPDATE." Handy for cross-table migrations.
+
+### Data audit
+
+"Verify that the `unique(email)` constraint on `users` isn't violated. If there are duplicates, show me which ones."
+
+### Comparison with alternatives
+
+- **vs [DBHub](/boveda/mcp-dbhub):** DBHub is multi-engine (includes MySQL). If your shop is MySQL-only, this MCP may be more focused.
+- **vs [pg-aiguide](/boveda/plugin-pg-aiguide):** pg-aiguide is Postgres-only with vertical expertise. No MySQL equivalent exists with the same depth.
+
+## Prerequisites
+
+- **Valid connection string** to MySQL/MariaDB
+- **User with the right permissions** (SELECT for exploration; others for mutations)
+- **Network access** from wherever Claude Code runs to your MySQL
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before connecting Claude to a production MySQL">
+
+- **Destructive operations:** `DROP TABLE`, `TRUNCATE`, `DELETE` without a WHERE = catastrophic. ALWAYS use approval hooks in prod.
+- **Broad permissions:** a user with GRANT ALL inherits full control. Restrict to SELECT-only for initial exploration.
+- **Schema migrations in prod:** ALTER TABLE on large tables can lock them. Validate your strategy (online schema change) before applying.
+- **If your DB is Postgres:** [pg-aiguide](/boveda/plugin-pg-aiguide) is more optimized for PG.
+- **Connection strings with secrets:** the strings carry the password in plain text. Treat them as sensitive credentials.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [MySQL Integration MCP](https://www.aitmpl.com/component/mcps/database/mysql-integration) — exact command.
+- **JSON config:** [mysql-integration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mysql-integration.json).
+- **MySQL docs:** [dev.mysql.com](https://dev.mysql.com).
+
+## Related resources
+
+- [DBHub MCP](/boveda/mcp-dbhub) — multi-engine. If your stack has several different databases.
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — for Postgres specifically. If you're going to migrate to PG.
+- [MongoDB MCP](/boveda/mcp-mongodb) — for your NoSQL stack if you have both.

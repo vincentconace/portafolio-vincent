@@ -1,0 +1,91 @@
+---
+title: "MCP zread — lectura web AI-optimizada por zread.ai (Z.AI)"
+description: "MCP server con 67 installs. Powered by zread.ai (Z.AI ecosystem). Lectura web optimizada para LLMs con foco en performance y output limpio. Otro MCP del stack Z.AI."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "zai", "zread"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-web-reader", "mcp-firecrawl", "mcp-web-fetch"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/zread"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/zread.json"
+---
+
+## Qué es
+
+zread es una capa adicional del ecosystem Z.AI específicamente para lectura web optimizada por LLMs. Powered by [zread.ai](https://zread.ai), provee output limpio listo para que Claude (u otros clientes MCP-compatibles) procesen contenido.
+
+Forma parte del stack Z.AI MCPs ([Vision](/boveda/mcp-zai-mcp-server), [Web Reader](/boveda/mcp-web-reader), [Web Search Prime](/boveda/mcp-web-search-prime)). Si tu setup ya usa Z.AI para otros servicios, mantener consolidado simplifica.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `web` |
+| Installs | 67 |
+| Servidor MCP | `zread` |
+| Powered by | zread.ai (Z.AI) |
+| Cuenta requerida | Sí — Z.AI |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp web/zread
+```
+
+Pre-requisito: cuenta Z.AI / zread.ai + API key.
+
+Para Claude:
+
+```
+Instalé el MCP web/zread. Configurá las credenciales. Lee esta URL
+[URL] y devolveme el contenido optimizado para que pueda hacerle
+análisis directamente.
+```
+
+## Qué podés hacer con esto
+
+### Web reading optimizado para LLM
+
+URL → output limpio. Mismo concepto que [Web Reader](/boveda/mcp-web-reader) y [Firecrawl](/boveda/mcp-firecrawl).
+
+### Diferencia con Web Reader
+
+Ambos son de Z.AI pero pueden tener APIs/output ligeramente distintos. Mirá los JSONs de configuración para saber cuál te conviene en tu caso específico.
+
+### Casos típicos
+
+- Convertir URLs a contenido procesable
+- Anti-hallucination en research
+- Lectura recurrente automatizada
+
+## Pre-requisitos
+
+- **Cuenta Z.AI / zread.ai** activa
+- **API key**
+- **Conexión a internet**
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si ya usás [Web Reader](/boveda/mcp-web-reader) del mismo provider:** alta probabilidad de overlap. Elegí uno.
+- **Si ya tenés [Firecrawl](/boveda/mcp-firecrawl) o solution Western:** compará valor antes de sumar.
+- **Compliance:** servicio chino. Validá tu policy.
+- **Solo 67 installs:** comunidad probando reducida.
+- **Para data sensible:** el contenido pasa a server Z.AI.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [zread MCP](https://www.aitmpl.com/component/mcps/web/zread) — comando exacto.
+- **Config JSON:** [zread.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/zread.json).
+- **zread.ai:** [zread.ai](https://zread.ai).
+
+## Recursos relacionados
+
+- [Web Reader MCP](/boveda/mcp-web-reader) — otro MCP Z.AI similar. Compará.
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — opción Western más adoptada.
+- [Web Fetch MCP](/boveda/mcp-web-fetch) — el más adoptado del catálogo `web` (3,346 installs).

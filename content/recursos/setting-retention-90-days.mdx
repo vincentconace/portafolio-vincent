@@ -1,0 +1,83 @@
+---
+title: "Setting Retention 90 Days — transcripts persistidos por 90 días (346 installs)"
+description: "Setting con 346 installs. Configura `cleanupPeriodDays: 90`. Chat transcripts persisten 90 días antes de auto-cleanup. Para users que valoran histórico extendido como referencia."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-retention-7-days", "mcp-memory-integration", "plugin-claude-mem"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/cleanup/retention-90-days"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/cleanup/retention-90-days.json"
+---
+
+## Qué es
+
+`cleanupPeriodDays: 90` — Claude Code mantiene chat transcripts 90 días.
+
+Para users que valoran histórico extendido. Útil para reference, auditoría leve o memoria entre sesiones largas.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `cleanup` |
+| Installs | 346 |
+| Setting | `cleanupPeriodDays: 90` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting cleanup/retention-90-days
+```
+
+Para Claude:
+
+```
+Instalé el setting cleanup/retention-90-days. Confirmá retention y
+mostrame cómo buscar transcripts viejos.
+```
+
+## Qué podés hacer con esto
+
+### Histórico para reference
+
+Volver a sesión de hace 60 días: tenés el transcript disponible.
+
+### Para projects largos
+
+Sprints de 3 meses: el transcript completo del sprint queda disponible.
+
+### Audit lite
+
+Para compliance suave, 90 días es razonable trail.
+
+### Combo con [Memory Integration MCP](/boveda/mcp-memory-integration)
+
+Retention guarda transcripts brutos. Memory MCP indexa y recupera relevante. Combo natural.
+
+### Combo con [Claude Mem Plugin](/boveda/plugin-claude-mem)
+
+Retention para data persistida. Claude Mem para context inteligente.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para data altamente sensible:** 90 días es mucho. [Retention 7 Days](/boveda/setting-retention-7-days).
+- **Disk space:** 90 días de transcripts ocupan storage. Verificá tu disk.
+- **GDPR strict:** 90 días puede no cumplir con data minimization principles.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Retention 90 Days Setting](https://www.aitmpl.com/component/settings/cleanup/retention-90-days) — comando exacto.
+- **Config JSON:** [retention-90-days.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/cleanup/retention-90-days.json).
+
+## Recursos relacionados
+
+- [Retention 7 Days Setting](/boveda/setting-retention-7-days) — alternative privacy strict.
+- [Memory Integration MCP](/boveda/mcp-memory-integration) — persistent memory layer.
+- [Claude Mem Plugin](/boveda/plugin-claude-mem) — memory compression con AI.

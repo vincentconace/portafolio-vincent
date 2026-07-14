@@ -1,0 +1,102 @@
+---
+title: "MCP Browserbase — cloud browser con Stagehand para automation a escala"
+description: "MCP server que provee automation en cloud browser via Browserbase + Stagehand. Captura screenshots, ejecuta JS en páginas, navega y extrae data sin instalar Chrome local. La opción enterprise de Stagehand."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "browserbase", "stagehand"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-browser-use-mcp-server", "mcp-chrome-devtools", "plugin-playwright-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/browser_automation/mcp-server-browserbase"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/mcp-server-browserbase.json"
+---
+
+## Qué es
+
+Browserbase es una infraestructura cloud de browsers headless, mantenida como producto enterprise. Stagehand es el framework de browser automation que combina LLM con primitives tradicionales (click, type, navigate) para que sea más robusto a cambios en la página.
+
+Este MCP los une: cloud browsers de Browserbase + agente de Stagehand controlados desde Claude Code. Vos no corrés Chrome local; Browserbase te da uno en cloud. Stagehand orquesta las acciones.
+
+La gran ventaja vs [browser-use](/boveda/mcp-browser-use-mcp-server) o [Chrome DevTools](/boveda/mcp-chrome-devtools): no consume tu RAM, escala a paralelos, y maneja anti-bot mejor por ser tráfico residencial real (depende del plan).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `browser_automation` |
+| Installs | 291 |
+| Servidor MCP | `browserbase` |
+| Stack | Browserbase + Stagehand |
+| Cuenta requerida | Sí — Browserbase (paga, sin free tier real) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp browser_automation/mcp-server-browserbase
+```
+
+Pre-requisitos: cuenta Browserbase + API key.
+
+Para Claude:
+
+```
+Instalé el MCP browser_automation/mcp-server-browserbase. Configurá la
+API key. Después abrí una sesión cloud, andá a example.com, sacame
+screenshot y mostrame el title.
+```
+
+## Qué podés hacer con esto
+
+### Automation sin instalar nada local
+
+"Andá a `tu-app.com/checkout` en el cloud browser, completá el form con datos de prueba, observá el flow y traeme screenshot al final". Sin que tu Mac transpire con Chrome.
+
+### Paralelismo
+
+"Abrí 10 sesiones de browser en paralelo y testeame cada uno con un set distinto de credenciales". Browserbase escala. Local no.
+
+### Anti-bot serio
+
+Si Cloudflare o DataDome te bloquean con Playwright local, Browserbase (según plan) ofrece browsers más realistas / residenciales.
+
+### Comparación con alternativas
+
+- **vs [browser-use](/boveda/mcp-browser-use-mcp-server):** browser-use es Python + local + open source. Browserbase es cloud + comercial + más robusto para producción.
+- **vs [Chrome DevTools](/boveda/mcp-chrome-devtools):** CDP local es para debugging. Browserbase es para automation productiva a escala.
+- **vs [Playwright Skill](/boveda/plugin-playwright-skill):** Playwright Skill es local + model-invoked. Browserbase es cloud + más opinionado.
+
+### Stagehand como capa de inteligencia
+
+Stagehand no es solo wrapper de Playwright. Es un sistema que combina LLM (para entender la página y decidir acciones) con primitivas determinísticas (las ejecuciones reales). Resulta más robusto cuando el HTML cambia.
+
+## Pre-requisitos
+
+- **Cuenta Browserbase** con plan apto
+- **API key**
+- **Sin requisitos locales** — todo el browser corre en cloud
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin presupuesto:** Browserbase es comercial. Sin plan, no funciona. Para indie/hobby, browser-use local.
+- **Para debugging interactivo:** browsers cloud son menos cómodos para devtools. Usá local.
+- **Latencia:** cloud browsers tienen RTT mayor que local. Para feedback rápido (microflows), local gana.
+- **Costos a escala:** paralelismo cuesta. Mirá pricing antes de batchear 1000 sesiones.
+- **Compliance:** algunos datos no pueden salir de tu infra. Browserbase es cloud — verificá tu policy.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Browserbase MCP](https://www.aitmpl.com/component/mcps/browser_automation/mcp-server-browserbase) — comando exacto.
+- **Config JSON:** [mcp-server-browserbase.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/mcp-server-browserbase.json).
+- **Browserbase oficial:** [browserbase.com](https://www.browserbase.com).
+- **Stagehand:** [github.com/browserbase/stagehand](https://github.com/browserbase/stagehand).
+
+## Recursos relacionados
+
+- [Browser-Use MCP](/boveda/mcp-browser-use-mcp-server) — alternativa open source local.
+- [Chrome DevTools MCP](/boveda/mcp-chrome-devtools) — para debugging local profundo.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — model-invoked, alternativa más liviana.

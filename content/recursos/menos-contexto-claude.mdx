@@ -1,0 +1,264 @@
+---
+title: "context-mode — reduce hasta 98% el contexto que consume Claude Code"
+description: "Plugin MCP open source que ejecuta comandos en sandbox (no llegan datos crudos al contexto), indexa resultados pesados con BM25 (315KB → 5.4KB), y restaura tu sesión cuando se compacta. Para sesiones largas donde Claude pierde el hilo. Setup en 2 comandos."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["cinco-repos-no-quemar-cuenta", "cinco-errores-claude", "claude-token-efficient"]
+---
+
+## El problema
+
+Imaginate que tu escritorio tiene espacio limitado. Cada vez que Claude Code usa una tool (leer archivo, screenshot Playwright, revisar issues GitHub), el resultado entra a la conversación y ocupa espacio en ese escritorio. Ese espacio = **contexto**.
+
+Los resultados son **enormes**:
+- Un screenshot Playwright: **56 KB**
+- Lista de issues GitHub: **59 KB**
+
+Con pocas llamadas, tu escritorio se llena y:
+- Claude **pierde el hilo**
+- **Olvida decisiones**
+- Sesión se reinicia → empezás de nuevo
+
+---
+
+## La solución — context-mode
+
+MCP server open source que se instala como plugin. **3 pilares**:
+
+### Pilar 1 — Sandbox (ejecución aislada)
+
+Tu asistente lee reporte de 100 páginas y te da resumen de 1. Eso hace el sandbox: **comandos se ejecutan en entorno aislado** y solo el resultado procesado entra a tu conversación. **Los datos crudos nunca tocan tu contexto**.
+
+Soporta 11 lenguajes: JavaScript, Python, Go, Rust, Ruby, PHP, Java, C#, C++, Haskell, Julia.
+
+### Pilar 2 — Indexación inteligente
+
+Cuando un resultado pesa **más de 5 KB**, lo indexa con **ranking BM25** (la tech de motores de búsqueda) y te devuelve solo las partes relevantes.
+
+| Sin | Con |
+|-----|-----|
+| 315 KB de datos crudos | **5.4 KB** indexados |
+
+**98% menos contexto**.
+
+### Pilar 3 — Memoria de sesión
+
+Cada archivo editado, operación git, tarea y decisión se guarda en SQLite. Cuando el contexto se compacta, **guarda foto del estado** (max 2 KB) con todo lo crítico.
+
+Al retomar, restaura:
+- Tareas pendientes
+- Decisiones tomadas
+- Archivos modificados
+- Errores sin resolver
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado ([instalar Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Instalación — 2 comandos
+
+```bash
+# 1. Agregar marketplace
+/plugin marketplace add mksglu/context-mode
+
+# 2. Instalar plugin
+/plugin install context-mode
+```
+
+Reiniciá Claude Code. El plugin configura MCP server + hooks automático.
+
+---
+
+## Verificar
+
+```
+> /plugin list
+```
+
+`context-mode` debe aparecer como Enabled.
+
+Probá:
+
+```
+> Corré `ls -la` en el sandbox y mostrame solo los archivos
+  modificados en últimas 24h.
+```
+
+Si responde con resultado **filtrado** (no todo el `ls`), está funcionando.
+
+---
+
+## Cómo se siente usarlo
+
+### Sin context-mode
+
+Sesión típica de 1h:
+- Llamadas a tools: ~20
+- Contexto consumido: ~80%
+- Claude empieza a olvidar después de los 40 min
+- Sesión se compacta automáticamente, perdés contexto
+
+### Con context-mode
+
+Sesión típica de 1h:
+- Llamadas a tools: ~20 (mismas)
+- Contexto consumido: ~15%
+- Claude mantiene **todo el hilo**
+- Sesión dura 4-6x más
+
+---
+
+## Casos de uso
+
+### 1. Debugging largo
+
+Bug que requiere leer logs grandes + grep + investigación.
+
+Sin: contexto se llena con logs crudos.
+Con: solo info relevante de logs, foco en el bug.
+
+### 2. Refactor masivo
+
+Tocar 30+ archivos.
+
+Sin: cada archivo entero al contexto.
+Con: solo las partes que necesitás editar.
+
+### 3. Trabajo con Playwright
+
+Screenshots y outputs pesados.
+
+Sin: cada screenshot = 50+ KB.
+Con: análisis del screenshot + descarte del raw.
+
+### 4. Investigación de codebase nueva
+
+Necesitás entender estructura sin leer todo.
+
+Sin: cada `grep` te tira página de resultados.
+Con: solo lo relevante.
+
+### 5. Multi-day projects
+
+Querés que Claude retome donde dejaste ayer.
+
+Sin: empezás de cero, re-explicás contexto.
+Con: restaura estado al instante.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Para qué |
+|------|----------|
+| **context-mode** | Reducir contexto consumido en sesión (98%) |
+| [claude-mem](/boveda/cinco-repos-dominando-claude) | Memoria persistente entre sesiones |
+| [Token Efficient](/boveda/claude-token-efficient) | CLAUDE.md para output verboso |
+| [5 errores Claude](/boveda/cinco-errores-claude) | Hábitos básicos |
+
+context-mode opera a **nivel sandbox + indexación**.
+claude-mem opera a **nivel cross-sesión**.
+Token Efficient opera a **nivel output**.
+
+**Los 3 son complementarios**.
+
+---
+
+## Anti-patrones
+
+### 1. Asumir que no perdés data
+
+context-mode **filtra** lo que llega al contexto, pero la indexación es **buena, no perfecta**. Para data crítica completa, pedí Claude que **lea sin sandbox**.
+
+### 2. Sandbox para todo
+
+Tareas chicas que devuelven 200 bytes → sandbox agrega overhead. Útil para outputs **grandes**.
+
+### 3. No revisar la memoria
+
+context-mode guarda foto antes de compactar. **Revisá** qué guardó periódicamente. A veces guarda info que ya no aplica.
+
+### 4. Confiar 100% en restore
+
+Después de restore, **verificá** que Claude tiene contexto correcto. A veces falta una decisión clave.
+
+### 5. Pelearse con sandbox cuando hace falta interactivo
+
+Si necesitás **session interactiva** (REPL, debugger), sandbox no es la solución. Sandbox es para **outputs grandes**.
+
+---
+
+## ROI estimado
+
+Para uso intensivo (4+ h/día con Claude Code):
+
+| Sin context-mode | Con context-mode |
+|------------------|-------------------|
+| Sesiones de 45 min máximo | Sesiones de 3-4h |
+| 5-6 resets diarios | 1-2 resets diarios |
+| Re-contextualización: 1h/día | Re-contextualización: 15 min/día |
+| Plan Pro $20 alcanza 70-100h/mes | Plan Pro $20 alcanza 150-200h/mes |
+
+**Plan Pro puede llegar a rango de Max $100** con solo este plugin.
+
+---
+
+## Combinaciones potentes
+
+### Con claude-mem
+
+```
+context-mode: optimiza la sesión actual.
+claude-mem: persiste entre sesiones.
+
+Juntos: sesiones largas + recuerdo cross-sesión.
+```
+
+[claude-mem](/boveda/cinco-repos-dominando-claude).
+
+### Con Token Efficient
+
+```
+context-mode: reduce INPUT al contexto.
+Token Efficient: reduce OUTPUT verboso.
+
+Juntos: ahorro brutal.
+```
+
+[Token Efficient](/boveda/claude-token-efficient).
+
+### Con 5 errores Claude
+
+```
+Los 5 errores son HÁBITOS básicos.
+context-mode es HERRAMIENTA técnica.
+
+Hábitos primero. Herramientas después.
+```
+
+[5 errores Claude](/boveda/cinco-errores-claude).
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Sesiones siempre cortas (menos de 30 min) | El plugin no aporta |
+| Necesitás raw data crítica | Sandbox filtra |
+| Trabajo super interactivo (REPL constante) | Sandbox no aplica |
+
+---
+
+## Próximos pasos
+
+- Para memoria entre sesiones (no solo dentro), [claude-mem en 5 repos dominando Claude](/boveda/cinco-repos-dominando-claude)
+- Para reducir output verboso, [Token Efficient](/boveda/claude-token-efficient)
+- Para hábitos básicos antes de optimizaciones avanzadas, [5 errores Claude](/boveda/cinco-errores-claude)

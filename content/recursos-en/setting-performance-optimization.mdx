@@ -1,0 +1,89 @@
+---
+title: "Setting Performance Optimization — cap output + disable cost warnings (4,902 installs)"
+description: "Setting with 4,902 installs — the **absolute #2** among settings (after Context Monitor). Optimizes Claude Code performance: caps output tokens, disables non-essential calls, and silences cost warnings."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-bash-timeouts", "setting-mcp-timeouts", "setting-development-utils"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/environment/performance-optimization"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/performance-optimization.json"
+---
+
+## What it is
+
+**4,902 installs — the absolute #2 among settings (after Context Monitor 10.8k).** Nearly 5x more adopted than #3.
+
+Optimizes Claude Code performance with 3 env vars:
+- `CLAUDE_CODE_MAX_OUTPUT_TOKENS: 8000` — caps output per response
+- `DISABLE_NON_ESSENTIAL_MODEL_CALLS: 1` — avoids non-critical model calls
+- `DISABLE_COST_WARNINGS: 1` — silences cost warnings
+
+Result: faster responses, fewer tokens (= less $), less UI noise.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `environment` |
+| Installs | **4,902 (#2 absolute)** |
+| Vars | MAX_OUTPUT_TOKENS, DISABLE_NON_ESSENTIAL, DISABLE_COST_WARNINGS |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting environment/performance-optimization
+```
+
+For Claude:
+
+```
+I installed the environment/performance-optimization setting. Confirm the
+current values. If I want to change MAX_OUTPUT to 4000 (even more
+restrictive), show me how.
+```
+
+## What you can do with it
+
+### Reduce cost
+
+Capping output = fewer tokens generated = less $.
+
+### Faster responses
+
+The output cap also cuts response time.
+
+### Cleaner UI
+
+Without constant cost warnings, there's less noise.
+
+### For teams on a tight budget
+
+Hard caps prevent a dev from accidentally overshooting.
+
+### Combo with [Bash Timeouts](/boveda/setting-bash-timeouts) and [MCP Timeouts](/boveda/setting-mcp-timeouts)
+
+Performance Opt + Bash Timeouts + MCP Timeouts = every limit dialed in. A tuning bundle.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your workflow needs long responses:** 8000 tokens is restrictive. Raise it if needed.
+- **If you want to see cost warnings:** disabling silences them, but some warnings are useful.
+- **DISABLE_NON_ESSENTIAL_MODEL_CALLS:** some features may depend on "non-essential" calls. Check the impact.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Performance Optimization Setting](https://www.aitmpl.com/component/settings/environment/performance-optimization) — exact command.
+- **JSON config:** [performance-optimization.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/performance-optimization.json).
+
+## Related resources
+
+- [Bash Timeouts Setting](/boveda/setting-bash-timeouts) — timeouts for bash.
+- [MCP Timeouts Setting](/boveda/setting-mcp-timeouts) — timeouts for MCPs.
+- [Development Utils Setting](/boveda/setting-development-utils) — quality-of-life env vars.

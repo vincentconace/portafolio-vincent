@@ -1,0 +1,175 @@
+---
+title: "Claude Code desde cero — setup en 10 minutos"
+description: "Instalá Claude Code, configurá tu API key, tu primer proyecto y los settings esenciales que casi nadie te cuenta. Después de esto vas a estar listo para empezar a construir."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "anthropic-api"]
+featured: true
+featuredOrder: 3
+badge: "popular"
+version: "v1.0"
+publishedAt: "2026-05-10"
+readingTime: "10 min"
+relatedSlugs: ["hooks-automatizacion", "agente-pagokit"]
+---
+
+## Qué vas a lograr
+
+Al final de esta guía vas a tener:
+
+- **Claude Code** instalado y funcionando en tu terminal
+- Tu **API key de Anthropic** configurada de forma segura
+- Un **proyecto de prueba** corriendo con un `CLAUDE.md` bien armado
+- Los **3 settings** que más te van a ahorrar tiempo desde el día 1
+
+Si nunca usaste Claude Code, esto es lo más rápido y limpio que vas a encontrar en español.
+
+---
+
+## Requisitos previos
+
+<Checklist
+  storageKey="ccode-setup-prereqs"
+  items={[
+    "Node.js 18 o superior instalado (verificá con: node --version)",
+    "Una cuenta en console.anthropic.com con saldo o un plan activo",
+    "Acceso a una terminal moderna (Terminal en macOS, Windows Terminal, o iTerm2)",
+    "Editor de código instalado (VS Code, Cursor, o el que uses)",
+  ]}
+/>
+
+---
+
+## Paso 1 — Instalación
+
+<Step number={1} title="Instalar Claude Code">
+
+Claude Code se distribuye como un paquete global de npm:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Verificá que quedó bien:
+
+```bash
+claude --version
+```
+
+Si te tira error de permisos en macOS/Linux, **no uses sudo**. Configurá un prefix global para npm en tu home:
+
+```bash
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Después volvé a correr el `npm install -g`.
+
+</Step>
+
+<Step number={2} title="Configurar tu API key" last>
+
+Generá una API key en [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys).
+
+Exportala como variable de entorno permanente:
+
+```bash
+echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.zshrc
+source ~/.zshrc
+```
+
+<Callout type="warning" title="No la pongas en el código">
+Nunca commitees tu API key. Si usás `.env` en proyectos, agregalo al `.gitignore` antes de cualquier cosa.
+</Callout>
+
+Probá que Claude Code la lee:
+
+```bash
+claude --version && claude /status
+```
+
+</Step>
+
+---
+
+## Paso 2 — Tu primer proyecto
+
+Andá a un proyecto existente (o creá uno nuevo) y entrá con:
+
+```bash
+cd mi-proyecto
+claude
+```
+
+La primera vez te va a pedir confirmación para algunas operaciones. Aceptá y empezá a explorar:
+
+```
+> /init
+```
+
+El comando `/init` genera un `CLAUDE.md` analizando tu codebase. **Este archivo es oro**: Claude lo lee en cada sesión y le da contexto sobre tu proyecto.
+
+---
+
+## Paso 3 — Los 3 settings que importan
+
+Editá tu `~/.claude/settings.json` (o creá uno si no existe):
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(ls:*)",
+      "Read",
+      "Edit"
+    ]
+  },
+  "model": "claude-sonnet-4-6",
+  "env": {
+    "DISABLE_AUTOUPDATER": "0"
+  }
+}
+```
+
+**Por qué cada uno importa:**
+
+| Setting | Para qué sirve |
+|---------|----------------|
+| `permissions.allow` | Evita el prompt de "¿Permitir esto?" en operaciones inocuas. Te ahorra ~30 confirmaciones por sesión. |
+| `model` | Fija el modelo. Si no lo ponés, usa el default que puede cambiar. |
+| `env.DISABLE_AUTOUPDATER` | Mantenelo en `0` (auto-update on). Claude Code se actualiza seguido con mejoras. |
+
+<Callout type="tip" title="El comando /permissions">
+Adentro de Claude Code, escribí `/permissions` para ver y editar permisos de forma interactiva. Más fácil que tocar el JSON a mano.
+</Callout>
+
+---
+
+## Comandos que vale la pena conocer desde el día 1
+
+| Comando | Qué hace |
+|---------|----------|
+| `/init` | Genera `CLAUDE.md` del proyecto actual |
+| `/clear` | Limpia el contexto de la sesión |
+| `/compact` | Comprime el contexto (útil cuando se llena) |
+| `/help` | Lista todos los comandos disponibles |
+| `/model` | Cambia el modelo (Opus, Sonnet, Haiku) |
+| `/cost` | Te muestra el gasto de la sesión |
+| `/memory` | Edita tu memoria de usuario (preferencias persistentes) |
+
+---
+
+## Próximo paso
+
+Ya estás listo. Lo siguiente que recomiendo:
+
+1. Probá pedirle a Claude que te explique un archivo de tu proyecto: `"Explicame qué hace src/lib/db.ts"`
+2. Hacé un cambio chico: `"Agregale tipos a las funciones de src/utils/format.ts"`
+3. Cuando quieras automatizar, mirá la guía de [Hooks de Claude Code](/boveda/hooks-automatizacion).
+
+Si algo no te funcionó, abrí un issue en el [repo oficial](https://github.com/anthropics/claude-code/issues).

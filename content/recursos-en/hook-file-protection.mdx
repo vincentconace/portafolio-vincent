@@ -1,0 +1,86 @@
+---
+title: "Hook File Protection — protect critical files from accidental modification (568 installs)"
+description: "A hook with 568 installs that prevents editing of system files, critical configs, and production code. The list of protected paths is configurable. Defense in depth for shops that separate dev/prod."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-env-file-protection", "hook-dangerous-command-blocker", "hook-backup-before-edit"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/file-protection"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/file-protection.json"
+---
+
+## What it is
+
+A hook that blocks edits to files in a list of "protected" paths. It typically covers:
+- System files (`/etc/`, etc.)
+- Critical configuration files (CI/CD configs, base .gitignore, etc.)
+- Production code that's clearly marked
+
+More general than [Env File Protection](/boveda/hook-env-file-protection) (which is just `.env*`). Configuration defines which paths are protected.
+
+Hook event: `PreToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `security` |
+| Installs | 568 |
+| Hook event | `PreToolUse` (Edit/Write) |
+| Trigger | Path matches the protected list |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook security/file-protection
+```
+
+For Claude:
+
+```
+I installed the security/file-protection hook. Show me the default list of
+protected paths and how to add more (for example `prod/**`, `infra/**`).
+```
+
+## What you can do with it
+
+### Configurable protected paths
+
+A list of globs (`prod/`, `infra/`, `secrets/`, etc.). When Claude tries to edit anything in that list, it gets blocked.
+
+### Defense in depth
+
+Combined with [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) (for shell commands) and [Env File Protection](/boveda/hook-env-file-protection) (for .env), you get triple coverage.
+
+### For teams with dev/prod separation
+
+Your repo has `apps/dev/` and `apps/prod/`. You protect `apps/prod/` so Claude never touches it without an explicit override.
+
+### For autonomous sessions
+
+If Claude is running in `/goal`, this hook is essential. Without it, a wrong decision can touch production.
+
+## When it's not worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If your legitimate workflow edits the protected paths:** constant overrides = friction. Adjust the list.
+- **For shops without dev/prod separation:** less critical.
+- **For personal repos:** it can be overhead.
+- **If your list of paths is ambiguous:** document exactly what is protected.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [File Protection Hook](https://www.aitmpl.com/component/hooks/security/file-protection) — the exact command.
+- **JSON config:** [file-protection.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/file-protection.json).
+
+## Related resources
+
+- [Env File Protection Hook](/boveda/hook-env-file-protection) — specific to .env files.
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — for shell commands, not files.
+- [Backup Before Edit Hook](/boveda/hook-backup-before-edit) — if something slips through the filter, at least you have a backup.

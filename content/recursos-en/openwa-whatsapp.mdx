@@ -1,0 +1,350 @@
+---
+title: "Claude answering WhatsApp — a self-hosted gateway (with the honest warnings)"
+description: "A pattern for spinning up a self-hosted WhatsApp gateway on your own machine so Claude reads and replies on its own. Includes the full setup, the HMAC bridge, useful prompts, and the real risks — including the number ban that most people leave out."
+difficulty: "avanzado"
+category: "plugins"
+tools: ["claude-code", "whatsapp", "docker"]
+publishedAt: "2026-05-25"
+readingTime: "13 min"
+relatedSlugs: ["mcp-server-propio", "ecosistema-de-agentes", "plugin-n8n-mcp"]
+---
+
+## The warning before anything else
+
+Before the technical setup, the most important thing:
+
+> **WhatsApp can ban your number** if it detects you're using an unofficial client or if you use it for spam / mass messaging / automation without consent.
+
+This isn't "it could happen in theory." It's **something that happens**. Rules:
+
+1. **Never connect your personal number.** If you connect it, assume you might lose it.
+2. **Use a new number** dedicated to the gateway (a fresh SIM or a virtual number).
+3. **Don't send mass messages.** The gateway is meant to **reply** and **automate responses to users who messaged you first**, not for cold outbound.
+4. **If you get banned, there's no practical appeal.** Accept the risk or don't play.
+
+With that clear, the pattern is very useful for support, sales follow-up, and operations — but **you take on the risk**.
+
+---
+
+## Why this pattern
+
+The alternatives out there:
+
+| Option | Cost | Trade-off |
+|--------|-------|-----------|
+| **Official WhatsApp Business API** | $0.005-0.05 per message + setup | Legal, scalable, requires template approval |
+| **SaaS like Twilio / 360dialog** | Markup over WA Business | Zero infra, expensive at high volume |
+| **Self-hosted gateway (this pattern)** | Just your machine | Free but **ban risk + manual setup** |
+
+The self-hosted gateway wins **when you have low volume, want zero marginal cost, and accept the risk**.
+
+---
+
+## Setup architecture
+
+```
+WhatsApp (your new number)
+        ↓ QR scan, persistent connection
+   [Local gateway] (OpenWA or similar)
+        ↓ webhook with HMAC
+   [Node.js bridge] (you build it)
+        ↓ invokes Claude Code
+       Claude
+        ↓ response
+   Bridge → Gateway → WhatsApp → customer
+```
+
+The pieces:
+
+1. **Gateway**: open-source software that connects to WhatsApp as an unofficial client. It gives you a REST API + webhooks.
+2. **Bridge**: your own Node server that receives the gateway's webhooks, invokes Claude to decide the response, and sends the response to the gateway.
+3. **Claude**: the logic for how to respond. Skills, business rules, human escalation.
+
+---
+
+## Step 1 — Bring up the gateway
+
+There are open-source implementations (typically NestJS or Go, MIT). Two common paths:
+
+### Path A — Docker (recommended)
+
+```bash
+docker run -d \
+  --name wa-gateway \
+  -p 3000:3000 \
+  -v ./session:/app/session \
+  -e API_KEY=your-long-secret \
+  <gateway-image>
+```
+
+The gateway exposes:
+- `GET /qr` → returns the QR to scan from WhatsApp on the phone
+- `POST /send` → endpoint to send messages
+- `Webhook` → posts to you when a message arrives
+
+### Path B — Local Node
+
+If you'd rather skip Docker:
+
+```bash
+git clone <gateway-repo>
+cd gateway
+npm install
+npm start
+```
+
+Same result, just running on native Node.
+
+### Connect your number
+
+1. Open WhatsApp on the phone **with the new number** (not the personal one)
+2. Settings → Linked devices → Link a device
+3. Scan the QR from `http://localhost:3000/qr`
+4. Done, the gateway is active
+
+It's **just like WhatsApp Web** — the session lives in `./session/` and stays there until you log out from the phone or WhatsApp bans the client.
+
+---
+
+## Step 2 — The HMAC bridge
+
+The gateway fires webhooks when a message arrives. **Without HMAC, any process on your machine can send fake webhooks** to the bridge. That's why we sign them.
+
+`bridge.ts` (Node + Express):
+
+```ts
+import express from 'express'
+import crypto from 'crypto'
+import { spawn } from 'child_process'
+
+const SECRET = process.env.HMAC_SECRET! // shared with the gateway
+
+const app = express()
+app.use(express.json())
+
+function verifyHMAC(req: express.Request): boolean {
+  const signature = req.headers['x-signature'] as string
+  if (!signature) return false
+  const expected = crypto
+    .createHmac('sha256', SECRET)
+    .update(JSON.stringify(req.body))
+    .digest('hex')
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(expected)
+  )
+}
+
+app.post('/webhook', async (req, res) => {
+  if (!verifyHMAC(req)) return res.status(401).send('bad signature')
+
+  const { from, body, isGroup } = req.body
+  if (isGroup) return res.json({ ok: true }) // ignore groups
+
+  // Invoke Claude to decide the response
+  const response = await askClaude(from, body)
+
+  // Send the response back via the gateway
+  await fetch('http://localhost:3000/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': process.env.GATEWAY_API_KEY!,
+    },
+    body: JSON.stringify({ to: from, message: response }),
+  })
+
+  res.json({ ok: true })
+})
+
+async function askClaude(from: string, body: string): Promise<string> {
+  // Implementation depends on your setup — call the Claude API or Claude Code with skills
+  // See the next section
+  return '...'
+}
+
+app.listen(4000, () => console.log('Bridge listening on :4000'))
+```
+
+Config on the gateway (typical environment variables):
+
+```
+WEBHOOK_URL=http://localhost:4000/webhook
+WEBHOOK_HMAC_SECRET=your-long-secret
+```
+
+---
+
+## Step 3 — The response logic (Claude)
+
+This is where **your setup sets itself apart from a generic autoresponder**. There are 3 approaches:
+
+### Approach 1 — Call the Claude API directly
+
+Each webhook → an API call → a response. Simple, stateless.
+
+```ts
+import Anthropic from '@anthropic-ai/sdk'
+const client = new Anthropic()
+
+async function askClaude(from: string, body: string): Promise<string> {
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 500,
+    system: `You are the assistant for [your business]. Rules: [...]`,
+    messages: [{ role: 'user', content: body }],
+  })
+  return (response.content[0] as any).text
+}
+```
+
+**Limitation**: zero memory. Each message is independent.
+
+### Approach 2 — Claude Code with skills and memory
+
+If you have your Claude Code setup with skills and persistent memory, invoke Claude Code instead of the API:
+
+```ts
+import { spawn } from 'child_process'
+
+async function askClaude(from: string, body: string): Promise<string> {
+  return new Promise((resolve) => {
+    const claude = spawn('claude', ['--no-interactive'], {
+      cwd: `/home/user/agents/whatsapp/conversations/${from}/`,
+    })
+    claude.stdin.write(body)
+    claude.stdin.end()
+    let output = ''
+    claude.stdout.on('data', (d) => (output += d.toString()))
+    claude.on('close', () => resolve(output.trim()))
+  })
+}
+```
+
+Each conversation has its own folder. Claude reads the history on startup, responds, and saves what's new. **Persistent memory per contact**, with no external DB service.
+
+### Approach 3 — Smart routing (best for scale)
+
+If you get lots of messages of different kinds (support, sales, FAQs), use an agent that **classifies** and routes to the right agent:
+
+```
+Incoming message
+    ↓
+[Router agent] → "what kind of query is this?"
+    ↓
+   ┌──────────┬─────────┬──────────┐
+   ▼          ▼         ▼          ▼
+Support    Sales     FAQ      Escalate to human
+agent      agent     agent    (Slack ping)
+```
+
+This is the [agent ecosystem](/boveda/ecosistema-de-agentes) pattern applied to WhatsApp.
+
+---
+
+## 6 useful prompts
+
+Some common cases:
+
+### 1. Order support (e-commerce)
+
+```
+You are the support assistant for [store]. The customer messages you on WhatsApp.
+
+CUSTOMER CONTEXT:
+[load it from your DB with an MCP — past orders, status, etc.]
+
+RULES:
+- If they ask about order tracking, check with the /track_order tool
+- If they ask for an exchange or return, escalate to a human: reply "let me
+  connect you with someone from the team" and post in the support channel
+- If they ask about product info, reply with the available info
+- DO NOT make up order, date, or stock information
+- Tone: friendly but concise, 2-3 sentences max
+```
+
+### 2. Classifier / triage
+
+```
+We received this message on WhatsApp: "$message"
+
+CLASSIFY IT AS ONE OF:
+- order_support: question about a specific order
+- general_support: complaint or query not tied to an order
+- sales_inquiry: interest in buying, asking about price/availability
+- spam: unrelated or obvious spam
+- urgent: threat, critical issue, needs human attention now
+
+Return JSON: { type, confidence: 0-1, reason: string }
+```
+
+### 3. Warm sales follow-up
+
+```
+5 days ago we contacted this lead on WhatsApp:
+[context]
+
+They didn't reply.
+
+Generate a follow-up message that:
+- Sounds natural, not obviously automated
+- Mentions something specific from the previous conversation
+- Has a soft CTA (not aggressive)
+- If this is the 2nd or 3rd time with no reply, suggest a friendly close
+
+Tone: like a friend in the industry, not like a salesperson.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Mass outbound
+
+If you're going to message a list of people who didn't message you first, this **will get you banned**. WhatsApp detects outbound patterns and blocks them. Use it only to reply to people who already started a conversation.
+
+### 2. Replying to ANYTHING without classifying
+
+If Claude replies to **everything** that comes in, you'll generate weird responses to spam and to the wrong people. **Always classify first**, then decide whether to reply.
+
+### 3. No handoff to a human
+
+Cases a human should handle (large purchases, serious complaints, legal issues) → escalate. Don't let Claude handle everything "because it can."
+
+### 4. Connecting the personal number "just to test"
+
+No. Use a new number. Period.
+
+---
+
+## When this pattern is worth it
+
+✅ Low-to-medium volume (dozens of messages/day, not thousands)
+✅ Support / follow-up / repetitive FAQs
+✅ You accept the risk of the number getting banned
+✅ You have the technical capacity to maintain the setup
+
+❌ High commercial volume → use the official WhatsApp Business API
+❌ If you don't accept the risk of losing the number → no
+❌ If the use case requires high SLA availability → no (self-hosted gateways go down)
+❌ Regulated industry that requires legal traceability of messages → official API
+
+---
+
+## Real cost
+
+- Initial setup: 2-6 hours
+- Gateway free (MIT)
+- Virtual number (if you don't want a SIM): $1-5/month
+- Claude API or Claude Code subscription: your plan
+- Server: your machine or a VPS ($5-20/month)
+
+**Total: ~$10-30/month** for medium volume. Compared with per-message SaaS (~$0.05-0.20 per interaction), it pays off fast.
+
+---
+
+## Next steps
+
+- To understand the general agent pattern with its webhooks/MCPs, [agent ecosystem](/boveda/ecosistema-de-agentes)
+- To connect Claude to more systems without code, [n8n MCP plugin](/boveda/plugin-n8n-mcp)
+- If you're going to build the bridge from scratch, [your own MCP server](/boveda/mcp-server-propio) covers similar patterns

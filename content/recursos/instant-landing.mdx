@@ -1,0 +1,368 @@
+---
+title: "Instant Landing — landing page completa en una sola ejecución del agente"
+description: "System prompt para Codex/Claude Code/Antigravity que arma landing entera: 3 preguntas de discovery, busca skills relevantes (prioriza Vercel), construye Next.js + TypeScript + Tailwind end-to-end, corre lint + build + dev y te entrega URL localhost lista para revisar."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["codex", "claude-code", "antigravity"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-web-builder", "claude-disenador-web", "comando-de-sistema"]
+---
+
+## La idea
+
+Un system prompt que convierte cualquier CLI compatible (Codex, Claude Code, Antigravity, Gemini CLI) en una **fábrica de landing pages**.
+
+El flow:
+1. Copiás el system prompt
+2. Pegás como system prompt en tu CLI
+3. Respondés **3 preguntas** del negocio
+4. El agente ejecuta todo: instala skills + construye frontend + corre validaciones
+5. Te devuelve URL de localhost lista para revisar
+
+Sin clicks. Sin Figma. Sin diseñador. **Una sola ejecución**.
+
+---
+
+## CLIs compatibles
+
+Funciona con cualquier agente que acepte system prompt:
+
+| CLI | Cómo |
+|-----|------|
+| **Codex (OpenAI)** | `npm i -g @openai/codex` + `codex login` |
+| **Claude Code** | `/system` o config con system prompt |
+| **Antigravity** | Campo de system prompt en interfaz |
+| **Gemini CLI** | Configuración inicial |
+
+Si tu herramienta no tiene campo system prompt, **pegalo como primer mensaje** de contexto. Mismo efecto.
+
+---
+
+## Setup rápido — Codex CLI
+
+Si usás Codex como CLI principal:
+
+```bash
+# 1. Instalar
+npm i -g @openai/codex
+
+# 2. Login con cuenta ChatGPT
+codex login
+
+# 3. Ejecutar en tu proyecto
+cd mi-proyecto && codex
+```
+
+Después pegás el system prompt de abajo y arrancás.
+
+---
+
+## El system prompt completo
+
+```
+Sos ingeniero frontend senior trabajando en Codex. Tu objetivo:
+construir landing page completa, funcional y lista para producción
+en UNA sola ejecución.
+
+Debes seguir este flujo obligatorio:
+
+FASE 0 — Discovery corto (obligatorio)
+Antes de codear, hacé SOLO estas 3 preguntas y esperá respuesta:
+1. ¿Cuál es el nombre de tu negocio y a qué se dedica? (1-2 líneas)
+2. ¿Qué estilo visual querés y qué paleta de colores preferís?
+3. ¿Tenés referencias (webs/marcas) o requisitos obligatorios
+   que deba respetar?
+
+Reglas de interacción mínima:
+- NO hagas preguntas extra salvo bloqueo técnico real
+- Si falta info, asumí defaults razonables y declararlos en
+  2-4 líneas ANTES de codificar
+- Defaults: idioma del usuario, estructura completa de landing,
+  CTA de contacto/agendamiento, copy demo profesional, imágenes
+  placeholder premium
+
+FASE 1 — Skills (obligatorio antes de construir)
+Buscá e instalá skills relevantes para el proyecto.
+1. Buscar skills con npx:
+   - npx -y skills find "vercel nextjs react"
+   - npx -y skills find "tailwind ui ux"
+   - npx -y skills find "landing page frontend"
+2. PRIORIZAR skills de Vercel cuando apliquen, especialmente
+   repos como vercel-labs/agent-skills
+3. Instalar 2-5 skills útiles para el caso (si existen) con
+   npx skills add ... -y
+4. Verificar skills instaladas con npx skills ls (y npx skills ls -g
+   si aplica)
+5. Si no hay skills adecuadas o falla, continuá con fallback y
+   explicalo en 1-2 líneas
+
+FASE 2 — Construcción end-to-end
+- Construí landing completa sin dejar pasos a medias
+- Stack: el pedido por usuario, o por defecto Next.js + TypeScript
+  + Tailwind + Bootstrap
+- UI moderna, premium y responsive (mobile/tablet/desktop)
+- Si falta contenido final, escribí copy demo coherente y realista
+- Si faltan imágenes, usá imágenes web de alta calidad y configurá
+  dominios remotos de Next.js Image
+- HTML semántico y accesibilidad básica (labels, alt text,
+  jerarquía de headings)
+- Código limpio y mantenible
+
+Estructura mínima obligatoria:
+- Navbar / header
+- Hero con CTA principal
+- Franja de confianza o prueba social
+- Sección de servicios o funcionalidades
+- Sección de beneficios / propuesta de valor
+- Sección de proceso (cómo funciona)
+- Testimonios o casos demo
+- Contacto con formulario
+- Footer
+
+FASE 3 — Validación técnica final
+- Ejecutá lint
+- Ejecutá build
+- Levantá servidor local (dev)
+- Confirmá URL localhost
+
+Formato de respuesta final:
+1. Resumen de lo construido
+2. Skills encontradas e instaladas (o fallback si no se pudieron)
+3. Archivos modificados (rutas)
+4. Resultado de validaciones (lint/build/dev)
+5. URL localhost para revisar
+6. Siguientes mejoras opcionales (si aplica)
+```
+
+---
+
+## Plantilla para el primer prompt del usuario
+
+Después de cargar el system prompt, tu primer mensaje:
+
+```
+Quiero que construyas landing page completa en una sola ejecución.
+
+Datos:
+- Negocio: [nombre + qué hace]
+- Estilo + paleta: [estética que quieren]
+- Referencias + requisitos: [URLs o restricciones obligatorias]
+
+Requisitos:
+- Máximo 3 preguntas de discovery
+- Buscá e instalá skills relevantes (priorizá Vercel)
+- Construí end-to-end
+- Corré lint + build + dev
+- Entregá resumen, skills usadas, archivos cambiados, URL localhost
+```
+
+---
+
+## Las 3 preguntas — guía para responder bien
+
+### Pregunta 1 — Negocio
+
+❌ "Una agencia"
+✅ "DigitalLAB, agencia de growth para SaaS B2B en LATAM. Servicios: SEO, content, paid media. 3 años en el mercado, 25 clientes activos."
+
+Más detalle = landing más específica.
+
+### Pregunta 2 — Estilo + paleta
+
+❌ "Bonita"
+✅ "Estilo Linear (clean, minimalista, dark first). Paleta: negro base, blanco, acento verde lima (#9FFF1A). Tipografía: Inter para body, Söhne para headings."
+
+Más detalle = menos iteraciones.
+
+### Pregunta 3 — Referencias
+
+❌ "No tengo"
+✅ "Inspirate en linear.app, vercel.com y resend.com. Restricción: el cliente final son CTOs, ningún emoji en hero. Logo dorado (link adjunto). Copy en inglés."
+
+Restricciones explícitas = no problemas después.
+
+---
+
+## Lo que sale al final
+
+Después de la ejecución (típicamente 5-15 min), te llega:
+
+```
+=== LANDING CONSTRUIDA ===
+
+1. Resumen:
+   Landing de DigitalLAB construida con Next.js 16 + TypeScript +
+   Tailwind v4 + shadcn/ui. Estética Linear-inspired, dark first.
+   8 secciones según estructura solicitada.
+
+2. Skills instaladas:
+   - vercel-labs/agent-skills/landing-design
+   - vercel-labs/agent-skills/seo-meta
+   - tailwind-ui-snippets
+
+3. Archivos modificados:
+   - app/page.tsx
+   - app/layout.tsx
+   - components/Hero.tsx
+   - components/Features.tsx
+   - components/Testimonials.tsx
+   - components/ContactForm.tsx
+   - styles/globals.css
+
+4. Validaciones:
+   - Lint: PASS
+   - Build: PASS (2.3s)
+   - Dev server: running on http://localhost:3000
+
+5. Localhost: http://localhost:3000
+
+6. Mejoras opcionales:
+   - Conectar formulario a backend real (actualmente console.log)
+   - Agregar tests E2E con Playwright
+   - Optimizar imágenes (actualmente externas, considerar local)
+```
+
+---
+
+## Casos de uso
+
+### 1. MVP para validar idea
+
+```
+Negocio: "TrackrPro — herramienta para freelancers de tracking
+de horas + facturación automática"
+
+Estilo: "Modern SaaS, profesional pero no aburrido. Colores
+azul + verde."
+
+Referencias: "Toggl Track + Wave Accounting. Audiencia:
+freelancers individuales (no agencias)."
+```
+
+20 min después tenés landing publicable para validar interés.
+
+### 2. Landing para campaña específica
+
+```
+Negocio: "Black Friday — descuento 50% en mi curso de Notion"
+
+Estilo: "Urgente, alto contraste, naranja Black Friday."
+
+Referencias: "Solo hero + features + countdown + CTA. Sin
+testimonios ni footer largo. Página single-purpose."
+```
+
+### 3. Re-design de landing existente
+
+```
+Negocio: "Tengo landing en WordPress fea. La quiero
+re-construir en Next.js manteniendo el copy."
+
+Estilo: "Limpio, minimalista, dark mode opcional."
+
+Referencias: "Mi landing actual: [URL]. Copialo pero modernizado.
+Mantené las mismas secciones y CTAs."
+```
+
+### 4. Portfolio personal
+
+```
+Negocio: "Mi portfolio como diseñador UX/UI freelance"
+
+Estilo: "Bold, statement-making, fuentes serif grandes,
+mucho whitespace"
+
+Referencias: "Inspiración: rauno.me + emilkowal.ski.
+Audiencia: founders que buscan UX freelance."
+```
+
+---
+
+## Anti-patrones
+
+### 1. Respuestas vagas a las 3 preguntas
+
+Si respondés "una landing bonita" a las 3, vas a recibir output genérico. **El system prompt es bueno, pero no compensa briefs flojos**.
+
+### 2. No reiniciar CLI después de instalar skills
+
+Si el agente instala skills nuevas, **reinicia el CLI** antes de la siguiente sesión. Si no, no las carga.
+
+### 3. Esperar pixel-perfect en la primera
+
+El system prompt entrega **~80% del trabajo**. El 20% final (afinar copy, tweakear spacing, ajustar interacciones) es manual o con prompts adicionales.
+
+### 4. Stack diferente sin avisar
+
+Si tu equipo usa Vue + Nuxt en lugar de Next.js, **decilo explícitamente** en el discovery o en requisitos. Si no, va con default Next.js.
+
+### 5. Múltiples paginas
+
+Este sistema está para **una landing**. Si necesitás site multi-página, necesitás múltiples ejecuciones o approach distinto.
+
+---
+
+## Combinaciones potentes
+
+### Con Agent Browser
+
+Después de construir, validá:
+
+```
+> Usá Agent Browser para entrar a http://localhost:3000.
+  Evaluá UX. Reportá 3 cosas que mejoraría.
+```
+
+[Agent Browser](/boveda/agent-browser) te da feedback automático.
+
+### Con Claude Animador Web
+
+Para sumar animaciones premium después de la base:
+
+```
+> Aplicá Emil Kowalski Skill a la landing recién construida.
+  Foco en hero entry animation y micro-interactions en CTAs.
+```
+
+[Claude Animador Web](/boveda/claude-animador-web).
+
+### Con Humanizer
+
+Si el copy demo suena IA-generated:
+
+```
+> Pasá todo el copy de la landing por /humanizer.
+  Mantené estructura, mejorá tono.
+```
+
+[Claude Copywriter](/boveda/claude-copywriter).
+
+### Con Clonador de Páginas
+
+```
+> 1. Cloná https://stripe.com con clonador
+> 2. Aplicá Instant Landing system prompt al output para
+     adaptarlo a mi marca
+```
+
+[Clonador](/boveda/clonador-de-paginas) + Instant Landing.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Diseño muy custom / fuera de tendencia | Defaults van con tendencias mainstream |
+| Site multi-página complejo | Para un sitio entero, otro approach |
+| Branding crítico con guía rigurosa | Necesitás diseñador humano para honor a la guía |
+| Funcionalidad real (no solo landing) | Esto es página estática + formulario, no app |
+
+---
+
+## Próximos pasos
+
+- Para landings con browser real revisando, [Claude diseñador web](/boveda/claude-disenador-web)
+- Para landing con interview guiado por Claude, [Claude Web Builder](/boveda/claude-web-builder)
+- Para crear system prompts custom como este, [comando de sistema](/boveda/comando-de-sistema)

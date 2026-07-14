@@ -1,0 +1,79 @@
+---
+title: "Setting Git Commit Settings — controla 'Co-Authored-By: Claude' en commits (1,840 installs)"
+description: "Setting con 1,840 installs. Configura behavior de git commit incluyendo `includeCoAuthoredBy`. Desactivá la firma Claude si querés history limpio o tu org tiene policies."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-smart-commit", "hook-conventional-commits", "setting-allow-git-operations"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/global/git-commit-settings"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/git-commit-settings.json"
+---
+
+## Qué es
+
+**1,840 installs — uno de los settings más adoptados.** Razón: muchísima gente no quiere el `Co-Authored-By: Claude <noreply@anthropic.com>` que se agrega automáticamente a cada commit.
+
+Setting key: `includeCoAuthoredBy: false`. Resultado: commits limpios sin co-authorship line.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `global` |
+| Installs | **1,840** |
+| Setting key | `includeCoAuthoredBy: false` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting global/git-commit-settings
+```
+
+Para Claude:
+
+```
+Instalé el setting global/git-commit-settings. Hacé un commit de prueba
+y verificá que NO incluye la línea Co-Authored-By Claude.
+```
+
+## Qué podés hacer con esto
+
+### Git history limpio
+
+Si tu equipo prefiere commits sin metadata del modelo, este setting lo logra.
+
+### Compliance / policy de org
+
+Algunas orgs requieren que commits no mencionen tools externos. Setting enforce.
+
+### Para repos públicos OSS
+
+En proyectos OSS donde author attribution matters, podés preferir solo tu nombre.
+
+### Si te molesta visualmente
+
+Para algunos devs, la línea extra ensucia el commit. Estética matter.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu equipo valora transparency sobre AI usage:** Co-Authored-By señala dónde se usó Claude. Removerlo oculta esa info.
+- **Para compliance que requiere AI disclosure:** algunos contracts/regulations piden señalar uso de AI en code. Removerlo puede ir contra eso.
+- **Para audit:** la línea ayuda a tracking de qué fue generado por AI.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Git Commit Settings Setting](https://www.aitmpl.com/component/settings/global/git-commit-settings) — comando exacto.
+- **Config JSON:** [git-commit-settings.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/git-commit-settings.json).
+
+## Recursos relacionados
+
+- [Smart Commit Hook](/boveda/hook-smart-commit) — auto-generate messages.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — enforce format.
+- [Allow Git Operations Setting](/boveda/setting-allow-git-operations) — pre-autoriza git ops.

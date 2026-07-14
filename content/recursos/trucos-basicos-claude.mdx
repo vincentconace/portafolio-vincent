@@ -1,0 +1,260 @@
+---
+title: "4 trucos básicos para sacarle más jugo a Claude Code"
+description: "Ultra Think + Plan Mode, sub-agentes en paralelo, /init para CLAUDE.md, y personalización del CLAUDE.md para que Claude verifique su trabajo y guarde memoria. Los 4 que de verdad cambian cómo trabajás. Sin trucos de pacotilla."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-26"
+readingTime: "8 min"
+relatedSlugs: ["guia-claude-code-completa", "memoria-claude-code", "agent-view-paralelo"]
+---
+
+## Por qué estos 4 y no otros
+
+Hay listas de "20 trucos para Claude Code" que mezclan cosas obvias con tips marginales. Acá las 4 que **realmente** mueven la aguja:
+
+1. **Ultra Think + Plan Mode** — pensar profundo antes de actuar
+2. **Sub-agentes en paralelo** — dividir tareas grandes en piezas
+3. **`/init` bien usado** — el CLAUDE.md que cambia todo
+4. **Personalización del CLAUDE.md** — memoria + auto-verificación
+
+Si no usás ninguna de estas, tu Claude está al 40% de su capacidad real.
+
+---
+
+## Truco 1 — Ultra Think + Plan Mode
+
+### Qué es
+
+**Ultra Think** es pedirle explícitamente a Claude que "piense más" antes de responder. La palabra-trigger `ultrathink` (o variantes como `think hard`) hace que use extended thinking — invierte más tokens en razonar antes de generar la respuesta.
+
+**Plan Mode** es un modo dentro de Claude Code donde Claude **propone un plan** antes de ejecutar nada. Te muestra el plan, vos lo aprobás o ajustás, después ejecuta.
+
+### Combinarlos
+
+Para tareas complejas, el combo gana:
+
+```
+> ultrathink
+
+Necesito refactorizar el módulo de auth de Supabase Auth a Clerk.
+Hay ~12 archivos involucrados y la app tiene 8 endpoints autenticados.
+
+Antes de tocar nada, entrá en Plan Mode y proponé el plan completo:
+- Qué archivos vas a tocar y en qué orden
+- Cómo manejás la migración de usuarios existentes
+- Cómo evitás romper la app durante el cambio
+- Tests que vas a actualizar
+```
+
+Claude:
+1. Activa extended thinking (`ultrathink`)
+2. Activa Plan Mode (modo "propongo plan, no ejecuto")
+3. Te tira un plan detallado de 8-15 pasos
+4. Esperá tu aprobación / cambios
+5. Ejecuta
+
+**La diferencia**: sin esto, Claude tira código y vos descubrís problemas a mitad de camino. Con esto, los problemas aparecen en la fase de plan donde son baratos de arreglar.
+
+### Cuándo usarlo
+
+- Tareas con >5 archivos
+- Refactors estructurales
+- Decisiones de arquitectura
+- Cualquier cosa con riesgo de "ah, no había pensado en X"
+
+**Cuándo NO**: tareas chicas obvias. Activar ultrathink para "renombrame esta variable" es overkill.
+
+---
+
+## Truco 2 — Sub-agentes en paralelo
+
+### Qué es
+
+En lugar de pedirle a Claude que haga una tarea grande secuencial, **descomponela en sub-tareas independientes** y delegalas a sub-agentes que corren en paralelo.
+
+```
+> Necesito que investigues 3 cosas para una decisión de arquitectura.
+  Lanzá 3 sub-agentes en paralelo:
+
+  Sub-agente 1: investigá las pros/cons de usar Postgres como vector DB
+  Sub-agente 2: investigá las pros/cons de pgvector vs Pinecone vs Weaviate
+  Sub-agente 3: investigá qué empresas similares a la nuestra usan cada opción
+
+  Cuando terminen los 3, sintetizá las conclusiones en una recomendación.
+```
+
+Claude lanza los 3, cada uno trabaja independientemente, los resultados llegan en paralelo, después la síntesis.
+
+### Por qué importa
+
+| Sin sub-agentes | Con sub-agentes |
+|------------------|------------------|
+| Tiempo secuencial: T1 + T2 + T3 | Tiempo paralelo: max(T1, T2, T3) |
+| Contexto contaminado entre tareas | Cada sub-agente tiene contexto limpio |
+| Si una sub-tarea se descontrola, afecta las otras | Aislamiento — una falla no rompe las demás |
+
+Para tareas con investigación distribuida, **el speedup es real** (típicamente 3-5×).
+
+### Cuándo usarlo
+
+- Investigación con múltiples ángulos independientes
+- Procesamiento de batches (analizar 10 archivos donde cada uno es independiente)
+- Comparativa entre opciones (cada opción la mira un sub-agente distinto)
+
+**Cuándo NO**: tareas con dependencia secuencial. Si B necesita el output de A, ponerlos en paralelo no aporta.
+
+Más sobre sub-agentes en paralelo en [múltiples Claude Code en paralelo](/boveda/agent-view-paralelo).
+
+---
+
+## Truco 3 — `/init` bien usado
+
+### Qué es
+
+`/init` es el comando que genera tu `CLAUDE.md` analizando el codebase. **El 80% de la gente lo corre una vez al principio y nunca más**. Eso desperdicia el truco.
+
+### Cómo usarlo bien
+
+#### Al arrancar en un proyecto
+
+```
+> /init
+```
+
+Genera el `CLAUDE.md` inicial. **Pero ahora la parte importante**: leelo. Editalo. Agregale lo que no sabe:
+
+- Convenciones del equipo (tabs vs spaces, naming, qué patterns usamos)
+- Lo que NO se debe tocar (legacy, archivos generados)
+- Comandos útiles (`npm run dev`, scripts custom)
+- Decisiones de arquitectura ("por qué Drizzle y no Prisma")
+
+#### Cuando el proyecto cambia significativamente
+
+`/init` no es solo para el primer día. Cuando:
+- Cambiás de stack o framework version mayor
+- Agregás un módulo grande nuevo
+- Refactorizás algo estructural
+
+**Volvé a correr `/init`** (o pedile a Claude que actualice el CLAUDE.md específicamente). El archivo viejo puede tener info obsoleta que confunde.
+
+#### Modo selectivo
+
+Si solo querés que mire una parte del proyecto:
+
+```
+> /init src/lib/payments/
+```
+
+Te genera contexto específico de ese módulo. Útil cuando el proyecto es enorme y necesitás focus.
+
+### Qué meter en el CLAUDE.md (y qué NO)
+
+| Sí ✅ | No ❌ |
+|------|------|
+| Stack con versiones exactas | "Usamos JavaScript" (obvio) |
+| Convenciones del equipo | Documentación de cada función (Claude la lee del código) |
+| Comandos custom | `npm install` (obvio) |
+| Restricciones ("no tocar X") | Estado actual del sprint (cambia muy rápido) |
+| Decisiones de arquitectura con porqué | Historia detallada del proyecto |
+
+Regla práctica: si Claude puede leerlo del código en 30 segundos, no va al CLAUDE.md. Si requiere contexto histórico que no está en el código, sí va.
+
+---
+
+## Truco 4 — Personalización del CLAUDE.md
+
+### Las 2 líneas que cambian todo
+
+En tu `CLAUDE.md`, agregale al final:
+
+```markdown
+## Comportamiento esperado
+
+- Después de hacer cualquier cambio significativo, ejecutá los tests
+  relevantes y mostrame el output. NO declares "listo" sin verificar.
+
+- Mantené notas de aprendizajes importantes en docs/learnings.md.
+  Cuando descubras algo no obvio del proyecto, agregalo ahí antes de
+  terminar la sesión.
+```
+
+Esas dos líneas hacen 2 cosas:
+
+#### 1. Auto-verificación
+
+Sin esto: Claude implementa algo, dice "listo", vos descubrís que rompió tests. Con esto: Claude implementa, corre tests él mismo, te muestra que pasan **antes** de declarar listo.
+
+Es la diferencia entre "dev junior que pide review pesado" y "dev senior que valida antes de pedir review".
+
+#### 2. Memoria entre sesiones
+
+Sin esto: cada sesión nueva arranca de cero, perdés aprendizajes acumulados ("ah, no me había dado cuenta que el endpoint X tira 500 si no le pasás header Y"). Con esto: Claude va anotando en `docs/learnings.md` cada vez que descubre algo no obvio.
+
+3 meses después, ese archivo tiene **el conocimiento operativo real del proyecto** acumulado. Vale oro.
+
+### Variantes según tu workflow
+
+#### Si trabajás en equipo
+
+```markdown
+- Antes de proponer un cambio mayor, validar contra docs/decisions.md
+  por si la decisión ya se tomó (en cualquier dirección).
+
+- Si vas a tomar una decisión nueva (eligiendo entre 2+ opciones),
+  documentala en docs/decisions/<fecha>-<topic>.md con: opciones
+  evaluadas, criterios, decisión, razones.
+```
+
+#### Si te preocupa el costo de tokens
+
+```markdown
+- Para tareas mecánicas (renombrar, formatear), usá modelo Haiku.
+- Para razonamiento, Sonnet.
+- Opus solo para decisiones de arquitectura.
+- Si dudás del modelo, preguntame.
+```
+
+#### Si te interesa la performance
+
+```markdown
+- Después de cambios en código de hot path, correr el benchmark
+  (npm run bench) y comparar contra baseline. Reportar regression
+  si latencia sube >10%.
+```
+
+---
+
+## Combinación de los 4
+
+El verdadero ROI viene de combinarlos:
+
+```
+1. /init bien armado con CLAUDE.md customizado (truco 3+4)
+2. Para tareas grandes: ultrathink + plan mode (truco 1)
+3. Investigaciones complejas: sub-agentes en paralelo (truco 2)
+4. CLAUDE.md guarda aprendizajes que ayudan a las próximas sesiones
+```
+
+No es magia — es disciplina. Tu Claude opera 2-3× mejor solo por seguir estos 4.
+
+---
+
+## Lo que NO está en esta lista (y por qué)
+
+Muchas listas de "trucos" incluyen cosas como:
+
+- **"Usá emojis para clarificar"** — marginal, depende del modelo
+- **"Pedile en inglés que es mejor"** — falso para modelos modernos
+- **"Decile que es un experto"** — viejo prompt engineering, hoy poco efecto
+- **"Pedí que piense paso a paso"** — ya lo hace internamente (extended thinking)
+
+Esos pertenecían a la era de los modelos chicos. Los 4 que sí incluí están en cualquier flow de Claude Code maduro.
+
+---
+
+## Próximos pasos
+
+- Si recién arrancás con Claude Code, [guía completa](/boveda/guia-claude-code-completa) cubre lo previo a estos trucos
+- Para profundizar en memoria persistente entre sesiones, [memoria infinita para Claude Code](/boveda/memoria-claude-code)
+- Para usar sub-agentes de verdad en paralelo, [múltiples Claude Code en paralelo](/boveda/agent-view-paralelo)

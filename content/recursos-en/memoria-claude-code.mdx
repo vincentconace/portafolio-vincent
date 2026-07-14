@@ -1,0 +1,200 @@
+---
+title: "Infinite memory for Claude Code — strategies and tools"
+description: "Claude Code starts every session with an empty context. This is the pain point for everyone who uses it seriously. We go over the 4 strategies for giving it 'persistent memory' — from the simplest (an MD file) to specialized semantic-memory MCPs."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "mcp"]
+publishedAt: "2026-05-21"
+readingTime: "12 min"
+relatedSlugs: ["claude-code-setup-zero", "mcp-server-propio", "hooks-automatizacion"]
+---
+
+## The universal problem
+
+Claude Code starts every session remembering nothing from previous sessions. This is by design — privacy, control, not piling up junk. But it breaks your flow when:
+
+- You establish a convention on Monday and by Wednesday you have to repeat it
+- You decide on an architecture pattern and three weeks later Claude "forgets" it
+- You spent 20 minutes explaining your business domain and the next day you start from scratch
+- The variable/function names you standardized last month show up again looking random
+
+The question is: **how do we give it persistent memory without losing the clean reset between sessions?**
+
+There are 4 strategies, from least to most sophisticated.
+
+---
+
+## Strategy 1 — A well-written `CLAUDE.md`
+
+The simplest memory and the most underused. The `CLAUDE.md` is read at the start of **every session**. If it's well put together, it's as if Claude had already read a project manual before starting.
+
+### What to put in `CLAUDE.md`
+
+- **Stack and specific versions**: "Next.js 16, React 19, TypeScript strict, Drizzle ORM"
+- **Code conventions**: naming, formatting, which patterns we use and which we don't
+- **Useful commands**: `npm run dev`, `npm run db:push`, `npm test`
+- **Folder structure**: what's in `lib/`, what's in `app/`, what's in `components/`
+- **Constraints**: "don't touch `src/legacy/`", "don't use `any` without a comment"
+- **Design decisions**: why we chose what we chose (keeps Claude from proposing "improvements" we already rejected)
+
+### What NOT to put
+
+- Current-state information ("we're in the payments sprint right now") — that changes too often and isn't worth the space
+- Documentation for every function — Claude reads it from the code
+- Obvious framework stuff — Claude already knows Next.js
+
+<Callout type="tip" title="The CLAUDE.md rule">
+If what you're writing can be read from the code in 30 seconds, it doesn't go in CLAUDE.md. If it requires historical context, then yes.
+</Callout>
+
+---
+
+## Strategy 2 — User memory (`/memory`)
+
+Claude Code has a memory file per user, not per project. You edit it with the built-in command:
+
+```
+> /memory
+```
+
+It opens an editor where you jot down things that apply **to all your projects**:
+
+```markdown
+# General preferences
+
+- I work in TypeScript with strict mode always
+- I use pnpm, not npm or yarn
+- I prefer pure functions over classes when possible
+- When you propose refactors, show me the before/after in a table
+- Don't explain what a type guard is, assume I know
+
+# Communication style
+
+- Short answers, don't give me long paragraphs
+- If you're going to drop code, first tell me what you're going to do in 1 line
+- When there are tradeoffs, list them as a table, not as prose
+```
+
+This is read at the start of **every session, in any project**. Useful for personal preferences that don't change.
+
+---
+
+## Strategy 3 — "Living notes" files
+
+For info that changes but that you want to keep between sessions, use versioned files in the repo:
+
+```
+docs/
+├── decisions.md      ← architecture decisions with date and why
+├── conventions.md    ← team conventions, expanded
+├── glossary.md       ← domain jargon (Order, Customer, MRR, etc.)
+└── known-issues.md   ← known bugs and workarounds
+```
+
+And in the `CLAUDE.md` you reference them:
+
+```markdown
+## Internal documentation
+
+- Architecture decisions: `docs/decisions.md` (read it if you're going to propose structural changes)
+- Domain glossary: `docs/glossary.md` (check it if you're unsure what a business term means)
+- Known issues: `docs/known-issues.md` (review it before "fixing" a bug)
+```
+
+Claude reads `CLAUDE.md` and from there knows those files exist. When it needs them, it opens them.
+
+**Why it works**: your team needs these docs anyway, so it's not extra work for Claude. And living versioned in git means they evolve with the project.
+
+---
+
+## Strategy 4 — A semantic-memory MCP server
+
+For advanced cases, there are MCP servers dedicated to memory. They work like this:
+
+1. You connect a memory MCP to your Claude
+2. After each important session, you ask it to "save to memory: [summary]"
+3. The MCP indexes that with embeddings in a local database
+4. In future sessions, Claude queries the MCP when it detects that something in the current prompt relates to past knowledge
+
+### When the setup is worth it
+
+- Large teams with many projects sharing a domain
+- Very long-term projects (>6 months) where the historical context is vast
+- When you work on systems with many accumulated implicit decisions
+
+### When NOT
+
+- Small projects
+- Projects where `CLAUDE.md` + `docs/` are already enough
+- A new setup: adding a memory MCP before you have a baseline workflow is premature
+
+There are open-source implementations. The most popular ones use SQLite + local embeddings (they don't send your data anywhere).
+
+---
+
+## Anti-pattern: pasting context every time
+
+What A LOT of people do and you should avoid:
+
+```
+> Remember: we use Next.js 16, Drizzle ORM, TypeScript strict, we don't use any,
+  we follow the eslint conventions, we deploy on Vercel, the DB is
+  Postgres on Supabase, auth is with Clerk, payments are with Stripe...
+```
+
+Every time you open a session, you type that out. **No.** That goes in `CLAUDE.md` once and you're done.
+
+The other extreme: leaving the session open for 8 hours to "avoid losing context". Also wrong — a long session gets more confused than helpful. Better to have short sessions with a good `CLAUDE.md`.
+
+---
+
+## The 80/20 rule
+
+Of these 4 strategies, 80% of the value comes from a well-written `CLAUDE.md` + the user `/memory`. The `docs/*.md` files add another 15%. The memory MCP is the remaining 5%, justified only in specific cases.
+
+**If you're just getting started**: invest 30 minutes writing a good `CLAUDE.md`. That time pays off starting from the 3rd session.
+
+---
+
+## Hook to auto-update context
+
+An advanced pattern: use a `SessionStart` hook to inject dynamic context at the start of each session.
+
+`.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git log --oneline -10 && echo '---' && cat docs/sprint-actual.md 2>/dev/null"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This injects the last 10 commits + the current sprint file at the start of each session. Claude arrives with fresh context without you typing it.
+
+More on this in the [hooks guide](/boveda/hooks-automatizacion).
+
+---
+
+## Decision summary
+
+| Need | Solution |
+|-----------|----------|
+| Conventions that don't change | `CLAUDE.md` |
+| Personal preferences (all projects) | `/memory` |
+| Architecture decisions | `docs/decisions.md` |
+| Domain glossary | `docs/glossary.md` |
+| Dynamic context (current sprint, latest commit) | `SessionStart` hook |
+| Semantic memory across many projects | Dedicated MCP |
+
+Start at the top. Move down only when the previous strategy no longer suffices.

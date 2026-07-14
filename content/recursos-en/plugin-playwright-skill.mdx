@@ -1,0 +1,103 @@
+---
+title: "Playwright Skill — Claude autonomously automates the browser for testing and validation"
+description: "A skill by lackeyjb (2.2k⭐) that gives Playwright to Claude Code in model-invoked mode. Claude decides on its own when to open the browser, writes the custom automation, and runs it for end-to-end testing and validation."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "playwright"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["agency-agents", "anatomia-claude", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/playwright-skill"
+github: "https://github.com/lackeyjb/playwright-skill"
+---
+
+## What it is
+
+This is the skill that Claude Code activates on its own when it detects that your task needs a real browser. The difference from a traditional Playwright MCP is that this skill is **model-invoked**: you don't tell Claude "use Playwright"; Claude reads your request, decides it needs a browser, writes the Playwright script on the fly, runs it, and returns the result.
+
+It's the "autonomous skill" pattern: you ask for the what (validate that the checkout button works), Claude figures out the how (open the browser, navigate, click, verify).
+
+For E2E testing, validating UI changes, or one-off scraping, it's one of the most polished plugins around. Its 2.2k stars back that up.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | lackeyjb |
+| Stars | 2.2k |
+| Type | Single plugin (model-invoked skill) |
+| Components | 1 skill |
+| Mechanics | Claude detects the need and writes the Playwright script |
+| Marketplace | `lackeyjb/playwright-skill` |
+
+## How to install it
+
+```bash
+/plugin marketplace add lackeyjb/playwright-skill
+/plugin install playwright-skill@lackeyjb-playwright-skill
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+I installed lackeyjb's playwright-skill. Now ask: "Validate that at
+http://localhost:3000 the signup form accepts a valid email,
+shows an error with an invalid one, and blocks the submit if the password
+has fewer than 8 characters". Let Claude decide when to use the skill.
+```
+
+## What you can do with this
+
+### E2E tests that write themselves
+
+Instead of maintaining a hand-written test suite, you ask Claude: "validate the 3 critical flows of my app". Claude opens the browser, walks through them one by one, and tells you which pass and which fail, with screenshots if something breaks.
+
+### Validating the UI after a change
+
+You built something and want to know whether the UI still works. Without opening the browser yourself, Claude does it: it navigates, interacts, validates.
+
+### One-off scraping
+
+You need to extract data from a page just once. It's not worth building a persistent scraper. The skill opens the browser, extracts the data, and returns it in JSON.
+
+### Visual regression testing
+
+Combined with visual diff tools, you can ask Claude to take screenshots of the critical pages before and after a change and tell you whether anything looks different.
+
+### Ad-hoc automation
+
+Filling in a 30-field form to reproduce a bug, navigating through 10 pages to find something, logging in and taking a screenshot — all things you'd do by hand and can delegate instead.
+
+## Real benefits
+
+- **Model-invoked** — you don't decide when to use it, Claude does. Less cognitive friction.
+- **Custom scripts per task** — it's not a generic wrapper; each task generates its own specific Playwright script.
+- **2.2k stars** — proven adoption.
+- **Playwright is the modern standard** for browser automation — the plugin doesn't invent a new technology.
+- **Works locally and headless** — for CI too.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before you install">
+
+- **If you already have an established test suite (Cypress, etc.):** this plugin doesn't replace it; it complements it. For serious, maintained tests, a human-written Cypress/Playwright suite is still the way to go.
+- **For complex recurring automations:** the skill writes one-off scripts per task. If you need robust 200-line scripts with fine-grained error handling, it's worth writing them by hand.
+- **If your use case is scraping at scale:** for serious scrapers, look at dedicated tools (Scrapy, Crawlee). The plugin is for one-off jobs.
+- **Playwright requires the binary installed** — on some machines (restricted CI, embedded systems) it may not be available.
+- **Compare it with [Stagehand](/boveda/plugin-claude-plugins-official):** the official marketplace includes Browserbase's Stagehand. Try it before you choose.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Playwright Skill](https://www.aitmpl.com/plugins/playwright-skill) — the exact command.
+- **Repo on GitHub:** [lackeyjb/playwright-skill](https://github.com/lackeyjb/playwright-skill) — code, issues, examples.
+
+## Related resources
+
+- [Agency Agents](/boveda/agency-agents) — to understand the difference between a model-invoked skill and an agent or command.
+- [Anatomy of Claude](/boveda/anatomia-claude) — locate this skill on the map: it lives in `~/.claude/skills/`.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — when an autonomous skill is preferable to an explicit command.

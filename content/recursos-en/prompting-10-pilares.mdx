@@ -1,0 +1,276 @@
+---
+title: "Prompting 101 — 10 pillars for professional prompts"
+description: "The 10 pillars Anthropic's teams apply to write prompts that win in production. It's not 'little tricks', it's engineering: clear instructions, sufficient context, controlled formatting, examples where they matter. With a copy-paste template."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "claude-api"]
+publishedAt: "2026-05-20"
+readingTime: "14 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "prompt-debugging-sistematico", "mejora-prompts-plugin"]
+---
+
+## The core idea
+
+Prompt engineering is neither magic nor a recipe book. It's **empirical science**: you write a prompt, you look at the output, you identify what failed, you adjust, you run it again. The difference between an amateur prompt and a professional one comes down to 10 specific pillars that reduce output variance.
+
+These 10 pillars apply to any serious model (Claude, GPT, Gemini). The implementation details change, the principles don't.
+
+---
+
+## The 10 pillars in order of impact
+
+### 1. Clear instructions
+
+Tell it **exactly what to do**, with a specific verb and a bounded scope.
+
+❌ "Help me with the email."
+✅ "Rewrite the email below in a professional tone, maximum 4 paragraphs, no greetings or sign-offs."
+
+The difference: the first one requires Claude to guess the intent. The second one tells it what to do (rewrite), how (professional), constraints (4 paragraphs) and what to omit (greetings/sign-offs).
+
+### 2. Sufficient context
+
+Give it **the background the task demands**. Without context, Claude fills in with assumptions.
+
+If you ask it to "evaluate this sales pitch" without mentioning it's for B2B SaaS in LATAM, it will evaluate it assuming the most likely context (probably US, probably B2C). The feedback will be generic.
+
+Typical context:
+- **Who the user** of the output is
+- **Domain**: industry, product, audience
+- **Glossary**: internal jargon Claude doesn't know (internal products, teams, custom metrics)
+- **Constraints**: what should NOT be done
+
+### 3. How you arrange the information
+
+**Order matters**. In a long prompt, Claude weighs what's at the beginning and at the end more heavily than what's in the middle.
+
+A pattern that works:
+
+```
+[Beginning: role + goal]
+You are X. Your task is Y.
+
+[Middle: extensive context, examples, data]
+Here goes all the background...
+
+[End: precise instruction repeated + expected format]
+Now, return [exactly this] to me.
+```
+
+The critical instruction goes twice: at the top as the goal, at the bottom as a reminder. That anchors Claude on the "what".
+
+### 4. Empirical iteration
+
+**Launch → read → adjust → relaunch.** Don't try to nail the perfect prompt on the first shot. Generate 5 different outputs with small variations and look at which one hits best.
+
+Tricks:
+- Change a single variable per iteration (otherwise you don't know what moved the needle)
+- Note down what you changed and what happened
+- Look for patterns: does it "get verbose when I ask for X"? That's information about how the model behaves with that pattern
+
+### 5. Step-by-step reasoning (CoT)
+
+For non-trivial tasks, ask Claude to **think before answering**. This dramatically improves output quality on reasoning tasks.
+
+Simple format:
+
+```
+To solve this:
+1. First analyze [aspect A]
+2. Then consider [aspect B]
+3. Only then formulate the answer
+
+Reason out loud through each step, then return the conclusion to me.
+```
+
+In modern models this happens "internally" (extended thinking), but forcing it in the prompt still works.
+
+### 6. XML tags to structure input/output
+
+When your prompt has several parts (context + data + instruction), wrapping them in XML tags helps Claude separate what's what.
+
+```
+<context>
+You are a technical reviewer for a blog about ML.
+</context>
+
+<article>
+[content of the article to review]
+</article>
+
+<criteria>
+1. Technical accuracy
+2. Clarity for an intermediate audience
+3. Actionable examples
+</criteria>
+
+<output_format>
+Return JSON with: { precision: 1-10, claridad: 1-10, ejemplos: 1-10, comentarios: [...] }
+</output_format>
+```
+
+XML isn't the only option (markdown headers or `###`-style delimiters also work), but it's the most reliable when there are many elements.
+
+### 7. Examples (few-shot) where they matter
+
+For tasks with a **specific format** or a **style that's hard to explain**, examples beat descriptive text.
+
+❌ "Return the answer in a concise, professional bullet format."
+
+✅ "Return the answer in this format:
+
+```
+Case A:
+- Cause: ...
+- Impact: ...
+- Action: ...
+```
+
+Here are three good examples:
+
+[example 1]
+[example 2]
+[example 3]
+
+Now apply the format to: [your input]."
+
+3 examples > 1 example > description. But **good examples**, not random ones: they should cover realistic input variability.
+
+### 8. Prefilling the output
+
+If you want an output that starts in a specific way, **start it yourself**. Claude continues from there.
+
+A typical API call:
+
+```python
+messages = [
+    {"role": "user", "content": "Analyze this code for me..."},
+    {"role": "assistant", "content": "Structured analysis:\n\n## Bugs detected\n\n"}
+]
+```
+
+Claude will continue from "## Bugs detected". This forces the format without having to ask "respond with a Bugs header". Useful for JSON, for structured lists, for outputs that start with a specific marker.
+
+### 9. Explicit constraints
+
+Tell it **what NOT to do**, not just what to do.
+
+```
+Rewrite this email for me. Rules:
+- Maximum 4 paragraphs
+- No greetings or signatures (they'll be auto-completed)
+- Don't use the word "synergy"
+- Don't promise deadlines that aren't in the original email
+- If critical info is missing, don't make it up — mark "❓ missing info"
+```
+
+Explicit constraints eliminate outputs that technically respect your request but aren't what you wanted.
+
+### 10. Success criteria + self-evaluation
+
+Before accepting an output, ask Claude to **self-evaluate** against criteria:
+
+```
+Before returning your final answer, review it against these criteria:
+1. Does it meet the requested format?
+2. Does it respect the constraints?
+3. Is critical info missing that wasn't requested from the user?
+
+If you fail any criterion, adjust before returning.
+```
+
+This reduces the amount of "oh, but you forgot X" in the outputs.
+
+---
+
+## What a prompt that applies all 10 pillars looks like
+
+```xml
+<rol>
+You are a senior sales analyst with 10 years in B2B SaaS LATAM.
+</rol>
+
+<tarea>
+Analyze the sales conversation below and produce an actionable summary
+for the sales team.
+</tarea>
+
+<contexto>
+- Product: inventory management software for mid-sized retailers
+- Average ticket: USD 8k/year
+- Geo: Mexico and Colombia
+- Typical buyer: retail owner with 3-15 stores
+</contexto>
+
+<conversacion>
+[call transcript]
+</conversacion>
+
+<formato>
+Return JSON with this exact shape:
+
+{
+  "lead_qualification": "hot" | "warm" | "cold",
+  "señales_de_compra": [strings],
+  "objeciones": [{"objecion": str, "fuerza": 1-5}],
+  "próximo_paso": str,
+  "riesgo_principal": str
+}
+</formato>
+
+<restricciones>
+- Don't invent information that isn't in the conversation
+- If a signal/objection is ambiguous, don't include it
+- "próximo_paso" must be concrete (not "follow up")
+</restricciones>
+
+<criterios_de_éxito>
+Before returning, verify:
+1. The JSON is valid (all keys, values of the correct type)
+2. Every objection has evidence in the conversation
+3. "próximo_paso" is actionable today
+</criterios_de_éxito>
+```
+
+This prompt has all 10 pillars: clear role (1), explicit task (1), context (2), XML structure (6), precise format (1), constraints (9), self-eval criteria (10).
+
+---
+
+## Common mistakes
+
+### Asking for "the best" output without defining best
+
+"Give me the best email for this situation." → Best according to what? Conversion, clarity, brevity, formality… Define the metric.
+
+### Biased examples
+
+If your 3 examples are all the same type (all successful cases, or all from the same segment), Claude generalizes poorly. Make the examples **cover variability**: successes and failures, different segments, different formats.
+
+### Irrelevant context = noise
+
+More context is NOT always better. If you pass 5000 words of background for a task that requires 500, Claude gets distracted by irrelevant info. Give it what's **necessary**, not what's "just in case".
+
+### Iterating without measuring
+
+You change the prompt, something different comes out, it "seems better", you keep it. Is it really better? Keep a **test input set** (5-10 cases) and run both versions of the prompt against all of them. Decide with data.
+
+---
+
+## When NOT to follow the 10 pillars
+
+For small, conversational tasks, the 10 pillars are overkill. "Rewrite this in fewer words" doesn't need XML tags or success criteria.
+
+Apply the full force when:
+- The prompt is going to be used **many times** (worth investing in doing it right)
+- The task is **critical** (quality matters more than speed)
+- The output goes **straight to production** (no human review in between)
+
+For one-shot exploratory tasks, short and direct prompts are fine.
+
+---
+
+## Next steps
+
+- For specific technical tasks, [systematic debugging prompt](/boveda/prompt-debugging-sistematico)
+- For writing PRDs, [executive PRD prompts](/boveda/prompts-prd-ejecutivo)
+- If your team frequently writes vague prompts, install the [prompt evaluator](/boveda/mejora-prompts-plugin)

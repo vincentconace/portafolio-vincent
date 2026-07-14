@@ -1,0 +1,257 @@
+---
+title: "Spec-driven development con Claude — specs antes que código"
+description: "El patrón de escribir specs detalladas ANTES de que Claude tire código. Reduce iteraciones, mejora calidad y te da un artefacto reutilizable. Cuándo aplicarlo, cómo estructurar specs efectivas y un template listo para copiar."
+difficulty: "avanzado"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-13"
+readingTime: "13 min"
+relatedSlugs: ["skill-code-reviewer", "prompts-prd-ejecutivo", "comando-tests-automaticos"]
+---
+
+## El problema con "tirá código"
+
+El flujo natural con Claude es: "implementame X". Funciona para tareas chicas. Para tareas medianas y grandes, falla así:
+
+- Claude infiere un approach y arranca a codear
+- Vos ves el código a mitad de camino y querés cambiar la dirección
+- Claude rehace, pero ya consumió contexto y se confunde con su propia historia
+- Resultado: 3 iteraciones cuando podía ser 1
+
+El patrón **spec-first** invierte el orden: primero discutís el **qué** y el **cómo** sin escribir código. Cuando hay alineación, recién ahí Claude codea — y como tiene una spec clara, sale de una.
+
+---
+
+## El flujo en tres fases
+
+### Fase 1 — Spec (sin código todavía)
+
+Le pedís a Claude **explícitamente** que NO escriba código. Solo discutan diseño.
+
+```
+> Necesito agregar paginación a la lista de pedidos. NO escribas código todavía.
+
+Antes de codear, escribime una spec en docs/specs/pedidos-pagination.md con:
+- Qué API expone (endpoint, params, response shape)
+- Cómo se compone con el frontend
+- Edge cases: página vacía, filtros que cambian, navegación con browser back
+- Performance esperada: latencia objetivo, índices que necesita la DB
+- Out of scope: qué NO incluye esta feature
+```
+
+Claude escribe el `.md`. Vos lo leés. Cambiás lo que no te gusta. **Iteran sobre el documento**, no sobre código.
+
+### Fase 2 — Validación
+
+Cuando la spec está OK, le pedís un plan de implementación:
+
+```
+> Perfecto. Ahora listame los archivos que vas a tocar y en qué orden vas a
+  hacer los cambios. No empieces todavía.
+```
+
+Claude te tira algo como:
+
+```
+1. lib/db/queries/orders.ts — agregar limit/offset args
+2. lib/api/orders/route.ts — exponer params en el endpoint
+3. components/OrdersList.tsx — UI de paginación
+4. components/OrdersList.test.tsx — tests
+5. migrations/202605_orders_index.sql — índice si hace falta
+```
+
+Si algo te suena raro (ej. te falta un archivo), lo discutís. Cuando hay alineación, **fase 3**.
+
+### Fase 3 — Implementación
+
+```
+> Dale, implementá siguiendo la spec y el plan. Hacé los cambios en el orden
+  que listaste. Después de cada archivo, decime "listo X" y pasá al siguiente.
+```
+
+Ahora Claude codea con un norte claro. Las iteraciones bajan dramáticamente.
+
+---
+
+## Por qué funciona
+
+| Sin spec | Con spec |
+|----------|----------|
+| Claude infiere qué querés y arranca | Claude lee la spec y sabe qué querés |
+| Cambios mid-flight rompen el contexto | Cambios pre-código son baratos |
+| El código es el primer artefacto | La spec es el primer artefacto, queda en el repo |
+| Si Claude se va por las ramas, perdiste tiempo | Si la spec se va por las ramas, son 5 minutos de edición |
+| Difícil revisar después qué decidieron | El `.md` queda para futuras referencias |
+
+Lo más subestimado del patrón: la spec **sobrevive a la sesión**. Dentro de 3 meses, vos o cualquiera del equipo puede leer `docs/specs/pedidos-pagination.md` y entender por qué se hizo así.
+
+---
+
+## Template de spec
+
+Guardá esto en `.claude/templates/spec-template.md` (o donde guardes tus templates):
+
+```markdown
+# Spec: [Feature]
+
+## 1. Problema
+2-3 líneas. ¿Qué problema resuelve y para quién?
+
+## 2. Solución propuesta
+1 párrafo describiendo el approach. Incluí "por qué este approach y no otros considerados".
+
+## 3. API / Interface
+Si es backend: endpoints, params, response shape.
+Si es frontend: props de componentes, estados que maneja.
+Si es lib: funciones exportadas con sus signatures.
+
+## 4. Modelo de datos (si aplica)
+- Tablas nuevas / columnas nuevas
+- Relaciones
+- Migraciones necesarias
+
+## 5. Flujo end-to-end
+Paso a paso del happy path. Cómo se ve el flujo desde input del usuario hasta efecto observable.
+
+## 6. Edge cases
+Lista. Para cada uno: comportamiento esperado.
+- Input vacío
+- Permisos insuficientes
+- Timeouts
+- Datos corruptos
+- Race conditions
+
+## 7. Performance / scale
+- Latencia objetivo
+- Throughput esperado
+- Índices/cache que necesita
+- Qué pasa si crece 10×
+
+## 8. Seguridad
+- Qué input se valida
+- Permisos requeridos
+- Logging / auditoría
+
+## 9. Out of scope
+Lista explícita de cosas que NO incluye esta spec. Esto evita que Claude (o vos) agregue features sin pensar.
+
+## 10. Tests
+- Unit tests críticos
+- Integration tests si hay flujo multi-componente
+- E2E si la feature toca UI
+```
+
+Cuando le pasás esto a Claude como input ("seguí este template para la spec"), salen specs comparables entre features. Útil cuando son varias personas escribiéndolas.
+
+---
+
+## Cuándo usar este patrón y cuándo no
+
+### Sí, vale la pena
+
+- Features que tocan >3 archivos
+- Cambios que afectan el modelo de datos
+- APIs nuevas que otros van a consumir
+- Trabajos donde el "qué" no es obvio
+- Cuando vas a delegar la implementación a alguien (humano o IA) que no estuvo en la discusión
+
+### No, es overkill
+
+- Cambios de 1 archivo / 1 función
+- Bugs claros con causa identificada
+- Refactors mecánicos (renombrar, mover archivos)
+- Spikes / exploración temprana donde la spec sería mentira
+
+Regla práctica: **si la feature te tomaría más de 1 hora de implementación humana, vale la spec**.
+
+---
+
+## La skill que lo automatiza
+
+Para no tipear todo el flujo cada vez, armá una skill:
+
+`.claude/skills/spec-first/SKILL.md`:
+
+```markdown
+---
+name: spec-first
+description: Para features grandes (>3 archivos o cambios estructurales), forzá
+  escribir una spec antes de tocar código. Úsala cuando el usuario diga
+  "necesito implementar", "agregame la feature X" o describe algo que va a
+  requerir varios archivos.
+---
+
+# Spec-first workflow
+
+Cuando el usuario pide implementar algo no trivial, NO escribas código.
+
+## Protocolo
+
+### Paso 1
+Detectá el alcance. Si es chico (1 archivo, < 30 minutos), seguí normal.
+Si es grande, pasá al paso 2.
+
+### Paso 2
+Pediime confirmar que querés modo spec-first. Si dice sí:
+
+a) Generá una spec en `docs/specs/<slug>.md` siguiendo el template:
+   [acá pegás el template de arriba]
+
+b) Mostrame el draft. Esperá feedback. NO toques código.
+
+### Paso 3
+Cuando la spec esté aprobada, listame los archivos a modificar en orden
+de dependencia (primero modelo, después lógica, después UI, después tests).
+Esperá confirmación del plan.
+
+### Paso 4
+Recién ahora implementá. Archivo por archivo. Después de cada uno, pausá
+y reportá "listo X". Esperá ok para el siguiente.
+
+## Reglas
+
+- No proponer un approach radicalmente distinto al de la spec sin avisar
+- Si descubrís un problema con la spec mientras codeás, parar y discutirlo
+- La spec se mergea al repo junto con el código
+```
+
+Con esto, cuando decís "necesito implementar paginación", Claude **automáticamente** entra en modo spec-first.
+
+---
+
+## Ejemplo real: el antes y el después
+
+### Sin spec (~ 6 iteraciones, 90 minutos)
+
+```
+> Agregame paginación en la lista de pedidos.
+Claude implementa con cursor pagination.
+> Pero quiero offset, no cursor.
+Claude rehace, pero deja el cursor en algunos lados.
+> Sacá el cursor.
+Claude saca, pero rompe los tests.
+> Arreglá los tests.
+Claude arregla, pero la nueva paginación no respeta los filtros.
+...
+```
+
+### Con spec (~ 2 iteraciones, 35 minutos)
+
+```
+> Necesito agregar paginación a pedidos. Hacé la spec primero.
+[Claude escribe docs/specs/pedidos-pagination.md]
+> Cambiá "cursor" por "offset", y aclará que respeta los filtros activos.
+[Claude actualiza la spec]
+> Perfecto. Dale, implementá.
+[Claude implementa de una toma]
+```
+
+Tiempo invertido en spec: 10 minutos. Tiempo ahorrado en iteraciones: 50 minutos. Ratio 5×.
+
+---
+
+## Próximos pasos
+
+- Combinalo con el [Skill code-reviewer](/boveda/skill-code-reviewer) que valida los cambios después de implementar
+- Si tu feature toca tests, el [comando de tests automáticos](/boveda/comando-tests-automaticos) usa la misma filosofía: enumerar casos antes de escribir
+- Para PRDs ejecutivos (no técnicos), mirá los [prompts de PRD](/boveda/prompts-prd-ejecutivo)

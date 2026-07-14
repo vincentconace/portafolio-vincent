@@ -1,0 +1,89 @@
+---
+title: "Hook Discord Error Notifications — Discord alerts when something stalls or fails"
+description: "Hook with 114 installs that sends Discord notifications when Claude hits long-running operations or errors. For catching productivity problems or stuck sessions."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "discord"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-discord-notifications", "hook-discord-detailed-notifications", "hook-deployment-health-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/discord-error-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-error-notifications.json"
+---
+
+## What it is
+
+Discord notifications when something goes wrong:
+- Long-running operations (Claude takes longer than expected)
+- Tools that take a significant amount of time
+- Native Claude Code notifications (errors that require attention)
+
+Unlike [Discord Notifications](/boveda/hook-discord-notifications) (which always announces), this one pings you when something warrants human attention.
+
+Hook events: `PreToolUse` + `PostToolUse` + `Notification`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 114 |
+| Hook events | `PreToolUse` + `PostToolUse` + `Notification` |
+| Account required | Yes — Discord webhook URL |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/discord-error-notifications
+```
+
+Prerequisite: a Discord webhook URL.
+
+For Claude:
+
+```
+I installed the automation/discord-error-notifications hook. Set up
+DISCORD_WEBHOOK_URL. Show me the thresholds that trigger
+notifications (what counts as long-running, etc.).
+```
+
+## What you can do with it
+
+### Detecting stuck sessions
+
+If Claude has been on an operation for 5+ min, something is probably off. The notification lets you know.
+
+### Productivity audit
+
+If long-running op notifications keep showing up, there's something in your setup worth optimizing.
+
+### Automatic error catching
+
+When Claude Code fires an internal notification (a tool error, an auth issue), this hook bounces it over to Discord.
+
+### Combo with [Deployment Health Monitor](/boveda/hook-deployment-health-monitor)
+
+Deployment monitor for post-deploy + error notifications for the sessions in between = full visibility.
+
+## When NOT to use it
+
+<Callout type="warning" title="Before installing">
+
+- **If you want success notifications too:** this one is errors/long-running only. Check out [Discord Notifications](/boveda/hook-discord-notifications) or [Detailed](/boveda/hook-discord-detailed-notifications).
+- **If your Discord channel is already noisy:** tune the thresholds first.
+- **Without a webhook configured:** it does nothing.
+- **For casual use:** 5–10 min sessions don't need this much monitoring.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Discord Error Notifications Hook](https://www.aitmpl.com/component/hooks/automation/discord-error-notifications) — exact command.
+- **JSON config:** [discord-error-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-error-notifications.json).
+
+## Related resources
+
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — for basic success notifications.
+- [Discord Detailed Notifications Hook](/boveda/hook-discord-detailed-notifications) — for full context.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — for post-deploy specifically.

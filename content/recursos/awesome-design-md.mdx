@@ -1,0 +1,259 @@
+---
+title: "Awesome Design MD — 55 diseños de las páginas más famosas, gratis"
+description: "Colección open source de 55 archivos DESIGN.md con el design system extraído de páginas famosas (Apple, Stripe, Linear, Vercel, Notion). Copiás un archivo, lo pegás en tu proyecto, le decís a Claude 'diseñá como esto pero con mi marca'. Claude usa colores, fonts, espaciado, botones."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["replica-disenos-web", "clonador-de-paginas", "cult-ui"]
+---
+
+## La idea
+
+Querés que tu página se vea como Apple. Antes:
+- Contratabas diseñador
+- Buscabas inspiración semanas
+- Sacabas colores uno por uno
+
+**Ahora**: alguien ya hizo el trabajo. Abrió Apple, sacó todos los colores, fonts, tamaños, botones, espaciado → puso todo en archivo de texto `DESIGN.md`.
+
+Vos:
+1. Copiás ese archivo
+2. Lo pegás en tu proyecto
+3. Le decís a Claude "diseñá como esto"
+4. Claude usa ese design system
+
+Repo: `VoltAgent/awesome-design-md`. Open source.
+
+| Métrica | Valor |
+|---------|-------|
+| Diseños | 55 |
+| Archivos por diseño | 3 (DESIGN.md + 2 previews) |
+| Costo | $0 |
+
+---
+
+## Instalación
+
+```bash
+git clone https://github.com/VoltAgent/awesome-design-md.git
+```
+
+O ZIP desde GitHub.
+
+---
+
+## Cómo usarlo — 3 pasos
+
+### 1. Elegí un diseño
+
+Mirá la carpeta `designs/`. 55 carpetas, cada una con nombre de empresa (`apple/`, `stripe/`, `linear/`, etc.).
+
+### 2. Copiá el DESIGN.md a tu proyecto
+
+```bash
+cp awesome-design-md/designs/linear/DESIGN.md ~/mi-proyecto/
+```
+
+### 3. Decile a Claude
+
+En tu proyecto:
+
+```
+> Leé DESIGN.md.
+
+  Quiero diseñar landing para [TU PRODUCTO] usando ese design
+  system pero con mi marca.
+
+  Mi marca:
+  - Color principal: [TU COLOR]
+  - Mi tono: [TU TONO]
+  - Mi audiencia: [TU TARGET]
+
+  Aplicá la estructura, espaciado, jerarquía visual del
+  DESIGN.md pero con mis valores.
+```
+
+Claude diseña tu página con la estética del original pero **con tu identidad**.
+
+---
+
+## Qué contiene un DESIGN.md típico
+
+```markdown
+# Linear Design System
+
+## Colors
+- Primary: #5E6AD2 (RGB: 94, 106, 210)
+- Background: #1C1C24 (dark)
+- Text primary: #F7F8F8
+- Text secondary: #B4BBC4
+- Accent: #8b5cf6 (purple)
+
+## Typography
+- Headings: Inter, font-weight 600
+- Body: Inter, font-weight 400
+- Mono: JetBrains Mono
+- Sizes: 12px base, 1.25 scale
+
+## Spacing
+- Base unit: 4px
+- Common: 8, 12, 16, 24, 32, 48, 64
+- Section padding: 96px desktop, 48px mobile
+
+## Buttons
+- Border radius: 6px
+- Padding: 12px 16px
+- Hover: scale 0.98 + brightness change
+- Primary: solid color, white text
+- Secondary: transparent border
+
+## Components
+- Cards: subtle border, no shadow, hover state
+- Inputs: minimal border, focus highlight
+- Navigation: top bar with subtle blur backdrop
+```
+
+Es **destilación del design system** del original.
+
+---
+
+## Las 55 páginas (categorías)
+
+| Categoría | Ejemplos |
+|-----------|----------|
+| **Tech / SaaS** | Stripe, Vercel, Linear, Notion, Figma |
+| **Apple-like** | Apple, Apple Music, Apple Card |
+| **AI / Modern** | Anthropic, OpenAI, Perplexity |
+| **Editorial** | Substack, Medium, NY Times |
+| **E-commerce** | Shopify stores famosas |
+| **Portfolio** | Diseñadores reconocidos |
+| **Brand-first** | Nike, Tesla, Glossier |
+
+55 cubre **prácticamente cualquier estética** que necesités.
+
+---
+
+## Casos de uso
+
+### 1. Quiero MI landing pero estilo Linear
+
+```
+> Leé designs/linear/DESIGN.md.
+> Mi producto: SaaS de gestión de inventario para retail.
+> Mi color: verde #2DA44E (en lugar del violet de Linear).
+> Mantené spacing, tipo, jerarquía, componentes de Linear.
+> Cambiá colores específicos a mi paleta.
+```
+
+### 2. Pitch deck con vibe Apple
+
+```
+> Leé designs/apple/DESIGN.md.
+> Quiero pitch deck (Keynote o PPTX) con esa estética.
+> 10 slides, mi info de empresa: [pegás].
+```
+
+### 3. App mobile estilo Notion
+
+```
+> Leé designs/notion/DESIGN.md.
+> Construime app mobile (Next.js + Tailwind, responsive a
+  mobile-first) con esa estética.
+> Feature principal: tomar notas con bullets, headers, code blocks.
+```
+
+### 4. Mezclar 2 estilos
+
+```
+> Leé designs/stripe/DESIGN.md y designs/linear/DESIGN.md.
+> Quiero estética híbrida: spacing + jerarquía de Stripe,
+  paleta + sutil dark de Linear.
+```
+
+### 5. Auditar tu diseño actual
+
+```
+> Leé designs/stripe/DESIGN.md.
+> Auditá MI landing actual: [URL].
+> Decime qué le falta para tener esa calidad de diseño.
+> Prioridad: high-impact changes primero.
+```
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **Awesome Design MD** (esta) | Estética específica de site famoso |
+| [Clonador de páginas](/boveda/clonador-de-paginas) | Clonar la página entera literal |
+| [Replica diseños](/boveda/replica-disenos-web) | Replicar layout + estilo de URL |
+| [Cult UI](/boveda/cult-ui) | Componentes premium pre-armados |
+
+### Diferencia clave
+
+**Awesome Design MD** te da el **lenguaje del design system**. No copia la página — copia la **gramática visual**. Vos llenás con tu contenido + tu identidad.
+
+---
+
+## Anti-patrones
+
+### 1. Copiar literal sin diferenciación
+
+Si tu landing termina siendo **Linear con otro nombre**, no diferenciás. Usá el design system como **base**, agregá tu twist.
+
+### 2. Mezclar 5 design systems
+
+3 sistemas mezclados = caos. **Pickeá 1-2 dominantes** + acentos del tercero quizás.
+
+### 3. Forzar estética que no matchea tu producto
+
+Si vendés productos para abuelas y querés **estética cyberpunk** — choca con audiencia. **Que matchee**.
+
+### 4. Asumir que copiar el DESIGN.md te hace pixel-perfect
+
+Es **lenguaje, no copia exacta**. Esperá 80-90% del feel del original, no 100%.
+
+### 5. No iterar
+
+Primera generación rara vez es perfecta. **Iterá** con feedback específico.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Marca con identidad visual súper específica | Conflicto con design system externo |
+| Industria que exige UI propia (banking compliance) | Necesitás design custom |
+| Producto que vive de "ser único visual" | Copiar estética conocida = no único |
+
+---
+
+## Combinaciones potentes
+
+### Con replica-disenos-web
+
+[Replica diseños](/boveda/replica-disenos-web) + DESIGN.md = **doble fuente** del estilo. Replica trae layout, DESIGN.md trae detalles fine-grained.
+
+### Con Cult UI
+
+```
+> Usá DESIGN.md/linear como guía visual.
+> Implementá con componentes de [Cult UI](/boveda/cult-ui)
+  para que las piezas sean premium-grade.
+```
+
+### Con The Architect
+
+The Architect genera blueprint funcional. DESIGN.md agrega **identidad visual** al blueprint.
+
+---
+
+## Próximos pasos
+
+- Para replicar una página específica entera con Playwright, [Replica diseños web](/boveda/replica-disenos-web)
+- Para clonar UI completa con Chrome real, [Clonador de páginas](/boveda/clonador-de-paginas)
+- Para componentes premium implementables, [Cult UI](/boveda/cult-ui)

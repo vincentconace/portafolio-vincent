@@ -1,0 +1,240 @@
+---
+title: "5 skills Claude para creators — Hyperframes, Last 30 Days, Banana, Video Vision, Apify"
+description: "Las 5 que están usando los top creators. Hyperframes arma videos desde un prompt (HeyGen). Last 30 Days saca ideas del feed real. Claude Banana genera imágenes con Nano Banana. Video Vision te dice por qué pegó un reel. Apify trae data cruda de IG y FB."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-banana", "investigador-automatico", "apify-clientes-ilimitados"]
+---
+
+## Quiénes están usando esto
+
+Los creators que mueven números con Claude Code. Estas 5 cubren el **flujo real**: investigar tema → generar visual → descomponer viral → sacar data → armar video.
+
+| # | Skill | Tipo | Para qué |
+|---|-------|------|----------|
+| 01 | Hyperframes | Skill (HeyGen) | Video desde un prompt |
+| 02 | Last 30 Days | Skill (mvanhorn) | Tendencias en vivo |
+| 03 | Claude Banana | Plugin | Imágenes con Nano Banana |
+| 04 | Claude Video Vision | Skill (jordanrendric) | Desglose frame por frame |
+| 05 | Apify | MCP | Data cruda IG/FB |
+
+---
+
+## 01 — Hyperframes (video desde un prompt)
+
+### Qué hace
+
+Le picás un prompt y Claude arma el **video completo** con animaciones, gráficos y subtítulos. Sin Premiere, sin CapCut, sin timeline.
+
+### El truco
+
+Renderizado **programático** — el resultado es consistente y lo podés regenerar las veces que quieras con variaciones.
+
+### Para qué
+
+Prototipar reels, explainers, intros cortas cuando no tenés tiempo de editar a mano.
+
+### Instalación
+
+```bash
+git clone https://github.com/heygen-com/hyperframes ~/.claude/skills/hyperframes
+```
+
+Nota: el README del repo dice si tu versión de Claude Code prefiere skill manual o plugin. El comando de arriba es el universal.
+
+---
+
+## 02 — Last 30 Days (qué dice la gente HOY)
+
+### Qué hace
+
+Le pasás un tema y entra a **Reddit, X, YouTube, Hacker News, GitHub** a sacar lo que la gente está diciendo los últimos 30 días.
+
+Ya no inventás ideas. Las sacás del feed real.
+
+### Para qué
+
+Cuando arrancás guion, post o proyecto y querés validar **qué está pegando** antes de invertir tiempo.
+
+### Instalación
+
+```bash
+git clone https://github.com/mvanhorn/last30days-skill ~/.claude/skills/last30days
+```
+
+Reiniciá Claude Code después de clonar.
+
+Ver [investigador automático](/boveda/investigador-automatico) para guía completa.
+
+---
+
+## 03 — Claude Banana (imágenes Nano Banana)
+
+### Qué hace
+
+Conecta Claude con **Nano Banana** (Gemini 2.5 Flash Image de Google). Pedís thumbnail, carousel para IG, imagen para post — te las arma directo en la sesión.
+
+### Para qué
+
+Visuales rápidos sin abrir Photoshop ni Figma.
+
+### Pre-requisito
+
+API key de **Google AI Studio** (tier gratis).
+
+### Instalación
+
+```bash
+git clone https://github.com/Hainrixz/claude-banana ~/.claude/plugins/claude-banana
+```
+
+Ver [Claude Banana](/boveda/claude-banana) para deep-dive con los 7 ingredientes de prompt.
+
+---
+
+## 04 — Claude Video Vision (desglose de virales)
+
+### Qué hace
+
+Le mandás un reel viral y Claude lo **ve frame por frame**. Te entrega desglose: hook, tomas, ritmo, transiciones.
+
+Le copiás la fórmula al que pegó — **con datos**, no a ojo.
+
+### Pre-requisito
+
+**Python + ffmpeg** instalados (para extraer los frames).
+
+### Para qué
+
+Cuando ves un reel pegando en tu nicho y querés entender **exactamente** por qué antes de replicarlo.
+
+### Instalación
+
+```bash
+git clone https://github.com/jordanrendric/claude-video-vision ~/.claude/skills/claude-video-vision
+```
+
+---
+
+## 05 — Apify (data cruda de IG/FB)
+
+### Qué hace
+
+Scrapers de redes. Le picás un perfil o post y te trae **likes reales, comments reales, copy real**.
+
+Ya no copiás a ojo: copiás con data.
+
+### Para qué
+
+Análisis de competencia o de creator que está creciendo. Necesitás los **números reales** detrás del feed.
+
+### Pre-requisito
+
+Cuenta Apify (plan free). API token como env var.
+
+### Instalación
+
+```bash
+claude mcp add apify -- npx -y @apify/actors-mcp-server
+```
+
+Ver [Apify clientes ilimitados](/boveda/apify-clientes-ilimitados) para casos de uso.
+
+---
+
+## Por orden de impacto inmediato
+
+| Tier | Skills |
+|------|--------|
+| **Instantáneas** | Last 30 Days, Claude Banana |
+| **Setup leve** | Claude Video Vision, Apify |
+| **Experimental** | Hyperframes |
+
+Para empezar hoy: Last 30 Days + Claude Banana.
+
+---
+
+## Flujo de creator real
+
+### Para un reel
+
+```
+1. LAST 30 DAYS:    Qué se está diciendo del tema esta semana.
+2. APIFY:           Top 10 reels del nicho con más engagement.
+3. VIDEO VISION:    Desglosá frame por frame el #1.
+4. CLAUDE escribe:  Guion adaptando la fórmula con tu ángulo.
+5. CLAUDE BANANA:   Generá thumbnail y B-roll visual.
+6. HYPERFRAMES:     Armá el reel completo con todo eso.
+```
+
+Lo que tomaba 3 días → 3 horas.
+
+---
+
+## Anti-patrones
+
+### 1. Hyperframes para producción crítica
+
+Está bueno para **prototipar** y validar ideas. Para reel que va a salir con marca grande, editor humano todavía gana.
+
+### 2. Copiar virales 1:1
+
+Video Vision te dice **por qué pegó**, no que copies pegado. Adaptá la fórmula a tu voz.
+
+### 3. Apify para spam
+
+NO scrapees para enviar DMs masivos. Es para **análisis**, no para outreach automatizado de baja calidad.
+
+### 4. Last 30 Days sin filtro
+
+Lo que está pegando puede ser **basura viral**. Pickeá qué tendencia vale la pena adoptar y cuál no.
+
+### 5. Claude Banana sin API key
+
+Sin Google AI Studio key, no funciona. Setupealo primero.
+
+---
+
+## Combinaciones potentes
+
+### Last 30 Days + Apify
+
+```
+1. Last 30 Days: temas que está mencionando la gente
+2. Apify: datos crudos de qué reels sobre esos temas pegaron
+```
+
+Cruce de "qué se habla" + "qué funciona".
+
+### Video Vision + Hyperframes
+
+```
+1. Video Vision: desglose del reel viral X
+2. Hyperframes: regenerá con tu ángulo siguiendo la fórmula
+```
+
+### Con [humanízalo](/boveda/humanizalo)
+
+Para que el copy de tus reels/posts no suene a IA.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| No hacés contenido | Combo no aplica |
+| Audience B2B muy nicho | Trends generales no aplican |
+| Sin tiempo para iterar | Skills requieren refinamiento |
+| Foco en long-form (podcast, blog largo) | Estas son para short-form |
+
+---
+
+## Próximos pasos
+
+- Para imágenes con prompts pro, [Claude Banana](/boveda/claude-banana)
+- Para investigación multi-fuente, [investigador automático](/boveda/investigador-automatico)
+- Para scraping con Apify, [Apify clientes ilimitados](/boveda/apify-clientes-ilimitados)

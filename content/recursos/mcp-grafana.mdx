@@ -1,0 +1,103 @@
+---
+title: "MCP Grafana — dashboards y monitoring desde Claude Code (252 installs)"
+description: "MCP server con 252 installs para Grafana. Soporta self-hosted y Grafana Cloud. Consulta dashboards, queries Prometheus/Loki, alertas, y datasource info desde lenguaje natural."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "grafana", "prometheus"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-dynatrace", "mcp-elasticsearch", "mcp-logfire"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/grafana"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/grafana.json"
+---
+
+## Qué es
+
+Grafana es probablemente el stack más usado del open source para observability: dashboards, queries a Prometheus, Loki, InfluxDB, Tempo, y otros datasources. Este MCP da acceso a esa data desde Claude Code.
+
+En vez de abrir el browser, navegar al dashboard y escribir PromQL/LogQL a mano, le preguntás a Claude. Claude consulta los datasources, te devuelve resultados estructurados.
+
+Soporta self-hosted y Grafana Cloud — útil porque la realidad de empresa suele ser mix.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 252 |
+| Servidor MCP | `grafana` |
+| Soporte | Self-hosted + Grafana Cloud |
+| Datasources típicos | Prometheus, Loki, Tempo, InfluxDB, ES |
+| Cuenta requerida | Sí — Grafana access + service account / API key |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/grafana
+```
+
+Pre-requisitos: URL de tu Grafana + service account token con permisos correctos.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/grafana. Después de setear GRAFANA_URL y
+token, listame los dashboards en el folder X y mostrame el estado
+de alertas activas.
+```
+
+## Qué podés hacer con esto
+
+### Consultas a métricas en lenguaje natural
+
+"¿Cuál fue el peor latency p95 del servicio `payments-api` en las últimas 24h? ¿En qué momento ocurrió y qué endpoints estuvieron involucrados?". Claude traduce a PromQL.
+
+### Inspección de logs en Loki
+
+"En Loki, mostrame los logs del namespace `prod` con level ERROR en los últimos 30 min, agrupados por servicio". LogQL generado y ejecutado.
+
+### Estado de alertas
+
+"¿Qué alertas están firing en este momento? Agrupame por severity y por team owner". Útil para incidentes.
+
+### Comparación temporal
+
+"Comparame el RPS del servicio X esta semana vs la semana pasada en el mismo intervalo". Detección de regresiones.
+
+### Cross-reference con deploys
+
+"La latencia se disparó a las 14:30. ¿Qué dashboards tienen anotaciones de deploy alrededor de esa hora?". Cruzar métricas con eventos para root cause.
+
+### Crear dashboards o paneles
+
+Algunas implementaciones del MCP permiten también crear/modificar dashboards. Validá con el JSON qué exactamente expone.
+
+## Pre-requisitos
+
+- **Acceso a Grafana** (self-hosted URL o Grafana Cloud)
+- **Service account token** o API key con permisos sobre los datasources
+- **Datasources configurados** en Grafana (el MCP es un cliente; no setea Prometheus por vos)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás otra observability platform** ([Datadog, New Relic, Dynatrace](/boveda/mcp-dynatrace)): este MCP es Grafana específico.
+- **Sin datasources funcionando:** el MCP consulta lo que ya tenés. Si Prometheus no está scrapeando, el MCP no va a inventarte data.
+- **Si tu permisión es read-only y el plugin permite write:** verificá scopes del token para evitar accidentes.
+- **Para alertas críticas:** el MCP no reemplaza el routing de PagerDuty / Opsgenie. Es para consulta y triaging, no para reception.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Grafana MCP](https://www.aitmpl.com/component/mcps/devtools/grafana) — comando exacto.
+- **Config JSON:** [grafana.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/grafana.json).
+- **Grafana oficial:** [grafana.com](https://grafana.com) — Cloud y docs.
+
+## Recursos relacionados
+
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — observability enterprise alternativa.
+- [Elasticsearch MCP](/boveda/mcp-elasticsearch) — si tu observability vive más en Elastic que en Grafana.
+- [Logfire MCP](/boveda/mcp-logfire) — para OpenTelemetry traces específicamente con Pydantic Logfire.

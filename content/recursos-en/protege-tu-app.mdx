@@ -1,0 +1,289 @@
+---
+title: "The 3 security configurations Claude sets up for you"
+description: "Building with Claude is amazing until you get hacked. Row-Level Security, CORS and Security Headers — what they do, why they matter, and ready-to-use prompts so Claude configures them correctly in your project."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "supabase", "postgres"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["plugin-supabase-mcp", "trifecta-perfecta", "skill-code-reviewer"]
+---
+
+## The problem
+
+Building with Claude is blazing fast. Your MVP ships in 4 hours. You deploy it. **3 weeks later you get hacked**.
+
+The 3 most common vulnerabilities that show up in "vibe-coded" AI apps are always the same:
+
+1. **No Row-Level Security** → any user can read/edit other users' data
+2. **Open CORS** → any domain can call your API
+3. **No Security Headers** → XSS attacks, clickjacking, referrer leaks
+
+All 3 are **easy to get right**. Most people ignore them **because they don't know they exist**.
+
+The 3 prompts below tell Claude exactly how to implement them.
+
+---
+
+## Protection 1 — Row-Level Security (RLS)
+
+### What it is
+
+Picture a library. Without RLS, **every visitor can grab any book** (even the private ones). With RLS, there's a guard at every shelf who **checks whether you're allowed to see that specific book**.
+
+Technically: row-level rules in the DB that limit what each user can read/write.
+
+### Without RLS — the typical attack
+
+Your API endpoint `/api/orders` returns "the current user's orders". The code:
+
+```ts
+// BAD
+async function getOrders() {
+  const userId = getUserFromSession()
+  return db.query('SELECT * FROM orders WHERE user_id = $1', [userId])
+}
+```
+
+This **looks** secure. But if your app has **ANY other endpoint** that takes `user_id` as a parameter:
+
+```ts
+// app/api/admin/orders/route.ts
+async function GET(req) {
+  const userId = req.url.searchParams.get('user_id') // ← attacker manipulates this
+  return db.query('SELECT * FROM orders WHERE user_id = $1', [userId])
+}
+```
+
+Attacker sends `?user_id=another-id` → sees another user's orders.
+
+**With RLS, that fails at the DB level** no matter what your code does.
+
+### The prompt for Claude
+
+```
+> Implement Row-Level Security on every table in my Postgres DB
+  (Supabase). Specifically:
+
+  1. For each table that has a `user_id` column:
+     - Enable RLS
+     - Policy: SELECT only allows rows where user_id = auth.uid()
+     - Policy: INSERT only allowed if user_id = auth.uid()
+     - Policy: UPDATE only on own rows
+     - Policy: DELETE only on own rows
+
+  2. For tables without user_id (e.g. public products):
+     - Enable RLS
+     - Policy: SELECT open to everyone
+     - Policy: INSERT/UPDATE/DELETE only admin role
+
+  3. For admin tables (e.g. audit_logs):
+     - Enable RLS
+     - Policy: only accessible if JWT has role='admin'
+
+  BEFORE applying:
+  - List which tables you detected
+  - Show me the full SQL policies
+  - Tell me which tables are at risk if the policy comes out wrong
+
+  DON'T apply until I approve.
+```
+
+Claude:
+1. Inspects your schema
+2. Generates policies for each table
+3. Shows you the full SQL
+4. Applies only with your confirmation
+
+---
+
+## Protection 2 — CORS configured properly
+
+### What it is
+
+CORS (Cross-Origin Resource Sharing) controls **which domains can call your API**.
+
+Analogy: your API is a phone. CORS is the list of who can call you:
+- **Open CORS (`*`)**: anyone can call
+- **Configured CORS**: only your frontend, your authorized partners
+
+### The typical mistake
+
+Your MVP in Next.js. The first CORS error shows up. You (or Claude) "fix" it:
+
+```ts
+// BAD
+res.headers.set('Access-Control-Allow-Origin', '*')
+```
+
+`*` = **any domain**. Any site can now call your API and, if the user is logged into your app and visits that site, **the site can perform actions in your app on the user's behalf**.
+
+### The prompt for Claude
+
+```
+> Configure CORS properly in my API.
+
+Rules:
+1. Allowed origin in production:
+   - https://miapp.com
+   - https://www.miapp.com
+   - (do NOT use *)
+
+2. Allowed origin in development:
+   - http://localhost:3000
+   - http://localhost:3001 (other common ports)
+
+3. Allowed methods: GET, POST, PUT, DELETE, PATCH, OPTIONS
+
+4. Credentials: true (so session cookies work)
+
+5. Allowed headers:
+   - Content-Type
+   - Authorization
+   - X-Requested-With
+
+6. For public endpoints (e.g. /api/health), CORS can be more permissive
+   but NOT with credentials.
+
+Implement it in middleware (Next.js / Express / whatever I use).
+BEFORE applying, show me the code and tell me which endpoints end up
+with which CORS level.
+```
+
+---
+
+## Protection 3 — Security Headers
+
+### What it is
+
+HTTP headers that protect against various attacks: XSS (script injection), clickjacking (trapping clicks in invisible frames), MIME sniffing, etc.
+
+Your site can be working **perfectly** without these headers, and still be vulnerable.
+
+### The critical headers
+
+| Header | What for |
+|--------|----------|
+| `Content-Security-Policy` | Controls which scripts/resources can load |
+| `X-Frame-Options: DENY` | Prevents your site from being embedded in iframes (clickjacking) |
+| `X-Content-Type-Options: nosniff` | Prevents MIME sniffing |
+| `Strict-Transport-Security` | Forces HTTPS |
+| `Referrer-Policy` | Controls what referrer info you send |
+| `Permissions-Policy` | Limits browser features (geo, mic, etc.) |
+
+### The prompt for Claude
+
+```
+> Implement Security Headers in my Next.js app.
+
+Specifically:
+
+1. Content-Security-Policy:
+   - default-src 'self'
+   - script-src 'self' [add if you use analytics or CDNs]
+   - style-src 'self' 'unsafe-inline' (Tailwind requires it)
+   - img-src 'self' data: https:
+   - connect-src 'self' https://api.miapp.com
+
+2. X-Frame-Options: DENY
+
+3. X-Content-Type-Options: nosniff
+
+4. Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+5. Referrer-Policy: strict-origin-when-cross-origin
+
+6. Permissions-Policy: disable what you don't use
+   (camera=(), microphone=(), geolocation=())
+
+Implement it in next.config.js → headers().
+
+BEFORE applying, tell me:
+- Which external sites you detected my app calls (to include in CSP)
+- Which features could break when applying this
+- Whether there's any exception you recommend
+```
+
+---
+
+## Verification — the final command
+
+Once the 3 protections are applied, **verify**:
+
+```
+> Do a final security audit of my app:
+
+1. Verify RLS is active on ALL tables with `\d+ <table>`
+2. Verify CORS with `curl -H "Origin: https://random.com" https://api.miapp.com`
+3. Verify Security Headers with `curl -I https://miapp.com`
+
+For each one, show me:
+- Does it pass the check?
+- If it doesn't pass, what still needs fixing
+
+Give me a Security Score 0-100 based on these 3 + any additional
+issue you detect (env vars in code, deps with CVEs, etc.).
+```
+
+It gives you a report. If the score is 90+, you can deploy with peace of mind.
+
+---
+
+## Anti-patterns
+
+### 1. "I'll secure it later"
+
+Every day that passes with the app insecure is **a day of exposure**. The rule:
+
+> Before the first real user, the 3 protections must be active.
+
+Not "later". **Before**.
+
+### 2. "Temporary" CORS with `*`
+
+"Just while I develop, I'll fix it later". **You never fix it**. Configure CORS from day 1, no shortcuts.
+
+### 3. Thinking "RLS fixes everything"
+
+RLS protects at the DB level. **But** your business logic can have bugs (e.g. a function that passes the wrong user_id). RLS is **one layer**, not the only one.
+
+You also need:
+- Input validation
+- Query sanitization
+- Rate limiting
+- Logging of critical operations
+
+### 4. Copy-paste without understanding
+
+If Claude generates an 8-line CSP for you, **read every source-src**. If you leave something permissive "just in case", the CSP adds nothing.
+
+---
+
+## What the 3 prompts do NOT cover
+
+Things you need **on top of this**:
+
+- **Rate limiting**: throttling at the IP/user level
+- **Input validation**: Zod / Yup on every endpoint
+- **Secrets management**: never in code, always in env vars + vault
+- **Dependency audits**: `npm audit`, Snyk, etc.
+- **Automatic backups**: of the DB
+- **Monitoring**: detect attacks in progress (Sentry, Datadog)
+
+Covering the 3 protections prevents **80% of common hacks**. For enterprise-grade you need more layers.
+
+---
+
+## The takeaway
+
+Building fast with Claude **is no excuse to skip security**. The 3 protections above take **30 minutes total** with the prompts given.
+
+30 minutes against the potential disaster of having your data leaked.
+
+---
+
+## Next steps
+
+- For a broader pre-deploy audit, [the perfect trifecta — Cyber Neo](/boveda/trifecta-perfecta)
+- For code review with a security focus, [skill code-reviewer](/boveda/skill-code-reviewer)
+- To connect Claude to your Supabase with fine-grained permissions, [Supabase MCP plugin](/boveda/plugin-supabase-mcp)

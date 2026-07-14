@@ -1,0 +1,104 @@
+---
+title: "MCP Terraform — Registry APIs + IaC automation desde Claude"
+description: "MCP server con 290 installs para Terraform. Integración con Terraform Registry APIs para buscar providers/modules, generar config y automatizar IaC desde Claude Code. La versión MCP del [HashiCorp Agent Skills](/boveda/plugin-agent-skills)."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "terraform"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-agent-skills", "mcp-pulumi", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/terraform"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/terraform.json"
+---
+
+## Qué es
+
+Terraform sigue siendo el estándar de Infrastructure as Code, especialmente para multi-cloud. Este MCP da a Claude acceso a las APIs del Terraform Registry: buscar providers, modules, validar configuraciones, generar HCL.
+
+Comparado con [HashiCorp Agent Skills](/boveda/plugin-agent-skills) (que es un marketplace de skills con MCPs), este MCP es más focal: conexión directa con Registry. Para shops que querés que Claude generes Terraform fiel a docs reales (no inventando recursos), es la entrada base.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 290 |
+| Servidor MCP | `terraform` |
+| Acceso | Terraform Registry APIs |
+| Provider | HashiCorp (oficial detrás) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/terraform
+```
+
+Para Claude:
+
+```
+Instalé el MCP devtools/terraform. Buscame los providers más populares
+para AWS y dame los 5 resources más usados de cada uno. Después generame
+un módulo Terraform que aprovisione VPC + 3 subnets + RDS Postgres en AWS.
+```
+
+## Qué podés hacer con esto
+
+### Discovery de providers y modules
+
+"Buscame providers para Google Cloud. Dame los 3 más mantenidos con su versión actual y deprecaciones recientes". Anti-hallucination en Terraform.
+
+### Generación de HCL desde brief
+
+"Generame Terraform para: VPC, 2 subnets privadas y 1 pública, NAT Gateway, ALB con HTTPS desde ACM, ASG con AMI Linux, RDS Postgres multi-AZ". Claude consulta Registry para construir HCL preciso.
+
+### Validación
+
+"Tomá este Terraform y validá contra los docs de cada provider. Identificá deprecated args, params mal usados, o constructs que no escalan".
+
+### Modules de la comunidad
+
+"Para EKS, ¿qué modules de la comunidad son los más adoptados? Listame top 5 con stars y versión actual".
+
+### Migration entre versiones de provider
+
+"Estoy en `aws ~> 3.0` y quiero pasar a `5.0`. Identificá breaking changes que afectan mis resources actuales y proponé migration path".
+
+### Comparado con [Pulumi MCP](/boveda/mcp-pulumi)
+
+Pulumi es IaC en lenguajes reales (TS, Python, Go). Terraform es DSL (HCL). Mismo enfoque, diferentes filosofías. Este MCP te ayuda con Terraform; Pulumi MCP con Pulumi.
+
+### Combinado con [Agent Skills HashiCorp](/boveda/plugin-agent-skills)
+
+El plugin oficial de HashiCorp tiene 5 plugins con 15 skills. Este MCP es la base de Registry. Combinalos para tener stack completo Terraform en Claude.
+
+## Pre-requisitos
+
+- **Terraform CLI** instalado para aplicar lo que Claude genera
+- **Cloud credentials** (AWS, GCP, Azure) si vas a `terraform apply`
+- **Backend** de state configurado
+- **Para discovery only:** sin auth, Registry es público
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de aplicar Terraform a producción">
+
+- **Operaciones destructivas:** `terraform destroy`, eliminación de recursos. Catastrófico. Hooks de aprobación SIEMPRE.
+- **Cloud credentials amplias:** si el CLI tiene admin, Claude hereda. Restringí IAM al mínimo.
+- **State management:** si varios devs/agents operan el mismo state en paralelo, podés corrupt. Coordinen.
+- **Para shops 100% Pulumi:** [Pulumi MCP](/boveda/mcp-pulumi).
+- **Si querés más capacidades que solo Registry:** [HashiCorp Agent Skills](/boveda/plugin-agent-skills) tiene más cobertura.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Terraform MCP](https://www.aitmpl.com/component/mcps/devtools/terraform) — comando exacto.
+- **Config JSON:** [terraform.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/terraform.json).
+- **Terraform Registry:** [registry.terraform.io](https://registry.terraform.io).
+
+## Recursos relacionados
+
+- [HashiCorp Agent Skills](/boveda/plugin-agent-skills) — marketplace oficial con 5 plugins HashiCorp. Combinalos.
+- [Pulumi MCP](/boveda/mcp-pulumi) — IaC alternativa en lenguajes reales.
+- [All Deploy](/boveda/all-deploy) — para deploy apps sobre infra Terraform.

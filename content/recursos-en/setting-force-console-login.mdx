@@ -1,0 +1,79 @@
+---
+title: "Force Console Login Setting — restrict auth to Anthropic Console accounts"
+description: "Setting with 40 installs. Restricts auth to Anthropic Console (API billing) accounts only. Prevents access via Claude.ai accounts. For teams where API billing is the only path."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-force-claudeai-login", "setting-bedrock-configuration", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/authentication/force-console-login"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/authentication/force-console-login.json"
+---
+
+## What it is
+
+`forceLoginMethod: console` — Claude Code only allows login with Anthropic Console accounts (API billing). Claude.ai accounts (Pro/Team) are rejected.
+
+The opposite of [Force Claude.ai Login](/boveda/setting-force-claudeai-login). Use this if your org centralizes on API billing instead of Claude.ai plans.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `authentication` |
+| Installs | 40 |
+| Setting key | `forceLoginMethod: "console"` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting authentication/force-console-login
+```
+
+For Claude:
+
+```
+I installed the authentication/force-console-login setting. Confirm that
+I'm authenticated with a Console API key and not with a Claude.ai account.
+```
+
+## What you can do with it
+
+### Centralize on API billing
+
+Your org has an Anthropic API contract with centralized billing. This setting enforces it.
+
+### For developers with dedicated API access
+
+If each dev has an org API key instead of a personal Claude.ai one, this setting avoids confusion.
+
+### For integration with existing tooling
+
+If your org uses the API directly for other things (internal apps, etc.), centralizing on Console makes sense.
+
+### The opposite of [Force Claude.ai Login](/boveda/setting-force-claudeai-login)
+
+These two are opposites. Only install one.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you use Claude.ai Pro/Team:** this setting blocks you.
+- **Only 40 installs:** low adoption. Most people prefer Claude.ai.
+- **For devs with a personal Pro account:** no override possible.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Force Console Login Setting](https://www.aitmpl.com/component/settings/authentication/force-console-login) — exact command.
+- **JSON config:** [force-console-login.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/authentication/force-console-login.json).
+
+## Related resources
+
+- [Force Claude.ai Login Setting](/boveda/setting-force-claudeai-login) — the opposite (Claude.ai plans).
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — for the AWS billing path.
+- [Anatomy of Claude](/boveda/anatomia-claude) — auth options.

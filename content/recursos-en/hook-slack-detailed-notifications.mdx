@@ -1,0 +1,89 @@
+---
+title: "Hook Slack Detailed Notifications — Slack alerts with session info"
+description: "Hook with 125 installs. Sends notifications to Slack with detailed context: working directory, duration, system info. For teams that live in Slack and want visibility into activity."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "slack"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-slack-notifications", "hook-slack-error-notifications", "hook-discord-detailed-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/slack-detailed-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-detailed-notifications.json"
+---
+
+## What it is
+
+The equivalent of [Discord Detailed Notifications](/boveda/hook-discord-detailed-notifications) but for Slack. It sends messages to a channel with detailed info:
+- Working directory
+- Session duration
+- System info
+
+Hook events: `SessionStart` (announces the start) + `Stop` (announces the end with details).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 125 |
+| Hook events | `SessionStart` + `Stop` |
+| Account required | Yes — Slack webhook |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/slack-detailed-notifications
+```
+
+Prerequisite: an incoming webhook URL from your Slack App settings.
+
+For Claude:
+
+```
+I installed the automation/slack-detailed-notifications hook. Configure
+SLACK_WEBHOOK_URL. Run a short session and verify that it reaches the
+channel.
+```
+
+## What you can do with it
+
+### Team visibility
+
+Your team can see in a `#claude-runs` channel who's running what, on which project, and how long it took.
+
+### Audit lite
+
+Without opening logs, you can see in Slack when each session ran.
+
+### Sync with remote workers
+
+If your team is distributed, the hook keeps visibility up.
+
+### Compared to the alternatives
+
+- [Slack Notifications](/boveda/hook-slack-notifications) — minimal, just "done"
+- **Slack Detailed (this one)** — with context
+- [Slack Error](/boveda/hook-slack-error-notifications) — only when something goes wrong
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you work solo:** a Slack notification adds nothing.
+- **If your Slack channel is noisy:** short sessions will flood it.
+- **Working dir + system info:** it can reveal more than you'd like. Check your privacy.
+- **Without a configured webhook:** it does nothing.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Slack Detailed Notifications Hook](https://www.aitmpl.com/component/hooks/automation/slack-detailed-notifications) — exact command.
+- **JSON config:** [slack-detailed-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-detailed-notifications.json).
+
+## Related resources
+
+- [Slack Notifications Hook](/boveda/hook-slack-notifications) — minimal version.
+- [Slack Error Notifications Hook](/boveda/hook-slack-error-notifications) — errors only.
+- [Discord Detailed Notifications Hook](/boveda/hook-discord-detailed-notifications) — the equivalent for Discord.

@@ -1,0 +1,209 @@
+---
+title: "Tres errores con IA — no es la IA, sos vos (y la regla del contexto)"
+description: "Los 3 errores filosóficos que cometemos con cualquier IA — Claude, ChatGPT, Gemini — y por qué los outputs salen mediocres. Spoiler: ninguno tiene que ver con el modelo. La regla del contexto que arregla el 80% de los problemas."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "chatgpt"]
+publishedAt: "2026-05-04"
+readingTime: "8 min"
+relatedSlugs: ["prompting-10-pilares", "mejora-prompts-plugin"]
+---
+
+## La queja típica
+
+> "Le pedí a ChatGPT/Claude X y me devolvió cualquier cosa. La IA no sirve para Y."
+
+Esto se escucha todo el tiempo. Y en la mayoría de los casos, **el problema no es el modelo**. Es uno de estos tres errores filosóficos al usarlo.
+
+Cuando ajustás esos tres, los outputs mejoran 10×. Sin cambiar de modelo, sin pagar plan premium, sin trucos.
+
+---
+
+## Error 1 — Pensar que la IA "sabe lo que querés"
+
+El error de base: tratás a la IA como si fuera un colega que **te conoce**. Le decís "mejorá esto" como le dirías a un compañero que ya entiende tu contexto, tu producto, tu audiencia, tu tono.
+
+Pero la IA no te conoce. Cada conversación arranca virgen. No sabe qué hacés, no sabe a quién le hablás, no sabe qué te importa, no sabe qué ya probaste.
+
+### Síntoma
+
+Pedidos cortos y genéricos:
+- "Hacelo mejor"
+- "Reescribilo más profesional"
+- "Optimizame esto"
+- "Dame ideas"
+
+### Fix
+
+**Trata a la IA como a un freelancer que entró hoy a tu equipo.** Necesita briefing. Antes de pedirle algo, contale:
+
+- Quién sos / qué hacés
+- Para qué audiencia es el output
+- Qué tono buscás
+- Qué ya descartaste
+- Cómo se ve "bueno" para vos
+
+Comparación:
+
+❌ "Dame ideas de nombre para mi startup."
+
+✅ "Mi startup es B2B SaaS de gestión de inventario para retailers medianos en LATAM. Audiencia: dueños de comercio, 35-55, no técnicos. Quiero un nombre corto (1-2 palabras), pronunciable en español, que no suene a software pero sugiera control/orden. Evitar palabras genéricas como 'gestión', 'cloud', 'tech'. Dame 10 opciones con justificación de 1 línea."
+
+El segundo se ve "demasiado largo" pero ese es el punto: si querés output específico, input específico.
+
+---
+
+## Error 2 — No iterar sobre el prompt, iterar sobre el output
+
+El segundo error: la IA te devuelve algo mediocre, y vos respondés "no, no es esto, hacelo otra vez" o "podés hacerlo mejor?".
+
+Eso le pide a la IA que **adivine qué cambiar** sin información nueva. Va a tirar otra variante random.
+
+### Síntoma
+
+Conversaciones largas donde cada respuesta es "no, eso tampoco" sin explicar qué falta.
+
+### Fix
+
+**Volvé al prompt, no al output.** Si el output no fue bueno, el prompt no fue lo suficientemente claro. Iterá sobre el prompt:
+
+```
+Iteración 1: "Dame ideas de nombre para mi startup."
+Output: mediocre
+
+[NO digas "dame mejores ideas". Pensá: ¿qué le faltó al prompt?]
+
+Iteración 2: [agregás contexto] "Mi startup es... [como el ejemplo de arriba]"
+Output: mejor, pero el tono no encaja
+[¿Qué tono querés? Definilo en el prompt.]
+
+Iteración 3: "...tono debe sonar a marca premium pero accesible, tipo Notion
+o Linear, no tipo Salesforce."
+Output: en el target
+```
+
+Cada iteración del prompt **agrega información**, no más demanda. Output mediocre = input incompleto.
+
+---
+
+## Error 3 — Tratar el output como verdad final
+
+El tercer error: lo que la IA tira lo aceptás tal cual. Si dice "el código está bien" o "esta es una buena estrategia", lo asumís.
+
+Esto es peligroso porque las IAs son **muy buenas escribiendo cosas que suenan plausibles**. Pueden estar equivocadas y sonar igual de convincentes que cuando aciertan. No hay "tono de duda" automático.
+
+### Síntoma
+
+Copiar/pegar el output sin verificarlo. Aceptar la primera respuesta como definitiva.
+
+### Fix
+
+**El output es un primer borrador, siempre.** Tu trabajo es validarlo:
+
+| Tipo de output | Cómo validás |
+|----------------|--------------|
+| Código | Lo corrés, lo testeás, revisás edge cases |
+| Análisis | Lo cruzás con data real, buscás casos donde no aplique |
+| Recomendación | Le pedís a la IA "argumentos en contra" antes de aceptarla |
+| Contenido escrito | Lo leés en voz alta, lo mirás con ojos de tu audiencia |
+| Datos / hechos | Verificás contra fuente original |
+
+Truco específico para análisis y recomendaciones — **pedile el contraargumento**:
+
+```
+> Acabás de recomendarme A sobre B. Ahora dame 3 razones fuertes por las que
+  B sería mejor que A. No te suavices.
+```
+
+La IA te tira el contraargumento. Vos comparás los dos lados. **Ahí tomás decisión.** Eso es 10× mejor que aceptar la primera recomendación.
+
+---
+
+## La regla del contexto
+
+Los 3 errores convergen en una sola regla:
+
+> **La calidad del output es proporcional a la calidad del input.**
+
+No hay forma de saltarse esto. Cambiar de modelo (Claude → GPT → Gemini) te puede dar +20% en algunos casos. Mejorar tu input te da +300%.
+
+### Cómo medir si tu input es bueno
+
+Antes de mandar el prompt, leelo y preguntate:
+
+1. **¿Un freelancer que recién entra entendería qué quiero?**
+   Si la respuesta es "depende", falta contexto.
+
+2. **¿Definí qué considero "bueno"?**
+   Sin criterio, la IA inventa el criterio.
+
+3. **¿Mencioné lo que NO quiero?**
+   Restricciones explícitas evitan el output técnicamente correcto pero no deseado.
+
+4. **¿Pasé los hechos críticos?**
+   Números, fechas, nombres específicos. La IA no los sabe.
+
+5. **¿Definí el formato del output?**
+   Sin formato, vas a recibir lo que la IA crea que es razonable. Suele no coincidir con lo que vos querías.
+
+Si las 5 respuestas son "sí", el output va a ser bueno. Si no, sabés exactamente qué agregar al prompt.
+
+---
+
+## El test de la "página en blanco"
+
+Una heurística simple para saber si estás cayendo en estos errores:
+
+> Si tu prompt fuera la página en blanco que recibe un consultor recién contratado, **¿podría hacer el trabajo solo con esa info?**
+
+Si la respuesta es no, **el prompt está incompleto**.
+
+La IA no es mágica — es un consultor brillante pero sin contexto. Lo brillante depende del modelo. El contexto depende de vos.
+
+---
+
+## Aplicado a casos concretos
+
+### Caso 1 — "Escribime un email a mi cliente"
+
+❌ "Escribime un email a mi cliente Acme diciéndole que no llegamos al deadline."
+
+Faltan: por qué no llegaron, cuándo es el nuevo deadline, qué relación tienen con Acme, qué se prometió, qué se entrega igual, qué tono manejan.
+
+✅ "Escribime un email a Carlos, mi contacto en Acme. Llevamos 6 meses trabajando juntos, somos relativamente cercanos pero formales (le hablo de usted en escrito). Le había prometido entregar el módulo de reportes el viernes 30. No llegamos por un bug que descubrimos en la integración con su SAP. Nuevo deadline realista: viernes 6 (una semana después). Mientras tanto, le podemos entregar el resto del proyecto que sí está listo. Tono: dueño del error, sin excusas largas, con plan concreto. Máximo 6 líneas."
+
+### Caso 2 — "Optimizame esto"
+
+❌ "Optimizá esta función:"
+```python
+def get_users():
+    ...
+```
+
+Faltan: ¿optimizar qué? Velocidad, memoria, legibilidad. ¿Cuánto importa? ¿Cuál es la carga actual?
+
+✅ "Esta función se llama 100/seg en producción. Latencia actual: 200ms. Target: menos de 50ms. Está bottleneck'd por la query de la línea 8 (vi en NewRelic). No podemos cambiar la DB ni agregar cache externo (sin Redis). Propón optimizaciones que se puedan deployar en menos de 1 día."
+
+### Caso 3 — "Hacé el código más limpio"
+
+❌ "Limpiá este archivo."
+
+✅ "Refactorizá este archivo siguiendo nuestra convención de [hooks personalizados en archivos separados, lógica de business en /domain/, validación con Zod]. NO cambies la API pública del módulo (otros 12 archivos lo importan). NO toques los tests existentes. Listame los cambios propuestos antes de aplicarlos."
+
+---
+
+## El cierre
+
+Los 3 errores son uno solo en distintas formas: **delegarle a la IA decisiones que requieren tu contexto**.
+
+La IA no sabe quién sos, qué te importa, qué ya probaste, ni cómo se ve "bueno" para vos. **Esa info la tenés vos, y tu trabajo es pasársela.**
+
+Cuando aceptás esto, dejás de pelearte con los outputs y empezás a invertir en mejores inputs. Es ahí donde la productividad real con IA aparece.
+
+---
+
+## Próximos pasos
+
+- Para profundizar en cómo armar buenos prompts, [Prompting 101 — 10 pilares](/boveda/prompting-10-pilares)
+- Si trabajás en equipo y tus colegas tiran prompts vagos, instalá el [evaluador de prompts](/boveda/mejora-prompts-plugin)
+- Para PRDs y documentos largos, [prompts de PRD ejecutivo](/boveda/prompts-prd-ejecutivo)

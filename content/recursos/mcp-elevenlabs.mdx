@@ -1,0 +1,103 @@
+---
+title: "MCP ElevenLabs — voces AI, clonación y transcripción desde Claude Code"
+description: "MCP oficial de ElevenLabs para text-to-speech, clonación de voz, procesamiento de audio y transcripción. Generá voces AI, diseñá voces custom, aislá audio, transcribí sin salir de Claude."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "elevenlabs"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["agency-agents", "anatomia-claude", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/audio/elevenlabs"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/audio/elevenlabs.json"
+---
+
+## Qué es
+
+ElevenLabs es el estándar actual de text-to-speech con calidad cercana a humana. Voces naturales, soporte para muchos idiomas, clonación de voz desde muestras cortas. La empresa publica este MCP oficial para que aplicaciones (incluido Claude Code) usen su API sin escribir el cliente.
+
+Lo que el MCP expone:
+- **Text-to-speech** — texto a audio en voces pre-armadas o custom
+- **Voice cloning** — entrenar una voz desde una muestra de tu voz
+- **Audio processing** — aislar voz, limpiar ruido
+- **Transcripción** — audio a texto (ASR)
+
+Es uno de los MCPs más adoptados para AI audio.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `audio` |
+| Installs | 231 |
+| Servidor MCP | `elevenlabs` |
+| Autor | ElevenLabs (oficial) |
+| Cuenta requerida | Sí — ElevenLabs (free tier limitado, paid tiers) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp audio/elevenlabs
+```
+
+Pre-requisitos: cuenta ElevenLabs + API key.
+
+Para Claude:
+
+```
+Instalé el MCP audio/elevenlabs. Después de setear ELEVENLABS_API_KEY,
+listame las voces disponibles en mi cuenta y generá un audio de prueba
+con la voz "Rachel" diciendo "Hola, esto es una prueba".
+```
+
+## Qué podés hacer con esto
+
+### Voiceovers para contenido
+
+"Generá voiceover para este guion en voz `Adam` en inglés y voz `Mateo` en español". Output: archivos de audio listos.
+
+### Clonación de voz para narración personal
+
+"Cloná mi voz desde el sample que subí. Después generá audio del siguiente texto con esa voz". Útil para narrar tu propio contenido en escala.
+
+### Transcripción de meetings
+
+"Transcribí este archivo de audio de una reunión de 45 minutos y devolveme el texto con timestamps y diarización (quién dijo qué)".
+
+### Limpieza de audio
+
+"Aislá la voz principal y eliminá el ruido de fondo de este archivo". Útil para procesar grabaciones de campo.
+
+### Generación masiva para apps
+
+Si tu app necesita generar audio dinámico (lectura de noticias, asistentes de voz, e-learning), el MCP integrado al workflow de Claude permite scriptear la generación.
+
+## Pre-requisitos
+
+- **Cuenta ElevenLabs** con tier apto para tu volumen
+- **API key**
+- **Cumplir TOS de ElevenLabs:** clonación de voz tiene restricciones (consentimiento explícito de la voz original)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de usar">
+
+- **Costos:** la generación TTS cobra por carácter; clonación tiene plan específico. Mirá pricing antes de procesos masivos.
+- **Clonación sin consentimiento:** clonar voz de alguien sin permiso viola TOS y puede ser legalmente arriesgado. ElevenLabs te puede banear.
+- **Calidad varía por idioma:** inglés es óptimo, español muy bueno, otros idiomas pueden tener acento o errores.
+- **Latencia para tiempo real:** TTS de calidad no es instantáneo. Para chatbots con voz en streaming, mirá streaming endpoints.
+- **Sin internet, no funciona:** todo pasa por API de ElevenLabs.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [ElevenLabs MCP](https://www.aitmpl.com/component/mcps/audio/elevenlabs) — comando exacto.
+- **Config JSON:** [elevenlabs.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/audio/elevenlabs.json).
+- **ElevenLabs oficial:** [elevenlabs.io](https://elevenlabs.io) — cuenta, pricing, voces.
+
+## Recursos relacionados
+
+- [Agency Agents](/boveda/agency-agents) — para orquestar pipelines tipo "Claude lee texto → ElevenLabs genera audio → publicación".
+- [Anatomía de Claude](/boveda/anatomia-claude) — ubicar este MCP como conector a un servicio externo de audio.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas cuando integrás servicios pagos con uso variable.

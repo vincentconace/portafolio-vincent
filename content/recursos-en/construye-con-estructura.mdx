@@ -1,0 +1,252 @@
+---
+title: "Build with structure — the master prompt that turns loose ideas into finished products"
+description: "A 5-phase master prompt (discovery, planning, building, polishing, delivery) that forces the AI to act as your technical cofounder. It separates the critical from the optional, gives you checkpoints, and delivers documentation. You paste your context and execute phase by phase."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "codex", "chatgpt"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["de-idea-a-codigo", "comienza-a-construir", "mejores-practicas-claude"]
+---
+
+## The problem
+
+You ask an AI to "build me an app for X" and it hands you:
+
+- Something **generic** that ignores your context
+- No prioritization between critical features and nice-to-haves
+- No checkpoints to course-correct before it's too late
+- No documentation to maintain it afterward
+
+The result: a product you **can't use** or show to anyone.
+
+**Build with structure** is a master prompt built for Spanish speakers that turns that chaos into a **clear execution path**.
+
+---
+
+## What it solves
+
+| Typical problem | How it solves it |
+|-----------------|------------------|
+| Building "blindly" | Forces you to define the real scope of v1 |
+| Mixing critical features with ideas | Explicitly separates v1 vs. future |
+| Losing control of the product | You're the product owner, the AI executes |
+| Generic delivery | Wraps up with build + validation + polish + handoff |
+
+---
+
+## How to use it
+
+```
+1. Copy the full prompt
+2. Replace the placeholders with your real context
+3. Paste it as the starting context in Claude/Codex/ChatGPT/Gemini
+4. Answer the key decisions
+5. Execute phase by phase, not all at once
+```
+
+---
+
+## The master prompt
+
+```
+# Build with Structure
+
+## Role
+Act as my technical cofounder. Your job is to help me build 
+a real product that I can use, share, or launch.
+You handle the building, but I keep control of the decisions.
+
+## Initial Context (fill in before executing)
+- Product idea: {{PRODUCT_IDEA}}
+- Target user: {{TARGET_USER}}
+- Problem it solves: {{PROBLEM_TO_SOLVE}}
+- Seriousness level: {{EXPLORE | PERSONAL_USE | SHARE | LAUNCH}}
+- Available time and resources: {{TIME_AND_RESOURCES}}
+- Constraints and preferences: {{CONSTRAINTS_AND_PREFERENCES}}
+
+## Framework (mandatory)
+
+### Phase 1: Discovery
+- Ask questions to understand what I really need.
+- Challenge my assumptions if you spot contradictions.
+- Separate what's critical for v1 from what can wait.
+- If my idea is too broad, narrow the scope and propose a starting point.
+
+### Phase 2: Planning
+- Define exactly what we'll build in v1.
+- Explain the technical approach in plain language.
+- Estimate complexity: low, medium, or high.
+- List dependencies (accounts, services, APIs).
+- Show me a functional sketch of the finished product.
+
+### Phase 3: Building
+- Build in visible stages so I can review quickly.
+- Briefly explain what you're doing and why.
+- Test what you implement before moving on.
+- Stop at decision points to validate with me.
+- If there's a blocker, give me options with trade-offs.
+
+### Phase 4: Polishing
+- Bring the result up to a real product standard, not a demo.
+- Handle errors and edge cases gracefully.
+- Ensure a good experience on desktop and mobile.
+- Add finishing touches so it feels complete.
+
+### Phase 5: Delivery
+- If I want to publish it, include a deploy step.
+- Deliver clear instructions to use, maintain, and modify it.
+- Document the important decisions.
+- Close with recommended improvements for v2.
+
+## Collaboration Rules
+- Treat me as the product owner: I make the business decisions.
+- Speak clearly and directly; translate the jargon.
+- Point out when I'm overcomplicating things.
+- Be honest about limitations and risks.
+- Move fast, but with visibility.
+
+## Mandatory Response Format
+ALWAYS in this order:
+1. Initial diagnosis
+2. v1 plan (in-scope / out-of-scope)
+3. Technical approach explained simply
+4. Building in stages
+5. Dependencies and required decisions
+6. Validation and minimal testing
+7. Delivery plan and v2
+
+## Expected outcome
+I don't just want "something that works". I want a functional, 
+clear, and presentable product, built with structure.
+```
+
+---
+
+## The 5 phases in detail
+
+### Phase 1 — Discovery
+
+The AI **interviews you** before it codes. It challenges assumptions. It narrows the scope if your idea is too broad.
+
+**Expected output**: a document that separates "critical v1" from "v2+".
+
+### Phase 2 — Planning
+
+It defines exactly **what gets built**. Technical approach in plain terms. Lists dependencies. Estimates complexity.
+
+**Expected output**: a functional sketch of the finished product.
+
+### Phase 3 — Building
+
+In **visible stages**. The AI explains what it's doing and why. It stops at decision points.
+
+**Expected output**: code you can review as it comes out.
+
+### Phase 4 — Polishing
+
+From "demo" to "real product". It handles edge cases. Responsive. Finishing touches.
+
+**Expected output**: something you **could show** to the client without embarrassment.
+
+### Phase 5 — Delivery
+
+Deploy. Documentation. Next steps for v2.
+
+**Expected output**: product + manual + roadmap.
+
+---
+
+## Use cases
+
+### 1. SaaS MVP
+
+```
+- Idea: SaaS app for inventory management
+- User: COOs of mid-sized retail in LATAM
+- Problem: stock control across branches
+- Level: LAUNCH
+- Time: 4 weeks
+- Constraints: limited AWS budget
+```
+
+### 2. Internal company tool
+
+```
+- Idea: internal KPI dashboard
+- User: my company's management team
+- Problem: visibility into monthly metrics
+- Level: PERSONAL_USE (team)
+- Time: 2 weeks
+- Constraints: must use SSO with Okta
+```
+
+### 3. Side project
+
+```
+- Idea: habit-tracking app
+- User: me and the people around me
+- Problem: test whether it's useful to me
+- Level: EXPLORE
+- Time: 1 weekend
+- Constraints: simple stack
+```
+
+---
+
+## Anti-patterns
+
+### 1. Skipping Phase 1
+
+The temptation is to jump straight to "build it". **It doesn't work**. The discovery phase is what saves you from redoing everything later.
+
+### 2. Accepting everything in Phase 2
+
+If the plan it shows you is too broad, **ask it to cut down to a 7-day MVP**. The AI tends to overcomplicate.
+
+### 3. Not stopping at checkpoints
+
+Phase 3 has **decision points**. If you skip them, you lose control. Stop, review, decide.
+
+### 4. Skipping Phase 4
+
+"It works, done". NO. Polishing is what separates a demo from a product. **Always do it**.
+
+### 5. Not documenting (Phase 5)
+
+Without docs, in 3 months you won't understand your own product. The AI can document it — **ask it to**.
+
+---
+
+## Powerful combinations
+
+### With [from idea to code](/boveda/de-idea-a-codigo)
+
+The Haiku → Sonnet → Opus workflow to use Claude efficiently in every phase.
+
+### With [start building](/boveda/comienza-a-construir)
+
+A free stack to execute the plan that comes out of it.
+
+### With [Claude Code best practices](/boveda/claude-code-best-practices)
+
+The 83 practices to refine the execution.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| A 20-line script | Overkill — just ask directly |
+| Something you're already clear on | The questions are just noise |
+| Production crisis | No time for 5 phases |
+| No clear product owner | Without decisions, the prompt doesn't work |
+
+---
+
+## Next steps
+
+- For the model workflow, [from idea to code](/boveda/de-idea-a-codigo)
+- For a free stack, [start building](/boveda/comienza-a-construir)
+- To refine execution, [Claude best practices](/boveda/mejores-practicas-claude)

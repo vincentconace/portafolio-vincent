@@ -1,0 +1,342 @@
+---
+title: "9 prompts for Claude Cowork — the catalog that survived 30 days of real use"
+description: "The 9 slash-commands that survived a 30-day experiment against 21 discarded prompts. Morning brief, competitor detective, meeting prep, weekly report, and 5 more. With the 3 properties that make them work and the 4 anti-patterns."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-cowork"]
+publishedAt: "2026-05-14"
+readingTime: "15 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "mejora-prompts-plugin", "prompting-10-pilares"]
+---
+
+## The experiment
+
+30 days. 30 prompts tested against doing the tasks by hand. **9 survived**. The other 21 were discarded for two reasons we'll get to at the end — they're just as important as the prompts that did work.
+
+The 9 cover operational tasks that a founder / SMB operator does every day: morning brief, meeting prep, weekly report, reading long docs, inbox cleanup, etc. **These aren't marketing prompts**, they're office tools.
+
+> Note: these prompts assume Claude Cowork (the surface with connectors and persistent memory). Some require Gmail + Calendar connected; others are agnostic.
+
+---
+
+## The 5 with the most impact
+
+### 1. Morning brief
+
+What took the human 47 min → ~4 min with the prompt running automatically.
+
+**What it does**: every morning, it hands you an executive summary with:
+- The day's meetings with context for each one
+- Emails that need your reply today (filtered, not the entire inbox listing)
+- Yesterday's open items that didn't close
+- 1-2 things to keep an eye on based on recent context
+
+```
+You're my chief of staff. Every morning at 7am you put together my brief for the day.
+
+INPUTS:
+- Today's calendar (next 12h)
+- Unanswered emails from the last 24h
+- Uncompleted tasks from my to-do
+- Cowork memory: persistent project context
+
+OUTPUT (in this exact order):
+
+## 🎯 Today in one line
+[the day's #1 priority, no diplomacy]
+
+## 📅 Agenda
+[each meeting with: time, with whom, objective, prep needed]
+
+## 📧 Need your reply
+[emails that need YOUR decision, NOT the noise. 5 max.]
+
+## 🔥 Yesterday's open items
+[what was left unclosed and why it matters]
+
+## ⚠️ To monitor
+[1-2 things with context that may require intervention]
+
+RULES:
+- If an email can wait, do NOT include it
+- If a meeting is an irrelevant recurring one, do NOT describe it in detail
+- Be short. My reading time is 3 minutes max.
+```
+
+Schedule in Cowork: runs at 7:00 every business day.
+
+### 2. Competitor detective
+
+What took 3h → ~18 min.
+
+**What it does**: deep research on a competitor. Not a generic "what they do," but a tactical analysis.
+
+```
+You're a competitive intelligence analyst. I give you a competitor's name
+and you put together an actionable dossier.
+
+COMPETITOR: $1
+
+RESEARCH AND RETURN TO ME:
+
+## Product
+- What they sell (in 3 lines)
+- How they position themselves vs the rest of the market
+- Public pricing if any
+
+## Recent changes (last 60 days)
+- Launches / pricing changes / team changes
+- Moves that signal strategy (specific hire, message pivot)
+
+## Their structural strength
+- 1 thing they clearly do better than us
+- 1 thing where they're weak and can be attacked
+
+## Recommended move for our next review
+- 1 concrete action based on what you found
+
+RULES:
+- Do NOT make things up. If you don't find info, write "didn't find any."
+- Cite the source for each relevant data point.
+- If everything is public and available, that's fine. I don't want illegal intelligence.
+```
+
+### 3. Meeting prep
+
+30 min → 3 min.
+
+```
+You're a chief of staff. I give you the title and participants of a meeting
+I have today. You put together the prep.
+
+MEETING: $1 (title)
+PARTICIPANTS: $2 (list)
+DURATION: $3 (min)
+
+RETURN TO ME:
+
+## Objective
+[in 1 line: what I need to get out of this meeting]
+
+## Context on each participant
+[for each one: role, last interaction with you according to emails, what
+matters to them according to history]
+
+## Proposed agenda
+[with time per point, adding up to the meeting length]
+
+## The 3 questions I need to ask
+[focused, actionable, not generic]
+
+## Risks / hot topics
+[if there's historical tension with any participant or topic, warn me]
+```
+
+### 4. Friday weekly report
+
+2h → 7 min.
+
+```
+You're my chief of staff. It's Friday 5pm. You put together the team's weekly report.
+
+SCOPE: the week closing today.
+
+RETURN TO ME (in shareable format):
+
+## Executive summary
+[3 lines: what happened this week, what went well, what fell behind]
+
+## Metrics
+[table with: metric, this Friday, last Friday, delta, short comment]
+
+## What moved forward
+[bullets with: what, who moved it, why it matters]
+
+## What's stuck
+[bullets with: what, who has it, what it needs to get unblocked]
+
+## What's coming next week
+[3 priorities, not 15]
+
+RULES:
+- Direct tone, no unnecessary diplomacy
+- If a metric got worse, say so
+- If someone is blocking something, mention it (carefully but without hiding it)
+```
+
+### 5. Content multiplier
+
+90 min → 12 min. You take a long piece (LinkedIn post, essay, podcast transcript) and multiply it into formats for different channels.
+
+```
+You're a content editor. I give you an original piece and you multiply it
+for different channels without losing the essence.
+
+ORIGINAL PIECE:
+$1
+
+GENERATE FOR ME:
+
+## Tweet thread (8-10 tweets)
+[a complete thread with the idea, keeping the original's voice]
+
+## LinkedIn post
+[~300 words, LinkedIn format with strategic line breaks]
+
+## Newsletter blurb (~150 words)
+[to drop into Monday's newsletter with a clear CTA to the original]
+
+## YouTube short (60-second script)
+[strong hook in the first 3 seconds, clear close]
+
+## 3 alternative titles for SEO
+[same idea but optimized for search]
+
+RULES:
+- Don't change arguments. Format only.
+- Keep the original's voice (whether it's informal, formal, etc.).
+- If the original piece is bad, tell me instead of adapting it.
+```
+
+---
+
+## The 4 extras
+
+Less famous but useful for specific cases:
+
+### 6. Clean the inbox
+
+90 min → 11 min. Shreds your inbox of unanswered emails.
+
+```
+You're my assistant. My inbox is full. Shred it and return actions to me.
+
+UNANSWERED EMAILS: [list]
+
+CLASSIFY EACH ONE AS:
+
+🔴 You reply today (with a 2-3 line draft reply)
+🟡 Delegate to [team]
+🟢 Just read / archive
+⚫ Spam or irrelevant (justify)
+
+RETURN THEM TO ME IN THAT ORDER. Start with the 🔴 ones.
+```
+
+### 7. Investment auditor
+
+45 min → 3 min. For reviewing investment opportunities fast.
+
+### 8. Deep researcher with sub-agents
+
+4h → 28 min. For complex multi-source research.
+
+### 9. Long-document reader
+
+90 min → 9 min. Structured summary of long PDFs (contracts, papers, reports).
+
+---
+
+## The 3 properties that make them work
+
+The 9 prompts that survived have **3 properties in common**. The 21 discarded ones failed at least one.
+
+### Property 1 — A checkable termination criterion
+
+Each prompt defines **objectively when it's done**. Not "until it's good" — something verifiable.
+
+✅ "Return JSON with keys A, B, C"
+✅ "List me exactly 5 emails"
+✅ "3 minutes of reading max for the output"
+
+❌ "Do your best"
+❌ "Summarize this"
+
+### Property 2 — Output with a named structured shape
+
+The output format is **declared** with headers, sections, or a schema. Not free text.
+
+✅ "Return it with this structure: ## Objective, ## Agenda, ## Questions"
+✅ "JSON with `{summary, items[], action}`"
+
+❌ "Give me back a summary"
+
+### Property 3 — ROLE in the first line
+
+The prompt's first message assigns a specific role, not a generic one.
+
+✅ "You're my chief of staff"
+✅ "You're a competitive intelligence analyst"
+✅ "You're a content editor"
+
+❌ "Help me with..."
+❌ "Do..."
+
+The role works as an **interpretation lens**. Claude doesn't respond the same way as a "generic assistant" as it does as a "chief of staff" — the second applies different filters.
+
+---
+
+## The 2 reasons 21 prompts were discarded
+
+### Reason 1 — No termination criterion
+
+Prompts in the style of "help me think through X" deliver something, but you don't know whether it finished or whether Claude fell short. Without "done when..." we live in limbo.
+
+### Reason 2 — Amorphous output
+
+Prompts that return free text were discarded because their value depends on reading the whole thing. **The whole point of a slash-command is that the output is processable at a glance.** Long text with no structure doesn't get processed, it gets procrastinated.
+
+---
+
+## Anti-patterns — when they DON'T help you
+
+### 1. You don't have Cowork (or its connectors)
+
+Some prompts (morning brief, inbox cleanup) require Gmail + Calendar connected. Without that, they're empty shells.
+
+### 2. Your work doesn't generate these inputs
+
+If you don't have daily meetings, you don't need meeting prep. If you don't write content, you don't need the multiplier. **Adopt only the ones that match your real workflow.**
+
+### 3. You expect perfect outputs on day 1
+
+Each prompt needs 2-3 weeks of tuning for your specific context. The first morning brief will get some things wrong. You adjust → it improves. Whoever quits in week 1 never reaches the ROI.
+
+### 4. You'll trust outputs without reviewing
+
+These prompts are **80% drafts**. You're the missing 20%. If you blindly trust a morning brief and send the weekly report without reading it, you'll get burned.
+
+---
+
+## How they're installed in Cowork
+
+3 steps:
+
+1. **Open your project in Cowork** (not in a loose chat — Cowork because you want it to have persistent memory)
+2. **Save the prompt as a slash-command**: name it `/brief-manana`, `/prep-junta`, etc.
+3. **Schedule it** with scheduled tasks. The morning brief runs 7am every business day. The Friday report runs 5pm every Friday.
+
+After that you don't type anything — the outputs show up on their own.
+
+---
+
+## The honest math behind the headline
+
+> "34 hours/week saved"
+
+It's real **but with asterisks**:
+
+- It assumes you were doing all 9 tasks by hand before (not everyone does)
+- It assumes the tuning is already done (~3 weeks)
+- It assumes you accept 80% drafts (no perfectionism)
+- It assumes Cowork + connectors working well
+
+If your situation is the first one (an operator with lots of operational tasks + some tolerance for "not perfect"), the ROI is huge. If you're a pure developer touching code all day, the Code prompts will serve you better than these.
+
+---
+
+## Next steps
+
+- To improve the quality of any prompt before using it, [Prompting 101 — 10 pillars](/boveda/prompting-10-pilares)
+- If you need to write more complex prompts, [Executive PRD](/boveda/prompts-prd-ejecutivo) covers structured prompt patterns
+- If your homemade prompts tend to be vague, the [prompt evaluator](/boveda/mejora-prompts-plugin) warns you before you send them

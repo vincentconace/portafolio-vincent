@@ -1,0 +1,89 @@
+---
+title: "Hook Discord Detailed Notifications — alerts to Discord with session info"
+description: "Hook with 162 installs that sends detailed notifications to Discord when Claude finishes. Includes working directory, duration, and system info. For teams that track activity in a shared channel."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "discord"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-discord-notifications", "hook-discord-error-notifications", "hook-desktop-notification-on-stop"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/discord-detailed-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-detailed-notifications.json"
+---
+
+## What it is
+
+When Claude finishes a session, this hook sends Discord a detailed message with:
+- The working directory it ran in
+- The session duration
+- System info (OS, machine)
+
+More useful than the basic [Discord Notifications](/boveda/hook-discord-notifications) when you want context, and less invasive than continuous monitoring.
+
+Hook events: `SessionStart` (announces the start) + `Stop` (announces the end with details).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 162 |
+| Hook events | `SessionStart` + `Stop` |
+| Account required | Yes — Discord webhook URL |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/discord-detailed-notifications
+```
+
+Prerequisite: a webhook URL for your Discord channel (Server Settings → Integrations → Webhooks).
+
+For Claude:
+
+```
+I installed the automation/discord-detailed-notifications hook. Configure
+DISCORD_WEBHOOK_URL. Run a short session and verify that the channel
+receives both the start and end with detailed info.
+```
+
+## What you can do with this
+
+### Team awareness
+
+Your team sees in a `#claude-runs` channel who's running what, in which project, and how long it took.
+
+### Audit lite
+
+Without having to open logs, you can see in Discord when each session ran.
+
+### Sync with remote workers
+
+If you work distributed and want the team to know what's happening, the hook posts it automatically.
+
+### Compared to [Discord Notifications](/boveda/hook-discord-notifications)
+
+Discord Notifications is minimal (just "finished"). Detailed adds context. If you only want to know that it finished, use the minimal one. If you want team visibility, use this one.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you work alone:** notifications to Discord by yourself add nothing.
+- **If the webhooks go to a sensitive channel:** working dir + system info can reveal more than you'd want.
+- **If your team doesn't use Discord:** obviously.
+- **Spam:** short, frequent sessions saturate the channel.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Discord Detailed Notifications Hook](https://www.aitmpl.com/component/hooks/automation/discord-detailed-notifications) — exact command.
+- **JSON config:** [discord-detailed-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-detailed-notifications.json).
+
+## Related resources
+
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — minimal version.
+- [Discord Error Notifications Hook](/boveda/hook-discord-error-notifications) — for tracking errors specifically.
+- [Desktop Notification On Stop Hook](/boveda/hook-desktop-notification-on-stop) — for desktop only, not remote.

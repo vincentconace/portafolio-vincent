@@ -1,0 +1,244 @@
+---
+title: "Claude Code 0-to-100 — the complete guide to not getting lost"
+description: "The complete guide to Claude Code: desktop app or terminal, what to do on day one, the 10 commands you use every day, how to organize long context, and the typical mistakes beginners make. If you already did the setup, this is what comes next."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-19"
+readingTime: "16 min"
+relatedSlugs: ["claude-code-setup-zero", "anatomia-claude", "hooks-automatizacion"]
+---
+
+## Who this guide is for
+
+If you've already installed Claude Code (if not, check out the [setup guide](/boveda/claude-code-setup-zero) first), this guide covers **what comes next**: the phase where it already works but you're still not getting the most out of it. It's the month-1 learning curve condensed.
+
+It's not a command reference — that's what `/help` is for inside the tool. It's a guide on **how to use it well**.
+
+---
+
+## Desktop app or terminal: which to choose?
+
+Claude Code comes in two forms:
+
+| Form | When it's a good fit |
+|-------|------------------|
+| **Desktop app** | First time, exploration, long pair-programming sessions, when you don't have a specific project |
+| **Terminal (CLI)** | Working in a specific repo, integrating it with scripts/hooks, when you already have a defined workflow |
+
+The real difference isn't visual — it's that the **desktop app** opens a "global" session for you, while the **CLI** runs inside the project folder. If you're working against a specific repo, the CLI has better context from the very first message.
+
+**My recommendation**: start with the desktop app the first week to get comfortable. Then move to the CLI once you know what you want to ask it for.
+
+---
+
+## Day one: what to do, in order
+
+<Step number={1} title="Open Claude Code in your project">
+
+From the terminal, standing in the project:
+
+```bash
+cd mi-proyecto
+claude
+```
+
+The first time, it will ask you to confirm some harmless operations. Accept them.
+
+</Step>
+
+<Step number={2} title="Generate the CLAUDE.md">
+
+Inside the session:
+
+```
+> /init
+```
+
+This scans your codebase and generates a `CLAUDE.md` with the project summary. **This file is the most important thing**: Claude reads it at the start of every session. If it's well written, the quality of every response goes up a lot.
+
+After generating it, open it and add by hand:
+- The team's **conventions** (tabs vs spaces, naming, etc.)
+- **What should NOT be touched** (generated files, untouchable legacy code)
+- **Useful commands** (`npm run dev`, `npm test:e2e`, etc.)
+
+</Step>
+
+<Step number={3} title="Make a small request" last>
+
+Don't start with "refactor the entire auth module for me". Start with:
+
+```
+> Explain what src/lib/db.ts does in 5 lines
+```
+
+Read the response. Is it correct? Does it understand your code? If so, raise the bar:
+
+```
+> Add types to the functions in src/utils/format.ts. Don't change the logic.
+```
+
+You're calibrating how much trust to give it. The first week is for that.
+
+</Step>
+
+---
+
+## The 10 day-to-day commands
+
+| Command | What for | When |
+|---------|----------|--------|
+| `/init` | Generate `CLAUDE.md` | First time in a repo |
+| `/clear` | Clear context | When you finish a task and start another |
+| `/compact` | Compress context | When it fills up (~80% capacity) and you want to keep going |
+| `/model` | Switch model | From Sonnet to Opus for heavy tasks, or to Haiku for small stuff |
+| `/cost` | See spend | At the end of the day to understand consumption |
+| `/permissions` | View/edit permissions | When you're tired of confirming the same command 10 times |
+| `/memory` | Edit persistent preferences | To note down how you like to work |
+| `/diff` | See uncommitted changes | Before reviewing what Claude proposed |
+| `/undo` | Revert the last change | When Claude broke something for you |
+| `/help` | Full list | When in doubt |
+
+Of these, the 4 you'll use most are `/clear`, `/compact`, `/diff`, and `/permissions`. The rest show up occasionally.
+
+---
+
+## How to organize context in long sessions
+
+The most common mistake for new users: leaving the session open for 4 hours with 20 different tasks, and by the end Claude gets confused because it has 4 contexts stepping on each other.
+
+**A pattern that works**:
+
+```
+Task A → work → finish → /clear
+Task B → work → finish → /clear
+Task C → if it needs stuff from A, /resume A
+```
+
+Claude Code saves histories per project. `/resume` shows you past sessions so you can pick up specific context.
+
+**Another technique**: if a task is big (refactoring a whole module), open it in a dedicated session and don't mix it with bug fixes. Quality drops when there are 3 open threads of thought.
+
+<Callout type="tip" title="`/compact` isn't magic">
+`/compact` summarizes the context but **loses details**. If you're in the middle of something critical, better to keep saving notes in files (`docs/decisions.md`) that do persist between sessions.
+</Callout>
+
+---
+
+## Three typical mistakes beginners make
+
+### Mistake 1: Making requests that are too open-ended
+
+❌ "Improve this code"
+✅ "Extract the email validation logic into a separate function and add 3 tests."
+
+The more specific, the better. "Improve" has no definition — Claude will invent what it considers better, and it probably won't match what you had in mind.
+
+### Mistake 2: Not reading the response before accepting
+
+Claude proposes changes, and you hit "y" to accept without looking. **This is the fastest path to breaking something in production.** Especially in critical files: read the diff. If you don't understand a change, ask:
+
+```
+> Why did you change that function? Explain the reasoning.
+```
+
+### Mistake 3: Forgetting it has limited memory
+
+Claude Code doesn't remember what happened 2 sessions ago. If you establish a convention on Monday ("we always use `async/await`, never `.then`"), by Wednesday it may have forgotten it. Critical conventions **go in `CLAUDE.md`**, not the chat.
+
+---
+
+## Working with large files
+
+When a file is >1000 lines, Claude doesn't read it all every time (it would be expensive and slow). It uses strategies like an internal `grep` to find what's relevant.
+
+This means: if you ask "explain this file", for large files it will do a partial read. If you need it to look at something specific, **point at it**:
+
+```
+> Look at the validateOrder function in src/orders/validate.ts:120 — what does it do if the cart is empty?
+```
+
+With `file:line`, Claude goes straight to the spot. Faster and more precise.
+
+---
+
+## The `--debug` flag when something's off
+
+If Claude is behaving weird (can't find files, doesn't apply hooks, skills don't activate):
+
+```bash
+claude --debug
+```
+
+It shows you:
+- Which hooks it fires and with what inputs
+- Which skills it detects as applicable
+- Which tools it invokes and with what args
+- Timings for each operation
+
+It's like opening the browser devtools — ugly, but the only way to understand what's happening inside.
+
+---
+
+## When to switch models
+
+Claude Code lets you choose among the available models. The practical rule:
+
+| Model | When |
+|--------|--------|
+| **Haiku** | Mechanical tasks (renaming variables, formatting, translating comments) |
+| **Sonnet** | Default. Good balance — you'll do 90% of the work with this one |
+| **Opus** | Large refactors, complex debugging, design decisions |
+
+You switch with `/model opus`. **Don't use Opus for everything** — it's expensive, and for small tasks you won't notice the difference.
+
+<Callout type="info" title="Fast mode">
+For Opus there's a "fast mode" that gives faster output without dropping to a smaller model. Useful when you're in a tight iteration loop. You activate it with `/fast`.
+</Callout>
+
+---
+
+## Git integration
+
+Claude Code respects your git workflow. Things worth knowing:
+
+- **It never commits on its own** — it always asks you to confirm
+- **It reads `.gitignore`** so it doesn't touch generated files
+- **It handles merges** sensibly (it asks you when there's a conflict, it doesn't decide alone)
+- **It doesn't force push** unless you explicitly ask it to
+
+If you want it to be more autonomous with git (automatic commits after tasks), that's configured with [hooks](/boveda/hooks-automatizacion).
+
+---
+
+## A typical productive day's session
+
+```
+morning:
+  claude (I open a session in my project)
+  > /resume "notifications feature"   (I pick up yesterday's work)
+  ... work for 2-3 hours ...
+  > /clear
+
+midday:
+  > /init src/lib/payments/  (I generate context for a new module)
+  ... work on something different ...
+  > /clear
+
+afternoon:
+  /model opus
+  > I need to rethink the architecture of background jobs. Start by reading src/jobs/ and propose 3 options.
+  ... design discussion ...
+```
+
+Pattern: fresh context for each block of work, big model only when you need it, specific files as entry points.
+
+---
+
+## Next steps
+
+Once you've got the basics down, the next 3 resources are the ones that'll get you the most juice:
+
+- [Claude Code hooks](/boveda/hooks-automatizacion) — to automate the repetitive stuff
+- [Anatomy of Claude](/boveda/anatomia-claude) — to understand skills, MCPs, plugins
+- [The code-reviewer skill](/boveda/skill-code-reviewer) — your first custom skill

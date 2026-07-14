@@ -1,0 +1,234 @@
+---
+title: "Prompt Master — the skill that sharpens your prompts before you send them"
+description: "Open-source skill that reviews your prompt across 9 dimensions, detects which tool you're writing for (Claude, ChatGPT, Cursor...) with dedicated profiles, and keeps memory so you don't contradict yourself. To stop burning quota on mediocre prompts."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["mejora-prompts-plugin", "prompting-10-pilares", "cinco-herramientas-primer-dia"]
+---
+
+## The concrete problem
+
+Those of us who pay the $20 for Claude **burn half our quota on badly written prompts**. It's not Claude — it's us asking for vague things that take 4-5 iterations to reach something decent.
+
+What you save by **sharpening the prompt before sending it** is huge:
+
+| Unsharpened | Sharpened |
+|------------|---------|
+| 5 iterations | 1-2 iterations |
+| ~8k tokens spent | ~2k tokens |
+| 15 real minutes | 4 real minutes |
+
+**Prompt Master** is a skill that does exactly that: **it reviews your prompt before you send it**, spots gaps, and proposes the sharpened version.
+
+---
+
+## What it does exactly
+
+### 9 dimensions it reviews
+
+For every prompt you write, the skill checks:
+
+| # | Dimension | What it looks for |
+|---|-----------|-----------|
+| 1 | **Task** | Clear verb? "Improve" doesn't cut it. "Rewrite in X tone" does. |
+| 2 | **Input** | Where's the material to process? Is it complete? |
+| 3 | **Output** | Is the expected format defined? (JSON, table, list, prose) |
+| 4 | **Constraints** | What should it NOT do? (word limit, avoid X, etc.) |
+| 5 | **Context** | Has the necessary background been provided? |
+| 6 | **Audience** | Who is the output for? Defines tone and depth |
+| 7 | **Memory** | Are there relevant past decisions to mention? |
+| 8 | **Success criteria** | How does Claude know it finished well? |
+| 9 | **Examples** | Are there 1-3 examples of the desired output (few-shot)? |
+
+For each missing dimension, the skill flags it and proposes how to add it.
+
+### 30+ tools detected
+
+The skill detects which LLM/tool you're writing for and applies a **specific profile**:
+
+- Claude (chat, Cowork, Code) — different sensitivities in each one
+- ChatGPT
+- Cursor / Windsurf
+- Gemini
+- Perplexity
+- Replit / Bolt / V0 / etc.
+
+Each profile knows which patterns work best for that tool. A prompt that works in Claude doesn't necessarily work in Cursor, and vice versa.
+
+### Memory across prompts
+
+It keeps a history of decisions made in past prompts. If on Monday's prompt you decided "no emojis," Wednesday's prompt warns you if you're contradicting yourself.
+
+---
+
+## How to install it
+
+### Path A — claude.ai (web chat)
+
+You download the `SKILL.md` file from the repo and upload it to Settings → Customize → Skills.
+
+Details on the upload process in the [skills guide](/boveda/guia-skills-claude).
+
+### Path B — Claude Code (CLI)
+
+```bash
+mkdir -p ~/.claude/skills/prompt-master
+curl https://raw.githubusercontent.com/nidhinjs/prompt-master/main/SKILL.md \
+  -o ~/.claude/skills/prompt-master/SKILL.md
+```
+
+After that, in any session, you say "sharpen this prompt" and it activates.
+
+---
+
+## How to use it
+
+### Case 1 — Sharpen a prompt before sending
+
+```
+> Before executing, sharpen this prompt:
+
+  "Make the code cleaner"
+
+  Target tool: Claude Code
+```
+
+The skill analyzes:
+
+```
+Original prompt: "Make the code cleaner"
+
+MISSING DIMENSIONS:
+1. Task ❌ — "cleaner" isn't a clear verb. Options:
+   - Refactor to reduce cyclomatic complexity
+   - Rename variables to snake_case (or camelCase)
+   - Extract long functions into sub-functions
+   - Remove dead code
+
+2. Input ❌ — you don't specify which file
+
+3. Output ⚠️ — missing criterion (how deep should the refactor go?)
+
+4. Constraints ❌ — anything that should NOT be touched?
+
+SHARPENED PROPOSAL:
+
+"Refactor src/lib/orders/validate.ts:
+
+ACTIONS:
+- Extract the validation functions that have >40 lines into
+  pure sub-functions
+- Rename variables with generic names (data, result, temp)
+  to descriptive names
+- Remove the code on lines 234-267 that's no longer called from
+  anywhere (verify with grep first)
+
+DO NOT:
+- Don't change the module's public API (signatures of exported
+  functions)
+- Don't modify the existing tests
+- Don't add new deps
+
+VERIFICATION:
+- npm test must pass
+- npm run lint with no warnings
+- Show me the diff before applying"
+```
+
+You confirm (or adjust) and send that version. **One iteration instead of five.**
+
+### Case 2 — Learn while you use it
+
+Every time the skill flags a missing piece, **you learn what it is**. After a month:
+
+- Your original prompts already include 5-7 of the 9 dimensions
+- The skill only flags 1-2 things that slip past you
+- Eventually you use it only for critical cases
+
+It's like having a built-in prompt engineering tutor.
+
+### Case 3 — Detect contradictions with past prompts
+
+```
+> Sharpen: "Generate the tests for the orders module with emojis in the
+  describe blocks so they're more visual"
+
+Prompt Master:
+  ⚠️ Memory from previous prompts:
+  2 weeks ago you asked "never use emojis in project X's code."
+
+  Do you want to:
+  a) Make an exception for this case (the tests are visual)?
+  b) Keep the rule?
+  c) Change the rule globally?
+```
+
+It warns you **before** the current prompt leads you into an inconsistency.
+
+---
+
+## The 35 anti-patterns it detects
+
+The full catalog is in the repo. Some common ones:
+
+| # | Anti-pattern | Why |
+|---|-------------|-----|
+| 1 | "Be creative" | Without defining a criterion, it opens everything up |
+| 2 | "Think outside the box" | Doesn't produce better output, just more erratic |
+| 3 | "Act as an expert in X" | Marginal in modern models, they already know X |
+| 4 | "Step by step" without context | Generates unnecessary prose |
+| 5 | "Be concise" without a limit | "Concise" has huge ranges |
+| 6 | Prompt + 5000 words of context | More is NOT better — pass only what's relevant |
+| 7 | Asking for a "guarantee" or "100% sure" | Makes it lie to comply |
+| 8 | Mixing several tasks in one prompt | One task per prompt |
+| ... | ... | ... |
+
+Detecting and avoiding them = 30-50% better output with no extra effort.
+
+---
+
+## When Prompt Master wins over other options
+
+| Approach | When |
+|----------|--------|
+| **Improving your prompt by hand** | When you already have intuition for what's missing. Faster. |
+| **[Improve Prompts Plugin](/boveda/mejora-prompts-plugin)** | For vague prompts on specific tasks (Claude detects and asks for clarification). Simpler. |
+| **Prompt Master skill** | For complex prompts where you want an exhaustive audit of all 9 dimensions. More complete. |
+| **Just write and pray** | Never recommended. |
+
+For day-to-day prompts, improving by hand is enough. For critical prompts you'll use many times, **Prompt Master saves you hours**.
+
+---
+
+## Anti-patterns of using Prompt Master
+
+### 1. Using it for everything
+
+For "convert this to markdown" you don't need a 9-dimension audit. The skill is for **non-trivial prompts**.
+
+### 2. Ignoring the suggestions
+
+If it tells you "missing success criterion" and you respond "it's fine anyway, send it," **the skill is useless to you**. The friction is a feature, not a bug.
+
+### 3. Expecting it to replace your judgment
+
+The skill proposes. **You validate**. Sometimes it proposes constraints that don't apply to your case. **Edit** what comes out, don't accept it blindly.
+
+---
+
+## The meta-trick
+
+Once you've used Prompt Master ~20 times, **you internalize the 9 dimensions**. Your original prompts start covering them naturally.
+
+After that, you can stop using the skill actively — just invoke it for critical prompts. The real value isn't the skill — it's the **mental pattern** you're left with.
+
+---
+
+## Next steps
+
+- For a lighter version that just detects vagueness and asks, [improve prompts plugin](/boveda/mejora-prompts-plugin)
+- To dig deeper into the pillars of good prompting, [Prompting 101 — 10 pillars](/boveda/prompting-10-pilares)
+- To avoid fundamental mistakes when using AI, [3 mistakes with AI](/boveda/tres-errores-con-ia)

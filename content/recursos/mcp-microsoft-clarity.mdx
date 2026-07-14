@@ -1,0 +1,104 @@
+---
+title: "MCP Microsoft Clarity — web analytics + session replay gratis desde Claude"
+description: "MCP server con 120 installs para Microsoft Clarity. Acceso a analytics web + session replay (heatmaps, recordings, click tracking) — todo gratis. Para entender el comportamiento real de usuarios sin pagar Hotjar/FullStory."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "microsoft-clarity"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-google-workspace", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/microsoft-clarity"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/microsoft-clarity.json"
+---
+
+## Qué es
+
+[Microsoft Clarity](https://clarity.microsoft.com) es probablemente la mejor sorpresa gratis del stack analytics: heatmaps, session recordings (videos de cómo usuarios reales usan tu app), insights de rage clicks y dead clicks, todo sin pagar. Compite directo con Hotjar / FullStory que cobran por sesiones.
+
+Este MCP lo conecta a Claude Code. Le pedís a Claude que consulte Clarity y analice patterns de comportamiento sin abrir el dashboard.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 120 |
+| Servidor MCP | `@microsoft/clarity-mcp-server` |
+| Autor | Microsoft (oficial) |
+| Costo | **Gratis** |
+| Capabilities | Heatmaps, session recordings, click tracking, insights |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/microsoft-clarity
+```
+
+Pre-requisitos:
+- Cuenta en [clarity.microsoft.com](https://clarity.microsoft.com) (gratis)
+- Project ID + API token
+
+Para Claude:
+
+```
+Instalé el MCP devtools/microsoft-clarity. Configurá las credenciales y
+mostrame los heatmaps de la última semana para la home page. Identificá
+los 3 elementos con más rage clicks.
+```
+
+## Qué podés hacer con esto
+
+### Detección de rage clicks
+
+"En las últimas 7 días, ¿qué elementos generaron más rage clicks (usuarios haciendo click frustrados)? Probablemente sean los que rompen UX". Insight súper accionable.
+
+### Heatmaps por página
+
+"Para la página de pricing, dame el heatmap de scrolls: ¿hasta dónde llegan los visitors? ¿hay un cliff donde abandonan?".
+
+### Session recordings filtrados
+
+"Mostrame 5 sessions de usuarios que llegaron al checkout pero abandonaron antes de pagar. Para cada uno, identificá en qué momento abandonó y por qué".
+
+### Dead clicks
+
+"Detectá elementos visuales que parecen clickables pero no responden (dead clicks). Listame los top 10". Catch low-hanging UX bugs.
+
+### Sync con análisis cross-source
+
+Combinado con [Google Workspace](/boveda/mcp-google-workspace) o data en sheets, podés cruzar comportamiento de Clarity con cohort de usuario o segmentación de marketing.
+
+### Tabla de prioridades
+
+"Para los 10 rage clicks más frecuentes, asigná effort estimado de fix y impact estimado. Sugiéreme cuál atacar primero".
+
+## Pre-requisitos
+
+- **Cuenta Microsoft Clarity** (gratis, sin tier paid)
+- **Clarity tracking instalado** en tu sitio (un snippet JS)
+- **API token / project ID**
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no tenés Clarity instalado en tu sitio:** sin el tracking, no hay data. Es lo primero.
+- **Compliance GDPR:** Clarity tiene su política de tracking. Validá consent en tu sitio si tu audiencia incluye EU.
+- **Para web analytics completos** (funnels, attribution): Clarity es session replay + heatmaps. Para eso, [Google Analytics 4](/boveda/mcp-google-workspace) o [Plausible](https://plausible.io) complementarios.
+- **Para apps móviles:** Clarity tiene SDK iOS/Android pero menos maduro. Verificá si tu caso aplica.
+- **Privacy:** session recordings ven todo. Configurá masking para campos sensibles (password, credit card) — Clarity lo permite.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Microsoft Clarity MCP](https://www.aitmpl.com/component/mcps/devtools/microsoft-clarity) — comando exacto.
+- **Config JSON:** [microsoft-clarity.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/microsoft-clarity.json).
+- **Clarity oficial:** [clarity.microsoft.com](https://clarity.microsoft.com) — cuenta y docs.
+
+## Recursos relacionados
+
+- [Google Workspace MCP](/boveda/mcp-google-workspace) — para correlacionar Clarity con data de Sheets, Calendar, etc.
+- [Agency Agents](/boveda/agency-agents) — para orquestar pipelines tipo "Clarity detecta rage clicks → agent abre ticket".
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector a un servicio externo de analytics.

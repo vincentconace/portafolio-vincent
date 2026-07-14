@@ -1,0 +1,268 @@
+---
+title: "Stack for a mobile app with AI — Rork + Claude + Supabase + Stripe + Stores"
+description: "A hands-on guide to building, monetizing, and shipping a mobile/web app with AI in 2026. A single stack: Rork (AI-powered mobile builder), Claude Opus 4.6 (logic), Supabase (auth + DB), Stripe (payments), Apple/Google/Vercel (distribution). Real costs and a step-by-step flow."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["rork", "claude", "supabase", "stripe"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["instant-landing", "claude-web-builder", "all-deploy"]
+---
+
+## The recommended stack
+
+The main route for a creator/builder who wants to go from **idea to published app**:
+
+| Piece | What it's for |
+|-------|----------|
+| **Rork** | Builder focused on AI-powered mobile apps |
+| **Claude Opus 4.6** | Reasoning + generation for assisted front/back |
+| **Supabase** | Auth + database + managed backend |
+| **Stripe** | Payments and subscriptions |
+| **Apple / Google / Vercel** | Distribution |
+
+**Rule**: complete this route first. Optimize afterward.
+
+---
+
+## Tool by tool
+
+### Rork
+
+For iterating quickly on the mobile product. Ideal for going from **idea to working prototype** without setting up infrastructure by hand from day 1.
+
+### Claude Opus 4.6
+
+Generate and review product logic, UI, and backend. If your budget is tight, start with the cheaper models (Sonnet/Haiku) and move up to Opus for critical tasks.
+
+### Supabase
+
+Auth + DB + APIs. A good fit for MVPs because it **reduces operational friction** and gives you a clear path to scale.
+
+### Stripe
+
+Once you have a value proposition someone would pay for. **Turn on payments early** to validate real monetization.
+
+### Apple / Google Stores
+
+For native distribution and on-device retention. **Account for review times** + policy compliance.
+
+### Vercel
+
+**Ship a quick web version**, validate demand, and gather feedback **before** pushing hard on the mobile stores.
+
+---
+
+## Real costs (2026)
+
+| Scenario | Monthly | What it's for |
+|-----------|---------|----------|
+| **Minimum (web-first)** | $0-20 | Get started on free plans, early validation |
+| **Creator** | $45-120 | Base paid stack, consistent operation |
+| **Pro (with stores)** | $200+/year | Full mobile operation + store accounts |
+
+### Costs per component
+
+| Component | Fixed | Variable |
+|------------|------|----------|
+| Rork | Depends on the plan (free/pro/ultra) | Message/credit usage |
+| Claude API | $0 required | Tokens per model |
+| Supabase | Free or Pro | DB/storage/compute overage |
+| Stripe | $0 base | Per-transaction fee |
+| **Apple Developer** | **$99/year** | — |
+| **Google Play Console** | **$25 one-time** | — |
+| Vercel | Hobby free / Pro paid | Extra usage |
+
+---
+
+## The 3 publishing routes
+
+| Route | When | Setup |
+|------|--------|-------|
+| **Apple App Store** | iOS native, high retention | $99/year + review |
+| **Google Play Store** | Android, mass audience | $25 one-time + compliance |
+| **Vercel web app** | Validate traction fast | Hobby free |
+
+**Recommendation**: Vercel first. If it gains traction, take it to the native stores.
+
+---
+
+## Operational flow
+
+### Step 1 — Define the v1 scope
+
+- Idea + user + purpose in 3 lines
+- What DOES go in v1, what does NOT
+- A clear success metric (downloads, conversion, retention)
+
+### Step 2 — MVP in Rork
+
+```
+Brief for Rork:
+- App: [name]
+- For: [audience]
+- Solves: [concrete problem]
+- v1 features: [3-5 functions, no more]
+- Visual style: [reference]
+```
+
+You iterate in Rork with prompts until you have a navigable app.
+
+### Step 3 — Backend with Supabase
+
+You connect Rork ↔ Supabase:
+- Auth (email + Google)
+- Tables for your data
+- Storage for assets
+
+### Step 4 — Payments with Stripe
+
+```
+Products:
+- Free tier (with limits)
+- Paid tier ($X/month)
+
+Webhooks → Supabase to manage subscriptions
+```
+
+### Step 5 — Validate with a web app
+
+Deploy on Vercel. Promote it on social/communities. Measuring:
+- Signups
+- Paid conversion
+- Week 1 retention
+
+### Step 6 — If it gains traction, mobile stores
+
+Apple Developer + Google Play Console. Rork exports to iOS/Android.
+
+### Step 7 — Iterate based on data
+
+Every week: 1 hypothesis + 1 change + measure. **Do NOT do big refactors** until you have product-market fit.
+
+---
+
+## Essential prompts for Rork
+
+### Initial brief
+
+```
+Build me a mobile app about [topic].
+
+Audience: [specific target]
+Problem it solves: [1 line]
+v1 features (minimum viable):
+1. [core feature]
+2. [secondary feature]
+3. [retention feature]
+
+Do NOT include:
+- Complex settings
+- Multi-language (later)
+- Offline mode (later)
+
+Style: [Modern minimal / Bold / Editorial / etc.]
+Inspiration: [URL of a reference app]
+```
+
+### Connect Supabase
+
+```
+Connect this app to Supabase:
+- Auth with email + Google OAuth
+- users table with: id, email, plan_tier, created_at
+- [main entity] table with: [fields]
+- RLS enabled on all tables
+- Versioned migrations
+```
+
+### Connect Stripe
+
+```
+Implement payments with Stripe:
+- Product: "Pro Plan" at $9/month
+- Subscription model (not one-time)
+- Webhooks to handle: subscription.created,
+  subscription.deleted, payment.failed
+- Update plan_tier in the Supabase users table based on the webhook
+- Customer portal for management
+```
+
+---
+
+## Anti-patterns
+
+### 1. Starting with mobile native without validating
+
+Apple $99 + Google $25 + review time + complexity. **Vercel web first** validates whether the investment is worth it.
+
+### 2. A 15-tool stack
+
+Every extra tool = one more point of failure. **Stick to the 5 in the stack**.
+
+### 3. Free tier for everything
+
+If you don't validate payments early, **you don't know if anyone pays**. Stripe from day 1.
+
+### 4. Rork without knowing what to build
+
+Rork speeds up execution, but **it doesn't design the product for you**. Define a clear brief first.
+
+### 5. Skipping Vercel and deploying straight to the stores
+
+Stores have review times (1-7 days). **Vercel deploys in 30s**. Brutally faster iteration.
+
+---
+
+## Powerful combinations
+
+### With Plan Mode
+
+Before building in Rork: [Plan Mode](/boveda/planea-audita-construye) to design the architecture.
+
+### With All Deploy
+
+For automated deploys: [All Deploy](#).
+
+### With Cult UI
+
+If your app is web (Vercel), [Cult UI](/boveda/cult-ui) gives it premium components.
+
+### With Instant Landing
+
+For the app's marketing landing page, [Instant Landing](/boveda/instant-landing).
+
+---
+
+## When this stack is NOT a good fit
+
+| Case | Alternative |
+|------|-------------|
+| You need extreme native performance | Flutter or hand-written React Native |
+| Very custom backend | AWS/GCP with your own code |
+| Web only (no mobile) | [Claude Web Builder](/boveda/claude-web-builder) |
+| Zero budget | The stack has minimum costs of $20+/month |
+
+---
+
+## Metrics to track
+
+### Validation (first 4 weeks)
+
+- Signups (landing CTR → signup)
+- Free → paid conversion (≥3% is a good sign)
+- Week 1 retention (≥30% is a good sign)
+
+### Growth (months 2-6)
+
+- MRR (Monthly Recurring Revenue)
+- Monthly churn (under 5% is good)
+- Acquisition cost vs LTV
+
+---
+
+## Next steps
+
+- For the app's marketing landing page, [Instant Landing](/boveda/instant-landing)
+- To design a plan before coding, [Plan Mode](/boveda/planea-audita-construye)
+- For premium UI components if you go web, [Cult UI](/boveda/cult-ui)

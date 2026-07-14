@@ -1,0 +1,276 @@
+---
+title: "Platica, luego construye — las 3 cosas que hacer ANTES de tocar código"
+description: "Si abrís Claude Code y te ponés a construir directo, ya la regaste. Hay 3 prácticas que separan apps que salen bien de las que salen rotas: separar plática de construcción, blueprint estructurado y delegación entre Claudes. Con principios para principiantes y la teoría detrás."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["spec-kit", "plan-mode-auditar", "trifecta-perfecta"]
+---
+
+## La trampa más común
+
+Abrís Claude Code. Le decís "armame X". Claude empieza a codear en segundos.
+
+**Te sentís imparable.** En 3 horas tenés algo que funciona. En 3 días algo se rompe y no sabés por qué. En 3 semanas el proyecto es deuda técnica que cuesta más mantener que rehacer.
+
+Esto pasa porque te **brincaste 3 prácticas críticas** que sí marcan la diferencia:
+
+| Práctica | Qué hace |
+|----------|----------|
+| 1. Separar plática de construcción | Decidís QUÉ construir antes de decidir CÓMO |
+| 2. Blueprint estructurado | El plan vive en un documento, no en tu cabeza |
+| 3. Delegación entre Claudes | Uno piensa, otro implementa |
+
+---
+
+## Práctica 1 — Separar plática de construcción
+
+### El error
+
+Cuando le pedís a Claude "armame el dashboard", está mezclando 4 cosas al mismo tiempo:
+
+1. **Qué** vas a construir (el feature)
+2. **Para quién** (audiencia, contexto)
+3. **Cómo** (stack, librerías, patterns)
+4. **Implementar el código**
+
+Si Claude hace las 4 simultáneamente, **se pisa**. La calidad cae.
+
+### La fix
+
+Separá la **fase de plática** de la **fase de construcción**:
+
+```
+[Fase de plática — Claude #1 o sesión #1]
+- Discutís qué construir
+- Por qué importa
+- A quién le sirve
+- Casos edge
+- Qué NO incluir
+- Stack que tiene sentido
+- Riesgos
+
+OUTPUT: blueprint del proyecto
+
+[Fase de construcción — Claude #2 o sesión #2 limpia]
+- Recibe el blueprint
+- Implementa SIN preguntar el QUÉ (ya está decidido)
+- Pide aclaraciones solo del CÓMO técnico
+```
+
+La diferencia: cuando la fase de construcción arranca, **el QUÉ ya no está en debate**. Eso libera contexto y permite enfocar en el cómo bien.
+
+### Analogía nivel principiante
+
+Es como construir una casa:
+
+- **Plática**: hablás con el arquitecto, decidís cuántos cuartos, dónde van las ventanas, qué materiales
+- **Construcción**: el constructor toma el plano y construye
+
+Si el constructor también tiene que decidir dónde van las puertas mientras pone los ladrillos, **el resultado es desastre**.
+
+---
+
+## Práctica 2 — Blueprint estructurado
+
+### Qué es
+
+Un documento markdown que captura **todas las decisiones de la fase de plática**. No es un email largo — es **estructura formal**:
+
+```markdown
+# Blueprint: [Nombre del proyecto]
+
+## 1. Visión (1 párrafo)
+Qué construimos y por qué importa.
+
+## 2. Usuario objetivo
+Quién es, qué problema tiene hoy, qué resuelve esto.
+
+## 3. User stories (3-5)
+Como [X] quiero [Y] para [Z].
+
+## 4. Stack técnico
+- Framework: ...
+- DB: ...
+- Auth: ...
+- Hosting: ...
+[Cada decisión con razón]
+
+## 5. Modelo de datos
+Tablas / colecciones con sus campos.
+
+## 6. Rutas y endpoints
+Listado exhaustivo.
+
+## 7. Diseño UX
+Flujo principal en 4-6 pasos.
+
+## 8. Out of scope
+Qué NO incluye este blueprint (explícito).
+
+## 9. Tests críticos
+Qué tiene que pasar para considerar "funciona".
+
+## 10. Riesgos identificados
+3-5 con su mitigación.
+
+[... hasta 16 secciones según el caso]
+```
+
+### Por qué importa el blueprint
+
+| Sin blueprint | Con blueprint |
+|---------------|----------------|
+| Contexto en la cabeza del fundador | Contexto en archivo versionado |
+| Si alguien más entra al proyecto, no entiende | Cualquiera lee el blueprint y entiende |
+| Decisiones cambian sin trace | Cambios al blueprint quedan registrados |
+| Claude empieza de cero cada sesión | Claude lee blueprint, opera con contexto completo |
+
+Es **el artefacto** que sobrevive a las sesiones. Tu codebase puede cambiar 10 veces; el blueprint queda como referencia.
+
+### Cómo generarlo
+
+Una herramienta como "The Architect" automatiza la generación (te entrevista, llena el template). O lo armás vos a mano con plantilla.
+
+Ver detalle en [trifecta perfecta](/boveda/trifecta-perfecta) — donde la primera pieza es exactamente este Architect.
+
+---
+
+## Práctica 3 — Delegación entre Claudes
+
+### El concepto
+
+El Claude que **piensa** y el Claude que **construye** son **sesiones distintas**.
+
+```
+Sesión 1: ARQUITECTO
+- Sos arquitecto de software senior
+- Tu única tarea: producir blueprint estructurado
+- NO escribís código en esta sesión
+
+[Generás blueprint.md]
+
+Sesión 2: BUILDER  
+- Sos developer senior
+- Input: blueprint.md
+- Construí según el blueprint
+- Si te falta detalle técnico, preguntás
+- Si te falta detalle de producto, NO preguntás (asumís lo del blueprint)
+```
+
+### Por qué dos sesiones
+
+- **Contexto limpio**: el Builder no se distrae con la conversación del Arquitecto
+- **Roles claros**: cada uno sabe su lente
+- **Artefacto en el medio**: el blueprint queda como contrato
+
+### Cómo se hace en práctica
+
+#### Opción A — Dos sesiones en el mismo Claude
+
+```
+[Sesión 1]
+> Sos arquitecto. Te explico la idea: [...]
+[Discutís hasta tener blueprint]
+> Guardá el blueprint en docs/blueprint.md
+[/clear]
+```
+
+```
+[Sesión 2 — contexto fresco]
+> Sos developer. Leé docs/blueprint.md y construilo paso a paso.
+```
+
+#### Opción B — Claude + Codex split
+
+Si tenés [Claude + Codex hack](/boveda/codex-plugin-hack):
+- Claude (mejor razonamiento) → arquitecto
+- Codex (mejor ejecución mecánica) → builder
+
+Cada uno con sus tokens separados.
+
+---
+
+## El error opuesto — sobre-platicar
+
+Hay extremos:
+
+- ❌ Vas directo a construir → app se rompe
+- ❌ Te quedás 2 semanas en "plática" → nunca construís nada
+
+El balance está en **plática proporcional a la complejidad**:
+
+| Tarea | Plática justificada |
+|-------|---------------------|
+| Edit de 1 archivo | 0 minutos |
+| Feature chica (3-5 archivos) | 10-20 min |
+| Módulo nuevo (10+ archivos) | 1-2 horas |
+| Producto completo | 1-3 días |
+
+**Si tu plática lleva más que 20% del tiempo total estimado, te estás trabando**.
+
+---
+
+## Anti-patrones
+
+### 1. Plática que no produce artefacto
+
+Hablás 2 horas con Claude, **no sale blueprint**. La plática queda en historial efímero. Cuando la sesión cierra, **se perdió todo**.
+
+**Regla**: cada sesión de plática debe terminar con archivo guardado.
+
+### 2. Blueprint genérico
+
+"El producto tiene auth, dashboard, API". **Demasiado abstracto**. Un blueprint útil tiene specificidad: "el dashboard muestra estos 7 KPIs en este orden, con estos filtros".
+
+### 3. Builder que ignora el blueprint
+
+A veces el Builder "interpreta" el blueprint y se desvía. **Forza** que vuelva al blueprint:
+
+```
+> Antes de implementar el próximo feature, releé blueprint.md sección 6
+  para confirmar cómo es. Si vas a desviarte del blueprint, decímelo y
+  justificá ANTES de codear.
+```
+
+### 4. Blueprint que no se actualiza
+
+Construís el feature, descubrís que algo del blueprint estaba mal. **Actualizá el blueprint**. Sino el blueprint queda desincronizado del código y deja de servir.
+
+---
+
+## El test simple
+
+Antes de tu próxima feature, preguntate:
+
+> **Si mañana otra persona del equipo entra al proyecto, ¿podrá entender qué estamos construyendo SIN preguntarme nada?**
+
+Si la respuesta es no → te falta blueprint.
+Si la respuesta es sí → adelante con la construcción.
+
+Ese test, aplicado consistentemente, marca la diferencia entre proyectos que duran y proyectos que se ahogan en deuda técnica.
+
+---
+
+## Para principiantes — el mínimo viable
+
+Si nunca hiciste esto, **arrancá con la versión mínima**:
+
+1. Antes de pedirle a Claude "armame X", pasá 15 min escribiendo en un .md:
+   - Qué es exactamente
+   - Quién lo usa
+   - Qué hace y qué no hace
+   - Stack base
+2. Después, en Claude: "leé este archivo, construí según lo que dice"
+
+Eso solo, sin herramientas especiales, **ya mejora 50%** la calidad del output.
+
+---
+
+## Próximos pasos
+
+- Para spec-driven development como patrón estructurado, [spec-driven development](/boveda/spec-kit)
+- Para Plan Mode que aplica esta filosofía built-in, [Plan Mode](/boveda/plan-mode-auditar)
+- Para el trío de herramientas que materializan el patrón, [trifecta perfecta](/boveda/trifecta-perfecta)

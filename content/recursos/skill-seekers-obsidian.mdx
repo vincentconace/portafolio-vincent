@@ -1,0 +1,306 @@
+---
+title: "Skill Seekers + Obsidian — recopilá contexto, organizalo, dáselo a Claude"
+description: "3 herramientas combinadas para convertir cualquier fuente en contexto para Claude. Skill Seekers extrae (GitHub, PDFs, videos, wikis, Notion). Obsidian organiza en notas privadas locales. obsidian-skills le permite a Claude leer/escribir en tu vault. Pipeline: recopilar → organizar → trabajar."
+difficulty: "intermedio"
+category: "skills"
+tools: ["python", "obsidian", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["obsidian-claude", "microsoft-markitdown", "investigador-automatico"]
+---
+
+## Las 3 piezas
+
+| Pieza | Rol |
+|-------|-----|
+| **Skill Seekers** | El recopilador — extrae info de cualquier fuente |
+| **Obsidian** | El cuaderno inteligente — guarda notas privadas conectadas |
+| **obsidian-skills** | Las manos de Claude — le deja leer/escribir en tu vault |
+
+Pensalo como **línea de trabajo**:
+
+```
+1. Recopilás (Skill Seekers)
+2. Organizás (Obsidian)
+3. Trabajás (Claude con obsidian-skills)
+```
+
+---
+
+## Pre-requisitos
+
+- **Python 3.8+** (`python --version`)
+- **Obsidian** instalado (`obsidian.md`)
+- **Claude Code** instalado
+- **Terminal** abierta
+
+---
+
+## Pieza 1 — Skill Seekers
+
+### Qué es
+
+Asistente que va a **cualquier lugar** a recopilar info:
+- Repos de GitHub
+- Videos de YouTube
+- PDFs
+- Wikis de empresa
+- Notion
+- Páginas web
+
+Te la regresa **organizada y lista** para que Claude la entienda.
+
+Lo que antes era horas de copy/paste → **3 comandos**.
+
+### Fuentes que puede procesar
+
+| Fuente | Cómo |
+|--------|------|
+| GitHub repo | Lee README + estructura |
+| YouTube | Transcribe + extrae conceptos |
+| PDF | OCR + estructuración |
+| Wiki / Confluence | Scrape + organize |
+| Notion | API + parsing |
+| Web pages | Firecrawl-style extraction |
+| Markdown docs | Direct import |
+
+### Instalación
+
+```bash
+pip install skill-seekers
+```
+
+O pedile a Claude:
+
+```
+> Instalá Skill Seekers en mi sistema.
+```
+
+### Uso
+
+```bash
+skill-seekers fetch https://github.com/anthropics/claude-code
+```
+
+Salida: carpeta `output/claude-code/` con notas estructuradas en Markdown.
+
+```bash
+skill-seekers fetch "https://www.youtube.com/watch?v=XXX"
+```
+
+Salida: transcripción + chapters + conceptos clave.
+
+---
+
+## Pieza 2 — Obsidian (organizá)
+
+### Qué hace
+
+[Obsidian](/boveda/obsidian-claude) es app gratis que guarda **todo como Markdown local**.
+
+Tu **vault** es carpeta en tu disco con todas tus notas. Sin cloud obligatorio, sin vendor lock-in.
+
+### Por qué para esto
+
+- **Markdown nativo** → Claude lee directo
+- **Wikilinks** `[[]]` → conectás conceptos
+- **Tags** → categorías
+- **Plugins** → extensibilidad
+- **Local first** → tus datos son tuyos
+
+### Setup básico
+
+1. Descargá Obsidian (`obsidian.md`)
+2. Creá vault (carpeta) llamado por ejemplo `~/research/`
+3. Estructurá con subcarpetas:
+
+```
+~/research/
+├── sources/        ← raw imports de Skill Seekers
+├── concepts/       ← conceptos extraídos
+├── projects/       ← notas por proyecto
+└── diario/         ← bitácora
+```
+
+Ver [Obsidian + Claude](/boveda/obsidian-claude) para profundizar.
+
+---
+
+## Pieza 3 — obsidian-skills (Claude lee tu vault)
+
+### Qué hace
+
+Skill que le da a Claude **acceso a tu vault de Obsidian**. Claude puede:
+- Leer cualquier nota
+- Buscar por contenido o tags
+- Crear notas nuevas
+- Actualizar notas existentes
+- Conectar via wikilinks
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/kepano/obsidian-skills
+```
+
+Ver [Obsidian Claude](/boveda/obsidian-claude) sección 3 para detalle.
+
+---
+
+## El pipeline completo
+
+### Día 1 — Recopilás
+
+```bash
+# Repo que vas a investigar
+skill-seekers fetch https://github.com/X/Y \
+  --output ~/research/sources/X-Y/
+
+# Video de tutorial
+skill-seekers fetch "https://youtube.com/watch?v=XXX" \
+  --output ~/research/sources/tutorial-X/
+
+# PDF de paper
+skill-seekers fetch ./papers/transformer.pdf \
+  --output ~/research/sources/transformer-paper/
+```
+
+3 minutos después, tu vault tiene **3 fuentes** procesadas y estructuradas.
+
+### Día 2 — Organizás con Claude
+
+```
+> Leé las notas nuevas en /research/sources/.
+  Para cada una:
+  1. Extraé conceptos clave
+  2. Creá nota en /research/concepts/ con cada concepto
+  3. Conectá con wikilinks a conceptos existentes
+  4. Tag por dominio
+```
+
+Claude organiza tu vault.
+
+### Día 3+ — Trabajás con Claude
+
+```
+> Necesito entender [TEMA] basándome en lo que tengo en mi vault.
+  Buscá en /research/, sintetizá, dame insights.
+
+  Si te falta info, decime qué buscar.
+```
+
+Claude usa **tu corpus curado** como contexto.
+
+---
+
+## Casos de uso
+
+### 1. Research académico
+
+```
+- Skill Seekers: PDFs de papers + tutoriales
+- Obsidian: notas con wikilinks entre conceptos
+- Claude: sintetiza, encuentra patrones, ayuda a escribir tu paper
+```
+
+### 2. Onboarding a tech nueva
+
+```
+- Skill Seekers: docs oficiales + videos + GitHub examples
+- Obsidian: tu "cheat sheet" personalizada
+- Claude: te ayuda a aprender basándose en tu corpus, no genérico
+```
+
+### 3. Investigación de mercado
+
+```
+- Skill Seekers: blogs de competencia + papers de industria
+- Obsidian: mapeo de jugadores + tendencias
+- Claude: análisis basado en TUS fuentes seleccionadas
+```
+
+### 4. Knowledge base de empresa
+
+```
+- Skill Seekers: tu Notion / Confluence
+- Obsidian: backup local privado
+- Claude: responde preguntas de empresa basándose en docs reales
+```
+
+---
+
+## Comparación con alternativas
+
+| Tool | Para qué |
+|------|----------|
+| **Skill Seekers + Obsidian** (este) | Pipeline curated + Claude con contexto preciso |
+| [Investigador automático](/boveda/investigador-automatico) | Búsqueda en 8 plataformas, menos curado |
+| [NotebookLM skill](/boveda/cinco-habilidades-marketing) | Google NotebookLM como backend |
+| [Microsoft MarkItDown](/boveda/microsoft-markitdown) | Solo conversión, sin pipeline |
+
+---
+
+## Anti-patrones
+
+### 1. Importar TODO sin filtrar
+
+Si recopilás 200 fuentes "por las dudas", **tu vault se vuelve ruido**. Sé selectivo.
+
+### 2. No conectar con wikilinks
+
+Sin `[[wikilinks]]`, tu vault es **pila de archivos sueltos**. Las conexiones son el valor.
+
+### 3. Olvidar que Skill Seekers no entiende tu nicho
+
+Skill Seekers extrae info **general**. Si tu nicho es muy específico, **vos curás** después.
+
+### 4. Vault sin estructura
+
+10000 notas en una carpeta = inútil. **Estructura** desde el principio.
+
+### 5. Asumir que más data = mejor
+
+A veces **menos fuentes pero curadas** > muchas fuentes sin curar.
+
+---
+
+## Combinaciones potentes
+
+### Con MarkItDown
+
+```
+> Skill Seekers no soporta este formato raro.
+> Usá [MarkItDown](/boveda/microsoft-markitdown) para convertir primero.
+> Después meté el output a /research/sources/.
+```
+
+### Con investigador automático
+
+```
+> /last30days [tema]
+> Para los top 5 links que devuelve, usá Skill Seekers para
+  procesarlos a fondo.
+> Guardá en mi vault.
+```
+
+### Con humanizer
+
+Si vas a publicar contenido basado en tu vault, [humanizalo](/boveda/humanizalo) el output.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| No tomás notas | Vault vacío = inútil |
+| Sin paciencia para curar | Pipeline requiere disciplina |
+| Toda info viene de tu equipo (Slack) | Otro tooling mejor |
+
+---
+
+## Próximos pasos
+
+- Para profundizar en Obsidian + Claude solamente, [Obsidian + Claude](/boveda/obsidian-claude)
+- Para conversión universal de archivos, [Microsoft MarkItDown](/boveda/microsoft-markitdown)
+- Para research automático sin pipeline manual, [investigador automático](/boveda/investigador-automatico)

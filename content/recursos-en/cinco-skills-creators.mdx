@@ -1,0 +1,240 @@
+---
+title: "5 Claude skills for creators — Hyperframes, Last 30 Days, Banana, Video Vision, Apify"
+description: "The 5 that top creators are using. Hyperframes builds videos from a prompt (HeyGen). Last 30 Days pulls ideas from the real feed. Claude Banana generates images with Nano Banana. Video Vision tells you why a reel landed. Apify brings raw data from IG and FB."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["claude-banana", "investigador-automatico", "apify-clientes-ilimitados"]
+---
+
+## Who's using this
+
+The creators moving real numbers with Claude Code. These 5 cover the **actual workflow**: research a topic → generate a visual → break down a viral → pull data → build a video.
+
+| # | Skill | Type | What for |
+|---|-------|------|----------|
+| 01 | Hyperframes | Skill (HeyGen) | Video from a prompt |
+| 02 | Last 30 Days | Skill (mvanhorn) | Live trends |
+| 03 | Claude Banana | Plugin | Images with Nano Banana |
+| 04 | Claude Video Vision | Skill (jordanrendric) | Frame-by-frame breakdown |
+| 05 | Apify | MCP | Raw IG/FB data |
+
+---
+
+## 01 — Hyperframes (video from a prompt)
+
+### What it does
+
+You feed it a prompt and Claude builds the **complete video** with animations, graphics, and captions. No Premiere, no CapCut, no timeline.
+
+### The trick
+
+**Programmatic** rendering — the result is consistent and you can regenerate it as many times as you want with variations.
+
+### What for
+
+Prototyping reels, explainers, and short intros when you don't have time to edit by hand.
+
+### Installation
+
+```bash
+git clone https://github.com/heygen-com/hyperframes ~/.claude/skills/hyperframes
+```
+
+Note: the repo's README says whether your version of Claude Code prefers a manual skill or a plugin. The command above is the universal one.
+
+---
+
+## 02 — Last 30 Days (what people are saying TODAY)
+
+### What it does
+
+You give it a topic and it goes into **Reddit, X, YouTube, Hacker News, GitHub** to pull what people have been saying over the last 30 days.
+
+No more making up ideas. You pull them from the real feed.
+
+### What for
+
+When you're starting a script, post, or project and want to validate **what's landing** before investing time.
+
+### Installation
+
+```bash
+git clone https://github.com/mvanhorn/last30days-skill ~/.claude/skills/last30days
+```
+
+Restart Claude Code after cloning.
+
+See [automatic researcher](/boveda/investigador-automatico) for the full guide.
+
+---
+
+## 03 — Claude Banana (Nano Banana images)
+
+### What it does
+
+Connects Claude with **Nano Banana** (Google's Gemini 2.5 Flash Image). You ask for a thumbnail, an IG carousel, an image for a post — it builds them right in the session.
+
+### What for
+
+Quick visuals without opening Photoshop or Figma.
+
+### Prerequisite
+
+An API key from **Google AI Studio** (free tier).
+
+### Installation
+
+```bash
+git clone https://github.com/Hainrixz/claude-banana ~/.claude/plugins/claude-banana
+```
+
+See [Claude Banana](/boveda/claude-banana) for a deep dive with the 7 prompt ingredients.
+
+---
+
+## 04 — Claude Video Vision (breaking down virals)
+
+### What it does
+
+You send it a viral reel and Claude **watches it frame by frame**. It hands you a breakdown: hook, shots, pacing, transitions.
+
+You copy the formula from what landed — **with data**, not by eye.
+
+### Prerequisite
+
+**Python + ffmpeg** installed (to extract the frames).
+
+### What for
+
+When you see a reel landing in your niche and want to understand **exactly** why before replicating it.
+
+### Installation
+
+```bash
+git clone https://github.com/jordanrendric/claude-video-vision ~/.claude/skills/claude-video-vision
+```
+
+---
+
+## 05 — Apify (raw IG/FB data)
+
+### What it does
+
+Social scrapers. You feed it a profile or post and it brings you **real likes, real comments, real copy**.
+
+No more copying by eye: you copy with data.
+
+### What for
+
+Analyzing a competitor or a creator who's growing. You need the **real numbers** behind the feed.
+
+### Prerequisite
+
+An Apify account (free plan). API token as an env var.
+
+### Installation
+
+```bash
+claude mcp add apify -- npx -y @apify/actors-mcp-server
+```
+
+See [Apify unlimited clients](/boveda/apify-clientes-ilimitados) for use cases.
+
+---
+
+## By immediate impact
+
+| Tier | Skills |
+|------|--------|
+| **Instant** | Last 30 Days, Claude Banana |
+| **Light setup** | Claude Video Vision, Apify |
+| **Experimental** | Hyperframes |
+
+To start today: Last 30 Days + Claude Banana.
+
+---
+
+## A real creator workflow
+
+### For a reel
+
+```
+1. LAST 30 DAYS:    What's being said about the topic this week.
+2. APIFY:           Top 10 reels in the niche with the most engagement.
+3. VIDEO VISION:    Break down #1 frame by frame.
+4. CLAUDE writes:   Script adapting the formula with your angle.
+5. CLAUDE BANANA:   Generate the thumbnail and visual B-roll.
+6. HYPERFRAMES:     Build the complete reel with all of it.
+```
+
+What used to take 3 days → 3 hours.
+
+---
+
+## Anti-patterns
+
+### 1. Hyperframes for critical production
+
+It's great for **prototyping** and validating ideas. For a reel going out under a big brand, a human editor still wins.
+
+### 2. Copying virals 1:1
+
+Video Vision tells you **why it landed**, not that you should copy it verbatim. Adapt the formula to your voice.
+
+### 3. Apify for spam
+
+DO NOT scrape to send mass DMs. It's for **analysis**, not for low-quality automated outreach.
+
+### 4. Last 30 Days without a filter
+
+What's landing might be **viral trash**. Pick which trend is worth adopting and which isn't.
+
+### 5. Claude Banana without an API key
+
+Without a Google AI Studio key, it doesn't work. Set it up first.
+
+---
+
+## Powerful combinations
+
+### Last 30 Days + Apify
+
+```
+1. Last 30 Days: topics people are mentioning
+2. Apify: raw data on which reels about those topics landed
+```
+
+Crossing "what's being talked about" + "what works".
+
+### Video Vision + Hyperframes
+
+```
+1. Video Vision: breakdown of viral reel X
+2. Hyperframes: regenerate with your angle following the formula
+```
+
+### With [humanize it](/boveda/humanizalo)
+
+So the copy in your reels/posts doesn't sound like AI.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| You don't make content | The combo doesn't apply |
+| Very niche B2B audience | General trends don't apply |
+| No time to iterate | Skills require refinement |
+| Focus on long-form (podcast, long blog) | These are for short-form |
+
+---
+
+## Next steps
+
+- For images with pro prompts, [Claude Banana](/boveda/claude-banana)
+- For multi-source research, [automatic researcher](/boveda/investigador-automatico)
+- For scraping with Apify, [Apify unlimited clients](/boveda/apify-clientes-ilimitados)

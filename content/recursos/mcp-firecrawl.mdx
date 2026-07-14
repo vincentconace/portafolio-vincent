@@ -1,0 +1,98 @@
+---
+title: "MCP Firecrawl — scraping web limpio y LLM-ready desde Claude Code"
+description: "MCP server de Firecrawl con 371 installs. Scrapea cualquier URL y devuelve markdown limpio listo para LLM. Maneja sitios SPA, anti-bot básico, y conversion estructurada — el camino corto de URL a contexto."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "firecrawl"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-apify", "mcp-brightdata", "plugin-claude-plugins-official"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/firecrawl"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/firecrawl.json"
+---
+
+## Qué es
+
+Firecrawl es una plataforma de web scraping diseñada específicamente para apps de LLM: en vez de devolverte HTML crudo (que el modelo después tiene que parsear), te devuelve markdown limpio y estructurado. Maneja SPAs, sitios con JavaScript pesado y anti-bot básico.
+
+Para Claude Code, esto significa: pasale una URL, el MCP devuelve el contenido en formato que el modelo procesa eficientemente. Sin tokens desperdiciados en `<div class="...">` repetidos.
+
+Comparado con [Apify](/boveda/mcp-apify) (catálogo de Actors) o [Bright Data](/boveda/mcp-brightdata) (enterprise scale), Firecrawl es más simple y enfocado: "dame esta URL en markdown listo para LLM".
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 371 |
+| Servidor MCP | `firecrawl-mcp` |
+| Output | Markdown LLM-ready |
+| Cuenta requerida | Sí — Firecrawl (free tier disponible) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/firecrawl
+```
+
+Pre-requisito: API key de Firecrawl.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/firecrawl. Después de setear FIRECRAWL_API_KEY,
+scrapeá esta URL [URL] y devolveme el contenido en markdown.
+```
+
+## Qué podés hacer con esto
+
+### Convertir una URL en contexto
+
+"Scrapeame `<URL del docs de X librería>` y úsame ese contenido como contexto para responder mi próxima pregunta". Anti-hallucination cuando Context7 no cubre la librería.
+
+### Crawl de un sitio entero
+
+"Crawleame el sitio `<docs.midomain.com>` y traeme todas las páginas como un solo markdown unificado". Útil para indexar tu propia documentación.
+
+### Extraction estructurada
+
+"De esta página de producto, extraé `nombre`, `precio`, `descripción`, `imágenes` como JSON". Firecrawl soporta extraction con schema.
+
+### Research recurrente
+
+"Cada lunes, scrapeame las páginas X, Y, Z (cambelogs de competidores) y traeme un diff respecto a la semana pasada". Combina con scheduler.
+
+### Lectura de artículos largos
+
+"Scrapeame este artículo y resumime en 5 puntos las ideas clave". Más limpio que copiar-pegar el HTML.
+
+## Pre-requisitos
+
+- **Cuenta Firecrawl** con API key
+- **URL alcanzable y pública** (no scrapea cosas detrás de tu login)
+- **Cumplir TOS del sitio scrapeado:** robots.txt, ToS
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para scraping a escala industrial:** [Bright Data](/boveda/mcp-brightdata) tiene más infraestructura.
+- **Para sitios con login propio:** Firecrawl no autentica con tu sesión. Para eso, [Browser Harness](/boveda/browser-harness) o [browser-use](/boveda/mcp-browser-use-mcp-server).
+- **Para sitios con anti-bot serio:** Firecrawl maneja básico (Cloudflare ligero), pero LinkedIn / Instagram requieren tools dedicados.
+- **Costos:** el free tier tiene cap. Para uso volumétrico, mirá pricing.
+- **Compliance / legal:** scrapear sitios con TOS estrictos es tu responsabilidad.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Firecrawl MCP](https://www.aitmpl.com/component/mcps/devtools/firecrawl) — comando exacto.
+- **Config JSON:** [firecrawl.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/firecrawl.json).
+- **Firecrawl oficial:** [firecrawl.dev](https://www.firecrawl.dev) — cuenta y pricing.
+
+## Recursos relacionados
+
+- [Apify MCP](/boveda/mcp-apify) — alternativa con catálogo enorme de Actors.
+- [Bright Data MCP](/boveda/mcp-brightdata) — enterprise scale, más caro pero más potente.
+- [Claude Plugins Official](/boveda/plugin-claude-plugins-official) — incluye también un plugin `firecrawl` oficial.

@@ -1,0 +1,76 @@
+---
+title: "Setting Friday Deploy Warning — spinner reminder 'Don't Deploy On Fridays'"
+description: "Setting with 32 installs. Replaces the default spinner verbs with a humorous 'Don't Deploy On Fridays' reminder so Claude drops you a hint when you suggest a deploy on Friday."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-vercel-auto-deploy", "hook-deployment-health-monitor", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/environment/friday-deploy-warning"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/friday-deploy-warning.json"
+---
+
+## What it is
+
+A decorative setting that replaces the spinner verbs (the animated text Claude Code shows while it's processing) with the classic "Don't Deploy On Fridays" reminder.
+
+It's a humorous nod to industry folklore: never deploy to production on a Friday afternoon, because if something breaks, you'll ruin your weekend.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `environment` |
+| Installs | 32 |
+| Setting key | `spinnerVerbs` (mode: replace) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting environment/friday-deploy-warning
+```
+
+For Claude:
+
+```
+I installed the environment/friday-deploy-warning setting. Run a task
+and show me what appears in the spinner.
+```
+
+## What you can do with it
+
+### Team culture
+
+If your team respects the rule, this setting is a knowing wink.
+
+### Anti-Friday impulse
+
+At 5pm on Friday someone suggests "let's just quickly do this deploy." The spinner reminds you that Monday is better.
+
+### To combo with [Vercel Auto Deploy](/boveda/hook-vercel-auto-deploy)
+
+If you have auto-deploy active, this reminder keeps awareness.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you work in a timezone where Friday isn't "the day":** the culture is US-centric. In other countries the pattern may be different.
+- **If your CI/CD is serious:** a good pipeline with feature flags + automatic rollback lets you deploy any day.
+- **For individual use without a team:** less fun.
+- **Only 32 installs:** very niche.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Friday Deploy Warning Setting](https://www.aitmpl.com/component/settings/environment/friday-deploy-warning) — exact command.
+- **JSON config:** [friday-deploy-warning.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/friday-deploy-warning.json).
+
+## Related resources
+
+- [Vercel Auto Deploy Hook](/boveda/hook-vercel-auto-deploy) — if you want to avoid auto-deploys, combine them.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — post-deploy observability.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — serious deploy patterns.

@@ -1,0 +1,260 @@
+---
+title: "Book to Skill — turn an entire book into a permanent Claude skill"
+description: "The pattern for putting a complete book (PDF, EPUB, DOCX) inside Claude as a permanent skill that loads itself when you talk about the topic. Works for technical books, company handbooks, big papers. When it's worth it and when it's overkill."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-17"
+readingTime: "11 min"
+relatedSlugs: ["anatomia-claude", "memoria-claude-code", "skill-code-reviewer"]
+---
+
+## The idea
+
+You have a 400-page technical book. You want Claude to "know" it, so when you talk about the topic, it applies what the book says. The options that existed:
+
+| Option | Problem |
+|--------|--------|
+| Paste the book into every chat | Burns 200k tokens per session, slow, repetitive |
+| Summarize the book by hand | Huge manual effort, you lose details, ends up inconsistent |
+| Upload to an external RAG | Complex setup, you have to maintain infra |
+| Leave it in docs/ and pray Claude reads it | Sometimes it reads it, sometimes it doesn't |
+
+**Book-to-Skill pattern**: turn the book into a **skill** that lives in `~/.claude/skills/`, structured into small files that load **on demand**. Claude activates it on its own when the chat topic matches the book.
+
+It's a general pattern — there are several specific implementations (open source in Python). We'll explain the idea, not one particular tool.
+
+---
+
+## The result: 5 files
+
+When you convert a book into a skill, it doesn't end up as one huge blob. It ends up as 5 structured files:
+
+```
+~/.claude/skills/<book-name>/
+├── SKILL.md          ← manifest + description + when to activate
+├── chapters/         ← one .md per chapter
+│   ├── 01-intro.md
+│   ├── 02-...md
+│   └── ...
+├── glossary.md       ← technical terms from the book with definitions
+├── patterns.md       ← recurring patterns/heuristics
+└── cheatsheet.md     ← executable 1-page summary
+```
+
+### Why this structure works
+
+Claude doesn't load the 400 pages every time. It first reads `SKILL.md` (short) to know **whether the skill applies**. If it applies, it reads `cheatsheet.md` or `patterns.md` (also short) to get a summary. It only reads specific `chapters/*.md` if the chat topic relates to those particular chapters.
+
+**On-demand loading → low token budget** even for giant books.
+
+---
+
+## What kinds of books it works for
+
+| Type | Does it work well? |
+|------|------------------|
+| **Technical book** (programming, infra, systems) | ✅ Excellent. The concepts are discrete, the examples preserve their structure. |
+| **Product/company handbook** | ✅ Very well. SOPs, policies, internal FAQs. |
+| **Long academic paper** | ✅ Well, if it's well structured. |
+| **Argumentative nonfiction book** | 🟡 Acceptable. Loses the narrative flow, gains in queryability. |
+| **Novel / fiction** | ❌ Makes no sense. Skills are for extracting **knowledge**, not for preserving narrative. |
+
+The rule: if the book is organized by **topics** (not by **plot**), it works well as a skill.
+
+---
+
+## How the process works
+
+A typical converter skill does this, in order:
+
+<Step number={1} title="Extraction">
+
+Pulls the text out of the file. Each format needs its own extractor:
+
+| Format | Typical library |
+|---------|------------------|
+| Technical PDF | Docling (preserves tables, code) |
+| General PDF | pdftotext / PyPDF |
+| EPUB | ebooklib |
+| DOCX | python-docx |
+| MOBI / AZW3 | Calibre (CLI) |
+| HTML | BeautifulSoup |
+| TXT / MD | direct read |
+
+Quality depends on the extractor. PDFs with mediocre OCR will give you mediocre results. Digitally-born PDFs with Docling give you excellent results.
+
+</Step>
+
+<Step number={2} title="Chapter segmentation">
+
+Detects the chapter breaks (level 1 or 2 headings) and splits them into files `chapters/01-...md`, `chapters/02-...md`, etc.
+
+Each chapter is preserved with its structure: headers, lists, code (in code blocks), tables.
+
+</Step>
+
+<Step number={3} title="Generating summarized artifacts">
+
+This is where Claude comes in (not just mechanical conversion). For each artifact:
+
+- **`glossary.md`**: extracts technical terms defined in the book with their canonical definition
+- **`patterns.md`**: identifies patterns/heuristics that appear repeatedly
+- **`cheatsheet.md`**: condenses the main takeaways onto one page
+
+This step is what separates a good conversion from a mechanical one.
+
+</Step>
+
+<Step number={4} title="Generating the SKILL.md" last>
+
+The manifest:
+
+```markdown
+---
+name: <book-slug>
+description: You are an expert in [book topic]. Activate when the user
+  talks about [key concepts], [another concept], [another]. Your source is the book
+  "[title]" by [author]. Cite the chapter when applicable.
+---
+
+# [Book title] — skill
+
+## How to use this skill
+
+1. If the user asks something in the domain, first read `cheatsheet.md`
+   to get a summary.
+2. If you need detail, read the relevant chapter in `chapters/`.
+3. For definitions, check `glossary.md`.
+4. Always cite the source: "per [Book], ch N: ..."
+
+[etc.]
+```
+
+</Step>
+
+---
+
+## Real usage examples
+
+### Example 1 — "Designing Data-Intensive Applications" as a skill
+
+You have Kleppmann's 600-page PDF. You convert it into a skill `ddia`.
+
+Later, when you ask:
+
+```
+> What's the difference between eventual consistency and strong consistency
+  in my context of an order system?
+```
+
+Claude:
+1. Detects that the `ddia` skill applies (because the description matches "consistency")
+2. Reads `cheatsheet.md`
+3. Reads `chapters/05-replication.md` and `chapters/09-consistency.md`
+4. Answers you **with citations to the book**: "per DDIA ch 9, eventual consistency lets you ... but in your order case where the inconsistency is visible, strong consistency with linearizability is better ..."
+
+A more precise answer than without the skill, and with references.
+
+### Example 2 — Your company's internal handbook
+
+Your company has an 80-page process handbook in Notion, exported to PDF. You convert it into a skill `empresa-procesos`.
+
+Later, when a dev asks:
+
+```
+> How do we handle production rollbacks in our process?
+```
+
+Claude detects it's skill info, goes to `chapters/12-incidents.md`, and returns the official process **citing the handbook section**. It doesn't improvise.
+
+### Example 3 — Anthropic Cookbook skill
+
+You have all of Anthropic's cookbooks/prompting guides downloaded as markdown. You convert them into a skill `anthropic-best-practices`.
+
+When you're about to write a prompt, Claude checks that skill **before** proposing a structure. Result: the prompts you write follow the official best practices, without you having to remember them.
+
+---
+
+## When it's NOT worth it
+
+### 1. The book changes often
+
+If your source updates every month, keeping the skill in sync is work. A RAG with the live version is better.
+
+### 2. You only need a specific piece of info, not a domain
+
+To answer a specific question once, you don't need to embed an entire book. Google it and pass the relevant chunk to Claude.
+
+### 3. The "book" is under 50 pages
+
+For something small, it's better to put the entire content into `CLAUDE.md` or the project's `docs/`. The skill adds overhead that isn't justified.
+
+### 4. You want it applied to all projects automatically
+
+Skills activate via **description** matching the chat. If you want something applied **always** regardless of the chat, it goes in the user `/memory`, not a skill.
+
+---
+
+## The typical antipattern
+
+A lot of people convert 10 books into skills "just in case." Then they have 10 skills competing to activate and Claude gets confused about which one applies.
+
+**Rule**: one skill per clear, well-defined domain. If two books cover the same topic, merge them into one consolidated skill instead of having `ddia` and `database-internals` separately.
+
+---
+
+## Variant: just `cheatsheet` without chapters
+
+If the book is good but you don't want all the chapters available (because most of them are irrelevant to your use), one option is to generate **just the cheatsheet + glossary**.
+
+The skill stays small (5-10KB), loads fast, and you know that for deep detail you go to the physical book.
+
+---
+
+## Trade-offs vs alternatives
+
+| Approach | Pros | Cons |
+|----------|------|---------|
+| **Book-to-Skill** | Local, no infra, cited, on-demand | Snapshot — doesn't update itself |
+| **External RAG** | Always up to date, scales | Complex setup, depends on infra |
+| **Paste the book every time** | No setup | Slow, expensive, human error |
+| **Manual summary** | Human-curated | Enormous effort, loses nuance |
+
+For stable books (that don't update often), Book-to-Skill wins. For live sources (docs of an active product), a RAG is better.
+
+---
+
+## How you implement it
+
+There are open source implementations (typically in Python, MIT). The installation flow:
+
+```bash
+# 1. Clone the tool's repo
+git clone <repo>
+
+# 2. Pass it the file
+python convert.py my-book.pdf
+
+# 3. The output ends up in ~/.claude/skills/<name>/
+
+# 4. Next Claude session, the skill is available
+```
+
+If you want to avoid using an external lib, **the manual process** works too:
+
+1. Convert the PDF to markdown with `pandoc` or similar
+2. Split it by chapters with a script (or by hand if there are few)
+3. Generate `glossary.md` by asking Claude to extract terms
+4. Generate `cheatsheet.md` by asking for a summary
+5. Build `SKILL.md` with a description that activates the skill
+
+It takes 30-60 minutes per book. For a book you're going to consult 200 times, it's worth it.
+
+---
+
+## Next steps
+
+- To understand what a skill is in detail, [anatomy of Claude](/boveda/anatomia-claude)
+- If your need is **project memory** more than **book knowledge**, [infinite memory for Claude Code](/boveda/memoria-claude-code)
+- To build your own skill from scratch (not converted), [skill code-reviewer](/boveda/skill-code-reviewer)

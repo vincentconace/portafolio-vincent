@@ -1,0 +1,96 @@
+---
+title: "MCP DeepGraph React — el grafo de tus componentes, state flow y dependencias"
+description: "MCP server con 881 installs que mapea tu proyecto React como grafo: jerarquías de componentes, flujos de state, dependencias. Útil para refactors, code review profundo y onboarding a codebases grandes."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "react"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-deepgraph-nextjs", "mcp-deepgraph-typescript", "plugin-cartographer"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-react"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-react.json"
+---
+
+## Qué es
+
+DeepGraph React analiza tu proyecto React como un grafo navegable. A diferencia de [DeepGraph Next.js](/boveda/mcp-deepgraph-nextjs), que es vertical de Next, este MCP cubre proyectos React puros: CRA, Vite, Remix, Astro con React, librerías de componentes, etc.
+
+Lo que mapea:
+- **Jerarquía de componentes** — quién renderiza a quién
+- **State flows** — useState, useReducer, context propagation
+- **Dependencias** — imports entre componentes
+
+Resultado: cuando Claude piensa en tu codebase, no adivina; consulta el grafo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `deepgraph` |
+| Installs | 881 |
+| Servidor MCP | `DeepGraph React MCP` |
+| Foco | React (cualquier setup) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp deepgraph/deepgraph-react
+```
+
+Para Claude:
+
+```
+Instalé el MCP deepgraph/deepgraph-react. Mostrame el grafo de mi
+proyecto: árbol de componentes desde el root y dónde está el state
+principal (useState/useReducer/context).
+```
+
+## Qué podés hacer con esto
+
+### Mapa de jerarquía de componentes
+
+"Dibujame el árbol desde `<App>` hasta hoja. Identificá los componentes con más hijos directos". Útil para detectar componentes-monolito que conviene fragmentar.
+
+### Análisis de state flow
+
+"¿Dónde se define el state que termina afectando a `<ProductCard>`? ¿Está prop-drilled o llega por context?". Sin esto, vas leyendo archivos hasta encontrarlo.
+
+### Impact de un refactor
+
+"Si cambio la firma de `useUser()`, qué componentes necesitan actualizarse?". Lista exacta.
+
+### Detectar prop drilling
+
+"Buscame casos donde un prop viaja 4+ niveles. Esos son candidatos a context o store global".
+
+### Dead code
+
+"Componentes definidos que nadie importa". Limpieza pre-release.
+
+## Pre-requisitos
+
+- **Proyecto React** accesible al MCP
+- **Node.js + Claude Code** funcionando
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás Next.js:** [DeepGraph Next.js](/boveda/mcp-deepgraph-nextjs) cubre Server/Client Components específicamente.
+- **Si tu stack es Vue:** [DeepGraph Vue](/boveda/mcp-deepgraph-vue).
+- **Para análisis de tipos TypeScript profundo:** [DeepGraph TypeScript](/boveda/mcp-deepgraph-typescript) suma sobre React.
+- **Proyectos chicos** (< 30 componentes): no necesitás grafo, leé los archivos.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [DeepGraph React MCP](https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-react) — comando exacto.
+- **Config JSON:** [deepgraph-react.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-react.json).
+
+## Recursos relacionados
+
+- [DeepGraph Next.js MCP](/boveda/mcp-deepgraph-nextjs) — vertical Next.
+- [DeepGraph TypeScript MCP](/boveda/mcp-deepgraph-typescript) — para análisis de tipos.
+- [Cartographer](/boveda/plugin-cartographer) — análisis horizontal de cualquier codebase (no solo React).

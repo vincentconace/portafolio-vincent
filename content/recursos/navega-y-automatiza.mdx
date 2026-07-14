@@ -1,0 +1,323 @@
+---
+title: "Firecrawl + Playwright — dale ojos y manos a Claude en internet"
+description: "Firecrawl convierte cualquier URL en texto limpio que Claude lee (los ojos). Playwright le da un navegador real para clickear, llenar formularios, tomar screenshots (las manos). Instalación: 1 comando cada uno. Plan gratis de Firecrawl: 500 créditos/mes."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "firecrawl", "playwright"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["agent-browser", "claude-control-remoto", "investigador-automatico"]
+---
+
+## La analogía
+
+Imaginá que Claude es **super inteligente pero vive encerrado**. Puede pensar y resolver problemas pero **no puede ver internet ni tocar nada afuera**.
+
+Con estas 2 herramientas le das **ojos** y **manos**:
+
+| Tool | Rol |
+|------|-----|
+| **Firecrawl** | Los ojos — lee cualquier página web como texto limpio |
+| **Playwright** | Las manos — navega real (clicks, forms, screenshots) |
+
+Juntas: Claude **trabaja en internet por vos**.
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado ([instalar Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Instalar Firecrawl (los ojos)
+
+### Paso 1 — Cuenta gratis
+
+`firecrawl.dev` → registrate gratis.
+
+### Paso 2 — Copiar API key
+
+Dashboard → llave que empieza con `fc-...`
+
+### Paso 3 — Instalar en Claude Code
+
+```bash
+claude mcp add firecrawl-mcp-server \
+  -e FIRECRAWL_API_KEY=tu-api-key \
+  -- npx -y firecrawl-mcp-server
+```
+
+### Plan gratis
+
+- **500 créditos/mes**
+- Más que suficiente para uso casual
+
+### Verificar
+
+```
+> Leé firecrawl.dev y decime de qué se trata.
+```
+
+Si te da resumen, **instalado**.
+
+---
+
+## Instalar Playwright (las manos)
+
+### Comando único
+
+```bash
+claude mcp add playwright -- npx -y @anthropic-ai/playwright-mcp@latest
+```
+
+### Sin API key ni cuenta
+
+**100% gratis**, sin registro.
+
+### Verificar
+
+```
+> Abrí google.com y tomá screenshot.
+```
+
+Si ves la imagen, **instalado**.
+
+---
+
+## Cuándo usar cada uno
+
+### Firecrawl (lectura)
+
+✅ Leer página web y extraer texto
+✅ Investigar competencia
+✅ Procesar muchas URLs en batch
+✅ Páginas con anti-bot (Firecrawl maneja mejor)
+
+❌ Interactuar con la página
+❌ Llenar formularios
+
+### Playwright (interacción)
+
+✅ Clickear botones
+✅ Llenar formularios
+✅ Tomar screenshots
+✅ Navegar sites SPA con JS
+✅ Hacer testing E2E
+
+❌ Procesar 100+ URLs en batch (lento)
+
+### Juntos
+
+Lo más potente: **Playwright navega, Firecrawl extrae**.
+
+---
+
+## Casos de uso
+
+### 1. Investigar competencia
+
+```
+> Leé la página [competidor.com] con Firecrawl y dame:
+  1. De qué se trata el negocio
+  2. Qué servicios o productos ofrecen
+  3. Cómo se posicionan (qué lenguaje usan)
+  4. Qué podría mejorar su página
+```
+
+### 2. Navegar y extraer datos
+
+```
+> Abrí [URL] con Playwright, buscá [término] y dame lista de
+  los primeros 5 resultados con título y enlace.
+```
+
+### 3. Llenar formularios repetitivos
+
+```
+> Acá hay form de [URL] que necesito llenar 20 veces con datos
+  de mi CSV.
+
+  Para cada fila:
+  1. Abrí form con Playwright
+  2. Completá campos con datos de la fila
+  3. Tomá screenshot antes de submit
+  4. Esperá mi OK por cada uno
+  5. Submit y log el resultado
+```
+
+### 4. Monitor de precios
+
+```
+> Cada lunes 9am:
+  1. Abrí estas 5 URLs de productos: [...]
+  2. Extraé precio actual con Firecrawl
+  3. Comparame contra precio en /data/precios-anterior.csv
+  4. Si bajó >5%, mandame email
+  5. Guardá nuevos precios en /data/precios-actual.csv
+```
+
+### 5. Datos de redes sociales públicas
+
+```
+> Leé el perfil público de Instagram [@cuenta] y extraé:
+  - Bio
+  - Cantidad de seguidores
+  - Últimos 9 posts (caption + engagement aprox)
+
+  Usá Firecrawl. Si bloquea, intentá con Playwright.
+```
+
+### 6. Trabajar dentro de tus herramientas
+
+```
+> Abrí mi dashboard de [tool.com] con Playwright.
+  Necesito que:
+  1. Hagas login con [credenciales del .env]
+  2. Navegues a Reports
+  3. Filtres "Last 7 days"
+  4. Exportes CSV
+  5. Guardes en /reports/2026-05-28.csv
+
+  Acción destructiva (cambios en config) NO la hagas sola.
+```
+
+### 7. Extraer tablas a CSV
+
+```
+> Acá hay tabla en [URL/wiki/...] que quiero como CSV.
+  Usá Firecrawl, parseá la tabla, guardá como /data/tabla.csv.
+
+  Mantené headers y formato de números.
+```
+
+### 8. Testing E2E de tu propio site
+
+```
+> Abrí http://localhost:3000 con Playwright.
+  Probá flow de signup:
+  1. Click "Sign up"
+  2. Llenar form con email random + password
+  3. Verificar redirect a dashboard
+  4. Verificar que welcome email llegó (chequear /tmp/inbox)
+  Reportá si algún paso falla.
+```
+
+---
+
+## Firecrawl vs Agent Browser
+
+| Aspecto | [Firecrawl](#) | [Agent Browser](/boveda/agent-browser) |
+|---------|----------------|----------------------------------------|
+| Approach | Extrae HTML → texto limpio | Numera elementos interactivos |
+| Tokens por acción | Medio | **10x menos** |
+| Costo | 500 free/mes | Gratis (open source) |
+| Mejor para | Lectura + extracción | Navegación + automation |
+
+Para **lectura masiva**: Firecrawl.
+Para **navegación intensiva**: Agent Browser.
+
+Podés tener los dos. Cada uno brilla en su área.
+
+---
+
+## Playwright vs Computer Use
+
+| Aspecto | Playwright | [Computer Use](/boveda/claude-control-remoto) |
+|---------|-----------|----------------------------------------------|
+| Alcance | Solo browsers | Compu entera |
+| Setup | 1 comando | App + permisos |
+| Velocidad | Rápida | Más lenta (UI real) |
+| Apps sin web | ❌ | ✅ |
+
+Para **web**: Playwright.
+Para **apps desktop**: Computer Use.
+
+---
+
+## Anti-patrones
+
+### 1. Usar Firecrawl para todo
+
+Si tu tarea requiere **interacción** (login, click, form), Firecrawl no alcanza. Necesitás Playwright.
+
+### 2. Playwright para 100 URLs
+
+Playwright es más lento que Firecrawl. Para batch grande, **Firecrawl primero**.
+
+### 3. Sin auth en sites privados
+
+Si necesitás login, Playwright + Claude pueden hacerlo, pero **guardá credenciales en .env**, no en el prompt.
+
+### 4. Scrape sites con anti-bot agresivo
+
+Cloudflare strict, gov sites, banking — pueden bloquear ambos. Para esos, **API oficial** o flow manual.
+
+### 5. Ignorar robots.txt y ToS
+
+Antes de scrapear un site comercial intensivo, revisá **robots.txt** y términos. Algunos prohíben scrape masivo.
+
+---
+
+## Costos
+
+### Firecrawl
+
+- **500 créditos/mes gratis** (suficiente para uso casual)
+- Plan paid si necesitás más
+
+### Playwright
+
+- **100% gratis sin límites**
+- Solo gastás compute local + tokens de Claude
+
+---
+
+## Combinaciones potentes
+
+### Con Agent Browser
+
+```
+> 1. Firecrawl extrae info de 50 URLs en batch
+> 2. Para las 5 más interesantes, [Agent Browser](/boveda/agent-browser)
+     navega y extrae más detalle
+> 3. Playwright valida formularios de signup en mi propio site
+```
+
+### Con Investigador Automático
+
+```
+> [Last30Days](/boveda/investigador-automatico) busca tendencias.
+> Firecrawl extrae texto de los top 5 links que devuelve.
+> Claude sintetiza todo.
+```
+
+### Con Cowork tareas programadas
+
+```
+> Cada lunes 9am, ejecutá automation:
+  - Firecrawl extrae precios de competidores
+  - Playwright filtra mi dashboard CRM
+  - Mandame email con análisis combinado
+```
+
+[Cowork workflow](/boveda/claude-cowork-workflow) te lo automatiza.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Sites con auth complejo (2FA, OAuth) | Mejor API oficial |
+| Producción crítica E2E | Selenium/Cypress más maduros |
+| Compliance estricto auditoría | Necesitás logs robustos |
+| Scraping comercial masivo | Probablemente viola ToS |
+
+---
+
+## Próximos pasos
+
+- Para navegación más eficiente en tokens, [Agent Browser](/boveda/agent-browser)
+- Para operar apps desktop (no solo web), [Computer Use](/boveda/claude-control-remoto)
+- Para research automático en redes/foros, [Investigador Automático](/boveda/investigador-automatico)

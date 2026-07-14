@@ -1,0 +1,99 @@
+---
+title: "MCP arXiv — buscar, descargar y analizar papers académicos desde Claude"
+description: "MCP server que conecta Claude Code con arXiv. Búsqueda full-text, descarga de papers, almacenamiento local para research workflows. Ideal para revisión de literatura o estado del arte sin abrir el browser."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "arxiv"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["book-to-skill", "aprende-skill", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/research/arxiv-mcp-server"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/research/arxiv-mcp-server.json"
+---
+
+## Qué es
+
+arXiv es el repositorio gigante de pre-prints académicos (CS, física, matemática, biología cuantitativa). Si trabajás en algo cercano a research, es probable que termines acá buscando papers.
+
+Este MCP te deja consultar arXiv directamente desde Claude Code. Buscás por keywords, autores o ID, descargás papers, los guardás local y Claude los puede leer y razonar sobre ellos como cualquier otro archivo del proyecto.
+
+Es la forma más directa de armar pipelines tipo "buscar papers nuevos sobre X cada lunes, resumir los top 5, agregar al doc de literatura review".
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `research` |
+| Installs | 27 |
+| Servidor MCP | `arxiv-mcp-server` |
+| Costo | Gratis (arXiv es público) |
+| Capacidades | Full-text search, retrieval, local storage |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp research/arxiv-mcp-server
+```
+
+No requiere API key (arXiv es abierto). Sí podés configurar dónde se guardan los papers descargados.
+
+Para Claude:
+
+```
+Instalá el MCP research/arxiv-mcp-server. Buscame los 5 papers más
+recientes sobre "diffusion language models" y descargá el PDF de cada
+uno. Después resumime el abstract de cada uno en 3 líneas.
+```
+
+## Qué podés hacer con esto
+
+### Revisión de literatura asistida
+
+"Buscá los 20 papers más citados sobre RAG (Retrieval Augmented Generation), descargalos y armame un cuadro comparativo de las arquitecturas que proponen". Claude hace el download masivo y la síntesis.
+
+### Estado del arte semanal
+
+Un patrón típico: cada lunes, Claude busca papers nuevos en tu área, descarga, resume y agrega al doc de tracking. Con hooks o `/loop` lo automatizás.
+
+### Lectura profunda de un paper
+
+"Tomá el paper 2308.12345 de arXiv, leelo entero y respondeme: ¿qué problema resuelve, qué método propone, qué limitaciones reconoce y qué experimentos hicieron?".
+
+### Búsqueda cruzada
+
+"Para cada uno de estos 10 papers, buscá las 3 papers más relacionadas que NO están citados en sus referencias". Útil para encontrar conexiones que los autores originales no vieron.
+
+### Combinación con [Book to Skill](/boveda/book-to-skill)
+
+Descargás papers clave de un área, los pasás por book-to-skill, y armás una skill permanente de Claude sobre ese campo. La diferencia: book-to-skill comprime el conocimiento; arxiv-mcp lo trae.
+
+## Pre-requisitos
+
+- **Node.js + Claude Code** funcionando
+- **Espacio en disco** para los PDFs descargados (los papers pueden pesar varios MB cada uno)
+- **Conexión a internet** estable para descargas masivas
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para búsqueda en otros repositorios** (Google Scholar, Semantic Scholar, PubMed): este MCP es arXiv-only. Para PubMed hay otros MCPs.
+- **Papers en revistas cerradas:** arXiv solo tiene pre-prints abiertos. Para Nature, Science, etc. necesitás acceso institucional separado.
+- **Si solo buscás 1-2 papers ocasionales:** abrir [arxiv.org](https://arxiv.org) directo es más simple.
+- **Carga de disco:** descargar muchos PDFs sin estrategia llena el disco. Configurá rotación o límites.
+- **Riesgo de hallucination en summaries:** Claude puede inventar detalles de un paper si el PDF es largo y se compacta mal. Validá conclusiones críticas leyendo el original.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [arXiv MCP Server](https://www.aitmpl.com/component/mcps/research/arxiv-mcp-server) — comando exacto.
+- **Config JSON:** [arxiv-mcp-server.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/research/arxiv-mcp-server.json) — definición.
+- **arXiv:** [arxiv.org](https://arxiv.org) — el repo público.
+
+## Recursos relacionados
+
+- [Book to Skill](/boveda/book-to-skill) — comprimí los papers descargados en una skill permanente de Claude.
+- [Aprende Skill](/boveda/aprende-skill) — para entender cómo encadenar el flujo: arXiv MCP → Book to Skill → skill activa.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP en el mapa mental (es el "cable" a un servicio externo).

@@ -1,0 +1,312 @@
+---
+title: "Editor Pro Max — describe a video in plain English and Claude builds it with Remotion"
+description: "Open source AI video editing studio. Describe the video in natural language, Claude generates Remotion code, you export a professional MP4. 25+ components, 9 templates (TikTok/Reels/YouTube), automatic captions with Whisper, silence removal with FFmpeg. 100% local."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "remotion", "ffmpeg"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["cinco-habilidades-marketing", "higgsfield-mcp", "claude-animador-web"]
+---
+
+## What it is
+
+You tell your computer: **"make me a 30s video announcing my product"** and it does it on its own.
+
+**Editor Pro Max** is an open source tool that turns Claude Code into an AI video editing studio. Describe it in plain English → Claude writes Remotion code → you export a professional MP4 for any platform.
+
+Repo: `Hainrixz/editor-pro-max`. Open source.
+
+| Feature | Detail |
+|----------------|---------|
+| Processing | 100% local (nothing goes to the cloud) |
+| Stack | Remotion 4 + FFmpeg + Whisper.cpp + React 19 |
+| Components | 25+ |
+| Templates | 9 (TikTok, Reels, YouTube, etc.) |
+| Output platforms | TikTok, IG, YouTube, LinkedIn, Twitter, FB |
+| Cost | Free |
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed
+- **Node.js 20+**
+- **FFmpeg** (optional, to process existing video)
+- **Whisper.cpp** (optional, for automatic captions)
+
+---
+
+## Setup — 4 commands
+
+```bash
+# 1. Clone
+git clone https://github.com/Hainrixz/editor-pro-max.git
+
+# 2. Install
+cd editor-pro-max && npm install
+
+# 3. Open Claude
+claude
+
+# 4. Start preview
+npm run dev
+```
+
+Open `http://localhost:3000` and you'll see the **Remotion Studio** with a live preview.
+
+### FFmpeg and Whisper are optional
+
+The core creation flow works without them. You only need them for:
+- FFmpeg → processing existing video (cutting silences, jump cuts)
+- Whisper → automatic captions
+
+---
+
+## The workflow — 4 steps
+
+```
+1. Describe the video in plain English
+2. Claude generates Remotion code
+3. Preview at localhost:3000
+4. Render the final MP4
+```
+
+### Iteration
+
+After the preview, you can:
+- Ask for color changes
+- Tweak the text
+- Change the animations
+- Ask for multiple versions for different networks
+
+---
+
+## The 8 AI skills included
+
+The repo ships with 8 skills that give Claude expert knowledge in:
+
+1. Remotion (framework)
+2. Motion graphics design
+3. Awwwards-style animations
+4. FFmpeg processing
+5. Explainer / educational video
+6. Optimized rendering
+7. Web browsing for visual inspiration
+8. Professional subtitling
+
+---
+
+## 25+ components (the "Lego pieces")
+
+| Category | Components |
+|-----------|-------------|
+| Text animations | Fade, slide, typewriter, scale, blur, bounce, word-by-word |
+| Backgrounds | Gradients, particles, grids, color wash |
+| Media | Video clips, responsive images, audio, slideshows |
+| Layouts | Picture-in-picture, split screen, mobile safe area |
+| Overlays | Watermark, lower third, progress bar, countdown, CTAs |
+| Transitions | 12 presets: crossfade, slide, wipe, zoom, cut, custom |
+
+**You don't need to know them**. You describe the result, and Claude picks and combines them.
+
+---
+
+## The 9 templates
+
+| Template | Format | What for |
+|----------|---------|----------|
+| TikTok | 9:16, 15-60s | Hook + body + CTA |
+| Instagram Reel | 9:16, 15-90s | Engagement optimized |
+| YouTube Short | 9:16, up to 60s | 60fps |
+| Presentation | 16:9 | Slides with transitions |
+| Testimonial | Multi | Speaker + quote |
+| Talking Head | Camera + captions + lower third | Vlogs, podcasts |
+| Podcast Clip | Waveform + captions | Podcast reels |
+| Ad | Bold + animations + CTA | Promo |
+| Before/After | Side by side | Comparisons |
+
+---
+
+## Platforms and dimensions
+
+You tell it which platform → automatic dimensions:
+
+| Platform | Dimensions | FPS |
+|------------|-------------|-----|
+| TikTok | 1080×1920 | 30 |
+| YouTube | 1920×1080 | 30 |
+| YouTube Shorts | 1080×1920 | 60 |
+| Instagram Reels | 1080×1920 | 30 |
+| Instagram Feed | 1080×1080 | 30 |
+| LinkedIn | 1920×1080 | 30 |
+| Twitter/X | 1920×1080 | 30 |
+| Facebook | 1080×1080 or 16:9 | 30 |
+
+### Batch render
+
+You generate the **same video in multiple versions** for different networks with a single command.
+
+---
+
+## 4 prompts to get started
+
+### 1. TikTok from scratch
+
+```
+> Create a 30s TikTok to promote [my product/service].
+  Style: modern and dynamic.
+  Include:
+  - Animated text with the product name
+  - 3 main benefits with icons
+  - Final CTA
+  Colors: [my brand colors]
+  9:16 TikTok format.
+```
+
+### 2. Captions on an existing video
+
+```
+> I have a video at [path/to/video.mp4].
+  Add automatic captions with the "bold" preset (large,
+  high contrast).
+  Transcribe with Whisper and sync with the speech.
+```
+
+### 3. Professional presentation
+
+```
+> Create a 2 min presentation about [topic].
+  16:9 format for YouTube.
+
+  Structure:
+  - Intro with an animated title
+  - 5 slides with key points
+  - Smooth transition between slides
+  - Closing with logo and contact
+
+  Style: minimalist, dark background, white text with
+  [brand color] accents.
+```
+
+### 4. Clean up a long video
+
+```
+> I have a long video at [path/to/video.mp4]. I need to:
+
+  1. Detect and remove silences longer than 0.5 seconds
+  2. Apply automatic jump cuts to keep only the speech
+  3. Export as MP4 for YouTube (16:9)
+```
+
+---
+
+## Capabilities — what it can do
+
+### Create from scratch
+
+- TikToks and Reels
+- Presentations
+- Explainer videos
+- Ads and testimonials
+
+### Edit an existing video
+
+- **Automatic captions** with 5 presets (classic, bold, outline, glow, box)
+- Automatic **silence removal**
+- Automatic **jump cuts** (keeps only the parts where you're talking)
+- **Background removal** with ImgLy
+
+---
+
+## Anti-patterns
+
+### 1. Vague prompts for video
+
+❌ "Make me a nice video"
+✅ "30s TikTok, Linear style, dark mode, 3 benefits with icons + CTA"
+
+Specificity wins.
+
+### 2. A single iteration
+
+The first version is 70%. Iterate:
+- "The text at second 5 comes in too fast, slow it down"
+- "Change the CTA color to green"
+- "Add a 0.5s pause before the logo"
+
+### 3. Expecting pixel-perfect creative work
+
+Editor Pro Max is **excellent for programmatic video**. For creative editing with lots of shots (filmed footage, subtle visual play), After Effects still wins.
+
+### 4. Ignoring the preview
+
+`localhost:3000` shows you the video **before rendering**. Rendering takes minutes. **Iterate in the preview**, and render only when you're ready.
+
+### 5. Rendering at low quality to save time
+
+If you're going to publish on YouTube/Reels, **render at maximum quality**. The extra seconds are worth it.
+
+---
+
+## Comparison with alternatives
+
+| Tool | What for |
+|------|----------|
+| **Editor Pro Max** | Programmatic video with code, free, local |
+| **CapCut / Premiere** | Traditional editing with a visual UI |
+| **After Effects** | Advanced creative motion graphics |
+| [Higgsfield MCP](/boveda/higgsfield-mcp) | Realistic cinematic video with AI |
+| **Runway** | AI video (effects, creative edits) |
+
+Editor Pro Max's sweet spot: **producing standard-format video at volume** (TikToks, Reels, presentations) without paying a subscription.
+
+---
+
+## Powerful combinations
+
+### With Claude Banana
+
+```
+> Generate images for the video frames with [Claude Banana](/boveda/claude-banana).
+> Then build the video with those images using Editor Pro Max.
+```
+
+### With NotebookLM Skill
+
+```
+> Take the key points from my paper in NotebookLM and turn them into
+  a 2 min animated presentation for YouTube with Editor Pro Max.
+```
+
+### With humanizer
+
+```
+> Claude wrote the video script. Run it through /humanizalo
+  before generating the video.
+```
+
+[Humanízalo](/boveda/humanizalo) makes the narration not sound like AI.
+
+### With 5 marketing skills
+
+[5 marketing skills](/boveda/cinco-habilidades-marketing) includes Editor Pro Max as one of the 5. The difference: this guide goes deep on it alone.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| Video with lots of filmed clips | Traditional Premiere/CapCut wins |
+| Super creative motion graphics | After Effects + a designer |
+| Realistic cinematic | Higgsfield MCP |
+| Editing family/events footage | Way overkill |
+
+---
+
+## Next steps
+
+- For a marketing skills suite (includes this one), [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- For realistic cinematic video with AI, [Higgsfield MCP](/boveda/higgsfield-mcp)
+- To humanize the script before generating audio, [Humanízalo](/boveda/humanizalo)

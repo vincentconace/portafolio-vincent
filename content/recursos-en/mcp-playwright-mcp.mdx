@@ -1,0 +1,87 @@
+---
+title: "MCP Playwright (1,393 installs) — Microsoft variant of the Playwright MCP"
+description: "MCP server with 1,393 installs for Playwright. Browser automation that lets LLMs interact with webpages, take screenshots, run JS. Variant of the more widely adopted [Playwright MCP Server](/boveda/mcp-playwright-mcp-server)."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "playwright"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-playwright-mcp-server", "mcp-mcp-server-playwright", "plugin-playwright-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/browser_automation/playwright-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/playwright-mcp.json"
+---
+
+## What it is
+
+It's one of the **three** Playwright variants in the browser_automation catalog:
+- [playwright-mcp-server](/boveda/mcp-playwright-mcp-server) (4,419 installs — top) — `executeautomation`
+- **playwright-mcp** (this one, 1,393 installs) — alternative variant
+- [mcp-server-playwright](/boveda/mcp-mcp-server-playwright) (675 installs) — `automatalabs`
+
+Three distinct implementations of the same concept (wrapping Playwright as an MCP). Compare the JSON to see which one suits you; for most cases, the most widely adopted (`playwright-mcp-server`) is the default option.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `browser_automation` |
+| Installs | 1,393 |
+| MCP server | `playwright-server` |
+| Stack | Playwright |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp browser_automation/playwright-mcp
+```
+
+For Claude:
+
+```
+I installed the browser_automation/playwright-mcp MCP. Show me the tools
+it exposes and compare it against playwright-mcp-server so I know whether
+one or the other is worth it.
+```
+
+## What you can do with it
+
+The same browser automation operations with Playwright as the other variants:
+
+- Navigate URLs
+- Click, type, scroll
+- Take screenshots
+- Run JS in the browser
+- Inspect the DOM
+- Ad-hoc E2E testing
+
+For concrete use cases, check out [Playwright MCP Server](/boveda/mcp-playwright-mcp-server) (the most widely adopted variant) — most of them transfer over.
+
+## When to choose which
+
+| Case | Recommendation |
+| --- | --- |
+| You have no preference | [playwright-mcp-server](/boveda/mcp-playwright-mcp-server) (most adopted) |
+| You want to try several and compare | Test one in a sandbox before committing |
+| Critical enterprise stack | Look at the JSONs and the upstream implementation |
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you already have another Playwright MCP:** don't install them together (tool collision).
+- **Smaller community vs the top one:** `playwright-mcp-server` has 3x more adoption. Higher chance that known bugs are already fixed.
+- **For sites with anti-bot:** better go with [Browserbase](/boveda/mcp-mcp-server-browserbase) or [Bright Data](/boveda/mcp-brightdata).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Playwright MCP](https://www.aitmpl.com/component/mcps/browser_automation/playwright-mcp) — exact command.
+- **Config JSON:** [playwright-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/playwright-mcp.json).
+
+## Related resources
+
+- [Playwright MCP Server](/boveda/mcp-playwright-mcp-server) — the most widely adopted variant (4,419 installs).
+- [MCP Server Playwright](/boveda/mcp-mcp-server-playwright) — the third variant.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — model-invoked, a lighter alternative.

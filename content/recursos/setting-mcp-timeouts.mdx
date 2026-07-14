@@ -1,0 +1,85 @@
+---
+title: "Setting MCP Timeouts — timeouts custom para MCP server ops (372 installs)"
+description: "Setting con 372 installs. Configura timeouts para MCP server operations: startup, tool execution, output max. Para sistemas lentos o MCPs complejos que necesitan más tiempo."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-bash-timeouts", "setting-performance-optimization", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/mcp/mcp-timeouts"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/mcp-timeouts.json"
+---
+
+## Qué es
+
+Configura timeouts y output limits para MCP server operations:
+
+- `MCP_TIMEOUT: 30000` (30s) — timeout de startup del MCP server
+- `MCP_TOOL_TIMEOUT: 60000` (60s) — timeout por tool execution
+- `MAX_MCP_OUTPUT_TOKENS: 50000` — output cap por tool call
+
+Previene que MCP servers lentos hagan hang a tu sesión.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `mcp` |
+| Installs | 372 |
+| Env vars | 3 (startup + tool + output) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting mcp/mcp-timeouts
+```
+
+Para Claude:
+
+```
+Instalé el setting mcp/mcp-timeouts. Listame los valores actuales.
+Si necesito subir el tool timeout (porque mi MCP de scraping tarda
+2 min), mostrame cómo.
+```
+
+## Qué podés hacer con esto
+
+### Anti-hang en MCPs lentos
+
+Si un MCP server tiene un bug o se cuelga, no te traba indefinidamente.
+
+### Cap a output
+
+`MAX_MCP_OUTPUT_TOKENS` evita que un MCP genere MB de output que consuma tu context.
+
+### Tunear para tu uso
+
+- Para sistemas rápidos: bajar timeouts (feedback más rápido on hangs)
+- Para MCPs complejos (browser automation, big scrapes): subir timeouts
+
+### Combo con [Bash Timeouts](/boveda/setting-bash-timeouts)
+
+Bash Timeouts para shell commands. MCP Timeouts para MCPs. Cubren todos los entry points.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás MCPs:** no aporta.
+- **Si tus MCPs son rápidos:** los defaults te alcanzan.
+- **Para MCPs que necesitan minutos:** subí timeouts con cuidado para no atascar la sesión.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [MCP Timeouts Setting](https://www.aitmpl.com/component/settings/mcp/mcp-timeouts) — comando exacto.
+- **Config JSON:** [mcp-timeouts.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/mcp-timeouts.json).
+
+## Recursos relacionados
+
+- [Bash Timeouts Setting](/boveda/setting-bash-timeouts) — para shell commands.
+- [Performance Optimization Setting](/boveda/setting-performance-optimization) — para tunear performance general.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de MCPs.

@@ -1,0 +1,96 @@
+---
+title: "Hook AI Bash Guard — un sub-agent de Claude evalúa cada comando antes de correrlo"
+description: "Hook de seguridad recién publicado. Antes de cada Bash command, un sub-agent ligero de Claude evalúa el comando contra patterns destructivos o irreversibles. Si detecta peligro, bloquea. El guardarraíl AI más sofisticado."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["claude-code-best-practices", "plugin-claude-forge", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/ai-bash-guard"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/ai-bash-guard.json"
+---
+
+## Qué es
+
+Es el hook de seguridad más sofisticado del catálogo. Antes de que cualquier comando Bash se ejecute en una sesión Claude Code, un sub-agent ligero de Claude evalúa el comando contra patterns destructivos o irreversibles. Si detecta peligro, lo bloquea.
+
+Diferencia con un blocklist tradicional (que solo matchea strings exactos): este usa **AI judgment**. Detecta variaciones, contextos, intent. `rm -rf` directo se detecta, pero también `rm -rf $UNDEFINED_VAR/*` o `find . -delete`.
+
+Hook event: `PreToolUse`. Específicamente sobre el tool Bash.
+
+7 installs (recién publicado), pero el patrón es prometedor.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `security` |
+| Installs | 7 (recién) |
+| Hook event | `PreToolUse` (Bash) |
+| Mecanismo | Sub-agent Claude evalúa cada command |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook security/ai-bash-guard
+```
+
+Para Claude:
+
+```
+Instalé el hook security/ai-bash-guard. Mostrame los patterns de
+detección que evalúa. Probá: intentá ejecutar `rm -rf /tmp/test` —
+debería bloquearse o pedir confirmación.
+```
+
+## Qué podés hacer con esto
+
+### Bloquear destructivo accidental
+
+Comandos como `rm -rf`, `dd if=...`, `mkfs.*`, `> /dev/sda` — bloqueados antes de ejecutar. Incluso si vienen como parte de un script complejo donde no son obvios.
+
+### Detectar variaciones
+
+`rm -rf $HOME/*` con variable que podría expandir a algo malo: el sub-agent lo detecta. Blocklist tradicional pasaría de largo.
+
+### Irreversibilidad
+
+No es solo "destructivo". También bloquea operaciones que no podés deshacer fácilmente: `chmod -R 777`, `kill -9` sobre procesos críticos, force-push a main.
+
+### Working in autonomous mode
+
+Si dejás Claude corriendo con `/goal` o `/loop`, este hook es básicamente obligatorio. Sin él, una decisión incorrecta del modelo puede ser catastrófica.
+
+### Combo con [Claude Forge](/boveda/plugin-claude-forge)
+
+Claude Forge trae 6 layers de seguridad. Este hook es complementario y más granular para comandos Bash específicamente.
+
+## Pre-requisitos
+
+- **Claude Code** con hooks habilitados
+- **Plan de Claude** con tokens suficientes (el sub-agent consume cada vez que evalúa un comando)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Costo de tokens:** cada bash command dispara al sub-agent. Si tu workflow tiene muchos comandos, multiplica gastos.
+- **Latencia:** evaluación AI suma medio segundo o más por comando. Para tareas muy rápidas, se nota.
+- **False positives:** el AI puede ser cauteloso de más. Comandos legítimos pueden necesitar override.
+- **Si ya tenés hooks deterministas de seguridad:** podés tener overlap.
+- **Solo 7 installs:** pattern nuevo. Probá en sandbox antes de ponerlo en sesiones productivas.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [AI Bash Guard Hook](https://www.aitmpl.com/component/hooks/security/ai-bash-guard) — comando exacto.
+- **Config JSON:** [ai-bash-guard.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/ai-bash-guard.json).
+
+## Recursos relacionados
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas de seguridad en hooks.
+- [Claude Forge](/boveda/plugin-claude-forge) — 6 layers de seguridad como framework, complementario.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar los hooks como capa de la arquitectura.

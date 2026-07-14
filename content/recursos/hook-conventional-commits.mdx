@@ -1,0 +1,89 @@
+---
+title: "Hook Conventional Commits — enforce formato de commit con type(scope): description"
+description: "Hook con 450 installs que valida que tus git commits sigan el formato Conventional Commits: `type(scope): description`. Bloquea commits que no respeten convention. Para teams que viven en commits semánticos."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-auto-git-add", "hook-console-log-cleaner", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/git/conventional-commits"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/conventional-commits.json"
+---
+
+## Qué es
+
+Antes de cada `git commit` que Claude ejecute, este hook valida que el mensaje siga el formato Conventional Commits:
+
+```
+type(scope): description
+```
+
+Types soportados: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`, `perf`, `build`.
+
+Si el mensaje no respeta el formato, el commit se bloquea. Hook event: `PreToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `git` |
+| Installs | 450 |
+| Hook event | `PreToolUse` (Bash con git commit) |
+| Acción | Valida formato, bloquea si falla |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook git/conventional-commits
+```
+
+Para Claude:
+
+```
+Instalé el hook git/conventional-commits. Probá: pedile a Claude que
+commitee con mensaje "hice cambios" — debería bloquear. Después con
+"feat(auth): agrega login OAuth" — debería pasar.
+```
+
+## Qué podés hacer con esto
+
+### Convention forzada en todo el repo
+
+Ya no importa si Claude tira un commit informal. El hook lo formatea o lo rechaza.
+
+### Changelog autogenerado
+
+Con commits conventional, herramientas como `conventional-changelog` arman el CHANGELOG automáticamente al release.
+
+### Semantic versioning automático
+
+`feat:` → minor bump. `fix:` → patch. `BREAKING CHANGE:` → major. Tu CI puede manejarlo.
+
+### Para teams nuevos en Convention
+
+Forzar el patrón es la forma más rápida de adoptar la convención.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu equipo no usa Convention:** no impongas — primero alineá con el equipo.
+- **Para repos personal/experimental:** convention es overhead. Commit a tu gusto.
+- **Si tu CI ya valida:** husky + commitlint hacen lo mismo en pre-commit hook tradicional.
+- **Quick commits de WIP:** el hook bloquea. Para hotfixes urgentes, override necesario.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Conventional Commits Hook](https://www.aitmpl.com/component/hooks/git/conventional-commits) — comando exacto.
+- **Config JSON:** [conventional-commits.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/conventional-commits.json).
+- **Convention spec:** [conventionalcommits.org](https://www.conventionalcommits.org/).
+
+## Recursos relacionados
+
+- [Auto Git Add Hook](/boveda/hook-auto-git-add) — combo natural: stage automático + commit convencional.
+- [Console Log Cleaner Hook](/boveda/hook-console-log-cleaner) — otra red de seguridad para commits limpios.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas de git workflow.

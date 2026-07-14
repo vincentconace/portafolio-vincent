@@ -1,0 +1,113 @@
+---
+title: "Mercado Pago Marketplace — el plugin OFICIAL de MP para Claude Code"
+description: "Plugin oficial del Developer Experience team de Mercado Pago. Scaffold, review y mantenimiento de integraciones de pagos en 7 países LATAM (AR, BR, MX, CL, CO, PE, UY) y 13 productos: Checkout Pro, Bricks, QR, Subscriptions, Marketplace y más."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "mercado-pago"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["agente-pagokit", "all-deploy", "claude-cowork-code"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/mercadopago-claude-marketplace"
+github: "https://github.com/mercadopago/mercadopago-claude-marketplace"
+---
+
+## Qué es
+
+Si vendés algo en LATAM, esto es noticia: Mercado Pago publicó un plugin **oficial** para Claude Code, mantenido por su equipo de Developer Experience. Cubre los 7 países donde MP opera (Argentina, Brasil, México, Chile, Colombia, Perú, Uruguay) y los 13 productos principales: Checkout Pro, Bricks, QR, Subscriptions, Marketplace, etc.
+
+La diferencia con [agente-pagokit](/boveda/agente-pagokit) (que también integra MP entre otros) es que este es **oficial de MP**. Conoce las particularidades exactas de cada país (Pix en Brasil, OXXO Pay en México, Rapipago en Argentina), sigue las convenciones oficiales del equipo y se actualiza cuando MP saca features nuevas.
+
+Cubre todo el ciclo de la integración: **scaffold** (te arma el código inicial), **review** (revisa que esté bien implementada), y **maintain** (te ayuda a actualizar cuando MP cambia algo).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | Mercado Pago (Developer Experience team) |
+| Stars | 0 (recién publicado) |
+| Tipo | Plugin único oficial |
+| Componentes | agents, commands, skills, hooks |
+| Países cubiertos | AR, BR, MX, CL, CO, PE, UY |
+| Productos | Checkout Pro, Bricks, QR, Subscriptions, Marketplace, +8 más |
+| Marketplace | `mercadopago/mercadopago-claude-marketplace` |
+| Docs oficiales | [mercadopago.com/developers](https://www.mercadopago.com/developers) |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add mercadopago/mercadopago-claude-marketplace
+/plugin install mercadopago-claude-marketplace@mercadopago-mercadopago-claude-marketplace
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalá el plugin oficial de Mercado Pago. Mi proyecto vende en
+[país: México / Argentina / Brasil / etc.] y necesito implementar
+[Checkout Pro / Bricks / Subscriptions / QR]. Arrancá el scaffold.
+```
+
+## Qué podés hacer con esto
+
+### Scaffold de Checkout Pro en minutos
+
+Pedile a Claude que arme el checkout para tu país y producto. El plugin sabe:
+- Las API keys correctas para sandbox vs producción
+- Los métodos de pago locales (PSE Colombia, OXXO/CoDi México, Pix Brasil, Rapipago Argentina)
+- Las convenciones de webhooks específicas de cada país
+- Los formatos de monto correctos (decimales, separadores)
+
+### Bricks — los componentes embebidos
+
+Si querés un checkout más customizable que Checkout Pro, MP ofrece "Bricks" (componentes prefabricados que integrás en tu UI). El plugin sabe cuáles existen y cómo enchufarlos.
+
+### QR para pagos físicos
+
+Si tu negocio tiene componente offline (tienda física, restaurant, evento), MP tiene QR Pago. El plugin arma la integración del lado server + el endpoint que genera el QR.
+
+### Suscripciones recurrentes
+
+`Subscriptions` para SaaS o membership. El plugin arma el flow completo: crear plan → suscribir cliente → manejar renovaciones → manejar fallos de pago → cancelaciones. Cubre los 7 países con sus particularidades.
+
+### Marketplace (split de pagos)
+
+Si construís un marketplace donde varios vendedores reciben pagos, MP tiene producto específico. El plugin maneja el split y la liquidación.
+
+### Review y maintain
+
+Cuando MP saca un cambio (cambian un webhook, deprecan un endpoint, mejoran un método de pago), el plugin te lo dice y te ayuda a migrar. Esto, mantenido por el propio equipo de MP, es oro: no dependés de un dev de la comunidad que se entera tarde.
+
+## Beneficios reales
+
+- **Oficial** — la única garantía real de que sigue las convenciones de MP.
+- **7 países cubiertos** con sus particularidades cada uno.
+- **13 productos** = cobertura amplia del catálogo MP.
+- **Mantenido por el equipo de Developer Experience** de MP.
+- **Scaffold + review + maintain** — los tres momentos cubiertos.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no operás en LATAM:** Mercado Pago no procesa fuera de los 7 países cubiertos. Para EU/US, Stripe es la opción.
+- **Si necesitás múltiples proveedores en paralelo:** este plugin es MP-only. Para combinarlo con Stripe / Wompi / Lemon Squeezy, [agente-pagokit](/boveda/agente-pagokit) elige automáticamente.
+- **Si tu integración ya está hecha y funcionando:** el valor está en scaffold y mantenance. Si ya tenés algo en prod estable, no urge.
+- **Si necesitás cripto / blockchain:** MP no procesa cripto. Mirá otros plugins (ej. [Pinion OS](/boveda/plugin-pinion-os) para x402 micropagos).
+- **Requiere cuenta MP activa** con API keys generadas. El plugin no te crea la cuenta.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Mercado Pago](https://www.aitmpl.com/plugins/mercadopago-claude-marketplace) — comando exacto.
+- **Repo en GitHub:** [mercadopago/mercadopago-claude-marketplace](https://github.com/mercadopago/mercadopago-claude-marketplace) — código y mantenimiento.
+- **Docs oficiales de MP:** [mercadopago.com/developers](https://www.mercadopago.com/developers) — referencia de APIs, productos y países.
+
+## Recursos relacionados
+
+- [Agente PagoKit](/boveda/agente-pagokit) — alternativa multi-proveedor (Stripe, MP, Wompi, Lemon Squeezy). Compará si vendés en varios mercados.
+- [All Deploy](/boveda/all-deploy) — para publicar tu integración a producción una vez armada.
+- [Claude Cowork & Code](/boveda/claude-cowork-code) — para decidir si tu integración la armas en Code o consultás desde Cowork.

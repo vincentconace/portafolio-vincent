@@ -1,0 +1,244 @@
+---
+title: "Dominar Codex en 1 hora si ya usás Claude Code — los 5 movimientos"
+description: "Codex de OpenAI usa el mismo paradigma que Claude Code. Si ya manejás Claude Code, en 1 hora dominás Codex: AGENTS.md (su CLAUDE.md), plan mode, skills, browser use y deploy. Los 5 movimientos y los gotchas que matan tiempo el primer día."
+difficulty: "intermedio"
+category: "skills"
+tools: ["codex", "openai"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["claude-codex-equipo", "codex-plugin-hack", "guia-claude-code-completa"]
+---
+
+## La transferencia mental
+
+Si ya usás Claude Code, el modelo mental se transfiere casi 1:1 a Codex de OpenAI. **No es otra herramienta — es la misma idea con cambio de nombre**:
+
+| Concepto | Claude Code | Codex |
+|----------|-------------|-------|
+| Manifest del proyecto | `CLAUDE.md` | `AGENTS.md` |
+| Activar plan mode | `Shift+Tab` 2× | `Shift+Tab` (verificá) |
+| Comportamientos reusables | skills | skills (mismo nombre) |
+| Modelo por debajo | Claude (Opus/Sonnet/Haiku) | GPT-5.5 |
+| Hooks / automatización | hooks de Claude Code | hooks de Codex |
+| MCPs | Model Context Protocol | MCPs (mismo estándar) |
+
+**Si dominás Claude Code, en 1 hora dominás Codex**. Lo que sigue son los 5 movimientos para acelerar esa hora.
+
+---
+
+## Movimiento 1 — `AGENTS.md` (el CLAUDE.md de Codex)
+
+### El truco
+
+No lo escribís a mano. **Pedile a Codex que lo escriba**:
+
+```
+> Sos nuevo en este proyecto. Explorá el repo y armame un AGENTS.md
+  completo con:
+  - Stack y versiones detectadas
+  - Convenciones que veo en el código (naming, formato)
+  - Comandos comunes (npm scripts, deploy, etc.)
+  - Restricciones obvias (legacy, archivos generados)
+  - Estructura de carpetas con propósito de cada una
+
+  Guardalo en raíz del proyecto.
+```
+
+Codex hace el equivalente a `/init` de Claude Code → archivo bien armado en 2-3 min.
+
+### Después editás
+
+El archivo generado es el 70%. Lo editás:
+- Convenciones del equipo no obvias del código
+- Lo que NO se debe tocar
+- Decisiones de arquitectura con su porqué
+
+5 minutos de edición → archivo que Codex va a leer en cada sesión.
+
+### El gotcha
+
+`AGENTS.md` se lee al inicio de cada sesión, pero si lo cambiás durante la sesión, **no se recarga automáticamente**. Reiniciá Codex para que tome el archivo actualizado.
+
+---
+
+## Movimiento 2 — Plan Mode
+
+### Cómo se activa
+
+`Shift+Tab` (en algunas versiones puede ser `/plan`). Verificá en tu setup.
+
+### Cómo funciona
+
+Igual que en Claude Code (cubierto en [Plan Mode — el momento donde decidís](/boveda/plan-mode-auditar)):
+
+- Codex propone el plan en texto
+- No ejecuta nada
+- Vos validás → recién ahí ejecuta
+
+### La diferencia con Claude
+
+Codex con GPT-5.5 tiende a:
+- Ser **más conciso** en el plan (menos texto, más punto)
+- **Defaultear a más libs externas** (Claude tiende a soluciones más nativas)
+- **Iterar más rápido** en cambios chicos
+
+Conocer esos tilts te ayuda a auditar el plan con criterio.
+
+---
+
+## Movimiento 3 — Skills
+
+### Estructura
+
+`~/.codex/skills/<nombre>/SKILL.md` (o equivalente — verificá la versión).
+
+Formato idéntico a las skills de Claude Code (frontmatter `name` + `description`, cuerpo con instrucciones).
+
+### El truco — porteás tus skills de Claude Code
+
+Si ya tenés skills en `~/.claude/skills/`, podés:
+
+```bash
+cp -r ~/.claude/skills/code-reviewer ~/.codex/skills/code-reviewer
+```
+
+**Funcionan tal cual** en el 90% de los casos. El 10% restante son cosas específicas de cada modelo (ej. Claude entiende `ultrathink`, GPT no).
+
+### Tunear para Codex específicamente
+
+Si una skill funciona OK pero no perfecto, **ajustá el SKILL.md**:
+
+- GPT responde mejor a estructura más numerada / explícita
+- Reglas negativas (qué NO hacer) son más necesarias en GPT
+- Los formats de output convienen ser MUY explícitos
+
+Después de 2-3 iteraciones, tus skills Codex-tuned ganan a las portadas tal cual.
+
+---
+
+## Movimiento 4 — Browser Use
+
+### Qué es
+
+Codex tiene **browser use** built-in. Puede:
+- Abrir páginas
+- Hacer clicks
+- Llenar formularios
+- Sacar screenshots
+- Validar lo que ve
+
+Equivalente conceptual al "Computer Use" de Claude, pero **más enfocado en browser** (Claude puede operar otras apps también).
+
+### Cuándo conviene
+
+- Testing E2E sin armar Playwright a mano
+- Scraping interactivo (no sirve HTTP fetch porque el site es SPA)
+- QA visual de tu propia app
+- Tareas que requieren autenticación browser-side
+
+### Cómo se invoca
+
+```
+> Abrí https://miapp.com/checkout, completá el flow de prueba:
+  - Carrito con 2 items
+  - Email: test@test.com
+  - Tarjeta: 4242 4242 4242 4242
+  - Cualquier dirección
+
+  Sacá screenshot en cada paso. Si algo falla, decime qué paso y por qué.
+```
+
+Codex lo hace en navegador real, te trae los screenshots, reporta.
+
+### El gotcha
+
+Browser use **consume cuota más rápido** que tareas normales. Cada acción es una llamada al modelo + procesamiento de la página. **No abuses** para tareas que `curl` + parse resuelven.
+
+---
+
+## Movimiento 5 — Deploy
+
+### Qué hace Codex bien acá
+
+Genera configs de deploy + ejecuta:
+
+```
+> Mi app Next.js está lista. Querés deployar a Vercel:
+  1. Verificá que build pasa local
+  2. Verificá variables de entorno necesarias
+  3. Configurá las que faltan
+  4. Deploy preview primero
+  5. Mostrame la URL del preview
+  6. Si apruebo, promové a producción
+```
+
+Codex maneja el flow completo. Útil cuando no querés tipear `vercel`, `vercel --prod`, etc.
+
+### El gotcha
+
+Codex puede **inventar configs** si no las encuentra. Especialmente con providers menos populares. **Verificá los configs generados** antes de aplicar.
+
+---
+
+## Los gotchas que matan 40 min el primer día
+
+### 1. `AGENTS.md` vs `CLAUDE.md`
+
+Si trabajás en repo que tiene los dos, **Codex lee solo AGENTS.md**. Tenés que duplicar o symlink:
+
+```bash
+ln -s CLAUDE.md AGENTS.md
+```
+
+Symlink mantiene los dos sincronizados.
+
+### 2. Auth token
+
+Codex requiere login a OpenAI. Si tu cuenta de ChatGPT no tiene plan que incluya Codex, **no funciona**. ChatGPT Plus ($20) lo incluye en planes recientes; Free no.
+
+### 3. Permissions
+
+Codex tiene su propio sistema de permissions. **No comparte allowlist** con Claude Code. Configurá las dos por separado.
+
+### 4. MCPs
+
+Si tenés MCPs configurados para Claude, hay que duplicarlos en config de Codex. **Mismo protocolo MCP**, distinto archivo de config.
+
+### 5. Modelo
+
+Codex usa GPT-5.5 por default. Si querés modelo distinto (mini para ahorrar, max para difícil), configurá explícitamente. Default puede no ser óptimo para tu caso.
+
+---
+
+## Cuándo Codex gana sobre Claude Code
+
+Honestidad: cada uno tiene su perfil:
+
+| Tarea | Quién gana típicamente |
+|-------|------------------------|
+| Razonamiento sobre arquitectura | Claude |
+| Refactor estructural complejo | Claude |
+| Edits mecánicos en batch | Codex (más rápido) |
+| Browser use intensivo | Codex (más afinado) |
+| Trabajo paralelo masivo | Codex (mejor scaling) |
+| Tareas creativas | Claude |
+| Manejo de contexto muy largo | Claude |
+| Generación de boilerplate | Codex |
+
+Quien usa **los dos** (con el [hack del plugin](/boveda/codex-plugin-hack)) saca más jugo que quien usa uno solo.
+
+---
+
+## La regla práctica
+
+Si todo tu trabajo cabe en 1 modelo, **quedate con el que ya manejás**. No cambies por curiosidad.
+
+Si notás que **rebotás contra límites de plan** o **algunas tareas te gustaría tener otro criterio**, sumá el otro. Los $20 del segundo plan se pagan rápido si el split de trabajo funciona.
+
+---
+
+## Próximos pasos
+
+- Para el patrón de combinar los dos con Claude planeando y Codex ejecutando, [Claude + Codex en equipo](/boveda/claude-codex-equipo)
+- Para el plugin oficial que conecta los dos en una sesión, [Claude + Codex hack](/boveda/codex-plugin-hack)
+- Si arrancás con Claude Code primero, [guía completa](/boveda/guia-claude-code-completa)

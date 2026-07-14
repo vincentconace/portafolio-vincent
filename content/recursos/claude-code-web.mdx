@@ -1,0 +1,262 @@
+---
+title: "Claude Code en web y celular — sin instalar nada"
+description: "Claude Code ya corre desde el navegador en claude.ai/code y desde el celular. Conectás tu repo, le mandás la tarea, y cuando llegás a tu compu el comando teleport baja la sesión al terminal con historial y rama lista. Flujo completo y gotchas."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "8 min"
+relatedSlugs: ["guia-claude-code-completa", "claude-canales-tg-discord", "agent-view-paralelo"]
+---
+
+## Qué cambió
+
+Antes Claude Code era **exclusivamente terminal**. Necesitabas:
+- Compu con Node 18+
+- Terminal abierto
+- Sesión local
+- Tu repo cloneado localmente
+
+Ahora hay 3 entradas distintas, **todas a la misma sesión**:
+
+| Entrada | Dónde |
+|---------|-------|
+| **Web** | `claude.ai/code` desde navegador |
+| **Celular** | App de Claude desde iOS / Android |
+| **Terminal** | `claude` desde tu compu como siempre |
+
+Las tres se sincronizan vía el comando `--teleport`. Empezás en el celular, seguís en la web, terminás en la terminal. **Mismo historial, mismo branch, sin perder contexto.**
+
+---
+
+## Setup
+
+### Requisitos
+
+- Plan Pro+ de Claude (no funciona en free)
+- Cuenta de GitHub conectada
+- Repo accesible (público o privado con permisos)
+
+### Conectar tu primer repo
+
+<Step number={1} title="Web">
+
+1. Entrá a `claude.ai/code` desde el navegador
+2. "Connect GitHub" → autorizás
+3. Seleccionás los repos que querés exponer a Claude Code (no todos, solo los que vayas a usar)
+4. Ya estás listo
+
+</Step>
+
+<Step number={2} title="Celular">
+
+1. Abrí la app de Claude en tu teléfono
+2. Tab "Code" → te lleva al mismo dashboard
+3. Los repos conectados ya aparecen
+
+</Step>
+
+<Step number={3} title="Terminal (si lo tenés instalado)" last>
+
+Normal:
+
+```bash
+claude
+```
+
+Ya viste antes. Lo nuevo: `claude --teleport` que **trae la sesión de web/celular** al terminal.
+
+</Step>
+
+---
+
+## Flujo típico — el "follow me"
+
+El caso de uso estrella:
+
+### En el subte / camino al trabajo (celular)
+
+```
+[App de Claude en iPhone]
+Vos: Voy a empezar la feature de notifications. Mirá el repo,
+     analizá el módulo lib/notifs/, y proponé el plan.
+
+Claude (en celular):
+[Lee el módulo]
+[Genera plan en chat]
+"Voy a tocar 4 archivos: ...
+ Approach: ...
+ ¿Empezamos por X o Y primero?"
+
+Vos: Por X. Empezá.
+
+[Claude empieza a trabajar en el celular, te muestra el progreso]
+```
+
+### Llegás a la oficina (web)
+
+```
+[claude.ai/code en navegador]
+Abrís → tu sesión sigue ahí. Ves todo el contexto.
+
+Claude: "Listo X, voy con Y. Mostrame los tests que querés conservar."
+
+[Vos respondés desde la web mucho más cómodo que celular]
+```
+
+### Te sentás en la compu (terminal)
+
+```bash
+$ claude --teleport
+```
+
+Te aparece la sesión completa en terminal. Branch ya en `feature/notifs`, historial intacto, contexto cargado. **Seguís donde dejaste, sin perder un byte.**
+
+---
+
+## Los 3 contextos donde usar cada uno
+
+### Web — para trabajo extenso
+
+✅ Sesiones largas en oficina/casa
+✅ Code review en pantalla grande
+✅ Ediciones de varios archivos
+✅ Cuando no querés instalar nada (compu ajena)
+
+❌ Operación rápida (lent para tareas chicas)
+
+### Celular — para queries y comandos
+
+✅ "¿Cómo va la tarea X?"
+✅ "Pausá lo que estás haciendo"
+✅ Aprobar / rechazar acciones específicas
+✅ Recibir notificaciones de tareas largas
+
+❌ Escribir prompts complejos (teclado pequeño)
+❌ Code review profundo
+
+### Terminal — para trabajo serio
+
+✅ Sesiones de coding intensas
+✅ Hooks y skills configurados localmente
+✅ Cuando necesitás performance máxima
+✅ Workflow de power-user con keybindings
+
+❌ Cuando no tenés tu compu
+
+---
+
+## El comando `--teleport`
+
+Variantes:
+
+```bash
+claude --teleport           # baja la última sesión activa
+claude --teleport <id>      # baja sesión específica
+claude --tp                 # alias corto
+/teleport                   # desde adentro de Claude Code
+```
+
+Lo que pasa cuando teleportás:
+
+1. Claude clona el branch correspondiente en tu local (si no estaba)
+2. Restaura el contexto de la conversación
+3. Te muestra el último mensaje y el estado
+4. Podés seguir tipeando como si nada
+
+---
+
+## Casos donde brilla
+
+### 1. Productividad asíncrona
+
+Tu equipo te pasa un bug a las 9pm. Le pediste a Claude que lo arregle desde tu cama (celular). A la mañana en la oficina, abrís la web, validás. Mergeás. **8 horas trabajadas sin vos**.
+
+### 2. Pair programming distribuido
+
+Vos en la oficina (web), tu colega en otra ciudad (web). Ambos viendo la misma sesión en tiempo real. Comments en line, decisiones compartidas.
+
+### 3. "Heredar" sesión de otro dev
+
+Tu compañero empezó una feature, se fue de vacaciones. Te pasa el link de la sesión, vos teleportás a tu terminal. Tenés todo el contexto sin que te explique.
+
+### 4. Mobile-first triage
+
+Como dev de guardia, te llaman por un incidente. Desde el celular: investigás logs, identificás el bug, **decidís si necesitás tu laptop** o si Claude puede resolverlo solo desde web.
+
+---
+
+## Gotchas que te van a frenar la primera vez
+
+### 1. El primer load es lento
+
+La primera vez que abrís web/celular, **carga el repo entero**. Para repos grandes (>5k archivos), puede tardar 30-60 segundos. Una vez cacheado, ya no.
+
+### 2. Cambios uncommitted no se sincronizan
+
+Si en tu local tenés cambios uncommitted y abrís la web, **la web no los ve**. Commit primero (aunque sea WIP) si querés sincronizar.
+
+### 3. Plan paid requerido
+
+Free tier no incluye Claude Code en web/celular. Necesitás Pro+.
+
+### 4. Permisos limitados en mobile
+
+En celular, **operaciones destructivas pueden requerir confirmación extra**. Por seguridad — no querés tipear `rm -rf` con autocorrector del teléfono.
+
+### 5. Notificaciones — ojo con el opt-in
+
+Por default no recibís notif push cuando Claude termina tareas. Activalo en Settings si querés que te avise.
+
+### 6. Repos privados de organizaciones
+
+Tu cuenta personal de GitHub puede no tener acceso a repos de tu org. Tu org admin debe **aprobar Claude Code** en los settings de la organización.
+
+---
+
+## Combinación con canales
+
+Si activás también [Claude Canales (Telegram/Discord)](/boveda/claude-canales-tg-discord), tenés **4 entradas**:
+
+| Entrada | Cuándo |
+|---------|--------|
+| Web | Sesión seria en compu sin instalar |
+| Celular | App nativa con notif |
+| Terminal | Power user en compu |
+| Telegram/Discord | Notif y comandos rápidos desde donde sea |
+
+La combinación más usada: **terminal + Telegram**. Trabajás en terminal cuando estás en la compu, recibís notif y mandás comandos cuando no.
+
+---
+
+## Lo que NO podés hacer aún
+
+Algunas limitaciones de la versión web/celular:
+
+❌ **Skills custom** — las locales no se cargan en web (todavía)
+❌ **MCPs locales** — los que corren en tu compu solo viven ahí
+❌ **Hooks** — algunos no aplican en web
+❌ **Computer use** — solo desde desktop, no web/celular
+
+Si dependés mucho de skills/MCPs/hooks, la web/celular sirve para **queries y triage**, no para tu workflow completo. Para eso seguís necesitando terminal.
+
+---
+
+## Cuándo conviene este patrón
+
+✅ Te movés mucho entre dispositivos
+✅ Trabajás asincrónico con equipo
+✅ Querés "Claude trabajando" sin tu compu prendida
+✅ Operás repos desde lugares donde no podés instalar nada
+
+❌ Tu workflow depende de skills/MCPs/hooks (terminal sigue siendo primary)
+❌ Sesiones súper largas con mucho contexto (web tiene ms más latencia)
+❌ Compliance estricto donde no podés exponer repos a la nube
+
+---
+
+## Próximos pasos
+
+- Si querés notificaciones / control desde el celular, [Claude Canales](/boveda/claude-canales-tg-discord)
+- Para tener Claude operando 24/7 sin tu compu, [Managed Agents](/boveda/agentes-managed)
+- Para el setup base de Claude Code en terminal, [guía completa](/boveda/guia-claude-code-completa)

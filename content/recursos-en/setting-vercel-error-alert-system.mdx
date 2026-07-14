@@ -1,0 +1,83 @@
+---
+title: "Setting Vercel Error Alert System — desktop notifications when builds fail"
+description: "A setting with 97 installs. Statusline + smart alert system. Tracks deployment failures and build issues. Sends desktop notifications when it detects errors. Anti 'I found out too late'."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-vercel-deployment-monitor", "hook-desktop-notification-on-stop", "hook-deployment-health-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/vercel-error-alert-system"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-error-alert-system.json"
+---
+
+## What it is
+
+Statusline + alert system for Vercel. When it detects deployment failures or build issues:
+- **Statusline** shows the error state
+- **Desktop notification** automatically
+- **Tracking** persisted for analysis
+
+Anti "the deploy failed 30 min ago and I'm only finding out now".
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 97 |
+| Features | Statusline + desktop notif + error tracking |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/vercel-error-alert-system
+```
+
+For Claude:
+
+```
+I installed the statusline/vercel-error-alert-system setting. Test it: do
+a deploy with an obviously broken build error. A notification
+should arrive.
+```
+
+## What you can do with this
+
+### Catch failures instantly
+
+While you're coding, a deploy fails → desktop notification → you go fix it.
+
+### For long sessions with auto-deploys
+
+If you have auto-deploy + a productive session, this setting catches the problems without breaking your focus.
+
+### Combo with [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor)
+
+Deployment Monitor for normal status. Error Alert for anomalies. But they're alternatives (one statusline).
+
+### Combo with [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor)
+
+The setting covers the statusline. The hook covers execution-time. A double net.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **Without Vercel:** doesn't apply.
+- **If you disabled OS notifications:** the alert won't arrive.
+- **For infrequent deploys:** less useful.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Vercel Error Alert System Setting](https://www.aitmpl.com/component/settings/statusline/vercel-error-alert-system) — exact command.
+- **JSON config:** [vercel-error-alert-system.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-error-alert-system.json).
+
+## Related resources
+
+- [Vercel Deployment Monitor Setting](/boveda/setting-vercel-deployment-monitor) — normal status without focusing on errors.
+- [Desktop Notification On Stop Hook](/boveda/hook-desktop-notification-on-stop) — general notifications.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — post-deploy observability.

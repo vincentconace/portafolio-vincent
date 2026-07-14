@@ -1,0 +1,92 @@
+---
+title: "Hook Security Scanner — vulns + secrets post-edit (1,365 installs, top 4)"
+description: "Hook with 1,365 installs (#4 in the catalog). Scans code for vulnerabilities and secrets after every change. Uses multiple security tools for broad detection. Defense in depth for security-conscious shops."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-secret-scanner", "hook-dependency-checker", "mcp-codacy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/security-scanner"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/security-scanner.json"
+---
+
+## What it is
+
+**#4 in the entire catalog (1,365 installs).** After every file modification, it scans for:
+
+- **Vulnerabilities** — insecure code patterns
+- **Secrets** — hardcoded API keys (similar to [Secret Scanner](/boveda/hook-secret-scanner) but broader)
+- **Other security smells**
+
+It uses multiple security tools under the hood for broad coverage.
+
+Hook event: `PostToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `security` |
+| Installs | **1,365 (#4 in the catalog)** |
+| Hook event | `PostToolUse` |
+| Tools | Multiple security scanners |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook security/security-scanner
+```
+
+For Claude:
+
+```
+I installed the security/security-scanner hook. Show me the scanners it
+uses under the hood. After an edit, it should run the scan and report
+findings.
+```
+
+## What you can do with it
+
+### Defense in depth post-edit
+
+Every one of Claude's modifications goes through the scan. If it introduces a security smell (SQL injection pattern, eval with unvalidated input, etc.), the hook warns you.
+
+### Combo with [Secret Scanner](/boveda/hook-secret-scanner)
+
+Secret Scanner pre-commit, Security Scanner post-edit. Redundant layers.
+
+### Combo with [Dependency Checker](/boveda/hook-dependency-checker)
+
+Dep Checker for supply chain (1,729 installs — the top one). Security Scanner for your own code. Complete coverage.
+
+### Combo with [Codacy MCP](/boveda/mcp-codacy)
+
+Codacy for deep platform analysis. Security Scanner for immediate feedback. They pair well.
+
+### For autonomous sessions
+
+A long `/goal`: Claude won't introduce vulns without you noticing.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **Latency:** a multi-tool scan can be slow. Every edit triggers it.
+- **False positives:** some flagged patterns may be legitimate. Validate the findings.
+- **No scanners installed:** the hook depends on external tools.
+- **If you already have a security pipeline in CI:** running it locally too can be overhead.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Security Scanner Hook](https://www.aitmpl.com/component/hooks/security/security-scanner) — exact command.
+- **JSON config:** [security-scanner.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/security-scanner.json).
+
+## Related resources
+
+- [Secret Scanner Hook](/boveda/hook-secret-scanner) — specific to secrets pre-commit.
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — supply chain, the #1 in the catalog.
+- [Codacy MCP](/boveda/mcp-codacy) — deep platform analysis.

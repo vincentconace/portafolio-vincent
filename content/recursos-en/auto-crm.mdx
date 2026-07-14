@@ -1,0 +1,301 @@
+---
+title: "Auto-CRM — your own CRM running locally with Claude Code"
+description: "An open-source CRM that runs 100% on your machine, no Salesforce, no HubSpot, no monthly fee. Claude Code tailors it to your business. When self-hosted makes sense, when Notion/Airtable are enough, and when you actually need real SaaS."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["claude-small-business", "ecosistema-de-agentes", "memoria-claude-code"]
+---
+
+## What it solves
+
+For a lot of small businesses and freelancers, commercial CRMs are **too much**:
+
+| Commercial CRM | Your actual need |
+|---------------|-------------------|
+| Salesforce | 200 active clients |
+| HubSpot | 10 open deals per month |
+| Pipedrive | Knowing who's who + status is enough for you |
+| **Cost: $30-100/user/month** | **What you need fits in a spreadsheet** |
+
+Auto-CRM goes the other way: **a minimal, open-source CRM, running 100% on your machine**, **customized for your specific business** by Claude Code. No monthly fee, no vendor lock-in, no sending your data to third parties.
+
+> It's not for everyone. If you handle 5000+ deals, a team of 20+ salespeople, complex integrations → get a real CRM. For freelancers, consultants, and small businesses up to ~10 people, it's more than enough.
+
+---
+
+## What it looks like inside
+
+Typical structure that Auto-CRM sets up for you:
+
+```
+mi-crm/
+├── data/
+│   ├── personas.json       ← contacts
+│   ├── empresas.json       ← accounts
+│   ├── deals.json          ← opportunities
+│   └── interacciones.json  ← history
+├── views/
+│   ├── pipeline.md         ← current pipeline view
+│   ├── follow-ups.md       ← what's due this week
+│   └── dashboard.md        ← metrics
+└── CLAUDE.md               ← rules for how it operates
+```
+
+**Each entity is a JSON / markdown file**. Versioned in git. Backup is trivial.
+
+Claude Code knows the structure (via `CLAUDE.md`) and helps you:
+- Add contacts / deals
+- Update status
+- Generate reports
+- Remember follow-ups
+
+---
+
+## Setup
+
+### The 3 questions Claude asks to customize it
+
+<Step number={1} title="About your business">
+
+```
+- Do you sell products or services?
+- Typical sales cycle (days/weeks/months)?
+- How many active deals do you handle in parallel?
+- Do you work solo or with a team?
+- Pipeline stages? (e.g.: lead → qualified → proposal → close)
+```
+
+</Step>
+
+<Step number={2} title="About your data">
+
+```
+- Do you have existing data to import? (contacts CSV, Excel, etc.)
+- Which fields matter to you per contact? (name, company, role, etc.)
+- Which fields per deal? (amount, expected close date, probability, etc.)
+```
+
+</Step>
+
+<Step number={3} title="About the flow" last>
+
+```
+- When do you want to be reminded of a follow-up? (X days after the last interaction)
+- Do you want automatic reports? (daily / weekly)
+- Are you going to connect with email / WhatsApp?
+- What do the executive reports your boss expects look like (if applicable)?
+```
+
+</Step>
+
+With those answers, Claude builds the `CLAUDE.md` specific to your CRM. The JSON file structure is ready for you to load data.
+
+---
+
+## How you use it day to day
+
+### Add a new contact
+
+```
+> Add a new contact:
+  Juan Pérez, CEO of Acme Argentina.
+  I met him at Monday's event.
+  Email: juan@acme.com.ar
+  Interested in our premium product.
+```
+
+Claude updates `data/personas.json` with the new entry. Then it shows you the JSON to confirm.
+
+### Create a deal
+
+```
+> New deal: Acme asked me for a quote for 5 licenses of the enterprise
+  plan. I'm at the "proposal sent" stage.
+  Close it for me this Friday, ~$15k.
+```
+
+Claude:
+1. Checks that Acme exists in accounts (if not, it asks you)
+2. Creates the deal in `data/deals.json`
+3. Links it to Juan Pérez
+4. Confirms
+
+### Pipeline view
+
+```
+> Show me the current pipeline.
+```
+
+Claude reads the JSON files and generates a table:
+
+| Deal | Stage | Amount | Expected close | Last interaction |
+|------|-------|-------|------------------|---------------------|
+| Acme - 5 licenses | Proposal | $15k | 2026-05-30 | 2026-05-26 |
+| Beta - Custom | Negotiation | $42k | 2026-06-15 | 2026-05-24 |
+| Gamma - Trial | Qualified | $8k | 2026-06-10 | 2026-05-25 |
+
+### Overdue follow-ups
+
+```
+> Who should I contact today?
+```
+
+Claude cross-references last-interaction dates against rules:
+
+```
+🔴 Overdue (>14 days without contact):
+- Delta Corp (Juan García) — last interaction 18 days ago
+
+🟡 Today:
+- Acme (Juan Pérez) — follow-up scheduled for today
+- Beta SA (María Lopez) — next proposal due
+
+🟢 This week:
+- 4 more
+```
+
+### Weekly report
+
+```
+> This week's report.
+```
+
+Claude puts it together:
+
+- Deals moved between stages
+- New contacts added
+- Current pipeline amount vs previous week
+- Top 3 priorities for next week
+
+---
+
+## Cases where Auto-CRM wins
+
+### 1. Solo freelancer / consultant
+
+You handle 20-50 relevant contacts. Salesforce is overkill. Notion works but **it doesn't remind you of anything automatically**. Auto-CRM gives you a simple structure + minimal automation.
+
+### 2. Small business (1-5 people)
+
+You don't want to pay $200-500/month for a CRM. Auto-CRM **lives on your machine/server**, shared via git if needed.
+
+### 3. Solo salesperson / Founder selling
+
+Until you hire a VP of Sales, Auto-CRM is enough. When you grow, **you export to a real CRM** (the JSON files are trivially migratable).
+
+### 4. Strict privacy
+
+A client in a regulated industry that doesn't want its data in HubSpot. Auto-CRM runs on your hardware. Zero data in external cloud.
+
+---
+
+## When it's NOT a good fit
+
+### 1. Large team with intensive coordination
+
+If 8 salespeople touch the same deals → you need real concurrency, locking, audit. Auto-CRM isn't that.
+
+### 2. Complex integrations with many systems
+
+Commercial CRMs have integration marketplaces. With Auto-CRM you have to build them by hand (with Claude Code, but by hand all the same).
+
+### 3. Complex executive reporting
+
+If your CFO expects dashboards with drill-down, Auto-CRM falls short. It's **operational**, not analytical.
+
+### 4. Strict SLA and compliance
+
+If you're required to have "99.9% uptime CRM, certified audit trail, SOC2", **this isn't it**. You need SaaS with an SLA.
+
+---
+
+## vs common alternatives
+
+| | Auto-CRM | Notion | Airtable | HubSpot |
+|---|----------|--------|----------|---------|
+| Cost | $0 | $10/month | $20/month | $50+/month |
+| Customization | Total with Claude | High | Medium | Low |
+| Privacy (local) | ✅ | ❌ | ❌ | ❌ |
+| Setup time | 30 min | 2-4h | 2-4h | 1-2 days |
+| For large teams | ❌ | medium | good | excellent |
+| Integration marketplace | ❌ | medium | good | excellent |
+| Reminds you of follow-ups | with Claude | manual | with automations | yes |
+
+**Auto-CRM's sweet spot**: privacy + cost + extreme customization. For 1-3 people who value not depending on SaaS.
+
+---
+
+## Useful patterns
+
+### Pattern 1 — Sync with Gmail
+
+Every morning:
+
+```
+> Read my emails from the last 24h. For each one that's from a
+  contact I already have in personas.json:
+  - Add the interaction to interacciones.json
+  - If the content suggests movement in the deal, update it
+
+For emails from NEW contacts:
+  - Show me the email, and if I want to add it just say "yes" and you add it.
+```
+
+Zero data loss between inbox and CRM.
+
+### Pattern 2 — Automatic weekly report
+
+[Hook](/boveda/hooks-automatizacion) `SessionStart` every Monday:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          { "type": "command", "command": "test $(date +%u) -eq 1 && echo 'Generate weekly CRM report on startup'" }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Pattern 3 — Auto-CRM + WhatsApp AgentKit
+
+Combo:
+- A client writes via WhatsApp → [WhatsApp AgentKit](/boveda/whatsapp-agentkit) responds
+- If they qualify as a lead → the agent adds them to Auto-CRM automatically
+- Auto-CRM reminds you of the follow-up in X days
+
+---
+
+## Anti-patterns
+
+### 1. Wanting big-CRM features
+
+Auto-CRM is **deliberately minimal**. If your "needs" list has 20 items, it's not for you.
+
+### 2. Not backing up
+
+Auto-CRM runs locally. If your disk dies, you lose everything. **Daily git push** or automatic backup.
+
+### 3. Loading a lot of data without curating
+
+Importing 5000 old contacts without curating = noise. Start with your active list (50-200). Grow organically.
+
+### 4. Not reviewing what Claude loads
+
+Claude can misread "a $15 deal" vs "a $1500 deal". **Review critical entries** before trusting them.
+
+---
+
+## Next steps
+
+- To automate your inbox and its connection to the CRM, [9 prompts for Cowork](/boveda/nueve-prompts-cowork)
+- If you need more than a CRM (15 business skills), [Claude Small Business](/boveda/claude-small-business)
+- To connect WhatsApp to this flow, [WhatsApp AgentKit](/boveda/whatsapp-agentkit)

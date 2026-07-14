@@ -1,0 +1,345 @@
+---
+title: "5 skills que convierten a Claude en tu equipo de devs entero"
+description: "Super Power, Systematic Debugging, File Search, Context Optimizer y Skill Creator. Las 5 son gratis y open source. Juntas reemplazan tech lead + debugger senior + búsqueda eficiente + optimizador de tokens + fábrica de skills. Setup en 10 minutos."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["mejores-practicas-claude", "ecosistema-de-agentes", "cinco-habilidades-marketing"]
+---
+
+## La premisa
+
+Un equipo de desarrollo decente requiere 4-5 roles diferentes:
+- Tech lead que planea y reparte tareas
+- Senior debugger cuando los errores se ponen feos
+- Sistema de búsqueda eficiente para no perderse en code base
+- Alguien que cuide el budget (tokens, en nuestro caso)
+- Build engineer que arma tooling custom
+
+5 skills open source instaladas en Claude Code te dan un **equivalente funcional** del 70-80% de ese equipo. Las 5 son gratis.
+
+| Skill | Rol | Para qué |
+|-------|-----|----------|
+| **Super Power** | Tech Lead / Arquitecto | Planea, reparte, revisa, testea |
+| **Systematic Debugging** | Senior debugger | Encuentra causa raíz, no parches |
+| **File Search** | Búsqueda rápida | Localiza archivos sin gastar tokens |
+| **Context Optimizer** | Token saver | Hace rendir tu plan más tiempo |
+| **Skill Creator** | Skill factory | Crea skills custom en minutos |
+
+---
+
+## Pre-requisitos
+
+- Claude Code v2.x ([setup zero](/boveda/claude-code-setup-zero))
+- Terminal abierta
+- Plan con créditos activos
+- Git instalado
+
+---
+
+## Skill 1 — Super Power
+
+### Qué hace
+
+**El más ambicioso del listado**. ~150k estrellas. Convierte a Claude en un orquestador que:
+
+1. **Planea** el proyecto antes de tocar código (spec-first)
+2. **Crea sub-agentes** especializados para cada tarea
+3. **Reparte tareas** entre ellos (en paralelo cuando es posible)
+4. **Revisa el código** de cada sub-agente automáticamente
+5. **Testea todo** antes de entregarte
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/obra/superpowers
+```
+
+### Cuándo brilla
+
+- Proyectos grandes (>500 LOC) donde quieres delegar de a poco
+- Tareas que tomarían **horas** y no querés supervisar paso a paso
+- Equipos que ya practican TDD (Super Power respeta RED-GREEN-REFACTOR)
+
+### Cuándo NO
+
+- Quick fixes / scripts de 1 archivo → es overkill
+- Workflow tipo "tirar prompts y ver qué sale" → Super Power te va a sentir lento
+- Tareas creativas/exploratorias sin spec clara
+
+Más detalles en [top 10 abril 2026 #2](/boveda/top-10-claude-abril-2026).
+
+---
+
+## Skill 2 — Systematic Debugging
+
+### Qué hace
+
+Cuando algo falla, el flow default de Claude (y la mayoría de LLMs) es:
+
+1. Lee el error
+2. Aplica el fix más obvio
+3. Si funciona, listo
+
+Esto **tapa el síntoma sin tocar la causa**. Resultado: el bug vuelve 2 semanas después en otra forma.
+
+Systematic Debugging cambia el flow:
+
+1. Lee el error
+2. **Hipotetiza** 3-5 causas posibles
+3. **Investiga cada una** (lee código, prueba scenarios)
+4. **Identifica la causa raíz**
+5. Aplica fix que resuelve el problema **y previene recurrencias**
+6. Documenta qué encontró para que **aprendas vos también**
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/ChrisWiles/claude-code-showcase/tree/main/.claude/skills/systematic-debugging
+```
+
+### Cuándo brilla
+
+- Bugs que ya volviste a fixar varias veces (señal de causa raíz no tocada)
+- Sistemas complejos donde el error visible es lejos del origen real
+- Debugging de race conditions, memory leaks, performance issues
+
+### Cuándo NO
+
+- Errores triviales (typo, missing import) → es sobre-ingeniería
+- Cuando solo querés que funcione **para hoy** y vas a refactorear después
+
+---
+
+## Skill 3 — File Search
+
+### Qué hace
+
+Sin este skill, cuando Claude necesita un archivo:
+
+```
+1. Lee root dir → 50 archivos
+2. Lee /src → otros 200
+3. Lee /src/components → otros 400
+4. Por fin encuentra el archivo
+   → gastó 5000 tokens solo navegando
+```
+
+File Search **pre-indexa** tu proyecto. Cuando Claude busca, va **directo**:
+
+```
+1. "User mencioned 'orders flow' — query index"
+2. Found: src/services/orders/handler.ts, src/api/orders/route.ts
+3. Lee solo esos 2 archivos
+   → gastó 200 tokens
+```
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/muratcankoylan/agent-skills-for-context-engineering
+```
+
+### Cuándo brilla
+
+- Proyectos con **>50 archivos**
+- Monorepos con varias apps/packages
+- Codebases legacy donde la estructura no es predecible
+
+### Cuándo NO
+
+- Proyectos chicos (menos de 20 archivos) — overhead del índice no compensa
+- Proyectos súper dinámicos donde la estructura cambia diariamente (índice se desactualiza)
+
+---
+
+## Skill 4 — Context Optimizer
+
+### Qué hace
+
+Claude tiene context window finito. Sin Context Optimizer, **lee de más**:
+
+- Re-lee archivos completos cuando solo necesitaba 10 líneas
+- Trae logs enormes cuando un grep filtrado bastaba
+- Mantiene en contexto cosas que ya no son relevantes
+
+Context Optimizer le enseña a:
+
+1. **Pedir solo lo necesario** (chunks específicos, no archivos enteros)
+2. **Comprimir** información ya procesada
+3. **Descartar** lo que no aporta a la tarea actual
+4. **Re-trair** solo cuando hace falta
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/ComposioHQ/awesome-claude-skills/blob/master/content-research-writer/SKILL.md
+```
+
+### Cuándo brilla
+
+- Sesiones largas (multi-hora) donde el context se llena
+- Plan con créditos limitados que querés estirar
+- Tareas que requieren cargar mucha doc/código de referencia
+
+### Cuándo NO
+
+- Sesiones cortas (menos de 30 min) donde el límite no es problema
+- Tareas que de verdad necesitan contexto amplio (refactor masivo)
+
+Combinable con [claude-mem](/boveda/top-10-claude-abril-2026) para persistir contexto entre sesiones.
+
+---
+
+## Skill 5 — Skill Creator
+
+### Qué hace
+
+Skill oficial de **Anthropic**. Crea skills custom describiéndolas en lenguaje natural.
+
+Flow:
+
+```
+> Necesito un skill que genere PDF de reportes mensuales:
+  - Inputs: fecha + database connection
+  - Procesa: queries para KPIs, charts con matplotlib
+  - Output: PDF con branding de mi empresa
+
+  Crealo.
+```
+
+Y Skill Creator:
+
+1. Te hace 3-5 preguntas de refinamiento
+2. Genera el `SKILL.md`
+3. Crea los archivos auxiliares (templates, helpers)
+4. Te lo deja **listo para producción**
+
+### Instalación
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/skill-creator
+```
+
+### Cuándo brilla
+
+- Identificaste 3+ workflows repetitivos sin skill que los cubra
+- Tu equipo tiene metodologías propias que querés codificar como skills
+
+### Cuándo NO
+
+- Si lo que querés ya existe como skill, **usá ese** (no reinventes)
+- Skills triviales (1-2 reglas) — mejor un slash command
+
+---
+
+## Instalar las 5 de un saque
+
+```bash
+claude install-skill https://github.com/obra/superpowers && \
+claude install-skill https://github.com/ChrisWiles/claude-code-showcase/tree/main/.claude/skills/systematic-debugging && \
+claude install-skill https://github.com/muratcankoylan/agent-skills-for-context-engineering && \
+claude install-skill https://github.com/ComposioHQ/awesome-claude-skills/blob/master/content-research-writer/SKILL.md && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/skill-creator
+```
+
+Verificá:
+
+```
+> /skill list
+```
+
+---
+
+## El flow combinado — caso real
+
+Tarea: "agregar feature de pagos recurrentes a SaaS Next.js mediano"
+
+```
+1. Vos: > Quiero agregar pagos recurrentes con Stripe.
+        Plan completo + ejecución.
+
+2. Super Power (arquitecto):
+   - Lee proyecto, analiza schema
+   - Plantea diseño: 3 archivos nuevos, 2 modificaciones
+   - Crea 3 sub-agentes: backend, frontend, tests
+   - Te muestra plan, espera confirmación
+
+3. Vos: > Aprobado, dale.
+
+4. Sub-agentes trabajan en paralelo.
+   File Search les permite encontrar archivos relevantes sin gastar tokens.
+   Context Optimizer mantiene cada sub-agente focused.
+
+5. Sub-agente backend tira error: "Stripe webhook signature failing".
+
+6. Systematic Debugging entra:
+   - Hipotetiza 5 causas
+   - Encuentra que el endpoint estaba detrás de body parser
+     que modificaba el raw body
+   - Fix: usar raw body parser en ese endpoint
+   - Documenta para que el equipo aprenda
+
+7. Tests pasan, Super Power te entrega:
+   - Diff revisado
+   - Tests con coverage
+   - Plan de migración para deploy
+
+8. Vos: > Skill Creator: armame un skill que automatice el setup
+          de nuevos webhooks de Stripe (raw body, signature check,
+          retry policy).
+
+9. Skill Creator: te entrega el SKILL.md en 3 minutos.
+```
+
+**Total**: 1 sesión continua, ~2-3h de trabajo de Claude, vos supervisando 2-3 checkpoints.
+
+Sin las 5 skills, esto serían **8-12 horas** repartidas en varias sesiones con re-contextualización constante.
+
+---
+
+## Anti-patrones
+
+### 1. Activar las 5 para todas las sesiones
+
+Cada skill ocupa contexto. Para tareas chicas (menos de 30 min, menos de 5 archivos), **desactivá** las que no aplican. Usá `/skill disable [nombre]`.
+
+### 2. Skill Creator para todo
+
+Si lo que necesitás ya existe como skill público (catálogo en [top 10 abril 2026](/boveda/top-10-claude-abril-2026)), **usá ese**. Crear duplicado custom es perder tiempo.
+
+### 3. Systematic Debugging sin paciencia
+
+El flow es lento por diseño — investiga antes de aplicar fix. Si te apurás y aceptás el primer fix que sugiere, **perdés todo el valor del skill**. Dejalo investigar.
+
+### 4. File Search en proyecto muy dinámico
+
+Si tu estructura cambia diariamente (nuevos packages, refactors masivos), el índice se desactualiza. Re-indexá manualmente cada N días o desactivá el skill.
+
+### 5. Super Power para fixes triviales
+
+Para "cambiame este texto" o "agregame un campo", Super Power planea durante 30s antes de hacer un cambio de 5s. Desactivalo para microtareas.
+
+---
+
+## ROI estimado
+
+| Skill | Sin skill (mes) | Con skill (mes) | Ahorro |
+|-------|-----------------|-----------------|--------|
+| Super Power | Re-trabajo por planning débil: ~10h | ~2h supervisión | ~8h |
+| Systematic Debugging | Re-debugging mismos bugs: ~5h | ~1h | ~4h |
+| File Search | Tokens en navegación: ~30% gasto plan | ~10% | ~20% del plan |
+| Context Optimizer | Sesiones cortas por context lleno: ~3h | ~1h | ~2h |
+| Skill Creator | Workflows manuales: ~6h | ~1h setup + uso | ~5h |
+
+Stack completo: **~19h/mes + 20% plan ahorrado**. Para devs intensivos, equivale a $200-400/mes en valor.
+
+---
+
+## Próximos pasos
+
+- Para principios generales que aplican a todos estos skills, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para escalar a ecosistema multi-agente, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para el equivalente en marketing, [5 skills marketing](/boveda/cinco-habilidades-marketing)

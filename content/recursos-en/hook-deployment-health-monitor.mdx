@@ -1,0 +1,92 @@
+---
+title: "Hook Deployment Health Monitor — monitor deploys, errors and perf (294 installs)"
+description: "Hook with 294 installs that monitors deployment status, error rates and performance. Tracks Vercel deploys and sends notifications on failures or degradation. For Vercel shops with AI in the loop."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-dependency-checker", "all-deploy", "mcp-sentry"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/deployment-health-monitor"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/deployment-health-monitor.json"
+---
+
+## What it is
+
+A hook that continuously monitors:
+- **Deployment status** — which deploys are running, which ones failed
+- **Error rates** — error spikes post-deploy
+- **Performance metrics** — degradations
+
+Specifically focused on Vercel deploys (the hosting mentioned in the description). It sends notifications when something breaks.
+
+Hook events: `PostToolUse` + `SessionStart`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 294 |
+| Hook events | `PostToolUse` + `SessionStart` |
+| Focus | Vercel deploys + error rates + perf |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/deployment-health-monitor
+```
+
+Prerequisite: credentials or tokens to access the provider (Vercel or another).
+
+For Claude:
+
+```
+I installed the automation/deployment-health-monitor hook. Set up the
+Vercel credentials. Show me the latest deploy and its health status.
+```
+
+## What you can do with it
+
+### Post-deploy automation
+
+After Claude pushes changes and a deploy is triggered, the hook validates that everything goes well and notifies you if it doesn't.
+
+### Fast regression detection
+
+If the new deploy introduces a high error rate, the hook warns you before you notice. Useful for autonomous `/goal` runs.
+
+### Performance budget
+
+If the new version is slower than the previous one (degraded LCP, FID), the hook detects it.
+
+### Combo with [Dependency Checker](/boveda/hook-dependency-checker)
+
+Dependency Checker pre-deploy + Deployment Health Monitor post-deploy = a complete supply chain + runtime health cycle.
+
+### Combo with [Sentry MCP](/boveda/mcp-sentry)
+
+Sentry has this kind of monitoring built in. Compare them based on your preference.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **Without Vercel or other supported providers:** check what the hook supports before installing.
+- **If your observability lives elsewhere** (Datadog, Sentry, Grafana): this hook may overlap.
+- **For infrequent deploys:** the hook shines with continuous deployment. For monthly releases, doing it manually is enough.
+- **Notifications config:** if you don't set up a channel (Discord, Slack, email), alerts won't reach you.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Deployment Health Monitor Hook](https://www.aitmpl.com/component/hooks/automation/deployment-health-monitor) — exact command.
+- **Config JSON:** [deployment-health-monitor.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/deployment-health-monitor.json).
+
+## Related resources
+
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — supply chain pre-deploy.
+- [All Deploy](/boveda/all-deploy) — to automate deploys with AI.
+- [Sentry MCP](/boveda/mcp-sentry) — complementary deep observability.

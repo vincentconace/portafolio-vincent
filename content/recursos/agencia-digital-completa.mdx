@@ -1,0 +1,320 @@
+---
+title: "Agencia Digital Completa — 900+ skills instalables para Claude, Cursor, Gemini"
+description: "Antigravity Awesome Skills es una biblioteca con 978+ archivos markdown de instrucciones para agentes IA. 9 categorías (arquitectura, negocio, data, dev, infra, security, testing, workflow). Instalás por categoría, activás con @skill-name en cualquier prompt. Funciona con Claude Code, Cursor, Gemini CLI, Codex."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "cursor", "gemini", "codex"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["crea-claude-skills", "5-skills-equipo-dev", "top-10-claude-abril-2026"]
+---
+
+## Qué es
+
+**Antigravity Awesome Skills** es un repositorio con **978+ archivos markdown** de instrucciones. Cada archivo le enseña a tu agente de IA a hacer una tarea específica.
+
+Pensalo así: cada skill es como **contratar un consultor experto bajo demanda**. Tu agente los lee automáticamente y los usa cuando son relevantes para lo que estás haciendo.
+
+Repo: `sickn33/antigravity-awesome-skills`. ~32k estrellas.
+
+---
+
+## Las 9 categorías
+
+| Categoría | Cubre |
+|-----------|-------|
+| **Arquitectura** | Diseño de sistemas, patrones, microservicios, APIs |
+| **Negocio** | Pricing, monetización, estrategia, go-to-market |
+| **Data & IA** | Pipelines de datos, ML, embeddings, RAG |
+| **Desarrollo** | Frontend, backend, APIs, debugging, refactoring |
+| **General** | Documentación, comunicación, productividad |
+| **Infraestructura** | Deploy, CI/CD, Docker, Kubernetes, cloud |
+| **Seguridad** | Auditorías, auth, OWASP, pentesting, compliance |
+| **Testing** | Unit tests, integration, e2e, TDD, coverage |
+| **Workflow** | Git, code review, project management, automation |
+
+Total: **978+** skills distribuidos.
+
+---
+
+## Instalación
+
+Abrí terminal en la carpeta de tu proyecto y corré según tu herramienta:
+
+### Claude Code
+
+```bash
+npx antigravity-awesome-skills --claude
+```
+
+### Cursor
+
+```bash
+npx antigravity-awesome-skills --cursor
+```
+
+### Gemini CLI
+
+```bash
+npx antigravity-awesome-skills --gemini
+```
+
+### Codex
+
+```bash
+npx antigravity-awesome-skills --codex
+```
+
+### Otros agentes compatibles
+
+```bash
+npx antigravity-awesome-skills
+```
+
+El instalador te deja **elegir qué categorías instalar**. **NO instales las 900+**. Elegí 2-3 categorías relevantes para tu proyecto.
+
+---
+
+## Cómo usar un skill
+
+Una vez instalados, usás la sintaxis `@skill-name` para activar un skill en tu prompt:
+
+### Ejemplos
+
+```
+@api-design diseñá la API para mi app de pedidos
+```
+
+```
+@security-audit revisá este endpoint por vulnerabilidades
+```
+
+```
+@pricing-strategy ayudame a definir precios para mi SaaS
+```
+
+```
+@test-generation generá tests para este módulo
+```
+
+```
+@refactor-suggestion mirá este código y sugerí refactor sin
+romper funcionalidad
+```
+
+---
+
+## Casos de uso por categoría
+
+### Para startup founder
+
+Instalá **Negocio + Workflow**:
+
+```
+@pricing-strategy ayudame a decidir entre freemium y trial 14 días
+para mi SaaS B2B de inventario.
+
+@go-to-market plan de 90 días para lanzar mi MVP.
+
+@project-management estructurame backlog de los próximos 2 sprints.
+```
+
+### Para backend dev
+
+Instalá **Desarrollo + Arquitectura + Testing**:
+
+```
+@api-design diseñame la API REST para sistema de pedidos
+multi-tenant.
+
+@microservices-pattern ayudame a decidir si rompo el monolito
+o lo mantengo.
+
+@test-generation generá tests integration para este módulo
+de checkout.
+```
+
+### Para DevOps
+
+Instalá **Infraestructura + Seguridad**:
+
+```
+@docker-optimization mi imagen está pesando 1.8GB. Reducila
+sin romper.
+
+@k8s-best-practices revisá mis manifests para producción.
+
+@security-audit auditá mi pipeline CI/CD por leak de secrets.
+```
+
+### Para creator/marketer
+
+Instalá **Negocio + General**:
+
+```
+@content-strategy plan de contenido 30 días para mi nicho de
+productividad para devs.
+
+@email-marketing diseñá mi welcome sequence de 5 emails.
+
+@pricing-strategy mi competidor cobra X, ¿qué hago?
+```
+
+### Para data scientist
+
+Instalá **Data & IA + Desarrollo**:
+
+```
+@rag-design para sistema de docs internos.
+
+@embeddings-strategy decidir entre OpenAI ada-002 vs
+sentence-transformers para mi caso.
+
+@pipeline-design ETL desde Snowflake a Postgres semanal.
+```
+
+---
+
+## Estrategia recomendada de adopción
+
+### Día 1 — Instalá 2 categorías core
+
+Las 2 que matchean **tu trabajo principal**. No más.
+
+### Semana 1 — Probá 5-10 skills
+
+Identificá cuáles realmente usás. La mayoría no aplican a vos.
+
+### Semana 2 — Refinás
+
+Quedate con los **20-30 skills** que más usás. Desinstalá los demás (ocupan contexto).
+
+### Mes 2 — Categorías secundarias
+
+Si tu workflow expande, sumá otra categoría.
+
+### Mes 3+ — Cree los tuyos
+
+Los skills de Antigravity son base. Para tu workflow específico, **crea tus propios** ([crear skills](/boveda/crea-claude-skills)).
+
+---
+
+## Lo bueno y lo no tan bueno
+
+### Pros
+
+- ✅ **Cantidad masiva** — 978+ es difícil de superar
+- ✅ **Open source y mantenido** — community activa
+- ✅ **Multi-agente** — funciona con todos los principales
+- ✅ **Categorías bien organizadas** — fácil filtrar
+- ✅ **Setup trivial** — `npx` one-liner
+
+### Cons honestos
+
+- ⚠️ **Calidad variable** — algunos skills son geniales, otros son básicos
+- ⚠️ **Choice paralysis** — 978 opciones puede paralizar
+- ⚠️ **Genericidad** — al ser para "todo el mundo", no aplica a tu nicho específico
+- ⚠️ **No reemplaza skills custom** — tu workflow propio necesita tus propios skills
+
+---
+
+## Anti-patrones
+
+### 1. Instalar las 9 categorías "por las dudas"
+
+Cada skill ocupa contexto. Con 978 activos, **Claude se distrae** intentando matchear. Instalá 2-3 categorías relevantes.
+
+### 2. No buscar antes de pedir
+
+Antes de pedir algo, **listá los skills disponibles**:
+
+```bash
+npx antigravity-awesome-skills --list
+```
+
+A veces lo que necesitás ya existe. Pedirle a Claude sin invocar el skill correcto = no aprovechás Antigravity.
+
+### 3. Olvidarse de remove
+
+Si instalaste una categoría y no la usás, **removela**. Cada categoría aporta peso al contexto.
+
+### 4. Crear tu skill cuando Antigravity ya lo tiene
+
+Antes de armar tu propio `@deploy-vercel`, **chequeá** si Antigravity tiene `@vercel-deployment`. Si ya existe, ahorrate el setup.
+
+### 5. Esperar magia con prompt vago
+
+`@security-audit hacé tu cosa` → output mediocre.
+
+`@security-audit revisá mi endpoint /api/orders por:
+- SQL injection
+- IDOR
+- Auth bypass
+- Rate limiting
+Reportá con severity y fix sugerido` → output útil.
+
+**El skill activa el conocimiento. El prompt activa el formato y profundidad**.
+
+---
+
+## Combinaciones potentes
+
+### Con tus skills custom
+
+Antigravity son **skills base**. Tus skills custom son **tu ventaja competitiva**.
+
+```
+.claude/skills/
+├── (instalados de Antigravity)
+│   ├── api-design.md
+│   ├── pricing-strategy.md
+│   └── security-audit.md
+└── (tus custom)
+    ├── nuestra-arquitectura.md
+    ├── brand-tone.md
+    └── client-onboarding.md
+```
+
+### Con [Token Efficient](/boveda/claude-token-efficient)
+
+Antigravity skills tienden a ser verbosos. Token Efficient corta el output excesivo cuando los usás.
+
+### Con [Sequential Thinking](/boveda/claude-fabrica-a-pro)
+
+Sequential Thinking + skill apropiado = razonamiento estructurado **con expertise específica**.
+
+### Con [crear skills propias](/boveda/crea-claude-skills)
+
+Aprendé a crear tus propias usando Antigravity como referencia.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Querés calidad uniforme alta | Antigravity tiene varianza |
+| Tu nicho es muy específico | Generic skills no encajan |
+| Prefieres curaduría manual | Demasiada cantidad |
+| Workflow ya tiene skills custom maduros | Overlap innecesario |
+
+Si tenés tu propio set de skills probados, Antigravity es **complementario**, no central.
+
+---
+
+## Estimación de skills "really useful"
+
+De los 978+:
+- **20-30** son utilities universales (api-design, security-audit, etc.)
+- **50-100** aplican según tu rol/industria
+- **800+** son situacionales o de baja calidad
+
+**Apuntá a tener activos 20-30**, no más. Más es ruido.
+
+---
+
+## Próximos pasos
+
+- Para crear tus propias skills personalizadas, [crear skills propias](/boveda/crea-claude-skills)
+- Para suite curada de 5 skills para devs, [5 skills equipo dev](/boveda/5-skills-equipo-dev)
+- Para top del mes con análisis de cada uno, [top 10 abril 2026](/boveda/top-10-claude-abril-2026)

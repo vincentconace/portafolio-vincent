@@ -1,0 +1,192 @@
+---
+title: "awesome-llm-apps — el repositorio con 100+ agentes listos para clonar"
+description: "Un repositorio de GitHub con más de 100 agentes de IA en 13 categorías — desde análisis de negocio hasta equipos de ventas completos. Cómo navegarlo sin perderse, cuáles realmente sirven y cómo adaptarlos a Claude Code en lugar de a la stack original."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "github"]
+publishedAt: "2026-05-10"
+readingTime: "9 min"
+relatedSlugs: ["cinco-skills-necesarias", "ecosistema-de-agentes", "trio-skills-claude-code"]
+---
+
+## Qué es
+
+[awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) es un repositorio open-source mantenido por la comunidad con **más de 100 agentes de IA** listos para clonar e instalar. Apache 2.0, gratis.
+
+No es una herramienta única — es un **catálogo curado** de agentes que cubren 13 categorías. La ventaja: en lugar de inventar tu agente desde cero, mirás si ya existe uno parecido y partís de ahí.
+
+> 106k+ estrellas en GitHub, actualizado seguido.
+
+---
+
+## Las 13 categorías
+
+| Categoría | Para qué |
+|-----------|----------|
+| **AI Agents** | Agentes generalistas (assistant, planner, writer) |
+| **RAG Tutorials** | Agentes con búsqueda sobre tus docs |
+| **Voice AI** | Agentes que hablan / escuchan |
+| **MCP AI** | Agentes que usan Model Context Protocol |
+| **Memory AI** | Agentes con memoria de largo plazo |
+| **Multi-agent Teams** | Equipos coordinados de agentes |
+| **Vertical AI Agents** | Especializados por industria (legal, finanzas, salud) |
+| **Business AI** | Análisis de negocio, marketing, ventas |
+| **Coding AI** | Asistentes de programación |
+| **Personal AI** | Asistentes personales (calendar, email, finanzas personales) |
+| **Travel AI** | Trip planners, booking assistants |
+| **Research AI** | Investigación académica, papers |
+| **Creative AI** | Contenido, escritura, arte |
+
+---
+
+## Cómo navegarlo sin perderse
+
+El problema típico: abrís el repo, ves 100+ carpetas, te perdés. **Empezá por categorías**, no por slug.
+
+### Approach 1 — Por necesidad concreta
+
+Pensá qué necesitás resolver **hoy**:
+
+| Necesidad | Categorías a mirar primero |
+|-----------|----------------------------|
+| Automatizar tu negocio (ventas, marketing) | Business AI, Vertical AI |
+| Asistente que conozca tus docs | RAG Tutorials, Memory AI |
+| Equipo de agentes coordinados | Multi-agent Teams, Ecosistema |
+| Asistente personal del día a día | Personal AI |
+| Asistente de research académico | Research AI |
+| Programar con ayuda de IA | Coding AI |
+
+### Approach 2 — Por arquitectura
+
+Si querés aprender el **patrón** más que copiar la app:
+
+- **Single agent (1 LLM, varios tools)**: empezá por AI Agents básicos
+- **RAG (1 LLM con búsqueda en tus docs)**: RAG Tutorials
+- **Multi-agent (varios LLM coordinados)**: Multi-agent Teams
+- **Stateful (con memoria persistente)**: Memory AI
+
+Cada arquitectura tiene complejidad creciente. Aprender en orden te da progresión.
+
+---
+
+## El detalle importante: la stack original
+
+La mayoría de estos agentes están construidos sobre:
+
+- **OpenAI API** o **Anthropic API** directo
+- **LangChain** o **LangGraph** como framework
+- **Streamlit** o **Gradio** para UI rápida
+- **ChromaDB / Pinecone** para vector storage en RAG
+
+Si querés correrlos tal cual, eso te toca instalar. Si querés **portarlos a Claude Code** (que es lo que la mayoría va a hacer), la lógica se traduce pero hay que reescribir partes.
+
+### Patrón de portado a Claude Code
+
+Para cualquier agente del repo, el flujo de portado es:
+
+1. **Leé el README** del agente — entender qué hace y qué necesita
+2. **Identificá los tools que usa** — qué APIs, qué storage, qué inputs/outputs
+3. **Convertí el prompt principal a una skill** (`~/.claude/skills/<nombre>/SKILL.md`)
+4. **Si usa RAG**: en lugar de ChromaDB, podés usar el [patrón Book-to-Skill](/boveda/book-to-skill) para conocimiento estático
+5. **Si necesita APIs externas**: armá un [MCP server propio](/boveda/mcp-server-propio) que las exponga
+6. **La UI**: Claude Code es tu UI, no necesitás Streamlit
+
+Lo que era una app entera con dependencias se vuelve una skill + 1 MCP. Mucho menos código a mantener.
+
+---
+
+## 5 agentes que vale la pena explorar primero
+
+De los 100+, estos 5 son buenos puntos de entrada:
+
+### 1. AI Customer Support Agent
+
+Categoría: Business AI.
+
+Un agente que clasifica tickets entrantes, responde los simples (FAQs) y escala los complejos. Aprende del historial para mejorar las respuestas.
+
+**Lo que sale**: clasificador + responder con templates + handoff humano.
+**Portado a Claude**: skill de clasificación + MCP para el ticketing system + lógica simple en CLAUDE.md.
+
+### 2. AI Investment Agent
+
+Categoría: Personal AI.
+
+Te ayuda a analizar oportunidades de inversión (acciones, ETFs). Junta datos de varias fuentes y devuelve resumen estructurado.
+
+**Útil para**: aprender el patrón de "agregar datos de N fuentes y resumir".
+
+### 3. Multi-Agent Code Reviewer
+
+Categoría: Coding AI, Multi-agent Teams.
+
+3 agentes coordinados que revisan el mismo PR desde ángulos distintos (security, performance, style). Después un agente final consolida feedback.
+
+**Útil para**: aprender multi-agent. **Pero**: nuestra [skill code-reviewer](/boveda/skill-code-reviewer) hace lo mismo con menos complejidad.
+
+### 4. RAG over Local Documents
+
+Categoría: RAG Tutorials.
+
+Patrón base de RAG. Cargás tus PDFs/markdown, el agente puede responder consultando esos docs.
+
+**Útil para**: entender el patrón conceptualmente. **Para uso real**: el [Book-to-Skill](/boveda/book-to-skill) suele ser más simple en proyectos de un solo usuario.
+
+### 5. Personal Finance Agent
+
+Categoría: Personal AI.
+
+Cargás tus transacciones (CSV del banco), el agente las clasifica, te da budget tracking, alertas de gastos atípicos.
+
+**Útil para**: ver cómo se estructura un agente con state que evoluciona en el tiempo.
+
+---
+
+## Anti-patrones — cómo NO usar este repo
+
+### 1. Clonar todo "por si acaso"
+
+100+ agentes ocupan espacio, dependencias, mantenerlos al día. Clonate solo el repo (para navegarlo) y descargá / portá lo que **realmente** vas a usar.
+
+### 2. Buscar "el agente perfecto" para tu caso
+
+La mayoría de los agentes son **demos / templates**, no production-ready para tu negocio específico. Tomalos como **punto de partida**, no como producto terminado.
+
+### 3. Quedarte en la stack original
+
+Si todo te lo armaron con Streamlit + LangChain + OpenAI, podés correrlo así por una tarde. Para uso recurrente, portalo a tu stack (Claude Code + tus tools). El overhead de mantener Python venvs + Streamlit servers para cada agente no escala.
+
+### 4. Saltearse la lectura del README
+
+Cada agente tiene su README con limitaciones, requisitos, casos de uso. **Leerlos** te ahorra "instalar y descubrir que no aplica a tu caso" después.
+
+---
+
+## Cómo contribuir
+
+Si portás un agente a Claude Code y querés contribuir, el repo acepta PRs. El patrón:
+
+1. Forkeás el repo
+2. Creás carpeta `claude-ports/<nombre-agente>/`
+3. Adentro: SKILL.md, MCP config si lo hay, README con tu adaptación
+4. PR al main
+
+El maintainer suele mergear PRs limpios bastante rápido.
+
+---
+
+## El valor real del repo
+
+No es "100 agentes listos para producción". Es **un catálogo de patrones**.
+
+Cuando alguien te pide "necesito un agente que haga X", lo más probable es que ya exista un agente parecido en el repo. Lo abrís, mirás cómo lo armaron, lo adaptás. Mucho más rápido que diseñar desde cero.
+
+**Recomendación práctica**: dale star al repo, suscribite a updates, y úsalo como **referencia consultada** cuando arrancás algo nuevo. No como dependencia activa de tu sistema.
+
+---
+
+## Próximos pasos
+
+- Para entender qué hace falta para crear tu agente propio, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para tres skills concretas de alto impacto, [trío de skills para Claude Code](/boveda/trio-skills-claude-code)
+- Si querés meter conocimiento estable en una skill (en lugar de RAG), [Book to Skill](/boveda/book-to-skill)

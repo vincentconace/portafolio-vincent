@@ -1,0 +1,350 @@
+---
+title: "Humanízalo — el skill que detecta 40+ patrones de IA y reescribe tu texto"
+description: "Le pegás un texto que suena a IA y te lo regresa sonando humano. Detecta 40+ patrones en 5 categorías (inflar contenido, vocabulario IA, estructura, formato, comunicación). Hace hasta 3 pasadas y se autoevalúa con un sistema de 6 dimensiones. Setup en 1 comando."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-copywriter", "cinco-habilidades-marketing", "mejores-practicas-claude"]
+---
+
+## El problema
+
+¿Alguna vez leíste algo y dijiste **"esto lo escribió una IA"**?
+
+Los mismos giros, las mismas frases, los mismos tonitos. Todas las IAs **fueron a la misma escuela de escritura** y les enseñaron a escribir igual.
+
+**Humanízalo** es un skill open source que detecta esos patrones específicos y **reescribe el texto** para que suene humano. Detecta **40+ patrones** en 5 categorías.
+
+Repo: `Hainrixz/humanizalo`. Open source.
+
+Es una **alternativa** o **complemento** al [Claude Copywriter / humanizer](/boveda/claude-copywriter) — más patrones (40 vs 24) y se auto-evalúa hasta 3 veces.
+
+---
+
+## Antes vs después
+
+**Antes (texto IA típico)**:
+
+> "En el dinámico panorama del marketing digital, es crucial profundizar en las estrategias que impulsan resultados significativos. Además, navegar estos desafíos requiere un enfoque holístico."
+
+**Después (humanizado)**:
+
+> "El marketing digital cambia rápido. Si querés que tu estrategia funcione, enfocá energía en lo que mueve la aguja — no en hacer de todo un poco."
+
+Diferencia: la versión humanizada **dice algo concreto**, tiene voz, propone acción.
+
+---
+
+## Los 40+ patrones — 5 categorías
+
+### Categoría 1 — Inflar contenido (8 patrones)
+
+- "Momento crucial"
+- "Papel vital"
+- "Hito significativo"
+- "Transformación sin precedentes"
+- Conclusiones vagas: "El futuro se ve brillante"
+
+### Categoría 2 — Vocabulario IA (6 patrones)
+
+- "además"
+- "crucial"
+- "profundizar"
+- "panorama"
+- "navegar" (en sentido figurado)
+- "desempacar" (información)
+- "cambio de juego"
+
+### Categoría 3 — Estructura (11 patrones)
+
+- **Contrastes binarios**: "No es X. Es Y."
+- Voz pasiva excesiva
+- Oraciones todas del mismo largo
+- Listas con paralelismo forzado
+- Estructura A → B → C → conclusión rígida
+
+### Categoría 4 — Formato (5 patrones)
+
+- **Guiones largos (—)** por todos lados ⭐ patrón #1
+- **Negritas** mecánicas en mitad de cada párrafo
+- Emojis decorativos en texto profesional
+- Listas tipo "Etiqueta: contenido"
+- Headings exagerados
+
+### Categoría 5 — Comunicación (10 patrones)
+
+- "¡Espero que esto ayude!"
+- "Como veremos en esta sección..."
+- "Antes de adentrarnos, es importante..."
+- "Vale la pena destacar"
+- Tono excesivamente amable
+
+### Dato curioso
+
+El **guion largo (—)** es la señal #1 de texto IA. Si tu texto tiene 5+ guiones largos en un párrafo, **ya sabés quién lo escribió**.
+
+---
+
+## Pre-requisitos
+
+- Claude Code instalado ([instalar Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Instalación
+
+### Opción A — Comando
+
+```bash
+git clone https://github.com/Hainrixz/humanizalo.git \
+  ~/.claude/skills/humanizalo
+```
+
+### Opción B — Pedirle a Claude
+
+```
+> Instalá esta habilidad:
+  https://github.com/Hainrixz/humanizalo
+```
+
+### Verificar
+
+```
+> /humanizalo
+```
+
+Si te pide texto, está activo.
+
+---
+
+## 3 formas de usarlo
+
+### 1. Con el comando
+
+```
+/humanizalo
+
+[pegás texto que suena a IA]
+```
+
+### 2. Con tus palabras
+
+```
+> Humanizá este texto:
+
+  [tu texto]
+```
+
+### 3. Desde un archivo
+
+```
+> Humanizá el texto en /docs/mi-borrador.md.
+  Guardá la versión humanizada como /docs/mi-borrador-humano.md
+```
+
+---
+
+## Cómo funciona — el flow de 3 pasadas
+
+A diferencia de un humanizer simple (1 pasada), Humanízalo hace hasta **3 pasadas**:
+
+### Pasada 1 — Reescritura
+
+Aplica patrones detectados. Versión inicial humanizada.
+
+### Pasada 2 — Auto-evaluación
+
+Claude **se lee a sí mismo** y se pregunta: "¿Esto suena a humano?".
+
+Usa sistema de 6 dimensiones:
+
+| Dimensión | Pregunta |
+|-----------|----------|
+| **Directo** | ¿Va al grano o da vueltas? |
+| **Ritmo** | ¿Las oraciones varían o suenan como robot? |
+| **Confianza** | ¿Respeta la inteligencia del lector? |
+| **Autenticidad** | ¿Suena a persona real? |
+| **Densidad** | ¿Cada oración aporta algo? |
+| **Alma** | ¿Tiene personalidad y opinión? |
+
+Cada dimensión: 10 puntos. Score mínimo aceptable: **42/60**.
+
+### Pasada 3 — Refinamiento (si falla la pasada 2)
+
+Si el score es bajo, Claude **vuelve a reescribir** focalizándose en las dimensiones que fallaron.
+
+Loop hasta llegar a 42+ o 3 pasadas máximo.
+
+---
+
+## El plus — le inyecta voz
+
+Un texto **sin patrones de IA pero sin personalidad** sigue sonando raro.
+
+Humanízalo no solo **quita lo de IA** — le **inyecta voz**:
+- Opinión clara
+- Ritmo variado
+- Detalles específicos
+- Toques personales
+
+El resultado es un texto que **suena a que lo escribió alguien**, no un algoritmo neutral.
+
+---
+
+## Casos de uso
+
+### 1. Email marketing
+
+```
+> /humanizalo
+
+  [pegás email armado con Claude]
+
+  Contexto: secuencia de bienvenida para SaaS B2B.
+  Tono target: profesional pero conversacional.
+```
+
+### 2. Posts de blog
+
+```
+> Humanizá el post /content/blog/post-nuevo.md.
+  Audiencia: devs senior.
+  Tono: opinionated, no neutral.
+  Conservá los ejemplos de código intactos.
+```
+
+### 3. Copy de landing
+
+```
+> Tomá cada sección de mi landing /app/page.tsx.
+  Humanizá los textos manteniendo el HTML/JSX.
+  Brand voice: directo, cercano, sin formalismos.
+```
+
+### 4. Newsletter
+
+```
+> Humanizá la edición #42 de mi newsletter.
+
+  Si después de 3 pasadas algo aún suena IA, marcá esa
+  sección y sugerí 3 maneras de reescribirla manualmente.
+```
+
+### 5. Docs / tutoriales
+
+```
+> Humanizá este tutorial técnico.
+
+  IMPORTANTE: NO quites los detalles técnicos.
+  Solo el tono.
+
+  Mantené la precisión de comandos y código intactos.
+```
+
+---
+
+## Diferencia vs humanizer (Claude Copywriter)
+
+| Aspecto | [Claude Copywriter](/boveda/claude-copywriter) | Humanízalo |
+|---------|------------------------------------------------|------------|
+| Patrones detectados | 24 | 40+ |
+| Pasadas | 2 fijas | Hasta 3 con auto-eval |
+| Sistema de scoring | No | Sí (6 dimensiones, 60 puntos) |
+| Autor | `blader/humanizer` | `Hainrixz/humanizalo` |
+| Idioma optimizado | Inglés/español | Español Latam |
+
+Ambos son válidos. Humanízalo es **más exhaustivo** y específico para LATAM. Para Claude Copywriter, más maduro globalmente.
+
+Podés tener los 2 instalados y usar el que aplique.
+
+---
+
+## Anti-patrones
+
+### 1. Humanizar todo el contenido sin discriminar
+
+Para docs técnicas, contratos legales, transcripciones — humanizar puede **romper precisión**. Reservalo para contenido de marketing, blog, social, email.
+
+### 2. No revisar el output
+
+Humanízalo es excelente pero **no infalible**. Leé el output antes de publicar. A veces sobre-corrige eliminando matices que querías.
+
+### 3. Humanizar texto que NO es de IA
+
+Si tu texto ya lo escribió un humano y lo pasás por humanizer, **puede empeorarlo**. El skill asume input con patrones IA.
+
+### 4. Pegarle textos gigantes
+
+Si pegás 5000 palabras, los resultados son menos consistentes. **Procesá por secciones** de 500-1000 palabras.
+
+### 5. Aceptar la primera pasada
+
+A veces Claude completa rápido con 42 puntos pero podría llegar a 55. Pedile explícitamente:
+
+```
+> Score 50+ por favor. Si no llegás, hacé otra pasada.
+```
+
+---
+
+## Combinaciones potentes
+
+### Con Marketing Skills
+
+```
+> 1. Marketing Skills: generá secuencia de 5 emails de venta
+> 2. /humanizalo en cada uno antes de finalizar
+```
+
+[5 skills marketing](/boveda/cinco-habilidades-marketing) + Humanízalo = email que vende sin sonar IA.
+
+### Con Claude Copywriter
+
+Para textos críticos, usá **ambos secuencialmente**:
+
+```
+> 1. /humanizer (24 patrones, 2 pasadas) primero
+> 2. /humanizalo (40+ patrones, 3 pasadas + scoring) después
+
+  El que pase los 2 está limpio.
+```
+
+### Con SEO
+
+```
+> /humanizalo este artículo de blog.
+  Después correr /seo-content para validar que sigue
+  optimizado para mis target keywords.
+```
+
+[Claude SEO](/boveda/claude-seo) verifica que humanizar no rompa SEO.
+
+### Con Brand Guidelines
+
+```
+> Cargá mi brand pack.
+  /humanizalo este post respetando mi tono de marca.
+```
+
+Brand voice + humanización = consistencia de marca + autenticidad.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Docs técnicos | El "tono IA" en docs es bueno (precisión) |
+| Legal / contratos | Necesitás precisión, no voz |
+| Texto académico formal | Algunos "tics IA" son válidos académicos |
+| Comunicación interna formal | Riesgo de sonar demasiado casual |
+
+---
+
+## Próximos pasos
+
+- Para alternativa más simple con 24 patrones, [Claude Copywriter](/boveda/claude-copywriter)
+- Para suite completa de marketing skills, [5 skills marketing](/boveda/cinco-habilidades-marketing)
+- Para principios de buen output con Claude, [mejores prácticas Claude](/boveda/mejores-practicas-claude)

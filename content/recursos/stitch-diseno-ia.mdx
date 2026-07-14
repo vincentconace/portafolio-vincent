@@ -1,0 +1,286 @@
+---
+title: "Stitch MCP — diseñar interfaces completas desde Claude con un solo prompt"
+description: "Stitch es la herramienta gratuita de Google que genera UIs desde texto. Configurás el MCP en Claude (30 segundos), le describís tu app, y Claude diseña pantallas completas — colores, tipografía, estructura, web + mobile + tablet. Salida: HTML listo para integrar."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude", "mcp", "stitch"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["5-skills-diseno-claude", "magic-patterns-mcp", "higgsfield-mcp"]
+---
+
+## Qué es Stitch
+
+**Stitch** es una herramienta de **Google Labs** que genera diseños UI completos desde texto. Le describís tu app y Stitch crea:
+
+- Paleta de colores
+- Tipografía + jerarquía visual
+- Estructura y layout de cada pantalla
+- Versiones web + mobile + tablet
+- **Código HTML listo** para integrar
+
+Es **gratis** con cuenta de Google. SDK oficial: `@google/stitch-sdk`. URL: `stitch.withgoogle.com`.
+
+---
+
+## Por qué importa el MCP
+
+Sin MCP, el flow es:
+
+1. Vas a Stitch → diseñás → exportás HTML
+2. Volvés a Claude con el HTML
+3. Le explicás contexto que perdiste en el salto
+4. Pedís integración
+
+Con MCP, **Claude usa Stitch directamente**. Le decís a Claude "diseñame el dashboard con estilo X" y Claude:
+
+1. Crea proyecto en Stitch
+2. Genera las pantallas
+3. Itera si pedís cambios
+4. Trae el HTML final
+5. Lo integra a tu proyecto
+
+Todo en **una conversación**.
+
+---
+
+## Setup — 4 pasos
+
+### Paso 1 — Cuenta en Stitch
+
+Andá a `stitch.withgoogle.com` y armá cuenta gratis con tu cuenta de Google. Sin tarjeta de crédito, sin aprobación — instantáneo.
+
+### Paso 2 — Generar API Key
+
+En configuración de tu cuenta Stitch → generá una **API Key**. Copiala.
+
+Variable de entorno requerida: `STITCH_API_KEY`.
+
+### Paso 3 — Instalar SDK
+
+```bash
+npm install @google/stitch-sdk
+```
+
+### Paso 4 — Configurar MCP en Claude
+
+El truco más rápido: pegale a Claude esta instrucción:
+
+```
+> Configurame el MCP de Stitch en Claude.
+
+  Documentación oficial: https://stitch.withgoogle.com/docs/mcp/setup
+
+  Mi API key: stk_xxxxx
+
+  1. Leé la doc oficial
+  2. Generá la config JSON correcta para Claude Code/Desktop
+  3. Pegala en el lugar correcto
+  4. Reiniciá lo que haga falta
+  5. Verificá con un test simple ("listame mis proyectos en Stitch")
+```
+
+En 30 segundos tenés todo conectado.
+
+---
+
+## Las 8 herramientas del MCP
+
+Una vez configurado, Claude tiene acceso a:
+
+| Tool | Para qué |
+|------|----------|
+| `create_project` | Crea un proyecto nuevo en Stitch |
+| `generate_screen_from_text` | Genera pantalla desde prompt (mobile/desktop/tablet) |
+| `edit_screens` | Edita pantallas existentes con prompts |
+| `get_screen` | Trae HTML + captura del diseño |
+| `generate_variants` | Genera variantes (colores, layout, tipografía, contenido) |
+| `list_projects` | Lista tus proyectos |
+| `list_screens` | Lista pantallas de un proyecto |
+| `apply_design_system` | Aplica un design system existente |
+
+---
+
+## Tu primer diseño
+
+### Prompt completo
+
+```
+> Diseñame una app de gestión de finanzas personales para
+  millennials latinos.
+
+  Estilo: minimalista, moderno, alto contraste, paleta verde
+  (no típica azul de finanzas).
+
+  Pantallas necesarias:
+  1. Onboarding (3 slides)
+  2. Home / Dashboard
+  3. Detalle de cuenta
+  4. Agregar transacción
+  5. Reportes mensuales
+
+  Para CADA pantalla:
+  - Versión mobile (priority)
+  - Versión desktop
+
+  Adjunto 3 capturas de inspiración (apps Robinhood, Cash App,
+  N26).
+
+  Usá el MCP de Stitch:
+  1. Creá proyecto "Finzy MVP"
+  2. Generá las 5 pantallas en mobile primero
+  3. Mostrame el diseño antes de hacer las versiones desktop
+  4. Cuando apruebe, hacé desktop
+  5. Devolveme el HTML completo de todas
+```
+
+Claude orquesta el flow completo. Vos ves preview, das feedback, Claude itera.
+
+---
+
+## Skills oficiales de Stitch
+
+Google publicó skills oficiales para Claude Code en `google-labs-code/stitch-skills`:
+
+| Skill | Para qué |
+|-------|----------|
+| `stitch-design` | Diseño completo con prompt enhancement |
+| `stitch-loop` | Sitio multi-página completo desde 1 prompt |
+| `react-components` | Convierte pantallas a componentes React con tokens |
+| `enhance-prompt` | Transforma ideas vagas en prompts optimizados |
+
+### Instalación
+
+```bash
+# Listar todas las skills
+npx skills add google-labs-code/stitch-skills --list
+
+# Instalar una específica
+npx skills add google-labs-code/stitch-skills --skill stitch-design --global
+```
+
+### Cuál instalar
+
+- **Estás diseñando UIs en cantidad** → `stitch-design`
+- **Necesitás sitio completo, no solo pantallas sueltas** → `stitch-loop`
+- **Tu proyecto es React/Next.js** → `react-components`
+- **Tus prompts no logran buenos diseños** → `enhance-prompt`
+
+---
+
+## Casos de uso
+
+### 1. MVP rápido
+
+```
+> MVP de SaaS de inventario para retail. Diseñame:
+  - Landing page
+  - Login + signup
+  - Dashboard principal
+  - Vista de productos (tabla + filtros)
+  - Vista de pedidos
+
+  Mobile + desktop. Estilo profesional, accesible.
+
+  Usá Stitch. Después convertí las pantallas a componentes
+  React con react-components skill.
+```
+
+Resultado: scaffold visual completo + componentes listos para integrar.
+
+### 2. Iteración con cliente
+
+```
+> Cliente pidió 3 variantes del dashboard:
+  - Versión "minimal" (poca info, mucho whitespace)
+  - Versión "data-heavy" (todo visible)
+  - Versión "guided" (con tooltips y onboarding)
+
+  Generá las 3 variantes con generate_variants.
+  Devolveme HTML de cada una para enviar al cliente.
+```
+
+### 3. Pivotar diseño rápido
+
+```
+> El dashboard que diseñé hace 2 semanas no convirtió en testing.
+  Quiero pivotar a estilo "Linear" — minimalismo extremo, monochrome,
+  keyboard-first.
+
+  Tomá el proyecto "MiApp" en Stitch, generá variante del
+  dashboard con ese estilo. Mantené la información, cambiá
+  presentación.
+```
+
+### 4. Design system desde cero
+
+```
+> Quiero design system para mi marca:
+  - Color base: #6B46C1 (purple)
+  - Tipografía: Inter
+  - Estilo: clean, premium
+
+  Generá design system completo en Stitch + apply_design_system
+  a todas las pantallas existentes del proyecto.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Prompts vagos
+
+```
+> Diseñame una app
+```
+
+Claude/Stitch va a tirar default genérico. **Especificá**: qué hace, para quién, estilo, referencias.
+
+### 2. No usar referencias visuales
+
+Sin capturas de inspiración, Stitch tiene que adivinar tu gusto. **Mandá 2-3 screenshots** de apps que admirás.
+
+### 3. Generar 20 pantallas en 1 prompt
+
+Claude pierde foco. Mejor: **generá 3-5**, revisá, ajustá, después seguí.
+
+### 4. Esperar perfección al primer intento
+
+Stitch es **excelente para baseline**, no para final polish. El diseño que genera necesita iteración con feedback humano antes de producción.
+
+### 5. Saltearse el `enhance-prompt` skill
+
+Si tus diseños salen mal seguido, **el problema es tu prompt**, no Stitch. Instalá `enhance-prompt` skill para que Claude refine tus prompts antes de mandarlos a Stitch.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás diseño con motion / animaciones complejas | Stitch genera UI estática |
+| Producto con UI muy custom (canvas drawing, juegos) | Stitch optimiza para apps estándar |
+| Trabajás con diseñador senior que ya tiene su sistema | Stitch es para acelerar, no reemplazar diseñador con visión |
+| Necesitás diseño que se diferencie radicalmente | Stitch tiende a "design lenguaje moderno consensuado" |
+
+---
+
+## Comparación con alternativas
+
+| Tool | Para qué |
+|------|----------|
+| **Stitch** | UI completa desde texto, gratis, output HTML |
+| [Magic Patterns MCP](/boveda/magic-patterns-mcp) | Componentes React específicos, paid |
+| [5 skills diseño](/boveda/5-skills-diseno-claude) | Suite completa de diseño (Frontend Design + Canvas + Theme Factory) |
+| Figma + plugins IA | Más control, requiere skill de diseñador |
+| v0.dev (Vercel) | Componentes React directos, integración Vercel |
+
+Sweet spot de Stitch: **devs no-diseñadores que necesitan UI completa rápido**.
+
+---
+
+## Próximos pasos
+
+- Para diseño dentro de Claude sin MCPs externos, [5 skills diseño](/boveda/5-skills-diseno-claude)
+- Para alternativa con componentes React, [Magic Patterns MCP](/boveda/magic-patterns-mcp)
+- Para generar visuals cinematográficos (no UI), [Higgsfield MCP](/boveda/higgsfield-mcp)

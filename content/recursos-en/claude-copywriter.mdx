@@ -1,0 +1,251 @@
+---
+title: "Humanizer — a skill that detects 24 AI writing patterns and rewrites them"
+description: "Open source skill based on Wikipedia's 'Signs of AI writing' guide. Detects 24 patterns that give away Claude/ChatGPT text, grouped into 5 categories. It runs 2 passes: obvious cleanup + subtle audit. How to install it and build copywriter agents that produce text that actually passes as human."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["cinco-habilidades-marketing", "mejores-practicas-claude", "skill-code-reviewer"]
+---
+
+## The "AI tone" problem
+
+Your reader doesn't need to be an expert to spot AI text. They feel it. They read 3 paragraphs and think "ChatGPT wrote this." The result:
+
+- Sales emails that get ignored
+- Landing pages that lose trust
+- Posts your audience scrolls past
+- Google starts penalizing low-quality AI content
+- Human editors turn down collaborations
+
+And the problem **isn't that Claude writes badly**. It's that **it always writes the same way**. The same words, the same structures, the same tics.
+
+**Humanizer** is a skill that detects those tics in the text Claude (or you) produce, and rewrites it.
+
+Repo: `blader/humanizer`.
+
+---
+
+## How it works
+
+Humanizer is based on Wikipedia's public guide *"Signs of AI writing"* — the same resource professional human editors use to spot AI-generated text.
+
+It detects **24 patterns** across **5 categories**:
+
+| Category | Count | Examples |
+|-----------|----------|----------|
+| Inflated content | 6 | "revolutionary", "unprecedented", "landscape" |
+| Robotic language | 6 | "serves as", "acts as", "testament to" |
+| Loaded style | 6 | Em dashes, excessive bold, decorative emojis |
+| Fake communication | 3 | "I hope this helps", overly friendly tone |
+| Filler | 3 | "in order to", "could potentially" |
+
+---
+
+## Installation
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/blader/humanizer.git ~/.claude/skills/humanizer
+```
+
+Verify:
+
+```
+> /humanizer
+```
+
+If it responds asking for text to humanize, it's active.
+
+---
+
+## The 2-pass process
+
+Unlike typical "humanizers" that do a single shallow pass, this one does **2**:
+
+### Pass 1 — Obvious cleanup
+
+Remove inflated words, repetitive structures, robot tone. This is the most visible pattern:
+
+```
+Before: "In the dynamic landscape of digital marketing, copywriting
+has undergone an unprecedented transformation."
+
+After pass 1: "Copywriting is changing fast. New formats keep
+showing up."
+```
+
+### Pass 2 — Subtle audit
+
+This is where the magic happens. Pass 2 asks: **"what still makes this sound like AI?"** and rewrites with a finer eye:
+
+```
+After pass 1: "Copywriting is changing fast. New formats keep
+showing up."
+
+After pass 2: "Copywriting changed. You used to write an ad,
+publish it and wait. Now you have real-time data on what
+works. The difference between good copy and mediocre copy is
+no longer talent — it's knowing how to read the numbers."
+```
+
+Pass 2 brings in **what Claude doesn't do by default**: specificity, contrast, opinion.
+
+---
+
+## The 5 pattern groups
+
+### Group 1 — Inflating everything
+
+Claude tends to make everything "revolutionary", "unprecedented", "transformative". Almost no real text carries that intensity.
+
+**Symptom**:
+
+> "This powerful tool not only serves as a catalyst for engagement — it also acts as the fundamental pillar of any successful strategy."
+
+**Fix**:
+
+> "This tool helps improve engagement. You use it as part of your strategy."
+
+### Group 2 — Tic words
+
+Words Claude loves and humans barely use:
+
+- "landscape" (instead of "situation", "context")
+- "testament to" (instead of "proof", "example")
+- "catalyst" (instead of "driver", "engine")
+- "serves as" (instead of "is")
+- "acts as" (instead of "is")
+
+### Group 3 — Loaded style
+
+- **Em dashes** in every paragraph
+- **Bold** in the middle of every sentence
+- Lists in "Label: content" format
+- Decorative emojis in professional text
+
+### Group 4 — Fake communication
+
+- "I hope this is helpful"
+- "Based on my limited sources..."
+- Overly friendly tone that agrees with everything
+- "As a language model..."
+
+### Group 5 — Filler
+
+- "in order to" → "to"
+- "due to the fact that" → "because"
+- "could potentially" → "can"
+- "the future looks promising" → (delete)
+
+---
+
+## Use cases — copywriter agents
+
+The real value isn't running `/humanizer` once. It's **wiring it into agents** that automatically produce humanized text.
+
+### Agent — email sequence
+
+```
+> You are an expert copywriter. Use /humanizer on EVERY email.
+
+  Create a 3-email welcome sequence for my inventory SaaS
+  for mid-size retail in LATAM:
+
+  Email 1 — Introduction (who I am, what I do, why it matters)
+  Email 2 — Value (1 practical tip you can apply today)
+  Email 3 — Invitation (soft CTA toward a trial)
+
+  Rules:
+  - Each email 150 words max
+  - Conversational tone, message from a colleague
+  - ZERO "revolutionary", "unprecedented", "landscape"
+  - Run EVERY email through /humanizer before delivering it
+  - If /humanizer flags patterns, rewrite until it passes clean
+```
+
+### Agent — landing page
+
+```
+> Copy for my SaaS landing page. Structure:
+
+  1. Hero: headline + subheadline + CTA (headline max 20 words)
+  2. Problem: 2-3 sentences of real user pain
+  3. Solution: how it solves it (no hyperbole)
+  4. Benefits: 3 concrete ones with numbers if possible
+  5. Social proof: structure for testimonials
+  6. Final CTA: real urgency, not artificial
+
+  Run each section through /humanizer. If it detects patterns,
+  rewrite until clean.
+```
+
+### Agent — social media
+
+```
+> Posts for LinkedIn + Twitter + Instagram about my launch.
+
+  - LinkedIn: professional but approachable, no buzzwords
+  - Twitter: direct, with opinion, max 280 chars
+  - Instagram: visual, hook on the first line
+
+  5 posts per network. Run EACH ONE through /humanizer.
+  If it sounds like "generic brand content", rewrite.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Humanizing text that is NOT from AI
+
+If your text was already written by a human and you run it through humanizer, **it can make it worse**. Humanizer assumes the input has AI patterns. If it doesn't, it will "fix" things that were fine.
+
+### 2. Trusting a single manual pass
+
+Humanizer does 2 automatic passes. If you ask "humanize this" without the skill running both, you lose 50% of the value. Check that Claude is running both.
+
+### 3. Humanizing at the end, not during
+
+If you generate 10 emails and run them through humanizer at the end, you spend more tokens and the result is worse. **Run EACH email as it's generated**, not at the end.
+
+### 4. Not reading the output
+
+Humanizer **isn't infallible**. Sometimes it over-corrects, sometimes it under-corrects. **Read the output** before publishing. The skill is an assistant, not a final validator.
+
+### 5. Using it to hide laziness
+
+If your base text is **generic**, humanizer won't save it. It'll be generic text that **sounds more human**, but still says nothing. The base has to have real ideas.
+
+---
+
+## When NOT to use it
+
+| Case | Why |
+|------|---------|
+| Technical documentation | The "AI" tone in technical docs is **good** (precision, repetition). Humanizing can break clarity |
+| Legal messages / contracts | They need precision, not "voice" |
+| Formal academic text | Some "AI tics" overlap with valid academic style |
+| Voice transcripts | They're already human by definition |
+
+---
+
+## Quick comparison
+
+| Approach | Speed | Quality | Cost |
+|----------|-----------|---------|-------|
+| Humanizer skill | Fast (seconds) | High (2 passes) | Free |
+| Editing by hand | Slow (10-30 min/piece) | Very high | Your time |
+| "Humanizer" web services | Medium | Variable | $10-30/month |
+| Generating from scratch with a tuned prompt | Slow | Variable | Tokens |
+
+Sweet spot: **humanizer + light human review** = best quality/time ratio.
+
+---
+
+## Next steps
+
+- For a full suite of marketing skills, [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- For general principles of good output with Claude, [Claude best practices](/boveda/mejores-practicas-claude)
+- For code review with a similar "pattern + fix" philosophy, [code-reviewer skill](/boveda/skill-code-reviewer)

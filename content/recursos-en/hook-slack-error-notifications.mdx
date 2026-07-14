@@ -1,0 +1,86 @@
+---
+title: "Hook Slack Error Notifications — Slack when something stalls or fails"
+description: "Hook with 94 installs. Sends notifications to Slack when Claude hits long-running operations or errors. To catch productivity problems or stuck sessions without spamming you with successes."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "slack"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-slack-notifications", "hook-slack-detailed-notifications", "hook-discord-error-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/slack-error-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-error-notifications.json"
+---
+
+## What it is
+
+The equivalent of [Discord Error Notifications](/boveda/hook-discord-error-notifications) for Slack. It alerts you when:
+- Long-running operations occur (Claude takes too long)
+- Tools take a significant amount of time
+- Native Claude Code notifications fire
+
+Hook events: `PreToolUse` + `PostToolUse` + `Notification`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 94 |
+| Hook events | `PreToolUse` + `PostToolUse` + `Notification` |
+| Account required | Yes — Slack webhook |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/slack-error-notifications
+```
+
+Prerequisite: a Slack webhook.
+
+For Claude:
+
+```
+I installed the automation/slack-error-notifications hook. Configure
+SLACK_WEBHOOK_URL. Show me the thresholds that trigger a notification.
+```
+
+## What you can do with it
+
+### Detecting stuck sessions
+
+If Claude has spent 5+ min on a single operation, something is probably wrong. The notification lets you know.
+
+### Catch errors automatically
+
+When Claude fires an internal notification, the hook bounces it to Slack.
+
+### For autonomous sessions
+
+Long `/goal` runs: the hook alerts you if something gets stuck.
+
+### Combo with regular Slack Notifications
+
+If you also have [Slack Notifications](/boveda/hook-slack-notifications) (basic success), you can separate successes from errors across different channels.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you want success notifications:** this one is errors only. Use the other Slack hooks.
+- **Without a configured webhook:** it does nothing.
+- **If your channel is noisy:** review the thresholds first.
+- **For casual use:** less critical than for automated sessions.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Slack Error Notifications Hook](https://www.aitmpl.com/component/hooks/automation/slack-error-notifications) — exact command.
+- **JSON config:** [slack-error-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-error-notifications.json).
+
+## Related resources
+
+- [Slack Notifications Hook](/boveda/hook-slack-notifications) — for basic success.
+- [Slack Detailed Notifications Hook](/boveda/hook-slack-detailed-notifications) — for full context.
+- [Discord Error Notifications Hook](/boveda/hook-discord-error-notifications) — the Discord equivalent.

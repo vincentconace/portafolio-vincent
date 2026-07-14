@@ -1,0 +1,178 @@
+---
+title: "Prompt: debugging sistemático con Claude (no más 'a ver qué pasa')"
+description: "Un prompt estructurado que convierte a Claude en un asistente de debugging metódico: forma hipótesis, las prioriza por probabilidad, propone experimentos para validar cada una, y solo después sugiere fix. Para bugs que no son obvios."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-11"
+readingTime: "8 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "skill-code-reviewer"]
+---
+
+## Por qué importa
+
+El reflejo de un dev cuando hay un bug raro es probar cosas: "y si lo cambio acá", "y si pongo un log allá". A veces funciona. La mayoría de las veces te quedás 2 horas haciendo cambios random que no te llevan a ningún lado.
+
+Lo mismo le pasa a Claude si le decís "tengo un bug, ayudame". Tira fixes a ciegas. La diferencia con un buen debugger humano es **el método**: hipótesis → priorización → validación → fix.
+
+Este prompt fuerza ese método. Es más lento que "ayudame con este bug" suelto, pero te lleva al fix correcto en lugar de iterar 5 veces sobre síntomas.
+
+---
+
+## El prompt
+
+```
+Sos un ingeniero senior haciendo debugging sistemático. NO escribas código de fix hasta que terminemos la fase de análisis.
+
+CONTEXTO DEL BUG:
+<DESCRIPCION>
+[1-3 párrafos: qué pasa, cuándo empezó, qué hiciste para reproducirlo, qué error/output ves]
+</DESCRIPCION>
+
+CÓDIGO RELEVANTE:
+<CODIGO>
+[Pegá los archivos / funciones que toca el bug. No más de 200 líneas.]
+</CODIGO>
+
+LOGS / OUTPUT DEL ERROR:
+<LOGS>
+[Si tenés logs, stack traces, console output — pegalos enteros, no resumas]
+</LOGS>
+
+LO QUE YA PROBÉ:
+<INTENTOS>
+[Lista breve de cosas que probaste y no funcionaron. Esto evita que sugieras lo mismo.]
+</INTENTOS>
+
+PROTOCOLO DE ANÁLISIS:
+
+## Paso 1 — Reproducir mentalmente
+Antes de hipotetizar, describime en 3-4 líneas qué entendés que está pasando. Si algo del contexto no te queda claro, preguntá ANTES de seguir.
+
+## Paso 2 — Hipótesis (mínimo 3)
+Listame 3-5 hipótesis concretas de qué puede causar este bug. Para cada una:
+- **Hipótesis [N]**: explicación clara
+- **Probabilidad**: alta / media / baja, con razón
+- **Cómo se valida**: experimento específico (un log, un breakpoint, una query, un test rápido)
+- **Cómo se descarta**: cuál sería la observación que prueba que NO es esto
+
+Ordenalas por probabilidad (alta primero).
+
+## Paso 3 — Plan de validación
+Proponé el orden de los experimentos, optimizando por:
+1. **Costo bajo**: empezar por los que toman 2 minutos
+2. **Información que separa hipótesis**: experimentos que descartan varias hipótesis a la vez valen más que los que validan una sola
+
+Listame los primeros 2-3 pasos concretos a hacer YA.
+
+## Paso 4 — Esperar resultados
+NO escribas el fix. Esperá que yo corra los experimentos y te pase los resultados. Después iteramos.
+
+REGLAS:
+- Si una hipótesis es "es un problema de cache" o "es timing", **especificá qué cache y qué timing**. Vaguedad = no sirve.
+- Si tres hipótesis están en la misma área (ej: las 3 dicen "es la auth"), pensá si te estás obsesionando con una zona del código. Forzá 1 hipótesis fuera de esa zona.
+- No saltees el Paso 1. La mitad de los bugs se resuelven cuando alguien te obliga a explicarlos en voz alta.
+```
+
+---
+
+## Ejemplo real de uso
+
+### Bug
+
+> "Mi endpoint `/api/orders` a veces devuelve 200 con `[]` aunque sé que hay órdenes. No siempre. Reinicio el servidor y vuelve a funcionar. Reaparece después de unas horas."
+
+### Lo que el prompt extrae
+
+**Paso 1 — Reproducir mentalmente:**
+
+> Entiendo que tu endpoint devuelve la lista de orders y a veces te devuelve un array vacío sin error. El comportamiento parece relacionado con el tiempo de uptime del servidor. ¿Estás usando una conexión persistente a la DB (pool)? ¿Tenés algún caching en memoria (Redis, Map, etc.)?
+
+(Te preguntó algo crítico antes de inventar hipótesis. Decís: "Pool de Postgres con `pg`, sin Redis, sin Map en memoria deliberado.")
+
+**Paso 2 — Hipótesis:**
+
+> 1. **Connection pool con conexiones stale** — alta. Si una conexión queda en mal estado, el pool puede devolver una conexión que falla silenciosamente. Validación: log de `pool.totalCount` y `pool.idleCount` cada minuto. Descarte: si los counts son estables y healthy, no es esto.
+>
+> 2. **Filtro de tenant/org mal aplicado** — alta. Si tu query filtra por org_id y la session lo pierde después de cierto tiempo (cookie expira pero no error), te queda WHERE org_id = NULL. Validación: log del org_id en la query justo antes de ejecutarla. Descarte: si el org_id es correcto y la query con ese org devuelve rows en psql, no es esto.
+>
+> 3. **Race con migración / replicación lag** — media. Si tenés read replica y escribís a primaria, puede haber lag. Validación: ¿usás DATABASE_URL con replicas? Descarte: si la query corre contra primary, no es esto.
+>
+> 4. **Bug de paginación con cursor stale** — baja. Si tu endpoint usa cursor pagination y el cursor se cachea client-side... Validación: ¿el cliente manda `?cursor=`? Descarte: si la request no tiene cursor, no es esto.
+
+**Paso 3 — Plan:**
+
+> Empezá con (2): es 30 segundos de trabajo. Agregá `console.log('org_id query', orgId)` justo antes del query. Reproducí el bug y mirá si org_id es null cuando devuelve []. Si SÍ es null, tenemos el culpable y pasamos a fix. Si es válido, vas a (1).
+
+(Corrés, ves que `org_id` es `undefined` cuando devuelve []. Encontraste el bug en 30 segundos.)
+
+**Paso 4:**
+
+Solo ahora Claude propone el fix:
+
+> El problema es que después de ~1h tu auth middleware no está poblando `req.org_id`. Acordate de [...] La fix es [...]
+
+---
+
+## Variantes del prompt
+
+### Cuando el bug es de UI
+
+Agregá al contexto:
+
+```
+## Paso 1.5 — Reproducir visualmente
+Antes de hipotetizar, describí en 3-4 líneas qué debería verse vs qué se ve. Pediime un screenshot si no te queda claro. No sigas sin tener el "delta visual" claro.
+```
+
+### Cuando es un performance issue
+
+Cambiá el Paso 2:
+
+```
+## Paso 2 — Hipótesis de bottleneck
+Listame 3-5 hipótesis de dónde puede estar el cuello de botella:
+- DB: queries lentas, N+1, locks, missing indexes
+- App: serialización pesada, loops anidados, sync calls bloqueantes
+- Red: payloads grandes, calls externos sin caching, latencia entre servicios
+- Cliente: re-renders, bundles pesados, fetch waterfall
+
+Para cada una, decime qué métrica/herramienta usar para validar (Chrome DevTools timeline, EXPLAIN ANALYZE, etc.).
+```
+
+### Cuando es un bug intermitente / flaky
+
+Agregá:
+
+```
+## Paso 1.5 — Patrón temporal
+Antes de hipotetizar, pediime:
+- Frecuencia: ¿1 de cada 10? ¿1 de cada 1000?
+- Patrón: ¿se da más en horarios pico? ¿después de N tiempo? ¿solo en CI?
+- Tasa de éxito en local vs producción
+
+Sin estos datos no podés priorizar hipótesis. La mitad de los flaky son race conditions y la otra mitad cache/timing — necesitás el patrón para distinguir.
+```
+
+---
+
+## Cuándo NO usar este prompt
+
+<Callout type="warning" title="Para bugs obvios, perdés tiempo">
+
+Si el error es:
+- Stack trace claro apuntando a una línea con `undefined.foo`
+- Typo de variable
+- Import faltante
+- Sintaxis rota
+
+**No uses este prompt**. Pegale el error y listo. Este prompt brilla cuando ya investigaste un rato y no le encontrás la vuelta.
+
+</Callout>
+
+---
+
+## Próximos pasos
+
+- Combinalo con [Skill code-reviewer](/boveda/skill-code-reviewer): el reviewer te detecta bugs antes de que lleguen a producción.
+- Si tu equipo tiene un postmortem template, agregá la salida del Paso 2 (hipótesis ordenadas) como sección del postmortem — es valioso para el aprendizaje.

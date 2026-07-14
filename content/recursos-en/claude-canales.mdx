@@ -1,0 +1,292 @@
+---
+title: "Claude Channels — connect Claude Code to Telegram and Discord (official plugins)"
+description: "Open source plugins from Anthropic. Connect Claude Code to Telegram and/or Discord. You message it from the app and it replies right there. Setup: create a bot in BotFather/Discord Developer Portal + 2 commands in Claude Code. Requires Bun as the runtime."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "telegram", "discord"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-canales-tg-discord", "claude-dispatch", "hooks-automatizacion"]
+---
+
+## What Channels are
+
+A way to talk to Claude Code **from other apps**. Instead of just the terminal, you message it from Telegram or Discord and it replies right there.
+
+### Analogy
+
+Claude has a "phone." Normally you only talk to it through the terminal. **Channels** are like giving it **another number** — one on Telegram and another on Discord.
+
+### Available plugins
+
+| Channel | Repo |
+|-------|------|
+| **Telegram** | `anthropics/claude-plugins-official/external_plugins/telegram` |
+| **Discord** | `anthropics/claude-plugins-official/external_plugins/discord` |
+
+Open source, maintained by Anthropic.
+
+> This guide complements [Claude Channels TG/Discord](/boveda/claude-canales-tg-discord) with technical detail on the official setup.
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed ([install Claude Code](/boveda/instalar-claude-code))
+- **Bun** (the runtime the plugin uses)
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+---
+
+## Telegram setup — 3 steps
+
+### Step 1 — Create a bot in Telegram
+
+BotFather is the official "bot creator."
+
+1. Open Telegram
+2. Search for `@BotFather`
+3. Tap the result with the blue checkmark ✓
+4. Send `/newbot`
+5. It asks for the bot's **name** (e.g., "My Claude Assistant")
+6. It asks for a **username** (must end in "bot", e.g., `my_claude_bot`)
+7. It replies with your **TOKEN** (a long string like `123456:ABC-DEF...`)
+8. **Copy it and save it**
+
+**Important**: the token is the key. Whoever has it controls the bot. **Do NOT share it**.
+
+### Step 2 — Install the plugin
+
+Inside a Claude Code session:
+
+```
+/plugin install telegram@claude-plugins-official
+```
+
+### Step 3 — Configure the token
+
+```
+/telegram:configure TU_TOKEN_AQUI
+```
+
+Replace `TU_TOKEN_AQUI` with the one from BotFather. It's saved in `.claude/channels/telegram/.env`.
+
+### Verify
+
+Search for your bot in Telegram (by its username) and send it `/start`. If it replies, you're **connected**.
+
+---
+
+## Discord setup — 3 steps
+
+### Step 1 — Create a bot in Discord
+
+1. `discord.com/developers/applications`
+2. **New Application** → bot name
+3. Bot → **Add Bot**
+4. Copy the **TOKEN** (it's a secret, don't share it)
+5. OAuth2 → URL Generator → scopes `bot` + basic permissions (Send Messages, Read Messages)
+6. Paste the URL in your browser to invite the bot to your server
+
+### Step 2 — Install the plugin
+
+```
+/plugin install discord@claude-plugins-official
+```
+
+### Step 3 — Configure
+
+```
+/discord:configure TU_TOKEN_AQUI
+```
+
+---
+
+## Critical security configuration
+
+For both Telegram and Discord, configure **who can talk to it**:
+
+### Telegram
+
+In `.claude/channels/telegram/.env`:
+
+```
+TELEGRAM_BOT_TOKEN=tu_token
+TELEGRAM_ALLOWED_USERS=@tu_username,@otro_admin
+```
+
+### Discord
+
+```
+DISCORD_BOT_TOKEN=tu_token
+DISCORD_ALLOWED_CHANNELS=123456789012345678
+DISCORD_ALLOWED_USERS=tu_id_discord
+```
+
+**Without allowed_users / allowed_channels**, anyone with the bot's username can send it commands.
+
+---
+
+## Use cases
+
+### 1. Monitor for long-running processes
+
+You have a script that takes 20 min. You use a [Stop hook](/boveda/hooks-automatizacion):
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -X POST https://api.telegram.org/bot$TG_TOKEN/sendMessage -d 'chat_id=$TG_CHAT&text=Claude finished the task'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+You go grab lunch, come back, and get a ping on Telegram when it's done.
+
+### 2. Operate agents from your phone
+
+Combined with an [agent ecosystem](/boveda/ecosistema-de-agentes), Telegram = remote control for agents 24/7.
+
+```
+[From the subway]
+You: Did any clients reply today?
+Bot: 3 replied:
+  - Acme: confirmed Thursday's meeting
+  - Beta: asked to reschedule
+  - Gamma: OK, no further detail
+```
+
+### 3. Discord for teams
+
+A #dev channel. Anyone on the team:
+
+```
+@ClaudeBot review the latest commits on main and summarize
+the changes for me
+```
+
+Claude reads, summarizes, and posts to the channel. **Shared history** of the team's queries.
+
+### 4. Incident notifications
+
+With a monitoring MCP:
+
+```
+Mac mini detects an error in a production payment.
+Claude → generates a message → posts to Discord #alerts with:
+- What error
+- How many times
+- A suggested fix
+```
+
+---
+
+## Security — critically important
+
+Any command you send via Telegram/Discord **runs on your local machine**.
+
+### Minimum rules
+
+1. **`allowed_users` ALWAYS** — no exceptions
+2. **`allowed_channels` for Discord** — do NOT open it up to the whole server
+3. **Restrictive `permissions.allow`** for sessions via channel
+4. **Destructive actions** (delete, force push, drop table) → `PreToolUse` hooks that **always require human confirmation**
+5. **Token rotation** — if you suspect a leak, regenerate from BotFather/Discord Dev and update the config
+
+### Tokens in code
+
+**Never** commit a `.env` with tokens:
+
+```bash
+echo ".env" >> .gitignore
+echo ".claude/channels/*/.env" >> .gitignore
+```
+
+---
+
+## Telegram vs Discord — when to use each
+
+| Telegram | Discord |
+|----------|---------|
+| Private, 1:1 with your Claude | Shared, with your team |
+| Personal / operational | Collaboration |
+| Native mobile notifications | Threads, organization by channels |
+| Simpler setup | More moderation |
+
+If you're solo and want to operate from your phone → **Telegram**.
+If your team lives on Discord and you want Claude to take part → **Discord**.
+
+The two aren't mutually exclusive. You can have both.
+
+---
+
+## Anti-patterns
+
+### 1. No `allowed_users`
+
+An open bot = anyone can send commands and **burn through your tokens** or do unwanted things.
+
+### 2. Token exposed in a commit
+
+If you commit the token, someone grabs it and operates your bot. **`.env` in `.gitignore`**.
+
+### 3. Bot in a public Discord server
+
+If you invite the bot to a public server, **someone will misuse it**. Only private servers for your team.
+
+### 4. Expecting it to replace your terminal
+
+Telegram/Discord are for **short queries and small commands**. For long sessions, the terminal still wins.
+
+### 5. Destructive commands without confirmation
+
+`PreToolUse` hooks for `rm -rf`, `drop table`, `git push --force`. **Always require human confirmation** from a remote channel.
+
+---
+
+## When you DON'T need Channels
+
+✅ You use Claude on your machine all day without moving → the terminal is enough
+✅ No 24/7 agents → there's nothing to monitor
+✅ You work solo, not sharing with a team
+
+If all three are yes, **don't install channels** — you'd be adding complexity for nothing.
+
+---
+
+## Powerful combinations
+
+### With Dispatch
+
+[Claude Dispatch](/boveda/claude-dispatch) is the "official" version from the Claude app. Channels are the DIY approach with plugins.
+
+Use Dispatch if you want an integrated UI. Channels if you want full control.
+
+### With hooks
+
+[Automation hooks](/boveda/hooks-automatizacion) + Channels = automatic notifications when events happen.
+
+### With an agent ecosystem
+
+For 24/7 multi-agent systems, Channels are the remote control.
+
+---
+
+## Next steps
+
+- For a broader conceptual guide, [Claude Channels TG/Discord](/boveda/claude-canales-tg-discord)
+- For the official integrated alternative, [Claude Dispatch](/boveda/claude-dispatch)
+- For hooks that notify via Channels, [automation hooks](/boveda/hooks-automatizacion)

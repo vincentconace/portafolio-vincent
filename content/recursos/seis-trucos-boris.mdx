@@ -1,0 +1,284 @@
+---
+title: "6 trucos del creador de Claude Code para Opus 4.7"
+description: "Trucos publicados por Boris Cherny (creador de Claude Code) después de usar Opus 4.7 varias semanas: auto mode, fewer-permission-prompts, recaps, focus mode, effort level y verificación. Los 6 explicados con comandos listos para copiar."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "opus"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["trucos-basicos-claude", "claude-tres-modelos", "comando-goal"]
+---
+
+## Quién es Boris
+
+Boris Cherny es el creador de Claude Code — el CLI con el que millones usan Claude desde la terminal. Cuando él publica trucos, vale la pena prestar atención: **es el ingeniero que diseñó cómo Claude entra a tu compu**, no un usuario cualquiera.
+
+Después de usar Opus 4.7 varias semanas en su día a día, publicó 6 trucos que cambian cómo trabajar con Claude. Vamos uno por uno.
+
+---
+
+## Truco 1 — Auto mode
+
+### Qué es
+
+Un modo donde Claude **decide solo qué confirmaciones pedir y cuáles no**, según el riesgo de la acción.
+
+- Edits en archivos no críticos → ejecuta sin preguntar
+- Acciones que tocan auth, payments, prod → siempre pide
+- Comandos destructivos → siempre pide
+
+El balance entre "ask each time" (te molesta todo el rato) y "trust mode" (peligroso).
+
+### Cómo activarlo
+
+```
+/auto on
+```
+
+(Verificá la sintaxis exacta en la versión actual de Claude Code.)
+
+### Cuándo conviene
+
+✅ Trabajás en proyectos donde el 80% es edits "seguros"
+✅ Te cansa el "¿permitir? y/n" cada 30 segundos
+✅ Confiás en tu CLAUDE.md como guardrail base
+
+### Cuándo NO
+
+❌ Estás aprendiendo Claude Code todavía (mejor "ask each time")
+❌ Trabajás en código sensible (auth, payments, prod) sin tests
+❌ No tenés git limpio (no podés revertir fácil)
+
+---
+
+## Truco 2 — `/fewer-permission-prompts`
+
+### El problema
+
+Pasás 30 minutos en una sesión y la mitad fue "¿permito este `npm install`? ¿permito este `git log`? ¿permito este `ls`?". Tu cerebro pone los ojos en blanco.
+
+### La solución
+
+Un comando que **revisa el historial reciente** y te ayuda a agregar a tu allowlist los comandos que aprobaste 5+ veces.
+
+```
+/fewer-permission-prompts
+```
+
+Claude:
+1. Mira tu historial
+2. Lista los comandos que aprobaste seguido
+3. Te propone agregarlos a `permissions.allow` en settings
+4. Si decís ok, los agrega
+
+### Resultado
+
+La próxima sesión, esos comandos no te molestan. **Foco preservado.**
+
+### Trampa
+
+No agreges a allow cosas como `rm`, `git push --force`, `npm uninstall`. Pueden ser inocuas en algún contexto pero destructivas en otro.
+
+---
+
+## Truco 3 — Recaps automáticos
+
+### El problema
+
+Sesión de 2 horas, hiciste 15 cosas. Al final no sabés bien qué se cambió y qué quedó pendiente.
+
+### El truco
+
+Pedirle a Claude **recap explícito** cada cierto rato:
+
+```
+> /recap
+
+Claude:
+  Cambios de esta sesión:
+  - Refactor de auth en src/lib/auth/ (8 archivos)
+  - Nuevo endpoint /api/profile (2 archivos)
+  - Tests actualizados (5 archivos)
+
+  Pendientes:
+  - Documentar el cambio de auth en docs/
+  - Verificar que el endpoint maneja edge case de usuario sin perfil
+
+  Decisiones tomadas:
+  - Decidimos NO migrar a Clerk todavía (necesita más eval)
+  - Cambiamos formato de fechas a ISO 8601 globalmente
+```
+
+### Variante automática
+
+Combinado con [hooks](/boveda/hooks-automatizacion), podés hacer que recap automático corra cada X turnos:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      { "type": "command", "command": "claude --no-interactive '/recap brief'" }
+    ]
+  }
+}
+```
+
+Cuando cerrás la sesión, te queda el recap escrito en algún lado.
+
+---
+
+## Truco 4 — Focus mode
+
+### Qué es
+
+Un modo donde Claude **no se desvía** de la tarea actual. Combina ideas de `/goal` con auto-verificación.
+
+```
+/focus on "completar la migración a Clerk"
+```
+
+A partir de ahí:
+- Antes de cada acción, Claude verifica si aporta a la meta
+- Si descubre algo no relacionado, lo anota en findings pero NO lo trabaja
+- Antes de declarar "listo", releé la meta y verifica que está completa
+
+### Diferencia con `/goal`
+
+Similar pero más liviano: `focus` es para una sesión, `goal` es para trabajo extendido con findings persistentes.
+
+Para implementarlo como skill propia, ver [comando /goal](/boveda/comando-goal).
+
+---
+
+## Truco 5 — Effort level
+
+### Qué es
+
+Decirle a Claude **cuánto pensar** antes de responder. Cuatro niveles:
+
+| Effort | Cuándo |
+|--------|--------|
+| `low` | Tareas mecánicas (rename, format, traducir) |
+| `medium` | Default razonable |
+| `high` | Tareas complejas (refactor, decisión) |
+| `ultrathink` | Lo más profundo (debugging difícil, arquitectura) |
+
+### Cómo usarlo
+
+Antes del prompt:
+
+```
+think low
+> Renombrame todas las apariciones de getUserData a fetchUser
+```
+
+```
+ultrathink
+> Tengo un bug intermitente que aparece 1 de cada 100 veces.
+  Análisis estructurado: hipótesis, validación, propuesta.
+```
+
+### Por qué importa
+
+`ultrathink` con Sonnet a veces le gana a `low` con Opus. **El effort puede pesar más que el modelo** para algunas tareas.
+
+Combinación práctica: **Sonnet + ultrathink** es buen balance costo/calidad para tareas medio-difíciles.
+
+---
+
+## Truco 6 — Verificación
+
+### El problema
+
+Claude termina algo, dice "listo", vos descubrís que no compila / rompió tests / hizo algo distinto a lo pedido.
+
+### El truco
+
+**Forzar que Claude se autoverifique** antes de declarar listo:
+
+En tu `CLAUDE.md`:
+
+```markdown
+## Verificación antes de "listo"
+
+Antes de declarar cualquier tarea como completada:
+
+1. Releé la pedida original.
+2. Listá punto por punto qué entregaste vs qué pedía.
+3. Identificá gaps explícitamente.
+4. Si hay gaps, NO declares listo — completá primero.
+5. Si tocaste código:
+   - Corré los tests relevantes
+   - Mostrame el output
+6. Si tocaste config:
+   - Verificá que el comando build / dev no se rompa
+
+Solo después de TODO esto, podés decir "listo".
+```
+
+### Resultado
+
+Pasás de "dice listo y descubrís problemas" a "dice listo y casi siempre está bien".
+
+**El cambio más impactante** de los 6 trucos. Si solo aplicás uno, que sea este.
+
+---
+
+## Combinarlos en flow
+
+Boris usa los 6 todos juntos. Un día típico:
+
+```
+[Mañana]
+- Activá auto mode (truco 1)
+- Corré /fewer-permission-prompts si tenés acumulación (truco 2)
+
+[Durante el día]
+- Para tareas simples: think low + edits
+- Para tareas grandes: /focus on + ultrathink + verificación
+
+[Cierre]
+- /recap brief (truco 3)
+- Anotás aprendizajes en CLAUDE.md
+```
+
+Sin los 6 trucos: Claude funciona pero te peleás con confirmaciones, perdés foco y te sorprenden los "listos" prematuros.
+Con los 6: 30-50% más productivo en la misma sesión.
+
+---
+
+## Cuál priorizar si solo aplicás uno
+
+Por orden de impacto según mi experiencia:
+
+1. **Verificación (#6)** — el que más previene errores
+2. **Effort level (#5)** — el que más mueve calidad
+3. **Auto mode (#1)** — el que más reduce fricción
+4. **fewer-permission-prompts (#2)** — el segundo en fricción
+5. **Focus mode (#4)** — útil pero específico
+6. **Recaps (#3)** — útil pero podés hacer manual
+
+Si arrancás con verificación + effort level, el resto suma incremental.
+
+---
+
+## La filosofía debajo de los 6
+
+Los 6 tienen algo en común: **bajan la fricción del operador humano sin perder control**.
+
+- Auto mode → menos confirmaciones
+- fewer-permission-prompts → menos repetir
+- Recaps → menos olvido
+- Focus → menos dispersión
+- Effort → menos desperdicio de cómputo
+- Verificación → menos sorpresas
+
+Boris construyó Claude Code con esta filosofía. Aplicarlos no es "trucos" en el sentido marketinero — es **cómo el creador piensa que la herramienta debe usarse**.
+
+---
+
+## Próximos pasos
+
+- Para los 4 trucos más fundamentales (Ultra Think, sub-agentes, /init), [trucos básicos](/boveda/trucos-basicos-claude)
+- Para profundizar en el comando focus / goal, [comando /goal](/boveda/comando-goal)
+- Para 83 tips más extensos del mismo Boris + Thariq, [Claude Code Best Practices](/boveda/claude-code-best-practices)

@@ -1,0 +1,96 @@
+---
+title: "MCP ImageSorcery — procesamiento de imágenes desde Claude Code"
+description: "MCP server con 214 installs que provee tools para procesamiento de imágenes desde Claude Code. Resize, crop, format conversion, filters, batch processing — operaciones tipo ImageMagick pero scripted."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-elevenlabs", "mcp-filesystem-access", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/imagesorcery"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/imagesorcery.json"
+---
+
+## Qué es
+
+ImageSorcery MCP te da capacidades de procesamiento de imágenes desde Claude Code: resize, crop, conversion de formato, filtros, watermarks, batch processing.
+
+El uso típico es operaciones bulk que serían un loop de bash con ImageMagick o un script Python con Pillow: "redimensioná estas 200 imágenes a 1200x630 y exportá como webp". Lo escribís en lenguaje natural, Claude lo orquesta.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 214 |
+| Servidor MCP | `imagesorcery-mcp` |
+| Operaciones | Resize, crop, convert, filters, batch |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/imagesorcery
+```
+
+Para Claude:
+
+```
+Instalé el MCP devtools/imagesorcery. En `~/Pictures/blog-2026/`,
+redimensioná todas las imágenes a 1600px de ancho manteniendo aspect
+ratio, conviérlas a webp con calidad 85 y guardame el output en
+`~/Pictures/blog-2026-optimized/`.
+```
+
+## Qué podés hacer con esto
+
+### Optimización para web
+
+"Bajá el peso de todas las imágenes mayores a 500KB en mi carpeta `public/images/` convirtiéndolas a webp con calidad 80". Útil pre-deploy.
+
+### Resize por device
+
+"Generame versiones 320, 640, 1024 y 1920 de ancho de estas hero images, para servir responsive". Cubre srcset.
+
+### Watermarks batch
+
+"Aplicáme el logo de mi empresa en la esquina inferior derecha de las 50 fotos en la carpeta X, con opacity 0.4 y padding 20px".
+
+### Format conversion
+
+"Convertí todos los PNGs en este folder a JPG con calidad 90, manteniendo el nombre original". Para reducir peso de assets que no necesitan transparencia.
+
+### Cropping inteligente
+
+"Para cada foto en X, cropá al ratio 16:9 centrado. Después, exportá como WebP".
+
+### Combinado con [Filesystem Access](/boveda/mcp-filesystem-access)
+
+ImageSorcery procesa; Filesystem Access te deja autorizar acceso a las carpetas correctas. Combo natural.
+
+## Pre-requisitos
+
+- **Imagenes accesibles** (a través de [Filesystem Access](/boveda/mcp-filesystem-access) o paths que Claude Code ya alcance)
+- **Espacio en disco** para outputs (operaciones bulk generan archivos)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para edición creativa compleja** (composiciones, retoque pro): usá Photoshop / GIMP / Affinity. ImageSorcery es para operaciones programáticas.
+- **Para AI image generation** (Midjourney, DALL-E, Stable Diffusion): otros tools.
+- **Para batch muy masivo** (10k+ imágenes): scripts dedicados con multiprocessing son más eficientes.
+- **Si tu necesidad es solo una imagen casual:** abrí Preview / GIMP y listo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [ImageSorcery MCP](https://www.aitmpl.com/component/mcps/devtools/imagesorcery) — comando exacto.
+- **Config JSON:** [imagesorcery.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/imagesorcery.json).
+
+## Recursos relacionados
+
+- [ElevenLabs MCP](/boveda/mcp-elevenlabs) — el equivalente para audio (generación, procesamiento).
+- [Filesystem Access MCP](/boveda/mcp-filesystem-access) — para autorizar las carpetas que ImageSorcery va a leer/escribir.
+- [Agency Agents](/boveda/agency-agents) — para orquestar pipelines tipo "scraping → procesamiento de imágenes → publicación".

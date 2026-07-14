@@ -1,0 +1,88 @@
+---
+title: "Hook Validate Branch Name — enforce convention Git Flow al crear branches"
+description: "Hook con 293 installs. Valida que branches sigan convention Git Flow antes de checkout: feature/*, release/v*.*.*, hotfix/*. Previene branches malformadas o ad-hoc."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-prevent-direct-push", "hook-conventional-commits", "hook-force-push-blocker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/git/validate-branch-name"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/validate-branch-name.json"
+---
+
+## Qué es
+
+Antes de cualquier `git checkout -b` o `git switch -c`, valida que el nombre de la branch siga Git Flow:
+- `feature/<name>` para features
+- `release/v*.*.*` para releases (semver)
+- `hotfix/<name>` para hotfixes
+
+Si no matchea, bloquea la creación. Hook event: `PreToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `git` |
+| Installs | 293 |
+| Hook event | `PreToolUse` (Bash) |
+| Patterns | feature/*, release/v*.*.*, hotfix/* |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook git/validate-branch-name
+```
+
+Para Claude:
+
+```
+Instalé el hook git/validate-branch-name. Probá:
+`git checkout -b mi-branch` debería bloquearse. Con
+`git checkout -b feature/auth-oauth` debería pasar.
+```
+
+## Qué podés hacer con esto
+
+### Enforce Git Flow sin disciplina
+
+Vos no tenés que recordar la convention — el hook la enforce.
+
+### Para teams donde branch name matters
+
+CI scripts que matchean por prefix (`feature/*` triggerea ciertos tests), release tooling automático — todo necesita convention respetada.
+
+### Para sesiones autónomas
+
+Claude no inventa nombres random — debe seguir la convention.
+
+### Combo con [Prevent Direct Push](/boveda/hook-prevent-direct-push) y [Conventional Commits](/boveda/hook-conventional-commits)
+
+Triple gate Git Flow:
+1. Branch name valid
+2. No direct push a main
+3. Conventional commit format
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu team no usa Git Flow:** otro convention podría aplicar (trunk-based, etc.). Ajustá patterns o no instales.
+- **Para repos personal / experimental:** overhead.
+- **Si tu CI ya valida:** este hook duplica pero local.
+- **Quick prototypes:** override puede ser frecuente.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Validate Branch Name Hook](https://www.aitmpl.com/component/hooks/git/validate-branch-name) — comando exacto.
+- **Config JSON:** [validate-branch-name.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/git/validate-branch-name.json).
+
+## Recursos relacionados
+
+- [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push) — bloquea push a main.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — enforce format de mensaje.
+- [Force Push Blocker Hook](/boveda/hook-force-push-blocker) — completar la triple red.

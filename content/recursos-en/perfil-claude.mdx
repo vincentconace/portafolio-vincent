@@ -1,0 +1,290 @@
+---
+title: "Claude Profile — a permanent system prompt for all your chats"
+description: "Claude has a place (Settings → Profile) where you tell it ONCE who you are, what you do, and how you want it to respond. It applies to ALL conversations, on every plan (even free). 30-second setup + copy-paste template."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "4 min"
+relatedSlugs: ["hablarle-a-claude", "configura-claude-ahorra", "claude-cowork-workflow"]
+---
+
+## What it is
+
+Claude has a place where **once** you tell it:
+- Who you are
+- What you do
+- How you want it to respond
+
+It applies to **ALL** your conversations. It's like a **permanent system prompt** that Claude respects in every chat.
+
+It works on **every plan**, even the free one.
+
+---
+
+## 30-second setup
+
+1. Open `claude.ai` in your browser
+2. Click the **icon at the bottom left** (your name/avatar)
+3. **Settings**
+4. **Profile** section
+5. Write your profile → **Save**
+
+---
+
+## What to include
+
+### Who you are
+
+- Name and role
+- Industry or niche
+- Technical level
+
+### How you want responses
+
+- Language
+- Tone (formal, casual, direct)
+- Length (short, detailed)
+- Format (bullets, paragraphs, commented code)
+
+### What NOT to do
+
+- "Don't use 'great question'"
+- "Don't repeat my question"
+- "No unnecessary jargon"
+- "No filler phrases"
+
+### Code (optional)
+
+- Main stack
+- Preferred code style
+- Whether you want comments in the code
+
+---
+
+## The most powerful part — the constraints
+
+The rules about what it should **NOT** do are what **transforms the experience the most**.
+
+Claude respects constraints **better than** positive instructions. If you tell it "don't start with 'great question'", it obeys 100%.
+
+---
+
+## Copy-paste template
+
+```
+About me:
+- I'm [YOUR NAME], [YOUR ROLE] in the [YOUR INDUSTRY] industry
+- Technical level: [basic / intermediate / advanced / expert]
+- I work with: [YOUR STACK / TOOLS]
+
+How to respond to me:
+- Language: English [neutral / US / UK]
+- Tone: direct, professional but approachable
+- Format: bullets for lists, short paragraphs for explanations
+- Length: concise by default, detailed if I ask "in depth"
+- Code: commented only where the "why" isn't obvious
+
+DON'T:
+- DON'T start with "sure", "great question", or preambles
+- DON'T repeat my question before answering
+- DON'T use emojis in technical responses
+- DON'T use filler phrases like "as you can see"
+- DON'T end with "I hope this was helpful"
+- DON'T use ellipses
+- DON'T use em dashes (—)
+
+When in doubt:
+- If info is missing, ask me instead of making it up
+- If there are 2-3 valid approaches, show me the tradeoffs instead
+  of picking one
+- If what I'm asking has obvious problems, tell me before
+  implementing
+```
+
+Adapt the `[brackets]` to your case.
+
+---
+
+## Examples by role
+
+### For a senior dev
+
+```
+- I'm a senior backend dev at a B2B SaaS
+- Stack: TypeScript + Node + Postgres + Vercel
+- 8 years of experience, I don't need basic explanations
+
+Responses:
+- Assume I know common patterns (DI, Repository, etc.)
+- Show me direct code, no preliminary pseudo-code
+- If you recommend a library, justify why vs alternatives
+- TypeScript strict mode always
+
+DON'T:
+- DON'T explain basic programming concepts to me
+- DON'T tell me "per best practices..." — tell me WHICH
+  practice and why
+- DON'T use any in TypeScript
+```
+
+### For a non-technical founder
+
+```
+- Founder of [NICHE], I don't code
+- I use Claude for research, writing, strategy
+- My audience: [TARGET]
+
+Responses:
+- Clear language, no jargon
+- If you need technical terms, explain them in 1 line
+- Structure: TL;DR first + details after
+- Concrete examples > theory
+
+DON'T:
+- DON'T use jargon without explaining
+- DON'T suggest paid tools without flagging the cost
+- DON'T make assumptions about my tech stack (I don't have one)
+```
+
+### For a content creator
+
+```
+- Content creator in [NICHE], LATAM
+- 50k Instagram followers, 20k TikTok
+- I sell a course on [TOPIC]
+
+Responses:
+- Latin American Spanish, no formalities
+- Focus on the actionable
+- When you propose something, give me the "why" in 1 line
+- Real metrics when they apply
+
+DON'T:
+- DON'T use AI words (landscape, navigate, delve)
+- DON'T tell me "this will go viral" without a concrete reason
+- DON'T suggest premium tools without a free alternative
+```
+
+### For a marketer
+
+```
+- I'm Head of Growth at a Series A B2B SaaS
+- Stack: HubSpot + Mixpanel + Stripe + Webflow
+- Current focus: lower CAC, raise LTV
+
+Responses:
+- Concise, professional
+- Bullet points for actions
+- If you propose an experiment, give me: hypothesis + metric + duration
+- If you reference benchmarks, cite the source
+
+DON'T:
+- DON'T tell me "it depends" without proposing options
+- DON'T copy generic playbooks without adapting to my context
+- DON'T use motivational language
+```
+
+---
+
+## Per project vs global
+
+### Global profile (claude.ai Settings)
+
+Applies to ALL conversations. For general **personal** preferences.
+
+### Specific project ([Projects](/boveda/configura-claude-ahorra))
+
+Applies only within that Project. For context **specific to a client / product / topic**.
+
+**Combine**: global profile with your general preferences + Project with specific context = fine-grained override.
+
+---
+
+## Anti-patterns
+
+### 1. Vague profile
+
+❌ "I'm a dev, I like clean code"
+✅ "I'm a Node + TS backend dev, style: no premature abstractions, mandatory tests for business logic"
+
+### 2. Positive instructions only
+
+Constraints (what NOT to do) are MORE effective. Include at least 5.
+
+### 3. A 500-word profile
+
+Past a certain length, **Claude only partially processes it**. Keep it to 100-300 words.
+
+### 4. Forgetting to update it
+
+Your role/stack/preferences change. **Review every 3-6 months** and update.
+
+### 5. Conflicts with the project's CLAUDE.md
+
+If your Profile says "respond in English" and the project's CLAUDE.md says "respond in Spanish", Claude gets confused. **Coordinate the two**.
+
+---
+
+## Cases where the Profile changes EVERYTHING
+
+### Before (without a tuned profile)
+
+```
+> What's the best library for validation?
+
+Claude: Great question! There are several libraries for
+validation in JavaScript. Each one has its pros and cons.
+Let's explore the most popular options:
+
+1. Zod - A modern, type-safe library...
+[3 more paragraphs]
+
+I hope this helped. Do you need more information?
+```
+
+### After (with a tuned profile)
+
+```
+> What's the best library for validation?
+
+Claude: Zod. Type-safe, integrates with TS strict, runtime + compile
+checks. Alternatives: yup (less type-safe), valibot (faster,
+immature).
+```
+
+**80% fewer tokens, 100% more useful**.
+
+---
+
+## Powerful combinations
+
+### With a per-project CLAUDE.md
+
+Global profile + specific CLAUDE.md = layered rules. The most general in the profile, the specific in CLAUDE.md.
+
+### With Talking to Claude
+
+[Talking to Claude](/boveda/hablarle-a-claude) is the 4 elements per prompt. The Profile **pre-applies** them to all your chats.
+
+### With the 5 settings
+
+[Configure Claude and save](/boveda/configura-claude-ahorra) — the Profile is 1 of the 5. **Start there**.
+
+---
+
+## Why most people don't use it
+
+- **They don't know it exists** (Settings is hidden)
+- **They assume it only works on Pro** (it works on Free too)
+- **They think it's just "cosmetic personalization"** (it's a functional system prompt)
+
+**Once you set it up, you won't want Claude without a profile**.
+
+---
+
+## Next steps
+
+- For more settings that double your performance, [configure Claude and save](/boveda/configura-claude-ahorra)
+- To understand why a good prompt matters per interaction, [talking to Claude](/boveda/hablarle-a-claude)
+- To use Cowork with your profiles, [Cowork workflow](/boveda/claude-cowork-workflow)

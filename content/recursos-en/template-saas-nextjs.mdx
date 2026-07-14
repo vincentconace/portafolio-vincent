@@ -1,0 +1,246 @@
+---
+title: "Next.js SaaS Template — auth, payments, and AI ready to ship"
+description: "Modern boilerplate with Next.js 16, auth (Clerk or Supabase), payments (Stripe + Mercado Pago), Postgres with Drizzle, admin panel, and AI endpoints integrated with Claude. From clone to deploy in under 30 minutes."
+difficulty: "intermedio"
+category: "templates"
+tools: ["next.js", "typescript", "stripe", "supabase", "claude-api"]
+badge: "actualizado"
+version: "v2.1"
+publishedAt: "2026-05-05"
+readingTime: "13 min"
+relatedSlugs: ["agente-pagokit", "plugin-supabase-mcp"]
+---
+
+## What it's for
+
+A Next.js template that solves the pieces you **always have to build from scratch** when starting a SaaS:
+
+- **Auth** with sessions, OAuth, password reset, and MFA
+- **Payments** subscriptions and one-time, with well-handled webhooks
+- **Multi-tenancy** (organizations, invitations, roles)
+- **Admin panel** to view users, subscriptions, metrics
+- **AI endpoints** preconfigured for Claude with caching and rate limits
+- **Transactional email** with editable templates
+- **i18n** ES/EN preconfigured
+
+What it does NOT include: your product. That part is on you. But the foundation is ready so that from day 1 you can focus on the business logic, not on repeating the Stripe webhooks setup all over again.
+
+---
+
+## Stack
+
+| Layer | Technology | Why |
+|------|-----------|---------|
+| Framework | Next.js 16 (App Router) | Server components + streaming + good DX |
+| Language | TypeScript strict | catch errors at compile time |
+| Auth | Clerk or Supabase Auth (you choose) | both solved with a single env switch |
+| DB | Postgres + Drizzle ORM | Drizzle = typesafe without generation |
+| Payments | Stripe + Mercado Pago | global + LATAM solved |
+| Email | Resend + React Email | templates in React, not HTML |
+| AI | Claude API (Anthropic SDK) | base endpoint with caching |
+| UI | Tailwind 4 + shadcn/ui | clean visual system |
+| Deploy | Vercel-ready | also works on Railway, Fly, Cloud Run |
+
+---
+
+## Getting started
+
+<Step number={1} title="Clone and configure">
+
+```bash
+npx create-nucleo-saas mi-app
+cd mi-app
+cp .env.example .env.local
+```
+
+The wizard will ask you:
+- Auth provider (Clerk / Supabase)
+- Primary payments provider (Stripe / Mercado Pago / both)
+- Whether you want multi-tenant (yes / no)
+- Whether you want a pre-built admin panel (yes / no)
+
+</Step>
+
+<Step number={2} title="Environment variables">
+
+Minimum viable `.env.local`:
+
+```bash
+# Database
+DATABASE_URL="postgres://..."
+
+# Auth (one of the two)
+CLERK_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
+# or
+NEXT_PUBLIC_SUPABASE_URL="..."
+SUPABASE_SERVICE_ROLE_KEY="..."
+
+# Payments
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+MERCADOPAGO_ACCESS_TOKEN="APP_USR-..."  # optional
+
+# Email
+RESEND_API_KEY="re_..."
+
+# AI
+ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+<Callout type="info" title="The wizard already generates everything">
+If you selected Stripe in the wizard, the `.env.example` only has the Stripe variables. Same for the other providers. You won't have to figure out what to keep and what to delete.
+</Callout>
+
+</Step>
+
+<Step number={3} title="Migrate DB and start" last>
+
+```bash
+npm install
+npm run db:push   # runs the initial migrations
+npm run dev
+```
+
+Go to [http://localhost:3000](http://localhost:3000) and you'll see the template's landing page. `/sign-up` to create the first user, who automatically becomes admin.
+
+</Step>
+
+---
+
+## What you'll find
+
+### `app/` — routes
+
+```
+app/
+├── (marketing)/       # landing, pricing, blog (fast static)
+├── (auth)/            # sign-in, sign-up, reset
+├── (dashboard)/       # authenticated app
+│   ├── overview/
+│   ├── settings/
+│   ├── billing/
+│   └── team/          # only if you enabled multi-tenant
+├── (admin)/           # admin panel (role=admin only)
+└── api/
+    ├── webhooks/      # Stripe, MP, Clerk webhooks ready
+    └── ai/            # AI endpoints with caching
+```
+
+### `lib/` — logic
+
+```
+lib/
+├── db/                # Drizzle schema + common queries
+├── auth/              # auth helpers, provider abstraction
+├── payments/          # checkout, subscriptions, webhooks
+├── ai/                # Claude client with prompt caching and retries
+├── email/             # React Email templates
+└── jobs/              # background jobs (Inngest optional)
+```
+
+### Solved cases worth their weight in gold
+
+| Case | Where to look |
+|------|-------------|
+| Stripe webhook with signature verification | `app/api/webhooks/stripe/route.ts` |
+| Idempotency in webhooks (avoid double-processing) | `lib/payments/webhook-store.ts` |
+| Active session in server components | `lib/auth/server.ts` |
+| Per-user rate limiting on AI endpoints | `lib/ai/rate-limit.ts` |
+| Claude prompt caching (saves 90% on costs) | `lib/ai/client.ts` |
+| Organization invitations with expiration | `lib/team/invitations.ts` |
+| Soft-delete for compliance (GDPR) | `lib/db/soft-delete.ts` |
+
+---
+
+## Preconfigured AI endpoint
+
+The template comes with a base endpoint that already has things solved:
+
+```ts
+// app/api/ai/chat/route.ts (abbreviated)
+export async function POST(req: Request) {
+  const user = await requireUser()
+  await checkRateLimit(user.id, 'ai-chat')
+  
+  const { messages } = await req.json()
+  
+  const response = await anthropic.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2000,
+    system: [
+      { type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }
+    ],
+    messages,
+  })
+  
+  await logUsage(user.id, response.usage)
+  return Response.json({ message: response.content[0] })
+}
+```
+
+Things already solved:
+- Auth check
+- Per-user rate limit
+- Prompt caching of the system prompt
+- Token logging (for billing or auditing)
+- Error handling
+
+To build your own endpoint, copy this one and replace the SYSTEM_PROMPT.
+
+---
+
+## Example pricing tiers
+
+The template ships with 3 tiers configured in Stripe (test mode):
+
+| Tier | Test price | Features |
+|------|-------------|----------|
+| Free | $0 | 100 requests/month, 1 user |
+| Pro | $20/month | 10k requests, 5 users, email support |
+| Business | $99/month | unlimited, team, SSO, priority support |
+
+Edit the real prices in `lib/payments/plans.ts`. The gate logic (which feature is in which tier) lives in `lib/payments/feature-gates.ts`.
+
+---
+
+## Deploy
+
+### Vercel (recommended)
+
+```bash
+npm i -g vercel
+vercel
+```
+
+Configure the environment variables in the Vercel dashboard. The DB has to live elsewhere (Supabase, Neon, Railway).
+
+### Self-hosted with Docker
+
+```bash
+docker compose up
+```
+
+The `docker-compose.yml` includes Postgres + app. Ready for Railway, Fly.io, or your VPS.
+
+---
+
+## What's NOT included (intentional)
+
+- **Analytics**: add PostHog or Plausible yourself. We don't want to lock you into a vendor.
+- **Customer support widget**: same.
+- **CMS for your blog**: the template has a blog with local MDX. If you want Sanity/Contentful, you plug it in yourself.
+- **Mobile apps**: if you need native iOS/Android, the template works as your backend, but it doesn't include apps.
+
+---
+
+## Roadmap
+
+Upcoming versions (v2.2 and beyond):
+
+- **Multi-region DB** with read replicas
+- **Audit log** for enterprise compliance
+- **SSO with SAML** (currently OAuth only)
+- **Sandboxed agent execution** (Claude running in isolated environments)
+
+PRs welcome. Public repo with MIT license.

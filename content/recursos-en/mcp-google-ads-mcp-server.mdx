@@ -1,0 +1,107 @@
+---
+title: "MCP Google Ads — Google Ads campaign management with automatic OAuth 2.0"
+description: "MCP server with 414 installs built on FastMCP. Google Ads API integration + automated OAuth 2.0. For advertisers and agencies who want to run Search, Display, YouTube and Performance Max campaigns from Claude."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "google-ads"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-facebook-ads-mcp-server", "meta-ads-claude-code", "andromeda-meta-ads"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/marketing/google-ads-mcp-server"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/marketing/google-ads-mcp-server.json"
+---
+
+## What it is
+
+If you sell on Google Ads (Search, Display, YouTube, Shopping, Performance Max) and you want Claude to run campaigns from your editor, this MCP opens that up. It's built on FastMCP, a framework known for simplifying OAuth.
+
+Automatic OAuth 2.0 is the standout feature: the Google Ads API requires complex OAuth (developer token + manager account + user OAuth flow). The MCP packages all of that so you only configure the credentials once.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `marketing` |
+| Installs | 414 |
+| MCP server | `google-ads` |
+| Framework | FastMCP |
+| Account required | Yes — Google Ads + Developer Token |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp marketing/google-ads-mcp-server
+```
+
+Prerequisites:
+- Active Google Ads account
+- Developer Token (requested in the API Center dashboard)
+- Manager account (MCC) if you manage several accounts
+- OAuth 2.0 client (Google Cloud Console)
+
+For Claude:
+
+```
+I installed the marketing/google-ads-mcp-server MCP. Tell me which env vars and
+credentials I need (developer token, OAuth client, customer ID) and then
+list the active campaigns in my account.
+```
+
+## What you can do with this
+
+### Campaign audits
+
+"Show me all active Search campaigns with an average QS below 6. For each keyword in them, tell me the actual search terms that triggered impressions." Classic SEM optimization tasks.
+
+### Bid management
+
+"Raise the bids on the top 20 keywords by conversion rate in campaign X." Programmatic operations that would take hours by hand.
+
+### Negative keywords
+
+"List the search terms from the last 30 days that generated impressions but zero conversions and a spend above USD 50. Suggest which ones to add as negative keywords." Essential hygiene.
+
+### Performance Max insights
+
+"For each active Performance Max campaign, give me the asset performance and the dominant topic / audience signals." Useful because PM is hard to inspect manually.
+
+### Custom reporting
+
+"Generate a report for the last 4 weeks: spend, conversions, CPA, ROAS by campaign, week over week." For meetings or stakeholder updates.
+
+### Cross-platform marketing
+
+Combined with the [Facebook Ads MCP](/boveda/mcp-facebook-ads-mcp-server), Claude gets the cross-platform view: "which channel performs better by CPA?".
+
+## Prerequisites
+
+- **Active Google Ads account**
+- **Developer Token** (requires Google approval — can take days)
+- **OAuth 2.0 credentials** from Google Cloud Console
+- **Customer ID** for the account you'll operate
+- **Manager Account (MCC)** if you run several
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before connecting Claude to real budgets">
+
+- **Pause / change budget by mistake:** Google Ads operates at large scale. A bad prompt can trigger unexpected spend. Mandatory approval hooks for writes.
+- **Broad OAuth scopes:** the Google Ads token lets you operate the entire account. If your account has admin power, Claude inherits it.
+- **Compliance with Google policies:** ads that violate policies can suspend your account. The MCP doesn't validate policies.
+- **Developer Token approval:** some countries/use cases take a while. Don't expect immediate use if you're only just requesting the token.
+- **If you only need reporting:** Google Ads Editor or a connected Looker may be a better UX.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Google Ads MCP](https://www.aitmpl.com/component/mcps/marketing/google-ads-mcp-server) — exact command.
+- **JSON config:** [google-ads-mcp-server.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/marketing/google-ads-mcp-server.json).
+- **Google Ads API:** [developers.google.com/google-ads/api](https://developers.google.com/google-ads/api).
+
+## Related resources
+
+- [Facebook Ads MCP](/boveda/mcp-facebook-ads-mcp-server) — for Meta Ads. Cross-platform marketing in one workflow.
+- [Meta Ads with Claude Code](/boveda/meta-ads-claude-code) — patterns for working with ads in Claude.
+- [Andromeda Meta Ads](/boveda/andromeda-meta-ads) — opinionated Meta Ads framework, transferable to Google Ads in many cases.

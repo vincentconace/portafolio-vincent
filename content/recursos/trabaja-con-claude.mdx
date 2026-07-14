@@ -1,0 +1,258 @@
+---
+title: "Las 3 formas de trabajar con Claude — Chat, Computer Use, Claude Code"
+description: "Claude no es solo chatbot. Es sistema completo con 3 modos: Chat (conversación), Computer Use (controla tu compu) y Claude Code (trabaja en tu proyecto). Cada uno resuelve un tipo de problema. Cuándo usar cuál y cómo empezar."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-cowork-code", "claude-control-remoto", "instalar-claude-code"]
+---
+
+## 3 formas, 1 Claude
+
+Claude no es solo chatbot. Es sistema completo con **3 modos de interacción**, cada uno diseñado para tipo de trabajo distinto. Como tener 3 herramientas en una.
+
+La mayoría solo conoce el chat. Pero las otras 2 son donde **ocurre la magia para trabajo real**.
+
+| Modo | Qué hace |
+|------|----------|
+| **Chat** | Vos preguntás, Claude responde |
+| **Computer Use** | Claude controla tu compu (mouse, teclado) |
+| **Claude Code** | Claude trabaja en tu proyecto (lee, escribe, ejecuta) |
+
+---
+
+## Modo 1 — Chat
+
+El Claude que la mayoría conoce. Abrís `claude.ai` o Claude Desktop, escribís, te responde.
+
+### Para qué es perfecto
+
+✅ Preguntas rápidas y explicaciones
+✅ Escritura y edición (emails, posts, docs, traducciones)
+✅ Análisis de archivos (subís PDF/imagen/CSV)
+✅ Brainstorming y planning
+✅ Ayuda con código (pegás snippet, pedís explicación)
+
+### Dónde usarlo
+
+- `claude.ai` (navegador)
+- Claude Desktop (Mac/Windows)
+- App móvil (iOS/Android)
+
+### Lo que NO puede
+
+- ❌ Abrir apps o navegar internet por vos
+- ❌ Editar archivos en tu compu
+- ❌ Ejecutar código o hacer deploys
+
+---
+
+## Modo 2 — Computer Use
+
+Claude **controla tu computadora** como si fuera vos. Mueve el mouse, hace clicks, escribe, navega.
+
+### Para qué es perfecto
+
+✅ Apps sin API (CRMs viejos, software interno)
+✅ QA/testing automatizado
+✅ Migración de datos entre sistemas
+✅ Reportes manuales que hacés a mano
+✅ Operar tu compu mientras vos hacés otra cosa
+
+### Dónde usarlo
+
+- Claude Desktop con Computer Use activado
+- Claude Code con flag `--computer-use`
+
+### Lo que NO puede (bien)
+
+- ❌ Sites con anti-bot agresivo
+- ❌ Apps con CAPTCHA o 2FA
+- ❌ Hardware (cámara, impresora especializada)
+
+Ver [Computer Use](/boveda/claude-control-remoto) para profundizar.
+
+---
+
+## Modo 3 — Claude Code
+
+Claude **trabaja dentro de tu proyecto**. Lee archivos, escribe código, ejecuta comandos, hace git, deploya.
+
+### Para qué es perfecto
+
+✅ Construir features nuevas
+✅ Refactor de código
+✅ Debugging
+✅ Migración de stacks
+✅ Setup de nuevos proyectos
+✅ Automation de workflow de dev
+
+### Dónde usarlo
+
+- Claude Code en terminal (CLI)
+- Embebido en Claude Desktop
+- IDE (extensiones VS Code, JetBrains)
+
+### Lo que NO puede
+
+- ❌ Trabajar fuera del directorio del proyecto sin permiso
+- ❌ Apps SaaS sin MCP / API
+- ❌ Operar tu compu visualmente (ahí Computer Use)
+
+Ver [instalar Claude Code](/boveda/instalar-claude-code).
+
+---
+
+## La decisión — qué modo para qué
+
+### Tarea conversacional / Análisis / Texto
+
+→ **Chat**
+
+Ejemplos:
+- "Explicame este concepto"
+- "Mejorá este email"
+- "Analizá este PDF"
+- "Brainstormeame ideas para X"
+
+### Tarea con apps externas sin API
+
+→ **Computer Use**
+
+Ejemplos:
+- "Llená este formulario en mi CRM viejo"
+- "Migrá clientes del sistema A al B"
+- "Tomá screenshots del flow de checkout"
+
+### Tarea con código / proyecto técnico
+
+→ **Claude Code**
+
+Ejemplos:
+- "Agregá feature de pagos"
+- "Refactorizá el módulo de auth"
+- "Migrá de Express a Fastify"
+- "Construime app entera"
+
+---
+
+## Cómo combinarlos en un flow real
+
+### Founder de SaaS típico
+
+**Mañana — Chat**:
+- Planea día con Claude
+- Lee resumen de email
+- Brainstorm features
+
+**Mediodía — Claude Code**:
+- Construye nueva feature
+- Debug
+- Deploy
+
+**Tarde — Computer Use**:
+- Onboarding manual de clientes en herramienta legacy
+- Reportes desde dashboards sin API
+
+**Noche — Chat (mobile)**:
+- Reflexión del día
+- Estrategia con la pareja
+
+Los 3 modos son **complementarios**, no rivales.
+
+---
+
+## Costos y planes
+
+| Plan | Chat | Computer Use | Claude Code |
+|------|------|--------------|-------------|
+| **Free** | Limitado | ❌ | Limitado |
+| **Pro $20** | ✅ | ❌ | ✅ |
+| **Max $100** | ✅ | ✅ | ✅ |
+| **Max $200** | ✅ | ✅ | ✅ (más cuota) |
+
+Para Computer Use necesitás **Max o superior**.
+
+Ver [cuál plan Claude](/boveda/cual-plan-claude).
+
+---
+
+## Cómo empezar — paso por paso
+
+### Si nunca usaste Claude
+
+1. Andá a `claude.ai`
+2. Cuenta gratis
+3. Chat por 1-2 semanas para conocerlo
+4. Cuando sientas que necesitás más → Pro $20
+
+### Si ya usás Chat y querés más
+
+1. Si tu trabajo es **mucho code** → instalá Claude Code
+2. Si tu trabajo es **mucho apps externas** → upgradeá a Max y activá Computer Use
+
+### Si ya sos dev
+
+1. Claude Code es tu pieza principal
+2. Chat para brainstorm + edición fuera del proyecto
+3. Computer Use para automation de UI que no podés evitar
+
+---
+
+## Anti-patrones
+
+### 1. Usar Chat para código complejo
+
+Chat puede ayudar con snippets, pero **para proyectos serios usá Claude Code**. Te ahorra horas.
+
+### 2. Usar Claude Code para chat exploratorio
+
+Si solo querés conversar/brainstormear, Chat alcanza. Claude Code mete overhead.
+
+### 3. Usar Computer Use para todo
+
+Si la app tiene API → MCP es mejor. Computer Use solo cuando no hay otra.
+
+### 4. No mezclar
+
+Pensar que tenés que elegir UNO. **Combinalos según tarea**.
+
+### 5. Saltarse Chat después de aprender
+
+Aunque seas dev pro, Chat sigue siendo útil para muchas cosas (escritura, brainstorm). No lo descartes.
+
+---
+
+## Comparación con alternativas
+
+| Approach | Cuándo |
+|----------|--------|
+| **Claude (los 3 modos)** | Stack integrado para trabajo intelectual + técnico |
+| ChatGPT | Similar al Chat de Claude |
+| Cursor / Copilot | Específicos para code (no chat ni computer use) |
+| Make / Zapier | Específicos para automation no-IA |
+
+Sweet spot de Claude: **los 3 modos coordinados** en una sola cuenta.
+
+---
+
+## Próximos pasos según tu nivel
+
+### Principiante
+→ [Hablarle a Claude](/boveda/hablarle-a-claude) para aprender los fundamentos de Chat
+
+### Intermedio
+→ [Cowork + Code](/boveda/claude-cowork-code) para entender flujos avanzados
+
+### Avanzado
+→ [Computer Use](/boveda/claude-control-remoto) para operar tu compu
+
+---
+
+## Próximos pasos
+
+- Para aprender a hablarle bien a Claude (Chat), [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para entender Computer Use en profundidad, [Computer Use](/boveda/claude-control-remoto)
+- Para instalar Claude Code, [instalar Claude Code](/boveda/instalar-claude-code)

@@ -1,0 +1,86 @@
+---
+title: "Setting Neon Database Context — statusline with project + branch + compute state"
+description: "Setting with 26 installs. Neon-specific statusline: project name, active branch, compute state, autoscaling CU range. Uses only the Neon REST API (no SQL connections)."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "neon"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-neon-database-dev", "setting-neon-database-resources", "mcp-neon"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/neon-database-context"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-context.json"
+---
+
+## What it is
+
+A statusline focused on Neon (serverless Postgres). It shows:
+- **Project name**
+- **Active branch** (Neon supports git-like branching of DBs)
+- **Compute state** (active, suspended, etc.)
+- **Autoscaling CU range** (compute units)
+
+It uses **only the Neon REST API** — it doesn't open constant SQL connections, so it's lightweight.
+
+One of 3 Neon statuslines in the family: this one (Context), [Dev](/boveda/setting-neon-database-dev), [Resources](/boveda/setting-neon-database-resources).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 26 |
+| Focus | Project + branch + compute state |
+| Mechanism | Neon REST API (no SQL) |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting statusline/neon-database-context
+```
+
+For Claude:
+
+```
+I installed the statusline/neon-database-context setting. Configure my
+Neon API key and show me the current context in the statusline.
+```
+
+## What you can do with it
+
+### Neon branch awareness
+
+If you're working on a Neon dev branch, the statusline reminds you — so you don't push migrations to main by mistake.
+
+### Quick cost awareness
+
+Compute state tells you whether you're paying for active or you're suspended. Handy for monitoring costs.
+
+### Combo with [Neon Database Dev](/boveda/setting-neon-database-dev)
+
+Context shows cluster info. Dev shows runtime info. They combine well (but only one at a time as a statusline).
+
+### Combo with [Neon MCP](/boveda/mcp-neon)
+
+Statusline for constant context. MCP for on-demand ops. A natural combo.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Neon:** doesn't apply.
+- **If you already have another statusline:** you can only have one, so choose.
+- **Only 26 installs:** small community. Validate the implementation.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Neon Database Context Setting](https://www.aitmpl.com/component/settings/statusline/neon-database-context) — exact command.
+- **JSON config:** [neon-database-context.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-context.json).
+
+## Related resources
+
+- [Neon Database Dev Setting](/boveda/setting-neon-database-dev) — variant focused on dev workflow.
+- [Neon Database Resources Setting](/boveda/setting-neon-database-resources) — variant for resource tracking.
+- [Neon MCP](/boveda/mcp-neon) — on-demand operations.

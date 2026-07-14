@@ -1,0 +1,340 @@
+---
+title: "5 official Anthropic skills to design without knowing design"
+description: "Frontend Design, Canvas Design, Web Artifacts Builder, Theme Factory and Algorithmic Art. All 5 are official Anthropic skills, free, and together they let you design pages, posters, apps, palettes and generative art straight from Claude. No Figma, no Canva."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["cinco-habilidades-marketing", "stitch-diseno-ia", "higgsfield-mcp"]
+---
+
+## The premise
+
+5 **official Anthropic skills** give you design capabilities that used to require Figma + Canva + a junior designer. All 5 are free and each installs in 30 seconds.
+
+| Skill | What it's for | Replaces |
+|-------|----------|-------------|
+| **Frontend Design** | Design complete pages and apps | Generic template + 4h in Figma |
+| **Canvas Design** | Posters and graphics for social | Canva |
+| **Web Artifacts Builder** | Small functional apps | Bubble, jotform |
+| **Theme Factory** | Coherent colors + typography | 2h in Coolors |
+| **Algorithmic Art** | Generative art / fractals | Nothing — Figma/Canva can't do this |
+
+---
+
+## Skill 1 — Frontend Design
+
+### What it does
+
+You tell Claude **what your page/app is for** and it designs everything:
+
+- Complete layout
+- Color palette
+- Typography
+- Animations and micro-interactions
+- Real, ready-to-use code (not a mockup or an image)
+
+400k+ devs already use it. It's the **most popular** official skill in the catalog.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design
+```
+
+### Examples
+
+**Landing page for a bakery**:
+
+```
+> Design a landing page for an artisan bakery. Warm colors,
+  elegant typography, smooth animations on scroll.
+  Include a hero with a photo, menu, testimonials, contact form.
+```
+
+**Minimalist dashboard**:
+
+```
+> Design a minimalist dashboard for a personal finance app.
+  Neutral colors, clean typography, cards with soft shadows.
+  Include a spending chart, transaction list, monthly summary.
+```
+
+### When it shines
+
+- You need a page/app with **cohesive aesthetics**
+- You're not a designer and you want something better than the generic default
+- You're fine with code-first (it hands you React/HTML, not Figma)
+
+### When NOT
+
+- You need visual iteration with a client (collaborative Figma is better)
+- Your brand requires a very specific identity (load [Brand Guidelines](/boveda/cinco-habilidades-marketing) first)
+
+---
+
+## Skill 2 — Canvas Design
+
+### What it does
+
+Generates posters, covers and graphics for social. Output: PNG or PDF ready to download.
+
+Unlike Canva (templates that look like everyone else's), Canvas Design generates a **unique design** that respects the brief.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/canvas-design
+```
+
+### Examples
+
+**Instagram poster for a course**:
+
+```
+> Poster for Instagram announcing my online photography course.
+  Dark colors with gold accents. Just the course name and date.
+  Minimal text, maximum visual impact.
+```
+
+**YouTube thumbnail**:
+
+```
+> YouTube thumbnail for a tech channel. Modern, clean style,
+  dark blue with cyan details. Channel name and a short tagline.
+```
+
+### When it shines
+
+- You produce visual content regularly (Reels, Posts, Stories)
+- You need something more professional than generic Canva
+- You want to iterate on variants fast
+
+### When NOT
+
+- For video and motion graphics — you need another tool ([Editor Pro Max](/boveda/cinco-habilidades-marketing) or [Higgsfield MCP](/boveda/higgsfield-mcp))
+- Enterprise production where you need granular traceability for each asset
+
+---
+
+## Skill 3 — Web Artifacts Builder
+
+### What it does
+
+Builds **small functional apps** without code. 40+ pre-built components, React + TypeScript + Tailwind stack. Output: an executable HTML file.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder
+```
+
+### Examples
+
+**Pricing calculator**:
+
+```
+> Pricing calculator for a graphic design service.
+  Inputs: project type (logo, poster, web), complexity, urgency.
+  Show the estimated price instantly.
+```
+
+**Task organizer**:
+
+```
+> Task organizer with 3 columns: To Do, In Progress,
+  Done. Drag and drop between columns. Minimalist design.
+```
+
+### When it shines
+
+- You need a small **utility tool** (calculator, form, generator)
+- A quick prototype that **works** (not just a mockup)
+- A tool for internal team use without wanting to deploy a backend
+
+### When NOT
+
+- An app that requires a real backend (DB, auth, APIs)
+- An app going to production with many users — you need a more solid stack
+- Complex business logic (>500 LOC)
+
+---
+
+## Skill 4 — Theme Factory
+
+### What it does
+
+Solves the "which colors + which typography" problem in 5 seconds. 10 pre-curated professional palettes, each with typography that matches perfectly.
+
+It also lets you **create custom palettes** from scratch based on a brief.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/theme-factory
+```
+
+### Examples
+
+**Palette for a SaaS**:
+
+```
+> Show me the 10 Theme Factory palettes and recommend the best
+  one for a productivity SaaS. Apply it to an interface mock.
+```
+
+**Custom theme**:
+
+```
+> Custom theme for an artisan coffee brand. Earthy, warm
+  colors, organic + modern typography.
+```
+
+### When it shines
+
+- You're starting a new project and don't want to waste 2h in a color picker
+- You need quick visual coherence across deck/landing/email
+- You're not a designer and you don't want it to show
+
+### When NOT
+
+- Your brand is already established (load [Brand Guidelines](/boveda/cinco-habilidades-marketing) instead)
+- You need a highly differentiated identity (the 10 palettes tend toward "professional neutral")
+
+---
+
+## Skill 5 — Algorithmic Art
+
+### What it does
+
+Generates **algorithmic/generative** art: fractals, spirals, particle systems, geometry. **Figma and Canva can't do this**.
+
+100+ variations with interactive real-time controls (you change colors, speed, shapes).
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/algorithmic-art
+```
+
+### Examples
+
+**Animated natural fractal**:
+
+```
+> Generative art inspired by natural growth patterns —
+  tree branches, roots, coral. Greens and golds over
+  a dark background. Controls to adjust density and speed.
+```
+
+**Particle system**:
+
+```
+> Particle system with geometric patterns flowing like a river.
+  Cyan and magenta over black. Controls for the number of particles
+  and the strength of the flow.
+```
+
+### When it shines
+
+- Animated backgrounds for premium landing pages
+- Unique hero visuals (not stock)
+- NFT art / generative collections
+- Visuals for high-impact presentations
+
+### When NOT
+
+- A commercial product that needs **clarity** (generative art distracts)
+- Any functional UI (buttons, forms)
+- Traditional branding (standard vector logos are better)
+
+---
+
+## Install all 5 in one go
+
+```bash
+claude install-skill https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design/skills/frontend-design && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/canvas-design && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/theme-factory && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/algorithmic-art
+```
+
+---
+
+## The combined flow
+
+You need to launch a landing page for an online course.
+
+```
+1. Theme Factory:
+   > Generate a theme for a professional photography course landing.
+     Audience: serious hobbyists. Mood: aspirational + premium.
+
+2. Frontend Design (with the theme active):
+   > Design the complete landing: hero, problem, solution, course
+     modules, testimonials, FAQ, final CTA. Apply the theme.
+
+3. Canvas Design:
+   > Generate 5 Instagram posters to promote the course, using
+     the same theme.
+
+4. Algorithmic Art:
+   > Generate a subtle animated background for the hero, aligned with
+     the mood (not loud, decorative).
+
+5. Web Artifacts Builder:
+   > Interactive calculator: "what level are you" — 5 questions →
+     recommends a starting module. Embeddable in the landing.
+```
+
+**Total output**: landing + posters + animation + interactive tool. **All visually coherent** because you started with Theme Factory.
+
+Estimated time: 2-3h. Without the 5 skills: 1-2 days + a designer.
+
+---
+
+## Anti-patterns
+
+### 1. Activating all 5 at the start of the project
+
+Each skill takes up context. Activate **one at a time** as you need it. After launch, keep active only the ones you use regularly.
+
+### 2. Algorithmic Art for functional UIs
+
+The temptation: "it looks nice, I'll put it in the dashboard". **Mistake**. Generative art in a functional UI **distracts the user**. Save it for the hero, decorative backgrounds, splash screens.
+
+### 3. Frontend Design without a defined theme
+
+If you ask "design me a landing" without a theme loaded, Claude uses defaults (blue + Inter). It'll come out correct but generic. **Load Theme Factory first**.
+
+### 4. Web Artifacts for real apps
+
+Web Artifacts Builder is **excellent for small tools**. For an app going to production with real users and persistent data, use a full stack (Next.js + DB + Auth).
+
+### 5. Canvas Design instead of real photos
+
+For a physical product, **a real photo > abstract design**. Canvas Design is for promos/announcements, not for replacing product photography.
+
+---
+
+## Estimated ROI
+
+| Skill | External equivalent (month) | Cost with the skill |
+|-------|---------------------------|-----------------|
+| Frontend Design | Freelance designer $80/h × 8h = $640 | Free + your time |
+| Canvas Design | Canva Pro $13 + designer $40/h × 3h = $133 | Free |
+| Web Artifacts | Bubble Pro $134 + 5h setup time | Free |
+| Theme Factory | Coolors Pro $5 + 3h research | Free |
+| Algorithmic Art | Generative art tool $20 + learning curve | Free |
+
+Full stack: **~$900-1100/month** of equivalent value.
+
+---
+
+## Next steps
+
+- For the marketing equivalent (copy, SEO, video), [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- For UI design with AI outside Claude Code, [Stitch — design with AI](/boveda/stitch-diseno-ia)
+- For generating cinematic visuals (not UI), [Higgsfield MCP](/boveda/higgsfield-mcp)

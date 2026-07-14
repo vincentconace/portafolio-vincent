@@ -1,0 +1,82 @@
+---
+title: "Setting Neon Database Dev — statusline focused en daily dev work"
+description: "Setting con 85 installs. Variante development-focused del statusline Neon. Connection status, response time, database activity. Para daily development work."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "neon"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-neon-database-context", "setting-neon-database-resources", "mcp-neon"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/neon-database-dev"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-dev.json"
+---
+
+## Qué es
+
+Variante development-focused del statusline Neon. Muestra:
+- **Connection status** (conectado / desconectado)
+- **Response time** (latency average)
+- **Database activity** (queries en progreso, etc.)
+
+A diferencia de [Neon Context](/boveda/setting-neon-database-context) (project info estático), este es runtime info dinámico.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 85 |
+| Foco | Daily dev: connection + latency + activity |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/neon-database-dev
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/neon-database-dev. Configurá creds y
+mostrame el dev statusline.
+```
+
+## Qué podés hacer con esto
+
+### Health check constante de Neon
+
+Connection status te avisa si la DB cayó.
+
+### Detection de latency issues
+
+Si response time sube, sabés que algo va mal.
+
+### Para daily dev work
+
+Stronger fit que [Neon Context](/boveda/setting-neon-database-context) cuando hacés muchas queries dev.
+
+### Combo con [Neon MCP](/boveda/mcp-neon)
+
+Statusline para awareness constante. MCP para ops puntuales (queries, branches).
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin Neon:** no aplica.
+- **Si tu app no toca DB seguido:** menos util que [Neon Resources](/boveda/setting-neon-database-resources) (que cubre costos).
+- **Statusline es uno:** elegí entre las 3 variantes.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Neon Database Dev Setting](https://www.aitmpl.com/component/settings/statusline/neon-database-dev) — comando exacto.
+- **Config JSON:** [neon-database-dev.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/neon-database-dev.json).
+
+## Recursos relacionados
+
+- [Neon Database Context Setting](/boveda/setting-neon-database-context) — project info.
+- [Neon Database Resources Setting](/boveda/setting-neon-database-resources) — cost tracking.
+- [Neon MCP](/boveda/mcp-neon) — operations on-demand.

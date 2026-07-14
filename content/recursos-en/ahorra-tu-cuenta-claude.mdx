@@ -1,0 +1,237 @@
+---
+title: "3 tricks to save your Claude account — skills, cleanup and organization"
+description: "Your account is a bucket of water. Every time Claude searches across your whole project, reads long chats, or can't find files, it leaves the tap running. 3 tricks to shut the tap: create skills (shortcuts), clean up chats, and organize files. 5-min setup, your plan lasts 2x longer."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["cinco-errores-claude", "configura-claude-ahorra", "claude-token-efficient"]
+---
+
+## The problem
+
+Your Claude account is a **bucket of water**. Every time Claude:
+- Searches across your whole project
+- Reads long conversations
+- Doesn't know where your files are
+
+…it's like **leaving the tap running**. It drains without you noticing.
+
+These 3 tricks = **shutting the tap**. You're not using Claude less — you just stop **wasting** what you already have.
+
+| Setup | Your plan lasts |
+|-------|-----------|
+| 5 min | 2x |
+
+---
+
+## Trick 1 — Create your own skills (shortcuts)
+
+### What you're doing wrong
+
+You ask for something. Claude **searches across your whole project** to figure out how to do it. It opens files, reads folders, tries things.
+
+Like looking for a needle in a haystack... **every single day**. **It burns half your account for no reason**.
+
+### The solution
+
+A **skill** is a personalized shortcut. Instead of "figure out how to deploy," you tell it: **"you already have this skill, use it."**
+
+Claude goes **straight** to what it needs to do.
+
+### How
+
+1. Open Claude Code
+2. Use **Skill Creator** ([5 skills for team work](/boveda/5-skills-equipo-trabajo))
+3. Name your skill (e.g. "deploy", "test", "review")
+4. Write the exact steps
+5. Save
+
+### Example
+
+```
+> Create a "deploy-vercel" skill for me:
+
+  When invoked:
+  1. Run npm run build
+  2. If it fails, show me the error and stop
+  3. If it passes, npm run test
+  4. If tests pass, vercel --prod
+  5. Show me the final URL
+```
+
+Next time:
+```
+> /deploy-vercel
+```
+
+Without Claude having to **figure out** how to deploy.
+
+### Estimated savings
+
+40-60% on repetitive sessions.
+
+---
+
+## Trick 2 — Clean up your chats
+
+### What you're doing wrong
+
+You have an 80-message conversation. With each new message, Claude **rereads all 80**.
+
+```
+Message 1 → processes 1 message
+Message 50 → processes 50 messages
+Message 80 → processes 80 messages
+```
+
+The cost **grows exponentially**. Your quota goes to rereading old stuff.
+
+### The solution
+
+`/clear` or `/compact`:
+
+**`/clear`** — deletes **EVERYTHING**. You start fresh. Before deleting, **distill what you learned** into CLAUDE.md or a note.
+
+**`/compact`** — summarizes the conversation + keeps the critical parts. Less drastic.
+
+### When
+
+- After 25-30 messages
+- When you switch topics completely
+- When you notice Claude "forgetting" old decisions
+
+See [Claude best practices](/boveda/claude-mejores-practicas) (the 2-corrections rule).
+
+### Estimated savings
+
+50-70% on long sessions.
+
+---
+
+## Trick 3 — Organize your files
+
+### What you're doing wrong
+
+A main folder with 47 loose files. Claude **opens them all searching** for what it needs.
+
+### The solution
+
+A clear structure:
+
+```
+mi-proyecto/
+├── CLAUDE.md            ← rules + map
+├── src/                 ← code
+├── docs/                ← documentation
+├── tests/               ← tests
+├── scripts/             ← utilities
+└── data/                ← data files
+```
+
+And a `CLAUDE.md` with a **map** of the project:
+
+```markdown
+## Structure
+
+- `src/` — main code
+  - `lib/` — utilities
+  - `components/` — UI components
+  - `api/` — endpoints
+- `docs/` — internal docs
+- `tests/` — unit + e2e
+
+## Conventions
+
+- Files in kebab-case
+- Tests next to the file (not in /tests/)
+- Stories in /stories/
+
+## Where to look:
+- "Something about auth" → src/lib/auth/
+- "Something about payments" → src/lib/payments/
+- "Component styling" → src/components/_styles/
+```
+
+Claude **goes straight** to the right place.
+
+### Estimated savings
+
+20-30% on search sessions.
+
+---
+
+## Combined
+
+Applying all 3:
+
+| Without tricks | With tricks |
+|------------|------------|
+| Pro Plan $20: 70-100h/month | 140-200h/month |
+| Constant frustration | Smooth flow |
+| Re-explaining context | Claude already knows |
+
+---
+
+## Summary table
+
+| Trick | What for | Savings |
+|-------|----------|--------|
+| 1. Skill shortcuts | Repeated tasks | 40-60% |
+| 2. /clear or /compact | Long sessions | 50-70% |
+| 3. Organize + CLAUDE.md map | Searching in the project | 20-30% |
+
+---
+
+## Anti-patterns
+
+### 1. Creating 50 skills you never use
+
+Unused skills = noise + context. **Create only the ones you repeat 5+ times**.
+
+### 2. Cleaning the chat mid-task
+
+`/clear` in the middle of a task = you lose critical context. **Clean up between tasks**, not during.
+
+### 3. Over-structuring the project
+
+10 levels of nested folders = Claude gets lost anyway. **Clear but flat structure**.
+
+### 4. Outdated CLAUDE.md
+
+Your structure changed but CLAUDE.md is old = Claude searches where things aren't. **Keep it updated**.
+
+### 5. Applying just 1 trick
+
+The 3 tricks **complement each other**. Applying only 1 gives you partial savings. **All 3 → multiplication**.
+
+---
+
+## Powerful combinations
+
+### With configure Claude and save
+
+[Configure Claude and save](/boveda/configura-claude-ahorra) has 5 complementary configurations. Total setup: 10 min for 4x.
+
+### With Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) cuts verbose OUTPUT. The 3 tricks cut unnecessary INPUT. **Both sides**.
+
+### With five Claude mistakes
+
+[5 Claude mistakes](/boveda/cinco-errores-claude) are basic habits. These 3 tricks are **techniques**. Combined = pro usage.
+
+---
+
+## When optimizing doesn't matter
+
+If you use Claude **2-3 times a week**, you have plenty of quota. These tricks are for **heavy use** (>15h/month with Claude Code).
+
+---
+
+## Next steps
+
+- For more configurations that double your performance, [configure Claude and save](/boveda/configura-claude-ahorra)
+- For a CLAUDE.md that cuts verbosity, [Claude Token Efficient](/boveda/claude-token-efficient)
+- For basic habits that affect your account, [5 Claude mistakes](/boveda/cinco-errores-claude)

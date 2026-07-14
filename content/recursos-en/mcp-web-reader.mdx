@@ -1,0 +1,90 @@
+---
+title: "MCP Web Reader — Z.AI web reader optimized for LLMs"
+description: "MCP server with 148 installs based on Z.AI. Web reader with clean output for MCP-compatible clients (Claude Code, Cline, etc.). Z.AI's alternative to [Firecrawl](/boveda/mcp-firecrawl) and similar tools."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "zai"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-web-fetch", "mcp-firecrawl", "mcp-jina-ai"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/web-reader"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-reader.json"
+---
+
+## What it is
+
+Web Reader is a Z.AI implementation for web reading. Z.AI is a Chinese company that provides models (GLM) and various AI services. This MCP uses their infrastructure to do web reading optimized for LLMs to process.
+
+It's one of several Z.AI MCPs (there's also [zai-mcp-server](/boveda/mcp-zai-mcp-server), [web-search-prime](/boveda/mcp-web-search-prime), [zread](/boveda/mcp-zread)). If your work involves Z.AI models or you want an alternative to Western providers, this stack works.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web` |
+| Installs | 148 |
+| MCP server | `web-reader` |
+| Author | Z.AI |
+| Account required | Yes — Z.AI |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp web/web-reader
+```
+
+Prerequisite: Z.AI account + API key.
+
+For Claude:
+
+```
+I installed the web/web-reader MCP. Configure the Z.AI credentials.
+Read this URL [URL] and give me back the clean content ready for analysis.
+```
+
+## What you can do with this
+
+### LLM-optimized web reading
+
+URL → clean content. Same concept as [Firecrawl](/boveda/mcp-firecrawl) and similar tools, but using Z.AI infrastructure.
+
+### Combining with other Z.AI MCPs
+
+If you use several Z.AI tools ([Vision](/boveda/mcp-zai-mcp-server), [Search](/boveda/mcp-web-search-prime), [zread](/boveda/mcp-zread)), having them consolidated under a single provider can simplify billing and auth.
+
+### Use cases similar to Firecrawl
+
+- Convert URLs to markdown
+- Content extraction
+- Anti-hallucination in research
+- Recurring page reading
+
+## Prerequisites
+
+- **Active Z.AI account**
+- **API key**
+- **Internet connection**
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you already use [Firecrawl](/boveda/mcp-firecrawl) or [Jina AI](/boveda/mcp-jina-ai):** there's overlap. Try one before adopting another.
+- **Without a Z.AI account:** it doesn't work. If your jurisdiction has restrictions on Chinese services, check compliance.
+- **148 installs is middling:** fewer people in the community testing it than Firecrawl (371) or Web Fetch (3,346).
+- **Sensitive data:** the content passes through Z.AI servers. For highly regulated data, review their policy.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Web Reader MCP](https://www.aitmpl.com/component/mcps/web/web-reader) — exact command.
+- **JSON config:** [web-reader.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/web-reader.json).
+- **Z.AI:** [open.bigmodel.cn](https://open.bigmodel.cn).
+
+## Related resources
+
+- [Web Fetch MCP](/boveda/mcp-web-fetch) — simple, no-cost alternative.
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — most widely adopted Western option.
+- [Jina AI MCP](/boveda/mcp-jina-ai) — with additional grounding and fact-checking.

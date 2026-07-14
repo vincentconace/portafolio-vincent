@@ -1,0 +1,83 @@
+---
+title: "Setting Zero Config Deployment Monitor — Vercel statusline sin configuración"
+description: "Setting con 106 installs. Auto-detecting Vercel deployment monitor. Cero env vars necesarias — detecta el Vercel auth token automático desde CLI config local. Plug-and-play."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-vercel-deployment-monitor", "setting-vercel-multi-env-status", "setting-vercel-error-alert-system"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/zero-config-deployment-monitor"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/zero-config-deployment-monitor.json"
+---
+
+## Qué es
+
+Versión zero-config del [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor). En vez de pedirte que setees env vars, detecta automáticamente el Vercel auth token desde el CLI config local (`~/Library/...` en macOS).
+
+Plug-and-play: si `vercel` CLI está autenticado, este setting funciona instantáneamente.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 106 |
+| Config requerida | Cero — auto-detect |
+| Source | Vercel CLI config local |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/zero-config-deployment-monitor
+```
+
+Pre-requisito: `vercel` CLI instalado y autenticado (`vercel login`).
+
+Para Claude:
+
+```
+Instalé el setting statusline/zero-config-deployment-monitor. Verificá
+que detecta mi Vercel auth automaticamente y mostrame el deploy status.
+```
+
+## Qué podés hacer con esto
+
+### Setup más simple
+
+Si ya usás Vercel CLI, no tenés que configurar nada.
+
+### Para devs que rotan máquinas
+
+Cada máquina con `vercel login` activo funciona out of the box.
+
+### Combo con [Vercel CLI workflows](/boveda/hook-vercel-auto-deploy)
+
+Si ya tenés flow Vercel CLI completo, este setting agrega awareness without overhead.
+
+### Anti vs [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor)
+
+Deployment Monitor pide env vars. Zero Config auto-detecta. Mismo output, setup distinto.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin `vercel` CLI auth:** el auto-detect falla.
+- **Para CI sin CLI config:** [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor) con env vars explícitas.
+- **Si querés multi-env:** [Vercel Multi Env Status](/boveda/setting-vercel-multi-env-status).
+- **Para focus en errors:** [Vercel Error Alert System](/boveda/setting-vercel-error-alert-system).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Zero Config Deployment Monitor Setting](https://www.aitmpl.com/component/settings/statusline/zero-config-deployment-monitor) — comando exacto.
+- **Config JSON:** [zero-config-deployment-monitor.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/zero-config-deployment-monitor.json).
+
+## Recursos relacionados
+
+- [Vercel Deployment Monitor Setting](/boveda/setting-vercel-deployment-monitor) — con env vars explícitas.
+- [Vercel Multi Env Status Setting](/boveda/setting-vercel-multi-env-status) — prod + preview.
+- [Vercel Error Alert System Setting](/boveda/setting-vercel-error-alert-system) — focus en errors.

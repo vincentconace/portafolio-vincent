@@ -1,0 +1,435 @@
+---
+title: "Meta Ads CLI Oficial — el conector oficial de Facebook para Claude (29-abril-2026)"
+description: "Meta lanzó Ads AI Connectors el 29 de abril de 2026: un MCP server remoto (mcp.facebook.com/ads) + Ads CLI de línea de comandos. La forma oficial de que Claude/ChatGPT manejen campañas de Facebook/Instagram. Campañas siempre nacen en PAUSED. Setup en menos de 1 min."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude", "chatgpt", "meta"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-meta-ads", "claude-ads", "andromeda-rules-for-claude"]
+---
+
+## El anuncio
+
+El **29 de abril de 2026**, Meta publicó su marco **Ads AI Connectors** con 2 productos:
+
+1. **MCP server remoto** — URL `https://mcp.facebook.com/ads` que pegás en Claude o ChatGPT
+2. **Ads CLI** — línea de comandos para Claude Code y otros agentes en terminal
+
+Es la primera vez que Meta abre su Marketing API directo a un agente de IA en formato MCP oficial.
+
+| Característica | Detalle |
+|----------------|---------|
+| Lanzamiento | 29-abril-2026 |
+| URL MCP | `https://mcp.facebook.com/ads` |
+| CLI | `meta ads [comando]` |
+| Estado de campañas creadas | **PAUSED por default** |
+| Agentes soportados | Claude, ChatGPT, otros via MCP/CLI |
+| Costo del conector | Gratis (gastás en ads tradicional) |
+
+---
+
+## Las 4 superpotencias
+
+### 1. Armar campañas desde brief
+
+> "Quiero vender mi nueva colección a mujeres 25-40 en CDMX, $5000/día. Armámela."
+
+El agente crea: campaña + ad sets + creativos + anuncios. **Todo en PAUSED**. Vos dás el play final.
+
+### 2. Traer reportes claros
+
+> "Dame reporte de última semana: qué anuncio convirtió más, cuál quemó budget sin convertir, por qué."
+
+Te entrega análisis estructurado con números y conclusiones.
+
+### 3. Subir catálogos completos
+
+> "Tomá este CSV con 80 productos y creá catálogo 'Verano-2026' para dynamic ads."
+
+Ya no producto por producto en Commerce Manager.
+
+### 4. Auditar pixel
+
+> "Revisá el pixel: está conectado a campañas activas? Eventos de compra registrándose bien?"
+
+Lo que agencias cobran caro, ahora vos.
+
+---
+
+## La regla de oro
+
+> **Resources are created in PAUSED status by default, so nothing goes live until you are ready.**
+
+Todo lo que el CLI crea **se queda en pausa**. Para activar, **vos** corrés explícitamente:
+
+```bash
+meta ads campaign update CAMPAIGN_ID --status ACTIVE
+```
+
+Es la red de seguridad más importante. **Claude no prende campañas solo**.
+
+---
+
+## Setup vía MCP (rápido, menos de 1 min)
+
+### Paso 1 — Settings → Conectores
+
+En Claude (claude.ai o desktop), ir a Settings → Conectores.
+
+### Paso 2 — Conector personalizado (Remote MCP)
+
+Click en **➕** → "Conectores personalizados" (Remote MCP).
+
+### Paso 3 — Pegar URL
+
+| Campo | Valor |
+|-------|-------|
+| Nombre | Meta Ads |
+| URL | `https://mcp.facebook.com/ads` |
+
+### Paso 4 — Autorizar
+
+Click "Conectar". Claude te pide autorizar acceso a tu cuenta de Meta. Confirmás.
+
+### Verificar
+
+En cualquier chat con Claude:
+
+```
+> Listame mis campañas activas en Meta Ads.
+```
+
+Si responde con tu lista real, **conectado**.
+
+---
+
+## Para ChatGPT
+
+Mismo URL, distinta UI. OpenAI documenta el setup en su **Developer Mode**:
+
+`developers.openai.com/api/docs/guides/developer-mode`
+
+Pegás la misma URL `https://mcp.facebook.com/ads`.
+
+---
+
+## Setup vía CLI (más control, terminal)
+
+Si el conector visual no te aparece (rollout por etapas), el CLI ya está disponible para todos.
+
+### Requisitos
+
+- **Python 3.12+**
+- **pip o uv** (uv es el instalador rápido recomendado por Meta)
+- **Meta Business Manager** con admin a un ad account
+- **App registrada en Meta Developers** con Marketing API aprobada
+
+### Instalación
+
+Comando exacto en doc oficial:
+`developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started`
+
+### Autenticación
+
+El CLI lee tu token y IDs desde **variables de entorno**:
+
+```bash
+export META_ADS_ACCESS_TOKEN="..."
+export META_ADS_ACCOUNT_ID="act_..."
+```
+
+Es la forma estándar de mantener llaves fuera del historial y de tu Git.
+
+---
+
+## Los 9 comandos del CLI
+
+### 1. Explorar lo que ya tenés
+
+```bash
+meta ads campaign list
+```
+
+Lo primero que se corre. Para que Claude no cree duplicados.
+
+### 2. Crear campaña (PAUSED)
+
+```bash
+meta ads campaign create \
+  --name "Summer Sale" \
+  --objective OUTCOME_SALES \
+  --daily-budget 5000
+```
+
+### 3. Crear ad set
+
+```bash
+meta ads adset create CAMPAIGN_ID \
+  --name "My Ad Set" \
+  --optimization-goal LINK_CLICKS \
+  --billing-event IMPRESSIONS \
+  --bid-amount 500 \
+  --targeting-countries US
+```
+
+### 4. Subir creativo
+
+```bash
+meta ads creative create \
+  --name "Hero Banner" \
+  --page-id 111222333 \
+  --image ./banner.jpg \
+  --body "50% off everything!" \
+  --title "Shop Now" \
+  --link-url https://example.com/sale \
+  --call-to-action SHOP_NOW
+```
+
+### 5. Crear anuncio (une creativo + ad set)
+
+```bash
+meta ads ad create ADSET_ID \
+  --name "Hero Banner Ad" \
+  --creative-id CREATIVE_ID
+```
+
+### 6. Prender campaña (paso manual)
+
+```bash
+meta ads campaign update CAMPAIGN_ID --status ACTIVE
+```
+
+**Solo vos** corrés esto. Claude no.
+
+### 7. Pedir reporte
+
+```bash
+meta ads insights get \
+  --campaign_id COMPAIGN_ID \
+  --date-preset last_7d \
+  --fields conversions,impressions
+```
+
+**Importante**: viene escrito `COMPAIGN_ID` con typo en la doc oficial. **No lo corrijas** — así lo aceptan.
+
+### 8. Crear pixel (Meta lo llama dataset ahora)
+
+```bash
+meta ads dataset create --name "Website Pixel"
+```
+
+### 9. Conectar pixel a cuenta y catálogo
+
+```bash
+meta ads dataset connect 111222 \
+  --ad-account-id 333444 \
+  --catalog-id 555666
+```
+
+---
+
+## 3 prompts copy-paste
+
+### 1. Del brief a campaña en PAUSED
+
+```
+Sos mi media buyer. Tenés acceso al CLI oficial de Meta Ads.
+
+Brief:
+- Producto: [QUÉ VENDO]
+- Oferta: [PRECIO O DESCUENTO]
+- Audiencia: [EDAD, GÉNERO, CIUDAD/PAÍS, INTERESES]
+- Budget diario: $[X] USD
+- Objetivo: [VENTAS / LEADS / TRÁFICO]
+- Landing: [URL]
+- Page ID FB: [PAGE_ID]
+
+Por favor:
+1. Creá campaña con `meta ads campaign create`. Objetivo
+   OUTCOME_SALES (o el que mejor encaje).
+2. Creá 2 ad sets con audiencias distintas para A/B testing —
+   explicame en 1 línea por qué armaste cada audiencia.
+3. Creá 3 creativos diferentes (variando ángulo: beneficio,
+   social proof, urgencia). Copy completo + CTA + link.
+4. Creá los 3 anuncios uniendo creativos con ad sets.
+5. Al final, listá TODO lo creado con sus IDs.
+
+Reglas NO negociables:
+- Campañas se quedan en PAUSED. NO uses
+  `meta ads campaign update --status ACTIVE` por ningún motivo.
+- UNA llamada al CLI a la vez. Si una falla, parate y avisame.
+- NO subas imágenes — usá placeholders, esa parte va por mí.
+- Si tenés que asumir algo, marcalo con [VERIFICAR] al final.
+```
+
+### 2. Reporte semanal
+
+```
+Sos mi analista de Meta Ads. Tenés acceso al CLI oficial.
+
+Cuenta: act_[ID]
+Periodo: últimos 7 días
+
+Por favor:
+1. Corré `meta ads insights get` para campañas activas con
+   --date-preset last_7d.
+   Fields: spend, impressions, clicks, ctr, cpc, conversions,
+   cost_per_action_type.
+2. Reporte de 1 página estructurado así:
+   (a) Lo bueno: 2 anuncios con mejor ROAS o conversiones,
+       con números
+   (b) Lo malo: 2 peores, qué los hundió
+   (c) Tu diagnóstico: por qué (creativo, audiencia, oferta,
+       landing)
+   (d) Plan próxima semana: 3 acciones concretas por impacto
+3. Cerrá con semáforo (verde/amarillo/rojo) sobre salud general.
+
+Reglas:
+- NO toques NADA. SOLO lectura. Si algo da tentación de pausar,
+  parate y avisame.
+- UNA llamada al CLI a la vez.
+- Si los números se ven raros, parate y dí "esto no parece
+  correcto" antes de inventar.
+- Lenguaje simple — el reporte se lo muestro a cliente no experto.
+```
+
+### 3. Auditoría del pixel
+
+```
+Sos mi auditor de tracking. Tenés acceso al CLI oficial.
+
+Cuenta: act_[ID]
+Pixel/Dataset ID: [DATASET_ID]
+Catálogo: [CATALOG_ID o "ninguno"]
+
+Por favor:
+1. Listá campañas activas con `meta ads campaign list`.
+2. Verificá que el dataset [DATASET_ID] esté conectado a la
+   cuenta — usá `meta ads dataset connect` con --ad-account-id
+   si necesitás validar.
+3. Confirmá que eventos de compra y add-to-cart están llegando
+   (mirá insights si hay conversiones).
+4. Reporte:
+   (a) Estado del pixel: verde / amarillo / rojo + razón
+   (b) Campañas activas que NO aprovechan el pixel para
+       optimización
+   (c) Eventos faltantes o mal conectados (específico)
+   (d) Qué tengo que arreglar yo, con prioridad y dificultad
+
+Reglas:
+- NO crees, modifiques ni borres NADA. Solo lectura.
+- Si encontrás algo urgente, escribilo en (d) y dejame decidir.
+- UNA llamada al CLI a la vez.
+- Lenguaje claro — soy marketer, NO developer.
+```
+
+---
+
+## Las 2 reglas que SIEMPRE repetir
+
+### 1. Una llamada al CLI a la vez
+
+Si Claude lanza muchas en paralelo, **Meta lo interpreta como bot abusivo** y puede tirarte el ad account.
+
+**Mejor lento y vivo que rápido y baneado**.
+
+### 2. NO prender campañas sin mi permiso
+
+El CLI deja todo en PAUSED por diseño. La regla: **solo vos** corrés `meta ads campaign update --status ACTIVE`. **Nunca el agente**.
+
+---
+
+## Diferencia vs Claude Meta Ads (skill no oficial)
+
+| Aspecto | Meta Ads CLI Oficial | [Claude Meta Ads](/boveda/claude-meta-ads) |
+|---------|----------------------|--------------------------------------------|
+| Por quién | **Meta oficial** | Comunidad (`AgriciDaniel/claude-ads`) |
+| Setup | MCP URL / CLI | Install script + token Meta |
+| Guardrails | PAUSED default | PAUSED + budget cap + content checks |
+| Update | Meta maintain | Comunidad maintain |
+| Multi-plataforma | Solo Meta | Sí (incluye otras) |
+
+**Cuándo usar oficial vs comunidad**:
+- Oficial: si tu uso es Meta-only y querés stack stable de Meta
+- Comunidad: si querés guardrails extras + multi-plataforma
+
+Podés combinar: usar oficial para ejecutar, [Claude Ads](/boveda/claude-ads) para auditoría.
+
+---
+
+## Anti-patrones
+
+### 1. Sin las 2 reglas duras en los prompts
+
+Si prompts no incluyen "una llamada a la vez" y "no actives sin permiso", Claude **va a improvisar** y puede banear tu cuenta.
+
+### 2. Activar campañas automáticamente
+
+Aunque sea tentador "que Claude active si todo se ve bien", **NO**. Es la red de seguridad principal.
+
+### 3. Subir media por API
+
+Aunque el CLI tiene `--image`, **NO uses para multipart upload**. Generá brief de imagen y subila vos desde Ads Manager.
+
+### 4. Confundir CLI typos
+
+`COMPAIGN_ID` está en la doc real. NO lo corrijas a `CAMPAIGN_ID`. Meta lo acepta así.
+
+### 5. Asumir feature está disponible para vos
+
+El conector se está rollando por etapas. Si ves "You may not have access to this feature yet" en la UI, usá el CLI mientras tanto.
+
+---
+
+## Combinaciones potentes
+
+### Pipeline auditoría → ejecución
+
+```
+1. [Claude Ads](/boveda/claude-ads) audita tu cuenta:
+   /ads audit
+   /ads next
+
+2. Ads CLI Oficial ejecuta los fixes:
+   "Pausá los 3 ad sets con peor CPA según el audit"
+```
+
+Auditor + ejecutor especializado.
+
+### Con Andromeda
+
+[Andromeda rules](/boveda/andromeda-rules-for-claude) son framework conceptual. CLI oficial es ejecución técnica.
+
+```
+> Aplicá las 8 reglas Andromeda para diseñar mis nuevos
+  creativos. Después usá Meta Ads CLI para crear las campañas
+  en PAUSED.
+```
+
+### Con Claude Copywriter
+
+```
+> Generá copy para los 5 anuncios.
+  Pasalo por /humanizer (Claude Copywriter).
+  Después subí los creativos con Meta Ads CLI.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Nunca corriste anuncios | Aprendé fundamentos primero |
+| Presupuestos enterprise (>$50k/mes) | Complemento, no reemplazo del equipo paid |
+| Necesitás multi-plataforma | Esto es Meta-only |
+| Compliance estricto auditoría humana | Validá flujos primero |
+
+---
+
+## Próximos pasos
+
+- Para alternativa de comunidad con guardrails extras, [Claude Meta Ads](/boveda/claude-meta-ads)
+- Para auditoría multi-plataforma (Meta + Google + TikTok), [Claude Ads](/boveda/claude-ads)
+- Para framework conceptual de Meta Ads, [Andromeda — 8 reglas](/boveda/andromeda-rules-for-claude)

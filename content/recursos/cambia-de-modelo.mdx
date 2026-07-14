@@ -1,0 +1,274 @@
+---
+title: "Cambiá de modelo cuando Claude se siente lento (y ahorrá tokens)"
+description: "Cuando los modelos nuevos están saturados, podés bajar a versiones anteriores (Sonnet 4.5, Opus 4.5, Haiku 4.5) que están menos congestionadas. Bonus: gastan menos tokens. Cómo cambiar en claude.ai, en Claude Code con /model, al iniciar con --model y fijar modelo en subagentes."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["cual-plan-claude", "cinco-errores-claude", "cinco-repos-no-quemar-cuenta"]
+---
+
+## Por qué Claude a veces se siente lento
+
+Si Claude **no te parece tan inteligente** o anda lento, no te lo estás imaginando.
+
+Los modelos más nuevos (recién lanzados) suelen estar:
+- **Saturados** por demanda alta inicial
+- **Con throttling** porque Anthropic balancea carga
+- **Más caros** en tokens nominales
+
+A veces la solución **no es escribir mejores prompts**. Es **cambiar de modelo** a uno anterior — está:
+- Menos congestionado
+- Más rápido
+- Más barato en tokens
+
+**Doble beneficio**: mejor performance + menos quema de cuenta.
+
+---
+
+## Los modelos disponibles (mayo 2026)
+
+### Modelos actuales
+
+| Modelo | Para qué | ID |
+|--------|----------|-----|
+| **Opus 4.7** | Más capaz, razonamiento profundo | `claude-opus-4-7` |
+| **Sonnet 4.6** | Balance velocidad/calidad | `claude-sonnet-4-6` |
+| **Haiku 4.5** | Rápido, ultra barato | `claude-haiku-4-5-20251001` |
+
+### Modelos anteriores (menos saturados)
+
+| Modelo | Para qué | ID |
+|--------|----------|-----|
+| **Sonnet 4.5** | Excelente para código | `claude-sonnet-4-5-20250929` |
+| **Opus 4.5** | Razonamiento sin costo Opus 4.7 | `claude-opus-4-5-20251101` |
+
+---
+
+## Método 1 — En claude.ai (web/desktop)
+
+### Paso a paso
+
+1. Abrí **claude.ai** y entrá al chat (o creá nuevo)
+2. **Selector de modelo** en esquina superior derecha — click
+3. Buscá **"Más modelos"** (o "Anteriores")
+4. Seleccioná el anterior que querés (Sonnet 4.5, Opus 4.5, Haiku 4.5)
+
+El modelo seleccionado **se queda activo** para esa conversación.
+
+### Cuándo cambiar
+
+- Sentís que Claude responde "extraño" o lento
+- Tu tarea es repetitiva y no necesita el modelo más nuevo
+- Tu cuenta está consumiendo más rápido que de costumbre
+
+---
+
+## Método 2 — Claude Code en terminal
+
+### Dentro de una sesión activa
+
+```
+> /model claude-sonnet-4-5-20250929
+```
+
+O para Opus 4.5:
+
+```
+> /model claude-opus-4-5-20251101
+```
+
+O Haiku 4.5:
+
+```
+> /model claude-haiku-4-5-20251001
+```
+
+### Al iniciar la sesión
+
+```bash
+claude --model claude-sonnet-4-5-20250929
+```
+
+### Verificar qué modelo estás usando
+
+La barra de estado de Claude Code muestra el modelo activo en la parte inferior:
+
+```
+~/mi-proyecto · sonnet-4 · 1M ctx · 67% ■■■■■■░░
+```
+
+Si ves modelo nuevo y notás slowdown, cambiá con `/model`.
+
+---
+
+## Método 3 — Fijar modelo en subagentes
+
+Si usás subagentes (archivos en `.claude/agents/*.md`), podés **fijar el modelo en el frontmatter**. Ese agente siempre usa ese modelo, sin importar el activo en la sesión principal.
+
+### Ejemplo
+
+`.claude/agents/code-reviewer.md`:
+
+```markdown
+---
+name: code-reviewer
+model: sonnet
+---
+
+Sos un agente especializado en revisión de código.
+Analizá el código del proyecto y sugerí mejoras.
+```
+
+### Valores soportados en `model:`
+
+- `haiku` → Haiku 4.5
+- `sonnet` → Sonnet 4.6 (actual)
+- `opus` → Opus 4.7 (actual)
+- ID específico → modelo exacto
+
+### Estrategia recomendada
+
+| Tarea del subagente | Modelo |
+|---------------------|--------|
+| Documentación, clasificación, parsing simple | `haiku` |
+| Code review, análisis estándar | `sonnet` |
+| Arquitectura, decisiones complejas, debugging difícil | `opus` |
+
+Solo usá `opus` cuando lo necesita. Para el resto, Sonnet o Haiku.
+
+---
+
+## Estrategia de routing por tarea
+
+Para uso intensivo, asigná modelos por **tipo de tarea**:
+
+| Tipo de tarea | Modelo recomendado | Por qué |
+|---------------|---------------------|---------|
+| Generación de boilerplate | Haiku | Rápido y barato |
+| Refactor mecánico | Haiku o Sonnet | No requiere razonamiento profundo |
+| Code review estándar | Sonnet | Balance velocidad/profundidad |
+| Diseño de arquitectura | Opus | Razonamiento crítico |
+| Debugging complejo (race conditions, memory leaks) | Opus | Hipotesis múltiples |
+| Documentación / parsing | Haiku | Mecánico |
+| Brainstorming creativo | Opus | Conexiones laterales |
+| Tests unitarios estándar | Sonnet | Estructura clara |
+| Migración de versiones | Sonnet | Pattern matching |
+| Lectura/resumen de docs | Haiku | Comprensión + síntesis |
+
+---
+
+## Costos relativos
+
+Aproximadamente (varía según release):
+
+| Modelo | Costo por 1M tokens input | Costo por 1M tokens output |
+|--------|---------------------------|------------------------------|
+| **Opus 4.7** | $15 | $75 |
+| **Opus 4.5** | $15 | $75 |
+| **Sonnet 4.6** | $3 | $15 |
+| **Sonnet 4.5** | $3 | $15 |
+| **Haiku 4.5** | $0.80 | $4 |
+
+Tareas en Haiku son **18x más baratas** que en Opus. Si tu tarea es Haiku-apropiada, **el ahorro es masivo**.
+
+---
+
+## Anti-patrones
+
+### 1. Usar Opus para todo "porque es el mejor"
+
+Opus es excelente para razonamiento. Para tareas mecánicas (rename, format, generar boilerplate), **Haiku da el mismo resultado** por una fracción del costo.
+
+### 2. Usar Haiku para razonamiento complejo
+
+Si pedís a Haiku que diseñe arquitectura, **probablemente te tira solución simplista**. Va a generar resultado que parece correcto pero no lo es. **Sobre-confiar en Haiku es caro** porque después tenés que rehacer con Opus.
+
+### 3. Cambiar de modelo a mitad de tarea importante
+
+Cada modelo tiene **estilo de output ligeramente distinto**. Si empezás un refactor con Sonnet y cambiás a Opus a mitad, el código resultante puede tener **inconsistencias de estilo**.
+
+### 4. No verificar qué modelo está activo
+
+Si pasaste 2 horas creyendo que usabas Opus pero estaba Sonnet, **algunas decisiones complejas pueden estar subóptimas**. Verificá la barra de estado.
+
+### 5. Olvidarte de volver al modelo actual
+
+Si bajaste a Sonnet 4.5 porque 4.6 estaba lento, **volvé a 4.6 cuando vuelva la performance**. Modelos viejos eventualmente se deprecan.
+
+---
+
+## Cuándo cambiar (señales claras)
+
+### Bajá a modelo anterior si:
+
+- Las respuestas tardan **>30s** consistentemente
+- Notás respuestas que parecen "saltadas" o sin contexto
+- Tu cuenta está consumiendo **más rápido** que en sesiones similares anteriores
+- Anthropic anuncia "high demand" en su status page
+
+### Subí a modelo más nuevo si:
+
+- El anterior te da respuestas claramente subóptimas
+- Tu tarea requiere features específicas del modelo nuevo (ej: extended thinking más profundo)
+- La demanda bajó (verificá status page)
+
+---
+
+## Combinaciones potentes
+
+### Con [Subagentes especializados](/boveda/crea-agentes-con-claude)
+
+```
+.claude/agents/
+├── docs-writer.md      → model: haiku
+├── reviewer.md         → model: sonnet
+├── architect.md        → model: opus
+└── refactor.md         → model: sonnet
+```
+
+Cada agente usa el modelo apropiado **automáticamente**. No tenés que pensar en routing.
+
+### Con [los 5 errores básicos](/boveda/cinco-errores-claude)
+
+Cambio de modelo es **una palanca** de ahorro. Las 5 reglas son otras. Combinadas amplifican.
+
+### Con [Token Efficient](/boveda/claude-token-efficient)
+
+Tu CLAUDE.md puede tener instrucción de qué modelo preferir para qué tipo de tarea:
+
+```markdown
+# Modelo policy
+
+- Generación de tests unitarios → invocá con prompt apto para Haiku
+- Refactor complejo → mantenete en Sonnet/Opus
+- Si Claude detecta que la tarea es mecánica, sugerí bajar a Haiku
+```
+
+---
+
+## Tarjeta de referencia rápida
+
+| Método | Cómo |
+|--------|------|
+| **claude.ai** | Selector modelo → "Más modelos" → elegir |
+| **Sesión activa CLI** | `/model claude-sonnet-4-5-20250929` |
+| **Iniciar CLI** | `claude --model claude-opus-4-5-20251101` |
+| **Fijar en subagente** | `model: sonnet` en frontmatter de `.md` |
+
+---
+
+## La regla mental
+
+**Modelo nuevo + se siente lento = bajá al anterior**
+
+Mejores resultados + menos tokens = más rendimiento de tu cuenta. **No es bug, es saturación**. La solución es un click o un comando.
+
+---
+
+## Próximos pasos
+
+- Para entender qué plan necesitás y por qué, [cuál plan Claude](/boveda/cual-plan-claude)
+- Para los hábitos básicos que más afectan tu cuota, [5 errores Claude](/boveda/cinco-errores-claude)
+- Para optimizaciones avanzadas con 5 repos, [5 repos no quemar cuenta](/boveda/cinco-repos-no-quemar-cuenta)

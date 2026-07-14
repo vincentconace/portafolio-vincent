@@ -1,0 +1,89 @@
+---
+title: "Telegram PR Webhook Hook — notification on PR creation with URL and Vercel preview"
+description: "Hook with 69 installs. Sends a Telegram notification when a PR is created via `gh pr create`. Includes the PR URL and the Vercel preview URL. For teams that live on Telegram + PRs."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "telegram", "github"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-telegram-notifications", "hook-vercel-auto-deploy", "mcp-github-integration"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/telegram-pr-webhook"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-pr-webhook.json"
+---
+
+## What it is
+
+When Claude creates a PR via `gh pr create` (GitHub CLI), this hook notifies Telegram with:
+- URL of the created PR
+- Associated Vercel preview URL (if the project is on Vercel)
+
+Hook event: `PostToolUse`.
+
+Useful for teams where Telegram is the channel and you want a quick review of the preview deploy before merging.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 69 |
+| Hook event | `PostToolUse` (Bash) |
+| Trigger | `gh pr create` |
+| Includes | PR URL + Vercel preview URL |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --hook automation/telegram-pr-webhook
+```
+
+Prerequisites: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, `gh` CLI configured, project on Vercel so the preview can be detected.
+
+For Claude:
+
+```
+I installed the automation/telegram-pr-webhook hook. Configure the creds.
+Ask Claude to create a PR with `gh pr create` — a notification should
+arrive with both URLs.
+```
+
+## What you can do with it
+
+### Quick cross-platform review
+
+You get the PR + preview on Telegram → you open the preview on mobile → you decide on the merge.
+
+### Distributed team on Telegram
+
+A notification with links lets anyone on the team open the preview without hunting for it.
+
+### For PR-heavy workflows
+
+If you push several PRs a day, automating the notify step saves friction.
+
+### Combo with [Vercel Auto Deploy](/boveda/hook-vercel-auto-deploy)
+
+Vercel auto-deploys. This hook lets you know when the preview is ready.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use GitHub CLI or Vercel:** the hook needs both.
+- **For repos without previews:** the hook works but delivers less value.
+- **If your Telegram channel is noisy:** adding PR notifications can saturate it.
+- **Only 69 installs:** validate the implementation in a sandbox.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Telegram PR Webhook Hook](https://www.aitmpl.com/component/hooks/automation/telegram-pr-webhook) — exact command.
+- **JSON config:** [telegram-pr-webhook.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/telegram-pr-webhook.json).
+
+## Related resources
+
+- [Telegram Notifications Hook](/boveda/hook-telegram-notifications) — for general notifications.
+- [Vercel Auto Deploy Hook](/boveda/hook-vercel-auto-deploy) — a natural combo.
+- [GitHub Integration MCP](/boveda/mcp-github-integration) — operate GitHub from Claude.

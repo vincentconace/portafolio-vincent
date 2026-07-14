@@ -1,0 +1,107 @@
+---
+title: "Setting GLM Coding Plan — use Z.AI GLM-4.7 from Claude Code ($3/mo)"
+description: "Setting with 265 installs. Points Claude Code at the Z.AI API with GLM-4.7 — a top model on the Code Arena leaderboard. Compatible with the Anthropic API surface. Plans from $3/mo with thinking enabled."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "zai", "glm"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["setting-bedrock-configuration", "setting-custom-model", "mcp-web-reader"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/partnerships/glm-coding-plan"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/partnerships/glm-coding-plan.json"
+---
+
+## What it is
+
+A partnership setting that reconfigures Claude Code to use **Z.AI GLM models** via an endpoint compatible with the Anthropic API surface. In other words: same client tooling, different model underneath.
+
+It configures:
+- `ANTHROPIC_BASE_URL: https://api.z.ai/api/anthropic`
+- `ANTHROPIC_DEFAULT_HAIKU_MODEL: glm-4.5-air`
+- `ANTHROPIC_DEFAULT_SONNET_MODEL: glm-4.7`
+- `ANTHROPIC_DEFAULT_OPUS_MODEL: glm-4.7`
+- `alwaysThinkingEnabled: true`
+
+The pitch: GLM-4.6 is top-ranked on the Code Arena leaderboard. Plans from $3/mo (much cheaper than Claude Pro).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `partnerships` |
+| Installs | 265 |
+| Main model | GLM-4.7 (Sonnet replacement) |
+| Fast model | GLM-4.5-air (Haiku replacement) |
+| Pricing | From $3/mo |
+| Platform | Z.AI |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting partnerships/glm-coding-plan
+```
+
+Prerequisites:
+- A Z.AI account with an active GLM Coding Plan
+- API key
+
+Replace `YOUR-API-KEY` with your real key:
+
+```json
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "your-real-key"
+  }
+}
+```
+
+For Claude:
+
+```
+I installed the partnerships/glm-coding-plan setting. Configure the Z.AI
+API key. Run a test query and confirm the model that responds is
+GLM-4.7, not Claude.
+```
+
+## What you can do with it
+
+### Massive cost reduction
+
+Z.AI plans from $3/mo vs Claude Pro at $20+. For heavy use, a significant difference.
+
+### Same Claude Code workflow
+
+Since it points to an Anthropic-compatible endpoint, you don't have to learn a new client.
+
+### Competitive coding model
+
+GLM-4.6/4.7 scores high on Code Arena. For pure coding tasks, comparable to Claude.
+
+### Combo with Z.AI MCPs
+
+If you already use [Z.AI Vision MCP](/boveda/mcp-zai-mcp-server), [Web Reader](/boveda/mcp-web-reader), etc., centralizing on the Z.AI ecosystem makes sense.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you specifically need Claude:** some workflows were tuned for Claude. Switching models can degrade results.
+- **Compliance:** Z.AI is a Chinese company. Some orgs have restrictions on sending code to Chinese services.
+- **Variable performance:** models rotate on leaderboards. Check recent benchmarks against your use case.
+- **API compatibility isn't 100%:** some Anthropic-specific features may not be available.
+- **Sensitive data:** your code goes to Z.AI servers. For regulated projects, validate the policy.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [GLM Coding Plan Setting](https://www.aitmpl.com/component/settings/partnerships/glm-coding-plan) — exact command.
+- **JSON config:** [glm-coding-plan.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/partnerships/glm-coding-plan.json).
+- **Z.AI official:** [open.bigmodel.cn](https://open.bigmodel.cn).
+
+## Related resources
+
+- [Custom Model Setting](/boveda/setting-custom-model) — override the model generically.
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — enterprise alternative via AWS.
+- [Web Reader MCP](/boveda/mcp-web-reader) — combo with the Z.AI ecosystem.

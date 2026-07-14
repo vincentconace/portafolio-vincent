@@ -1,0 +1,251 @@
+---
+title: "Cult UI con Claude Code — salirse del look 'shadcn flat'"
+description: "Cómo conectar una librería de componentes premium a Claude Code para que deje de generar diseños genéricos. Setup en 3 pasos, las 2 skills oficiales que aplican el spec sin recordárselo, y los 4 errores típicos al integrar componentes complejos."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "shadcn", "tailwind"]
+publishedAt: "2026-05-24"
+readingTime: "11 min"
+relatedSlugs: ["trio-skills-claude-code", "skill-seo-completo", "cinco-skills-necesarias"]
+---
+
+## El problema
+
+Pedís una landing a Claude → sale H1 grande, párrafo gris, dos botones flat. Pedís un dashboard → sale shadcn base con border-radius medio, shadow-md, layout predecible. Pedís una tienda → template aburrido de siempre.
+
+**No es que Claude sea malo en diseño**. Es que sin una **librería de componentes premium** y un **archivo de reglas que lo obligue a usarlos**, defaultea a shadcn flat. Y shadcn flat ya lo tiene todo el mundo.
+
+La fix: integrar una librería de componentes con personalidad (text-animate, cosmic-button, dynamic-island, hero-liquid-metal, etc.) **+ skills oficiales** que le indiquen a Claude cuándo usar cada componente sin que vos se lo recuerdes.
+
+Este patrón aplica a Cult UI, pero también a cualquier librería premium (Aceternity, Magic UI, etc.).
+
+---
+
+## Qué necesitás
+
+| Pieza | Para qué |
+|-------|----------|
+| **Librería de componentes premium** (Cult UI, Aceternity, etc.) | Las piezas visuales que evitan el look flat |
+| **Skill `components-build`** | Reglas que Claude sigue al armar páginas |
+| **Skill `fixing-motion-performance`** | Para que las animaciones no maten el rendimiento |
+| **Tailwind v4 + motion (framer-motion)** | La base sobre la que viven los componentes |
+
+Sin las 2 skills, los componentes están instalados pero Claude no los usa coherentemente. **Las skills son tan importantes como los componentes mismos.**
+
+---
+
+## Setup en 3 pasos
+
+<Step number={1} title="Instalar la librería de componentes">
+
+Para Cult UI específicamente (otras librerías premium tienen comandos parecidos):
+
+```bash
+npx shadcn@latest add https://cult-ui.com/r/text-animate.json
+npx shadcn@latest add https://cult-ui.com/r/cosmic-button.json
+npx shadcn@latest add https://cult-ui.com/r/dynamic-island.json
+# ... etc
+```
+
+O instalás varios a la vez en un solo comando:
+
+```
+> Andá a https://cult-ui.com y instalame los 10 componentes premium que
+  más se usan en landings modernas. Por cada uno usá el comando npx shadcn
+  add con su URL.
+```
+
+Claude se encarga de los comandos uno por uno.
+
+</Step>
+
+<Step number={2} title="Bajar las skills oficiales">
+
+Las dos skills que vienen con la librería:
+
+- `components-build` → reglas de uso (cuándo qué componente)
+- `fixing-motion-performance` → optimización de animaciones
+
+Bajalas a `.claude/skills/` del proyecto:
+
+```bash
+mkdir -p .claude/skills/components-build
+curl https://cult-ui.com/skills/components-build/SKILL.md \
+  -o .claude/skills/components-build/SKILL.md
+
+mkdir -p .claude/skills/fixing-motion-performance
+curl https://cult-ui.com/skills/fixing-motion-performance/SKILL.md \
+  -o .claude/skills/fixing-motion-performance/SKILL.md
+```
+
+(Si la librería que usás no tiene skills oficiales, las escribís vos — más sobre esto al final.)
+
+</Step>
+
+<Step number={3} title="Verificar" last>
+
+Reabrí Claude Code en el proyecto y probá:
+
+```
+> Armame el hero de mi landing. Producto SaaS para PyMEs, tono moderno
+  pero accesible.
+```
+
+Antes (sin skills): salía un H1 + párrafo + 2 botones flat.
+
+Después (con skills + componentes): Claude detecta que es un hero, mira en `components-build` qué componente premium aplica, lo usa.
+
+</Step>
+
+---
+
+## Las 2 skills explicadas
+
+### `components-build` — las reglas de uso
+
+Es una skill larga (típicamente 16+ reglas) que le dice a Claude:
+
+- **Cuándo usar cada componente premium** (no usar `cosmic-button` en formularios, sí en CTAs principales)
+- **Cuándo NO usar uno** (no abusar de `dynamic-island` que es decorativo)
+- **Cómo combinarlos** (qué se ve bien junto, qué choca)
+- **Variantes de tipografía** (no mezclar más de 2 fonts en una página)
+- **Spacing system** (escala consistente)
+- **Cuándo defaultear a shadcn plano** (formularios, tablas — no todo necesita ser fancy)
+
+Sin esta skill, Claude usa componentes premium **sin criterio** → resultado peor que sin instalarlos. Con la skill, los usa **selectivamente** y la página gana personalidad sin volverse circo.
+
+### `fixing-motion-performance` — para que no se trabe
+
+Las animaciones (motion / framer-motion) son fáciles de armar pero **fáciles de hacer mal**. Esta skill captura las prácticas de:
+
+- Cuándo usar `transform` vs propiedades que causan reflow
+- Cuándo `will-change` ayuda y cuándo perjudica
+- Cómo reducir el peso de un componente animado
+- Qué animaciones evitar en mobile
+- Cuándo deshabilitar con `prefers-reduced-motion`
+
+Si tu página se trabaja al hacer scroll, esta skill **identifica y arregla** los problemas.
+
+---
+
+## El patrón general — replicalo con otras librerías
+
+Cult UI es un ejemplo. **El patrón funciona con cualquier librería premium**:
+
+| Si usás... | Aplicá la misma estructura |
+|-----------|-----------------------------|
+| Aceternity UI | Instalá componentes + escribí una skill que indique cuándo usar cada uno |
+| Magic UI | Idem |
+| Tu librería interna (componentes propios de la empresa) | Skill que documente uso correcto |
+| Tailwind UI (paid) | Skill con tus convenciones de uso |
+
+**La skill es lo que falta** en la mayoría de las stacks. Tener componentes lindos sin guía → Claude los usa al azar. Componentes + skill clara → uso coherente.
+
+---
+
+## Plantilla para tu propia skill `components-build`
+
+Si tu librería no trae skills oficiales, armala así:
+
+```markdown
+---
+name: components-build
+description: Reglas para armar UI en este proyecto. Activate cuando el
+  usuario pida armar/diseñar páginas, secciones o componentes nuevos.
+---
+
+# Componentes - reglas de uso
+
+Sos diseñador / desarrollador de UI. Seguís estas reglas estrictamente.
+
+## Stack base
+- Tailwind v4 + motion (framer-motion)
+- Componentes en /components/ui (shadcn) y /components/cult (premium)
+- Sin agregar deps nuevas sin confirmar
+
+## Cuándo usar cada componente
+
+### Hero / Landing
+- Hero principal → usar [componente premium A] o [componente premium B]
+- NUNCA defaultear a "H1 + párrafo + 2 botones" sin razón
+
+### Botones
+- CTA principal → cosmic-button o variante con animación
+- Acciones secundarias → shadcn default (no necesitan personalidad)
+- Botones dentro de cards → variant ghost de shadcn
+
+### Cards
+- Cards de feature → con animación de hover (no flat)
+- Cards de data → shadcn plain (no distrae de la info)
+
+### Headers de sección
+- Título principal de sección → text-animate o similar
+- Subtítulos → tipografía simple, sin animación
+
+## Tipografía
+- Máximo 2 fonts en una página
+- Combinaciones aprobadas: [lista]
+- Tracking en headings: -0.02em mínimo
+- Line-height en body: 1.6 o 1.7
+
+## Spacing
+- Escala: 4, 8, 12, 16, 24, 32, 48, 64, 96
+- Padding entre secciones: 64-96px desktop, 48-64px mobile
+- Gap entre cards: 16px o 24px (consistente en la página)
+
+## Colors
+- Si el proyecto tiene tema definido, usar las variables CSS
+- NO inventar colores nuevos
+- Backgrounds con personalidad → usar [componente shader] o gradients sutiles
+
+## Anti-patrones (evitá esto)
+
+- ❌ Cards anidadas dentro de cards
+- ❌ Botones con casi mismo peso visual (primario vs secundario indistinguibles)
+- ❌ 4+ border-radius distintos en la misma página
+- ❌ Glassmorphism en lugares random
+- ❌ Emojis en headers de sección (a menos que sea intencional)
+- ❌ Animar todo (la animación destacada gana valor; todo animado pierde)
+```
+
+Adaptá a tu librería y convenciones. Una vez en `.claude/skills/`, Claude la sigue automáticamente.
+
+---
+
+## Anti-patrones
+
+### 1. Instalar 50 componentes premium "por si los uso"
+
+Cada componente trae deps, JS, CSS. **Instalá solo los que vas a usar**. Si después necesitás otro, lo instalás en ese momento.
+
+### 2. Componentes sin skill
+
+Sin skill que diga **cuándo usar cada uno**, Claude los usa en lugares aleatorios y la página queda incoherente. **Skill primero, después componentes**.
+
+### 3. Animar todo
+
+El error más común con librerías premium: como cada componente tiene animación, terminás con 8 cosas animándose en simultáneo. **La animación destacada gana valor; todo animado pierde**.
+
+### 4. Ignorar mobile
+
+Componentes premium suelen verse bien en desktop. En mobile, las animaciones pesadas se sienten. Usá `prefers-reduced-motion` y simplificá en móviles.
+
+---
+
+## Cuándo este patrón conviene
+
+✅ Producto consumer-facing donde el look matters (landings, marketing sites)
+✅ Productos premium / B2B alto ticket donde transmitir calidad importa
+✅ Side projects donde querés salir del "look genérico"
+
+❌ Dashboards internos / admin tools (priorizá densidad de info, no look)
+❌ Aplicaciones de productividad donde la velocidad importa más que el wow
+❌ MVPs early-stage donde el tiempo está mejor invertido en producto que en look
+
+---
+
+## Próximos pasos
+
+- Para auditar un diseño existente, [skill SEO completa](/boveda/skill-seo-completo) tiene patrones similares
+- Si vas a armar UI con AI desde cero, [trío de skills](/boveda/trio-skills-claude-code) cubre el flow pensar/planear/pulir
+- Para entender qué es una skill vs componente, [anatomía de Claude](/boveda/anatomia-claude)

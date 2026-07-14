@@ -1,0 +1,298 @@
+---
+title: "5 tools you'd install on day one with Claude (if you were starting from scratch today)"
+description: "What was missing from your initial setup. The 5 tools that fix the real problems: thinking before building, not making up data, sounding human, connecting to other apps, and understanding what you ask for without perfect prompts. All free."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["trucos-basicos-claude", "cinco-skills-necesarias", "claude-code-setup-zero"]
+---
+
+## The day-one kit
+
+Claude out of the box is good. But it has 5 real problems that show up the moment you use it seriously:
+
+1. **It does the first thing that comes to mind** without thinking
+2. **It sounds like a robot** (jargon, canned phrases, "It's important to note")
+3. **It sometimes makes up data** that sounds plausible but is false
+4. **It doesn't connect to the apps** you already use
+5. **It half-understands** what you ask for when the prompt is vague
+
+These 5 tools — free, open source, installable with 1 command — each fix **one** of them. If you were starting from scratch today, these are the first ones I'd install.
+
+| # | Tool | Fixes |
+|---|-------------|---------|
+| 1 | Skill that forces planning before coding | Does the first thing that comes to mind |
+| 2 | Voice / tone skill | Sounds like a robot |
+| 3 | Data verification skill | Makes up data |
+| 4 | Basic connectors MCP | Doesn't connect to other apps |
+| 5 | Skill that clarifies vague prompts | Half-understands |
+
+---
+
+## 1. Think before building — `grill-me` skill (or similar)
+
+### The problem
+
+You ask "build me the dashboard" and Claude dumps 200 lines in 30 seconds without asking you anything. For whom? Which metrics? Which framework? It guesses, and half the time it guesses wrong.
+
+### The fix
+
+A skill that **forces it to interrogate you** before writing code. It triggers when you ask "build me", "make me", "implement me" — something non-trivial.
+
+Pseudo-SKILL.md (abridged):
+
+```markdown
+---
+name: grill-me
+description: Before building anything non-trivial, interrogate the user.
+  Activate when they ask "build me", "make me", "implement me", "create me"
+  any feature/module/app.
+---
+
+# Grill Me
+
+When the user asks to implement something:
+
+1. Do NOT write code yet
+2. Ask 5-10 precise questions:
+   - For whom?
+   - What inputs and outputs?
+   - Important edge cases?
+   - What should it NOT do?
+   - How do you measure success?
+3. Wait for answers before continuing
+4. Summarize back the scope you understood
+5. Wait for my confirmation
+6. ONLY THEN write code
+```
+
+There are already ready-made versions of this idea (the [skill trio](/boveda/trio-skills-claude-code) is one example). But you can build it yourself in 10 min.
+
+---
+
+## 2. Strip the robotic tone — voice skill
+
+### The problem
+
+Default Claude writes in a specific tone — phrases like "It's important to note", "In conclusion", bulleted lists no one would use in real speech. It sounds like a robot.
+
+For personal/internal use it's fine. For public content (LinkedIn, newsletter, blog), it **gives away** that it's AI.
+
+### The fix
+
+A skill that **learns your voice** from real examples of yours:
+
+```markdown
+---
+name: voice-writer
+description: Rewrite in my personal voice. Activate when I ask
+  "draft", "write me", "rewrite me", "LinkedIn post", etc.
+---
+
+# Voice Writer
+
+Before writing:
+1. READ 3 random examples from ~/Documents/my-voice/examples/
+2. Identify my tone, rhythm, favorite words
+
+When you write:
+- Use MY structure
+- Keep the words I use
+- AVOID: "It's important to note", "In conclusion", "It's worth mentioning",
+  emojis if they aren't mine, empty bulleted lists when a paragraph
+  works better
+- If you're going to use a metaphor, check whether I use metaphors — if not, don't
+
+After generating:
+- Ask yourself: "does this sound like [me]?"
+- If not, rewrite it before showing me
+```
+
+**The critical part**: the `~/Documents/my-voice/examples/` folder with 10-30 real texts of yours. Without those, the skill has nothing to learn from.
+
+---
+
+## 3. Stop it from making up data — verification skill
+
+### The problem
+
+You ask "tell me how much market X grew last year" and Claude spits out a number that **sounds reasonable** but may be made up. Especially with numbers, dates, people's names, legal cases, academic papers.
+
+This is **hallucination**. And it's dangerous because the output **sounds true**.
+
+### The fix
+
+A skill that **forces Claude to flag what it CAN'T verify**:
+
+```markdown
+---
+name: source-check
+description: Data verification mode. Activate when I ask for figures,
+  dates, quotes, proper names, or any verifiable data.
+---
+
+# Source Check
+
+When you provide data:
+
+1. For EVERY number, quote, date, or proper name you mention:
+   - If you know it with high confidence: go ahead, say it
+   - If you're not 100% sure: flag it as ⚠️ "unverified"
+   - If you made it up to illustrate: flag it explicitly "made-up
+     example, not real data"
+
+2. At the end, list:
+   - Data I'm sure about: [...]
+   - Data that needs verification: [...]
+   - Searches I recommend running to confirm: [...]
+
+3. NEVER present made-up data without the label.
+```
+
+The output changes from "according to a 2023 study, the market grew 47%" (potentially made up) to "based on my knowledge [⚠️ unverified, worth confirming], the market grew ~47% in 2023".
+
+Small difference. **Huge** in reliability.
+
+---
+
+## 4. Connect to other apps — basic MCPs
+
+### The problem
+
+Claude lives in chat. Your work lives in Gmail, Calendar, Notion, GitHub, your DB. Without a real connection, you have to **copy-paste everything manually**.
+
+### The fix
+
+Install **4-5 basic MCPs** that cover 80% of cases:
+
+| MCP | What for |
+|-----|----------|
+| GitHub MCP | Read issues, PRs, commits |
+| Gmail / Outlook MCP | Real inbox, drafts |
+| Calendar MCP | Your schedule |
+| Notion / Drive MCP | Your docs |
+| CRM MCP | Client data |
+
+Each installs with 1 line in `.claude/settings.json`. Once installed, Claude can query your real systems without you copying info.
+
+Which to install depends on your stack. The rule: **start with the 2-3 you use most**. Add more as you need them.
+
+To understand MCPs in general, [your own MCP server](/boveda/mcp-server-propio).
+
+---
+
+## 5. Understand vague prompts — clarification skill
+
+### The problem
+
+You ask "optimize this" or "make it better". Claude infers an interpretation and gets going. Half the time, **it wasn't what you wanted**.
+
+### The fix
+
+A skill that **detects vagueness and asks** before executing (not after):
+
+```markdown
+---
+name: prompt-clarifier
+description: Detects vague prompts and asks for clarification. Activate
+  whenever the user asks for something non-trivial. Do NOT work with
+  ambiguous prompts.
+---
+
+# Prompt Clarifier
+
+If the prompt is CLEAR (verb + object + criterion):
+- Proceed normally
+
+If it has AMBIGUITY:
+- Identify the 2-3 main ambiguities
+- For each, propose concrete options
+- Ask for confirmation
+
+Vagueness indicators:
+- Generic verbs: "improve", "optimize", "clean up"
+- Adjectives with no metric: "faster", "cleaner"
+- Doesn't name a specific file when it applies to something concrete
+- Doesn't mention a success criterion
+
+Example:
+User: "optimize this file"
+Response: "I detected ambiguity. What kind?
+  a) Performance (it looks slow to me)
+  b) Readability (there are long functions)
+  c) Security (I don't see problems but I can audit)
+Which one + any constraint?"
+```
+
+This is the idea behind the [prompt-improver plugin](/boveda/mejora-prompts-plugin) — but you can build it in 10 min as your own skill.
+
+---
+
+## How to install all 5 together
+
+If you're starting from scratch:
+
+```bash
+# 1. Base setup
+# See guia-claude-code-completa for this
+
+# 2. Create the skills folder
+mkdir -p ~/.claude/skills
+
+# 3. Create each skill
+mkdir -p ~/.claude/skills/{grill-me,voice-writer,source-check,prompt-clarifier}
+
+# 4. Paste each SKILL.md inside
+# (the SKILL.md files above)
+
+# 5. Create the voice examples folder
+mkdir -p ~/Documents/my-voice/examples
+# Drop in 10-30 real texts of yours
+
+# 6. Configure MCPs in .claude/settings.json
+# (the ones you need)
+```
+
+Total setup: ~30 min. After that, **your Claude operates 3× better from day 1**.
+
+---
+
+## Order matters
+
+If you can only install 1, install **#5 (clarifier)** — it's the one that most prevents wrong executions.
+
+If you can install 2, add **#1 (grill-me)** for big tasks.
+
+If you can install 3, add **#3 (source check)** so you don't spread hallucinations.
+
+#2 (voice) and #4 (MCPs) are more nice-to-have at the start. You add them when you notice the specific gap.
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 5 without tuning
+
+Each skill needs to be adjusted to your context. **Spend 10 min editing each SKILL.md** with your specific rules. The generic version does 60% of what the tuned version does.
+
+### 2. Overlapping skills
+
+Don't install 3 skills that do almost the same thing. **One per clear domain**.
+
+### 3. No voice examples
+
+Skill #2 without the examples folder = the skill doesn't work. Lots of people install it and forget to add the examples.
+
+### 4. Expecting magic on day 1
+
+Each skill needs iteration. The first version is a **baseline**, not the final one. After using it for a week, you adjust what you saw fail.
+
+---
+
+## Next steps
+
+- For general basic tricks (Ultra Think, /init, sub-agents), [basic tricks](/boveda/trucos-basicos-claude)
+- For 5 more opinionated skills (more focused on Claude Code), [5 essential skills](/boveda/cinco-skills-necesarias)
+- For your first detailed skill step by step, [code-reviewer skill](/boveda/skill-code-reviewer)

@@ -1,0 +1,274 @@
+---
+title: "GPT Realtime 2 — voz-a-voz con Claude Code armando tu app conectada"
+description: "Los 3 modelos de audio de OpenAI en GA: voice-to-voice con razonamiento, traducción simultánea y transcripción streaming. Cómo probar en el playground sin código y después pedirle a Claude Code que monte tu app conectada a Shopify/Gmail/Calendar."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["openai", "claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["stack-ia-creador", "claude-canales-tg-discord", "mcp-server-propio"]
+---
+
+## Qué cambió
+
+OpenAI activó 3 modelos de audio en GA al mismo tiempo:
+
+| Modelo | Para qué |
+|--------|----------|
+| **gpt-realtime-2** | Voice-to-voice con razonamiento clase GPT-5 (el principal) |
+| **gpt-realtime-translate** | Interpretación simultánea (audio→audio en otro idioma sin pasar por texto) |
+| **gpt-realtime-whisper** | Transcripción streaming en tiempo real |
+
+Lo importante: **gpt-realtime-2 se conecta a Shopify, Gmail y Calendar directamente**. Decís en voz "agendame reunión con Juan el viernes" y lo agenda.
+
+---
+
+## Cómo se prueba sin código (60 segundos)
+
+OpenAI tiene un **playground oficial**:
+
+1. Andá a `platform.openai.com/playground/realtime`
+2. Login con tu cuenta
+3. Click "Connect" → te pide permiso de mic
+4. Le hablás
+
+Sale en 60 segundos. No instalás nada.
+
+Para usarlo más sustancial:
+
+### Personalizar la "Instructions"
+
+En el playground, hay un campo "Instructions" — es el system prompt del modelo. Cambialo según el rol que querés:
+
+```
+Sos coach de pitch. Cuando te explique un pitch:
+1. Escuchame hasta el final (no me cortes)
+2. Devolveme feedback en voz alta:
+   - 1 cosa concreta que funciona
+   - 2 cosas que mejorar (específicas, no genéricas)
+   - 1 reframe que sugiero
+3. Tono directo pero amable. Sin diplomacia falsa.
+
+Después de mi reescritura, repetí el ciclo.
+```
+
+Apretás "Start" y empezás a hablar. Conversación voz-a-voz natural.
+
+---
+
+## 5 personalidades listas para pegar
+
+Para arrancar sin pensar:
+
+### 1. Intérprete simultáneo ES → EN
+
+```
+Sos intérprete simultáneo profesional español-inglés. Cuando hable
+en español, traducí inmediatamente al inglés. Cuando hable inglés,
+al español. Mantené tono y registro.
+
+NO comentes ni interpretes — solo traducí. Si no entiendo algo,
+repetilo en el otro idioma.
+```
+
+### 2. Coach de pitch
+
+```
+[el del ejemplo arriba]
+```
+
+### 3. Practicante de inglés conversacional
+
+```
+Sos tutor de inglés conversacional. Mi nivel: intermedio.
+Conversá normalmente conmigo en inglés. Si cometo error:
+- Corregimelo brevemente
+- Repetí la frase correcta
+- Seguí la conversación
+
+No me satures de correcciones — solo errores que cambien el meaning
+o suenen muy raros.
+```
+
+### 4. Brainstorm partner
+
+```
+Sos partner de brainstorm. Cuando te tire una idea:
+1. Hacé 1 pregunta que la profundice
+2. Después tirá 2 variantes / opuestos
+3. Pedí mi opinión
+
+NO me apruebes todo. Si la idea parece floja, decímelo con razón.
+```
+
+### 5. Compañero de gym
+
+```
+Sos compañero de gym motivador pero realista. Cuando te diga qué
+ejercicios estoy haciendo, contame durante set:
+- Forma correcta (recordatorios)
+- Cuándo descansar
+- Motivación (sin ser cursi)
+
+Si menciono dolor, alertame de parar y consultar.
+```
+
+---
+
+## Armar tu propia app conectada (sin código)
+
+El playground es para probar. Si querés app propia con TU marca, conectada a TUS sistemas, **Claude Code te la arma con 4 prompts**.
+
+### Prompt 1 — App base
+
+```
+> Quiero armar app de voz que use gpt-realtime-2 de OpenAI.
+
+Stack:
+- Next.js 16
+- TypeScript
+- Tailwind
+- API key de OpenAI en env var
+- Audio capture del browser
+- WebSocket al endpoint Realtime de OpenAI
+
+Implementá la versión base. Que pueda:
+- Apretar "Start" → captura mic → manda a OpenAI
+- Recibe audio de vuelta → reproduce
+- Botón "Stop" cierra conexión
+
+Sin features avanzadas todavía. Solo loop básico.
+```
+
+Claude arma la app. Lo corrés. Habla.
+
+### Prompt 2 — Conectar Shopify
+
+```
+> Ahora conectame Shopify al agente. Cuando el usuario diga cosas
+  como "cuántos pedidos tengo hoy" o "cuál es mi top producto del
+  mes", el agente debe:
+
+1. Detectar la intención
+2. Llamar a la API de Shopify (tengo el access token en env)
+3. Responder con los datos reales en voz
+
+Implementá tool calling con OpenAI Realtime para esto.
+```
+
+### Prompt 3 — Conectar Gmail + Calendar
+
+```
+> Sumá conectores de Gmail y Google Calendar via OAuth.
+  El agente debe poder:
+
+- "Lee mi último email de [persona]"
+- "Agendame reunión con [persona] [fecha] [duración]"
+- "Qué tengo hoy en el calendar?"
+
+Implementá OAuth flow + tool calling para los 3 casos.
+```
+
+### Prompt 4 — Claude como cerebro principal
+
+```
+> En lugar de que GPT decida la lógica, quiero usar Claude como cerebro:
+
+- GPT realtime maneja el audio (input/output)
+- Pero las decisiones complejas (qué hacer cuando hay ambigüedad,
+  cuándo escalar a humano, etc.) las decide Claude
+
+Implementá:
+- Audio in → STT (gpt-realtime-whisper)
+- Texto → Claude (decide qué hacer + qué tools llamar)
+- Resultado → TTS de vuelta (gpt-realtime-2 voice)
+
+Razón: Claude maneja mejor razonamiento. GPT maneja mejor voz.
+```
+
+Con los 4 prompts, **tenés app propia con tu marca, conectada a tus sistemas, con Claude como brain y GPT como voz**.
+
+---
+
+## Casos donde brilla
+
+### 1. Asistente personal hands-free
+
+Estás cocinando / manejando / haciendo deporte. Le hablás:
+
+- "¿Cuál es mi próxima reunión?"
+- "Mandale a María que llego 10 min tarde"
+- "¿Cuántos pedidos cerré ayer?"
+
+Sin sacar el teléfono.
+
+### 2. Soporte al cliente por voz
+
+Cliente llama por teléfono. El agente:
+- Escucha el problema
+- Consulta tu DB (Shopify, CRM)
+- Responde con info real
+- Si necesita humano, transfiere con contexto cargado
+
+Reemplaza IVR (los menús de "presione 1") con conversación natural.
+
+### 3. Aprendizaje de idiomas
+
+Conversación continua en idioma objetivo con correcciones livianas.
+
+### 4. Tutorías técnicas
+
+"Explicame qué es X concepto" → Claude explica → vos preguntás follow-up → loop hasta entender.
+
+---
+
+## Anti-patrones
+
+### 1. Esperar perfección de voz
+
+Voice tiene latencia (200-500ms típica). Para conversación normal es excelente, **para flows críticos en tiempo real puede frenarte**.
+
+### 2. Saltarse el playground
+
+"Voy directo a armar la app" sin probar antes. **Mala idea**. El playground te dice si el modelo es lo que esperás antes de invertir setup.
+
+### 3. Voice para todo
+
+Algunas tareas son mejor texto. **Editar código por voz** es ridículo. **Leer documentación larga por voz** es lento. Voice gana cuando la interacción **debe ser hands-free**.
+
+### 4. Sin permissions claros
+
+Como cualquier agente con acceso a sistemas, **definí qué puede hacer solo y qué requiere confirmación**. "Mandá email" debería pedir confirmación. "Leé email" puede ir solo.
+
+---
+
+## Cuándo conviene
+
+✅ Necesitás interacción hands-free (cocina, gym, conducción)
+✅ Caso de uso "asistente personal" donde voz es más natural
+✅ Soporte al cliente por teléfono
+✅ Aprendizaje de idiomas / práctica conversacional
+
+❌ Tareas que requieren precisión absoluta (legal, médico, financiero crítico)
+❌ Workflow ya optimizado para texto
+❌ Si no aceptás latencia ocasional
+
+---
+
+## El costo
+
+| Modelo | Costo aprox |
+|--------|--------------|
+| gpt-realtime-2 (voice) | ~$0.20/min de conversación |
+| gpt-realtime-translate | ~$0.30/min |
+| gpt-realtime-whisper | $0.006/min (transcripción) |
+
+Para uso ocasional, gastás $5-20/mes. Para uso intenso (soporte al cliente continuo), puede llegar a $200+/mes. Calculá antes de armar pipeline.
+
+---
+
+## Próximos pasos
+
+- Para entender el stack completo de creación con voz como parte, [Stack IA Creador](/boveda/stack-ia-creador)
+- Si querés voz desde tu Claude (no app propia), [Claude Canales TG/Discord](/boveda/claude-canales-tg-discord) — texto, no voz
+- Para construir MCP propio que use la API, [tu propio MCP server](/boveda/mcp-server-propio)

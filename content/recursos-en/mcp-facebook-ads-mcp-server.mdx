@@ -1,0 +1,105 @@
+---
+title: "MCP Facebook Ads — manage Meta Ads (Facebook + Instagram) from Claude Code"
+description: "MCP server with 497 installs that wraps the Meta Ads API. Programmatic access to Facebook + Instagram campaigns: data, creation, editing, and management. For people who live in Meta Ads Manager."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "meta-ads", "facebook"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["andromeda-meta-ads", "meta-ads-claude-code", "claude-meta-ads-setup"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/marketing/facebook-ads-mcp-server"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/marketing/facebook-ads-mcp-server.json"
+---
+
+## What it is
+
+If you run campaigns on Facebook + Instagram (the Meta Ads suite), this MCP opens up the full API from Claude Code. Instead of switching tabs to Ads Manager to check how a campaign is doing, adjust budgets, or launch variants, Claude does it for you.
+
+It covers what the Meta Ads API exposes: campaigns, ad sets, ads, audiences, performance insights, custom audiences, conversion tracking.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `marketing` |
+| Installs | 497 |
+| MCP server | `fb-ads-mcp-server` |
+| Account required | Yes — Business Manager + Ads access |
+| Platforms | Facebook, Instagram (Meta Ads) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp marketing/facebook-ads-mcp-server
+```
+
+Prerequisites:
+- Access to Meta Business Manager
+- App registered on [Meta for Developers](https://developers.facebook.com)
+- Access token with Ads management scopes
+
+For Claude:
+
+```
+I installed the MCP marketing/facebook-ads-mcp-server. Once the credentials
+are configured, list the active campaigns in my ad account, with today's
+spend and current CPM.
+```
+
+## What you can do with this
+
+### Live campaign audits
+
+"Show me all active campaigns with a CPM higher than last month's average, grouped by objective. For each one, tell me whether it's worth turning off or adjusting the budget."
+
+### Creating campaigns from a brief
+
+"Create a Conversion campaign in my account X, with an ad set targeting [criteria] and 3 ads with these copies + creatives." Claude structures the API calls.
+
+### Analytics combined with your own data
+
+"Cross-reference the spend of campaign X with the real conversions from the CRM (not the ones Meta reports). What's the real CPA?" Useful when attribution gets out of hand.
+
+### Programmatic A/B testing
+
+"Generate 5 copy variants for ad `<id>`, launch them with equal budgets, and monitor CPC over the next 48 hours." Iterative optimization workflow.
+
+### Audience management
+
+"Create a custom audience from my 1,000 top-customer emails, then build a 1% lookalike and prepare a prospecting campaign for that audience."
+
+### Bulk campaign pausing
+
+"Pause all ads with a CTR below 0.5% that have been active for more than 48 hours." Account hygiene.
+
+## Prerequisites
+
+- **Business Manager** with access to the ad account
+- **App** on Meta for Developers with Ads Management permissions
+- **Access token** with the correct scopes (NOT expired)
+- **Meta Ads knowledge:** the MCP is plumbing; the decisions are still yours
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before connecting Claude to real budgets">
+
+- **Pause / increase budget by mistake:** a misinterpreted prompt and Claude can trigger unexpected spend. For serious budgets, approval hooks ALWAYS.
+- **Tokens and security:** Meta Ads access tokens give full power over the account. Treat them like banking credentials.
+- **Compliance:** creating ads with copy/creative that violates Meta policies can get your Business Manager banned. The MCP doesn't validate policies; you do.
+- **API rate limits:** Meta Ads has quotas. Bulk operations can get you blocked.
+- **If you only need reporting:** Meta Ads Manager or a connected Looker might be a better UX.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Facebook Ads MCP](https://www.aitmpl.com/component/mcps/marketing/facebook-ads-mcp-server) — exact command.
+- **Config JSON:** [facebook-ads-mcp-server.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/marketing/facebook-ads-mcp-server.json).
+- **Meta for Developers:** [developers.facebook.com](https://developers.facebook.com) — to create the app and obtain tokens.
+
+## Related resources
+
+- [Andromeda Meta Ads](/boveda/andromeda-meta-ads) — an opinionated Meta Ads framework that pairs well with this MCP.
+- [Meta Ads with Claude Code](/boveda/meta-ads-claude-code) — recurring workflow patterns for Meta Ads from Claude.
+- [Claude Meta Ads Setup](/boveda/claude-meta-ads-setup) — the recommended base setup to get started.

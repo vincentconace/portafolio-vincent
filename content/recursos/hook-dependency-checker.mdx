@@ -1,0 +1,91 @@
+---
+title: "Hook Dependency Checker — análisis de dependencies + vulns + licencias (1,729 installs, top)"
+description: "Hook con 1,729 installs — el más adoptado del catálogo. Monitorea outdated packages, security vulnerabilities y license compatibility después de cada operación. Defense in depth contra supply chain risk."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-codacy", "hook-deployment-health-monitor", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/dependency-checker"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/dependency-checker.json"
+---
+
+## Qué es
+
+**1,729 installs — el hook más adoptado del catálogo aitmpl.com.** Hace tres análisis sobre dependencies después de cada operación:
+
+1. **Outdated packages** — qué libs tenés viejas
+2. **Security vulnerabilities** — CVEs conocidas en lo que usás
+3. **License compatibility** — licencias incompatibles con tu proyecto
+
+Hook event: `PostToolUse`.
+
+Para shops con supply chain risk (que son todos hoy), es probablemente el hook más útil del catálogo. Por algo lo tiene el doble de installs que el segundo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | **1,729 (top del catálogo de hooks)** |
+| Hook event | `PostToolUse` |
+| Análisis | Outdated + Vulnerabilities + Licenses |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/dependency-checker
+```
+
+Para Claude:
+
+```
+Instalé el hook automation/dependency-checker. Ejecutalo sobre el
+proyecto actual y dame el reporte: deps outdated, vulnerabilities
+critical y licencias conflictivas.
+```
+
+## Qué podés hacer con esto
+
+### Catch automático de vulnerabilities
+
+Cada vez que Claude toca dependencies (instala, update, etc.), el hook valida. Si introduce algo con CVE conocida, te avisa.
+
+### Mantener libs al día
+
+Listado constante de outdated. Útil para sprints periódicos de update.
+
+### Compliance de licencias
+
+Si tu proyecto es MIT y alguien instala una lib GPL, el hook lo flagea. Crucial para proyectos comerciales.
+
+### Combo con [Codacy](/boveda/mcp-codacy)
+
+Codacy hace análisis de calidad/security más profundo. Este hook es el primer filtro rápido.
+
+### Combo con [Deployment Health Monitor](/boveda/hook-deployment-health-monitor)
+
+Deploy health monitor + dependency checker = pre-deploy y post-deploy cubiertos.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Costo de tokens / tiempo:** el análisis suma. Para proyectos enormes, puede ser lento.
+- **Falsos positivos en licenses:** algunos analizadores se confunden con licencias hybrid o multi-license. Validá hallazgos.
+- **Si tu CI ya hace esto:** Dependabot, Snyk, Trivy cubren igual. El hook complementa, no reemplaza.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Dependency Checker Hook](https://www.aitmpl.com/component/hooks/automation/dependency-checker) — comando exacto.
+- **Config JSON:** [dependency-checker.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/dependency-checker.json).
+
+## Recursos relacionados
+
+- [Codacy MCP](/boveda/mcp-codacy) — análisis de quality + security profundo, complementario.
+- [Deployment Health Monitor Hook](/boveda/hook-deployment-health-monitor) — pre-deploy hook complementario.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — supply chain hygiene.

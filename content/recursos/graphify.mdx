@@ -1,0 +1,271 @@
+---
+title: "Graphify — un grafo de conocimiento del repo para no quemar tokens"
+description: "Convertir una carpeta (código, PDFs, papers) en un grafo de conocimiento navegable que Claude consulta en lugar de leer archivo por archivo. Reduce dramáticamente el costo de tokens en preguntas de arquitectura y onboarding de proyectos heredados."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "graphify"]
+publishedAt: "2026-05-24"
+readingTime: "10 min"
+relatedSlugs: ["memoria-claude-code", "book-to-skill", "memory-palace-agentes"]
+---
+
+## El problema — Claude quemando tokens
+
+Le pedís a Claude Code que entienda tu repo. Lo que hace:
+
+1. `Glob` para encontrar archivos relevantes → encuentra 200
+2. `Read` del primero
+3. `Read` del segundo
+4. `Read` del tercero...
+
+A los 30 archivos ya quemaste la mitad del contexto y todavía no respondió tu pregunta. En un repo de 3 años, ni siquiera llegás al final.
+
+**Cada Read son tokens reales que pagás vos.**
+
+Para preguntas chicas no importa. Para **preguntas de arquitectura** ("¿cómo se conecta el módulo de auth con payments?") o **onboarding** ("explicame la app entera"), el costo es enorme.
+
+---
+
+## La idea de un "grafo del repo"
+
+En lugar de hacer que Claude abra archivos para entender estructura, **pre-procesar el repo** una vez y guardar:
+
+- **El mapa**: qué archivos hay, cómo se importan entre sí, qué exporta cada uno
+- **El cerebro**: descripciones de qué hace cada módulo, decisiones de arquitectura
+- **El detective**: dependencias inversas — quién usa qué, blast radius de cambios
+
+Todo guardado en 2 archivos: `GRAPH_REPORT.md` (legible) y `graph.json` (serializado para queries).
+
+Cuando Claude pregunta sobre arquitectura, lee **estos 2 archivos** en lugar de 200 archivos sueltos. **Reducción típica: 50-70× menos tokens** en queries de arquitectura.
+
+---
+
+## Los 3 outputs
+
+### 1. El mapa (`GRAPH_REPORT.md`)
+
+Markdown navegable con:
+
+- Lista de módulos top-level
+- Para cada módulo: qué exporta, qué importa, líneas
+- Diagrama (ASCII o Mermaid) de las relaciones principales
+
+Útil para **onboarding** — abrís este archivo y entendés el proyecto en 10 min.
+
+### 2. El cerebro (`graph.json`)
+
+Estructura serializada con nodos y aristas:
+
+```json
+{
+  "nodes": [
+    { "id": "lib/auth", "type": "module", "exports": [...], "summary": "..." },
+    { "id": "lib/payments", "type": "module", "exports": [...], "summary": "..." }
+  ],
+  "edges": [
+    { "from": "api/checkout", "to": "lib/payments", "type": "import" },
+    { "from": "lib/payments", "to": "lib/auth", "type": "import" }
+  ]
+}
+```
+
+Claude lo consulta para responder queries específicas sin leer código fuente.
+
+### 3. El detective — análisis de dependencias
+
+Reportes derivados del grafo:
+
+- **Blast radius**: si cambio el archivo X, ¿qué se rompe?
+- **Dead code**: módulos que nadie importa
+- **Hotspots**: archivos que se importan desde muchísimos lugares (riesgo en refactor)
+- **Cycles**: dependencias circulares
+
+---
+
+## Setup
+
+### Instalación
+
+```bash
+# Vía uv (rápido)
+uv tool install graphify
+
+# O pipx
+pipx install graphify
+
+# O pip clásico
+pip install graphify
+```
+
+### Generar el grafo
+
+Desde la raíz del proyecto:
+
+```bash
+graphify build .
+```
+
+Procesa el repo, genera `GRAPH_REPORT.md` y `graph.json` en `./graphify/`.
+
+Tiempo típico:
+- Repo chico (~50 archivos): 30 segundos
+- Repo mediano (~500 archivos): 2-5 minutos
+- Repo grande (~5000 archivos): 15-30 minutos
+
+### Conectar con Claude Code
+
+Agregá al `CLAUDE.md` del proyecto:
+
+```markdown
+## Estructura del proyecto
+
+Antes de explorar archivos individuales para entender arquitectura,
+**siempre** consultá:
+
+- `./graphify/GRAPH_REPORT.md` — mapa del proyecto
+- `./graphify/graph.json` — relaciones serializadas
+
+El grafo está pre-procesado. Úsalo en lugar de hacer múltiples Read.
+```
+
+Ahora cuando Claude tenga que responder algo de arquitectura, va al grafo primero.
+
+---
+
+## Lenguajes soportados
+
+Graphify entiende ~25 lenguajes (los populares):
+
+- **Web**: TypeScript, JavaScript, Python, Ruby, PHP
+- **Sistemas**: Go, Rust, C, C++, Java, Kotlin, Swift
+- **Data**: R, Julia
+- **Otros**: C#, Scala, Elixir, Haskell, Lua, Perl
+
+Para cada uno entiende **imports/requires** y **exports/declarations**. La calidad varía por lenguaje (TS/Python son mejor soportados que Lua).
+
+---
+
+## Casos de uso reales
+
+### Caso 1 — Onboarding a proyecto heredado
+
+Te asignan un proyecto que ningún dev actual escribió. 3 años de código, sin docs.
+
+```bash
+graphify build .
+```
+
+```
+> Leé ./graphify/GRAPH_REPORT.md y explicame:
+  1. ¿Cuál es el módulo "core" del que dependen los demás?
+  2. ¿Cuáles son las 3 carpetas más independientes (testeables en aislamiento)?
+  3. ¿Hay alguna dependencia circular que indique deuda técnica?
+  4. ¿Qué módulos parecen ser "legacy" (nadie los importa)?
+
+  Resumime en 1 página.
+```
+
+En 5 minutos tenés el mapa mental. **Sin Graphify, esto te toma 2-3 horas leyendo carpetas.**
+
+### Caso 2 — Refactor con consciencia de blast radius
+
+```
+> Quiero renombrar la función `validateOrder` en lib/orders/validate.ts.
+  Antes de hacerlo:
+
+  1. Consultá graph.json para ver TODOS los archivos que la importan
+  2. Hacé una lista de los cambios necesarios
+  3. Estimame el blast radius (chico / medio / grande)
+  4. Si es grande, proponé strategy de cambio gradual
+
+  NO empieces a editar hasta que aprobé el plan.
+```
+
+Mucho más seguro que hacer find/replace y rezar.
+
+### Caso 3 — Auditoría rápida para cliente
+
+Sos consultor. Te pasan un repo, tenés 1h para diagnosticarlo:
+
+```bash
+graphify build /ruta/al/repo-cliente
+```
+
+```
+> Soy consultor revisando este repo. Generame un reporte ejecutivo
+  de 2 páginas:
+
+  1. Salud general: organización, modularidad, deuda técnica visible
+  2. Top 5 problemas estructurales
+  3. Top 3 oportunidades de quick win
+  4. Recomendación de cambios de fondo (si los hay)
+
+  Basate principalmente en el grafo, no leas código.
+```
+
+Reporte profesional en minutos.
+
+### Caso 4 — PDFs y papers como curso navegable
+
+Graphify no es solo para código. Tirale una carpeta de PDFs:
+
+```bash
+graphify build ./docs-cliente/
+```
+
+Procesa los PDFs, identifica conceptos, genera grafo de referencias entre documentos.
+
+Después:
+
+```
+> El cliente nos dio 40 PDFs sobre su plataforma. Leé el grafo y
+  proponeme un orden de lectura priorizando los documentos centrales
+  primero (los que más se referencian).
+```
+
+Convertís 40 PDFs sin orden en curso secuencial coherente.
+
+---
+
+## Anti-patrones
+
+### 1. Construir el grafo y no usarlo
+
+Si lo generás pero no agregás al `CLAUDE.md` que **lo use primero**, Claude va a seguir leyendo archivos. **El instructivo en CLAUDE.md es crítico.**
+
+### 2. No regenerar después de cambios grandes
+
+El grafo es snapshot. Si refactorizás estructura mayor, el grafo queda desactualizado. **Reconstruí periódicamente** o cuando el repo cambie significativamente.
+
+### 3. Esperar que reemplace lectura de código
+
+El grafo es para **navegación estructural**, no para entender lógica fina. Para "qué hace exactamente esta función", Claude tiene que leer el código. **Es complemento, no reemplazo.**
+
+### 4. Confiar 100% en el blast radius
+
+El análisis estático no captura todo (imports dinámicos, monkey patching, eval). El blast radius es **buena aproximación**, no verdad absoluta.
+
+---
+
+## Comparación con alternativas
+
+| Approach | Costo tokens | Velocidad | Precisión |
+|----------|--------------|-----------|-----------|
+| **Claude lee archivo por archivo** | Alto | Lento | Alta (pero solo lo leído) |
+| **Graphify + grafo** | Bajo (50-70× menos) | Rápido | Buena para estructura, no para lógica |
+| **RAG con embeddings** | Medio | Medio | Buena para búsqueda semántica |
+| **Manual: documentar a mano** | Cero | Muy lento | Mejor, pero costoso de mantener |
+
+Para **preguntas de arquitectura, blast radius, onboarding**: Graphify gana.
+Para **búsqueda semántica en docs**: RAG (Book-to-Skill, embeddings) gana.
+Para **entender lógica detallada de una función**: lectura directa gana.
+
+Los 3 enfoques son **complementarios**, no sustitutos.
+
+---
+
+## Próximos pasos
+
+- Para meter conocimiento estable (libros, papers) como skill, [Book to Skill](/boveda/book-to-skill)
+- Para gestionar memoria del proyecto que evoluciona en el tiempo, [memoria infinita para Claude Code](/boveda/memoria-claude-code)
+- Para entender qué tipo de skills aportan más, [catálogo de 40 skills](/boveda/skills-catalogo-40)

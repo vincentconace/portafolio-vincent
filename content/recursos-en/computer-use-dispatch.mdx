@@ -1,0 +1,244 @@
+---
+title: "Computer Use + Dispatch — Claude operates your computer (and you direct it from your phone)"
+description: "Flagship combo: Computer Use gives Claude control of your computer (mouse, keyboard, screen). Dispatch lets you send it instructions from your phone while you're out. Setup in 4 steps. Use cases: prospects, social media, repetitive forms, files."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude", "cowork"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-control-remoto", "claude-dispatch", "claude-cowork-workflow"]
+---
+
+## The combo
+
+Two features that complement each other:
+
+| Feature | What for |
+|---------|----------|
+| **Computer Use** | Claude controls your computer (mouse, keyboard, screen) |
+| **Dispatch** | You give it instructions from your phone |
+
+Combined: **you're on the subway, you tell Claude to process 30 invoices while your Mac mini at home does it on its own**.
+
+---
+
+## What Computer Use is
+
+It gives Claude the ability to:
+- ✅ See your screen
+- ✅ Move your mouse
+- ✅ Click
+- ✅ Type
+- ✅ Navigate between apps
+
+**You don't need APIs, code, or complicated configurations**. If you can do it with a mouse and keyboard, **so can Claude**.
+
+### Before
+
+You did everything manually: looking up data, copying info, filling out forms, organizing files. **Repetitive and slow**.
+
+### Now
+
+You tell Claude what you need. What takes an assistant 1 hour, **Claude does in minutes**.
+
+See [Computer Use in detail](/boveda/claude-control-remoto) to dive deeper.
+
+---
+
+## Enabling Computer Use — 4 steps
+
+### 1. Download the app
+
+`claude.ai/download` → Claude Desktop for Mac/Windows.
+
+### 2. Open Settings
+
+In the app, go to Settings (gear icon).
+
+### 3. Flip the toggle
+
+Find **"Computer Use"** and enable it.
+
+### 4. Grant permissions
+
+**macOS**: System Preferences → Security & Privacy → Privacy → Accessibility → check Claude.
+
+**Windows**: the system prompts you for permissions on first use.
+
+---
+
+## What Dispatch is
+
+It lets you **assign tasks to Claude from your phone**. Claude runs them on your computer (which is at home, powered on).
+
+### The Computer Use + Dispatch combo
+
+```
+1. You're on the subway / at a café / out for a walk
+2. You message Claude from Telegram/Discord/Cowork mobile
+3. Claude, on your computer at home:
+   - Enables Computer Use
+   - Does what you asked (move mouse, fill form, etc.)
+4. It reports back when it finishes
+```
+
+See [Claude Dispatch](/boveda/claude-dispatch) for the full Dispatch setup.
+
+---
+
+## Use cases
+
+### 1. Lead prospecting
+
+```
+From the café:
+"Open Apollo on my Mac. Find CTOs of Series A B2B SaaS in LATAM,
+companies with 11-50 people. For the first 20, copy the email and
+name into my Google Sheet 'leads-mayo'."
+```
+
+Computer Use operates Apollo + Sheets. You come back with 20 leads ready.
+
+### 2. Social media posts
+
+```
+From the street:
+"Post this text on my LinkedIn:
+[text]
+
+Then on my Twitter:
+[280-char adapted version]
+
+Hashtags: #SaaS #LATAM #Growth"
+```
+
+Claude operates LinkedIn + Twitter. Posts published.
+
+### 3. Filling out 30 forms
+
+```
+"Fill out these 30 registration forms for [event]:
+[file with data]
+
+For each one:
+- Fill in the fields
+- Before submitting, take a screenshot
+- Verify the confirmation email arrived
+
+If any fail, leave me a log."
+```
+
+4h of work → 30 min with Computer Use.
+
+### 4. Organizing files
+
+```
+"There are 200+ files from the last month in my /Downloads/.
+Organize them:
+- PDFs → /Documents/PDFs/
+- Images → /Pictures/imported/
+- Delete duplicates (same hash)
+- Log of what you moved"
+```
+
+### 5. Processing email followed by manual triage
+
+```
+"Process my inbox:
+- Trial signups → label 'trial' + reply with welcome
+- Support → forward to my VA
+- Newsletter → archive
+- Important → leave in inbox + create task in Notion"
+```
+
+---
+
+## Limitations
+
+### Sites with anti-bot protection
+
+CAPTCHAs, 2FA, strict Cloudflare → **Claude stops to ask you**.
+
+### Closed / no-API apps
+
+If it requires a Google login → Claude can't get past 2FA. You need the password saved in a password manager and a specific workflow.
+
+### Latency
+
+Operating the mouse/keyboard is **slower than an API**. If the task has an API available (Gmail MCP, for example), **the API is better**.
+
+### Apps that change their UI
+
+If the app's UI changes (a button moved), Claude **may click where it shouldn't**. For apps that change frequently, consider MCP/API.
+
+---
+
+## Anti-patterns
+
+### 1. Computer Use for everything
+
+If the app has an API, **the API is better**. Use Computer Use for apps **without an API** or as a last resort.
+
+### 2. Critical tasks without supervision
+
+Computer Use can make mistakes with clicks. For critical tasks (sending an important email, making a payment), **review** before auto-confirming.
+
+### 3. No sandbox for testing
+
+If you're going to test a new workflow with Computer Use, **test it in a test account** first. Not in real production.
+
+### 4. Dispatch for urgency
+
+Dispatch latency can be seconds to minutes. For something **urgent and real-time**, it's not the right tool.
+
+### 5. No monitoring
+
+If you leave Claude operating with Computer Use for 1h, **monitor it**. If something breaks, you'll see it quickly.
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **Computer Use + Dispatch** | Operating your computer from your phone |
+| **APIs / MCPs** | If the app has a formal integration |
+| **Zapier / Make** | Automation between cloud apps |
+| **Selenium** | Programmatic testing |
+| **Mac mini ecosystem** | More robust 24/7 setup |
+
+---
+
+## Powerful combinations
+
+### With scheduled tasks
+
+[Cowork scheduled tasks](/boveda/claude-cowork-workflow) + Computer Use:
+
+```
+Every Monday at 9am: Computer Use opens Sheets, adds the weekend's
+data, refreshes dashboards.
+```
+
+### With remote Claude Code
+
+Dispatch → Claude Desktop with Computer Use → Mac mini running a Claude Code agent = **pro automation stack**.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Free plan | Computer Use requires Pro+ |
+| No Mac/Windows powered on | Dispatch needs a local computer active |
+| Iterative creative work | Better done hands-on |
+| Strict compliance | Auditing of automated actions |
+
+---
+
+## Next steps
+
+- To dive into Computer Use only, [Computer Use](/boveda/claude-control-remoto)
+- To dive into Dispatch only, [Claude Dispatch](/boveda/claude-dispatch)
+- To combine it with scheduled tasks, [Cowork workflow](/boveda/claude-cowork-workflow)

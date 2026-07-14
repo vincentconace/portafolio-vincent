@@ -1,0 +1,105 @@
+---
+title: "MCP Figma Dev Mode — real design context to generate faithful code"
+description: "Official Figma MCP with 997 installs that brings Dev Mode straight into your workflow: design tokens, component properties, exact layout. Anti 'Claude generated something that doesn't look like the Figma'."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "figma"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["replica-disenos-web", "anatomia-claude", "plugin-claude-plugins-official"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/figma-dev-mode"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/figma-dev-mode.json"
+---
+
+## What it is
+
+Figma Dev Mode MCP is the official implementation Figma released so AI agents (including Claude Code) can understand your design with the same precision Dev Mode has inside Figma: exact measurements, design tokens, component properties, hierarchy, naming.
+
+The difference versus pasting a screenshot into Claude: the screenshot gives you "more or less." The MCP gives you the real values — `#5B21B6`, `padding: 24px`, `font-size: 16px`, not approximations.
+
+Result: when Claude generates code from a Figma frame, the output uses the correct values. Fewer "move it 2px to the right" iterations.
+
+997 installs position it as one of the most widely adopted MCPs in the devtools category.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 997 |
+| MCP server | `Figma Dev Mode MCP` |
+| Author | Figma (official) |
+| Account required | Yes — Figma with Dev Mode enabled |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp devtools/figma-dev-mode
+```
+
+Prerequisites: a Figma account on a plan that includes Dev Mode (Professional or higher) + Personal Access Token.
+
+For Claude:
+
+```
+I installed the MCP devtools/figma-dev-mode. Configure the credentials and
+generate the React component for the frame `<Figma URL>` respecting exact colors,
+spacing, and typography. If there are design tokens defined, use them.
+```
+
+## What you can do with this
+
+### Generating a component faithful to the design
+
+"Convert this Figma frame into a React + Tailwind component. Use the color and typography tokens from the file, don't make things up." The MCP reads them directly.
+
+### Extracting design tokens
+
+"List all the design tokens from Figma project X. Generate a `tokens.json` ready to use with Style Dictionary or an equivalent."
+
+### Design system audit
+
+"Compare the components defined in my code vs the components in the Figma library. What do I have in code that isn't in Figma? And vice versa?" Useful for aligning the DS.
+
+### Precise inspections
+
+"For the primary button in frame X, give me specifically: color, hover state, font, padding, border radius, shadow." The MCP pulls it all.
+
+### Generating Storybook stories
+
+"For each variant of the Button component in Figma (primary, secondary, ghost, danger), generate the corresponding Storybook story with the correct props."
+
+### Design-to-code workflow
+
+If your designer works in Figma and you work in code, the MCP closes the gap. Changes in Figma → Claude detects them → proposes a diff in the code.
+
+## Prerequisites
+
+- **Figma account** with Dev Mode (Pro+)
+- **Personal Access Token** generated from Figma settings
+- **Access to the target file / project**
+- **A design with well-named tokens and components:** the MCP doesn't make up names, it reads what's there
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **Without Dev Mode enabled:** some key features (inspect, code) require a paid plan. Free isn't enough.
+- **Designs with chaotic naming:** if your components are called `Frame 47` and `Rectangle 12`, the MCP returns that garbage. Serious naming first.
+- **For inspiration / early mockups:** Claude generating from text can be faster if you don't have a design yet. The MCP shines when there's already a source Figma.
+- **If your design uses heavy external plugins:** some plugins generate odd structures the MCP may not parse perfectly.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Figma Dev Mode MCP](https://www.aitmpl.com/component/mcps/devtools/figma-dev-mode) — exact command.
+- **Config JSON:** [figma-dev-mode.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/figma-dev-mode.json).
+- **Figma Dev Mode docs:** [help.figma.com](https://help.figma.com) — official reference.
+
+## Related resources
+
+- [Replicating web designs](/boveda/replica-disenos-web) — the classic pattern for replicating UI without a source Figma; complementary to the MCP.
+- [Anatomy of Claude](/boveda/anatomia-claude) — placing this MCP as a connector to an external service.
+- [Claude Plugins Official](/boveda/plugin-claude-plugins-official) — also includes a `figma` plugin with a different scope (all of Figma, not just Dev Mode).

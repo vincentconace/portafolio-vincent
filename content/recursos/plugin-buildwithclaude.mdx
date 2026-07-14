@@ -1,0 +1,126 @@
+---
+title: "Buildwithclaude — el hub con 53 plugins, 134 skills y 357 commands"
+description: "Marketplace de davepoon (2.7k⭐) que junta en un solo lugar skills, agents, commands, hooks y plugins para Claude Code, Desktop, Agent SDK y OpenClaw. Incluye 199+ MCPs de Docker oficiales."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "claude-desktop", "agent-sdk"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["5-claude-skills-necesarias", "agency-agents", "trifecta-perfecta"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/buildwithclaude"
+github: "https://github.com/davepoon/buildwithclaude"
+---
+
+## Qué es
+
+Buildwithclaude se posiciona como "el hub único para todo lo de Claude". No exagera: 53 plugins, 134 skills, 357 commands, 234 agents y 59 hooks dentro del mismo marketplace. Y agarra cuatro entornos: Claude Code, Claude Desktop, el Agent SDK y OpenClaw.
+
+Lo interesante no es solo el volumen. Es que viene organizado por dominio (blockchain, data/AI, design, infra, language specialists, security, sales, etc.) con plugins específicos por área. Y trae un sub-plugin `mcp-servers-docker` que mete 199+ MCPs verificados del registry oficial de Docker.
+
+Es un marketplace "para llevar" — instalás la base y después agarrás packs según el proyecto que estés haciendo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | davepoon |
+| Stars | 2.7k |
+| Tipo | Marketplace (53 plugins) |
+| Componentes | 134 skills, 357 commands, 234 agents, 59 hooks |
+| Marketplace | `davepoon/buildwithclaude` |
+| Web | [buildwithclaude.com](https://buildwithclaude.com) |
+
+### Los packs grandes
+
+| Plugin | Qué trae |
+| --- | --- |
+| `all-agents` | 117 agents en 11 categorías |
+| `all-commands` | 175 slash commands en 22 categorías |
+| `all-hooks` | 28 automation hooks |
+| `all-skills` | 121 skills (documents, dev, automation, CRM, DevOps) |
+| `mcp-servers-docker` | 199+ MCPs del Docker MCP registry oficial |
+| `nextjs-expert` | App Router, Server Components, Route Handlers, Server Actions, auth |
+| `frontend-design-pro` | Wizard de diseño, trend research, moodboard, browser-based inspiration, WCAG |
+| `obsidian-skills` | Markdown + wikilinks + Bases + Canvas (por kepano) |
+| `project-boundary` | Hook de seguridad: bloquea ops destructivas fuera del directorio |
+| `cashflow` | Personal finance con Plaid + OAuth |
+| `claude-hud` | Statusline HUD en tiempo real |
+
+### Sub-packs por categoría
+
+Hooks y commands agrupados por uso (`commands-ci-deployment`, `commands-database-operations`, `hooks-security`, `agents-data-ai`, etc.). Esto te deja instalar solo el área que necesitás sin cargar todo.
+
+## Cómo se instala
+
+```bash
+# 1) Agregar el marketplace
+/plugin marketplace add davepoon/buildwithclaude
+
+# 2) Instalar packs según uso
+/plugin install all-skills@davepoon-buildwithclaude
+/plugin install mcp-servers-docker@davepoon-buildwithclaude
+/plugin install project-boundary@davepoon-buildwithclaude
+```
+
+O `/plugin` → Discover.
+
+Para que Claude lo arme por vos:
+
+```
+Instalá el marketplace davepoon/buildwithclaude. Mostrame los 53 plugins,
+agrupados por categoría, con una línea sobre qué hace cada uno. Yo elijo
+después.
+```
+
+## Qué podés hacer con esto
+
+### Empezar un proyecto Next.js con setup serio
+
+`nextjs-expert` trae App Router, Server Components, Route Handlers, Server Actions y patrones de auth listos. Suma `frontend-design-pro` y tenés wizard de diseño + auditoría WCAG. Combo decente para arrancar un proyecto sin hacer 40 prompts.
+
+### Conectar 199+ servicios externos vía MCPs
+
+`mcp-servers-docker` te da acceso a todo el catálogo verificado del registry de Docker. Es la forma más directa de no escribir tu propio MCP cuando ya existe uno mantenido. Compatible con la filosofía de [Anatomía de Claude](/boveda/anatomia-claude) cuando hablamos de "el cable telefónico".
+
+### Endurecer la seguridad por defecto
+
+`project-boundary` corre como hook y bloquea comandos destructivos o ediciones de archivos fuera del directorio del proyecto. Es el cinturón de seguridad que olvidamos prender hasta que un agent borra algo de `~/`.
+
+### Markdown y notas con Obsidian-skills
+
+Si tu PKM es Obsidian, `obsidian-skills` (de kepano, autor de Obsidian) te deja a Claude trabajar con wikilinks, Bases para vistas de DB y Canvas para diagramas, sin desarmar tu vault.
+
+### Workflow completo con `claude-hud` + agents + hooks
+
+Statusline en tiempo real + agents de calidad + hooks de seguridad. Es lo más cerca de un "Claude Code IDE-grade" que vas a armar sin escribir código vos.
+
+## Beneficios reales
+
+- **Un solo marketplace cubre 4 entornos** (CC, Desktop, Agent SDK, OpenClaw).
+- **Los packs son granulares** — instalás `hooks-security` sin tener que tragarte `hooks-formatting`.
+- **199+ MCPs de Docker oficiales** dentro de un solo plugin.
+- **Mantenedor con presencia pública** (davepoon, web propia), no un ghost repo.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **No instales `all-agents` + `all-commands` + `all-skills` + `all-hooks` juntos:** vas a tener 600+ entidades cargadas y Claude se va a perder. Elegí los packs del dominio que estás trabajando.
+- **`mcp-servers-docker`:** pesa, porque trae 199+ MCPs aunque uses 3. Si tenés clara la lista, instalá los MCPs sueltos.
+- **Si ya usás otro marketplace gigante** (`alirezarezvani/claude-skills`, `jeremylongshore/claude-code-plugins-plus-skills`), elegí uno. Solapar tres es desperdicio.
+- **Para proyectos muy chicos:** la curación oficial de Anthropic + 5 skills te alcanza.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Buildwithclaude](https://www.aitmpl.com/plugins/buildwithclaude) — listado completo de los 53 plugins.
+- **Repo en GitHub:** [davepoon/buildwithclaude](https://github.com/davepoon/buildwithclaude) — código, issues, contributing.
+- **Web oficial:** [buildwithclaude.com](https://buildwithclaude.com) — docs y guías.
+
+## Recursos relacionados
+
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — el set mínimo. Empezá por ahí antes de agarrar un marketplace de 53 plugins.
+- [Agency Agents](/boveda/agency-agents) — para decidir cuándo necesitás un agent vs una skill cuando el marketplace ofrece ambos.
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — combo más liviano de 3 herramientas si Buildwithclaude te suena demasiado de entrada.

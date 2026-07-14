@@ -1,0 +1,301 @@
+---
+title: "Construí tu app sin saber programar — 3 pasos con Claude"
+description: "Gente que no sabe una línea de código ya está sacando apps y haciendo negocio con Claude. El flujo: entrevista (chat normal) → plan organizado → construcción con Claude Code. Vos solo describís la idea. Antes era programador + meses + miles de dólares. Ahora solo necesitás tu idea y Claude."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["vivecoding-101", "claude-web-builder", "the-architect"]
+---
+
+## El cambio
+
+| Antes | Ahora |
+|-------|-------|
+| Programador | Vos |
+| Meses de trabajo | Días o semanas |
+| Miles de dólares | $20-200 |
+| Necesitabas idea + ejecutor | Solo necesitás idea + Claude |
+
+---
+
+## El flujo — 3 pasos
+
+| Paso | Dónde | Qué hacés |
+|------|-------|-----------|
+| 1 | claude.ai (chat) | **Entrevista** — Claude te hace preguntas |
+| 2 | claude.ai (chat) | **Plan** — Claude arma roadmap organizado |
+| 3 | Claude Code | **Construcción** — Claude construye, vos validás |
+
+---
+
+## Paso 1 — La entrevista
+
+Llegás con amigo, le decís "quiero hacer app". Tu amigo **NO empieza a construir**. Primero te pregunta cosas.
+
+### Qué te va a preguntar Claude
+
+- ¿Qué quiere hacer tu app?
+- ¿Para quién es?
+- ¿Cómo te la imaginás visualmente?
+- ¿Hay apps parecidas que te gusten?
+- ¿Qué es lo MÁS importante que tiene que funcionar?
+- ¿En qué dispositivo principal? (web, mobile, ambos)
+- ¿Cómo va a pagar tu cliente?
+- ¿Qué pasa después de que paga?
+
+### Tip importante
+
+**Más detalle = mejor app**. No digas "quiero tienda". Decí:
+
+> "Quiero tienda donde la gente vea mis pasteles, elija sabor + tamaño, y pueda pedir por WhatsApp con pago previo por Mercado Pago."
+
+### Prompt para iniciar entrevista
+
+```
+Quiero construir [APP / PÁGINA / HERRAMIENTA — tu idea].
+
+Antes de hacer nada, hacéme entrevista. Preguntame TODO lo que
+necesitás saber para poder construirlo:
+
+- ¿Qué quiero que haga exactamente?
+- ¿Para quién es?
+- ¿Cómo quiero que se vea?
+- ¿Qué funciones necesita?
+- ¿Cómo cobro?
+- ¿Qué dispositivo principal?
+- ¿Qué pasa después de cada acción importante?
+
+Hacéme las preguntas una por una. Esperá mi respuesta antes
+de la siguiente. Si necesitás clarificación, profundizá.
+
+Al final, resumime lo que entendiste para que confirme.
+```
+
+---
+
+## Paso 2 — El plan
+
+Con info de la entrevista, Claude arma **mapa organizado**: qué se construye primero, qué después, todo en orden.
+
+**Sin plan, te perdés**. El plan es tu mapa.
+
+### Prompt para generar plan
+
+```
+Excelente. Con todo lo que conversamos, armame plan de construcción:
+
+1. RESUMEN DEL PRODUCTO (5 líneas)
+   - Qué es
+   - Para quién
+   - Cómo gana dinero (si aplica)
+   - Por qué alguien lo usaría
+
+2. FEATURES POR PRIORIDAD
+   - MUST-have v1 (3-5 features)
+   - NICE-have v2 (después)
+   - NO HACER v1 (qué dejamos fuera explícito)
+
+3. STACK TECNOLÓGICO
+   - Frontend
+   - Backend
+   - DB
+   - Deploy
+   - Pagos (si aplica)
+   - Justificá cada elección en 1 línea
+
+4. ORDEN DE CONSTRUCCIÓN
+   - Paso 1, 2, 3... explicado para que Claude Code lo siga
+   - Para cada paso: qué archivos crear, qué hace
+
+5. SIGUIENTE PASO PRÁCTICO
+   - ¿Qué hago yo HOY para empezar?
+
+Guardá esto como markdown. Lo voy a usar en Claude Code.
+```
+
+---
+
+## Paso 3 — A construir
+
+### Setup
+
+1. Instalá Claude Code ([instalar Claude Code](/boveda/instalar-claude-code))
+2. Creá carpeta para tu proyecto:
+
+```bash
+mkdir mi-app && cd mi-app && claude
+```
+
+3. Pegá el plan que generaste en `BLUEPRINT.md`
+
+### Prompt inicial
+
+```
+> Leé BLUEPRINT.md.
+
+  Estamos en Fase 1 MVP. Construí el primer paso según el
+  orden del blueprint.
+
+  Antes de codear, hacé Plan Mode (Shift+Tab).
+  Decime qué archivos vas a crear, qué dependencies instalar.
+
+  Esperá mi OK para construir.
+
+  Si algo no está claro, preguntame ANTES de inventar.
+```
+
+### Iteración
+
+Cuando Claude termine paso 1:
+
+```
+> Probemos lo que construiste. Corré el server local y abrime
+  la URL.
+
+  Voy a probar. Te aviso si funciona.
+```
+
+Vos probás. Si algo no anda:
+
+```
+> No funciona [DESCRIBÍ EL PROBLEMA].
+> Diagnosticá y arreglá.
+```
+
+Si funciona:
+
+```
+> Funciona. Siguiente paso del blueprint.
+```
+
+---
+
+## El ciclo de iteración
+
+```
+1. Claude construye paso N del plan
+2. Vos probás
+3. Si funciona → siguiente paso
+4. Si no → describís problema → Claude arregla
+```
+
+Cada paso es **chico**, validable, reversible.
+
+---
+
+## Templates por tipo de app
+
+### App de servicio (consultoría, agencia)
+
+```
+- Landing con tu servicio
+- Form de contacto
+- Calendario de citas
+- Páginas internas (sobre, casos, pricing)
+- Deploy a Vercel
+```
+
+### Tienda online básica
+
+```
+- Catálogo de productos
+- Carrito
+- Checkout con Mercado Pago / Stripe
+- Confirmación por email
+- Admin panel para gestionar pedidos
+```
+
+### Herramienta (calculadora, generador)
+
+```
+- Página simple con input
+- Lógica de procesamiento
+- Output con opción de descargar/copiar
+- Analytics básico para entender uso
+```
+
+### App de membresía
+
+```
+- Landing con paywall
+- Auth (email + Google)
+- Stripe subscription
+- Área privada para miembros
+- Cron job para procesar renovaciones
+```
+
+---
+
+## Anti-patrones
+
+### 1. Saltarse la entrevista
+
+Si vas directo a Claude Code con "construime app de [X]", **te pierde el contexto crítico**. Pasá por chat primero.
+
+### 2. Querer Spotify en v1
+
+Tu primera versión NO necesita todas las features de productos consolidados. **3-5 features bien hechas > 15 mediocres**.
+
+### 3. Cambiar stack a mitad
+
+Empezaste Next.js → "mejor SvelteKit". **No**. Quedate hasta v1.
+
+### 4. No validar entre pasos
+
+Si construís 5 pasos sin probar nada, cuando algo rompe **no sabés dónde**. Probá cada paso.
+
+### 5. Comprar dominios antes del MVP
+
+Dominio + setup hosting + pagar SaaS = $50-200 sin nada construido. **Validá primero**.
+
+---
+
+## Cuánto cuesta realmente
+
+| Pieza | Costo |
+|-------|-------|
+| Claude Pro | $20/mes (usás 1-2 meses) |
+| Dominio | $12/año |
+| Vercel | Gratis (Hobby plan) |
+| Supabase | Gratis tier suficiente para MVP |
+| Stripe | Solo si vas a cobrar (comisión por transacción) |
+| **Total para MVP** | **$30-50** total |
+
+vs. Programador freelance: **$2000-10000** para hacer lo mismo.
+
+---
+
+## Combinaciones potentes
+
+### Con The Architect
+
+[The Architect](/boveda/the-architect) genera blueprint más estructurado. Si tu app es ambiciosa, usá Architect en lugar del prompt simple.
+
+### Con VibeCoding 101
+
+[VibeCoding 101](/boveda/vivecoding-101) profundiza fases (validar, crecer) después de tener MVP.
+
+### Con All Deploy
+
+Cuando tu app está lista, [All Deploy](/boveda/all-deploy) la sube a producción.
+
+---
+
+## Cuándo NO conviene este approach
+
+| Caso | Por qué |
+|------|---------|
+| App super compleja (banking, healthcare) | Necesitás devs reales |
+| Sin idea clara | Validá la idea antes |
+| Sin paciencia para iterar | Es proceso, no instantáneo |
+| Esperás que tu app sea ChatGPT v2 | Sé realista con scope v1 |
+
+---
+
+## Próximos pasos
+
+- Para metodología completa con PRD, [VibeCoding 101](/boveda/vivecoding-101)
+- Para blueprint estructurado de 16 secciones, [The Architect](/boveda/the-architect)
+- Para deploy automatizado al final, [All Deploy](/boveda/all-deploy)

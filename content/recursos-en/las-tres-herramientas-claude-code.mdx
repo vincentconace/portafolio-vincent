@@ -1,0 +1,229 @@
+---
+title: "The 3 Claude Code Tools — Vibe Kanban + GSD + Templates to systematize your vibecoding"
+description: "A combo of 3 repos to go from scattered ideas to a repeatable system. Vibe Kanban coordinates agents with visual tickets. GSD (Get Shit Done) turns ideas into a phased roadmap. Claude Code Templates gives you pre-built agents, commands, and MCPs."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["completa-tu-claude", "claude-piloto-automatico", "seis-mejores-skills-claude"]
+---
+
+## The problem
+
+Vibecoding without a system = chaos. You start one day, switch topics, lose context, Claude goes off the rails, and you have to redo everything.
+
+This combo of 3 tools turns that chaos into a **repeatable system** with visibility, structure, and ready-made templates.
+
+| # | Tool | Role |
+|---|------|------|
+| 01 | Vibe Kanban | Visual board to coordinate agents |
+| 02 | GSD (Get Shit Done) | Ideas → roadmap → phased execution |
+| 03 | Claude Code Templates | Catalog of agents/commands/hooks/MCPs |
+
+---
+
+## What you'll achieve
+
+- **Organize work** into clear tasks so Claude doesn't go off the rails
+- **Reduce broken context** with a spec-driven dev flow
+- **Speed up iterations** with ready-made templates
+- **Raise quality** without relying on one giant prompt
+
+---
+
+## 01 — Vibe Kanban
+
+### What it does
+
+A board and workspace to **coordinate coding agents**. You see diffs, run things by ticket, and check the real status of the work.
+
+### When it shines
+
+- You already have **several tasks running in parallel**
+- You need visibility into what's happening
+- You work with several agents at once
+
+### Installation
+
+```bash
+npx vibe-kanban
+```
+
+Repo: `BloopAI/vibe-kanban`.
+
+### What changes
+
+You go from "Claude is doing something" → **a board with real status** per ticket.
+
+---
+
+## 02 — GSD (Get Shit Done)
+
+### What it does
+
+A **meta-prompting and spec-driven dev** system to keep results consistent in Claude Code. It gives you commands and structure to plan and execute in phases.
+
+### When it shines
+
+- Your context degrades over long sessions
+- Responses become inconsistent
+- You need to turn a loose idea into a roadmap
+
+### Installation
+
+```bash
+npx get-shit-done-cc@latest
+```
+
+Repo: `gsd-build/get-shit-done`.
+
+### What changes
+
+You go from "explaining it from scratch every time" → **structured commands** that keep things consistent.
+
+---
+
+## 03 — Claude Code Templates
+
+### What it does
+
+A catalog of **agents, commands, hooks, and MCPs** ready to install. It saves you from starting from scratch on every project.
+
+### When it shines
+
+- You start lots of similar projects
+- You want to standardize quality across teams
+- You need a base setup without reinventing it
+
+### Installation
+
+```bash
+npx claude-code-templates@latest
+```
+
+Repo: `davila7/claude-code-templates`.
+
+### What changes
+
+You go from "manual config every time" → **a template applied in seconds**.
+
+---
+
+## How to combine them
+
+### Recommended flow
+
+```
+1. BASE SETUP
+   Claude Code Templates → agents/commands/MCPs installed
+
+2. PLANNING
+   GSD → turns ideas into a roadmap, phases, and executable plans
+
+3. DAILY EXECUTION
+   Vibe Kanban → tickets, workspaces, diff review
+
+4. ITERATION
+   Real weekly feedback → adjust the plan
+```
+
+---
+
+## Use cases
+
+### New client project
+
+```
+1. TEMPLATES: apply the "agencia-saas" template
+   → Claude starts with 10 agents + 15 curated commands
+   
+2. GSD: "this client wants a CRM, help me build a v1 roadmap"
+   → Delivers phases with success criteria
+   
+3. KANBAN: each phase becomes a board column
+   → You watch real progress
+```
+
+### Refactor of an existing project
+
+```
+1. GSD: "analyze this repo, give me a phased refactor plan"
+2. KANBAN: turn the plan into tickets
+3. TEMPLATES: add a code-review MCP if you don't have one
+```
+
+### Building a SaaS
+
+```
+1. TEMPLATES: "saas-baseline" → Auth, DB, payments setup
+2. GSD: roadmap by feature
+3. KANBAN: subagents working in parallel per feature
+```
+
+---
+
+## The reality of using them
+
+These tools **don't replace judgment**. What they do is give you a system that **reduces chaos** and improves consistency.
+
+If today you feel like "Claude sometimes works and sometimes doesn't," this combo helps you stabilize.
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 3 without a real project
+
+Without an active project, all 3 are abstract. Wait until you have something concrete to organize.
+
+### 2. Skipping the base setup (Templates)
+
+If you go straight to GSD + Kanban without Templates, **you work with the default setup** that isn't optimized. Templates is the foundation.
+
+### 3. Using Kanban for tiny tasks
+
+For a 30-minute task, opening Kanban is overkill. It's for **projects with multiple pieces**.
+
+### 4. GSD as a replacement for thinking
+
+GSD structures your thinking — **it doesn't think for you**. If you ask "plan my SaaS" without context, you'll get a generic plan.
+
+### 5. Not iterating on real feedback
+
+Expecting it to "stabilize on its own" → nope. The flow requires **weekly review** and adjustment.
+
+---
+
+## Powerful combinations
+
+### With [complete your Claude](/boveda/completa-tu-claude)
+
+GSD is one of the 5 patches in that combo. Here you see it with more context.
+
+### With [Claude on autopilot](/boveda/claude-piloto-automatico)
+
+Superpowers + this combo = structured autopilot.
+
+### With [6 best Claude skills](/boveda/seis-mejores-skills-claude)
+
+The 6 curated skills that complement these 3 tools.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| Solo, casual vibecoder | Overkill for recreational use |
+| One-shot project | The system pays off on long projects |
+| A team that already has a workflow | Don't pile another one on top |
+| No discipline to maintain it | Without updates, the Kanban becomes noise |
+
+---
+
+## Next steps
+
+- For patches to base Claude, [complete your Claude](/boveda/completa-tu-claude)
+- For autopilot with subagents, [Claude on autopilot](/boveda/claude-piloto-automatico)
+- For curated skills, [6 best Claude skills](/boveda/seis-mejores-skills-claude)

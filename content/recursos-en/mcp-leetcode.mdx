@@ -1,0 +1,100 @@
+---
+title: "MCP LeetCode — problems, user info, and contests from Claude Code"
+description: "MCP server with 154 installs for LeetCode. Access problems, user data, and contest info from Claude. For studying for technical interviews or building progress-tracking tools."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "leetcode"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-arxiv-mcp-server", "aprende-skill", "vivecoding-101"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/leetcode"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/leetcode.json"
+---
+
+## What it is
+
+LeetCode is the standard platform for technical interview prep. 3,000+ problems, a difficulty system, contests, user solutions.
+
+This MCP gives Claude Code access to the LeetCode API: search problems, view statements, pull user info, contest data. Useful if:
+- You're prepping for interviews and want Claude to assist you
+- You're building progress-tracking tools
+- You want a workflow like "Claude picks a random problem from topic X and helps me with hints"
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 154 |
+| MCP server | `leetcode` |
+| Account required | For some operations, yes |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp devtools/leetcode
+```
+
+For Claude:
+
+```
+I installed the devtools/leetcode MCP. Show me the "two-sum" problem with
+its full statement and constraints. Then give me 3 different solution
+approaches, from the most naive to the most optimized, with complexity
+analysis.
+```
+
+## What you can do with this
+
+### Assisted study
+
+"Find me a Medium difficulty problem, topic Dynamic Programming, that I haven't solved. Give me the statement and let me try. Then you can review my solution."
+
+### Study plan
+
+"Generate a 2-week plan for senior backend interviews: prioritize `graph traversal`, `system design`, `concurrency`. 2-3 problems per day, a mix of Medium and Hard."
+
+### Progress tracking
+
+"Of the problems I solved this month, which topics are hardest for me (most attempts before passing)? Suggest the topics I should reinforce."
+
+### Contest analysis
+
+"Show me the most recent contest. For each problem, give me my time vs the top 1%. Suggest which pattern to study to move up."
+
+### Explained solutions
+
+"For problem X, show me my solution and compare it with the official solution. Explain the differences in complexity and why the official one is better."
+
+### Assisted mock interview
+
+"Let's do a mock interview: give me a Hard problem, give me 5 minutes to understand it, then I'll walk through my approach and you ask me questions as the interviewer." A conversational workflow.
+
+## Prerequisites
+
+- **A LeetCode account** if you're going to use features that require login (your progress, contest results)
+- **An internet connection** (everything is an API call against LeetCode)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you're not prepping for interviews:** the MCP is niche. For generic algorithmic problems you can just ask Claude directly.
+- **For cheating in live interviews:** let's be clear — it's wrong and it shows. Use it for honest study.
+- **For a company's proprietary problems:** LeetCode doesn't have every company's problems. Some are customized.
+- **If your prep is system design:** LeetCode has little coverage there. Look at other resources.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [LeetCode MCP](https://www.aitmpl.com/component/mcps/devtools/leetcode) — the exact command.
+- **JSON config:** [leetcode.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/leetcode.json).
+- **Official LeetCode:** [leetcode.com](https://leetcode.com).
+
+## Related resources
+
+- [arXiv MCP Server](/boveda/mcp-arxiv-mcp-server) — for a theoretical deep dive into algorithms when you need it.
+- [Aprende Skill](/boveda/aprende-skill) — to understand how to build Claude-assisted learning workflows.
+- [ViveCoding 101](/boveda/vivecoding-101) — general vibes of learning to code with AI.

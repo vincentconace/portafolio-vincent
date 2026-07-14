@@ -1,0 +1,260 @@
+---
+title: "5 skills para crear contenido sin gastar extra — Notebook LM, Banana, Editor Pro, Stitch, Humanízalo"
+description: "Tu equipo completo de creación dentro de Claude. Notebook LM investiga, Banana Cloud genera imágenes, Editor Pro Max edita video, Stitch diseña tu web, Humanízalo elimina tono IA. 5 personas reemplazadas por 5 skills gratis."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["humanizalo", "claude-banana", "stitch-diseno-ia"]
+---
+
+## La premisa
+
+Antes necesitabas **5 personas** para hacer contenido:
+- Investigador para temas
+- Diseñador para imágenes
+- Editor de video
+- Diseñador web
+- Escritor que no suene a robot
+
+Estas 5 skills te dejan hacer **el trabajo de los 5**. Sin pagar nada extra.
+
+| # | Skill | Rol |
+|---|-------|-----|
+| 01 | Notebook LM | Investigador |
+| 02 | Banana Cloud | Diseñador de imágenes |
+| 03 | Editor Pro Max | Editor de video |
+| 04 | Stitch | Diseñador web |
+| 05 | Humanízalo | Voz auténtica |
+
+---
+
+## 01 — Notebook LM (el investigador)
+
+### Qué hace
+
+Caja mágica: le avientas artículos, videos, PDFs — lo que sea — y te escupe **resumen estructurado** con los puntos clave.
+
+Se acabó pasarte horas leyendo 50 fuentes para sacar el ángulo.
+
+### Flujo
+
+```
+1. Le das tus fuentes (links, PDFs, videos)
+2. Procesa y te entrega resumen con puntos clave
+3. Usás ese resumen como base para tu siguiente video/post
+```
+
+### Instalación
+
+```bash
+pip install notebooklm-py
+```
+
+Repo: `teng-lin/notebooklm-py`.
+
+### Para qué sirve
+
+Cuando vas a hacer contenido sobre tema que no dominás 100%. Le das 5-10 fuentes confiables y te arma el "qué importa" antes de que vos escribas.
+
+---
+
+## 02 — Banana Cloud (el diseñador)
+
+### Qué hace
+
+Le **describís** la imagen que necesitás — foto de producto, gráfico para redes, infográfico — y la genera en segundos.
+
+Sin Canva, sin Photoshop. Directo desde Claude.
+
+### Instalación
+
+```bash
+git clone https://github.com/AgriciDaniel/banana-claude.git && cd banana-claude
+```
+
+### Casos
+
+```
+"Foto de producto minimalista para mi e-commerce de zapatillas"
+"Banner para Instagram con fondo gradient y texto bold"
+"Infográfico comparando 3 features"
+```
+
+### Diferencia vs Claude Banana
+
+Banana Cloud es la versión **de AgriciDaniel** enfocada en pipeline. Hay también [Claude Banana](/boveda/claude-banana) (de Hainrixz) con foco en formato narrativo de prompts. Las dos son válidas.
+
+---
+
+## 03 — Editor Pro Max (el editor de video)
+
+### Qué hace
+
+Editor que nunca se cansa. Le decís "necesito video con animaciones, transiciones y cortes" y arma el proyecto completo.
+
+Sin After Effects, sin Premiere.
+
+### Instalación
+
+```bash
+git clone https://github.com/Hainrixz/editor-pro-max.git && cd editor-pro-max
+```
+
+### Flujo
+
+```
+1. Clonás el proyecto
+2. Abrís la carpeta con Claude Code
+3. "Hacé video con gráficos animados sobre ventas Q4"
+4. Claude genera el proyecto con animaciones, transiciones, cortes
+```
+
+### Casos
+
+- Reels con motion graphics
+- Explainers cortos
+- Cortes para YouTube
+- Animaciones de datos
+
+---
+
+## 04 — Stitch (el diseñador web)
+
+### Qué hace
+
+Le describís tu app o landing y diseña el **proyecto completo**: colores, tipografía, estructura, componentes. Lo que tomaba semanas con diseñador → minutos.
+
+### Output
+
+Diseño listo para pasarlo a código.
+
+### Instalación
+
+```bash
+npx -y @anthropic-ai/claude-code mcp add stitch -- npx -y stitch-mcp
+```
+
+### Flujo
+
+```
+1. Instalás Stitch como MCP
+2. Abrís Claude Code
+3. "Landing para mi agencia de marketing — estilo minimalista, tonos azules"
+4. Stitch entrega: paleta, fuentes, layout, componentes
+5. Le pedís a Claude que lo construya con el diseño como guía
+```
+
+Ver [Stitch diseño IA](/boveda/stitch-diseno-ia) para deep-dive.
+
+---
+
+## 05 — Humanízalo (la voz auténtica)
+
+### Qué hace
+
+Le pegás cualquier texto IA y te lo regresa sonando **como vos lo escribirías**. Cero frases robóticas, cero guiones raros, cero "en el panorama actual...".
+
+### Por qué cierra el ciclo
+
+Las otras 4 skills te generan contenido. Pero si todo sale con tono IA, **se nota**. Humanízalo es el filtro final.
+
+### Instalación
+
+```bash
+git clone https://github.com/Hainrixz/humanizalo.git && cd humanizalo
+```
+
+### Uso
+
+```
+/humanizalo [texto que suena a IA]
+```
+
+Ver [Humanízalo](/boveda/humanizalo) para los 40+ patrones que detecta.
+
+---
+
+## El equipo completo en flujo
+
+### Ejemplo — post de blog con video y carousel
+
+```
+1. NOTEBOOK LM:    Investigá 10 fuentes sobre el tema X.
+                   Dame los 5 puntos que importan.
+
+2. CLAUDE escribe: Borrador del post.
+
+3. HUMANÍZALO:     Pasalo por humanizer.
+                   Que suene a persona.
+
+4. BANANA CLOUD:   Generá 5 imágenes que ilustren los puntos.
+
+5. EDITOR PRO MAX: Convertí los 5 puntos en reel de 60s
+                   con animaciones.
+
+6. STITCH:         Diseñá landing para capturar emails
+                   con el ángulo del post.
+```
+
+5 personas → 5 skills → 1 vos.
+
+---
+
+## Anti-patrones
+
+### 1. Saltar Humanízalo
+
+Si publicás sin humanizar, **se nota**. Es el paso que la gente saltea y que más importa.
+
+### 2. Notebook LM con fuentes basura
+
+Garbage in, garbage out. **Curá las fuentes** antes de meterlas — Notebook LM es resumir, no juzgar calidad.
+
+### 3. Banana sin estilo definido
+
+"Imagen bonita" → output genérico. **Especificá estilo, paleta, mood**.
+
+### 4. Editor Pro Max para video largo
+
+Está pensado para piezas cortas (reels, shorts, explainers). Para video largo (10+ min), usá editor real.
+
+### 5. Stitch para production direct
+
+Stitch te diseña, no construye production-ready. **Usalo como guía**, no como entregable final.
+
+---
+
+## Combinaciones potentes
+
+### Con [investigador automático](/boveda/investigador-automatico)
+
+Notebook LM + investigador = research multi-fuente automatizado.
+
+### Con [Claude Web Builder](/boveda/claude-web-builder)
+
+Stitch te da el diseño → Web Builder lo construye en Next.js → deploy.
+
+### Con [marketing skills](/boveda/29-habilidades-de-marketing)
+
+Marketing Skills te da la estrategia → este combo ejecuta el contenido.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| No hacés contenido | Combo entero no aplica |
+| Cliente con brand book estricto | Output puede no respetarlo |
+| Equipo grande con specialists | Ellos hacen mejor el trabajo |
+| Video largo de producción | Editor Pro Max es para corto |
+
+---
+
+## Próximos pasos
+
+- Para humanizer deep-dive, [Humanízalo](/boveda/humanizalo)
+- Para imágenes con narrativa, [Claude Banana](/boveda/claude-banana)
+- Para diseño UI vía MCP, [Stitch diseño IA](/boveda/stitch-diseno-ia)

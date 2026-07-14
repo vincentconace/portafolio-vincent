@@ -1,0 +1,281 @@
+---
+title: "4 trucos básicos de Claude Code — Ultra Think + Sub-agentes + /init + CLAUDE.md"
+description: "4 trucos esenciales para sacarle más a Claude Code: Ultra Think + Plan Mode (combo para razonamiento profundo), sub-agentes (paralelizan trabajo), /init (genera CLAUDE.md inicial) y personalización del CLAUDE.md (memoria + verificación). El upgrade más barato y rápido."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["planea-audita-construye", "hablarle-a-claude", "guia-claude-opus-47"]
+---
+
+## Los 4 trucos
+
+| # | Truco | Para qué |
+|---|-------|----------|
+| 1 | **Ultra Think + Plan Mode** | Razonamiento profundo en plan |
+| 2 | **Sub-agentes** | Paralelizar trabajo |
+| 3 | **`/init`** | Generar CLAUDE.md inicial |
+| 4 | **Personalizar CLAUDE.md** | Memoria + verificación |
+
+Setup total: **10-15 min**. Impacto: **enorme**.
+
+---
+
+## Truco 1 — Ultra Think + Plan Mode
+
+### Ultra Think
+
+Claude tiene **2 modos** de pensar:
+- **Rápido** (preguntas obvias)
+- **Profundo** (problemas complicados paso a paso)
+
+`ultrathink` activa el modo profundo. Es decirle: **"No te apures, pensalo bien"**.
+
+### Plan Mode
+
+Modo **arquitecto**. En lugar de empezar a codear, Claude:
+1. Investiga tu proyecto
+2. Entiende la estructura
+3. Crea plan detallado **antes** de tocar nada
+
+Activar: `/plan` o `Shift + Tab`.
+
+### El combo
+
+Plan Mode + ultrathink = **plan mucho más completo**, menos errores, mejor estructura.
+
+Como pedirle a arquitecto que no solo dibuje planos, sino que **los revise 3 veces** antes de dártelos.
+
+### Prompt
+
+```
+Activá Plan Mode (Shift+Tab).
+
+ultrathink — Necesito que analices mi proyecto completo y crees
+plan detallado para [DESCRIBÍ TAREA].
+
+Investigá la estructura actual, identificá todos los archivos
+que necesitás tocar, y dame plan paso a paso ANTES de escribir
+cualquier código.
+```
+
+### Aviso 2026
+
+`ultrathink` SIGUE funcionando. Pero "think hard", "think harder", "think more" **YA NO** (se interpretan como texto normal). Ver [guía Opus 4.7](/boveda/guia-claude-opus-47).
+
+---
+
+## Truco 2 — Sub-agentes
+
+### Qué son
+
+Imaginate proyecto grande (construir casa). Podés tener UN trabajador haciendo todo (plomería + eléctrica + paredes + techo), o **equipo de especialistas** cada uno en lo suyo.
+
+Sub-agentes son **trabajadores separados** que Claude crea para atacar partes distintas **en paralelo**.
+
+### Por qué son mejores
+
+- **Velocidad**: en lugar de secuencial, paralelo. Tarea de 4 partes → potencialmente **4x más rápido**
+- **Menos errores**: cada sub-agente foco en UNA cosa. Sin confusión de contexto
+- **Menos contexto consumido**: cada uno tiene su propio scope
+
+### Cuándo brilla
+
+- Refactor de proyectos grandes
+- Implementar features que tocan front + back + DB + tests
+- Trabajos donde podés dividir en partes independientes
+
+### Prompt
+
+```
+Acá hay tarea grande: [TAREA].
+
+Dividila en sub-agentes paralelos. Cada uno con su contexto
+limpio. Sugerencia: 3-5 sub-agentes, no más.
+
+Para cada sub-agente:
+- Qué hace
+- Qué archivos toca
+- Qué outputs entrega
+
+Después los lanzás en paralelo. Reportame al final cuando todos
+terminen.
+```
+
+Ver [crear agentes con Claude](/boveda/crea-agentes-con-claude) para profundizar.
+
+---
+
+## Truco 3 — `/init`
+
+### Qué hace
+
+Genera `CLAUDE.md` inicial para tu proyecto. Claude:
+1. Investiga el proyecto
+2. Detecta stack, convenciones
+3. Genera doc explicando cómo trabajar con este proyecto
+
+### Cuándo usar
+
+- **Proyecto nuevo**: lo primero que corrés después de inicializar
+- **Proyecto heredado**: para que Claude entienda qué hay
+- **Onboarding de teammate**: documentación auto-generada
+
+### Cómo
+
+Dentro de Claude Code:
+
+```
+/init
+```
+
+Te genera `CLAUDE.md` en la raíz con:
+- Tech stack detectado
+- Estructura de carpetas
+- Convenciones de naming
+- Scripts disponibles
+- Comandos de test/build/deploy
+
+### El truco
+
+Después de `/init`, **personalizalo** (ver truco 4). El default es buen baseline pero hay que adaptarlo a tu workflow.
+
+---
+
+## Truco 4 — Personalizar CLAUDE.md
+
+### Por qué importa
+
+Claude **lee CLAUDE.md** al abrir tu proyecto. Lo que ponés ahí, **lo aplica siempre** sin que se lo recuerdes.
+
+Es la mejor inversión de tiempo en Claude Code.
+
+### Las 2 reglas estrella
+
+#### Regla 1 — Verificar trabajo
+
+```markdown
+## Verificación
+
+Después de cada cambio significativo:
+1. Corré `npm test` (o el comando equivalente)
+2. Corré `npm run build` (o equivalente)
+3. Si algo falla, **arreglalo antes de declarar listo**
+4. NO me digas "está listo" si los tests no pasan
+```
+
+Claude antes de decirte "listo" **verifica que efectivamente funcione**.
+
+#### Regla 2 — Memoria entre sesiones
+
+```markdown
+## Memoria
+
+Al terminar cada sesión, guardá en /docs/session-notes/[FECHA].md:
+- Qué se hizo
+- Decisiones importantes
+- Bloqueos encontrados
+- Próximos pasos
+
+Al inicio de cada sesión, leé el último archivo en
+/docs/session-notes/ para retomar contexto.
+```
+
+Claude **mantiene memoria** entre sesiones.
+
+### Otras reglas útiles
+
+```markdown
+## Convenciones
+
+- Estilo de código: Prettier defaults
+- Naming: camelCase para variables, PascalCase para clases
+- Comments: solo cuando el "por qué" no es obvio del código
+
+## Limitaciones
+
+- NO instales libs nuevas sin preguntarme primero
+- NO modifiques archivos en /legacy/ (deprecated)
+- NO commitees `.env`
+
+## Tone
+
+- Respondé en español
+- Bullets, no párrafos largos
+- Sin emojis en docs formales
+```
+
+### CLAUDE.md global
+
+`~/.claude/CLAUDE.md` aplica a **todos los proyectos**. Útil para preferencias personales que no dependen del proyecto.
+
+CLAUDE.md por proyecto override config global cuando aplica.
+
+---
+
+## Combinaciones potentes
+
+### Stack completo de productividad
+
+```
+1. /init para baseline
+2. Personalizar CLAUDE.md con tus reglas
+3. Plan Mode + ultrathink para tareas grandes
+4. Sub-agentes para paralelizar
+```
+
+### Con Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) tiene 8 reglas para CLAUDE.md que cortan verbosity. **Combinalas con tus reglas custom**.
+
+### Con piloto automático
+
+Una vez CLAUDE.md está afinado, [piloto automático](/boveda/claude-piloto-automatico) trabaja confiable porque Claude **sabe las reglas**.
+
+---
+
+## Anti-patrones
+
+### 1. CLAUDE.md de 500 líneas
+
+Después de cierto tamaño, Claude **ignora partes**. Mantenelo en 50-150 líneas. Lo crítico, no todo.
+
+### 2. Ultra Think para tareas chicas
+
+`ultrathink + arregla este typo` = overhead innecesario. Solo para razonamiento profundo.
+
+### 3. Sub-agentes para todo
+
+Para tareas con pocos archivos, sub-agentes meten overhead. Útiles cuando hay **paralelismo real posible**.
+
+### 4. No actualizar CLAUDE.md
+
+Tu proyecto evoluciona. **Cada 2-3 meses revisá** CLAUDE.md. Borrar reglas obsoletas, agregar nuevas.
+
+### 5. Olvidar que `/init` es solo el comienzo
+
+`/init` genera baseline. Si no personalizás, **no aprovechás el truco**.
+
+---
+
+## ROI estimado
+
+Los 4 trucos aplicados consistentemente:
+
+| Métrica | Sin trucos | Con trucos |
+|---------|-----------|------------|
+| Retrabajo por mala planificación | 20-30% sesiones | 5-10% |
+| Tiempo perdido re-explicando contexto | 30 min/sesión | 5 min/sesión |
+| Errores en código generado | Frecuentes | Pocos |
+| Calidad general | Buena | Excelente |
+
+Para uso diario: **30-50% más productivo**.
+
+---
+
+## Próximos pasos
+
+- Para profundizar en Plan Mode, [Plan Mode (planea audita construye)](/boveda/planea-audita-construye)
+- Para razonamiento profundo con Opus 4.7 específicamente, [guía Opus 4.7](/boveda/guia-claude-opus-47)
+- Para fundamentos de cómo hablarle a Claude, [hablarle a Claude](/boveda/hablarle-a-claude)

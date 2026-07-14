@@ -1,0 +1,285 @@
+---
+title: "Claude Ads Skill — paid media auditor with 161 checks"
+description: "Open-source skill that turns your Claude Code into a paid media strategist for Meta, Google, and TikTok. 3 parallel agents, 161 severity-weighted checks, and an Ads Health Score 0-100 with an A-F grade."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "meta-ads", "google-ads", "tiktok-ads"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["andromeda-meta-ads", "agencia-marketing-claude", "cloud-ads-flow"]
+---
+
+## What it does
+
+An open-source skill that turns Claude Code into a **paid media auditor** for 3 platforms:
+
+- Meta Ads (Facebook + Instagram)
+- Google Ads (Search + Display + Performance Max)
+- TikTok Ads
+
+It runs **161 severity-weighted checks** on your account, across **3 parallel agents** (one per platform), and returns an **Ads Health Score 0–100** with an A–F grade.
+
+It's the "audit + coach" version of the marketing workflow — it complements what you built in [Cloud Ads Flow](/boveda/cloud-ads-flow) and [Andromeda — 8 Meta Ads rules](/boveda/andromeda-meta-ads).
+
+---
+
+## The 2 modes
+
+### `/ads start` — initial wizard
+
+The first time you invoke the skill:
+
+```
+> /ads start
+
+[Skill]
+  Hi. I'm going to audit your accounts. I need:
+
+  1. Which platforms do you use?
+     [x] Meta  [x] Google  [x] TikTok
+
+  2. For each platform:
+     - What's your ad account ID?
+     - Do you have a token configured?
+     - What's your main objective? (conversion/leads/awareness)
+     - What's your target KPI? (CPA, ROAS, CTR)
+
+  3. Your business category:
+     [you pick from a list]
+
+  4. Your experience level with each platform:
+     - Meta: beginner/intermediate/advanced
+     - Google: ...
+     - TikTok: ...
+```
+
+With that, it sets everything up and runs a **first full audit**.
+
+### `/ads next` — continuous coach
+
+Once configured, the second mode is a coach:
+
+```
+> /ads next
+
+[Skill]
+  Last audit: 7 days ago. Score: 67 (grade C+)
+
+  Changes since then:
+  - You paused 3 ad sets (good, I'd flagged them as bad)
+  - You uploaded 4 new creatives (under evaluation)
+  - 2 new active campaigns
+
+  Priority actions for this week:
+
+  🔴 Critical:
+  - Campaign "Lookalike-1pct" has CPA 3.2× target. Pause it NOW.
+
+  🟡 High:
+  - 3 ad sets with frequency >4.5 (audience fatigue). Refresh creative.
+
+  🟢 Improvable:
+  - Missing event match quality optimization in Meta Pixel.
+
+  Want me to dig into any of these?
+```
+
+It's **continuous, not one-shot**. You run it every Monday (or whenever you prefer) and it keeps tracking your progress.
+
+---
+
+## The 161 checks (summary by category)
+
+| Category | How many checks | Examples |
+|-----------|-----------------|----------|
+| **Creative** | 35 | Hookrate, frequency, fatigue, A/B coverage |
+| **Targeting** | 28 | Audience size, overlap, exclusions |
+| **Bidding** | 22 | Strategy fit, budget pacing, cap optimization |
+| **Tracking** | 24 | Pixel events, attribution, conversion API |
+| **Compliance** | 18 | Prohibited terms, disclaimers, country restrictions |
+| **Performance** | 19 | CPA trends, ROAS, frequency, CTR |
+| **Account health** | 15 | Permissions, billing, status, holds |
+
+**Weighted by severity**: a critical check (e.g. broken pixel) counts more than a medium one (e.g. inconsistent naming).
+
+---
+
+## The Ads Health Score 0-100
+
+| Score | Grade | Status |
+|-------|-------|--------|
+| 90-100 | A+ / A | Excellent. Fine-tuning. |
+| 75-89 | B+ / B | Good. There's room but it's solid. |
+| 60-74 | C+ / C | Average. Clear issues to tackle. |
+| 40-59 | D+ / D | Problematic. Several areas compromised. |
+| 0-39 | F | Critical. Reset / rethink needed. |
+
+**The point of the score**: it gives you an objective number to track progress month over month.
+
+Month 1: 52 (D)
+Month 2: 67 (C+)
+Month 3: 78 (B)
+
+You know you're improving. Without a score, "I'm getting better" is subjective.
+
+---
+
+## Setup
+
+### Requirements
+
+<Checklist
+  storageKey="claude-ads-prereqs"
+  items={[
+    "Claude Code installed",
+    "Active accounts on the platforms you're going to audit",
+    "API tokens / credentials for each one (Meta Business Token, Google Ads OAuth, TikTok API key)",
+    "Admin access to make changes (if you're going to use more than read-only)",
+  ]}
+/>
+
+### Installation
+
+```bash
+mkdir -p ~/.claude/skills/claude-ads
+git clone https://github.com/tododeia/claude-ads ~/.claude/skills/claude-ads
+cd ~/.claude/skills/claude-ads
+npm install
+```
+
+Then in Claude Code:
+
+```
+> /ads start
+```
+
+It walks you through the initial config.
+
+---
+
+## The 3 parallel agents
+
+What sets this skill apart: it uses **sub-agents** to audit the 3 platforms **in parallel**:
+
+```
+[Your prompt: /ads audit]
+   ↓
+[Orchestrator]
+   ├── [Meta Agent] — runs 35+ Meta checks
+   ├── [Google Agent] — runs 35+ Google checks
+   └── [TikTok Agent] — runs 35+ TikTok checks
+   ↓
+[Orchestrator consolidates]
+   ↓
+[Unified report]
+```
+
+**Speed**: sequential would be 6-9 minutes. Parallel: 2-3 minutes.
+
+---
+
+## Read-only mode by default
+
+As with [Claude Meta Ads](/boveda/claude-meta-ads-setup):
+
+- By default it only reads
+- For changes you need an explicit `WRITE_MODE=true`
+- For critical changes it asks for confirmation
+
+**Recommendation**: use the skill **in read-only mode only** for 1-2 months. Once you trust what it detects, consider giving it write access for mechanical changes (pausing ads with high CPA, for example).
+
+---
+
+## Use cases
+
+### 1. Freelance audit
+
+New client. They give you access to their accounts. **In 1 hour**:
+
+```
+> /ads start
+[you configure the accounts]
+> /ads audit deep
+
+[2-3 minutes]
+
+[Full report across all 3 platforms]
+```
+
+You turn the report into a services proposal:
+- "Your Meta has a score of 45 (D). Here are the top 5 fixes that would push it to 75 (B+)."
+
+You close the sale with an objective argument.
+
+### 2. Weekly coach for your own account
+
+Every Monday 9am, `/ads next` runs as a [scheduled task](/boveda/nueve-prompts-cowork):
+
+- It reminds you of critical issues
+- It compares against the previous week
+- It proposes 3 actions for the week
+
+### 3. Junior onboarding
+
+A junior marketer joins the team. Instead of explaining everything:
+
+```
+> /ads explain [specific issue]
+
+[Skill explains the problem, why it matters, how to fix it]
+```
+
+They learn from the audit by doing, not from generic courses.
+
+---
+
+## Anti-patterns
+
+### 1. Expecting it to replace strategy
+
+The skill audits **execution**. It doesn't define **strategy**. It tells you "this is technically wrong"; it doesn't tell you "your product is poorly positioned in the market".
+
+### 2. Attacking EVERYTHING at once
+
+If your score is 45, there are 50 things wrong. **Don't fix them all at once**. Tackle the critical ones first. Then the high ones. Changing 30 things simultaneously = you don't know what moved the needle.
+
+### 3. Score as the only metric
+
+The score is a useful proxy. **It's not the end goal**. Your goal is low CAC, high ROAS, growing revenue. The score correlates but isn't the same thing.
+
+### 4. Skipping the coach
+
+`/ads start` is a one-time thing. `/ads next` is the one that delivers continuous value. **Don't stop at the initial audit**.
+
+---
+
+## What the skill does NOT do
+
+❌ **Create ads automatically**: it only audits. For creation, check out [Claude Meta Ads setup](/boveda/claude-meta-ads-setup) or [Cloud Ads Flow](/boveda/cloud-ads-flow).
+
+❌ **Optimize bid strategies for you**: it tells you if your strategy is suboptimal, but you make the change yourself.
+
+❌ **Guess business criteria**: if your target CPA is $20 but your LTV is $400, no algorithm will know that unless you feed it in.
+
+❌ **Replace best practices**: if you've never run ads, read [Andromeda — 8 rules](/boveda/andromeda-meta-ads) first.
+
+---
+
+## When it's worth it
+
+✅ You spend >$2k/month on paid media (it justifies the setup)
+✅ You run >2 platforms simultaneously
+✅ You want to improve consistently but don't have a framework
+✅ You're a freelancer auditing client accounts
+
+❌ You're just starting out (no data to audit)
+❌ Very low spend
+❌ A mature paid media team with its own frameworks
+
+---
+
+## Next steps
+
+- To understand Meta Ads post-Andromeda in depth, [Andromeda — 8 rules](/boveda/andromeda-meta-ads)
+- To automate the creation + testing cycle, [Cloud Ads Flow](/boveda/cloud-ads-flow)
+- For the broader marketing tools stack, [marketing agency with Claude](/boveda/agencia-marketing-claude)

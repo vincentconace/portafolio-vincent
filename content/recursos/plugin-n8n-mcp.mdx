@@ -1,0 +1,215 @@
+---
+title: "Plugin n8n MCP — conectar Claude con n8n y automatizar sin código"
+description: "n8n es un orquestador visual con cientos de integraciones. Conectarlo a Claude vía MCP te da automatizaciones de negocio (WhatsApp, email, CRM, etc.) que Claude puede invocar. Setup, casos típicos y cuándo conviene este combo."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "mcp", "n8n"]
+publishedAt: "2026-05-23"
+readingTime: "10 min"
+relatedSlugs: ["mcp-server-propio", "plugin-supabase-mcp"]
+---
+
+## Qué es n8n y por qué meterlo con Claude
+
+[n8n](https://n8n.io) es un orquestador de workflows visual, parecido a Zapier o Make pero open-source y self-hostable. Tiene cientos de "nodos" para integrar servicios: Gmail, WhatsApp Business, Telegram, Notion, Airtable, Stripe, Shopify, etc.
+
+El combo Claude + n8n resuelve un problema común:
+
+- Claude es bueno **razonando** (decidir qué hacer, generar contenido, analizar)
+- n8n es bueno **ejecutando** (mandar emails, llamar APIs, transformar datos, schedule tareas)
+
+Por separado: Claude no puede mandar un WhatsApp y n8n no puede decidir qué responder. Juntos: Claude piensa, n8n ejecuta.
+
+---
+
+## Cómo se conectan
+
+Hay un MCP server para n8n que expone los workflows de tu instancia como **tools que Claude puede invocar**. Es decir:
+
+```
+Vos en Claude:
+> Mandale un email de seguimiento a todos los clientes que no compraron en 30 días.
+
+Claude:
+[invoca el tool "trigger_workflow" del MCP n8n con workflow_id="reactivar-clientes"]
+[n8n ejecuta el workflow: query a tu DB, filtra clientes, manda emails personalizados]
+[Claude recibe el resultado: "47 emails enviados, 2 errores en direcciones inválidas"]
+```
+
+Claude no escribe el código del email ni tiene credenciales de SMTP. **n8n hace el trabajo sucio** con sus integraciones pre-armadas. Claude solo orquesta.
+
+---
+
+## Setup
+
+### Requisitos
+
+<Checklist
+  storageKey="n8n-mcp-prereqs"
+  items={[
+    "Instancia de n8n corriendo (cloud o self-hosted)",
+    "API key de n8n con permisos sobre los workflows que querés exponer",
+    "Claude Code v1.5 o superior",
+    "Al menos 1 workflow ya armado en n8n para probar",
+  ]}
+/>
+
+### Instalación
+
+Agregalo a `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "npx",
+      "args": ["-y", "n8n-mcp-server@latest"],
+      "env": {
+        "N8N_HOST": "https://mi-n8n.example.com",
+        "N8N_API_KEY": "${N8N_API_KEY}",
+        "N8N_ALLOW_WORKFLOWS": "reactivar-clientes,enviar-factura,sync-contactos"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="ALLOW_WORKFLOWS es importante">
+Sin `N8N_ALLOW_WORKFLOWS`, Claude podría invocar **cualquier workflow** de tu n8n. Eso incluye workflows administrativos o destructivos. **Listá explícitamente** los workflows que querés que Claude pueda triggerar.
+</Callout>
+
+### Verificar
+
+```
+> ¿Qué workflows de n8n tengo disponibles?
+```
+
+Claude debería invocar `list_workflows` del MCP y devolver la lista.
+
+---
+
+## Casos típicos donde brilla
+
+### 1. Outreach personalizado
+
+Tenés una lista de leads. Querés mandarles un email personalizado **según su perfil**, no un blast genérico.
+
+```
+> Tengo estos 30 leads (te paso el CSV). Para cada uno, escribime un email
+  personalizado mencionando su industria y mandálo vía n8n con el workflow
+  "send-cold-outreach". Pausá después del primero para que yo revise.
+```
+
+Claude:
+1. Lee el CSV
+2. Para cada lead, escribe el email personalizado
+3. Te muestra el primero
+4. Vos aprobás
+5. Claude invoca el workflow para los 30, uno por uno, con el contenido custom
+
+n8n se encarga de SMTP, tracking de apertura, manejo de bounces. Claude se encarga del razonamiento por lead.
+
+### 2. Soporte semi-automático
+
+Un workflow de n8n recibe tickets de Zendesk/Intercom. Para los simples, responde con templates. Para los complejos, te pide ayuda en Slack.
+
+Cuando llega un caso complejo, podés:
+
+```
+> Vino este ticket: [pega el ticket]. Analizalo, decidí una respuesta y
+  pasala al workflow "responder-ticket" con el ID del ticket.
+```
+
+Claude analiza el contexto del cliente, redacta una respuesta apropiada, la pasa a n8n con el ID. n8n la postea en el sistema correcto.
+
+### 3. Sync entre sistemas
+
+Cosas como "cuando alguien compra en Shopify, agrégalo a un CRM, mandale email de bienvenida, y registrá la conversión en el sheet de marketing".
+
+n8n maneja el flow técnico (webhooks, retries, formateo). Claude solo aparece cuando hay decisiones (¿este cliente es VIP? ¿qué template usar?).
+
+---
+
+## Diseño de los workflows expuestos
+
+No expongas todos tus workflows a Claude. **Los workflows que expongas deberían**:
+
+| Característica | Por qué |
+|----------------|---------|
+| **Idempotentes** | Si Claude los llama 2 veces sin querer, no rompen nada |
+| **Con inputs validados** | El workflow verifica antes de ejecutar |
+| **Limitados en scope** | "Mandar email a 1 dirección" mejor que "mandar emails al gusto" |
+| **Loggeables** | Quedan en el historial de n8n para auditoría |
+| **Reversibles cuando sea posible** | Si crea algo, también debería poder eliminarlo |
+
+Ejemplo de un workflow MAL diseñado para exponer:
+
+```
+Nombre: "automation"
+Inputs: { code: "JavaScript que se ejecuta" }
+```
+
+Eso le da a Claude la capacidad de **ejecutar código arbitrario via n8n**. Mala idea.
+
+Ejemplo de uno BIEN diseñado:
+
+```
+Nombre: "enviar-factura"
+Inputs:
+  - customer_id (string, validado contra DB)
+  - period (YYYY-MM, validado regex)
+Outputs:
+  - invoice_url
+  - email_sent: boolean
+```
+
+Acotado, claro, sin sorpresas.
+
+---
+
+## Caso de uso real — el patrón "Cowork"
+
+Una forma común de usar este combo: tenés un workflow de n8n que actúa de "secretario virtual". Recibe emails, tickets, mensajes de WhatsApp.
+
+Cuando algo requiere razonamiento, postea un resumen en un canal de Slack y te etiqueta. Vos abrís Claude Code, leés el resumen, decidís la respuesta, y le pedís a Claude que invoque el workflow correspondiente.
+
+```
+> En slack hay un mensaje del cliente Acme pidiendo descuento por volumen.
+  Histórico: 3 años con nosotros, ARR $24k, NPS 9. Política: descuentos por
+  volumen >$30k anual. Redactá una respuesta diplomática que NO conceda el
+  descuento pero ofrezca algo de valor. Después pasala por el workflow
+  "responder-cliente" con el thread_id.
+```
+
+Claude analiza el contexto, escribe la respuesta, la manda. Vos tomaste la decisión clave (no dar descuento, ofrecer otra cosa) pero no tipeaste el email. **15 minutos ahorrados por interacción.**
+
+---
+
+## Cuándo NO necesitás n8n MCP
+
+- Si tus integraciones son 1 o 2 simples → mejor un MCP custom específico
+- Si tu workflow es solo "llamar a una API", `Bash` + `curl` desde Claude alcanza
+- Si nunca usaste n8n, primero familiarizate con él aparte (este combo asume que ya lo manejás)
+
+---
+
+## Alternativas
+
+Si n8n te queda grande, hay opciones similares:
+
+| Herramienta | Cuándo |
+|-------------|--------|
+| **n8n** | Self-host, +500 nodos, complejo |
+| **Make** (ex Integromat) | Cloud, UI muy buena, menos nodos custom |
+| **Zapier** | El más simple, menos potente para flujos complejos |
+| **Pipedream** | Code-first, devs lo prefieren a n8n |
+
+Para los 4 existen MCP servers community con diferente nivel de madurez.
+
+---
+
+## Próximos pasos
+
+- Si nunca armaste un workflow en n8n, empezá con su [quick start oficial](https://docs.n8n.io). Una hora de juego suficiente para entender.
+- Para entender MCPs en general, [tu propio MCP server](/boveda/mcp-server-propio).
+- Si querés conectar Claude a tu DB en lugar de a integraciones externas, el [plugin Supabase MCP](/boveda/plugin-supabase-mcp) es buen complemento.

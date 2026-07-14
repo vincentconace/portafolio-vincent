@@ -1,0 +1,86 @@
+---
+title: "Hook Slack Notifications — aviso minimal a Slack cuando termina"
+description: "Hook con 164 installs. Versión minimal de Slack notifications: notification al canal cuando Claude o un subagent terminan. Requiere SLACK_WEBHOOK_URL."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "slack"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-slack-detailed-notifications", "hook-slack-error-notifications", "hook-discord-notifications"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/slack-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-notifications.json"
+---
+
+## Qué es
+
+Versión minimal del Slack pipeline. Cuando Claude o un subagent terminan, manda mensaje al canal. Sin context, sin filtros — solo "terminó".
+
+Hook events: `Stop` + `SubagentStop`.
+
+Pre-requisito: env var `SLACK_WEBHOOK_URL` (creado desde Slack App settings → Incoming Webhooks).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 164 |
+| Hook events | `Stop` + `SubagentStop` |
+| Env var | `SLACK_WEBHOOK_URL` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/slack-notifications
+```
+
+Configurá:
+
+```bash
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/.../..."
+```
+
+## Qué podés hacer con esto
+
+### Aviso remoto cuando termina
+
+Cuando estás lejos del editor, Slack te avisa.
+
+### Subagent completions
+
+Si tu workflow usa subagents, te avisa por cada uno. Para orquestaciones largas.
+
+### Canal de actividad de equipo
+
+Equipo ve en `#claude-runs` los completions automáticamente.
+
+### Comparado con alternativas
+
+| Hook | Cuándo avisa | Detalle |
+| --- | --- | --- |
+| **Slack Notifications (este)** | Stop + SubagentStop | Minimal |
+| [Slack Detailed](/boveda/hook-slack-detailed-notifications) | SessionStart + Stop | Con context |
+| [Slack Error](/boveda/hook-slack-error-notifications) | Long-running + errors | Solo problems |
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Slack:** obvio.
+- **Spam:** sesiones cortas frecuentes saturan.
+- **Sin webhook configurado:** no funciona.
+- **Si querés más detail:** usá Detailed version.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Slack Notifications Hook](https://www.aitmpl.com/component/hooks/automation/slack-notifications) — comando exacto.
+- **Config JSON:** [slack-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/slack-notifications.json).
+
+## Recursos relacionados
+
+- [Slack Detailed Notifications Hook](/boveda/hook-slack-detailed-notifications) — con context.
+- [Slack Error Notifications Hook](/boveda/hook-slack-error-notifications) — solo cuando algo va mal.
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — equivalente para Discord.

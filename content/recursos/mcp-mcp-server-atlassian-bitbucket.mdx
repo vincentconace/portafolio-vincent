@@ -1,0 +1,102 @@
+---
+title: "MCP Bitbucket Cloud — repos, PRs y workflows de Atlassian desde Claude"
+description: "MCP server Node/TypeScript para Atlassian Bitbucket Cloud. Acceso seguro a repos, pull requests, branches y workspaces. Para equipos que usan Bitbucket en vez de GitHub o GitLab."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "bitbucket"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-github-integration", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/mcp-server-atlassian-bitbucket"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mcp-server-atlassian-bitbucket.json"
+---
+
+## Qué es
+
+Para los equipos que viven en Atlassian (Jira + Confluence + Bitbucket) en vez de GitHub o GitLab, este MCP da acceso a Bitbucket Cloud. Mismo modelo que el [GitHub MCP](/boveda/mcp-github-integration), pero apuntando al stack de Atlassian.
+
+Implementado en Node/TypeScript, conecta a la API REST de Bitbucket Cloud para que Claude (u otros LLMs como Cursor AI) puedan operar de forma segura sobre repos, PRs, branches.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 173 |
+| Servidor MCP | `bitbucket` |
+| Lenguaje | Node.js / TypeScript |
+| Cuenta requerida | Sí — Atlassian + Bitbucket Cloud + App Password |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/mcp-server-atlassian-bitbucket
+```
+
+Pre-requisitos: cuenta Bitbucket Cloud + App Password con scopes correctos (repository:read/write, pullrequest:read/write).
+
+Para Claude:
+
+```
+Instalé el MCP devtools/mcp-server-atlassian-bitbucket. Configurá las
+credenciales (workspace, app password) y listame mis repos en el
+workspace X con sus branches activas.
+```
+
+## Qué podés hacer con esto
+
+### Triage de PRs
+
+"Listame los PRs abiertos en los repos del workspace X. Para cada uno, dame días desde apertura, autor y si tiene comentarios pendientes". Útil para morning triage.
+
+### Code review asistido
+
+"Abrí el PR #234 del repo Y. Leé el diff y dame review por archivo: bugs, edge cases. Si está OK, dejá comment de approval con resumen".
+
+### Búsqueda cross-repo
+
+"En todos mis repos, buscame archivos que usen la función legacy `<X>` y armame plan de migración". Útil cuando empresa tiene 50+ repos.
+
+### Workflow de PR completo
+
+"Creá branch `feature/X` desde main, commit el cambio actual, abrí PR con título Y y description Z, asigná reviewers W". El flow entero.
+
+### Gestión de releases / tags
+
+"Sacá un tag v1.2.0 con changelog autogenerado desde los últimos 30 commits, agrupados por tipo".
+
+### Inspección de pipelines
+
+Si usás Bitbucket Pipelines, el MCP puede consultar el estado de builds (depende de implementación — mirá la config).
+
+## Pre-requisitos
+
+- **Cuenta Bitbucket Cloud** activa
+- **App Password** con scopes correctos (Settings → App Passwords)
+- **Workspace identifier**
+- **Acceso a los repos** que vas a consultar
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de habilitar writes en repos importantes">
+
+- **Operaciones destructivas:** force-push, delete branch, close PR. Hooks de aprobación SIEMPRE en repos productivos.
+- **App password scopes amplios:** el password hereda lo que tu user puede hacer. Restringí scopes al mínimo.
+- **Bitbucket Server (on-prem):** este MCP es Bitbucket Cloud-only. Para Server hay otras implementaciones o ninguna.
+- **Auditoría:** todo lo que Claude haga queda en tu usuario. Logs lo registran.
+- **Rate limits:** la API tiene cuotas. Operaciones masivas pueden bloquearte temporalmente.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Bitbucket MCP Server](https://www.aitmpl.com/component/mcps/devtools/mcp-server-atlassian-bitbucket) — comando exacto.
+- **Config JSON:** [mcp-server-atlassian-bitbucket.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mcp-server-atlassian-bitbucket.json).
+- **Bitbucket API docs:** [developer.atlassian.com/cloud/bitbucket](https://developer.atlassian.com/cloud/bitbucket).
+
+## Recursos relacionados
+
+- [GitHub Integration MCP](/boveda/mcp-github-integration) — equivalente para GitHub. Compará si tu equipo aún no decidió plataforma.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para escrituras en repos productivos.
+- [Agency Agents](/boveda/agency-agents) — para orquestar workflows que crucen Bitbucket + Jira + Confluence.

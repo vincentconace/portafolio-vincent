@@ -1,0 +1,264 @@
+---
+title: "Browser Harness — Claude navega tu Chrome real y aprende cada búsqueda"
+description: "Skill que deja a Claude operar tu Chrome real (con tus sesiones logueadas) y guardar lo aprendido como skill por sitio. Tarda la primera vez en Amazon; la segunda ya sabe cómo. Casos de uso, instalación y diferencia vs scraping puro."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "chrome"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["agent-view-paralelo", "scrapling-leads", "apify-mcp"]
+---
+
+## Qué resuelve
+
+Scraping clásico (curl + parse HTML) **falla en muchos sitios modernos**:
+
+- LinkedIn requiere login → curl no puede
+- Amazon tiene anti-bot agresivo → te bloquea
+- Facebook Ads Library es SPA con JS pesado → HTML inicial no tiene la data
+- Mercado Libre cambia HTML seguido → tu parser se rompe
+
+**Browser Harness** resuelve esto distinto: en lugar de simular tráfico, **usa tu Chrome real con tus sesiones logueadas**. Claude opera tu navegador como vos lo harías — clicks, scroll, navegación.
+
+**Bonus**: cada tarea exitosa **se guarda como skill por sitio**. La primera vez Claude "aprende" cómo sacar precios de Amazon; la segunda va directo.
+
+---
+
+## Cómo funciona
+
+### Setup técnico
+
+Chrome corre con **debugging port abierto** (`--remote-debugging-port=9222`). Eso le permite a un proceso externo (Claude) controlarlo via protocolo Chrome DevTools.
+
+Importante: **es TU Chrome con TU sesión**. Si estás logueado a LinkedIn, Claude opera como vos.
+
+### El flow típico
+
+```
+[Vos]: Sacame los precios top 10 de auriculares en Amazon, ordenados
+       por más vendidos.
+
+[Claude]:
+  Primera vez con Amazon. Voy a "aprender" cómo hacerlo:
+  - Abro Amazon
+  - Navego a Electrónicos > Auriculares
+  - Aplico filtro "Most popular"
+  - Scrapeo los primeros 10
+  - Guardo el procedimiento como skill `amazon-products-search.md`
+
+  [Te muestra el progreso paso a paso]
+
+  Listo. Resultado:
+  1. Sony WH-1000XM5 — $399
+  2. Apple AirPods Pro 2 — $249
+  ...
+
+  Skill guardada. La próxima vez que pidas algo similar de Amazon,
+  voy directo.
+```
+
+### La segunda vez
+
+```
+[Vos]: Ahora sacame los top 10 de teclados mecánicos en Amazon.
+
+[Claude]:
+  [usa la skill amazon-products-search que aprendió]
+  [va directo al flujo]
+  [te trae los 10 en 30 segundos]
+```
+
+---
+
+## Catálogo de sitios pre-aprendidos
+
+La comunidad va construyendo skills para sitios populares. Estado típico:
+
+| Sitio | Skill disponible |
+|-------|-------------------|
+| Amazon | ✅ búsqueda, precios, reviews |
+| LinkedIn | ✅ perfiles, empresas, búsquedas |
+| Facebook Ads Library | ✅ ads activos de competidores |
+| Instagram | ✅ profile data, hashtags |
+| YouTube | ✅ canales, videos, comments |
+| Mercado Libre | ✅ productos, precios, sellers |
+| Shopify (públicos) | ✅ productos, precios |
+| Google Maps | ✅ negocios, reviews |
+| ~90 sitios más | ✅ variable |
+
+Si el sitio que necesitás no está, **Claude lo aprende la primera vez**.
+
+---
+
+## Casos de uso reales
+
+### Caso 1 — Investigación de competencia visual
+
+```
+> Andá a Facebook Ads Library, buscá los ads activos de "mi-competidor".
+  Para cada ad:
+  - Screenshot
+  - Texto del copy
+  - Fecha de inicio
+  - Audience aproximada
+
+  Devolveme estructurado.
+```
+
+LinkedIn / Facebook Ads Library no son scrapeables con curl. Con Browser Harness, **trivial**.
+
+### Caso 2 — Monitoreo de precios
+
+```
+> Cada lunes, sacame los precios de estos 20 productos de Amazon.
+  Comparame contra el snapshot de la semana pasada (está en
+  /tmp/precios/anterior.json).
+
+  Mostrame:
+  - Productos con cambio >5%
+  - Productos discontinuados (no aparecen en stock)
+  - Productos nuevos en mi lista de competencia
+```
+
+[Hook](/boveda/hooks-automatizacion) cada lunes → reporte automático.
+
+### Caso 3 — Lead enrichment con LinkedIn
+
+Tu CRM tiene 100 contactos solo con nombre + empresa. Querés enriquecerlos:
+
+```
+> Para cada contacto de /tmp/contactos.csv:
+  - Buscá su perfil de LinkedIn (nombre + empresa)
+  - Si lo encontrás, agregá:
+    - URL del perfil
+    - Cargo actual
+    - Tiempo en la empresa
+    - Conexiones aproximadas
+
+  Si no encontrás match seguro, marcalo "no encontrado".
+  Output a /tmp/contactos-enriched.csv
+```
+
+Trabajo de 4-6 horas manual → 20 min con Browser Harness.
+
+### Caso 4 — QA visual de tu propia app
+
+```
+> Probá el checkout de mi app en https://staging.miapp.com/checkout:
+
+  Flow:
+  1. Cargar producto en carrito
+  2. Ir a checkout
+  3. Completar email + dirección de prueba
+  4. Tarjeta de test (4242 4242 4242 4242)
+  5. Confirmar
+
+  Para cada paso: screenshot + reportame si algo falló visualmente.
+```
+
+---
+
+## Anti-patrones y warnings
+
+### 1. Sites con login = riesgo de detection
+
+LinkedIn / Facebook **prohíben scraping en sus términos**. Aunque tu navegador real haga la conexión, **patrones repetitivos** los detectan:
+
+- Muchas requests rápidas → te bannean
+- Patrón no humano (no haces scroll, no movés mouse) → flag
+
+**Mitigación**:
+- **Volumen bajo** (decenas de queries por día, no miles)
+- **Sleep entre acciones** (que parezca humano)
+- **Usar cuenta separada** para scraping, no tu personal
+
+### 2. NO logueés tu cuenta personal sensible
+
+Si te bloquean / suspenden cuenta scrapeando LinkedIn, perdés esa cuenta. **Usá cuenta secundaria** para scraping.
+
+### 3. Términos de servicio
+
+Cada sitio tiene sus términos. **Leerlos antes** de armar pipeline serio. Algunos prohíben explícitamente automation, otros la permiten con condiciones.
+
+### 4. NO email harvesting
+
+Como con cualquier scraping, **sacar emails para spam masivo** es problemático legal y técnicamente (CAN-SPAM, GDPR). Browser Harness no te exime de esas leyes.
+
+### 5. Skills generadas requieren validación
+
+La skill que Claude aprende la primera vez **puede no ser óptima**. Revisala antes de confiar 100%:
+- ¿Los selectores son robustos o demasiado específicos?
+- ¿Maneja el caso "no encontré resultados"?
+- ¿Qué pasa si el sitio cambia el layout?
+
+---
+
+## vs alternativas
+
+| Approach | Cuándo |
+|----------|--------|
+| **Browser Harness** | Sites con login, SPAs, anti-bot agresivo |
+| **[Apify MCP](/boveda/apify-mcp)** | Sites populares, no querés mantener nada |
+| **[Scrapling](/boveda/scrapling-leads)** | Sites estáticos, uso intensivo, gratis |
+| **API oficial del sitio** | Cuando existe → siempre la mejor opción |
+
+Browser Harness gana **cuando ninguna alternativa funciona** (login + JS + anti-bot). No es el approach por default.
+
+---
+
+## Instalación
+
+### Paso 1 — Pegar el prompt
+
+```
+> Instalame Browser Harness siguiendo el install.md del repo
+  oficial.
+```
+
+Claude:
+1. Clona el repo
+2. Instala deps
+3. Configura los hooks de Chrome
+4. Te explica cómo activar Chrome con debugging port
+
+### Paso 2 — Arrancar Chrome con debugging port
+
+Mac:
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222
+```
+
+Cierra todas las instancias de Chrome antes. Esta sesión es la que Claude controla.
+
+### Paso 3 — Probar
+
+```
+> Browser Harness, abrí google.com y buscá "test".
+```
+
+Si funciona, conectado.
+
+---
+
+## El warning más importante
+
+Cuando Browser Harness opera tu Chrome:
+
+- **Puede ver lo que está abierto** en otras pestañas (potencialmente)
+- **Puede operar como vos** en sitios donde estés logueado (banco, email, etc.)
+
+**Mitigación seria**:
+- Usá un **perfil de Chrome dedicado** solo para esto
+- En ese perfil, **NO** estés logueado a banco / sistemas críticos
+- Usá Chrome principal para tu vida normal, Chrome con debugging port para Claude
+
+Esta separación reduce el riesgo de que un comando random toque algo crítico.
+
+---
+
+## Próximos pasos
+
+- Si tu necesidad es solo sites públicos sin login, [Scrapling](/boveda/scrapling-leads) (gratis, sin browser)
+- Para sites populares sin mantener nada, [Apify MCP](/boveda/apify-mcp)
+- Para múltiples Claude operando en paralelo (no necesariamente browser), [agent-view paralelo](/boveda/agent-view-paralelo)

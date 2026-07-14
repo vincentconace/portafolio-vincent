@@ -1,0 +1,281 @@
+---
+title: "Mejores prácticas Claude — la regla de las 2 correcciones y otros básicos"
+description: "Lo que la mayoría hace mal — y los creadores de Claude confirmaron. La regla de las 2 correcciones, cuándo usar /clear, cómo mantener contexto limpio. Las prácticas oficiales explicadas con ejemplos."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["tres-errores-con-ia", "trucos-basicos-claude", "prompting-10-pilares"]
+---
+
+## El error que todos cometemos
+
+La mayoría usa Claude así:
+
+```
+1. Pedís algo
+2. Claude tira mal
+3. Le decís "no, así no, así"
+4. Tira algo distinto, también mal
+5. Le decís "tampoco"
+6. Tira otra cosa
+7. ... seguís corrigiendo en la misma sesión
+```
+
+Después de 6 correcciones, el contexto está contaminado de **todas las versiones malas anteriores**. Claude se confunde porque "esto no, esto tampoco, esto menos, pero algo cerca, pero no exacto" lo enloquece.
+
+Anthropic confirmó: **la mayoría de los usuarios gasta 2× su cuota por este error**.
+
+---
+
+## La regla de las 2 correcciones
+
+Es simple:
+
+> **Si Claude se equivocó 2 veces en la misma conversación, no corrijas una 3ra vez. `/clear` + arrancá de nuevo con mejor prompt.**
+
+### Por qué funciona
+
+| Sesión contaminada | Sesión limpia |
+|--------------------|----------------|
+| Claude tiene 5 versiones malas en contexto | Claude tiene 0 contexto |
+| Se confunde de qué "no querés" | Empieza fresh |
+| Cada nueva corrección suma ruido | Tu prompt mejorado es input limpio |
+
+**La 3ra corrección** rara vez resuelve. Lo que SÍ resuelve es **mejor prompt en sesión nueva**.
+
+### Cómo aplicarla
+
+```
+[Pedís X]
+[Claude: versión 1 - mediocre]
+[Le decís cómo corregir]
+[Claude: versión 2 - todavía mediocre]
+
+→ STOP
+
+> /clear
+
+[Reformulás el prompt con lo que aprendiste de las 2 versiones]
+[Claude: versión nueva - generalmente mucho mejor]
+```
+
+Lo aprendido de las 2 versiones malas se vuelve **input de un prompt mejor**, no más correcciones en sesión contaminada.
+
+---
+
+## Cuándo usar `/clear`
+
+`/clear` borra el contexto de la sesión. Es **gratis** (no cuesta tokens). Pero la mayoría no lo usa lo suficiente.
+
+### Usá `/clear` cuando
+
+✅ Cambiás de tarea completamente (terminaste auth → vas a payments)
+✅ La sesión va larga (>1.5 horas) y notás que Claude se confunde
+✅ Aplicaste la regla de las 2 correcciones
+✅ Pasaste de fase exploratoria a implementación
+✅ Antes de pedir code review (querés contexto fresco para evaluar)
+
+### NO uses `/clear` cuando
+
+❌ Estás iterando una misma tarea con feedback constructivo
+❌ Tenés contexto cargado de archivos que necesitás
+❌ Es una conversación natural progresiva
+
+---
+
+## Contexto limpio — qué significa
+
+"Contexto" es **todo lo que Claude tiene en mente durante la sesión**:
+
+- Tu prompt actual
+- Todos los prompts y respuestas anteriores
+- Archivos que cargó
+- System prompt
+- Memory configurada
+
+Cuando hablamos de "contexto limpio", significa **solo lo necesario para la tarea actual**.
+
+### Contexto sucio típico
+
+```
+[Sesión de 3 horas]
+- 8 archivos cargados (5 ya no son relevantes)
+- 4 tareas distintas que hiciste hoy
+- 12 correcciones en distintos temas
+- Discusiones tangenciales sobre arquitectura
+```
+
+**Resultado**: Claude tarda más, responde peor, gasta más tokens.
+
+### Contexto limpio
+
+```
+[Sesión nueva]
+- CLAUDE.md (siempre)
+- 1-3 archivos específicos a la tarea
+- Tu prompt actual
+
+```
+
+**Resultado**: Claude responde rápido y certero.
+
+---
+
+## Cómo escribir prompts que reducen correcciones
+
+La forma de **evitar entrar en el ciclo de correcciones** es: prompts mejores **desde el inicio**.
+
+### Las 5 cosas que SIEMPRE deben estar
+
+```
+1. QUÉ — verbo claro + objeto específico
+   ❌ "mejorá esto"
+   ✅ "extraé la lógica de validación de email a una función separada"
+
+2. INPUT — qué archivo / qué data
+   ❌ (sin especificar)
+   ✅ "en src/lib/auth/validate.ts:45"
+
+3. RESTRICCIONES — qué NO hacer
+   ❌ (sin especificar)
+   ✅ "no cambies la signature de la función exportada"
+
+4. FORMATO DEL OUTPUT — qué esperás recibir
+   ❌ (sin especificar)
+   ✅ "mostrame el diff antes de aplicar"
+
+5. CRITERIO DE ÉXITO — cómo sabés que terminó
+   ❌ (sin especificar)
+   ✅ "tests pasan, el linter no se queja"
+```
+
+Si tu prompt tiene los 5, **rara vez necesitás corregir**.
+
+### Mantra simple
+
+> "Si Claude tuviera que dar la respuesta a un test escrito por mí, ¿qué le pasarías para que apruebe?"
+
+Eso es tu prompt mínimo viable.
+
+---
+
+## Las otras prácticas oficiales
+
+### Práctica 1 — Especifica archivo y línea
+
+```
+❌ "Mirá el código del módulo de auth"
+✅ "Mirá src/lib/auth/validate.ts:120 — qué hace si el carrito está vacío"
+```
+
+Apuntar a `archivo:línea` te ahorra que Claude lea archivo entero (gasta tokens innecesarios).
+
+### Práctica 2 — Usá el modelo correcto
+
+Cubierto en [los 3 modelos de Claude](/boveda/claude-tres-modelos). Resumen:
+
+- Haiku: tareas mecánicas
+- Sonnet: default
+- Opus: refactors complejos, debugging difícil
+
+**Default Sonnet, switch a Haiku para chicas, Opus para difíciles.**
+
+### Práctica 3 — Verificación auto antes de "listo"
+
+En tu `CLAUDE.md`:
+
+```markdown
+Antes de declarar cualquier tarea como completada:
+1. Releé el pedido original
+2. Corré los tests relevantes
+3. Listá lo entregado vs lo pedido
+4. Solo después de TODO esto, decí "listo"
+```
+
+Reduce el "ah, faltaba esto" un 70%.
+
+### Práctica 4 — Pedile que pregunte antes de inventar
+
+```markdown
+Si te falta información crítica para hacer la tarea bien, PREGUNTÁ.
+No inventes valores ni asumas. Pedí aclaración.
+```
+
+Una pregunta ahora ahorra 5 correcciones después.
+
+### Práctica 5 — Apuntale al CLAUDE.md
+
+```markdown
+Antes de tomar decisiones de arquitectura o stack, consulta CLAUDE.md
+para verificar las convenciones del proyecto.
+```
+
+Claude se "olvida" de leer CLAUDE.md si no le forzás el hábito. Esta línea ayuda.
+
+---
+
+## El antes y después
+
+Sin estas prácticas:
+
+```
+[Sesión de 2h]
+- 8 correcciones promediadas
+- 30k tokens gastados
+- Output mediocre
+- Frustración acumulada
+```
+
+Con estas prácticas:
+
+```
+[Sesión de 30 min]
+- 1-2 correcciones promediadas
+- 8k tokens gastados
+- Output bueno
+- Sin frustración
+```
+
+**Mismo problema. 4× menos tiempo y tokens.**
+
+---
+
+## Anti-patrones específicos
+
+### 1. "Una última corrección"
+
+Después de 4 correcciones, pensás "ya casi, una más y queda". **No**. Volvé a empezar.
+
+### 2. Mantener sesión gigante "porque no quiero perder el contexto"
+
+Si tu sesión tiene 4 horas, **el contexto ya no es valor — es ruido**. Hacé `/clear` y arrancá con un prompt que cubra lo importante.
+
+### 3. Corregir sin diagnosticar
+
+"No, así no" sin explicar **qué** falló. Claude no es telepático. Decí **específicamente** qué está mal y qué esperabas.
+
+### 4. Saltearse `/clear` entre tareas distintas
+
+Trabajaste 1h en auth. Ahora cambiás a payments. Sin `/clear`, Claude todavía tiene auth en mente y va a sugerir cosas raras.
+
+---
+
+## Lo más importante
+
+Si solo aplicás **una** práctica de este post:
+
+> **`/clear` entre tareas distintas.**
+
+Es **gratis**, cambia inmediatamente la calidad de la próxima sesión, y la mayoría no la usa.
+
+Las otras prácticas son refinamiento. Esta es la base.
+
+---
+
+## Próximos pasos
+
+- Para los 4 trucos generales que más mueven la aguja, [trucos básicos](/boveda/trucos-basicos-claude)
+- Para profundizar en escribir prompts buenos desde el inicio, [Prompting 101 — 10 pilares](/boveda/prompting-10-pilares)
+- Para los errores típicos al usar IA (no solo Claude), [3 errores con IA](/boveda/tres-errores-con-ia)

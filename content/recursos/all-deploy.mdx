@@ -1,0 +1,261 @@
+---
+title: "All Deploy — el skill que sube tu proyecto a producción con un comando"
+description: "Hiciste tu proyecto con Claude Code pero quedó parado en tu compu. All Deploy detecta qué tipo es, lo audita, te muestra preview, lo sube a Vercel/Railway/VPS según corresponda, y te deja el comando de rollback listo. Cierre del combo The Architect + Plan Mode + Cyber Neo."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "vercel", "railway"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["the-architect", "cyber-neo", "planea-audita-construye"]
+---
+
+## El problema
+
+Hiciste tu proyecto con Claude Code. Quedó parado en tu carpeta local. Sin dominio, sin nadie que lo pueda ver, **sin forma de enseñárselo a un cliente**.
+
+El problema no era construirlo. Era **subirlo**.
+
+**All Deploy** cierra ese hueco. Le decís *"subí esto"* y se encarga:
+
+- Detecta qué tipo de proyecto hiciste
+- Elige plataforma correcta (Vercel/Railway/VPS)
+- Corre **revisión de seguridad previa**
+- Te deja ver **preview**
+- Te entrega **comando de rollback** listo
+
+Es la 3ra pieza del combo para ir de **idea a en vivo sin depender de nadie**.
+
+Repo: `Hainrixz/all-deploy`. Open source.
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado (la app oficial). El comando `/all-deploy` **NO funciona en terminal suelta** ni otros editores. Solo en Claude Code.
+
+---
+
+## Instalación
+
+### Opción A — Pedirle a Claude
+
+```
+> Instalá este skill de deploy en mi Claude Code:
+  https://github.com/Hainrixz/all-deploy
+
+  Clonalo en ~/.claude/skills/all-deploy
+```
+
+### Opción B — Manual
+
+```bash
+git clone https://github.com/Hainrixz/all-deploy.git \
+  ~/.claude/skills/all-deploy
+```
+
+### Por qué `~/.claude/skills/`
+
+Claude Code busca skills auto en esa carpeta. Una vez ahí, Claude lo reconoce y `/all-deploy` funciona. **Sin config extra**.
+
+---
+
+## Cómo se usa
+
+Dentro de Claude Code, en la carpeta de tu proyecto:
+
+```
+/all-deploy
+```
+
+Claude:
+1. Detecta tipo de proyecto (Next.js, Astro, Node, Python, etc.)
+2. Elige plataforma apropiada
+3. Corre security check
+4. Muestra preview
+5. Te pide confirmación
+6. Deploya
+7. Te entrega comando de rollback
+
+---
+
+## Las 3 plataformas que detecta
+
+| Plataforma | Cuándo |
+|------------|--------|
+| **Vercel** | Next.js, Astro, frontend estático, SvelteKit |
+| **Railway** | Apps con DB integrada (Postgres, Redis), Node fullstack, Python apps |
+| **VPS** | Cuando necesitás control total (Docker, custom infra) |
+
+All Deploy elige según el stack detectado.
+
+---
+
+## El flujo de seguridad
+
+Antes de subir, All Deploy chequea:
+
+- ✅ `.env` NO commiteado
+- ✅ Sin secrets hardcoded
+- ✅ Build limpio (compila sin warnings críticos)
+- ✅ Dependencies sin CVEs conocidos
+- ✅ HTTPS configurado
+- ✅ Headers de seguridad básicos
+
+Si algo falla, te avisa **antes** de deployar. Vos decidís si seguir o arreglar primero.
+
+---
+
+## El preview
+
+Antes de deploy final:
+
+- Vercel: preview deployment con URL temporal
+- Railway: staging environment
+- VPS: descripción de qué va a deployar + dry-run
+
+Vos validás → confirmás → producción.
+
+---
+
+## Rollback
+
+Si algo sale mal post-deploy, All Deploy te da el comando para volver a la versión anterior:
+
+```bash
+# Vercel
+vercel rollback [deployment-id]
+
+# Railway
+railway down --force && railway up [previous-commit]
+
+# VPS
+all-deploy rollback --target [snapshot-id]
+```
+
+Sin pensar. Sin buscar docs.
+
+---
+
+## Casos de uso
+
+### 1. Cierre del combo
+
+```
+Plan Mode → audit del approach
+The Architect → blueprint del proyecto
+Construcción (con Claude Code)
+Cyber Neo → audit de seguridad
+All Deploy → producción
+```
+
+**Idea → en vivo** sin saltar pasos.
+
+### 2. MVP rápido
+
+Tu Saturday side-project. Lo construís en 3h. **No querés perder 1h configurando deploy**:
+
+```
+> /all-deploy
+```
+
+20 min después, **URL pública**.
+
+### 3. Demo para cliente
+
+Cliente quiere ver tu prototype. En lugar de "te muestro en pantalla compartida":
+
+```
+> /all-deploy
+```
+
+Le mandás URL.
+
+### 4. Iteración rápida
+
+Cada cambio importante:
+
+```
+> /all-deploy
+```
+
+Deploy + preview + rollback listo. **Sin esfuerzo**.
+
+---
+
+## Anti-patrones
+
+### 1. Saltar el security check
+
+Si All Deploy avisa de un problema, **arreglalo antes de deployar**. Aunque parezca menor.
+
+### 2. No leer el preview
+
+A veces lo que All Deploy detecta como "mismo proyecto" es **diferente versión**. Validá preview matchea expectativa.
+
+### 3. Sin variables de entorno configuradas
+
+All Deploy detecta `.env` local pero **no sube secrets**. Configurá variables en Vercel/Railway/VPS **antes** de deploy.
+
+### 4. Deploy directo a producción crítica
+
+Para SaaS con usuarios reales, **mejor staging primero**. All Deploy lo soporta pero vos elegís la flag.
+
+### 5. Ignorar rollback
+
+Tener comando de rollback **no significa que lo vas a recordar**. **Guardá** el comando que te da All Deploy en algún lugar accesible.
+
+---
+
+## La trilogía completa
+
+| # | Pieza | Para qué |
+|---|-------|----------|
+| 1 | [Plan Mode](/boveda/planea-audita-construye) | Auditar antes de tocar nada |
+| 2 | [The Architect](/boveda/the-architect) | Blueprint de 16 secciones |
+| 3 | **All Deploy** (esta) | Sube a producción |
+| 4 | [Cyber Neo](/boveda/cyber-neo) | Audita seguridad pre-deploy |
+
+---
+
+## Combinaciones potentes
+
+### Con The Architect
+
+The Architect tiene **sección 12 (Deploy)** en el blueprint. All Deploy implementa esa sección.
+
+### Con Cyber Neo
+
+```
+> /cyber-neo (audit completo de seguridad)
+> /all-deploy (después del audit OK)
+```
+
+Audit + deploy en secuencia.
+
+### Con tareas programadas
+
+[Cowork tareas programadas](/boveda/claude-cowork-workflow):
+
+```
+> Cada viernes 6pm, /all-deploy desde main branch al staging
+> de Vercel. Mandame URL del preview.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Producción enterprise crítica | Necesitás pipelines formales (CI/CD) |
+| Stack muy custom no detectado | Manual sigue ganando |
+| Compliance estricto (audit logs) | All Deploy abstrae too much |
+| Multi-region complejo | Necesitás control fino |
+
+---
+
+## Próximos pasos
+
+- Para diseño del blueprint antes de construir, [The Architect](/boveda/the-architect)
+- Para audit de seguridad pre-deploy, [Cyber Neo](/boveda/cyber-neo)
+- Para auditar el plan antes de todo, [Plan Mode](/boveda/planea-audita-construye)

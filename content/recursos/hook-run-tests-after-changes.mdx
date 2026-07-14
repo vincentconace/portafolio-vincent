@@ -1,0 +1,84 @@
+---
+title: "Hook Run Tests After Changes — auto-tests post-edit (1,017 installs)"
+description: "Hook con 1,017 installs. Después de modificaciones de código, corre tests automáticos para asegurar que nada se rompa. Catch regresiones en el momento, no después."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-tdd-gate", "hook-lint-on-save", "hook-format-python-files"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/post-tool/run-tests-after-changes"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/run-tests-after-changes.json"
+---
+
+## Qué es
+
+Después de cada modificación de código, el hook detecta el test runner del proyecto (Jest, Vitest, pytest, etc.) y corre tests rápidos. Si algo se rompe, te avisa inmediatamente.
+
+Hook event: `PostToolUse`. Foco: "quick tests" — unit, no E2E pesados.
+
+1,017 installs es alto para hooks de testing — refleja la importancia de catch regressions on the fly.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `post-tool` |
+| Installs | 1,017 |
+| Hook event | `PostToolUse` |
+| Tests | Quick (unit), no E2E |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook post-tool/run-tests-after-changes
+```
+
+Para Claude:
+
+```
+Instalé el hook post-tool/run-tests-after-changes. Verificá que mi
+test runner (Vitest) esté configurado. Probá editando un archivo
+de business logic — debería correr los tests asociados.
+```
+
+## Qué podés hacer con esto
+
+### Catch regresión instantáneo
+
+Si Claude rompe un test al editar, lo ves inmediatamente. No después de 30 ediciones.
+
+### Test-first workflow
+
+Si seguís TDD, este hook valida que tu green stay green durante refactors.
+
+### Combo con [TDD Gate](/boveda/hook-tdd-gate)
+
+TDD Gate fuerza que existan tests primero. Run Tests After valida que sigan green.
+
+### Combo con [Lint On Save](/boveda/hook-lint-on-save)
+
+Lint + tests = doble check de quality. Sin scaffolding extra.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Tests lentos:** si tu suite tarda 30+ segundos, fricción notable.
+- **Sin tests existentes:** el hook no inventa tests.
+- **Para edits experimentales:** tests verdes son útiles para release, no para WIP.
+- **Si tu CI ya corre tests:** local también puede ser overhead.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Run Tests After Changes Hook](https://www.aitmpl.com/component/hooks/post-tool/run-tests-after-changes) — comando exacto.
+- **Config JSON:** [run-tests-after-changes.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/run-tests-after-changes.json).
+
+## Recursos relacionados
+
+- [TDD Gate Hook](/boveda/hook-tdd-gate) — para enforce que existan tests antes del code.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — quality pipeline complementario.
+- [Format Python Files Hook](/boveda/hook-format-python-files) — format pre-test.

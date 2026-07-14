@@ -1,0 +1,259 @@
+---
+title: "Artefactos de Claude — apps funcionales en el navegador sin código"
+description: "Claude no es solo chat. Pedile algo complejo (landing, dashboard, calculadora, juego, chatbot) y abre panel al lado con la app FUNCIONAL en vivo. Sin descargar nada, en claude.ai. Plus: el 'Claude dentro de Claude' — usar la API de Claude desde un Artefacto para crear chatbots IA reales."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["instant-landing", "claude-web-builder", "live-artifacts-cowork"]
+---
+
+## Qué son
+
+Cuando le pedís a Claude algo complejo (página web, dashboard, juego), en lugar de solo responder con texto, **abre un panel a la derecha con algo FUNCIONANDO**.
+
+Los botones sirven. Las gráficas se mueven. Los formularios envían. Es como si Claude te construyera **una mini-app en tiempo real**.
+
+| Característica | Detalle |
+|----------------|---------|
+| Plataforma | `claude.ai` (web) |
+| Instalación | Cero |
+| Plan requerido | Free funciona |
+| Tipo de output | HTML/JS/React funcional |
+
+---
+
+## Qué los hace especiales
+
+### No es imagen, es app real
+
+Hacés clicks en botones, escribís en campos, **interactuás de verdad**.
+
+### Se actualiza en vivo
+
+Si algo no te gusta, le decís a Claude y lo ajusta al momento sin empezar de cero.
+
+### Cero instalación
+
+No descargás nada. Todo corre en tu navegador en la misma ventana de Claude.
+
+---
+
+## 6 cosas que podés crear ya
+
+| Tipo | Ejemplos |
+|------|----------|
+| **Sitios web** | Landings, portfolios, páginas de pricing con navegación, forms y responsive |
+| **Dashboards** | Subís Excel/CSV → Claude arma gráficas, filtros, tablas |
+| **Herramientas** | Calculadoras, convertidores, generadores de paletas, timers |
+| **Juegos** | Trivia, memory, snake, puzzles jugables |
+| **Documentos** | Cartas, reportes, presentaciones |
+| **Visualizaciones** | Gráficas animadas, mind maps, diagramas de flujo |
+
+---
+
+## Ejemplos copy-paste
+
+### Sitio web completo
+
+```
+Creá sitio para cafetería "Café Luna":
+- Home con hero atractivo
+- Menú con precios
+- Sección "sobre nosotros"
+- Form de contacto
+
+Colores cálidos, diseño moderno.
+```
+
+Resultado: sitio funcional en menos de 1 min en el panel derecho.
+
+### Dashboard desde data
+
+```
+Con los datos del archivo que subí, creá dashboard interactivo:
+- Gráfica de barras: ventas por mes
+- Gráfica circular: categorías
+- Tabla con filtros por fecha
+- Resumen con números clave arriba
+```
+
+### Calculadora custom
+
+```
+Calculadora para freelancers:
+- Input: horas/día, tarifa/hora, días/mes
+- Output: ingreso mensual, ingreso anual, después de impuestos
+  (25%), después de gastos (15%)
+
+Estilo: clean minimalista, tema dark.
+```
+
+### Juego
+
+```
+Juego de memoria con 12 cartas (6 pares).
+Tema: emojis de comida.
+Score se calcula por intentos.
+Animaciones suaves al voltear.
+```
+
+### Visualización
+
+```
+Diagrama interactivo de mi árbol familiar:
+- 4 generaciones
+- Click en cada persona muestra info
+- Hover muestra relación
+
+Datos: [pegás tu data]
+```
+
+---
+
+## El superpoder — Claude dentro de Claude
+
+Acá viene el **truco que nadie cuenta**. Podés crear Artefactos que **usan la API de Claude internamente**.
+
+Eso significa: chatbots con IA real funcionando en tu navegador, dentro del Artefacto.
+
+### Cómo funciona
+
+En tu prompt, le pedís a Claude que use `window.claude.complete()` para llamar a Claude desde el Artefacto.
+
+### Ejemplo — chatbot custom
+
+```
+Creá chatbot estilo terapeuta. Use `window.claude.complete()`
+para responder con Claude real.
+
+System prompt del bot:
+"Sos terapeuta empático. Escuchá sin juzgar. Hacé preguntas
+abiertas. NO des consejos directos — guiá a que la persona
+encuentre su respuesta."
+
+UI: chat clásico, mensajes burbuja, scroll automático,
+typing indicator mientras espera respuesta.
+```
+
+Te abre un chatbot **funcional con IA real**. Sin backend, sin API key tuya, sin nada.
+
+### Otros ejemplos del superpoder
+
+```
+> Asistente de recetas que responde según ingredientes que tengo
+```
+
+```
+> Generador de ideas de contenido para mi nicho [X]
+```
+
+```
+> Coach de productividad estilo Pomodoro con conversación
+```
+
+```
+> Tutor de [idioma] que corrige mis frases
+```
+
+---
+
+## Anti-patrones
+
+### 1. Esperar production-grade
+
+Los Artefactos son para **prototipos / demos / herramientas internas**. Para producción seria, exportá el código y deployá apropiadamente.
+
+### 2. Pedir features de backend complejas
+
+Artefactos viven en el browser. Sin backend = sin DB persistente, sin auth real. Para auth de verdad → [stack app móvil](/boveda/stack-app-movil-ia) o [Claude Web Builder](/boveda/claude-web-builder).
+
+### 3. Olvidar que el chatbot del superpoder consume tu cuota
+
+Cada llamada a `window.claude.complete()` **gasta tu plan**. Compartir tu Artefacto con muchas personas = todas usan tu cuota.
+
+### 4. No iterar visualmente
+
+Primera versión rara vez es perfecta. **Iterá con feedback**: "achicá el padding", "cambiá color principal a verde", "agregá animación al hover".
+
+### 5. Pedir muchas features de una
+
+Mejor: 1 feature → 2 features → 3 features. **Incremental**. Si pedís todo de una, Claude se confunde.
+
+---
+
+## Cómo compartir Artefactos
+
+### Compartir el link
+
+En el panel del Artefacto, hay botón "Share". Genera URL pública que cualquiera puede abrir.
+
+### Limitaciones del share
+
+- Quien abra ve el resultado
+- NO ve la conversación con Claude
+- Si usa el "superpoder" (Claude dentro de Claude), **consume tu cuota**
+
+### Embed
+
+Algunos Artefactos los embebés en otras webs. Útil para showcases de portfolio.
+
+---
+
+## Casos de uso prácticos
+
+### 1. Prototipos para validar ideas
+
+Antes de programar 2 semanas tu idea, **construí Artefacto en 30 min** y mostralo a 5 usuarios. Validá antes de invertir.
+
+### 2. Herramientas internas de equipo
+
+Calculadora de pricing custom, dashboard de KPIs, generador de templates. **No necesitás dev**.
+
+### 3. Material educativo
+
+Profesor explicando concepto: en lugar de slides estáticas, **simulación interactiva**.
+
+### 4. Demos para venta
+
+Cliente potencial pide "¿cómo se ve algo así?" → en la reunión mismo, Artefacto en 5 min mostrando concepto.
+
+### 5. Side projects rápidos
+
+Idea random un viernes → Artefacto el sábado → compartís en redes el domingo.
+
+---
+
+## Combinaciones potentes
+
+### Con Cowork
+
+[Live Artifacts en Cowork](/boveda/live-artifacts-cowork) te deja iterar Artefactos colaborativamente.
+
+### Con Claude Web Builder
+
+Para **producción real** (no solo prototipo), exportá idea desde Artefacto, llevala a [Claude Web Builder](/boveda/claude-web-builder).
+
+### Con Instant Landing
+
+Si solo necesitás landing, [Instant Landing](/boveda/instant-landing) es más profesional. Artefactos son para algo más interactivo.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Producción seria con muchos usuarios | Sin backend, no escala |
+| App con auth real + DB persistente | Para eso necesitás backend real |
+| Diseño pixel-perfect para cliente premium | Artefactos son buenos pero no perfectos |
+| App con dependencias específicas | Sandbox limitado |
+
+---
+
+## Próximos pasos
+
+- Para landing más profesional, [Instant Landing](/boveda/instant-landing)
+- Para producción con backend, [Claude Web Builder](/boveda/claude-web-builder)
+- Para Artefactos colaborativos, [Live Artifacts en Cowork](/boveda/live-artifacts-cowork)

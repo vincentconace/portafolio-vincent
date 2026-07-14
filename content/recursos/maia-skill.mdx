@@ -1,0 +1,307 @@
+---
+title: "Maia Skill — 5 agentes paralelos para análisis de inversión (cripto, acciones, forex, commodities)"
+description: "Skill multi-agente que despliega 5 agentes especializados al mismo tiempo: cripto, acciones, divisas, commodities y estrategia. Investigan en vivo y generan dashboard interactivo. NO es asesoría financiera — es herramienta educativa. Setup en un comando."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["investigador-automatico", "crea-agentes-con-claude", "arquitecto-de-ingresos"]
+---
+
+## Aviso crítico
+
+> **Maia Skill NO es asesoría financiera**.
+>
+> Los reportes son **solo para fines informativos y educativos**. No constituyen recomendaciones de inversión.
+>
+> **Siempre consultá** con un profesional financiero calificado antes de tomar decisiones con tu dinero.
+
+---
+
+## Qué es
+
+Imaginate **5 investigadores trabajando al mismo tiempo**, cada uno especializado en un tipo de mercado distinto. Vos les decís *"analicen el mercado"* y salen a investigar **en paralelo**:
+
+- Uno busca cripto
+- Otro acciones
+- Otro divisas
+- Otro commodities
+- Y el último **combina todo** en una estrategia
+
+Eso es Maia Skill. Convierte tu terminal en **centro de investigación de mercados** con agentes IA en equipo.
+
+Repo: `Hainrixz/maia-skill`. Open source.
+
+---
+
+## Los 5 agentes
+
+| Agente | Cubre |
+|--------|-------|
+| **Crypto** | Bitcoin, Ethereum, top alts |
+| **Acciones** | S&P 500, NASDAQ, principales índices |
+| **Divisas** | USD/MXN, DXY, pares principales |
+| **Materiales** | Oro, petróleo, commodities clave |
+| **Estrategia** | Combina los 4 anteriores y recomienda |
+
+---
+
+## Cómo funciona
+
+### Multi-agente real
+
+Los 5 trabajan **en paralelo**, no secuencial. Tu reporte está listo en **el tiempo del más lento**, no la suma de todos.
+
+### Investigación en vivo
+
+Buscan **datos frescos en internet** cada vez. Nada está guardado de antes.
+
+### Dashboard interactivo
+
+El reporte se abre como **página web en tu compu** con:
+- Gráficos
+- Rankings
+- Recomendaciones (con disclaimers)
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado
+- Acceso a internet (los agentes consultan web en tiempo real)
+
+---
+
+## Instalación
+
+```
+> Instalá Maia Skill desde
+  https://github.com/Hainrixz/maia-skill
+
+  Cloná en ~/.claude/skills/maia
+```
+
+O manual:
+
+```bash
+git clone https://github.com/Hainrixz/maia-skill.git \
+  ~/.claude/skills/maia
+```
+
+---
+
+## Cómo usarlo
+
+Dentro de Claude Code:
+
+```
+/maia
+```
+
+Claude despliega los 5 agentes, investigan en paralelo (~3-8 min), generan dashboard.
+
+### Variantes
+
+```
+> /maia foco en cripto y commodities
+```
+
+```
+> /maia con horizonte de 3 meses, perfil conservador
+```
+
+```
+> /maia compará vs mi portfolio actual: [pegás tu portfolio]
+```
+
+---
+
+## El dashboard
+
+Se abre en tu navegador. Estructura típica:
+
+### Sección 1 — Resumen ejecutivo
+
+- Estado general de mercados (1 frase por categoría)
+- Top 3 oportunidades del momento
+- Top 3 riesgos del momento
+
+### Sección 2 — Por mercado
+
+Para cada categoría (cripto, acciones, etc.):
+- Estado actual con datos clave
+- Tendencias últimas semanas
+- Sentiment
+- Catalysts próximos
+
+### Sección 3 — Cross-market analysis
+
+El agente Estrategia combina todo:
+- Correlaciones detectadas
+- Hedging opportunities
+- Asset allocation sugerida (con disclaimers)
+
+### Sección 4 — Fuentes
+
+Cada dato con link a fuente. **Verificable**. No invención.
+
+---
+
+## Casos de uso
+
+### 1. Briefing semanal de mercados
+
+```
+> Cada lunes 8am, ejecutá /maia.
+  Mandame dashboard a mi email.
+```
+
+Combinado con [Cowork tareas programadas](/boveda/claude-cowork-workflow).
+
+### 2. Pre-decisión de rebalanceo de portfolio
+
+Antes de mover tu portfolio:
+
+```
+> /maia con foco en mis tenencias actuales: [pegás portfolio]
+  Decime: qué está sobrevalorado, qué subvalorado, qué hold.
+```
+
+(Después validás con asesor real.)
+
+### 3. Aprender de mercados
+
+```
+> /maia con explicaciones detalladas — sos mi profesor.
+  Quiero entender qué está pasando, no solo qué hacer.
+```
+
+Educativo, no operativo.
+
+### 4. Investigar para newsletter
+
+Si escribís newsletter financiero:
+
+```
+> /maia. Tomá el output y convertí en draft de newsletter
+  semanal con tu voz [pegás brand voice].
+```
+
+### 5. Monitoreo de macro events
+
+```
+> /maia con foco en cómo afectaría [EVENTO MACRO próximo]
+  los 4 mercados.
+```
+
+Ej: "decisión de tasas de Fed", "elección presidencial", etc.
+
+---
+
+## Anti-patrones
+
+### 1. Tomar las "recomendaciones" como verdad
+
+Maia tira sugerencias **basadas en data pública + criterios estándar**. NO tiene insider info, NO conoce tu situación financiera personal, NO es CFA certificado.
+
+**Validá siempre con humano**.
+
+### 2. Tradear con cada reporte
+
+Si seguís ciegamente las sugerencias = **vas a perder dinero**. Mercados son más complejos que cualquier análisis automatizado.
+
+### 3. Sin diversificación de fuentes
+
+Maia + Bloomberg + tu asesor + tu propio análisis = stack robusto.
+Solo Maia = peligroso.
+
+### 4. Olvidar el disclaimer
+
+El dashboard tiene disclaimers por algo. **Leelos**. Cada decisión con tu dinero es tuya.
+
+### 5. Esperar predicción del futuro
+
+Maia analiza **presente**. No predice. Si algún output suena a "esto va a pasar", es **probabilidad, no certeza**.
+
+---
+
+## Limitaciones
+
+### Datos en tiempo real ≠ datos perfectos
+
+A veces APIs públicas tienen retraso (15 min en muchos casos). Para tradear day-trading, no alcanza. Para análisis macro, sí.
+
+### Sin contexto personal
+
+No conoce tu edad, situación, tolerancia al riesgo real, horizonte específico. Pedile que asuma perfil, pero **vos validás** que aplique.
+
+### Sesgos de fuentes
+
+Las fuentes públicas tienen sesgos (Western financial press, mostly USD-centric). Para mercados emergentes o nichos, **complementá**.
+
+### Sin backtesting
+
+Maia no te dice "esta sugerencia hubiera funcionado en escenarios pasados X% del tiempo". Para eso necesitás tools de backtesting reales.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **Maia Skill** | Análisis multi-mercado rápido en español |
+| Bloomberg Terminal | Profesional ($24k/año) |
+| TradingView | Charting + community ($15-60/mes) |
+| Asesor financiero humano | Decisiones reales con tu dinero |
+
+Maia es **complemento educativo**, no reemplazo.
+
+---
+
+## Combinaciones potentes
+
+### Con Last30Days research
+
+[Investigador automático](/boveda/investigador-automatico) busca tendencias generales. Maia profundiza en mercados específicos.
+
+### Con Cowork programado
+
+Reporte semanal automático cada lunes.
+
+### Con Arquitecto de Ingresos
+
+[Arquitecto de Ingresos](/boveda/arquitecto-de-ingresos) para tu negocio + Maia para tu portfolio = full picture.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Tradear day-trading | Latencia + sin order execution |
+| Asesoría legal/fiscal | Maia es análisis, no compliance |
+| Sin entender lo básico | Aprendé fundamentos primero |
+| Compromiso emocional con thesis | Maia es analítico, no motivacional |
+
+---
+
+## Disclaimer (otra vez)
+
+> Maia Skill es herramienta educativa de análisis basado en data pública.
+>
+> NO es asesoría financiera personalizada.
+>
+> NO sustituye consulta con profesional certificado.
+>
+> Inversiones implican riesgo de pérdida.
+>
+> Resultados pasados no garantizan resultados futuros.
+
+---
+
+## Próximos pasos
+
+- Para research general de mercados/tendencias, [investigador automático](/boveda/investigador-automatico)
+- Para planning de ingresos de tu negocio (no portfolio), [Arquitecto de Ingresos](/boveda/arquitecto-de-ingresos)
+- Para automatizar reporte semanal, [Cowork workflow](/boveda/claude-cowork-workflow)

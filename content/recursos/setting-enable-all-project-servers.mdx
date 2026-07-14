@@ -1,0 +1,80 @@
+---
+title: "Setting Enable All Project Servers — auto-approve MCPs definidos en .mcp.json (658 installs)"
+description: "Setting con 658 installs. Aprueba y enable automáticamente todos los MCP servers definidos en .mcp.json del proyecto. Skip approval prompts manuales. Para teams con .mcp.json controlado."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-enable-specific-servers", "setting-disable-risky-servers", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/mcp/enable-all-project-servers"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/enable-all-project-servers.json"
+---
+
+## Qué es
+
+`enableAllProjectMcpServers: true` — todos los MCP servers definidos en `.mcp.json` del proyecto se activan sin prompt manual.
+
+Útil para teams que definen MCPs como parte del repo (similar a `package.json` para libs): cuando alguien clona, los MCPs ya quedan activos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `mcp` |
+| Installs | 658 |
+| Setting key | `enableAllProjectMcpServers: true` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting mcp/enable-all-project-servers
+```
+
+Para Claude:
+
+```
+Instalé el setting mcp/enable-all-project-servers. Listame los MCPs
+de mi .mcp.json que se van a auto-activar.
+```
+
+## Qué podés hacer con esto
+
+### Onboarding de team simplificado
+
+Dev clona repo → MCPs activos sin pasos manuales.
+
+### Reproducibility de environment
+
+Lo que está en `.mcp.json` es la fuente de verdad. Todos los devs tienen el mismo setup MCP.
+
+### Combo con [Disable Risky Servers](/boveda/setting-disable-risky-servers)
+
+Enable All para el default + Disable Risky para excepciones específicas. Allowlist + blacklist.
+
+### Para CI / sandboxes
+
+CI que corre Claude Code en checked-out repo: este setting evita stuck por approval prompts.
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de habilitar">
+
+- **Confianza en .mcp.json:** auto-approve significa que si alguien agrega un MCP malicioso al `.mcp.json` del repo, se activa sin que vos lo veas. Reviá PRs que toquen ese file.
+- **Para projects en untrusted networks:** no auto-aprobés MCPs en repos compartidos sin review.
+- **Para uso conservador:** approval manual es más seguro.
+- **Combo con review process:** si tu equipo no hace PR review serio, este setting puede ser vector.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Enable All Project Servers Setting](https://www.aitmpl.com/component/settings/mcp/enable-all-project-servers) — comando exacto.
+- **Config JSON:** [enable-all-project-servers.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/mcp/enable-all-project-servers.json).
+
+## Recursos relacionados
+
+- [Enable Specific Servers Setting](/boveda/setting-enable-specific-servers) — granular allowlist.
+- [Disable Risky Servers Setting](/boveda/setting-disable-risky-servers) — blacklist complementario.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de MCPs.

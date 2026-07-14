@@ -1,0 +1,339 @@
+---
+title: "5 skills that turn Claude into your entire marketing team"
+description: "Marketing Skills, Claude SEO, Brand Guidelines, Editor Pro Max, and NotebookLM. All 5 are free, open source, and together they replace a copywriter + SEO auditor + brand director + video editor + research assistant. What each one does and when each combo makes sense."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["andromeda-meta-ads", "stack-ia-creador", "agencia-marketing-claude"]
+---
+
+## The premise
+
+A decent marketing department costs **$8-15k/month**. A good freelance copywriter charges $3-5k. A professional SEO audit runs $500-5000. A video editor asks for $50-150/hour.
+
+5 open source skills installed in Claude Code give you a **functional equivalent of 80% of that department**, for free. They don't replace a senior human — but they cover the 80% of mechanical work you were going to delegate anyway.
+
+The 5:
+
+| Skill | Role | What for |
+|-------|-----|----------|
+| **Marketing Skills** | Copywriter | 34 sub-skills: copy, emails, ads, pricing |
+| **Claude SEO** | SEO auditor | Audits your site, optimizes for Google + AI |
+| **Brand Guidelines** | Brand director | Applies your visual identity to everything it generates |
+| **Editor Pro Max** | Video editor | You describe the video → Remotion builds it |
+| **NotebookLM Skill** | Research assistant | Connects Claude to your real docs (no hallucinating) |
+
+---
+
+## Prerequisites
+
+Before installing anything:
+
+1. **Claude Code installed** — see [zero setup](/boveda/claude-code-setup-zero)
+2. **Plan with active credits** (some skills consume tokens in bulk when they run)
+3. **Git installed** (most installs are `git clone`)
+4. **Terminal open** in a directory where you can write
+
+---
+
+## Skill 1 — Marketing Skills
+
+### What it is
+
+34 specialized sub-skills, each trained for a distinct marketing workflow:
+
+- Copy for landing pages (long-form sales letters, hero copy)
+- Email marketing (welcome flows, broadcast, re-engagement)
+- Paid ads (Meta Ads, Google Ads, creatives)
+- Pricing strategy (anchoring, tiers, discounts)
+- Retention (referrals, loyalty, win-back)
+- Organic growth (SEO content, social posts)
+
+When you ask Claude for something marketing-related, **the skill automatically matches** the right sub-skill and applies the method.
+
+### Installation
+
+```bash
+npx skills add coreyhaines31/marketingskills
+```
+
+### When it shines
+
+- You need decent copy without hiring a copywriter
+- Your product is new and you have no reference for what tone to use
+- You want to A/B multiple versions (Marketing Skills gives you 5-10 variants in one pass)
+
+### When NOT
+
+- You have a senior copywriter who already knows your brand inside out (you'll over-correct whatever Claude delivers)
+- Super technical/niche product where the generic copywriter doesn't get the nuances
+- You need a very specific voice (there [Brand Guidelines](#skill-3) matters more than Marketing Skills alone)
+
+---
+
+## Skill 2 — Claude SEO
+
+### What it is
+
+19 sub-skills for SEO auditing and optimization. Main command:
+
+```
+/seo audit https://miapp.com
+```
+
+And Claude:
+
+1. Scrapes your site
+2. Audits meta tags, schema, speed, broken links
+3. Detects keywords you already rank for and new opportunities
+4. Optimizes for **AI Overviews** (Google) + answer engines like Perplexity
+5. Gives you a report prioritized by impact/effort
+
+### Installation
+
+```bash
+git clone https://github.com/AgriciDaniel/claude-seo.git
+cd claude-seo
+# Follow the README to activate it as a local skill
+```
+
+### When it shines
+
+- You just launched and want an SEO baseline
+- Your site is 6+ months old and you've never audited it
+- You want to optimize so AIs (ChatGPT, Perplexity) cite you
+
+### When NOT
+
+- Enterprise site with 50k+ URLs (Claude SEO doesn't scale well, you need Screaming Frog + Ahrefs)
+- If you already pay for SEMrush/Ahrefs and use them well, Claude SEO is redundant for auditing — but **it is useful** for AI-first optimization
+
+### Pairs well with
+
+[Sentry MCP plugin](/boveda/plugin-sentry-mcp) if you have 5xx errors killing your crawl budget.
+
+---
+
+## Skill 3 — Brand Guidelines
+
+### What it is
+
+An **official Anthropic skill**. You load your brand manual once (colors, typography, tone, do/don'ts) and Claude applies it automatically every time it generates visual or textual content.
+
+### Why it matters more than it seems
+
+Without Brand Guidelines, every Claude generation (presentation, banner, email) is **independent**. You have to keep repeating "use hex #FF6B35", "this typeface", "this tone". Over 10 generations, your brand looks fragmented.
+
+With Brand Guidelines, **one initial load** and Claude respects everything: colors in CSS, typefaces in Figma exports, tone in copy, layouts in presentations.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/brand-guidelines
+```
+
+Then you build your brand pack:
+
+```
+> Load the brand pack from /docs/brand/. Activate the skill for
+  this whole session.
+```
+
+### When it shines
+
+- Established brand with a visual guide
+- You produce a lot of content (LinkedIn, blogs, ads) and need consistency
+- Distributed team — everyone uses Claude but all respect the same identity
+
+### When NOT
+
+- Brand still in exploration (you don't have colors/typography defined yet)
+- You produce 1-2 pieces a month (the setup isn't worth it)
+
+---
+
+## Skill 4 — Editor Pro Max
+
+### What it is
+
+Generates videos by describing them in natural language. Under the hood it uses **Remotion** (a React framework for programmatic video). 25 pre-built components, 10 templates (TikTok, YouTube, Instagram, presentations).
+
+### The flow
+
+```
+> I need a 30s video for LinkedIn. Hook: "If your team doesn't use
+  AI, you lose 10h/week". Show me 3 stats with numbers animating
+  up. Final CTA: "Try Claude for free". My brand logo at the
+  end.
+```
+
+Claude:
+1. Selects a template
+2. Applies the brand pack if you have [Brand Guidelines](#skill-3) installed
+3. Generates the Remotion code
+4. Renders the video locally
+5. Delivers a ready-to-use `.mp4`
+
+### Installation
+
+```bash
+git clone https://github.com/Hainrixz/editor-pro-max.git
+cd editor-pro-max
+npm install
+```
+
+### When it shines
+
+- You produce short video in volume (TikTok, Reels, Shorts)
+- Your content is "talking head with stats + text animation" (the standard educational content format)
+- You have Whisper locally for automatic subtitles
+
+### When NOT
+
+- You need real cinematic video → better to use [Higgsfield MCP](/boveda/higgsfield-mcp) with Seedance 2.0
+- You want creative editing with lots of real footage (Editor Pro Max is for programmatic video, not traditional editing)
+- Enterprise production where you need client approval on every frame (programmatic adds friction there)
+
+---
+
+## Skill 5 — NotebookLM Skill
+
+### What it is
+
+Connects Claude to **Google NotebookLM** — your collection of PDFs, videos, docs. When you ask questions, Claude **queries your real sources** instead of making things up.
+
+### The problem it solves
+
+LLMs **hallucinate**. You ask something specific to your industry and it throws out data that looks real but is wrong. With NotebookLM Skill, Claude:
+
+1. Reads your question
+2. Searches your NotebookLM notebooks
+3. Extracts real quotes with references
+4. Answers based **only** on what's in your docs
+
+Zero hallucination. If it's not in your docs, it says "I can't find it".
+
+### Installation
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/PleasePrompto/notebooklm-skill ~/.claude/skills/notebooklm
+```
+
+The first time it asks you to auth with Google (just once).
+
+### When it shines
+
+- You have a lot of internal documentation (policies, manuals, contracts)
+- You do academic/legal research where **exact citations are critical**
+- Regulated industry (medical, legal, finance) where "hallucinating" is unacceptable
+
+### When NOT
+
+- Your workflow is 100% creative (there are no "sources" to consult)
+- Documentation lives in non-Google systems (Confluence, private Notion) — there you need specific MCPs like [Notion MCP](/boveda/plugin-notion-mcp)
+
+---
+
+## How they work together — the full flow
+
+The real value **isn't each skill in isolation**. It's the combined flow:
+
+```
+1. Idea → Marketing Skills generates strategy + copy
+2. Copy → Brand Guidelines applies voice and colors
+3. Web → Claude SEO audits and optimizes
+4. Promo video → Editor Pro Max produces the clip
+5. Verification → NotebookLM consults your real data to avoid errors
+```
+
+### Concrete example
+
+You want to launch a campaign for a new product:
+
+```
+> My product: inventory management SaaS for mid-sized LATAM retail.
+  Launch in 2 weeks. Brand pack loaded in /docs/brand/.
+  Market data in my NotebookLM "retail-latam-research".
+
+  Build me the full campaign:
+
+  1. Marketing Skills: strategy + 5 emails for the launch sequence
+  2. Brand Guidelines: apply colors and tone across everything
+  3. NotebookLM: validate that my claims about the market are backed up
+  4. Editor Pro Max: 1 30s video for LinkedIn
+  5. Claude SEO: review my current landing page and optimize it
+
+  Deliver a consolidated brief with everything.
+```
+
+A single Claude session → almost the entire campaign ready for review.
+
+---
+
+## Install all 5 in one shot
+
+```bash
+npx skills add coreyhaines31/marketingskills && \
+git clone https://github.com/AgriciDaniel/claude-seo.git && \
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/brand-guidelines && \
+git clone https://github.com/Hainrixz/editor-pro-max.git && cd editor-pro-max && npm install && cd .. && \
+mkdir -p ~/.claude/skills && \
+git clone https://github.com/PleasePrompto/notebooklm-skill ~/.claude/skills/notebooklm
+```
+
+Then validate with:
+
+```
+> /skill list
+```
+
+You should see all 5 active.
+
+---
+
+## Anti-patterns
+
+### 1. Installing them all at once without understanding what each does
+
+If you don't know what each skill does, **you'll misuse the output**. Install one, use it for 1-2 weeks, then the next.
+
+### 2. Not loading Brand Guidelines before requesting content
+
+If you ask "build me a sales email" without Brand Guidelines active, Claude uses a generic default. **The email will be correct but it won't sound like your brand**.
+
+### 3. Blindly trusting Marketing Skills
+
+34 sub-skills sounds impressive but **they're generalist frameworks**. If your product is very niche, the default copy will sound plastic. Iterate with human feedback.
+
+### 4. NotebookLM with outdated docs
+
+If your notebook has info from 2024, Claude will answer with that info even if it no longer applies today. **Curate your sources** periodically.
+
+### 5. Editor Pro Max for video that needs real emotion
+
+Programmatic video looks **correct** but not **emotional**. For brand-driven campaigns where emotion is the ROI, don't automate.
+
+---
+
+## Estimated ROI
+
+| Skill | Without skill | With skill |
+|-------|-----------|-----------|
+| Marketing Skills | Freelance copywriter $1500/project | Free + your iteration time |
+| Claude SEO | Professional audit $500-2000 | Free + ~20 min |
+| Brand Guidelines | Art director $80/h × 4h = $320 | Free + 1h initial setup |
+| Editor Pro Max | Video editor $50-100/min of video | Free + render time |
+| NotebookLM | Research assistant $30/h × 5h | Free + initial setup |
+
+Full stack: **~$2500-5000/month saved** if you produce marketing in volume. If you produce 1 piece/month, you won't come close to justifying the setup time.
+
+---
+
+## Next steps
+
+- To run Meta ads with a system, [Andromeda — 8 rules for Meta Ads](/boveda/andromeda-meta-ads)
+- For a broader creator stack, [AI stack for creators](/boveda/stack-ia-creador)
+- For a more strategic view (not just skills), [marketing agency with Claude](/boveda/agencia-marketing-claude)

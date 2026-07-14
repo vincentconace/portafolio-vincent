@@ -1,0 +1,169 @@
+---
+title: "Skill: Code Reviewer — segundo par de ojos antes del PR"
+description: "Una skill de Claude que revisa tu diff actual buscando bugs, vulnerabilidades, complejidad innecesaria y código que va contra las convenciones del proyecto. Te da feedback accionable, no checklist genérico."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+featured: false
+badge: "nuevo"
+version: "v1.1"
+publishedAt: "2026-05-12"
+readingTime: "9 min"
+relatedSlugs: ["claude-code-setup-zero", "skill-traduccion-tecnica"]
+---
+
+## Para qué sirve
+
+Antes de abrir un PR, querés que **alguien o algo** te haga la última revisión. Los linters detectan estilo, no diseño. Los tests verifican lo que pensaste testear, no lo que se te escapó.
+
+Esta skill mira tu diff completo y te devuelve un análisis estructurado: bugs probables, side effects que no consideraste, complejidad que se puede simplificar, y cosas que rompen las convenciones del proyecto (que lee del `CLAUDE.md`).
+
+Es **complementaria** al code review humano, no reemplazo. Te ahorra los comentarios obvios ("falta un `await`", "esto puede ser undefined") y deja al humano para lo importante.
+
+---
+
+## Cómo se instala
+
+Las skills viven en `~/.claude/skills/` (globales) o `.claude/skills/` (por proyecto). Crealo:
+
+```bash
+mkdir -p .claude/skills/code-reviewer
+```
+
+Después armá los dos archivos que componen una skill:
+
+<Step number={1} title="SKILL.md — el manifest">
+
+`.claude/skills/code-reviewer/SKILL.md`:
+
+```markdown
+---
+name: code-reviewer
+description: Revisa el diff actual buscando bugs, vulnerabilidades y violaciones de convenciones. Úsala cuando el usuario diga "revisá", "code review", "antes de mergear" o cuando esté a punto de abrir un PR.
+---
+
+# Code Reviewer
+
+Sos un revisor de código senior. Tu trabajo es analizar el diff del trabajo actual y devolver feedback accionable.
+
+## Protocolo
+
+1. Corré `git diff --staged` y `git diff` para ver los cambios. Si no hay cambios staged, asumí que el review es sobre lo modificado.
+2. Si el repo tiene `CLAUDE.md`, leelo. Las convenciones del proyecto van primero.
+3. Para cada hunk modificado, evaluá:
+   - **Bugs probables**: nulls no manejados, off-by-one, race conditions, types incorrectos
+   - **Seguridad**: SQL injection, XSS, secrets hardcodeados, validación faltante de input externo
+   - **Complejidad innecesaria**: abstracciones para 1 caller, ifs anidados que se simplifican con early return
+   - **Convenciones**: violaciones de lo que dice `CLAUDE.md` o patrones evidentes del codebase
+4. Devolvé un reporte estructurado (ver formato abajo).
+
+## Formato del reporte
+
+```
+## Cambios analizados
+[lista breve de archivos]
+
+## 🔴 Bloqueantes (corregir antes de mergear)
+- [archivo:línea] descripción + sugerencia
+
+## 🟡 Mejorables (no bloquean pero deberías mirarlos)
+- [archivo:línea] descripción + sugerencia
+
+## 🟢 Bien hecho
+- [opcional, 1-2 cosas que merecen mención positiva]
+```
+
+## Reglas
+
+- No inventes problemas para llenar secciones. Si no hay bloqueantes, escribí "ninguno".
+- Citá el archivo y la línea siempre. "Hay un bug en algún lado" no sirve.
+- Sé específico con la sugerencia. "Esto está mal" no sirve. "Cambiar X por Y porque Z" sí.
+- Si el diff toca código que tiene tests, verificá si los tests cubren los nuevos paths.
+```
+
+</Step>
+
+<Step number={2} title="Probarlo" last>
+
+Adentro de Claude Code, hacé un cambio cualquiera y pedile:
+
+```
+> code review de lo que hice
+```
+
+O más natural:
+
+```
+> revisá los cambios antes de que abra el PR
+```
+
+Claude va a detectar la skill por la descripción y la va a aplicar. Lo importante: la skill se activa **sin que la llames por nombre**. Por eso la `description` del frontmatter es crítica — es lo que Claude lee para decidir cuándo invocarla.
+
+</Step>
+
+---
+
+## Por qué funciona
+
+La diferencia entre esta skill y "pedirle a Claude que revise código" suelto es que:
+
+1. **El protocolo está fijo**. Siempre lee el diff primero, siempre lee CLAUDE.md, siempre devuelve el mismo formato. Sin la skill, cada vez puede saltearse pasos.
+2. **El formato es predecible**. Tu cerebro aprende a escanear el reporte en 10 segundos en vez de leer un texto libre de 3 párrafos.
+3. **Se invoca sola**. Cuando decís "antes de mergear", Claude conecta los puntos sin que tengas que decirle `/run code-reviewer`.
+
+---
+
+## Ajustes que vale la pena hacer
+
+### Por lenguaje
+
+Si trabajás siempre en TypeScript, agregale al final del SKILL.md:
+
+```markdown
+## Reglas específicas TypeScript
+
+- Marcá cualquier uso de `any` que no esté justificado con un comentario `// any: razón`.
+- `as` casts son sospechosos; verificá que haya un type guard antes.
+- `useEffect` sin dependencias completas es bloqueante.
+- Async functions sin try/catch que llamen a APIs externas son bloqueantes.
+```
+
+### Por equipo
+
+Si tu equipo tiene reglas duras (ej: "todo PR debe agregar test"), poné esa regla como **bloqueante explícito**:
+
+```markdown
+- Si el diff toca lógica de negocio y NO agrega tests, marcalo como 🔴 bloqueante automático.
+```
+
+### Modo "solo bloqueantes"
+
+A veces no querés todo el reporte. Agregá una variante:
+
+```markdown
+Si el usuario dice "review rápido" o "solo lo crítico", devolvé solo la sección de 🔴 bloqueantes. Si no hay, decí "todo OK" en una línea.
+```
+
+---
+
+## Limitaciones
+
+<Callout type="warning" title="Lo que esta skill NO hace bien">
+
+- **Refactors grandes**: si el cambio toca >500 líneas, el análisis se diluye. Pedile review parcial por área.
+- **Lógica de negocio compleja**: puede revisar la implementación, pero no sabe si la regla de negocio es correcta. Para eso necesitás un humano que entienda el dominio.
+- **Performance**: detecta cosas obvias (queries N+1) pero no profile real. Para optimizaciones serias usá herramientas dedicadas.
+
+</Callout>
+
+---
+
+## Próximos pasos
+
+Si te gustó este patrón, mirá otras skills útiles:
+
+- **db-migration-checker** — revisa migraciones de DB antes de mergearlas
+- **i18n-coverage** — verifica que las strings nuevas estén traducidas
+- **api-contract** — chequea que cambios en endpoints no rompan el contrato
+
+Si querés contribuir tu propia skill, mandá PR al [repo de la bóveda](https://github.com/anthropics/claude-code).

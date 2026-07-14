@@ -1,0 +1,78 @@
+---
+title: "Hook Env File Protection — block Write to .env files"
+description: "Hook with 83 installs that prevents Write tool calls to .env* files. Lightweight filtering via an if condition. Protects secrets so Claude doesn't accidentally modify them."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-file-protection", "hook-dangerous-command-blocker", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/env-file-protection"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/env-file-protection.json"
+---
+
+## What it is
+
+Before any Write tool call, the hook checks whether the target is a `.env*` file (`.env`, `.env.local`, `.env.production`, etc.). If it is, it blocks it.
+
+Deterministic filtering, zero cost (no LLM involved). Hook event: `PreToolUse`.
+
+It solves a concrete risk: Claude mistakenly rewrites your `.env` with made-up values, and you lose all your real credentials.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `security` |
+| Installs | 83 |
+| Hook event | `PreToolUse` (Write) |
+| Trigger | Path matches `.env*` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook security/env-file-protection
+```
+
+For Claude:
+
+```
+I installed the security/env-file-protection hook. Try it: ask Claude
+to create or overwrite `.env.local` with a value — it should get blocked.
+```
+
+## What you can do with it
+
+### Defense in depth for secrets
+
+Any Claude Code session. Zero cost, high protection.
+
+### For autonomous sessions
+
+If you leave Claude running with `/goal`, this hook prevents it from overwriting secrets by accident.
+
+### Combo with [Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker) and [File Protection](/boveda/hook-file-protection)
+
+Layered coverage: dangerous commands + system files + .env files. A triple net.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your legitimate workflow modifies .env:** the hook blocks direct Write. For edits, use the Edit tool (it may not be blocked — verify the behavior).
+- **If your env vars live somewhere else** (vault, AWS Secrets): the hook only protects .env files. Other patterns need other hooks.
+- **For initial setup:** when you create a .env for the first time, the hook blocks it. Manually override or set it up before installing.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Env File Protection Hook](https://www.aitmpl.com/component/hooks/security/env-file-protection) — the exact command.
+- **JSON config:** [env-file-protection.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/env-file-protection.json).
+
+## Related resources
+
+- [File Protection Hook](/boveda/hook-file-protection) — for more critical files in general.
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — for destructive shell commands.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — security defaults.

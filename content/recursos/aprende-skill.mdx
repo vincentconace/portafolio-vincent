@@ -1,0 +1,251 @@
+---
+title: "Skill 'Aprende' — terminar la amnesia entre sesiones de Claude"
+description: "Skill que al final de cada sesión escanea la conversación, identifica lo que valió la pena recordar (decisiones, lecciones, patrones), y lo guarda en 4 categorías: memoria, lección, skill stub y project-doc. Compatible con Claude Code y Codex."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["memoria-claude-code", "claude-obsidian", "memory-palace-agentes"]
+---
+
+## El problema universal
+
+> Le corregís hoy. Mañana lo vuelve a hacer.
+
+Es el patrón que todos los que usamos Claude conocemos:
+- Lunes: "Por favor usá tabs no espacios" → Claude entiende
+- Lunes (más tarde): Claude usa tabs ✓
+- Martes: Claude usa espacios de nuevo
+
+Sin memoria entre sesiones, **cada lección se pierde**. Te cansás de repetir.
+
+**Aprende** es una skill que ataca exactamente esto: **/aprende al final de la sesión** y el sistema captura lo que valió la pena recordar.
+
+---
+
+## Cómo funciona — 5 pases
+
+Al final de la sesión escribís:
+
+```
+> /aprende
+```
+
+La skill corre 5 pases en orden:
+
+### Pase A — Escanear
+
+Lee la conversación entera buscando **5 señales** de cosas para recordar:
+
+1. **Correcciones explícitas** ("no, hacelo así")
+2. **Decisiones tomadas** ("vamos con X y no Y porque...")
+3. **Patrones que se repitieron** (lo mismo aplicado en varios lugares)
+4. **Reglas mencionadas** ("nunca uses Z")
+5. **Aprendizajes técnicos** ("descubrí que la lib Y tiene este bug")
+
+### Pase B — Generar
+
+Para cada señal, genera el item candidato con su categoría (las 4 que vemos abajo).
+
+### Pase C — Deduplicar
+
+Cruza contra lo que ya tenés guardado:
+- Si es duplicado, lo skipea
+- Si refina algo existente, propone update
+- Si es nuevo, lo deja como candidato
+
+### Pase D — Confirmar
+
+Te muestra **lista numerada** con etiquetas de confianza:
+
+```
+Encontré 7 cosas para aprender:
+
+1. [memoria · ALTA] Preferís voseo argentino en outputs
+2. [lección · MEDIA] La lib X tiene bug si se usa con Node 18
+3. [memoria · ALTA] Tu CRM es HubSpot, no Salesforce
+4. [skill-stub · MEDIA] Patrón recurrente: limpiar inputs con trim() + toLowerCase
+5. [project-doc · ALTA] Stack: Next.js 16 + Drizzle + Tailwind v4
+6. [lección · BAJA] Quizás conviene usar useMemo en componentes pesados (no estoy seguro)
+7. [memoria · BAJA] Tal vez preferís emails cortos (vi tendencia pero solo 1 ejemplo)
+
+¿Cuáles guardo? (1,2,3,5 / todos / ninguno / elegir)
+```
+
+### Pase E — Escribir
+
+Lo que aprobaste se escribe a disco en la categoría correspondiente.
+
+---
+
+## Las 4 categorías
+
+### 1. Memoria
+
+**Preferencias que no cambian**. Cosas estables sobre cómo te gusta trabajar:
+
+- Voseo argentino
+- Tabs, no espacios
+- Sin emojis en código
+- Tono directo, sin diplomacia falsa
+- HubSpot, no Salesforce
+
+Se guardan en `~/.claude/memory.md` (o equivalente para Codex). **Persisten entre TODAS las sesiones, en cualquier proyecto.**
+
+### 2. Lección (estilo Reflexion)
+
+**Lecciones de algo que pasó**. Formato con 4 partes:
+
+```markdown
+## Lección: lib X falla con Node 18
+
+- Qué pasó: lib X tira "Module not found" en Node 18
+- Por qué: bug conocido en versión 2.3.x, ya hay fix en 2.4
+- Cómo evitar: usar Node 20+ o forzar lib X >= 2.4
+- Señal de detección: si veo error "Module not found" + Node 18, sospechar primero esto
+```
+
+Se guardan en `lessons/` del proyecto. **Específicas al proyecto donde aprendiste.**
+
+### 3. Skill stub
+
+Cuando se detecta **patrón recurrente** que merece skill:
+
+```
+La skill detectó que en 3 sesiones distintas hiciste:
+1. Renombrar archivos con kebab-case
+2. Agregar header de copyright
+3. Mover a carpeta específica según tipo
+
+¿Querés que arme una skill `prepare-file` que haga las 3?
+```
+
+Si decís sí, genera el stub del SKILL.md → vos lo refinás.
+
+### 4. Project-doc
+
+Info sobre el proyecto que vale para futuras sesiones. **Escritura dual**:
+
+- `CLAUDE.md` (para Claude Code)
+- `AGENTS.md` (para Codex)
+
+Así si trabajás con los dos, los dos tienen la misma info actualizada.
+
+---
+
+## El flow típico de uso
+
+### Sesión normal
+
+Trabajás 1-2 horas en algo. Vas iterando, corrigiendo, decidiendo.
+
+### Al final
+
+```
+> /aprende
+```
+
+La skill propone lo que vio. Vos curás. Aprobás lo que vale.
+
+### Próxima sesión
+
+Claude lee la memoria + project-doc al inicio. **No vuelve a hacer las cosas mal que ya corregiste.**
+
+---
+
+## Por qué la confirmación es feature, no fricción
+
+El pase D pide confirmación. Algunos lo encuentran molesto.
+
+**Es deliberado**:
+- Sin confirmación, la skill guarda basura (cosas que no merecen recordarse)
+- Pasar 30 segundos eligiendo cuáles guardar **evita basura acumulada**
+- Memoria llena de basura → contexto inflado → tokens desperdiciados → peor calidad
+
+Mejor 30 seg de curación que 30 días de basura.
+
+---
+
+## Casos donde brilla
+
+### 1. Proyectos largos (>3 meses)
+
+Sin Aprende: el mes 3 ya olvidaste por qué tomaste tal decisión en el mes 1.
+Con: lecciones acumuladas, decisiones documentadas con razón.
+
+### 2. Equipos donde varios usan el mismo proyecto
+
+`CLAUDE.md` / `AGENTS.md` versionados en git → cuando tu compañero abre Claude en el mismo repo, **ve las mismas lecciones**.
+
+### 3. Para "Claude veteranos"
+
+Si usás Claude todo el día y notás que te repetís en correcciones, Aprende **termina esa frustración** en una semana.
+
+---
+
+## Anti-patrones
+
+### 1. Saltarse el `/aprende`
+
+La skill funciona si la corrés. Si terminás sesiones sin invocarla, **se pierde todo**. Patrón: hacelo costumbre, como hacer commit al final del día.
+
+### 2. Aprobar todo sin curar
+
+"Todos" es tentador. Pero la mitad de las cosas que la skill propone son **ruido** (cosas que solo aplicaron a esa sesión específica). **Curá**.
+
+### 3. Memoria llena de cosas viejas
+
+Cada 2-3 meses, **auditá tu memoria.md**. Sacá lo que ya no aplica. Sino acumulás contexto irrelevante.
+
+### 4. Sin git para project-doc
+
+Si trabajás en equipo y tu CLAUDE.md no está versionado, **las lecciones se pierden** cuando otro dev hace su versión local. Versionalo en git desde el día 1.
+
+---
+
+## La pregunta filosófica
+
+> ¿Hasta qué punto debería Claude "aprender" de mí automáticamente?
+
+Aprende toma la posición de **assisted, not automatic**:
+- Detecta candidatos automáticamente
+- Pero requiere tu confirmación
+
+Otras herramientas hacen aprendizaje 100% automático. **Más cómodo, más riesgoso** (la memoria se llena de basura sin que vos veas qué guardó).
+
+El balance que elige Aprende es deliberado.
+
+---
+
+## Comparación con otras strategies de memoria
+
+| Approach | Esfuerzo | Calidad |
+|----------|----------|---------|
+| **Solo CLAUDE.md a mano** | Bajo recurrente | Pierde aprendizajes implícitos |
+| **`/aprende` con curación** | Bajo (30 seg/sesión) | Curado, alta calidad |
+| **Auto-learning sin filtro** | Cero | Memoria basura |
+| **Notion / Obsidian externo** | Alto (transcribís a mano) | Calidad pero esfuerzo |
+
+`/aprende` es el sweet spot: bajo esfuerzo + curación.
+
+---
+
+## Cuándo conviene esta skill
+
+✅ Usás Claude Code todos los días
+✅ Tenés proyectos que duran >1 mes
+✅ Te cansás de repetir las mismas correcciones
+✅ Trabajás en equipo y querés compartir aprendizajes
+
+❌ Uso ocasional (no llegás a 5 sesiones por proyecto)
+❌ No querés curar (30 seg te parece mucho)
+❌ Compliance estricto que no permite guardar contexto persistente
+
+---
+
+## Próximos pasos
+
+- Para profundizar estrategias de memoria persistente, [memoria infinita para Claude Code](/boveda/memoria-claude-code)
+- Si querés montar tu segundo cerebro completo con Obsidian, [JARVIS en Obsidian](/boveda/jarvis-obsidian)
+- Para coordinar múltiples agentes con memoria compartida, [Memory Palace](/boveda/memory-palace-agentes)

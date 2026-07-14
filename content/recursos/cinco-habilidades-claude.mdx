@@ -1,0 +1,271 @@
+---
+title: "5 habilidades para que Claude trabaje — Excel, Obsidian, Context7, Tavily, Task Master"
+description: "Tu equipo de 5 dentro de Claude. Excel MCP lee/escribe Excel sin tener Excel. Obsidian Skills organiza tu vault. Context7 jala docs actualizadas. Tavily le da buscador real de internet. Task Master convierte ideas en planes. Todo gratis, todo open source."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "mcp", "obsidian"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["obsidian-claude", "investigador-automatico", "instalar-claude-code"]
+---
+
+## El equipo de 5
+
+Cinco herramientas que convierten a Claude en un asistente que **planea, investiga, busca, organiza y calcula** — todo gratis.
+
+| # | Tool | Rol |
+|---|------|-----|
+| 01 | Excel MCP | Contador — lee/escribe Excel |
+| 02 | Obsidian Skills | Organizador — tu vault |
+| 03 | Context7 | Investigador — docs siempre nuevas |
+| 04 | Tavily | Buscador — internet en tiempo real |
+| 05 | Task Master | Planificador — ideas → plan |
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado
+- Terminal abierta
+- **Para Excel MCP**: `uv` instalado
+- **Para Tavily**: cuenta gratis en tavily.com
+
+---
+
+## 01 — Excel MCP (el contador)
+
+### Qué hace
+
+Le da a Claude la capacidad de **abrir y modificar archivos de Excel** sin que vos tengas Excel instalado. Lee, escribe, crea hojas, hace gráficas, tablas dinámicas, formato condicional.
+
+### Por qué importa
+
+Sin esto, cada vez que querés que Claude analice un .xlsx, tenés que copiar/pegar datos manualmente. Con Excel MCP, Claude **abre el archivo directo** y trabaja con datos reales.
+
+### Casos típicos
+
+- Reportes de ventas
+- Limpieza de datos
+- Tablas dinámicas
+- Generación de Excel desde cero
+- Gráficas con formato
+
+### Instalación
+
+```bash
+uvx excel-mcp-server stdio
+```
+
+Repo: `haris-musa/excel-mcp-server` (3.6k+ stars).
+
+---
+
+## 02 — Obsidian Skills (el organizador)
+
+### Qué hace
+
+Le da a Claude **acceso a tu vault de Obsidian**. Lee notas, las organiza por temas, las conecta con wikilinks, te deja todo limpio.
+
+### Por qué importa
+
+Tener ideas sueltas no sirve si no están organizadas. Cuando Claude conoce tu vault, **ya no le explicás todo desde cero** en cada conversación — tiene tu contexto.
+
+### Quién lo hizo
+
+**Kepano** — el creador de Obsidian. Soporta Markdown, Bases, JSON Canvas y la CLI de Obsidian.
+
+### Instalación
+
+```bash
+npx skills add git@github.com:kepano/obsidian-skills.git
+```
+
+Ver [Obsidian + Claude](/boveda/obsidian-claude) para deep-dive.
+
+---
+
+## 03 — Context7 (la enciclopedia actualizada)
+
+### Qué hace
+
+Cada vez que Claude necesita documentación técnica (frameworks, librerías, APIs), **consulta la fuente oficial** en vez de adivinar desde su training.
+
+### Por qué importa
+
+Claude fue entrenado hasta cierta fecha. Si una API cambió o se renombró, te da la versión vieja. Con Context7, **siempre trabaja con docs vigentes**.
+
+### Cobertura
+
+Más de 10.000 librerías y frameworks. 51k+ stars en GitHub.
+
+### Instalación
+
+```bash
+npx ctx7 setup --claude
+```
+
+Repo: `upstash/context7`.
+
+---
+
+## 04 — Tavily (el buscador)
+
+### Qué hace
+
+Le da a Claude **su propio buscador de internet**. Cuando le preguntás algo que requiere info actual, sale, busca, lee páginas, extrae contenido y te trae respuesta basada en datos reales.
+
+### El cambio
+
+Sin Tavily, Claude responde con lo que ya sabe. Con Tavily, **investiga**. Es la diferencia entre asistente que recuerda vs uno que verifica.
+
+### Tier gratis
+
+1.000 búsquedas/mes sin costo. Cuenta en tavily.com.
+
+### Instalación
+
+```bash
+claude mcp add --transport http tavily https://mcp.tavily.com/mcp
+```
+
+---
+
+## 05 — Task Master (el planificador)
+
+### Qué hace
+
+Le avientas tu idea — "quiero hacer app de recetas" — y te arma el **plan completo**: qué va primero, qué depende de qué, cuántas tareas son, en qué orden.
+
+### Por qué importa
+
+La mayoría de proyectos fallan porque arrancan **sin plan**. Task Master te da el mapa antes de construir.
+
+### Detalle por tarea
+
+Cada tarea incluye:
+- Descripción
+- Criterios de éxito
+- Prioridad
+- Dependencias
+
+### Integraciones
+
+Claude Code, Cursor, Windsurf, VS Code. 26k+ stars.
+
+### Instalación
+
+```bash
+claude mcp add taskmaster-ai -- npx -y task-master-ai
+```
+
+Repo: `eyaltoledano/claude-task-master`.
+
+---
+
+## Instalar todo de una
+
+```bash
+uvx excel-mcp-server stdio && \
+npx skills add git@github.com:kepano/obsidian-skills.git && \
+npx ctx7 setup --claude && \
+claude mcp add --transport http tavily https://mcp.tavily.com/mcp && \
+claude mcp add taskmaster-ai -- npx -y task-master-ai
+```
+
+---
+
+## Cómo trabajan juntas
+
+Pensá las 5 como **equipo de oficina**:
+
+| Rol | Tool | Función |
+|-----|------|---------|
+| Jefe de proyecto | Task Master | Te dice qué hacer y en qué orden |
+| Investigador | Context7 | Verifica info técnica actualizada |
+| Buscador | Tavily | Sale a internet por lo que falta |
+| Archivista | Obsidian Skills | Mantiene contexto organizado |
+| Contador | Excel MCP | Maneja números, reportes, datos |
+
+Juntas convierten a Claude en **asistente completo** — todo gratis.
+
+---
+
+## Casos de uso del equipo completo
+
+### Research → plan → ejecución
+
+```
+1. Tavily busca info sobre mi nicho
+2. Context7 verifica las librerías que necesito
+3. Task Master arma el plan de proyecto
+4. Obsidian Skills lo guarda en mi vault
+5. Excel MCP exporta el tracking a planilla
+```
+
+### Análisis de negocio
+
+```
+1. Excel MCP abre mi planilla de ventas
+2. Tavily busca benchmarks de industria
+3. Task Master prioriza qué optimizar
+4. Obsidian Skills guarda el plan en notes
+```
+
+---
+
+## Anti-patrones
+
+### 1. Instalar las 5 sin proyecto real
+
+Si no tenés data en Excel, ni vault de Obsidian, ni proyecto que planificar, las skills son **abstractas**. Instalá la que necesites cuando aparezca el caso.
+
+### 2. Excel MCP sin `uv`
+
+Sin uv instalado, el comando falla. Instalá uv primero con `pip install uv` o `brew install uv`.
+
+### 3. Obsidian Skills sin vault
+
+Si no usás Obsidian, no instales esta skill. Es **específica** para vaults existentes.
+
+### 4. Context7 + adivinar
+
+Si vas a confiar en Context7, no contradigas su info con lo que "recordás" de docs viejas. **Es por algo que consultás la fuente**.
+
+### 5. Tavily como Google
+
+Tavily es **buscador para Claude**, no para vos. Si querés buscar en navegador, usá Google directo.
+
+---
+
+## Combinaciones potentes
+
+### Con [Obsidian + Claude](/boveda/obsidian-claude)
+
+Obsidian Skills + ese setup = vault que Claude entiende completo.
+
+### Con [investigador automático](/boveda/investigador-automatico)
+
+Tavily + investigador = research multi-fuente.
+
+### Con [task master](/boveda/task-master) (deep-dive)
+
+El planificador con guía detallada.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Solo chat.claude.ai | Son MCPs, requieren Claude Code |
+| Sin proyectos | No hay nada que orquestar |
+| Sin Obsidian | Skill #2 no aplica |
+| Sin Excel data | Skill #1 no aplica |
+
+---
+
+## Próximos pasos
+
+- Para Obsidian deep-dive, [Obsidian + Claude](/boveda/obsidian-claude)
+- Para research multi-fuente, [investigador automático](/boveda/investigador-automatico)
+- Para instalar Claude Code base, [instalar Claude Code](/boveda/instalar-claude-code)

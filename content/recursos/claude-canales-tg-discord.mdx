@@ -1,0 +1,254 @@
+---
+title: "Claude Canales — conectar Claude Code a Telegram y Discord"
+description: "Los plugins oficiales que te dejan hablar con Claude Code desde Telegram o Discord — pedirle cosas desde el teléfono, monitorear procesos, recibir notificaciones. Setup paso a paso, casos donde sirve y los warnings de seguridad."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code", "telegram", "discord"]
+publishedAt: "2026-05-27"
+readingTime: "8 min"
+relatedSlugs: ["hooks-automatizacion", "ecosistema-de-agentes", "openwa-whatsapp"]
+---
+
+## Qué son los "canales"
+
+Los **canales** son una forma de hablarle a Claude Code **desde otras apps**, no solo la terminal. Anthropic publica plugins oficiales para Telegram y Discord que abren ese flow.
+
+Casos típicos:
+
+- Estás fuera de la compu y querés pedirle a Claude que mire algo
+- Tu Claude está corriendo un proceso largo y querés que te avise cuando termine
+- Tu equipo trabaja en Discord y querés que Claude responda en un canal compartido
+- Tenés agentes corriendo 24/7 en una Mac mini y querés operarlos desde el teléfono
+
+La diferencia con un bot custom: estos son **plugins oficiales** mantenidos por Anthropic. Open source, código revisable, sin terceros en el medio.
+
+---
+
+## Telegram vs Discord — cuándo cada uno
+
+| Telegram | Discord |
+|----------|---------|
+| Privado, 1:1 con tu Claude | Compartido, con tu equipo |
+| Mejor para uso personal / operativo | Mejor para colaboración |
+| Notificaciones nativas en móvil | Threads, organización por canales |
+| Setup más simple | Más capacidades de moderación |
+
+Si sos solo y querés operar tu Claude desde el teléfono: **Telegram**.
+Si tu equipo ya vive en Discord y querés que Claude participe: **Discord**.
+
+Las dos no se excluyen — podés tener ambas.
+
+---
+
+## Setup — Telegram
+
+### Paso 1 — Crear bot en Telegram
+
+1. Abrí Telegram y buscá `@BotFather`
+2. Mandale `/newbot`
+3. Te pide nombre + username
+4. Te devuelve el **token** del bot (algo como `123456:ABC-DEF...`)
+5. Guardalo, es lo único que necesitás
+
+### Paso 2 — Instalar el plugin
+
+En tu sesión de Claude Code:
+
+```
+> /plugin install anthropics/claude-plugins-official/telegram
+```
+
+(O clonás el repo manualmente desde [GitHub](https://github.com/anthropics/claude-plugins-official).)
+
+### Paso 3 — Configurar el token
+
+`.claude/settings.json` (o el archivo de config del plugin):
+
+```json
+{
+  "plugins": {
+    "telegram": {
+      "bot_token": "${TELEGRAM_BOT_TOKEN}",
+      "allowed_users": ["@tu_usuario_de_telegram"]
+    }
+  }
+}
+```
+
+**Crítico**: el `allowed_users` define quién puede hablar con tu bot. **No dejes vacío** — sin esa lista, cualquiera con el username puede mandar comandos a tu Claude.
+
+### Paso 4 — Probar
+
+En Telegram, buscá tu bot por username y mandale:
+
+```
+/start
+```
+
+Si responde, conectado. Ya podés mandarle pedidos:
+
+```
+listame los archivos modificados hoy en el proyecto X
+```
+
+Claude (corriendo en tu compu) recibe el mensaje, lo procesa, te devuelve la respuesta por Telegram.
+
+---
+
+## Setup — Discord
+
+### Paso 1 — Crear bot en Discord
+
+1. Andá a [discord.com/developers/applications](https://discord.com/developers/applications)
+2. New Application → nombre del bot
+3. Bot → Add Bot
+4. Copiá el **token** (es secret, no lo compartas)
+5. En OAuth2 → URL Generator: seleccioná scopes `bot` + permisos básicos (Send Messages, Read Messages)
+6. Pegá la URL en tu navegador para invitar el bot a tu server
+
+### Paso 2 — Instalar el plugin
+
+```
+> /plugin install anthropics/claude-plugins-official/discord
+```
+
+### Paso 3 — Config
+
+```json
+{
+  "plugins": {
+    "discord": {
+      "bot_token": "${DISCORD_BOT_TOKEN}",
+      "allowed_channels": ["123456789012345678"],
+      "allowed_users": ["yourdiscordid"]
+    }
+  }
+}
+```
+
+`allowed_channels` es el ID del canal donde el bot puede operar. Limitá esto **a 1-2 canales específicos** — no dejes el bot escuchando en todo el server.
+
+### Paso 4 — Probar
+
+En el canal autorizado, mencioná al bot:
+
+```
+@MiClaudeBot listame los issues abiertos en mi repo X
+```
+
+---
+
+## Casos de uso reales
+
+### Caso 1 — Monitor de procesos largos
+
+Tenés un script de build / deploy / análisis que tarda 20 min. Usás un [hook Stop](/boveda/hooks-automatizacion):
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "curl -X POST https://api.telegram.org/bot$TG_TOKEN/sendMessage -d 'chat_id=$TG_CHAT&text=Claude terminó la tarea'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Vas a almorzar, vuelve, ya tenés el ping en el teléfono cuando termina.
+
+### Caso 2 — Operar agentes desde el teléfono
+
+Combinado con [ecosistema de agentes](/boveda/ecosistema-de-agentes), Telegram es **el control remoto** de tus agentes 24/7:
+
+```
+[En Telegram, desde el subte]
+Vos: ¿algún cliente respondió hoy?
+Bot: 3 respondieron. Resumen:
+     - Acme: confirmó la próxima reunión para jueves
+     - Beta: pidió cambio de fecha
+     - Gamma: respondió OK sin más detalle
+```
+
+Tu Claude en casa accede a Gmail, te devuelve el resumen en Telegram. No tocás la compu.
+
+### Caso 3 — Discord para equipos
+
+Canal #dev de tu Discord. Cualquiera del equipo escribe:
+
+```
+@ClaudeBot revisame los últimos commits en main y resumime los cambios
+```
+
+Claude lee, resume, postea en el canal. Todo el equipo lo ve. Sirve como **historial compartido** de queries que el equipo hizo a la IA.
+
+### Caso 4 — Notificaciones de incidentes
+
+Combinado con un MCP de monitoring:
+
+```
+Mac mini detecta: error de pago en producción.
+Claude → genera mensaje → te postea en Discord (canal #alertas)
+con: qué error, cuántas veces ocurrió, sugerencia de fix.
+```
+
+Antes de que vos notes el problema, ya tenés contexto y propuesta.
+
+---
+
+## Anti-patrones
+
+### 1. Sin `allowed_users` configurado
+
+Bot abierto a cualquiera = riesgo real. Cualquiera con el username del bot puede mandarle comandos, gastar tus tokens, hacer cosas no deseadas. **Siempre limitá quién puede hablarle.**
+
+### 2. Token expuesto en código / commit
+
+Si commiteás el token, alguien lo agarra y opera tu bot. Usá variables de entorno + `.gitignore`.
+
+### 3. Bot en server público de Discord
+
+Si invitás el bot a un server donde no controlás los miembros, **alguien va a usarlo mal**. Mantenelo en servers privados de tu equipo.
+
+### 4. Esperar que reemplace tu terminal
+
+Telegram/Discord están bien para **queries** y **comandos chicos**. Para sesiones largas de trabajo, la terminal sigue ganando. No intentes refactorizar 200 líneas desde el celular.
+
+---
+
+## Seguridad — lo que importa
+
+**Cualquier comando que mandes por Telegram/Discord se ejecuta en tu compu local**. Eso es poderoso y peligroso.
+
+Reglas mínimas:
+
+1. **`allowed_users` SIEMPRE** — sin excepciones
+2. **`allowed_channels` para Discord** — no abrir a todo el server
+3. **Permisos de Claude limitados** — el [`permissions.allow`](/boveda/claude-code-setup-zero) del settings debería ser restrictivo para sesiones via canal
+4. **Para acciones destructivas** (delete, force push, drop table) — agregá hooks `PreToolUse` que **siempre pidan confirmación humana**, no automático
+5. **Token rotation** — si sospechás que se filtró, regenerá desde BotFather / Discord Dev y actualizá config
+
+---
+
+## Cuándo NO necesitás esto
+
+✅ Usás Claude en la compu todo el día sin moverte → la terminal alcanza
+✅ No tenés agentes corriendo 24/7 → no hay nada para "monitorear"
+✅ Trabajás solo y no necesitás compartir output con equipo
+
+Si las 3 son sí, no instales canales — agregás complejidad por nada.
+
+---
+
+## Próximos pasos
+
+- Para combinar con hooks que disparen notificaciones, [hooks de Claude Code](/boveda/hooks-automatizacion)
+- Para usar Telegram como entry point a agentes 24/7, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Si en lugar de Telegram/Discord querés WhatsApp, leé los warnings de [WhatsApp + Claude](/boveda/openwa-whatsapp)

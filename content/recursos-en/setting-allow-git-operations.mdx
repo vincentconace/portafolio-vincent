@@ -1,0 +1,87 @@
+---
+title: "Setting Allow Git Operations — authorize git status/diff/add/commit/push (1,061 installs)"
+description: "Setting with 1,061 installs. Pre-authorizes common git ops (status, diff, add, commit, push). Smooth git workflow without asking for permission on every command. Requires user confirmation for destructive ones."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-allow-npm-commands", "hook-conventional-commits", "hook-prevent-direct-push"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/allow-git-operations"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-git-operations.json"
+---
+
+## What it is
+
+By default, Claude Code asks before running commands. This setting pre-authorizes common git ops:
+- `git status`
+- `git diff`
+- `git add`
+- `git commit`
+- `git push`
+- ...and more (7 ops total)
+
+Destructive operations still require confirmation. A smooth git workflow without "allow / cancel" every time.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `permissions` |
+| Installs | 1,061 |
+| Setting key | `permissions.allow` |
+| Authorized ops | 7 common git commands |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting permissions/allow-git-operations
+```
+
+For Claude:
+
+```
+I installed the permissions/allow-git-operations setting. List which git
+ops are pre-authorized and which ones still ask for confirmation.
+```
+
+## What you can do with it
+
+### Uninterrupted git workflow
+
+You edit, Claude commits, Claude pushes — no "allow" on every step.
+
+### For autonomous sessions
+
+A `/goal` that includes git ops: the setting keeps Claude from getting stuck asking for confirmation.
+
+### Combo with [Conventional Commits Hook](/boveda/hook-conventional-commits)
+
+The setting authorizes commits. The hook validates the format. An automated but safe git workflow.
+
+### Combo with [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push)
+
+The setting authorizes generic push. The hook blocks pushes to protected branches. Defense in depth.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before enabling">
+
+- **For critical repos:** consider whether you always want confirmation.
+- **Without security hooks:** auto-push without [Prevent Direct Push](/boveda/hook-prevent-direct-push) can be dangerous.
+- **If your workflow is review-each-step:** this setting skips those steps.
+- **Git tokens with broad scope:** the setting + broad tokens = potential catastrophe.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Allow Git Operations Setting](https://www.aitmpl.com/component/settings/permissions/allow-git-operations) — exact command.
+- **JSON config:** [allow-git-operations.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-git-operations.json).
+
+## Related resources
+
+- [Allow Npm Commands Setting](/boveda/setting-allow-npm-commands) — equivalent for npm.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — complementary format validation.
+- [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push) — post-authorization safety net.

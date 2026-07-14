@@ -1,0 +1,399 @@
+---
+title: "Top 14 proyectos y skills de Claude Code — Abril 2026"
+description: "Lista curada del mes — WhatsApp AgentKit, Superpowers, Antigravity Skills, Everything Claude Code, LightRAG y más. Qué hace cada uno, cuándo conviene, y mi take sobre cuáles vale la pena instalar vs cuáles son hype."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "12 min"
+relatedSlugs: ["mejores-practicas-claude", "guia-claude-code-completa", "ecosistema-de-agentes"]
+---
+
+## Cómo se arma esta lista
+
+Cada mes el ecosistema de Claude Code lanza decenas de skills, plugins, agentes y frameworks. La mayoría son experimentos chicos. **Algunos pocos cambian cómo trabajás**.
+
+Esta lista filtra los 14 que vale la pena conocer en abril 2026. Para cada uno:
+
+- Qué hace
+- Cuándo conviene (no para todos sirve)
+- Mi take honesto (no todo está bueno)
+
+---
+
+## 1. WhatsApp AgentKit
+
+**Repo**: `Hainrixz/whatsapp-agentkit`
+
+### Qué hace
+
+Kit para armar un agente de WhatsApp en 30 min. Claude te hace una entrevista guiada de 10 preguntas (qué hace tu negocio, qué tono, qué horarios, qué FAQ) y genera todo el código — backend, integración con Whapi/Meta/Twilio, sistema de conocimiento, memoria de conversaciones.
+
+```bash
+git clone https://github.com/Hainrixz/whatsapp-agentkit.git
+cd whatsapp-agentkit && bash start.sh
+```
+
+### Cuándo conviene
+
+✅ Negocio chico/mediano con consultas repetitivas por WhatsApp
+✅ Querés bot que conteste FAQ + agende reuniones sin código
+✅ Ya tenés cuenta Whapi/Meta/Twilio
+
+### Mi take
+
+Lo mejor del listado para no-devs. La entrevista guiada hace que el resultado se sienta **personalizado**, no template genérico. Ojo: para producción seria, leé los warnings en [openwa-whatsapp](/boveda/openwa-whatsapp) sobre risks de unofficial APIs.
+
+---
+
+## 2. Superpowers
+
+**Repo**: `obra/superpowers` · ~150k estrellas
+
+### Qué hace
+
+Framework completo de skills agénticos. Convierte tu agente en "desarrollador senior" — flow spec-first (no escribe código hasta validar diseño), TDD real con ciclo RED-GREEN-REFACTOR, subagents que se revisan entre sí.
+
+```bash
+npx superpowers@latest init
+```
+
+### Cuándo conviene
+
+✅ Proyectos donde la calidad importa más que la velocidad
+✅ Tu equipo ya hace TDD y querés que el agente lo respete
+✅ Tareas largas (horas) donde no querés supervisar paso a paso
+
+### Mi take
+
+**El framework más serio del listado**. No es para todos — requiere disciplina de spec-first. Si tu workflow es "tirar prompts rápido y ver qué sale", Superpowers te va a sentir lento. Si querés que Claude **construya bien** sin tu supervisión cada 5 min, vale el setup.
+
+---
+
+## 3. Claude Code Ultimate Guide
+
+**Repo**: `FlorianBruniaux/claude-code-ultimate-guide` · ~3.3k estrellas
+
+### Qué hace
+
+Documentación masiva sobre Claude Code. 228 templates, 41 diagramas Mermaid, base de datos de seguridad con 24 CVEs y 655 skills maliciosos documentados, quiz de 271 preguntas.
+
+### Cuándo conviene
+
+✅ Estás onboarding equipo grande a Claude Code
+✅ Necesitás material de capacitación estructurado
+✅ Buscás referencia técnica profunda (no tutorial inicial)
+
+### Mi take
+
+**Es mucho contenido**. Más que una guía, es una enciclopedia. Para uso individual, abrumador. Para empresas que necesitan formalizar onboarding, **excelente**. Comparable a [mejores prácticas Claude](/boveda/mejores-practicas-claude) pero con más profundidad técnica.
+
+---
+
+## 4. Antigravity Awesome Skills
+
+**Repo**: `sickn33/antigravity-awesome-skills` · ~32.8k estrellas
+
+### Qué hace
+
+Biblioteca de **1409+ skills** instalables en un comando. Cubre dev, testing, security, infra, marketing. Funciona con Claude Code, Cursor, Codex, Gemini CLI, Antigravity, Kiro, OpenCode, Copilot.
+
+```bash
+npx antigravity-awesome-skills
+```
+
+### Cuándo conviene
+
+✅ Querés explorar el ecosistema de skills sin curar manual
+✅ Necesitás skills específicas que no existen como repos individuales
+
+### Mi take
+
+**Cuidado con la "ansiedad del catálogo"**. 1400 skills suena increíble — pero usás 5-10. Mi recomendación: instalar el explorer, **buscar por categoría específica** (no scrollear todo), instalar 2-3 que matcheen tu workflow real. Lo demás es ruido.
+
+---
+
+## 5. Everything Claude Code
+
+**Repo**: `affaan-m/everything-claude-code` · ~154k estrellas
+
+### Qué hace
+
+Ganador del Anthropic Hackathon. 38 agentes especializados, 156 skills, 72 shims de comandos legacy. Incluye AgentShield (sandboxing + security scan), dashboard GUI con Tkinter, prototipo en Rust (ECC 2.0).
+
+### Cuándo conviene
+
+✅ Querés un sistema **completo y opinionated** (no armar el tuyo desde cero)
+✅ Apreciás que esté validado por Anthropic (hackathon winner)
+✅ Te interesa la parte de seguridad/sandboxing
+
+### Mi take
+
+**El más ambicioso del listado**. Es prácticamente una distro completa para Claude Code. Setup más pesado que cualquier otro item de la lista (espera 30-60 min para tener todo corriendo). Para usuarios power que producen mucho código, **vale**. Para casual users, overkill.
+
+---
+
+## 6. LightRAG
+
+**Repo**: `hkuds/lightrag` · ~33.1k estrellas · Paper EMNLP 2025
+
+### Qué hace
+
+RAG (Retrieval-Augmented Generation) basado en **grafos de conocimiento**. Más preciso que RAG vectorial tradicional para queries que requieren relaciones entre conceptos.
+
+```bash
+pip install lightrag-hku
+```
+
+### Cuándo conviene
+
+✅ Tu data tiene relaciones complejas (entities + relationships, no solo docs)
+✅ Querés respuestas con trazabilidad de fuentes (citas)
+✅ Tu uso justifica setup de Neo4j/Postgres/Mongo como backend
+
+### Mi take
+
+**El item más técnico del listado**. No es plug-and-play como los skills — requiere entender RAG, vector DBs, graph DBs. Si ya tenés un sistema RAG y notás que las respuestas pierden contexto, LightRAG puede ser el upgrade. Si recién arrancás con RAG, primero [NotebookLM skill](/boveda/cinco-habilidades-marketing) que es más simple.
+
+---
+
+## 7. n8n-MCP
+
+**Repo**: `czlonkowski/n8n-mcp` · ~18k estrellas
+
+### Qué hace
+
+MCP que conecta Claude con n8n. Le decís "armame workflow que cuando llega email con X, postee en Slack Y" y Claude **construye el workflow JSON completo**, listo para importar a n8n.
+
+Cobertura: 1396 nodes de n8n (812 core + 584 community), 2709 templates con metadata.
+
+```bash
+npx n8n-mcp@latest
+```
+
+### Cuándo conviene
+
+✅ Ya usás n8n para automatizaciones
+✅ Te perdés tiempo armando workflows manualmente nodo por nodo
+✅ Querés iterar rápido sobre automaciones complejas
+
+### Mi take
+
+**Si usás n8n, instalar ya**. Es la diferencia entre clickear 30 nodos vs describir el flow en una frase. Comparable en value a [Supabase MCP](/boveda/plugin-supabase-mcp) o [HubSpot MCP](/boveda/plugin-hubspot-mcp) — específicos pero transformadores en su nicho.
+
+---
+
+## 8. UI UX Pro Max
+
+**Repo**: `nextlevelbuilder/ui-ux-pro-max-skill` · ~64.5k estrellas
+
+### Qué hace
+
+Le enseña a Claude a diseñar como UI/UX profesional. 67 estilos (Glassmorphism, AI-Native, Brutalism, Bento Grid), 161 reglas por industria, 161 paletas, 57 combos de tipografía, checklist WCAG AA.
+
+```bash
+npx uipro-cli@latest init
+```
+
+### Cuándo conviene
+
+✅ Construís UIs pero no sos diseñador
+✅ Querés que Claude propongas estilos coherentes (no genéricos)
+✅ Tu proyecto necesita variar estilos según industria (tech/finanzas/salud)
+
+### Mi take
+
+**El mejor skill de diseño que vi**. Tradicionalmente Claude pide "Tailwind defaults" y todo termina pareciéndose. UI UX Pro Max corrige eso — te empuja a estilos específicos con justificación. Único problema: tantos estilos puede paralizar. Pedile a Claude que **decida por vos** según el brief.
+
+---
+
+## 9. claude-mem
+
+**Repo**: `thedotmack/claude-mem` · ~54k estrellas
+
+### Qué hace
+
+Memoria permanente para Claude. Todo lo de cada sesión lo guarda + comprime + lo trae al inicio de la siguiente. Búsqueda semántica híbrida (SQLite + Chroma). Viewer web en `localhost:37777`.
+
+```bash
+npx claude-mem@latest init
+```
+
+### Cuándo conviene
+
+✅ Tenés proyecto largo (semanas/meses) con Claude
+✅ Re-contextualizar cada sesión te quema 30+ min
+✅ Querés que Claude recuerde decisiones de arquitectura previas
+
+### Mi take
+
+**Solución bien implementada para un problema real**. Claude por defecto **olvida todo** entre sesiones. claude-mem cierra ese gap. Caveat: la compresión a veces pierde matices importantes — confirmá periódicamente que la memoria captura lo crítico.
+
+Es comparable conceptualmente a tener [memoria + system prompts](/boveda/super-prompt) que persisten, pero automatizado.
+
+---
+
+## 10. Claude WebKit
+
+**Repo**: `Hainrixz/claude-webkit`
+
+### Qué hace
+
+Landing page profesional en minutos sin saber programar. Clonás repo → Claude te entrevista → genera + previsualiza + deploya en Vercel. Stack: Next.js + Tailwind + shadcn/ui.
+
+```bash
+git clone https://github.com/Hainrixz/claude-webkit.git
+cd claude-webkit && claude
+```
+
+### Cuándo conviene
+
+✅ Necesitás landing rápida (lanzar producto, capturar leads)
+✅ No sos dev pero querés algo no-genérico
+✅ Ya tenés cuenta Vercel
+
+### Mi take
+
+**Para landings simples, perfecto**. Los outputs no se ven "generados por IA" — eso es lo que más sorprende. Para sites más complejos (>5 secciones, lógica custom), te quedás corto. Pero para hero + features + pricing + CTA en 1 página, **insuperable** por el costo (gratis).
+
+---
+
+## 11. Andrej Karpathy Skills
+
+**Repo**: `multica-ai/andrej-karpathy-skills`
+
+### Qué hace
+
+4 reglas de programación destiladas de Andrej Karpathy (ex-Tesla AI Director, co-founder OpenAI), aplicadas como skill. Reduce comportamientos raros + código inesperado.
+
+```bash
+git clone https://github.com/multica-ai/andrej-karpathy-skills.git \
+  ~/.claude/skills/andrej-karpathy-skills
+```
+
+### Cuándo conviene
+
+✅ Te frustra que Claude over-engineerea o se va por la tangente
+✅ Apreciás filosofía minimalista de código
+
+### Mi take
+
+**Skill chiquito, impacto grande**. Las 4 reglas no son revolucionarias, pero formalizar el "Karpathy mindset" hace que Claude se mantenga más sobrio. Vale los 30s de instalación. Combina bien con [skill code-reviewer](/boveda/skill-code-reviewer).
+
+---
+
+## 12. Hermes Agent
+
+**Repo**: `NousResearch/hermes-agent`
+
+### Qué hace
+
+Agente abierto de **Nous Research** (equipo de los modelos Hermes). Multi-canal: corre en Telegram, Discord o terminal. Aprende de cada interacción.
+
+```bash
+git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent && bash install.sh
+```
+
+### Cuándo conviene
+
+✅ Querés explorar agentes open source serios (no Claude-only)
+✅ Te interesa Nous Research específicamente
+✅ Necesitás agente que viva en Telegram/Discord nativamente
+
+### Mi take
+
+**Para experimentación, sí. Para producción seria, hay opciones más maduras**. Hermes es interesante porque viene de un equipo con peso (Nous), pero el ecosistema alrededor es menor que el de Claude. Si tu objetivo principal es Telegram/Discord, [Claude canales](/boveda/claude-canales-tg-discord) es opción más directa.
+
+---
+
+## 13. Generic Agent
+
+**Repo**: `lsdefine/GenericAgent`
+
+### Qué hace
+
+Agente completo en **3000 líneas de código**. Controla la compu por instrucciones en lenguaje natural. Aprende con cada tarea.
+
+```bash
+git clone https://github.com/lsdefine/GenericAgent.git
+cd GenericAgent && pip install -e .
+```
+
+### Cuándo conviene
+
+✅ Querés **entender cómo funciona un agente por dentro**
+✅ Buscás base para construir tu propio agente custom
+✅ Apreciás minimalismo (3000 LOC es comparable a SQLite)
+
+### Mi take
+
+**Mejor recurso educativo del listado**. No lo instales para "usarlo" — instalalo para **leer el código** y entender la arquitectura. Después podés bifurcar para tu caso. Para producción real, los frameworks más grandes (Superpowers, Everything Claude Code) están mejor.
+
+---
+
+## 14. Evolver
+
+**Repo**: `EvoMap/evolver`
+
+### Qué hace
+
+Pone tus agentes a auto-mejorar. Itera sobre prompts y lógica del agente según resultados. Pensado para devs que ya tienen agentes propios.
+
+```bash
+npm install -g @evomap/evolver
+```
+
+### Cuándo conviene
+
+✅ Ya construiste 1+ agentes propios
+✅ Tenés métricas claras de qué define "agente bueno"
+✅ Aceptás que el auto-tuning a veces empeora antes de mejorar
+
+### Mi take
+
+**Para early adopters / researchers**. La idea de "agentes que se mejoran solos" suena espectacular — la realidad es que sin métricas bien definidas, Evolver **diverge en lugar de converger**. Si tenés benchmarks robustos, vale probar. Si no, primero armá tus métricas, después meta-optimizá.
+
+---
+
+## Mi top 5 si tuviera que elegir
+
+Si tuvieras que instalar **solo 5** del listado:
+
+| Posición | Skill | Por qué |
+|----------|-------|---------|
+| 1 | **WhatsApp AgentKit** | Mayor ROI inmediato si tenés negocio |
+| 2 | **n8n-MCP** | Si ya usás n8n, transformador |
+| 3 | **UI UX Pro Max** | Eleva la calidad visual de cualquier proyecto |
+| 4 | **claude-mem** | Cierra el problema de memoria entre sesiones |
+| 5 | **Andrej Karpathy Skills** | 30s de setup, mejora la sobriedad del código |
+
+Los otros 9 son contextuales — sirven cuando matchean tu workflow exacto.
+
+---
+
+## Anti-patrones
+
+### 1. Instalar 10+ skills/plugins a la vez
+
+Sobrecarga de contexto. Claude **se distrae** con tantos skills disponibles. Mantené 3-5 activos.
+
+### 2. No revisar lo que cada skill modifica
+
+Algunos skills agregan files, hooks, comandos slash. **Revisar `.claude/` después de instalar** para saber qué tenés activo.
+
+### 3. Asumir que estrellas en GitHub = calidad
+
+154k estrellas en `everything-claude-code` es impresionante, pero **no significa que sea para vos**. Stars miden popularidad, no fit con tu workflow.
+
+### 4. Olvidar updates
+
+El ecosistema cambia rápido. Skills que eran top en abril pueden estar deprecated en julio. Cada 1-2 meses revisar `git pull` en los skills que usás.
+
+---
+
+## Próximos pasos
+
+- Para principios generales que aplican a cualquier skill, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para construir tu propio ecosistema de agentes, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para entender el sistema completo de plugins de Claude Code, [guía Claude Code completa](/boveda/guia-claude-code-completa)

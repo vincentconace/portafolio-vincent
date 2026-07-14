@@ -1,0 +1,256 @@
+---
+title: "Organize Your Gmail with Claude — connect it in 2 clicks (no code)"
+description: "Claude Desktop connects directly to Gmail (with Google permissions) and organizes your inbox using natural language. 6 copy-paste prompts to group by topic, flag urgent emails, summarize threads, find invoices, draft replies, and clean up newsletters. Pro $20 or Team required."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "gmail"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-cowork-workflow", "claude-dispatch", "5-preguntas-ia-negocio"]
+---
+
+## What you need
+
+| Requirement | Details |
+|-----------|---------|
+| Computer | Mac or Windows (no mobile yet) |
+| Anthropic account | Pro $20 or Team plan |
+| Gmail account | Personal or Workspace |
+
+**No coding required**. The whole process is clicks and permissions.
+
+---
+
+## App vs. browser difference
+
+- **claude.ai (web)** = chat only. No tool connections.
+- **Claude Desktop** = app. **It DOES connect to Gmail, Calendar, Drive, files**.
+
+For this use case, **you need the app**.
+
+---
+
+## Setup in 3 steps
+
+### 1. Download Claude Desktop
+
+`claude.ai/download` → download for your OS → install → log in with your Anthropic account.
+
+### 2. Connect Gmail
+
+1. Settings (gear icon)
+2. **Connections** or **Integrations**
+3. **Google Workspace** (includes Gmail + Calendar + Drive)
+4. The Google window asks for permissions → **Allow**
+
+### 3. Verify
+
+```
+> List my 5 most recent unread emails.
+```
+
+If it returns the list, you're connected.
+
+---
+
+## The analogy
+
+Connecting Gmail is like **handing the keys to your office** to a trusted assistant. They can come in, review your documents, organize things — **but only when you ask**. It does nothing on its own.
+
+---
+
+## 6 copy-paste prompts
+
+### 1. Organize by topic
+
+```
+> Review my last 50 emails and group them by topic: work,
+  personal, invoices, newsletters, other.
+  Give me a summary of each group.
+```
+
+### 2. Flag urgent emails
+
+```
+> From my unread emails, identify which ones need an urgent
+  reply (today) and which can wait.
+  Explain why.
+```
+
+### 3. Summarize long conversations
+
+```
+> Summarize the 3 longest email threads from this week.
+  Give me key points + whether there's an action pending on my end.
+```
+
+### 4. Find info (invoices, receipts)
+
+```
+> Search my emails from the last month for any invoice or receipt.
+  Give me a list with date, sender, and amount.
+```
+
+### 5. Reply drafts
+
+```
+> Review my unanswered emails from the last 3 days.
+  Draft short, professional replies for each one.
+
+  DO NOT send them. Just drafts for me to approve.
+```
+
+### 6. Subscription cleanup
+
+```
+> Identify newsletters, promos, and automated emails I receive
+  repeatedly.
+  Give me a list so I can decide which to unsubscribe from.
+```
+
+---
+
+## Security
+
+| Guarantee | Details |
+|----------|---------|
+| Permission per action | Claude asks for confirmation before touching anything |
+| No sending without your OK | It drafts replies, you decide to send |
+| Privacy | Anthropic does NOT use your emails for training |
+| Disconnect | Settings → Connections → Revoke at any time |
+
+### Be careful with sensitive info
+
+Even though Claude is secure, **use common sense**:
+- Avoid processing emails with passwords, full banking details, medical info
+- If an email has very sensitive data, **handle it yourself** directly
+
+---
+
+## Tips for better results
+
+### 1. Be specific
+
+❌ "Organize my email"
+✅ "Group this week's emails by sender and tell me which ones need a reply"
+
+### 2. Start small
+
+Don't try to process 10,000 emails at once. **Last 7 days first**, then expand.
+
+### 3. Review before sending
+
+Claude shows the drafts before sending. **Always review them**. Sometimes it over-formalizes or misses nuance.
+
+### 4. Weekly maintenance
+
+Monday, 5 min: ask Claude for a summary of the week + pending actions. Your inbox stays clean effortlessly.
+
+### 5. Multiple accounts
+
+You can connect **several Gmail accounts**. When you ask for something, Claude asks which one to use.
+
+---
+
+## Advanced use cases
+
+### 1. Automatic daily briefing
+
+Combined with [Cowork scheduled tasks](/boveda/claude-cowork-workflow):
+
+```
+> Every morning at 8am, give me a brief:
+  - 3 most important unread emails
+  - Threads that need my reply today
+  - Invoices/payments due today
+  - Send it to my own email as a summary
+```
+
+### 2. Triage for your VA
+
+```
+> Process my unread emails:
+  - If it's from a current client → flag URGENT
+  - If it's support → label "support" for my VA
+  - If it's spam → archive
+  - Everything else → leave in inbox
+
+  Don't reply to any. Just triage.
+```
+
+### 3. Lightweight CRM
+
+```
+> From my emails over the last month with potential clients:
+  Make a table with: name, company, stage (hot/cold/closed),
+  last contact, suggested next action.
+```
+
+### 4. Monthly report
+
+```
+> Summary for the month of May:
+  - Number of emails received vs. replied to
+  - Top 5 people/companies with the most interactions
+  - Threads with commitments I haven't closed yet
+  - Suggestion of what to prioritize in June
+```
+
+---
+
+## Anti-patterns
+
+### 1. Auto-sending replies
+
+NO. Even if Claude writes well, **always review**. A misinterpreted reply can damage relationships.
+
+### 2. Trusting the classification 100%
+
+Claude may mark something critical as "not urgent" if the context didn't show it. **Review the flags**.
+
+### 3. Processing emails with sensitive legal/financial data
+
+For emails with contracts, banking details, medical info → handle them yourself. Not Claude.
+
+### 4. Not iterating on instructions
+
+If Claude classifies something wrong, **teach it**: "this type of email goes to 'support', not 'urgent'". It improves with feedback.
+
+### 5. Applying the same rules to personal + work
+
+Connect separate accounts with different rules. **Don't mix contexts**.
+
+---
+
+## Powerful combinations
+
+### With Cowork
+
+[Cowork](/boveda/claude-cowork-workflow) scheduled tasks → automate the daily triage without asking every morning.
+
+### With Dispatch
+
+[Dispatch](/boveda/claude-dispatch) → process email from your phone while you're out.
+
+### With 5 AI questions for business
+
+[5 questions](/boveda/5-preguntas-ia-negocio) → understand your process. Email is one of the most automatable steps. Identify which exact rules to apply.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Anthropic Free plan | Integrations require Pro+ |
+| You only use email on mobile | Claude Desktop isn't on mobile |
+| Strict corporate compliance | Your company may prohibit AI with email |
+| Highly sensitive email (legal/medical) | Better handled manually |
+
+---
+
+## Next steps
+
+- To process email from your phone, [Claude Dispatch](/boveda/claude-dispatch)
+- For scheduled tasks like an "automatic daily brief", [Cowork workflow](/boveda/claude-cowork-workflow)
+- To understand which processes to automate before email, [5 AI questions for business](/boveda/5-preguntas-ia-negocio)

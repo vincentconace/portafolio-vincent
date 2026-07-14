@@ -1,0 +1,103 @@
+---
+title: "MCP Railway — deploy and manage apps on Railway from Claude"
+description: "MCP server with 165 installs for Railway. Operate projects, services, deployments, and environment vars from Claude Code. For shops that use Railway as hosting (a modern Heroku-like)."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "railway"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["all-deploy", "mcp-microsoft-dev-box", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/railway"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/railway.json"
+---
+
+## What it is
+
+[Railway](https://railway.app) is one of the most widely used modern hosting platforms for apps with services + databases: deploy in minutes, support for multiple runtimes, automatic networking between services. The Heroku-like option without Heroku's limitations.
+
+This MCP plugs Railway into Claude Code. You operate projects, services, deployments, and environment vars without opening the dashboard.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 165 |
+| MCP server | `Railway` |
+| Account required | Yes — Railway + API token |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/railway
+```
+
+Prerequisite: a Railway account + a Personal API token from [railway.app/account/tokens](https://railway.app/account/tokens).
+
+For Claude:
+
+```
+I installed the devtools/railway MCP. List my projects and, for project
+X, show me the services with their status and URL.
+```
+
+## What you can do with this
+
+### Deploy triage
+
+"List the services with failed deploys in the last 24 hours. For each one, read the logs and give me the root cause."
+
+### Env var management
+
+"On the `api-prod` service, add these env vars: `STRIPE_KEY=sk_...`, `SENTRY_DSN=https://...`. Restart the service after applying."
+
+### Promotion between environments
+
+"Compare the env vars between `staging` and `production`. Identify the ones missing in prod. For the ones that clearly should be promoted (not staging secrets), copy them over."
+
+### Fast rollback
+
+"On service X, show me the last 10 deploys with timestamp and status. Roll back to the second-to-last one (the current one is broken)."
+
+### New service setup
+
+"Create a new `worker` service with: source from `~/my-repo` branch `main`, Node.js runtime, env vars X/Y/Z, autodeploy on push."
+
+### Database management
+
+Railway handles Postgres, Redis, MongoDB, and MySQL as services. The MCP can operate them (create a DB, connect it to another service, etc.).
+
+### Combo with [All Deploy](/boveda/all-deploy)
+
+All Deploy can use Railway as a target automatically. The MCP gives you manual control when you need it.
+
+## Prerequisites
+
+- **Active Railway account**
+- **API token** with permissions over the relevant projects
+- **Project already created** (or the MCP can create it)
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before enabling operations in production">
+
+- **Destructive operations:** delete service, delete deployment, restart prod without warning. Add approval hooks.
+- **Sensitive env vars:** when you handle secrets via MCP, they end up visible in the session. Validate your security policy.
+- **Costs:** Railway charges for compute / storage. Provisioning lots of services generates bills. Watch your plan.
+- **If you use another host** (Vercel, Render, Fly, AWS), this MCP doesn't apply.
+- **Broad token:** the token lets Claude operate everything your account can see. Restrict the scope if Railway allows it.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Railway MCP](https://www.aitmpl.com/component/mcps/devtools/railway) — exact command.
+- **JSON config:** [railway.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/railway.json).
+- **Railway official:** [railway.app](https://railway.app).
+
+## Related resources
+
+- [All Deploy](/boveda/all-deploy) — abstracts deploy across several providers, including Railway.
+- [Microsoft Dev Box MCP](/boveda/mcp-microsoft-dev-box) — for cloud devboxes (different: dev env vs hosting).
+- [Anatomy of Claude](/boveda/anatomia-claude) — to place the MCP as a connector to a hosting platform.

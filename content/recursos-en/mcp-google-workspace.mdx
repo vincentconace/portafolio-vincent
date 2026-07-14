@@ -1,0 +1,118 @@
+---
+title: "MCP Google Workspace — Gmail, Calendar, Docs, Sheets, Drive and more"
+description: "MCP server that connects Claude Code to the full Google Workspace: Gmail, Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search and Drive. AI operating over your productive office life."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "google-workspace", "gmail"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["nueve-prompts-cowork", "dominar-cowork", "plugin-knowledge-work-plugins"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/productivity/google-workspace"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/google-workspace.json"
+---
+
+## What it is
+
+Probably one of the most impactful MCPs for knowledge workers. It connects Claude Code (not just Cowork) to the full Google Workspace stack:
+
+- **Gmail** — read, search, draft, label
+- **Google Calendar** — events, schedule, conflicts
+- **Google Docs** — read, write, comment
+- **Google Sheets** — queries and updates
+- **Google Slides** — generate and modify
+- **Google Chat** — messages
+- **Google Forms** — responses
+- **Google Tasks** — tasks
+- **Google Search** — from the editor
+- **Google Drive** — files and permissions
+
+It's the ideal complement when you live in Google Workspace but code in Claude Code (not Cowork). It covers what [Cowork](/boveda/dominar-cowork) does natively, but from your terminal.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `productivity` |
+| Installs | 80 |
+| MCP server | `google-workspace` |
+| Services covered | Gmail, Calendar, Docs, Sheets, Slides, Chat, Forms, Tasks, Search, Drive |
+| Account required | Yes — Google account |
+| Authentication | OAuth 2.0 |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp productivity/google-workspace
+```
+
+Prerequisites: Google account + OAuth credentials (Google Cloud Console).
+
+For Claude:
+
+```
+I installed the productivity/google-workspace MCP. Tell me how to set up OAuth
+and then show me the next 5 events on my calendar + any important
+emails from the last 24 hours.
+```
+
+## What you can do with it
+
+### Assisted Gmail triage
+
+"List the unread emails from the last day that mention project X. For each one, tell me if it needs a reply and propose a draft." Bulk triage without having to look at your inbox.
+
+### Scheduling without fighting conflicts
+
+"Find me 3 60-min slots on my calendar this week where I have no meetings and suggest one for meeting with person X. Then create the event with those details."
+
+### Collaborative Google Docs
+
+"In doc X, read the last 5 comments and propose responses to each one. Then apply the ones I approve." A review workflow for long docs.
+
+### Sheets as a mini-database
+
+"In the leads sheet, add this list of 50 contacts with their fields. Keep the format and the formula in the 'score' column." CRUD-style operations over sheets.
+
+### Slides generation
+
+"Generate presentation slides based on doc X, using my org's template and 1 slide per section." A bridge between content and presentation.
+
+### Drive housekeeping
+
+"Find me files in Drive older than 6 months that haven't been opened, grouped by type. Suggest which ones to archive."
+
+### Compared with [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins)
+
+Anthropic's official plugin is for Cowork. This MCP is for Claude Code. Key difference: Cowork is a full productivity environment; Code is an editor with superpowers. If your base is Code, this MCP is the way to have Workspace right there.
+
+## Prerequisites
+
+- Active **Google account**
+- **OAuth client** from Google Cloud Console
+- **Correct scopes** depending on which services you'll use
+- **App verification** if you're going to use it in production
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before enabling full access to your Workspace">
+
+- **Sensitive emails:** Claude reading your Gmail with injectable prompts can be a vector. Look into validation hooks.
+- **Broad OAuth scopes:** if you authorize everything, Claude has access to everything. Restrict scopes to the minimum (only the services you're going to use).
+- **Destructive writes:** deleting emails, removing calendar events, deleting files — approval hooks ALWAYS.
+- **If you work in Cowork:** you already have the official [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins). Don't duplicate with this MCP.
+- **Compliance:** for regulated data (healthcare, finance), validate scope before enabling.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Google Workspace MCP](https://www.aitmpl.com/component/mcps/productivity/google-workspace) — exact command.
+- **JSON config:** [google-workspace.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/productivity/google-workspace.json).
+- **Google Cloud Console:** [console.cloud.google.com](https://console.cloud.google.com) — for OAuth credentials.
+
+## Related resources
+
+- [9 prompts for Claude Cowork](/boveda/nueve-prompts-cowork) — productivity prompts for Cowork users; transferable when you use this MCP in Code.
+- [Mastering Cowork](/boveda/dominar-cowork) — the native option for knowledge workers. Compare whether Cowork can replace your setup.
+- [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins) — Anthropic's official marketplace for knowledge work.

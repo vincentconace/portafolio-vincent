@@ -1,0 +1,123 @@
+---
+title: "Claude Skills (alirezarezvani) — +192 skills para engineering, marketing y C-level"
+description: "Marketplace de Alireza Rezvani (7.5k⭐) con 28 plugins y +192 skills divididas en engineering, marketing, product, compliance y advisory ejecutivo. Cross-tool: Claude Code, Codex, Gemini CLI, Cursor y 8 más."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex", "cursor", "gemini-cli"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["40-skills-claude", "5-claude-skills-necesarias", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/alirezarezvani-claude-skills"
+github: "https://github.com/alirezarezvani/claude-skills"
+---
+
+## Qué es
+
+Es uno de los marketplaces más grandes y mejor curados que vas a encontrar para Claude Code. Lo mantiene Alireza Rezvani y junta 192+ skills bajo 28 plugins temáticos. La gracia es que no es solo "engineering": tiene packs separados para marketing, product, project management, finanzas, compliance regulatoria (HealthTech/MedTech con ISO 13485, FDA, GDPR) y un pack de C-level con junta directiva virtual.
+
+Funciona en Claude Code y otros 8 entornos de coding agent — si mañana cambiás de herramienta, las skills te siguen.
+
+No instalás los 28 plugins a la vez (sería absurdo). Agregás el marketplace y después elegís 2-3 packs según el rol que estés jugando esa semana.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | Alireza Rezvani |
+| Stars | 7.5k |
+| Tipo | Marketplace (28 plugins) |
+| Componentes | 192+ skills, 31 agents, 8 hooks |
+| Cross-tool | Claude Code + 8 más (Codex, Gemini CLI, Cursor, etc.) |
+| Marketplace | `alirezarezvani/claude-skills` |
+
+### Los packs más útiles según rol
+
+| Pack | A quién le sirve | Skills clave |
+| --- | --- | --- |
+| `engineering-skills` | Dev fullstack | 30 skills (architecture, frontend, backend, QA, DevOps, security, Stripe, TDD, a11y WCAG 2.2) |
+| `engineering-advanced-skills` | Senior eng | 35 skills (agent designer, RAG, migration, observability, Helm, Terraform, MCP server builder) |
+| `marketing-skills` | Growth/contenido | 43 skills en 7 pods (Content, SEO, CRO, Channels, Growth, Intel, Sales) — 51 Python tools |
+| `product-skills` | PM | 14 skills (RICE, PRDs, UX research, design system, landing page generator) |
+| `pm-skills` | Project Manager | 6 skills (Jira expert, Confluence, scrum master, Atlassian admin) |
+| `c-level-skills` | Founder | 28 skills (junta virtual con CEO/CTO/CFO, board deck builder, M&A playbook) |
+| `ra-qm-skills` | HealthTech / MedTech | 13 skills (ISO 13485 QMS, FDA 510(k), GDPR, ISO 27001, SOC 2) |
+| `pw` | QA / Testing | Playwright toolkit (55 templates, TestRail + BrowserStack MCP) |
+| `executive-mentor` | Founder | Adversarial thinking partner que estresa-testea tu plan |
+| `code-to-prd` | Reverse-eng | Convierte cualquier codebase en un PRD completo |
+| `agenthub` | Multi-agente | Spawn de N subagents en paralelo con LLM judge mode |
+
+## Cómo se instala
+
+```bash
+# 1) Agregar el marketplace
+/plugin marketplace add alirezarezvani/claude-skills
+
+# 2) Instalar los packs según rol (no los instales todos)
+/plugin install engineering-skills@alirezarezvani-claude-skills
+/plugin install marketing-skills@alirezarezvani-claude-skills
+```
+
+O `/plugin` → Discover.
+
+Para que Claude haga la curación según lo que necesitás:
+
+```
+Instalá el marketplace alirezarezvani/claude-skills. Soy [tu rol: dev full-stack
+/ founder / PM / etc.] trabajando en [tu proyecto]. ¿Cuáles 2-3 packs de los 28
+disponibles me convienen instalar primero y por qué?
+```
+
+## Qué podés hacer con esto
+
+### Cubrir un rol nuevo en una semana
+
+Si esta semana tenés que actuar como Project Manager (tu PM se fue), instalás `pm-skills` y de golpe Claude sabe cómo escribir tickets de Jira siguiendo la convención del pack, armar un sprint plan y facilitar una retro. No reemplaza a un PM senior, pero te tapa el hueco.
+
+### Lanzar contenido sin equipo de marketing
+
+`marketing-skills` viene con 43 skills agrupadas en 7 pods. Para un founder solo: pedirle a Claude que use el pack de Content + SEO + CRO te da un calendario editorial, una landing optimizada y un análisis de conversion en la misma sesión.
+
+### Compliance pesada (HealthTech)
+
+Si trabajás en algo regulado (`ra-qm-skills`), los 13 skills de regulatorio cubren ISO 13485, MDR EU, FDA 510(k), CAPA management. No te valida ante la FDA, pero te ahorra meses de research sobre qué exige cada framework.
+
+### Stress-test de un plan con `executive-mentor`
+
+Como [Adversarial Spec](/boveda/spec-kit), pero para decisiones de negocio: presentás tu plan y la skill lo critica con preguntas duras. Útil antes de un board meeting o una decisión irreversible.
+
+### Junta virtual de C-level
+
+`c-level-skills` activa "asesores" sintéticos (CEO, CTO, COO, CPO, CMO, CFO, CRO, CISO, CHRO) que te dan opiniones desde sus ángulos. No reemplazan a humanos reales, pero ayudan a estructurar el pensamiento.
+
+## Beneficios reales
+
+- **Cobertura horizontal real** — un solo marketplace cubre eng/marketing/product/finanzas. Pocos lo hacen.
+- **Cross-tool** — el día que probás Cursor o Codex, no perdés las skills.
+- **Mantenimiento activo** — 7.5k stars no son por casualidad. El autor itera.
+- **Granular** — instalás solo los packs del rol que estás jugando esta semana.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **No instales los 28 packs juntos:** vas a tener 192 skills cargadas y Claude se va a marear. Elegí 2-3 según rol.
+- **Si ya pagás herramientas dedicadas** (Notion AI para marketing, Linear AI para PM), las skills se solapan. Probá una antes de duplicar.
+- **`ra-qm-skills` no te certifica nada:** son guías y templates. La validación regulatoria sigue siendo humana.
+- **`c-level-skills` no reemplaza mentores reales:** úsalo para estructurar ideas, no para decidir solo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+Marketplace mantenido fuera de Núcleo IA. Para descargar, leer docs o reportar issues:
+
+- **Ficha en aitmpl.com:** [Claude Skills · alirezarezvani](https://www.aitmpl.com/plugins/alirezarezvani-claude-skills) — listado completo de los 28 packs.
+- **Repo en GitHub:** [alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills) — código, issues.
+- **Posts del autor:** [alirezarezvani.medium.com](https://alirezarezvani.medium.com/) — explicaciones de cada pack.
+
+## Recursos relacionados
+
+- [40 Skills de Claude](/boveda/40-skills-claude) — alternativa más curada con 40 skills nombradas. Compará antes de adoptar el marketplace gigante.
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — el set base que conviene tener instalado además de un marketplace temático.
+- [Agency Agents](/boveda/agency-agents) — para entender cuándo un agent reemplaza a una skill y cuándo no.

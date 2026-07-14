@@ -1,0 +1,284 @@
+---
+title: "6 tricks from the creator of Claude Code for Opus 4.7"
+description: "Tricks shared by Boris Cherny (creator of Claude Code) after using Opus 4.7 for several weeks: auto mode, fewer-permission-prompts, recaps, focus mode, effort level, and verification. All 6 explained with ready-to-copy commands."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "opus"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["trucos-basicos-claude", "claude-tres-modelos", "comando-goal"]
+---
+
+## Who is Boris
+
+Boris Cherny is the creator of Claude Code — the CLI that millions use to run Claude from the terminal. When he shares tricks, it's worth paying attention: **he's the engineer who designed how Claude gets onto your machine**, not just any user.
+
+After using Opus 4.7 in his day-to-day work for several weeks, he shared 6 tricks that change how you work with Claude. Let's go through them one by one.
+
+---
+
+## Trick 1 — Auto mode
+
+### What it is
+
+A mode where Claude **decides on its own which confirmations to ask for and which not to**, based on the risk of the action.
+
+- Edits to non-critical files → runs without asking
+- Actions that touch auth, payments, prod → always asks
+- Destructive commands → always asks
+
+The balance between "ask each time" (constantly interrupting you) and "trust mode" (dangerous).
+
+### How to enable it
+
+```
+/auto on
+```
+
+(Check the exact syntax in the current version of Claude Code.)
+
+### When it's a good fit
+
+✅ You work on projects where 80% of the work is "safe" edits
+✅ You're tired of "allow? y/n" every 30 seconds
+✅ You trust your CLAUDE.md as a baseline guardrail
+
+### When NOT to use it
+
+❌ You're still learning Claude Code (better to use "ask each time")
+❌ You work on sensitive code (auth, payments, prod) without tests
+❌ Your git isn't clean (you can't revert easily)
+
+---
+
+## Trick 2 — `/fewer-permission-prompts`
+
+### The problem
+
+You spend 30 minutes in a session and half of it was "do I allow this `npm install`? do I allow this `git log`? do I allow this `ls`?". Your brain rolls its eyes.
+
+### The solution
+
+A command that **reviews your recent history** and helps you add to your allowlist the commands you've approved 5+ times.
+
+```
+/fewer-permission-prompts
+```
+
+Claude:
+1. Looks at your history
+2. Lists the commands you approved repeatedly
+3. Proposes adding them to `permissions.allow` in settings
+4. If you say ok, it adds them
+
+### Result
+
+Next session, those commands don't interrupt you. **Focus preserved.**
+
+### The trap
+
+Don't add things like `rm`, `git push --force`, or `npm uninstall` to allow. They may be harmless in some contexts but destructive in others.
+
+---
+
+## Trick 3 — Automatic recaps
+
+### The problem
+
+A 2-hour session, you did 15 things. By the end you're not quite sure what changed and what's still pending.
+
+### The trick
+
+Ask Claude for an **explicit recap** every so often:
+
+```
+> /recap
+
+Claude:
+  Changes from this session:
+  - Auth refactor in src/lib/auth/ (8 files)
+  - New endpoint /api/profile (2 files)
+  - Updated tests (5 files)
+
+  Pending:
+  - Document the auth change in docs/
+  - Verify the endpoint handles the edge case of a user with no profile
+
+  Decisions made:
+  - We decided NOT to migrate to Clerk yet (needs more eval)
+  - We changed the date format to ISO 8601 globally
+```
+
+### Automatic variant
+
+Combined with [hooks](/boveda/hooks-automatizacion), you can make an automatic recap run every X turns:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      { "type": "command", "command": "claude --no-interactive '/recap brief'" }
+    ]
+  }
+}
+```
+
+When you close the session, you have the recap written down somewhere.
+
+---
+
+## Trick 4 — Focus mode
+
+### What it is
+
+A mode where Claude **doesn't stray** from the current task. It combines ideas from `/goal` with self-verification.
+
+```
+/focus on "complete the migration to Clerk"
+```
+
+From that point on:
+- Before each action, Claude checks whether it contributes to the goal
+- If it discovers something unrelated, it notes it in findings but does NOT work on it
+- Before declaring "done", it re-reads the goal and verifies it's complete
+
+### Difference from `/goal`
+
+Similar but lighter: `focus` is for a single session, `goal` is for extended work with persistent findings.
+
+To implement it as your own skill, see [/goal command](/boveda/comando-goal).
+
+---
+
+## Trick 5 — Effort level
+
+### What it is
+
+Telling Claude **how much to think** before responding. Four levels:
+
+| Effort | When |
+|--------|--------|
+| `low` | Mechanical tasks (rename, format, translate) |
+| `medium` | Reasonable default |
+| `high` | Complex tasks (refactor, decision) |
+| `ultrathink` | The deepest (hard debugging, architecture) |
+
+### How to use it
+
+Before the prompt:
+
+```
+think low
+> Rename all occurrences of getUserData to fetchUser
+```
+
+```
+ultrathink
+> I have an intermittent bug that shows up 1 in every 100 times.
+  Structured analysis: hypothesis, validation, proposal.
+```
+
+### Why it matters
+
+`ultrathink` with Sonnet sometimes beats `low` with Opus. **Effort can matter more than the model** for some tasks.
+
+Practical combo: **Sonnet + ultrathink** is a good cost/quality balance for medium-hard tasks.
+
+---
+
+## Trick 6 — Verification
+
+### The problem
+
+Claude finishes something, says "done", and you find out it doesn't compile / broke tests / did something different from what you asked.
+
+### The trick
+
+**Force Claude to self-verify** before declaring it done:
+
+In your `CLAUDE.md`:
+
+```markdown
+## Verification before "done"
+
+Before declaring any task as completed:
+
+1. Re-read the original request.
+2. List point by point what you delivered vs. what was asked.
+3. Identify gaps explicitly.
+4. If there are gaps, do NOT declare it done — complete them first.
+5. If you touched code:
+   - Run the relevant tests
+   - Show me the output
+6. If you touched config:
+   - Verify that the build / dev command doesn't break
+
+Only after ALL of this can you say "done".
+```
+
+### Result
+
+You go from "says done and you discover problems" to "says done and it's almost always right".
+
+**The most impactful change** of the 6 tricks. If you only apply one, make it this one.
+
+---
+
+## Combining them into a flow
+
+Boris uses all 6 together. A typical day:
+
+```
+[Morning]
+- Enable auto mode (trick 1)
+- Run /fewer-permission-prompts if you have a backlog (trick 2)
+
+[During the day]
+- For simple tasks: think low + edits
+- For big tasks: /focus on + ultrathink + verification
+
+[Wrap-up]
+- /recap brief (trick 3)
+- Note lessons learned in CLAUDE.md
+```
+
+Without the 6 tricks: Claude works, but you fight with confirmations, lose focus, and get surprised by premature "done"s.
+With all 6: 30-50% more productive in the same session.
+
+---
+
+## Which to prioritize if you only apply one
+
+In order of impact, based on my experience:
+
+1. **Verification (#6)** — the one that prevents the most errors
+2. **Effort level (#5)** — the one that moves quality the most
+3. **Auto mode (#1)** — the one that reduces friction the most
+4. **fewer-permission-prompts (#2)** — second in friction
+5. **Focus mode (#4)** — useful but specific
+6. **Recaps (#3)** — useful but you can do it manually
+
+If you start with verification + effort level, the rest adds up incrementally.
+
+---
+
+## The philosophy underneath the 6
+
+The 6 have something in common: **they lower friction for the human operator without losing control**.
+
+- Auto mode → fewer confirmations
+- fewer-permission-prompts → less repetition
+- Recaps → less forgetting
+- Focus → less drifting
+- Effort → less wasted compute
+- Verification → fewer surprises
+
+Boris built Claude Code with this philosophy. Applying them isn't "tricks" in the marketing sense — it's **how the creator thinks the tool should be used**.
+
+---
+
+## Next steps
+
+- For the 4 most fundamental tricks (Ultra Think, sub-agents, /init), see [basic tricks](/boveda/trucos-basicos-claude)
+- To dig deeper into the focus / goal command, see [/goal command](/boveda/comando-goal)
+- For 83 more extensive tips from Boris himself + Thariq, see [Claude Code Best Practices](/boveda/claude-code-best-practices)

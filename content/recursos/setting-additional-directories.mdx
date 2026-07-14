@@ -1,0 +1,94 @@
+---
+title: "Setting Additional Directories — acceso a carpetas fuera del proyecto"
+description: "Setting con 530 installs. Configura `additionalDirectories` para dar a Claude acceso a paths fuera del proyecto actual. Útil para monorepos, shared libs o docs en otra carpeta."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-filesystem-access", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/additional-directories"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/additional-directories.json"
+---
+
+## Qué es
+
+Por default, Claude Code opera sobre el directorio del proyecto actual. Si necesitás que también lea/escriba en otras carpetas (un monorepo con paths cross-package, una shared library en `~/code/shared/`, docs en `~/Notes/`), tenés que declarar esos paths.
+
+Este setting configura el array `additionalDirectories` en tu config de Claude Code para autorizar paths extras.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `permissions` |
+| Installs | 530 |
+| Setting key | `additionalDirectories` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting permissions/additional-directories
+```
+
+Después editá tu config con las paths reales:
+
+```json
+{
+  "permissions": {
+    "additionalDirectories": [
+      "~/code/shared",
+      "~/Notes/proyecto-x",
+      "/Users/me/Documents/specs"
+    ]
+  }
+}
+```
+
+Para Claude:
+
+```
+Instalé el setting permissions/additional-directories. Decime dónde
+queda mi config y mostrame cómo agregar las paths reales.
+```
+
+## Qué podés hacer con esto
+
+### Monorepos con cross-package work
+
+Trabajás en `packages/api` pero necesitás ver `packages/shared`. Sin esto, Claude solo ve `api`.
+
+### Shared libraries
+
+Tu `~/code/shared/` viene en varios proyectos. Una sola config y siempre alcanzable.
+
+### Docs / specs externas
+
+Carpeta de notas en `~/Notes/` o `~/Documents/specs/`. Accesible para ground answers en docs reales.
+
+### Combo con [Filesystem Access MCP](/boveda/mcp-filesystem-access)
+
+Settings da permiso. Filesystem Access MCP da las operations granulares. Combo natural.
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de agregar paths sensibles">
+
+- **No autorices `~/` entero:** Claude tendría acceso a todo home incluyendo secrets.
+- **Cuidado con `.ssh/`, `.aws/`, `.env`:** nunca agregues directorios con credentials.
+- **Para writes:** asegurate que los paths permiten escritura solo donde lo necesitás.
+- **Backup primero:** antes de habilitar write en paths con contenido valioso.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Additional Directories Setting](https://www.aitmpl.com/component/settings/permissions/additional-directories) — comando exacto.
+- **Config JSON:** [additional-directories.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/additional-directories.json).
+
+## Recursos relacionados
+
+- [Filesystem Access MCP](/boveda/mcp-filesystem-access) — granular access control complementario.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — permission patterns.
+- [Anatomía de Claude](/boveda/anatomia-claude) — entender el modelo de permisos.

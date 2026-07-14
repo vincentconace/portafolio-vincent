@@ -1,0 +1,264 @@
+---
+title: "The Ultimate Web Designer — 4 tools to make Claude design premium pages"
+description: "You combine 4 pieces: UI/UX Pro Max GO (design brain with 67 styles + 161 palettes + 57 fonts), NanoBanana MCP (images/mockups with Gemini), Google Stitch MCP (interfaces to HTML/CSS) and 21st Dev Magic (a store of premium components). From a generic landing page to a Silicon Valley product."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "stitch", "nanobanana"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-disenador-web", "cult-ui", "stitch-diseno-ia"]
+---
+
+## The combination
+
+Imagine you have:
+- **A book with 67 design styles** (UI/UX Pro Max GO)
+- **An artist who draws whatever you ask** (NanoBanana)
+- **An interface designer who generates HTML** (Stitch)
+- **A store of premium components** (21st Dev)
+
+**That's the Ultimate Web Designer**. 4 tools you combine so that Claude:
+- Knows design with professional judgment
+- Generates images and mockups with AI
+- Turns ideas into HTML/CSS
+- Uses pre-built premium components
+
+---
+
+## The 4 pieces
+
+| Piece | Role |
+|-------|-------|
+| **UI/UX Pro Max GO** | The brain — knows design, colors, typography |
+| **NanoBanana MCP** | The artist — generates images with Gemini |
+| **Google Stitch MCP** | The UI designer — generates HTML/CSS interfaces |
+| **21st Dev Magic** | The store — premium components |
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed
+- **Node.js 18+** and **Python 3.x**
+- **Google Cloud account** (free, for Stitch + Gemini)
+- **21st.dev account** (Magic API key)
+
+---
+
+## Setup — 4 pieces
+
+### Piece 1 — UI/UX Pro Max GO
+
+```bash
+# Install globally
+npm install -g uipro-cli
+
+# Configure for Claude Code
+uipro init --ai claude
+```
+
+Generates config automatically. Claude has **67 styles + 161 palettes + 57 fonts + 99 UX rules** available.
+
+### Piece 2 — NanoBanana MCP
+
+See [Restore your photos](/boveda/restaura-tus-fotos) for detailed setup.
+
+Quick:
+```
+> Install NanoBanana MCP. My Gemini API key: [KEY]
+```
+
+### Piece 3 — Google Stitch MCP
+
+See [Stitch AI design](/boveda/stitch-diseno-ia) for detailed setup.
+
+Quick:
+```
+> Set up the Stitch MCP for me.
+  Official docs: stitch.withgoogle.com/docs/mcp/setup
+  My API key: [KEY]
+```
+
+### Piece 4 — 21st Dev Magic
+
+```bash
+npm install -g @21st-dev/magic
+```
+
+In Claude Code:
+```
+> Set up 21st Dev Magic with my API key: [KEY]
+```
+
+---
+
+## Complete workflow
+
+### For a new landing page
+
+```
+> Design a landing page for [PRODUCT/SERVICE].
+
+  Audience: [TARGET]
+  Style: [MOOD - use UI/UX Pro Max to suggest 3 options from
+  the 67 styles]
+
+  Steps:
+  1. UI/UX Pro Max: define palette, typography, style
+  2. NanoBanana: generate hero and section images (3-5)
+  3. Stitch: build the HTML/CSS structure of the sections
+  4. 21st Dev Magic: bring in premium components for buttons,
+     forms, cards
+  5. Assemble everything into a Next.js + Tailwind project
+
+  Deliver:
+  - A complete, working landing page
+  - List of 21st Dev components used
+  - Generated images in /public/images/
+```
+
+20-40 min later: **a production landing page**.
+
+### To improve an existing landing page
+
+```
+> Here's my current landing page: [path or URL]
+
+  Improve it:
+  1. UI/UX Pro Max: audit it. What's generic / what looks like a template
+  2. NanoBanana: replace stock images with AI-generated ones
+  3. 21st Dev Magic: replace default shadcn components with
+     premium ones
+  4. Stitch: adjust the layout if sections look flat
+
+  Keep the copy and CTAs. Visual upgrade only.
+```
+
+---
+
+## What each piece contributes
+
+### UI/UX Pro Max GO
+
+Without this, Claude uses **Tailwind defaults** and everything looks the same. With it:
+- Palette decisions with judgment (not random)
+- Typography that matches the industry
+- UX rules applied automatically
+
+### NanoBanana
+
+Without this, you depend on generic stock photos. With it:
+- Unique hero images
+- B-roll consistent with your brand
+- Custom mockups for features
+
+### Stitch
+
+Without this, you describe and Claude invents the structure. With it:
+- Stitch generates **proven layouts**
+- Coherent HTML/CSS
+- Responsive out of the box
+
+### 21st Dev Magic
+
+Without this, default components = they look like a template. With it:
+- Premium animations
+- Polished microinteractions
+- Instant "Silicon Valley" components
+
+---
+
+## Comparison with alternatives
+
+| Approach | Cost | Quality | Time |
+|----------|-------|---------|-------|
+| **The Ultimate Web Designer** (this one) | ~$10-30/month in APIs | Premium | 20-40 min |
+| [Claude web designer](/boveda/claude-disenador-web) | Free skills + Playwright | Good | 30-60 min |
+| [Cult UI](/boveda/cult-ui) | Free | Premium components | Initial setup |
+| [Replicate web designs](/boveda/replica-disenos-web) | Free skill | Variable (depends on the original) | 30 min |
+| Human designer + dev | $2k-10k | Excellent | 1-3 weeks |
+
+The sweet spot of the Ultimate Web Designer: **producing premium landing pages at scale** without a human designer.
+
+---
+
+## Anti-patterns
+
+### 1. Installing 4 pieces and not using all of them
+
+Each tool has a role. If you **only use UI/UX Pro Max**, you lose Stitch + NanoBanana + 21st Dev. **Learn the full flow**.
+
+### 2. A vague brief
+
+❌ "Make me a pretty landing page"
+✅ "Landing page for a B2B SaaS inventory tool, audience LATAM COOs, Linear-inspired aesthetic, earthy green palette"
+
+### 3. Expecting pixel-perfect on the first try
+
+The stack is good, but **you iterate 2-3 times** before finalizing. Accept the iteration.
+
+### 4. Overusing NanoBanana
+
+Generating 30 images "just in case" burns credits. **Generate the ones you're going to use**. If in doubt, generate 1 version and test it.
+
+### 5. Ignoring mobile
+
+The stack generates responsive by default, but **test it on real mobile**. Sometimes you need to adjust.
+
+---
+
+## Estimated costs
+
+| Piece | Cost |
+|-------|-------|
+| UI/UX Pro Max GO | Free (open source) |
+| NanoBanana (Gemini API) | Generous free tier, then ~$5-20/month |
+| Google Stitch | Free tier, paid depending on usage |
+| 21st Dev Magic | $19-49/month depending on plan |
+| **Typical total** | **~$20-50/month** |
+
+To produce 3-5 landing pages/month, the ROI is clear vs. a designer.
+
+---
+
+## Powerful combinations
+
+### With The Architect
+
+[The Architect](/boveda/the-architect) generates the blueprint. The Ultimate Web Designer **dresses it up** premium.
+
+### With Cult UI
+
+[Cult UI](/boveda/cult-ui) has 75 premium open source components. It **complements** 21st Dev Magic.
+
+### With humanizer
+
+```
+> After generating the landing page, run the copy through /humanizalo.
+  Make sure the copy does NOT sound like AI.
+```
+
+[Humanize it](/boveda/humanizalo).
+
+### With Cyber Neo
+
+Before deploying, [Cyber Neo](/boveda/cyber-neo) audits security.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-------|
+| Fully unique / artistic design | The stack tends toward "modern web design 2026" |
+| No $20+/month budget | The stack has minimum costs |
+| A single one-off landing page | The setup isn't worth it |
+| Enterprise product with strict compliance | You need a human visual audit |
+
+---
+
+## Next steps
+
+- For a simpler version with a real browser, [Claude web designer](/boveda/claude-disenador-web)
+- For free premium components, [Cult UI](/boveda/cult-ui)
+- For official Anthropic skills, [5 design skills](/boveda/5-skills-diseno-claude)

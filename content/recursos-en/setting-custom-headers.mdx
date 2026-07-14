@@ -1,0 +1,96 @@
+---
+title: "Setting Custom Headers — custom headers on API requests"
+description: "Setting with 147 installs. Adds custom headers to API requests for specialized auth or routing requirements. For enterprises with their own auth systems or multi-tenancy."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-corporate-proxy", "setting-bedrock-configuration", "setting-api-key-helper"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/api/custom-headers"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/custom-headers.json"
+---
+
+## What it is
+
+A setting that configures `ANTHROPIC_CUSTOM_HEADERS` to add custom HTTP headers to every request to the API. Useful for:
+
+- **Tenant identification** (`X-Company-ID: abc`)
+- **Environment routing** (`X-Environment: production`)
+- **API versioning** (`X-API-Version: v1`)
+- **Custom auth schemes**
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `api` |
+| Installs | 147 |
+| Env var | `ANTHROPIC_CUSTOM_HEADERS` |
+| Format | Multi-line, one header per line |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting api/custom-headers
+```
+
+Set up your env:
+
+```bash
+export ANTHROPIC_CUSTOM_HEADERS="X-Company-ID: your-company-id
+X-Environment: production
+X-API-Version: v1"
+```
+
+For Claude:
+
+```
+I installed the api/custom-headers setting. Verify that the headers are
+sent correctly with a test request to the API.
+```
+
+## What you can do with this
+
+### Multi-tenant SaaS
+
+If your org uses the Anthropic API in a multi-tenant setup, the headers let you distinguish tenants.
+
+### Routing by env
+
+Your proxy can route based on headers. `X-Environment: staging` takes you to the staging endpoint.
+
+### Custom auth gateway
+
+If your org has its own API gateway in front of the real API, the headers let the gateway validate.
+
+### Combo with [Corporate Proxy](/boveda/setting-corporate-proxy)
+
+Proxy + Custom Headers = complete enterprise networking.
+
+### Combo with [Bedrock Configuration](/boveda/setting-bedrock-configuration)
+
+If you use Bedrock with custom auth, headers complement it.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **For individual use:** it adds nothing.
+- **If your API doesn't expect custom headers:** they may break requests.
+- **For simple auth with an API key:** [API Key Helper](/boveda/setting-api-key-helper) or a direct env var is enough.
+- **Without coordinating with the backend team:** the headers have to match what the server expects.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Custom Headers Setting](https://www.aitmpl.com/component/settings/api/custom-headers) — exact command.
+- **Config JSON:** [custom-headers.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/custom-headers.json).
+
+## Related resources
+
+- [Corporate Proxy Setting](/boveda/setting-corporate-proxy) — enterprise networking.
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — AWS path.
+- [API Key Helper Setting](/boveda/setting-api-key-helper) — dynamic auth.

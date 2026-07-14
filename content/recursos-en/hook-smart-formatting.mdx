@@ -1,0 +1,97 @@
+---
+title: "Hook Smart Formatting — format by file type (2,076 installs, #3 overall)"
+description: "Hook with 2,076 installs (#3 overall). Automatically detects the language and applies the right formatter: Prettier (JS), Black (Python), gofmt (Go), rustfmt (Rust), and more. Universal formatter pipeline."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-format-javascript-files", "hook-format-python-files", "hook-lint-on-save"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/smart-formatting"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/smart-formatting.json"
+---
+
+## What it is
+
+**#3 overall in the catalog (2,076 installs).** The universal formatter pipeline.
+
+After every edit, it detects the language and applies the right formatter:
+- **JS/TS** → Prettier
+- **Python** → Black
+- **Go** → gofmt
+- **Rust** → rustfmt
+- **And more language-specific ones**
+
+It replaces the individual hooks ([Format JavaScript Files](/boveda/hook-format-javascript-files), [Format Python Files](/boveda/hook-format-python-files)) with a single one that covers them all.
+
+Hook event: `PostToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `development-tools` |
+| Installs | **2,076 (#3 overall)** |
+| Hook event | `PostToolUse` |
+| Formatters | Prettier, Black, gofmt, rustfmt, +more |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook development-tools/smart-formatting
+```
+
+Prerequisite: the formatters for your languages installed.
+
+For Claude:
+
+```
+I installed the development-tools/smart-formatting hook. List which
+formatters it detects as available on my system (prettier, black,
+gofmt, etc.).
+```
+
+## What you can do with it
+
+### Universal format pipeline
+
+No matter the language, formatting gets applied. You don't have to install a hook per language.
+
+### For polyglot repos
+
+If your repo has JS + Python + Go (a common case), a single hook covers them all.
+
+### Combo with [Lint On Save](/boveda/hook-lint-on-save)
+
+Format first, lint after. A clean cross-language pipeline.
+
+### For autonomous sessions
+
+Long `/goal`: code always ends up formatted, without you having to remember to ask for it.
+
+### Replaces several hooks
+
+If you have [Format JS](/boveda/hook-format-javascript-files) and [Format Python](/boveda/hook-format-python-files) separately, this one replaces them with a single hook.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **No formatters installed:** the hook fails silently for languages without a tool.
+- **If your team has a custom formatter:** it may not be in the supported list.
+- **For very niche languages:** check compatibility.
+- **If you already have [Format JS](/boveda/hook-format-javascript-files) or [Format Python](/boveda/hook-format-python-files):** don't install both.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Smart Formatting Hook](https://www.aitmpl.com/component/hooks/development-tools/smart-formatting) — exact command.
+- **JSON config:** [smart-formatting.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/smart-formatting.json).
+
+## Related resources
+
+- [Format JavaScript Files Hook](/boveda/hook-format-javascript-files) — JS/TS-specific if that's all you need.
+- [Format Python Files Hook](/boveda/hook-format-python-files) — Python-specific.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — the #2 in the catalog, a natural combo post-format.

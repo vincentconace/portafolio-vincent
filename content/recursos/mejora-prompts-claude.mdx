@@ -1,0 +1,267 @@
+---
+title: "Prompt Improver — plugin que evalúa tu prompt antes de ejecutarlo"
+description: "Plugin para Claude Code que intercepta cada prompt: si es claro pasa directo (cero overhead), si es vago hace 1-6 preguntas inteligentes antes de ejecutar. Hook layer + skill layer. Hasta 31% menos tokens desperdiciados en retrabajo."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "plugins"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["hablarle-a-claude", "comando-de-sistema", "cinco-errores-claude"]
+---
+
+## La idea
+
+Imaginate un asistente que **revisa tu prompt antes** de que Claude lo ejecute:
+
+- Si tu instrucción es **clara y con contexto** → pasa directo, **cero overhead**
+- Si es **vaga o ambigua** → hace 1-6 preguntas inteligentes antes de proceder
+
+Es como un arquitecto que te pide clarificar el plano antes de construir. No te frena — te **ahorra retrabajo**.
+
+Resultado: prompts más precisos, respuestas más útiles, **hasta 31% menos tokens** desperdiciados.
+
+Repo: `severity1/claude-code-prompt-improver`. Open source.
+
+---
+
+## Cómo funciona — 2 capas
+
+### Hook layer — el evaluador
+
+Hook que **intercepta cada prompt** antes de Claude. Evalúa: ¿claro o vago?
+
+- **Claro** → deja pasar
+- **Vago** → activa la skill layer
+
+### Skill layer — el clarificador
+
+Solo se activa con ambigüedad. Ejecuta 4 fases:
+
+1. **Research** — investiga contexto del proyecto
+2. **Questions** — genera preguntas específicas
+3. **Clarify** — refina el prompt con tus respuestas
+4. **Execute** — ejecuta el prompt mejorado
+
+### Bypass prefixes
+
+| Prefix | Efecto |
+|--------|--------|
+| `*` al inicio | Salta la evaluación |
+| `/` | Slash commands se ignoran auto |
+| `#` | Comments se ignoran auto |
+
+---
+
+## Pre-requisitos
+
+- **Claude Code 2.0.22+** (ver [instalar Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Instalación — 3 comandos
+
+```bash
+# 1. Agregar marketplace
+claude plugin marketplace add severity1/severity1-marketplace
+
+# 2. Instalar plugin
+claude plugin install prompt-improver@severity1-marketplace
+
+# 3. Reiniciar Claude Code
+claude
+```
+
+### Verificar
+
+```
+> /plugin
+```
+
+Buscá `prompt-improver` en la lista. O probá un prompt vago:
+
+```
+> arreglá el bug
+```
+
+Si te hace preguntas de clarificación, está activo.
+
+---
+
+## La magia — no interrumpe cuando ya sos claro
+
+El plugin solo interviene cuando puede mejorar el resultado. Si escribís prompts detallados con contexto suficiente, **ni te enterás de que está ahí**.
+
+---
+
+## Antes vs después
+
+### Prompt vago → plugin interviene
+
+```
+arreglá el bug
+```
+
+Plugin detecta ambigüedad → pregunta:
+
+```
+- ¿En qué archivo o componente está el bug?
+- ¿Cuál es el comportamiento esperado vs el actual?
+- ¿Hay error en consola o stack trace?
+- ¿Se reproduce siempre o solo en ciertas condiciones?
+```
+
+Con tus respuestas → Claude ejecuta con contexto completo. **Cero retrabajo**.
+
+### Prompt claro → pasa directo
+
+```
+En src/components/Header.tsx el botón de login no redirige al usuario
+después de autenticarse. El onClick llama a signIn() pero no tiene
+redirect callback. Agregá router.push("/dashboard") después de que
+signIn() resuelva exitosamente.
+```
+
+Plugin detecta que tiene contexto suficiente → **ejecuta sin interrumpir**.
+
+---
+
+## El flujo completo
+
+```
+1. Vos: escribís prompt
+2. Hook evalúa: ¿claro o vago?
+3a. ¿Claro? → ejecuta directo
+3b. ¿Vago? → activa skill
+4. Skill: research + questions
+5. Vos: respondés
+6. Skill: clarify + execute con contexto completo
+```
+
+---
+
+## Prompts para probar (vagos a propósito)
+
+```
+refactorizá este código para que sea más limpio
+```
+
+Plugin pregunta: ¿qué código? ¿qué tipo de refactoring?
+
+```
+agregá tests al proyecto
+```
+
+Plugin pregunta: ¿tests de qué? ¿unitarios, integración? ¿qué componente?
+
+```
+la app está lenta, mejorá rendimiento
+```
+
+Plugin pregunta: ¿qué parte? ¿frontend, backend, DB?
+
+```
+implementá la nueva feature que discutimos
+```
+
+Plugin pregunta: ¿qué feature? ¿con qué specs?
+
+---
+
+## Por qué ahorra 31% en tokens
+
+Sin plugin:
+
+```
+1. Prompt vago (50 tokens)
+2. Claude intenta interpretar y ejecuta algo (1000 tokens)
+3. Vos: "no, eso no era lo que quería" (30 tokens)
+4. Claude re-intenta (1200 tokens)
+5. Vos: "tampoco" (20 tokens)
+6. Iterás hasta acertar
+```
+
+Total: 3000-5000 tokens desperdiciados.
+
+Con plugin:
+
+```
+1. Prompt vago (50 tokens)
+2. Plugin pregunta (100 tokens)
+3. Vos respondés (80 tokens)
+4. Claude ejecuta bien la primera (1200 tokens)
+```
+
+Total: ~1400 tokens. **~60% menos**.
+
+El 31% promedio reportado es conservador.
+
+---
+
+## Anti-patrones
+
+### 1. Usar bypass (`*`) para todo
+
+Si saltás el plugin con `*` en cada prompt, **pierde el sentido**. Usá `*` solo cuando estás 100% seguro que el contexto es claro.
+
+### 2. Respuestas vagas a las preguntas
+
+Plugin pregunta "¿qué archivo?" y vos respondés "el del bug". **Sigue siendo vago**. Sé específico en las respuestas.
+
+### 3. Frustrarte con las preguntas
+
+Las preguntas **te ahorran retrabajo**. Si te molesta responder 3 preguntas ahora, vas a frustrarte más con 5 iteraciones después.
+
+### 4. Esperar que sustituya CLAUDE.md
+
+El plugin te ayuda **por prompt**. CLAUDE.md te ayuda **siempre**. Los dos son complementarios, no sustitutos.
+
+### 5. Confiar 100% en el juicio del plugin
+
+A veces el plugin marca como vago algo que vos sabés que está claro en el contexto de tu sesión. Si pasa seguido, usá `*` y seguí.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Workflows exploratorios | Querés iterar libre, no responder preguntas |
+| Brainstorming creativo | Las preguntas matan flow creativo |
+| Ya tenés disciplina de prompts | El plugin no aporta a quien ya prompea bien |
+| Sesiones súper rápidas | Las preguntas agregan fricción |
+
+---
+
+## Combinaciones potentes
+
+### Con Hablarle a Claude
+
+[Hablarle a Claude](/boveda/hablarle-a-claude) te enseña los 4 elementos. Plugin te recuerda aplicarlos cuando se te olvida.
+
+### Con Comando de Sistema
+
+[Comando de sistema](/boveda/comando-de-sistema) crea system prompts. Plugin afina los prompts individuales.
+
+### Con CLAUDE.md
+
+Si en CLAUDE.md ponés tus convenciones, plugin tiene **menos preguntas que hacer** porque el contexto está cargado.
+
+### Con 5 errores Claude
+
+[5 errores Claude](/boveda/cinco-errores-claude) cubre hábitos. Plugin es **safety net** automático cuando los hábitos fallan.
+
+---
+
+## Caso ideal del plugin
+
+Sos un dev intermedio. Conocés Claude bien pero a veces te apurás y mandás prompts flojos. El plugin te **forzar** a ser claro cuando hace falta, sin frenar cuando ya estás siendo claro.
+
+Resultado: tu output mejora **sin que vos te esfuerces más**.
+
+---
+
+## Próximos pasos
+
+- Para entender qué hace un buen prompt, [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para crear system prompts reutilizables, [comando de sistema](/boveda/comando-de-sistema)
+- Para evitar errores básicos que el plugin no cubre, [5 errores Claude](/boveda/cinco-errores-claude)

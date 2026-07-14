@@ -1,0 +1,366 @@
+---
+title: "Vercel's Agent Browser — Claude's eyes that won't burn your account"
+description: "Vercel Labs launched Agent Browser: a browser for Claude Code that cuts token cost by ~10x. Instead of sending full screenshots (~3000 tokens/action like Claude for Chrome or Playwright), it numbers buttons and inputs and sends only that (~300 tokens). Setup in 2 minutes with a prompt."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "skills", "vercel"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["claude-control-remoto", "clonador-de-paginas", "cinco-errores-claude"]
+---
+
+## The problem with Claude browsing the internet
+
+Claude **couldn't browse the internet** efficiently. The 2 existing options:
+
+| Approach | Cost per action | Problem |
+|----------|------------------|----------|
+| **Claude for Chrome** | ~3000 tokens | Sends the whole screenshot → account melts down |
+| **Playwright MCP** | ~3000 tokens | Same problem (sends HTML + screenshot) |
+
+You'd ask for something simple and it would burn 1000 tokens on a single capture. **3 actions and your account was toast**.
+
+Vercel Labs' **Agent Browser** changes the approach: instead of sending the entire page, it **numbers the interactive elements** and sends only the list.
+
+| Approach | Cost per action |
+|----------|------------------|
+| **Agent Browser** | ~300 tokens (**10x less**) |
+
+---
+
+## The idea — explained simply
+
+### Before (screenshots)
+
+> Picture walking into a store with your eyes closed. If I described everything I see (the lights, the shelves, the signs, the colors, everything), it would take an hour.
+
+Claude for Chrome / Playwright = that friend who describes everything.
+
+### Now (numbered refs)
+
+> But if I tell you: "you've got 3 doors: 1 restroom, 2 checkout, 3 exit," that's enough to get around.
+
+Agent Browser sends Claude:
+
+```
+Button 1: "Sign in"
+Link 2: "See more"
+Input 3: "Your email"
+Button 4: "Buy"
+...
+```
+
+And when you say "buy it," Claude says **"click 4 for me"** and done.
+
+It's the same thing you do when you browse: you don't read the image pixel by pixel — you read the element names and click the one you want.
+
+---
+
+## Real cost comparison
+
+| Task | Claude+Chrome | Playwright | Agent Browser |
+|-------|---------------|------------|----------------|
+| Summarize a blog article | ~12k tokens | ~12k tokens | ~1.2k tokens |
+| Audit your landing page | ~30k tokens | ~30k tokens | ~3k tokens |
+| Fill a 15-field form | ~50k tokens | ~50k tokens | ~5k tokens |
+| Test checkout E2E | ~80k tokens | ~80k tokens | ~8k tokens |
+
+In a **typical session** of 10 actions:
+- Claude+Chrome / Playwright: **~30k tokens**
+- Agent Browser: **~3k tokens**
+
+Your Pro quota lasts **5-10x longer** on browsing tasks.
+
+---
+
+## What Agent Browser is NOT
+
+- **It's not a Chrome extension**. It's a separate tool with its own browser. Claude **doesn't touch your Chrome** or your personal cookies.
+- **It doesn't replace Claude for Chrome for everything**. It's for agents running from code. If you want Claude to browse while you watch the screen, that's a different flow ([computer use](/boveda/claude-control-remoto)).
+- **It's not magic**. If a page has CAPTCHAs or 2FA login, Claude **stops and asks you**. That's exactly what you want.
+
+---
+
+## Setup — 2 minutes
+
+### Option A — Prompt for Claude to install it (recommended)
+
+Open Claude Code in any folder and paste:
+
+```
+> I want you to install Vercel Labs' Agent Browser in this
+  project, so you can browse pages for me afterward.
+
+  Repository: https://github.com/vercel-labs/agent-browser
+
+  Steps:
+  1. Read the README to identify the recommended installation
+     method for Claude Code. The likely command:
+     npx skills add https://github.com/vercel-labs/agent-browser
+     Confirm it against the README before running it.
+
+  2. Install the tool and everything it needs (it probably
+     downloads a testing Chrome — that's fine, let it).
+
+  3. Verify it got registered as a skill or MCP depending on the
+     method it uses.
+
+  4. Test it: open https://example.com, grab the title and
+     return it to me in chat. If you return "Example Domain"
+     it's working.
+
+  If something fails, do NOT invent a fix. Paste me the exact error.
+```
+
+### Option B — Direct command
+
+```bash
+npx skills add https://github.com/vercel-labs/agent-browser
+```
+
+---
+
+## Verification
+
+```
+> Open https://example.com with Agent Browser and return the title to me.
+```
+
+If it replies "Example Domain," it's active.
+
+---
+
+## 5 typical use cases
+
+### 1. Read a link and summarize
+
+```
+> Use Agent Browser to open this link and read the whole page:
+  [URL]
+
+  Return to me:
+  1. Summary in 3 bullets — what it says, one sentence each
+  2. 3 concrete actions I could take after reading
+  3. If something is unclear or looks like inflated marketing,
+     flag it as "heads up"
+
+  Do NOT copy whole paragraphs. I want the distilled version.
+  If the link redirects or asks for login, let me know.
+```
+
+### 2. Audit your own landing page
+
+```
+> Use Agent Browser to visit my landing page: [URL]
+
+  Do this:
+  1. Arrive as a first-time visitor (no prior context)
+  2. In the first 3 seconds, tell me what you understood I'm selling
+  3. Read down to the first CTA — what breaks? what confuses?
+     any claims without proof? empty phrases like "innovative
+     solutions"?
+  4. Scroll to the footer and tell me what's there (FAQ, testimonials,
+     price, guarantee)
+  5. Send me the 3 things I'd change RIGHT NOW to boost conversion
+
+  Do NOT tell me "the landing page looks good." Tell me what breaks.
+```
+
+### 3. Download reference images/assets
+
+```
+> Use Agent Browser to visit this page: [URL]
+
+  I want you to:
+  1. Identify the hero image (the main one at the top)
+  2. Identify images from the following sections (features,
+     testimonials) — max 5
+  3. Download them to /public/references/ with descriptive
+     names (hero-1.jpg, feature-pricing.jpg)
+  4. Summary: how many you downloaded, where they are, what each one shows
+
+  If the page has inline SVGs, copy the code into a
+  separate file for me.
+```
+
+### 4. Fill out a complex form
+
+```
+> Use Agent Browser to fill out this form: [URL]
+
+  My details:
+  - Name: [...]
+  - Email: [...]
+  - [rest of the details]
+
+  Rules:
+  1. Before touching anything, take a snapshot and send me the list
+     of fields so I can confirm
+  2. Fill one field at a time. After each one, verify
+     it's correct before the next
+  3. Do NOT touch submit until I confirm. Show me what
+     you filled in first
+  4. If there's a field you don't understand or that asks for something
+     I didn't give you, stop and ask me.
+```
+
+### 5. Test checkout end-to-end
+
+```
+> Use Agent Browser to test my store's checkout:
+  [product URL]
+
+  Walkthrough:
+  1. Product page
+  2. Add to cart
+  3. Checkout
+  4. Fill with a Stripe test card:
+     4242 4242 4242 4242, 12/30, CVC 123
+  5. BEFORE confirming payment, stop and send me a summary:
+     subtotal, shipping, total, accepted payment method,
+     validations it ran
+  6. Do NOT complete the payment. Just report the state.
+
+  If at any step something doesn't load, doesn't show up, throws an error or
+  hangs — stop right there and send me a screenshot + description.
+```
+
+---
+
+## Advanced use cases
+
+### Automated monitoring with `/loop`
+
+```
+> /loop daily 9am use Agent Browser to check the prices
+  of my 5 main competitors. Email me if any of them
+  changed >5%.
+```
+
+### Continuous auditing of your site
+
+```
+> /loop 4h audit my landing page with Agent Browser. Report if:
+  - Page Load Speed drops >2 seconds
+  - The main CTA breaks
+  - Anything doesn't show up in mobile viewport
+```
+
+### Lead generation from directories
+
+```
+> Use Agent Browser to visit directorio.com.
+  Identify businesses under "restaurants Buenos Aires".
+  For the first 20:
+  - Extract name, email, phone, website
+  - Validate that the email looks real (not @example.com)
+  - Save to /leads/2026-05.csv
+```
+
+### Testing competitor UX
+
+```
+> Use Agent Browser to visit [competitor.com].
+  Go through the full signup flow.
+  Document:
+  - Exact steps
+  - Friction points
+  - Best practices that apply
+  - Things they'd do differently/worse
+
+  Report it to me in a structured way to inspire my own onboarding.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Using Agent Browser for everything
+
+For visual tasks (reviewing design, evaluating layouts), you **need the screenshots** that Agent Browser doesn't send. For that, use [computer use](/boveda/claude-control-remoto) or Playwright MCP.
+
+Agent Browser shines at **navigation + data extraction + automation**.
+
+### 2. Expecting it to understand visual layout
+
+If your question is "does this look good?", Agent Browser won't help you. It only sees the **semantic structure**, not the visuals.
+
+### 3. Trusting sites with strong anti-bot protection
+
+Cloudflare strict, banking sites, gov sites — they can detect Agent Browser's browser as a bot and block it. For those, consider the official API or a manual flow.
+
+### 4. Not using numbered refs explicitly
+
+Claude sometimes "forgets" the refs and tries to describe by text ("the blue button at the top"). **Explicitly tell it** to use refs:
+
+```
+> When you interact, ALWAYS reference by number
+  (Button 4, Input 7), never by description.
+```
+
+### 5. Giant sessions without a reset
+
+If your session browses 50 pages, the context fills up with old refs. **Reset periodically** or close tabs between different tasks.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| You need to judge the UI visually | Agent Browser doesn't send images |
+| Sites with aggressive anti-bot | Detected and blocked |
+| 1-action tasks | The setup isn't worth it |
+| SPA apps with very custom JS | Sometimes doesn't detect the right elements |
+
+---
+
+## Powerful combinations
+
+### With Claude SEO
+
+```
+> Use Agent Browser to crawl the 50 pages of my site.
+  For each one:
+  - Extract H1, meta title, meta description
+  - Identify CTAs
+  - Detect broken links
+  Then run it through /seo-audit from the Claude SEO skill.
+```
+
+[Claude SEO](/boveda/claude-seo) + Agent Browser = automated deep audit.
+
+### With Page Cloner
+
+```
+> Clone https://stripe.com with the cloner.
+  Then use Agent Browser to visit the live one, compare
+  it with your clone, and report visible differences.
+```
+
+[Page Cloner](/boveda/clonador-de-paginas) + Agent Browser = validated clone.
+
+### With Agent View
+
+Multiple agents browsing in parallel. One scrapes competitor A, another B, another C. Agent View shows them all.
+
+---
+
+## ROI
+
+If you do regular navigation work (research, audits, monitoring):
+
+| Plan | Without Agent Browser | With Agent Browser |
+|------|---------------------|-------------------|
+| Pro $20 | ~3-5 intensive browsing sessions/month | ~30-50 sessions |
+| Max $100 | ~15 sessions | ~150 sessions |
+
+For cases with regular browser automation: **transformative**.
+
+---
+
+## Next steps
+
+- To operate your local machine with Claude (not just the browser), [Computer Use](/boveda/claude-control-remoto)
+- To clone page designs instead of just browsing, [page cloner](/boveda/clonador-de-paginas)
+- To understand why your account burns out and how to avoid it, [5 Claude mistakes](/boveda/cinco-errores-claude)

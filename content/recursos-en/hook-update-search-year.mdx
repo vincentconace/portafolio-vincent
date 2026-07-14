@@ -1,0 +1,85 @@
+---
+title: "Hook Update Search Year — automatically adds the current year to WebSearch (1,896 installs)"
+description: "Hook with 1,896 installs (#4 in the catalog). Intercepts WebSearch queries and adds the current year if it's not specified. Anti-stale-info: brings you recent results without you having to ask."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-context7", "mcp-jina-ai", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/pre-tool/update-search-year"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/update-search-year.json"
+---
+
+## What it is
+
+**1,896 installs — #4 in the catalog.** The reason: it catches a subtle but costly problem.
+
+When Claude uses the WebSearch tool and you ask "what's new in React" without specifying a year, the results might be from 2022 without you noticing. This hook intercepts the query and adds the current year (`2026` right now).
+
+It goes from "what's new in React" → "what's new in React 2026". Fresh results guaranteed.
+
+Hook event: `PreToolUse` (WebSearch).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `pre-tool` |
+| Installs | **1,896 (#4 in the catalog)** |
+| Hook event | `PreToolUse` (WebSearch) |
+| Mechanism | Appends the current year if missing |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook pre-tool/update-search-year
+```
+
+For Claude:
+
+```
+I installed the pre-tool/update-search-year hook. Ask it to search for
+"best React patterns" — it should transform it into "best React patterns
+2026" before the search.
+```
+
+## What you can do with this
+
+### Anti-stale info in searches
+
+Without the hook, "Next.js best practices" might bring you results from 2021. With the hook, 2026.
+
+### For info that changes fast
+
+Frameworks, tools, AI tools — anything fast-moving. The hook is basically mandatory for these searches.
+
+### Combo with [Context7 MCP](/boveda/mcp-context7)
+
+Context7 covers library docs (specific versions). This hook covers web searches. They cover different angles of the "Claude using old info" problem.
+
+### Zero cost, high benefit
+
+It doesn't consume tokens (it modifies the query beforehand) and adds no noticeable latency. The benefit: fresher searches.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **For historical searches:** "first iPhone" doesn't need "first iPhone 2026".
+- **For timeless info:** "what is OAuth" — the year adds nothing.
+- **If your usage is 100% specific docs:** [Context7](/boveda/mcp-context7) covers it better.
+
+</Callout>
+
+## Download it from the source
+
+- **Listing on aitmpl.com:** [Update Search Year Hook](https://www.aitmpl.com/component/hooks/pre-tool/update-search-year) — exact command.
+- **JSON config:** [update-search-year.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/pre-tool/update-search-year.json).
+
+## Related resources
+
+- [Context7 MCP](/boveda/mcp-context7) — for version-aware library docs.
+- [Jina AI MCP](/boveda/mcp-jina-ai) — for complementary grounding + fact-checking.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — anti-hallucination patterns.

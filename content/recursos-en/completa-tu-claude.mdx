@@ -1,0 +1,276 @@
+---
+title: "5 projects that complete what Claude is missing by default"
+description: "Out-of-the-box Claude is powerful but it's missing 5 things: thinking before acting, following engineering rules, remembering sessions, running repeatable processes, working in parallel. These 5 open source projects patch them. Karpathy Skills, Superpowers, claude-mem, GSD, sub-agents."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["cinco-repos-dominando-claude", "trucos-basicos-de-claude", "claude-fabrica-a-pro"]
+---
+
+## What Claude is missing by default
+
+Claude is powerful **but it's missing 5 things**:
+
+| # | Gap | The patch |
+|---|----------|-----------|
+| 1 | Thinks little before acting | **Karpathy Skills** |
+| 2 | Doesn't know engineering rules | **Superpowers** |
+| 3 | Forgets between sessions | **claude-mem** |
+| 4 | Improvises processes | **GSD (Get Shit Done)** |
+| 5 | Works in series | **Sub-agents** |
+
+All open source, free. Setup in 1-2 commands each.
+
+---
+
+## Patch 1 — Karpathy Skills (65k+ ⭐)
+
+### What it fixes
+
+Getting Claude to **think before coding**. 4 principles from Andrej Karpathy (ex-OpenAI, ex-Tesla AI Director):
+
+1. **Think before coding** — don't rush
+2. **Keep it simple** — no unnecessary complications
+3. **Surgical changes** — only touch what you asked for
+4. **Goal-focused** — don't drift into "improving other things along the way"
+
+### Installation
+
+See [5 repos to master Claude](/boveda/cinco-repos-dominando-claude#repo-2--andrej-karpathy-skills) for detail.
+
+```bash
+git clone https://github.com/forrestchang/andrej-karpathy-skills.git \
+  ~/.claude/skills/andrej-karpathy-skills
+```
+
+Or straight as a CLAUDE.md in your project:
+
+```bash
+curl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md
+```
+
+---
+
+## Patch 2 — Superpowers (150k+ ⭐)
+
+### What it fixes
+
+It **teaches Claude professional engineering rules**:
+- Spec-first (won't code until the design is validated)
+- Specialized sub-agents with automatic review
+- Real TDD with the RED-GREEN-REFACTOR cycle
+- Hours of autonomy without drifting off plan
+
+### Installation
+
+```bash
+npx superpowers@latest init
+```
+
+See [top 10 April 2026](/boveda/top-10-claude-abril-2026#superpowers) for details.
+
+---
+
+## Patch 3 — claude-mem (54k+ ⭐)
+
+### What it fixes
+
+It gives Claude **persistent memory** between sessions. It automatically captures:
+- Which tools it used
+- Which decisions you made
+- Which files you touched
+
+When you come back tomorrow, **Claude already knows where things left off**.
+
+### Installation
+
+```bash
+npx claude-mem install
+```
+
+Then you restart Claude Code. See [5 repos to master Claude](/boveda/cinco-repos-dominando-claude#repo-1--claude-mem) for details.
+
+---
+
+## Patch 4 — GSD (Get Shit Done)
+
+### What it fixes
+
+It gives Claude a structured **repeatable process** for projects. 6 commands that take you from idea to deploy:
+
+| Command | What for |
+|---------|----------|
+| `/gsd:new-project` | Start from scratch |
+| `/gsd:discuss-phase` | Define what to build |
+| `/gsd:plan-phase` | Create a step-by-step plan |
+| `/gsd:execute-phase` | Execute the plan |
+| `/gsd:verify-work` | Verify it works |
+| `/gsd:ship` | Push and deploy |
+
+### Installation
+
+```bash
+npx get-shit-done-cc@latest
+```
+
+See [Claude on autopilot](/boveda/claude-piloto-automatico#truco-3a--gsd-proyectos-nuevos) for details.
+
+---
+
+## Patch 5 — Sub-agents
+
+### What it fixes
+
+Getting Claude to work **in parallel**, not serially. When a task has 4 independent parts, **4 sub-agents** handle them at the same time.
+
+- 4x faster
+- Less context confusion
+- Each sub-agent focused on its own area
+
+### How to use them
+
+No installation required. Just ask for it:
+
+```
+> This task has 4 independent parts:
+  1. [X]
+  2. [Y]
+  3. [Z]
+  4. [W]
+
+  Launch 4 sub-agents in parallel. Each with its own context.
+  Report back when all of them finish.
+```
+
+More details in [basic Claude tricks](/boveda/trucos-basicos-de-claude#truco-2--sub-agentes).
+
+---
+
+## The full combo
+
+### Recommended setup (order matters)
+
+```bash
+# 1. Karpathy Skills first (changes base behavior)
+git clone https://github.com/forrestchang/andrej-karpathy-skills.git \
+  ~/.claude/skills/andrej-karpathy-skills
+
+# 2. claude-mem (memory between sessions)
+npx claude-mem install
+
+# 3. Superpowers (when you build something big)
+npx superpowers@latest init
+
+# 4. GSD (for new projects)
+npx get-shit-done-cc@latest
+
+# Sub-agents don't require install — just ask for them
+```
+
+### Restart Claude Code after installing
+
+```bash
+exit
+claude
+```
+
+---
+
+## Use cases
+
+### 1. Starting a serious new project
+
+```
+1. /gsd:new-project (GSD asks about the idea)
+2. /gsd:discuss-phase (defines v1 scope)
+3. /gsd:plan-phase (step-by-step plan)
+4. /gsd:execute-phase with Superpowers (sub-agents execute)
+5. /gsd:verify-work
+6. /gsd:ship
+```
+
+Karpathy Skills + claude-mem running in the background.
+
+### 2. Working on an existing project
+
+```
+- claude-mem brings in yesterday's context
+- Karpathy Skills keeps Claude from over-engineering
+- For big tasks, parallel sub-agents
+- Superpowers when there's a refactor
+```
+
+### 3. Quick fix
+
+You only need Karpathy Skills + claude-mem. GSD and Superpowers are **overkill**.
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 5 without understanding them
+
+Each one changes behavior. If you turn on 5 without knowing what each does, **you get confused**. **Turn them on one at a time**, understand the effect, then add more.
+
+### 2. GSD for small tasks
+
+GSD adds ceremony (6 phases). For "change this text" it's **overkill**.
+
+### 3. Superpowers without a clear spec
+
+Superpowers assumes you know what to build. If your spec is vague, **Superpowers gets stuck**. Use GSD first to clarify.
+
+### 4. claude-mem and then forgetting about it
+
+claude-mem stores **everything automatically**. Review it periodically at `localhost:37777` to audit what it remembers.
+
+### 5. Karpathy Skills and vague prompts
+
+Karpathy Skills makes Claude think harder before acting — but **if your prompt is vague, it thinks about something vague**. Apply [talking to Claude](/boveda/hablarle-a-claude) as well.
+
+---
+
+## Comparison with alternatives
+
+| Alternative | When |
+|-------------|--------|
+| **These 5 patches** | Full stack for a pro Claude |
+| [Claude from factory to pro](/boveda/claude-fabrica-a-pro) | Simpler version (4 tools) |
+| [5 repos to master Claude](/boveda/cinco-repos-dominando-claude) | Another 5 (Hermes, GenericAgent, Evolver) |
+| Nothing | Default Claude |
+
+---
+
+## Powerful combinations
+
+### With a tuned CLAUDE.md
+
+Your global CLAUDE.md with your preferences + these 5 patches = pro setup.
+
+### With Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) cuts verbosity. These 5 improve behavior. **Complementary**.
+
+### With a profile
+
+[Claude profile](/boveda/perfil-claude) applies to every conversation. These 5 apply to Claude Code specifically.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You use Claude casually | The setup doesn't pay off |
+| No patience to configure | 4 different setups |
+| Critical enterprise production | Validate compatibility |
+
+---
+
+## Next steps
+
+- For a simpler alternative with 4 pieces, [Claude from factory to pro](/boveda/claude-fabrica-a-pro)
+- For another 5 repos that master Claude, [5 repos to master Claude](/boveda/cinco-repos-dominando-claude)
+- To go deeper on Karpathy Skills + sub-agents, [basic tricks](/boveda/trucos-basicos-de-claude)

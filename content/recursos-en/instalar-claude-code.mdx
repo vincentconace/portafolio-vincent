@@ -1,0 +1,319 @@
+---
+title: "Install Claude — complete guide to the desktop app + CLI in your terminal"
+description: "Two ways to install Claude: the desktop app (the easiest, Mac/Windows) or Claude Code in your terminal (for devs). We cover both: requirements, installation, first launch, verification, basic commands, and how to update."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-code-setup-zero", "cual-plan-claude", "hablarle-a-claude"]
+---
+
+## Two paths depending on your level
+
+| Path | Who it's for |
+|--------|------------|
+| **Desktop App** | Anyone, no terminal required |
+| **Claude Code CLI** | Devs who already live in the terminal |
+
+Both are **free to start**. Free plan to try it out, then you upgrade to Pro/Max if you need more usage (see [which Claude plan](/boveda/cual-plan-claude)).
+
+---
+
+## Path A — Desktop App (recommended to get started)
+
+### Download
+
+`claude.ai/download` — the site detects your OS and shows you the right button.
+
+Supports:
+- **macOS** 13+
+- **Windows** 10 (1809+)
+
+### Install
+
+| OS | How |
+|----|------|
+| Mac | Open the `.dmg`, drag Claude into Applications |
+| Windows | Double-click the `.exe`, follow the wizard |
+
+### Login
+
+The first time you open it, it asks for an account. If you don't have one, **create it for free** — you start on the Free plan.
+
+### What the desktop app gives you
+
+3 tools in a single interface:
+
+| Tool | What it's for |
+|-------------|----------|
+| **Claude (chat)** | AI assistant. Questions, analysis, writing, research |
+| **Claude Code** | Embedded coding agent. Reads your project, edits, runs commands |
+| **Cowork** | Collaborative coding. Works in the background while you keep going |
+
+---
+
+## Path B — Claude Code in the terminal (for devs)
+
+### Prerequisites
+
+| Requirement | How to check |
+|-------------|----------------|
+| Supported OS | macOS 13+, Windows 10 1809+, Ubuntu 20.04+, Debian 10+, Alpine 3.19+ |
+| At least 4GB RAM | (usually yes) |
+| Internet | (usually yes) |
+| On Windows: Git for Windows | `git --version` |
+| Your country is supported by Anthropic | List in the docs |
+
+### Native installation
+
+**macOS / Linux / WSL**:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows PowerShell**:
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Windows CMD**:
+
+```cmd
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+### Installation with a package manager
+
+**Homebrew (macOS)**:
+
+```bash
+brew install --cask claude-code
+```
+
+**WinGet (Windows)**:
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### What NOT to install
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+**It's deprecated**. If you're coming from old tutorials, don't use that method.
+
+---
+
+## First launch
+
+### In an existing project
+
+```bash
+cd ~/proyectos/mi-app
+claude
+```
+
+### Create a new project
+
+```bash
+mkdir mi-proyecto && cd mi-proyecto && claude
+```
+
+### Authentication flow
+
+1. When you run `claude`, the login flow opens
+2. Choose a method:
+   - **Claude App** (most common, log in with your account)
+   - **Console** (for the API)
+   - **Bedrock** (AWS enterprise)
+   - **Vertex AI** (GCP enterprise)
+3. Finish logging in
+4. Done — you can start asking for tasks
+
+---
+
+## Verification
+
+### Installed version
+
+```bash
+claude --version
+```
+
+It should show you something like `2.1.x`.
+
+### Full diagnostics
+
+```bash
+claude doctor
+```
+
+It checks:
+- Version
+- Permissions
+- Connection to Anthropic
+- Installed plugins
+- Configuration
+
+If it doesn't flag any critical errors, your **environment is ready**.
+
+---
+
+## The basic commands
+
+| Command | What it's for |
+|---------|----------|
+| `/init` | Creates the project's initial CLAUDE.md |
+| `/help` | Shows all available commands |
+| `/clear` | Clears the current context (without losing the project) |
+| `/compact` | Summarizes the conversation to use less context |
+| `/review` | Requests a code review of changes |
+| `/model` | Switches model (see [switch models](/boveda/cambia-de-modelo)) |
+| `/plugin` | Manages installed plugins |
+| `/skills` | Lists active skills |
+
+---
+
+## Updating Claude Code
+
+### If you installed with curl/irm (native)
+
+**Automatic updates in the background**. You don't have to do anything.
+
+### With Homebrew
+
+```bash
+brew upgrade claude-code
+```
+
+### With WinGet
+
+```powershell
+winget upgrade Anthropic.ClaudeCode
+```
+
+### Desktop App
+
+Auto-updates when you open it. If it's outdated, it offers you an update.
+
+---
+
+## When to choose each path
+
+### Desktop App is ideal if:
+
+✅ You've never touched a terminal in your life
+✅ You want to try Claude quickly without setup
+✅ You're interested in Cowork (projects, scheduled tasks)
+✅ You use Dispatch from your phone
+✅ You work in multi-tab mode (chat + code + cowork)
+
+### Claude Code CLI is ideal if:
+
+✅ You already live in the terminal (tmux, vim, neovim)
+✅ You work a lot with git
+✅ You want to integrate with your existing dev workflow
+✅ Heavy graphical apps annoy you
+✅ You use multiple projects in parallel (cd between them)
+
+**The two aren't mutually exclusive**. The desktop app installs the CLI underneath. You can use both.
+
+---
+
+## Installation anti-patterns
+
+### 1. Using old tutorials with `npm install -g`
+
+Deprecated. Use `curl` or `brew`/`winget`.
+
+### 2. Installing without checking the requirements
+
+If your OS isn't supported, you'll run into problems. **Check first**.
+
+### 3. No Git on Windows
+
+Without Git for Windows, several Claude Code features break. **Install it first**.
+
+### 4. Forgetting about the supported country
+
+Some countries have compliance restrictions. If you get "country not supported", you'll need a VPN (with caution: it violates Anthropic's TOS).
+
+### 5. Not verifying with `claude doctor`
+
+`claude doctor` tells you if something isn't working **before** you start working. **Run it after installing**.
+
+---
+
+## Common troubleshooting
+
+### "command not found: claude"
+
+Your path doesn't include Claude. On macOS/Linux, check:
+
+```bash
+echo $PATH | tr ':' '\n' | grep -i claude
+```
+
+If it doesn't show up, add it to your `~/.zshrc` or `~/.bashrc`.
+
+### "Cannot connect to Anthropic"
+
+Check:
+- Internet is working
+- Your country is supported
+- There's no corporate firewall blocking it
+
+### Old version after an upgrade
+
+Sometimes the package manager doesn't force a real upgrade:
+
+```bash
+brew uninstall claude-code
+brew install --cask claude-code
+```
+
+### macOS permissions
+
+The first time, it may ask for accessibility permissions (for Computer Use, hooks, etc.). Accept them in System Preferences → Security → Privacy.
+
+---
+
+## Next steps depending on your goal
+
+### You want to save tokens from day 1
+
+After installing, read [setup zero](/boveda/claude-code-setup-zero) and [Token Efficient](/boveda/claude-token-efficient).
+
+### You're going to work with code
+
+[Complete Claude Code guide](/boveda/guia-claude-code-completa) and [5 skills for a dev team](/boveda/5-skills-equipo-dev).
+
+### You want to know how to talk to it well
+
+[Talking to Claude](/boveda/hablarle-a-claude) and [Claude best practices](/boveda/mejores-practicas-claude).
+
+### You're going to use agents
+
+[Create agents with Claude](/boveda/crea-agentes-con-claude) and [create skills](/boveda/crea-claude-skills).
+
+---
+
+## Official sources
+
+- **Downloads**: `claude.ai/download`
+- **Plans**: `claude.ai/pricing`
+- **CLI docs**: `code.claude.com/docs`
+- **Quickstart**: `code.claude.com/docs/en/quickstart`
+
+---
+
+## Next steps
+
+- For post-installation setup with best practices, [setup zero](/boveda/claude-code-setup-zero)
+- To understand which plan to choose, [which Claude plan](/boveda/cual-plan-claude)
+- To learn how to talk to Claude from day one, [talking to Claude](/boveda/hablarle-a-claude)

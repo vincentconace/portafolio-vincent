@@ -1,0 +1,85 @@
+---
+title: "Setting Git Flow Status — statusline with feature/release/hotfix icons"
+description: "Setting with 84 installs. Statusline that shows Git Flow status: icons per branch type (🌿 feature, 🚀 release, 🔥 hotfix), sync status, change indicators. For Git Flow teams."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-git-flow-settings", "setting-git-branch-statusline", "hook-validate-branch-name"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/git-flow-status"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/git-flow-status.json"
+---
+
+## What it is
+
+Statusline focused on Git Flow. It shows:
+- **Branch type icon** based on prefix:
+  - 🌿 feature/*
+  - 🚀 release/*
+  - 🔥 hotfix/*
+- **Sync status** with the remote
+- **Change indicators** (uncommitted)
+
+It's the visual version of [Git Flow Settings](/boveda/setting-git-flow-settings) (the all-in-one bundle). If you only want the statusline without permissions/hooks, use this one.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 84 |
+| Icons | 🌿 🚀 🔥 |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/git-flow-status
+```
+
+For Claude:
+
+```
+I installed the statusline/git-flow-status setting. Switch to a
+feature/* branch and show me the icon that appears.
+```
+
+## What you can do with it
+
+### Quick branch type identification
+
+Without reading the full name, the icon tells you the branch type.
+
+### For teams with many active branches
+
+If you're working on 5 features in parallel, the icons help with quick context.
+
+### Combo with [Git Flow Settings](/boveda/setting-git-flow-settings)
+
+If you want the complete bundle (which includes this statusline), use [Git Flow Settings](/boveda/setting-git-flow-settings).
+
+### Combo with [Validate Branch Name](/boveda/hook-validate-branch-name)
+
+The hook enforces naming. The statusline shows the resulting icon. A natural combo.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Git Flow:** other workflows don't have the prefixes.
+- **If your terminal doesn't show emojis:** the icons appear as weird ?? characters.
+- **If your team uses a different convention:** it won't match.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Git Flow Status Setting](https://www.aitmpl.com/component/settings/statusline/git-flow-status) — exact command.
+- **JSON config:** [git-flow-status.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/git-flow-status.json).
+
+## Related resources
+
+- [Git Flow Settings Setting](/boveda/setting-git-flow-settings) — complete bundle (includes this one).
+- [Git Branch Statusline Setting](/boveda/setting-git-branch-statusline) — more general alternative (not Git Flow specific).
+- [Validate Branch Name Hook](/boveda/hook-validate-branch-name) — combo that enforces naming.

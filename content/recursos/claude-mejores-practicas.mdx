@@ -1,0 +1,254 @@
+---
+title: "Mejores prácticas Claude — la regla de las 2 correcciones (oficial Anthropic)"
+description: "Anthropic confirmó que la mayoría usamos mal a Claude: cada corrección contamina su contexto y empeora las respuestas. La regla: máximo 2 correcciones, después /clear y empezás de nuevo con instrucción mejorada. Cómo reescribir prompts después de un fail."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["hablarle-a-claude", "cinco-errores-claude", "prompting-101-anthropic"]
+---
+
+## El error que todos cometemos
+
+Claude se equivoca. Lo corregís. Se vuelve a equivocar. Volvés a corregir. **Cada vez se pone peor.**
+
+No es tu culpa. No es bug de Claude. Es **por diseño**. Anthropic lo confirmó.
+
+### Lo que pasa
+
+```
+Intento 1: pedís algo → se equivoca
+Intento 2: corregís → mejora algo, sigue fallando
+Intento 3: corregís → ahora falla en algo diferente
+Intento 4-6: cada corrección empeora
+```
+
+Te frustrás, perdés tiempo, resultado sigue malo.
+
+---
+
+## Por qué se pone peor
+
+### La memoria de Claude se contamina
+
+Claude NO empieza de cero cada vez. Todo lo que decís se queda en su **ventana de contexto**. Cada corrección **se apila encima** de todo lo que falló.
+
+### La analogía
+
+Le pedís a alguien que dibuje un gato. Sale mal. En lugar de darle hoja nueva, le decís "corregilo" sobre el mismo dibujo. Borra, dibuja encima, borra. Después de 5 correcciones, **el dibujo es desastre de tachones**.
+
+**Hoja nueva con instrucciones más claras siempre gana a hoja llena de tachones**.
+
+### Lo que dice Anthropic (oficial)
+
+> "El rendimiento de Claude se degrada a medida que la ventana de contexto se llena. Una sesión de depuración puede generar decenas de miles de tokens que distraen a Claude de las instrucciones originales."
+
+---
+
+## La regla de oro — **máximo 2 correcciones**
+
+Anthropic lo dice directo:
+
+> "Si has corregido a Claude más de dos veces en el mismo tema dentro de una sesión, el contexto está lleno de enfoques fallidos."
+
+### El flow
+
+| Intento | Acción |
+|---------|--------|
+| 1. Primer intento | Le pedís. Si sale bien, perfecto. Si no, corregís. |
+| 2. Primera corrección | Le decís qué salió mal y cómo arreglarlo. **La mayoría se resuelve acá**. |
+| 3. Segunda corrección | Si sigue fallando, último intento en esta conversación. |
+| **⚠ PUNTO DE DECISIÓN** | Si después de 2 NO funciona, **PARÁ**. Memoria contaminada. |
+
+---
+
+## Qué hacer cuando llegás al límite
+
+### 1. Limpiá la memoria
+
+```
+/clear
+```
+
+O abrí chat nuevo.
+
+### 2. Reescribí la instrucción
+
+ANTES de mandar el nuevo prompt, **destilás lo que aprendiste** de los intentos fallidos.
+
+#### Pregunta clave
+
+> "¿Qué piezas de info faltaban en mi primer prompt que ahora sé que tenía que dar?"
+
+### 3. Prompt mejorado
+
+Mandás el prompt **enriquecido** con todo el contexto que descubriste en la conversación anterior.
+
+---
+
+## Ejemplo real
+
+### Intento 1 (vago)
+
+```
+> Hacéme función que valide email
+```
+
+Claude tira algo. Falta validar dominios específicos.
+
+### Intento 2 (corrección)
+
+```
+> Pero también tiene que validar que el dominio sea de empresa,
+  no gmail/yahoo
+```
+
+Mejor pero no respeta tu formato de validation existente.
+
+### Intento 3 → STOP
+
+NO corregís más. En su lugar:
+
+```
+> /clear
+```
+
+### Nuevo prompt (destilado)
+
+```
+> Hacéme función que valide email con estos requisitos:
+  1. Formato RFC 5322 válido
+  2. Bloquear dominios gratuitos (gmail.com, yahoo.com, hotmail.com,
+     outlook.com, icloud.com)
+  3. Estilo: matchear validators existentes en /lib/validators/
+     (mismo patrón: throwear ValidationError con código específico)
+
+  Ubicación: /lib/validators/email.ts
+  Tests: agregalos en /lib/validators/email.test.ts
+```
+
+Claude lo resuelve en **una pasada**.
+
+---
+
+## Por qué esto ahorra tiempo (y dinero)
+
+| Aspecto | Sin la regla | Con la regla |
+|---------|--------------|--------------|
+| Intentos para resolver | 5-8 | 2-3 |
+| Tokens consumidos | Mucho (acumulan contaminación) | Menos |
+| Frustración | Alta | Baja |
+| Calidad final | Mediocre | Alta |
+
+Aplicar la regla **te ahorra tiempo + tokens + frustración** simultáneamente.
+
+---
+
+## Cuándo /clear sin haber agotado correcciones
+
+A veces conviene `/clear` **antes** del límite:
+
+### 1. Tu sesión cumplió su propósito
+
+Resolviste lo que querías. Próxima tarea es distinta → **clear**.
+
+### 2. Pivote de tema
+
+Estabas con auth. Ahora pasás a deploy. Sin clear, Claude **arrastra contexto de auth** que no aplica.
+
+### 3. Notaste contexto sucio
+
+Claude empieza a referenciar cosas viejas que ya no aplican → **clear**.
+
+### 4. Chat largo (50+ mensajes)
+
+Aunque no hayas corregido, el contexto pesa. **Reset periódico** mantiene calidad.
+
+---
+
+## Variante para Claude Code — `/compact`
+
+En Claude Code, en lugar de `/clear` (que borra todo), podés:
+
+```
+/compact
+```
+
+**Resume** la conversación manteniendo lo crítico, deshecha el ruido. Útil cuando:
+- Querés mantener algunas decisiones tomadas
+- No querés perder el archivo de trabajo
+
+Tradeoff: `/clear` es radical pero limpio. `/compact` preserva contexto pero conserva algo de contaminación.
+
+---
+
+## Anti-patrones
+
+### 1. Insistir 8 veces "hasta que lo logre"
+
+Cada intento empeora. **Cortá a las 2**.
+
+### 2. Empezar la nueva sesión con mismo prompt malo
+
+Si fallaste 2 veces con prompt X, hacer `/clear` y mandar prompt X de nuevo **falla igual**. **Destilá el aprendizaje**.
+
+### 3. Saltarse `/compact` para "ahorrar tiempo"
+
+`/compact` toma 5 segundos. Te ahorra 30 min de Claude confundido. **ROI claro**.
+
+### 4. Cambiar de modelo a mitad
+
+"Voy a probar con Opus 4.7 quizás funciona". Si el problema es **contexto contaminado**, otro modelo no salva. Lo que salva es `/clear`.
+
+### 5. No documentar el aprendizaje
+
+Si te tomó 3 intentos descubrir un requisito, **guardá esa info** en CLAUDE.md. Próxima vez, Claude la sabe desde el inicio.
+
+---
+
+## La regla aplicada a CLAUDE.md
+
+En tu CLAUDE.md global o por proyecto:
+
+```markdown
+## Reglas de conversación
+
+- Si me equivoco 2 veces en mismo tema, parate y avisame.
+- Sugerí /clear + prompt mejorado en lugar de 3ra corrección.
+- Cuando descubramos info crítica durante corrección, sugerí
+  agregarla a este CLAUDE.md para futuras sesiones.
+```
+
+Claude **te ayuda a aplicar la regla**.
+
+---
+
+## Combinaciones potentes
+
+### Con hablarle a Claude
+
+[Hablarle a Claude](/boveda/hablarle-a-claude) te enseña los 4 elementos de buen prompt. **Si los aplicás desde el inicio, llegás menos a la regla de las 2 correcciones**.
+
+### Con 5 errores Claude
+
+[5 errores que queman cuenta](/boveda/cinco-errores-claude) incluye correcciones acumuladas como error #1. **Esta página profundiza el porqué**.
+
+### Con Prompting 101
+
+[Prompting 101 de Anthropic](/boveda/prompting-101-anthropic) es la metodología completa que **previene** llegar a las 2 correcciones.
+
+---
+
+## La regla mental
+
+> **Máximo 2 correcciones.**
+> **Después: `/clear` + prompt destilado.**
+
+---
+
+## Próximos pasos
+
+- Para fundamentos de cómo armar un buen prompt desde el inicio, [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para 5 errores más que arruinan tu cuenta, [5 errores Claude](/boveda/cinco-errores-claude)
+- Para metodología completa de prompts profesionales, [Prompting 101 Anthropic](/boveda/prompting-101-anthropic)

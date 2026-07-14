@@ -1,0 +1,293 @@
+---
+title: "29 (+33) skills de marketing — biblioteca completa para instalar en Claude"
+description: "Colección open source de 33 skills de marketing (Corey Haines, MIT). Cada skill convierte a Claude en especialista: copywriting, SEO, ads, email, optimización de conversiones, paid media. Instalás una vez y Claude detecta el correcto automáticamente según tu pregunta."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["cinco-habilidades-marketing", "claude-ads", "claude-seo"]
+---
+
+## Qué es
+
+Imaginate contratar a **33 especialistas de marketing** — uno para SEO, otro para copywriting, otro para ads, otro para email — y tenerlos 24/7.
+
+Eso son estos skills: **playbooks de experto** que le dan a Claude conocimiento especializado en cada área del marketing.
+
+- **Instalás una vez** → quedan para siempre
+- **Lenguaje natural**: decís qué necesitás, Claude detecta el skill correcto
+- **Open source MIT** (Corey Haines)
+
+Repo: `coreyhaines31/marketingskills`.
+
+---
+
+## Las 33 habilidades — por categoría
+
+### Optimización de Conversiones (6)
+
+| Skill | Para qué |
+|-------|----------|
+| `page-cro` | Optimizar landing, homepage, cualquier página |
+| `signup-flow-cro` | Mejorar flujos de registro y activación |
+| `onboarding-cro` | Optimizar onboarding post-registro |
+| `form-cro` | Optimizar forms (leads, contacto, cualquiera) |
+| `popup-cro` | Crear popups, modales, banners para conversión |
+| `paywall-upgrade-cro` | Optimizar paywalls, upgrade screens, upsell |
+
+### Contenido y Copy (6)
+
+| Skill | Para qué |
+|-------|----------|
+| `copywriting` | Copy para landing, ads, emails |
+| `content-marketing` | Estrategia de contenido y editorial |
+| `seo-content` | Contenido optimizado para SEO |
+| `blog-post` | Posts de blog específicos |
+| `case-study` | Case studies y testimonials |
+| `product-marketing` | Posicionamiento de producto |
+
+### Email y Lifecycle (5)
+
+| Skill | Para qué |
+|-------|----------|
+| `email-marketing` | Estrategia email general |
+| `welcome-sequence` | Welcome flow para nuevos signups |
+| `re-engagement` | Win-back de usuarios inactivos |
+| `transactional-email` | Email transaccional con copy persuasivo |
+| `newsletter` | Newsletter recurrente |
+
+### Paid Ads (5)
+
+| Skill | Para qué |
+|-------|----------|
+| `meta-ads` | Anuncios de Facebook / Instagram |
+| `google-ads` | Anuncios de Google Search + Display |
+| `tiktok-ads` | TikTok ads y creative |
+| `linkedin-ads` | LinkedIn ads para B2B |
+| `ad-creative` | Conceptos de creatividades publicitarias |
+
+### SEO y Orgánico (4)
+
+| Skill | Para qué |
+|-------|----------|
+| `technical-seo` | SEO técnico (crawl, schema, perf) |
+| `keyword-research` | Investigación de keywords |
+| `link-building` | Estrategia de backlinks |
+| `local-seo` | SEO local para negocios físicos |
+
+### Social y Comunidad (4)
+
+| Skill | Para qué |
+|-------|----------|
+| `social-media` | Estrategia social orgánica |
+| `community-building` | Construcción de comunidad |
+| `influencer-marketing` | Estrategias con influencers |
+| `viral-marketing` | Tácticas de growth viral |
+
+### Growth y Estrategia (3)
+
+| Skill | Para qué |
+|-------|----------|
+| `growth-strategy` | Estrategia de growth integral |
+| `pricing-strategy` | Pricing y monetización |
+| `retention` | Retención y reducción de churn |
+
+---
+
+## Instalación
+
+### En Claude (web)
+
+```
+> Instalá la colección awesome-claude-skills:
+  https://github.com/coreyhaines31/marketingskills
+
+  Para cada skill, hacé el upload correspondiente desde
+  Settings → Skills.
+
+  Empezá con los 5 más usados:
+  - copywriting
+  - email-marketing
+  - page-cro
+  - meta-ads
+  - growth-strategy
+```
+
+### En Claude Code
+
+```bash
+# Instalar todas
+npx skills add coreyhaines31/marketingskills
+
+# O selectivas
+npx skills add coreyhaines31/marketingskills --skill copywriting
+npx skills add coreyhaines31/marketingskills --skill page-cro
+```
+
+---
+
+## Cómo usarlas
+
+**No necesitás invocar el skill por nombre**. Claude detecta basándose en tu prompt.
+
+### Ejemplo 1 — Copy de landing
+
+```
+> Necesito copy para landing de SaaS B2B de inventario.
+  Audiencia: COOs de retail mediano LATAM.
+
+  Generá:
+  - Hero (headline + subhead)
+  - 3 secciones de features
+  - CTA principal
+```
+
+Claude usa `copywriting` + `page-cro` + `product-marketing` automático.
+
+### Ejemplo 2 — Estrategia de growth
+
+```
+> Mi SaaS llegó a $15k MRR. Quiero pasar a $50k en 6 meses.
+  Stack actual: organic content + paid Google.
+
+  Estrategia para crecer 3x manteniendo CAC actual.
+```
+
+Claude usa `growth-strategy` + `pricing-strategy` + `meta-ads`.
+
+### Ejemplo 3 — Email sequence
+
+```
+> Welcome sequence de 5 emails para nuevos signups de mi SaaS.
+  Goal: convertir trial gratuito a paid en 14 días.
+```
+
+Claude usa `email-marketing` + `welcome-sequence` + `retention`.
+
+---
+
+## El stack de los 5 más usados
+
+Si tenés tiempo de instalar solo 5, estos cubren 80% de casos:
+
+1. **copywriting** — para landing, ads, emails
+2. **page-cro** — para optimizar conversión
+3. **email-marketing** — para nurturing y retention
+4. **meta-ads** — para distribución paid
+5. **growth-strategy** — para decisiones macro
+
+---
+
+## Casos de uso reales
+
+### Founder solo
+
+```
+Use case típico: "Hacéme la estrategia completa de marketing
+para mi SaaS de [X]"
+
+Skills que Claude activa:
+- growth-strategy (overview)
+- product-marketing (positioning)
+- content-marketing (foundation orgánica)
+- meta-ads (paid distribution)
+- email-marketing (retention)
+- pricing-strategy (monetización)
+```
+
+### Agencia atendiendo cliente
+
+```
+Use case: "Cliente X vende [producto]. Auditá su funnel actual
+y proponé fixes priorizados."
+
+Claude usa según necesidad:
+- page-cro
+- form-cro
+- email-marketing
+- copywriting
+- technical-seo
+```
+
+### Equipo de marketing in-house
+
+```
+Use case por miembro:
+- Content marketer → content-marketing + blog-post + seo-content
+- Performance marketer → meta-ads + google-ads + ad-creative
+- Email manager → email-marketing + welcome-sequence + transactional-email
+- Growth lead → growth-strategy + pricing-strategy + retention
+```
+
+Cada uno tiene sus skills predilectos.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **29 (33) habilidades marketing** | Suite completa, gratis, ya curada |
+| [5 skills marketing](/boveda/cinco-habilidades-marketing) | Más enfocada (5 esenciales) |
+| [Claude Ads](/boveda/claude-ads) | Solo paid ads multi-plataforma |
+| [Claude SEO](/boveda/claude-seo) | Solo SEO con 13 comandos |
+| Cursos pagos / consultora | $$$ vs $0 |
+
+---
+
+## Anti-patrones
+
+### 1. Instalar las 33 al inicio
+
+Tu Claude se distrae con 33 skills activas. **Empezá con 5-7** relevantes a tu rol.
+
+### 2. Esperar que cada output sea genial
+
+Skills son **base de conocimiento**. Tu **brief específico + iteración** es lo que las hace brillar.
+
+### 3. Olvidar contexto
+
+Cada skill aplica diferente según tu industria, audiencia, etapa. **Dale contexto** específico siempre.
+
+### 4. No iterar
+
+Primera generación es 70%. Iterar te lleva a 95%.
+
+### 5. Confundir tactical con strategic
+
+Skills cubren tactical (cómo hacer email X). Para decisiones estratégicas reales, **complementá con humanos**.
+
+---
+
+## Combinaciones potentes
+
+### Con Andromeda
+
+[Andromeda — 8 reglas Meta](/boveda/andromeda-rules-for-claude) profundiza específicamente en Meta Ads. Combinado con `meta-ads` skill → máximo poder en esa plataforma.
+
+### Con Claude SEO
+
+[Claude SEO](/boveda/claude-seo) tiene 13 comandos específicos. `technical-seo` y `seo-content` del set lo complementan.
+
+### Con humanizer
+
+Todo lo que generen estos skills, pasá por [humanizalo](/boveda/humanizalo) antes de publicar.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| No usás Claude regularmente | Setup no compensa |
+| Tu marketing es 100% offline | Skills enfocados en digital |
+| Compliance estricto | Reviewers humanos requeridos |
+
+---
+
+## Próximos pasos
+
+- Para suite más enfocada (5 esenciales), [5 skills marketing](/boveda/cinco-habilidades-marketing)
+- Para profundizar en Meta Ads específicamente, [Andromeda](/boveda/andromeda-rules-for-claude)
+- Para auditoría SEO con 13 comandos, [Claude SEO](/boveda/claude-seo)

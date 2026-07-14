@@ -18,11 +18,15 @@ function getSectionKey(pathname) {
   return segments[0];
 }
 
-/** @param {import('react').PropsWithChildren<unknown>} */
-export function Transition({ children }) {
+/**
+ * @param {import('react').PropsWithChildren<{ label?: string }>} props
+ * `label` fuerza el preloader de sección con ese texto (sin el saludo inicial),
+ * útil para secciones que se abren en pestaña nueva y deben mostrar su nombre.
+ */
+export function Transition({ children, label }) {
   const pathname = usePathname();
   return (
-    <TransitionInner key={pathname} pathname={pathname}>
+    <TransitionInner key={pathname} pathname={pathname} label={label}>
       {children}
     </TransitionInner>
   );
@@ -32,10 +36,12 @@ export function Transition({ children }) {
  * @param {Object} props
  * @param {import('react').ReactNode} props.children
  * @param {string} props.pathname
+ * @param {string} [props.label]
  */
-function TransitionInner({ children, pathname }) {
+function TransitionInner({ children, pathname, label }) {
   const { t } = useTranslation();
-  const isFirstVisit = !hasShownInitialGreeting;
+  const forced = Boolean(label);
+  const isFirstVisit = !hasShownInitialGreeting && !forced;
   const [isLoading, setLoading] = useState(true);
 
   useLenis();
@@ -49,7 +55,7 @@ function TransitionInner({ children, pathname }) {
     deps: [],
   });
 
-  const sectionLabel = t(`nav.${getSectionKey(pathname)}`);
+  const sectionLabel = forced ? label : t(`nav.${getSectionKey(pathname)}`);
 
   return (
     <div className='overflow-hidden'>

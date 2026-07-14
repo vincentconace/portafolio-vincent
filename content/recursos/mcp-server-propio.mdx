@@ -1,0 +1,287 @@
+---
+title: "Tu propio MCP server — darle a Claude las tools que necesita tu equipo"
+description: "Construí un MCP server desde cero en TypeScript que expone tools custom a Claude Code. Caso real: un server que consulta tu base de datos interna y devuelve los últimos pedidos. Incluye autenticación, schema validation y deploy."
+difficulty: "avanzado"
+category: "guías"
+tools: ["claude-code", "mcp", "typescript", "node"]
+featured: true
+featuredOrder: 4
+version: "v1.2"
+publishedAt: "2026-05-18"
+readingTime: "22 min"
+github: "https://github.com/anthropics/model-context-protocol"
+relatedSlugs: ["hooks-automatizacion", "plugin-supabase-mcp"]
+---
+
+## Para qué sirve esto
+
+Un **MCP server** (Model Context Protocol) le da a Claude tools que tu equipo controla. La diferencia con los hooks: los hooks son acciones automáticas; las tools de un MCP son **funciones que Claude decide invocar** según el contexto.
+
+Casos donde un MCP propio gana:
+
+- Consultar una base de datos interna que no podés exponer por HTTP público
+- Darle acceso a tu wiki/Notion/Linear con permisos finos
+- Conectar a un sistema legacy que solo tiene SOAP/SSH
+- Mover datos sensibles sin que salgan del laptop del dev
+
+Si tu necesidad se resuelve con un Bash command o un `curl`, no necesitás MCP. **MCP brilla cuando hay state, schemas, y autenticación que querés centralizar.**
+
+---
+
+## Requisitos
+
+<Checklist
+  storageKey="mcp-server-prereqs"
+  items={[
+    "Node.js 20+ instalado",
+    "Claude Code v1.5 o superior (verificá con: claude --version)",
+    "Conocimiento intermedio de TypeScript",
+    "Acceso al recurso que vas a exponer (DB, API interna, etc.)",
+  ]}
+/>
+
+---
+
+## Paso 1 — Bootstrap del proyecto
+
+<Step number={1} title="Crear el package">
+
+```bash
+mkdir mcp-pedidos && cd mcp-pedidos
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+npm install -D typescript @types/node tsx
+npx tsc --init
+```
+
+Editá `tsconfig.json` para que apunte a ESM moderno:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}
+```
+
+Y en `package.json`, agregale `"type": "module"`.
+
+</Step>
+
+<Step number={2} title="Server mínimo">
+
+`src/index.ts`:
+
+```ts
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} from '@modelcontextprotocol/sdk/types.js'
+import { z } from 'zod'
+
+const server = new Server(
+  { name: 'mcp-pedidos', version: '0.1.0' },
+  { capabilities: { tools: {} } }
+)
+
+// Schema de inputs validado con Zod
+const ListarPedidosInput = z.object({
+  desde: z.string().describe('Fecha ISO. Ejemplo: 2026-05-01'),
+  estado: z.enum(['pendiente', 'pagado', 'enviado', 'cancelado']).optional(),
+  limite: z.number().int().min(1).max(100).default(20),
+})
+
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools: [
+    {
+      name: 'listar_pedidos',
+      description:
+        'Lista los pedidos desde una fecha. Útil para consultar actividad reciente del cliente.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          desde: { type: 'string', description: 'Fecha ISO' },
+          estado: { type: 'string', enum: ['pendiente', 'pagado', 'enviado', 'cancelado'] },
+          limite: { type: 'number', default: 20 },
+        },
+        required: ['desde'],
+      },
+    },
+  ],
+}))
+
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  if (req.params.name === 'listar_pedidos') {
+    const args = ListarPedidosInput.parse(req.params.arguments)
+    const pedidos = await consultarBD(args)
+    return {
+      content: [{ type: 'text', text: JSON.stringify(pedidos, null, 2) }],
+    }
+  }
+  throw new Error(`Tool desconocida: ${req.params.name}`)
+})
+
+async function consultarBD(args: z.infer<typeof ListarPedidosInput>) {
+  // Acá conectás a tu DB real (Postgres, MySQL, lo que sea)
+  // Por ahora, mock:
+  return [
+    { id: 1, cliente: 'Acme SA', estado: 'pagado', monto: 4500, fecha: '2026-05-16' },
+    { id: 2, cliente: 'Beta SRL', estado: 'pendiente', monto: 1200, fecha: '2026-05-17' },
+  ]
+}
+
+const transport = new StdioServerTransport()
+await server.connect(transport)
+```
+
+</Step>
+
+<Step number={3} title="Registrarlo en Claude Code" last>
+
+Agregalo a tu `.claude/settings.json` del proyecto donde lo querés usar:
+
+```json
+{
+  "mcpServers": {
+    "pedidos": {
+      "command": "node",
+      "args": ["/ruta/absoluta/a/mcp-pedidos/dist/index.js"],
+      "env": {
+        "DATABASE_URL": "postgres://..."
+      }
+    }
+  }
+}
+```
+
+Compilá y probá:
+
+```bash
+npx tsc && claude
+```
+
+Adentro de Claude, escribí:
+
+```
+> ¿Qué pedidos pendientes tenemos desde el 1 de mayo?
+```
+
+Claude va a detectar el tool `listar_pedidos`, invocarlo y resumirte la respuesta.
+
+</Step>
+
+---
+
+## Paso 2 — Validación y errores
+
+El problema de devolver "lo que vino de la DB" es que Claude puede recibir basura si la query falla. Patrón que recomiendo:
+
+```ts
+server.setRequestHandler(CallToolRequestSchema, async (req) => {
+  try {
+    const args = ListarPedidosInput.parse(req.params.arguments)
+    const pedidos = await consultarBD(args)
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: pedidos.length === 0
+            ? 'No se encontraron pedidos con esos filtros.'
+            : JSON.stringify(pedidos, null, 2),
+        },
+      ],
+    }
+  } catch (err) {
+    return {
+      isError: true,
+      content: [
+        { type: 'text', text: `Error consultando pedidos: ${(err as Error).message}` },
+      ],
+    }
+  }
+})
+```
+
+Con `isError: true`, Claude sabe que hubo un problema y puede decidir reintentar, pedirte info o cambiar de approach.
+
+---
+
+## Paso 3 — Autenticación
+
+Si tu MCP server toca datos sensibles, **no confíes en el caller**. Validá un token en cada request:
+
+```ts
+const REQUIRED_TOKEN = process.env.MCP_TOKEN
+if (!REQUIRED_TOKEN) {
+  console.error('MCP_TOKEN no seteado. Abortando.')
+  process.exit(1)
+}
+
+// En cada handler:
+const auth = req.params.arguments?._auth as string | undefined
+if (auth !== REQUIRED_TOKEN) {
+  return {
+    isError: true,
+    content: [{ type: 'text', text: 'Acceso denegado: token inválido.' }],
+  }
+}
+```
+
+Pasale el token desde `settings.json` vía `env`. Esto evita que un proceso curioso en tu máquina invoque tu MCP server.
+
+<Callout type="warning" title="Stdio no es público">
+El transport `StdioServerTransport` solo escucha en el stdin del proceso. No abre puertos. Es seguro por default — el riesgo solo aparece si exponés el proceso por red (con `--transport http`, por ejemplo).
+</Callout>
+
+---
+
+## Patrones que valen la pena
+
+| Patrón | Por qué |
+|--------|---------|
+| **Una tool = una intención** | No hagas `consultar_o_modificar`. Hacé `consultar_pedidos` y `modificar_pedido` separadas. Claude elige mejor. |
+| **Descripciones largas y específicas** | El `description` del tool es lo que Claude lee para decidir. "Lista pedidos" es malo. "Lista pedidos filtrando por fecha y estado, ordenados por fecha desc" es mejor. |
+| **Schema estricto en inputs** | Usá Zod con `.describe()` en cada campo. Claude lee las descripciones y arma argumentos correctos. |
+| **Idempotencia donde se pueda** | Si una tool puede correr 2 veces sin daño, marcalo. Claude a veces reintenta. |
+| **Logs en stderr** | No uses `console.log` (rompe el protocolo stdio). Usá `console.error` para logs y serializá a un archivo. |
+
+---
+
+## Deploy
+
+Para que tu equipo lo use:
+
+1. Publicalo como paquete npm (privado si tiene secrets)
+2. En `settings.json` de cada dev:
+
+```json
+{
+  "mcpServers": {
+    "pedidos": {
+      "command": "npx",
+      "args": ["-y", "@miempresa/mcp-pedidos"],
+      "env": { "MCP_TOKEN": "${MCP_TOKEN}" }
+    }
+  }
+}
+```
+
+Con `npx -y`, npm baja el paquete la primera vez y lo cachea. Versionado, distribuido, sin instalación manual.
+
+---
+
+## Próximos pasos
+
+- Mirá el [SDK oficial de MCP](https://github.com/modelcontextprotocol/typescript-sdk) — tiene helpers para resources y prompts, no solo tools.
+- Si querés un ejemplo real production-ready, revisá nuestro [plugin Supabase MCP](/boveda/plugin-supabase-mcp).
+- Para tools que requieren UI (auth flows, picks, etc.), considerá el transport HTTP con un wizard web.

@@ -1,0 +1,273 @@
+---
+title: "3 errores con la IA — no es la IA, sos vos (regla del contexto)"
+description: "Los 3 errores filosóficos universales con cualquier IA (Claude, ChatGPT, Gemini): culpar al modelo, asumir que te conoce, saltar entre modelos. Los 3 se arreglan con UNA regla: contexto. Cinco dimensiones que necesitás dar siempre. Checklist mental de 7 preguntas antes de mandar prompt."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "chatgpt", "gemini"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["hablarle-a-claude", "claude-mejores-practicas", "prompting-101-anthropic"]
+---
+
+## La idea central
+
+> Cero contexto, IA tonta. Contexto completo, IA monstruo.
+
+Los 3 errores que todos cometemos con la IA — **y por qué los 3 se arreglan con la misma regla**.
+
+---
+
+## La analogía
+
+Imaginate que cambiás de carro cada vez que llegás tarde al trabajo. Compraste 3 carros, cambiaste 4 motores, **seguís llegando tarde**.
+
+En algún momento te das cuenta: **el problema no era el carro**.
+
+Con IA pasa igual:
+- Cambiás de modelo
+- Pagás otro plan
+- Probás otra herramienta
+- Respuesta sigue genérica
+
+**El problema viaja con vos**. Es el conductor, no el carro.
+
+---
+
+## Los 3 errores
+
+### Error 1 — Le echás la culpa a la IA
+
+Le pediste *"hacé un video viral"* y te contesta cualquier cosa. Decís que la IA es **una porquería**.
+
+**El modelo te dio justo lo que le diste**: nada. ¿Video viral sobre qué? ¿Para quién? ¿En qué tono? Sin info, el modelo **adivina** y adivina mal.
+
+### Error 2 — Asumís que la IA te conoce
+
+La IA tiene acceso a medio internet. Pero **de vos no sabe nada**.
+
+- Ni tu proyecto
+- Ni tu audiencia
+- Ni qué vendés
+- Ni qué tono usás
+
+Asumir que te conoce porque "es inteligente" = decepción garantizada.
+
+### Error 3 — Saltás entre modelos
+
+Pedís plan a ChatGPT, lo pegás a Claude para que lo arme. Sale chueco.
+
+**Cada modelo lee distinto** y los gaps se llenan distinto. El "tono" que ChatGPT asumió Claude no lo asume igual.
+
+### Los 3 son uno solo
+
+Parecen 3 errores distintos. Son el mismo: **no le diste contexto**.
+
+- Culpás al modelo porque no te leyó la mente
+- Asumís que te conoce porque algún hilo viejo te conoció
+- Saltás entre modelos buscando uno que adivine mejor
+
+Los 3 son la misma queja: **"la IA no entendió"**. La IA no entendió porque **no le explicaste**.
+
+---
+
+## La regla — 5 dimensiones de contexto
+
+| # | Dimensión | Pregunta |
+|---|-----------|----------|
+| 1 | **Rol y proyecto** | Quién sos, qué construís |
+| 2 | **Audiencia** | Para quién es esto |
+| 3 | **Qué vendés o construís** | El producto/servicio específico |
+| 4 | **Situación actual** | Dónde estás parado |
+| 5 | **Qué querés que pase** | El outcome esperado |
+
+> **Si no tocás 4 de 5, el prompt está mal escrito.**
+
+---
+
+## Antes y después
+
+### Sin contexto (los 5 errores)
+
+```
+Hacéme video viral
+```
+
+Respuesta: genérica, para "creator promedio". Útil para nadie.
+
+### Con contexto (5 dimensiones tocadas)
+
+```
+Sos director creativo para SaaS B2B.
+
+Yo: founder de [TU SAAS], vendo gestión de inventario a retail
+mediano LATAM (rol + qué vendo).
+
+Audiencia: COOs / directores ops de retail con 5-50 sucursales
+(audiencia).
+
+Situación: lanzamos hace 6 meses, $15k MRR, queremos pasar a
+$50k MRR (situación actual).
+
+Quiero: 3 conceptos de Reel de 30s para LinkedIn que enganchen
+a esta audiencia, con hooks basados en sus dolores reales (qué
+quiero que pase).
+```
+
+Respuesta: hiper-específica, accionable, útil.
+
+---
+
+## El checklist mental — 7 preguntas
+
+Antes de mandar prompt importante, respondé:
+
+1. ¿Le dije **quién soy** y qué construyo?
+2. ¿Le dije **para quién** es esto?
+3. ¿Le dije **dónde estoy parado** (estado actual)?
+4. ¿Le dije **qué quiero ver al final** (outcome)?
+5. ¿Le dije **qué restricciones** tengo?
+6. ¿Le dije **el formato** del output?
+7. ¿Le dije **qué NO hacer**?
+
+**Si pasás de 3 "no" seguidos → NO lo mandes**. Reescribilo.
+
+---
+
+## Por qué no es "más palabras"
+
+Una persona puede escribir párrafo largo y **no estar dando contexto** — solo repite el pedido en frases más largas.
+
+**Contexto son las palabras correctas en el orden correcto**: quién sos, para quién es esto, qué construís, dónde estás parado, qué querés ver al final.
+
+5 datos. La diferencia entre prompt vacío y prompt que funciona suele ser **4 oraciones**.
+
+---
+
+## 3 prompts copy-paste
+
+### Plantilla 1 — para tareas creativas
+
+```
+CONTEXTO:
+- Soy [ROL] en [INDUSTRIA]
+- Mi producto/servicio: [DESCRIPCIÓN EN 1 LÍNEA]
+- Mi audiencia: [TARGET ESPECÍFICO]
+- Mi situación actual: [ESTADO]
+- Mi tono de marca: [DESCRIPCIÓN]
+
+QUIERO:
+[QUÉ NECESITO]
+
+RESTRICCIONES:
+[QUÉ NO HACER / LIMITACIONES]
+
+FORMATO DE OUTPUT:
+[CÓMO LO QUIERO ESTRUCTURADO]
+```
+
+### Plantilla 2 — para tareas técnicas
+
+```
+CONTEXTO TÉCNICO:
+- Stack: [TECH]
+- Mi nivel: [BEGINNER / INTERMEDIATE / ADVANCED]
+- Convenciones del proyecto: [REGLAS]
+- Estado del codebase: [DESCRIPCIÓN]
+
+PROBLEMA:
+[QUÉ NECESITO]
+
+CRITERIOS DE ÉXITO:
+[CÓMO SÉ QUE ESTÁ BIEN]
+
+QUÉ NO HACER:
+[RESTRICCIONES TÉCNICAS]
+```
+
+### Plantilla 3 — para decisiones
+
+```
+SITUACIÓN:
+[DÓNDE ESTOY]
+
+OPCIONES:
+[ALTERNATIVAS QUE CONOZCO]
+
+FACTORES IMPORTANTES PARA MÍ:
+[QUÉ PESA EN LA DECISIÓN]
+
+TENGO MIEDO DE:
+[RIESGOS PERCIBIDOS]
+
+QUIERO QUE ANALICES:
+[QUÉ ESPECÍFICAMENTE]
+```
+
+---
+
+## Anti-patrones
+
+### 1. Hablarle a la IA como amigo
+
+❌ "Che, ayudame con esto"
+✅ "Sos [ROL]. Yo soy [X]. Necesito [Y] para [PROPÓSITO]"
+
+La IA no es amigo. Es asistente que necesita brief.
+
+### 2. Asumir continuidad entre chats
+
+Cada chat NUEVO empieza de cero. Si confiás que "sabe" porque hablaste antes en otro chat, **decepción garantizada**.
+
+### 3. Saltar de modelo cuando algo no funciona
+
+Si te dio respuesta mala, probablemente fue mal prompt. **Mejorá el prompt antes de cambiar de modelo**.
+
+### 4. Esperar que el modelo "lea entre líneas"
+
+Los modelos son literales. Si querés algo, **decilo explícito**. Insinuar no funciona.
+
+### 5. Ignorar el output cuando es vago
+
+Si la respuesta es genérica, **es señal** de que tu prompt fue vago. NO culpés al modelo. Re-prompteá.
+
+---
+
+## Combinaciones potentes
+
+### Con hablarle a Claude
+
+[Hablarle a Claude](/boveda/hablarle-a-claude) detalla los 4 elementos. Esta página da las **5 dimensiones** que las extiende.
+
+### Con mejores prácticas
+
+[Claude mejores prácticas](/boveda/claude-mejores-practicas) cubre cuándo `/clear`. Esta página cubre **antes** del clear (cómo prevenir necesitarlo).
+
+### Con Prompting 101 Anthropic
+
+[Prompting 101](/boveda/prompting-101-anthropic) son los 10 pilares **técnicos** para production. Esta página son los **filosóficos** para uso diario.
+
+---
+
+## Cuándo esta regla NO te suma
+
+| Caso | Por qué |
+|------|---------|
+| Tareas one-off súper simples ("¿qué hora es?") | Overhead innecesario |
+| Brainstorming exploratorio | Querés que IA proponga, no que responda específico |
+| Aprendizaje (querés explicación general) | Pedir contexto para aprender es paradoja |
+
+---
+
+## La regla en una línea
+
+> **El problema con la IA no es la IA. Es que no le explicaste.**
+
+Aprender esto una vez = **te sirve para siempre**, sin importar qué modelo uses.
+
+---
+
+## Próximos pasos
+
+- Para los 4 elementos específicos de buen prompt, [hablarle a Claude](/boveda/hablarle-a-claude)
+- Para la regla de cuándo hacer /clear, [mejores prácticas Claude](/boveda/claude-mejores-practicas)
+- Para los 10 pilares de Anthropic para production, [Prompting 101](/boveda/prompting-101-anthropic)

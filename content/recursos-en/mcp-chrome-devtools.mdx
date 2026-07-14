@@ -1,0 +1,110 @@
+---
+title: "MCP Chrome DevTools — the most adopted browser MCP (2,685 installs)"
+description: "MCP server that connects to the Chrome DevTools Protocol (CDP). Direct control of Chrome from Claude: browser automation, debugging, network analysis, performance profiling. The browser_automation standard."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "chrome"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-browser-use-mcp-server", "plugin-playwright-skill", "plugin-claude-plugins-official"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/chrome-devtools"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/chrome-devtools.json"
+---
+
+## What it is
+
+The Chrome DevTools Protocol (CDP) is the low-level API that Chrome exposes so external tools can control the browser. The browser's DevTools, Lighthouse, Puppeteer, Playwright — they all use it under the hood.
+
+This MCP gives you direct access to CDP from Claude Code. Capabilities you unlock:
+- **Browser automation** — open pages, click, type, screenshots
+- **Debugging** — pause JS, inspect variables, network requests
+- **Performance analysis** — traces, Web Vitals metrics
+- **Network introspection** — see every request, response bodies, timings
+- **Source-mapped errors** — read stack traces from minified bundles
+
+With 2,685 installs, it's the most adopted browser MCP in the catalog. It's also included in the [official Anthropic marketplace](/boveda/plugin-claude-plugins-official). It's the standard.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | **2,685 (top of the browser catalog)** |
+| MCP server | `chrome-devtools` |
+| Protocol | Chrome DevTools Protocol (CDP) |
+| Browser | Chrome / Chromium |
+| Included in | [Anthropic Official Marketplace](/boveda/plugin-claude-plugins-official) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/chrome-devtools
+```
+
+Prerequisite: Chrome or Chromium installed.
+
+For Claude:
+
+```
+Install the devtools/chrome-devtools MCP. Then open localhost:3000,
+do a 5-second performance trace while I interact with the
+page, and show me the Web Vitals (LCP, FID, CLS).
+```
+
+## What you can do with it
+
+### Assisted real-time debugging
+
+"In my app, when I click the `Buy` button, a 500 error pops up. Go to the page, click, capture the network request that failed, read the response, and propose what's wrong in the endpoint."
+
+### Performance profiling
+
+"Run a Lighthouse run on localhost:3000 and give me the top 3 opportunities sorted by impact on LCP." CDP has direct access to the tracing API.
+
+### Web Vitals inspection
+
+"Track LCP, FID, and CLS for me while I navigate the 5 main pages of the site." Metrics that typically require a manual Lighthouse setup.
+
+### Network request analysis
+
+"Show me every request the page sends on load, grouped by origin, with size and time. Identify the 3 that block rendering the most."
+
+### Source-mapped reads of errors in prod
+
+If your minified bundle fails in prod, CDP can read the source maps and give you back the stack trace in the original code. Very useful when the logs are unreadable.
+
+### Compared with alternatives
+
+- **vs [browser-use MCP](/boveda/mcp-browser-use-mcp-server):** browser-use is higher-level and more agentic. Chrome DevTools is lower-level and more powerful. For serious debugging → Chrome DevTools. For interactive automation → browser-use.
+- **vs [Playwright Skill](/boveda/plugin-playwright-skill):** Playwright is more for tests. Chrome DevTools is more for live introspection and debugging.
+
+## Prerequisites
+
+- **Chrome or Chromium** installed
+- **Node.js + Claude Code** working
+- **For apps on localhost:** they need to be running (the MCP doesn't start your app)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **For simple automations:** `browsermcp` is enough (lighter weight).
+- **For sites with aggressive anti-bot:** Chrome DevTools doesn't disguise itself. Use [Bright Data](/boveda/mcp-brightdata).
+- **Conflicts with your everyday Chrome:** running it on your main profile can interfere. Use a dedicated profile or headless.
+- **Learning curve:** CDP is powerful but verbose. Getting Claude to use the correct methods requires knowing the API (or letting Claude explore).
+- **Chrome/Chromium only:** for Firefox or Safari, use other tools.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Chrome DevTools MCP](https://www.aitmpl.com/component/mcps/devtools/chrome-devtools) — exact command.
+- **JSON config:** [chrome-devtools.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/chrome-devtools.json) — definition.
+- **CDP docs:** [chromedevtools.github.io/devtools-protocol](https://chromedevtools.github.io/devtools-protocol/) — the official protocol reference.
+
+## Related resources
+
+- [Browser-Use MCP](/boveda/mcp-browser-use-mcp-server) — higher-level and more agentic. Compare them by use case.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — for reproducible E2E tests vs live introspection.
+- [Claude Plugins Official](/boveda/plugin-claude-plugins-official) — Chrome DevTools also appears curated in the official Anthropic marketplace.

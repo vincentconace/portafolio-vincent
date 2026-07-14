@@ -1,0 +1,92 @@
+---
+title: "Hook Worktree Ghostty — automatic 3-panel layout when you create worktrees"
+description: "Hook with 139 installs. When you create a git worktree, it opens a 3-panel Ghostty layout: Claude Code | lazygit | yazi. For devs who live in the terminal with parallel worktrees."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "ghostty", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-validate-branch-name", "plugin-claude-hud", "agent-view"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/worktree-ghostty"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/worktree-ghostty.json"
+---
+
+## What it is
+
+For devs who use [Ghostty](https://mitchellh.com/ghostty) (Mitchell Hashimoto's modern terminal emulator) and work with git worktrees, this hook automates the visual setup.
+
+When you create a worktree, it opens a 3-panel layout:
+- **Left:** Claude Code
+- **Top-right:** lazygit
+- **Bottom-right:** yazi (TUI file manager)
+
+When you remove the worktree, it closes the layout.
+
+Hook events: `WorktreeCreate` + `WorktreeRemove`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `development-tools` |
+| Installs | 139 |
+| Hook events | `WorktreeCreate` + `WorktreeRemove` |
+| Stack | Ghostty + Claude Code + lazygit + yazi |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook development-tools/worktree-ghostty
+```
+
+Prerequisites:
+- Ghostty terminal
+- lazygit installed (`brew install lazygit`)
+- yazi installed (`brew install yazi`)
+
+For Claude:
+
+```
+I installed the development-tools/worktree-ghostty hook. Verify that I have
+all the CLI tools. Create a test worktree and show me the 3-panel
+layout.
+```
+
+## What you can do with this
+
+### Terminal-first productivity setup
+
+For devs who live in the terminal, the 3-panel layout streamlines the workflow: code (Claude) + git (lazygit) + file nav (yazi).
+
+### Visual parallel worktrees
+
+If you're working on 3 features in parallel across 3 worktrees, each one gets its own consistent layout.
+
+### For [Agent View](/boveda/agent-view) users
+
+It pairs well with multi-session workflows where each worktree is a Claude session.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If you don't use Ghostty:** this hook is specific to that terminal. iTerm, Warp, and others — not applicable.
+- **If you don't use worktrees:** the hook never fires.
+- **Without lazygit / yazi:** missing dependencies = incomplete layout.
+- **Only 139 installs:** niche, validate it in a sandbox before adopting it seriously.
+- **For GUI IDE users:** the Ghostty + TUI workflow doesn't fit with VSCode/JetBrains.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Worktree Ghostty Hook](https://www.aitmpl.com/component/hooks/development-tools/worktree-ghostty) — exact command.
+- **JSON config:** [worktree-ghostty.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/worktree-ghostty.json).
+- **Ghostty:** [ghostty.org](https://ghostty.org).
+
+## Related resources
+
+- [Validate Branch Name Hook](/boveda/hook-validate-branch-name) — for consistent worktree naming.
+- [Claude HUD Plugin](/boveda/plugin-claude-hud) — a complementary statusline in each panel.
+- [Agent View](/boveda/agent-view) — Anthropic's official multi-session workflow.

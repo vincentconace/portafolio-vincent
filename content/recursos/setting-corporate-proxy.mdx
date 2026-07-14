@@ -1,0 +1,87 @@
+---
+title: "Setting Corporate Proxy — Claude Code detrás de proxy/firewall corporativo"
+description: "Setting con 115 installs. Configura HTTP_PROXY y HTTPS_PROXY para que Claude Code funcione behind corporate firewalls y proxy servers manteniendo security policies."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-custom-headers", "setting-bedrock-configuration", "setting-company-announcements"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/api/corporate-proxy"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/corporate-proxy.json"
+---
+
+## Qué es
+
+Para enterprises que tienen toda la salida a internet via proxy corporativo. Sin este setting, Claude Code no puede llegar al API de Anthropic.
+
+Configura:
+- `HTTP_PROXY` = `http://proxy.company.com:8080`
+- `HTTPS_PROXY` = `https://proxy.company.com:8080`
+
+(Los valores reales son los de tu org.)
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `api` |
+| Installs | 115 |
+| Env vars | HTTP_PROXY, HTTPS_PROXY |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting api/corporate-proxy
+```
+
+Después seteás los valores reales de tu proxy.
+
+Para Claude:
+
+```
+Instalé el setting api/corporate-proxy. Decime las env vars que necesito
+exportar con los valores de mi proxy y cómo testear si Claude llega
+al API.
+```
+
+## Qué podés hacer con esto
+
+### Claude Code funcional en enterprise
+
+Sin esto, Claude Code en red corporate no funciona porque no puede llegar al API.
+
+### Compliance con egress
+
+Toda salida pasa por proxy con logging/inspection. El setting habilita Claude pero respeta el flow corporate.
+
+### Combo con [Custom Headers](/boveda/setting-custom-headers)
+
+Si tu proxy requiere headers de auth, combinás con Custom Headers.
+
+### Combo con [Bedrock Configuration](/boveda/setting-bedrock-configuration)
+
+Algunos enterprise prefieren Bedrock (no Anthropic direct) + proxy. Settings complementarios.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu red no requiere proxy:** no aplica.
+- **Si tu proxy requiere auth no-estándar:** verificá si Claude Code la soporta.
+- **Performance:** proxy agrega latencia. En red corporate lenta, Claude Code va a ser más slow.
+- **Cambios de proxy URL:** si la URL del proxy cambia (rotación), tenés que actualizar.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Corporate Proxy Setting](https://www.aitmpl.com/component/settings/api/corporate-proxy) — comando exacto.
+- **Config JSON:** [corporate-proxy.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/corporate-proxy.json).
+
+## Recursos relacionados
+
+- [Custom Headers Setting](/boveda/setting-custom-headers) — para auth headers si tu proxy los requiere.
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — alternativa enterprise via AWS.
+- [Company Announcements Setting](/boveda/setting-company-announcements) — para reminders enterprise.

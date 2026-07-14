@@ -1,0 +1,273 @@
+---
+title: "Gbrain — permanent memory for Claude (notes, clients, meetings, projects)"
+description: "You explain something to Claude and tomorrow it's forgotten. Gbrain gives it a brain that NEVER gets wiped. You turn a folder into its memory: every conversation detects entities, reads what it already knows, responds with context, and updates the brain. While you sleep, it organizes and connects everything on its own."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["obsidian-claude", "cinco-repos-dominando-claude", "live-artifacts-cowork"]
+---
+
+## The problem
+
+You explain something to Claude. Tomorrow it's **forgotten**. You explain it again. Over and over.
+
+Your client notes, your team, your meetings, your projects, your ideas — all of it **lives scattered** across your head, Notion, Drive, emails.
+
+**Gbrain gives Claude a brain that NEVER gets wiped**.
+
+Repo: `garrytan/gbrain`. 4k+ stars. Open source. Runs **locally**.
+
+---
+
+## What it is
+
+Picture a folder on your computer with notes about your clients, team, meetings, projects. Or an empty folder. **It doesn't matter**.
+
+Gbrain turns that folder into **Claude's brain**. Before answering you, Claude **checks its brain** to give you the best response.
+
+### Example
+
+```
+> Prep me for the meeting with attorney Joaquín
+```
+
+Claude **already knows**:
+- Who Joaquín is
+- What you discussed in the last meeting
+- What's still pending
+- Project context
+
+Without you having said anything in this conversation.
+
+---
+
+## How it works — the cycle
+
+```
+1. A signal arrives (email, meeting, tweet, link)
+2. Claude detects entities (people, companies, projects)
+3. Reads its brain (looks up what it already knows)
+4. Responds with context
+5. Updates its brain
+6. Organizes and connects
+```
+
+### The wild part
+
+**While you sleep**, Claude organizes its brain on its own and connects projects/people/ideas. **Smarter every day**.
+
+---
+
+## Prerequisites
+
+- Claude Code installed (can be the desktop app)
+- A dedicated folder on your drive (can be empty)
+- Access to the Claude API
+
+---
+
+## Installation
+
+```
+> Install Gbrain from https://github.com/garrytan/gbrain
+  on my computer.
+
+  Brain folder: ~/Documents/gbrain
+  Configure it to use my Claude account.
+
+  Test it: add a test entity ("Test client") and
+  query it.
+```
+
+Claude handles the technical setup.
+
+---
+
+## Brain structure
+
+Gbrain organizes by **entities**:
+
+| Type | Examples |
+|------|----------|
+| People | "Joaquín García (attorney)", "Ana López (CEO of X)" |
+| Companies | "Acme Corp", "My client B" |
+| Projects | "Q3 launch", "Migration to Stripe" |
+| Concepts | "Pricing strategy", "Brand voice" |
+| Events | "Meeting 2026-03-15", "DXC Conference" |
+
+Each entity has:
+- Summary
+- Connections to other entities
+- Chronological history
+- Tags
+
+---
+
+## Use cases
+
+### 1. Personal CRM
+
+```
+> I talked to Client X. They asked for 3 changes to the proposal.
+> Next step: send them draft v2 on Friday.
+```
+
+Gbrain saves:
+- Client X (with prior context)
+- Requested changes (linked to the proposal)
+- Action item with a date
+
+Next time you mention Client X: Claude **pulls everything up**.
+
+### 2. Meeting brief before a meeting
+
+```
+> I have a meeting in 10 min with Client B.
+```
+
+Claude:
+- Last meeting with Client B (when, about what)
+- Project status
+- Pending actions on both sides
+- Personal context (client preferences, avoid mentioning X)
+
+### 3. Project tracking without an external tool
+
+```
+> How's project X going?
+```
+
+Claude:
+- Current status based on all prior conversations
+- Open blockers
+- Upcoming milestones
+- People involved
+
+### 4. Daily reflection
+
+```
+> Note today's takeaway: I discovered that my B2B audience
+  responds better to use cases than to features.
+```
+
+Gbrain saves it. In 3 months when you use this insight, **it's there**.
+
+### 5. Connecting scattered ideas
+
+```
+> Is there a pattern among the last 5 clients who churned?
+```
+
+Claude searches its brain, detects patterns, and answers with analysis based on data **you weren't going to connect manually**.
+
+---
+
+## Why it runs locally
+
+### Privacy
+
+Your brain holds sensitive info (clients, finances, strategic decisions). You **don't want** it living on a third party's server.
+
+### Speed
+
+Queries against local files are fast. No network latency.
+
+### Sovereignty
+
+If Anthropic changes its policy tomorrow, your brain **is still yours**.
+
+---
+
+## How it differs from claude-mem and Obsidian
+
+| Aspect | Gbrain | [claude-mem](/boveda/cinco-repos-dominando-claude) | [Obsidian](/boveda/obsidian-claude) |
+|---------|--------|----------------------------------------------------|---------------------------------------|
+| Focus | Entity-based memory + relationships | Session memory | Manual knowledge base |
+| Auto-organizes | ✅ (organizes at night) | ⚠️ Partial | ❌ You organize |
+| Structure | Entities with connections | Session summaries | Notes + wikilinks |
+| Best for | Personal CRM + projects | Continuity across chats | Research / second brain |
+
+All 3 can coexist. They cover different layers.
+
+---
+
+## Anti-patterns
+
+### 1. Not feeding the brain
+
+If you only query but don't feed it, **the brain stays empty**. Every time something important happens, **tell it**.
+
+### 2. Duplicate entities
+
+"Client X" vs "Client X Inc." vs "X" — Gbrain may not detect them as the same. **Review periodically** to make sure entities are consolidated.
+
+### 3. Sensitive info without control
+
+Gbrain runs locally, but **your disk can be shared, synced, hacked**. Treat your folder as **sensitive data**.
+
+### 4. Expecting Gbrain to replace everything
+
+Gbrain is operational memory. For:
+- A real CRM with automation → HubSpot
+- Formal project management → Linear
+- A public knowledge base → Notion
+
+Gbrain is a **complement**.
+
+### 5. No backups
+
+If your disk breaks, you lose months of brain. **Regular backups** are critical.
+
+---
+
+## Powerful combinations
+
+### With Obsidian
+
+Gbrain (entities + relationships) + [Obsidian](/boveda/obsidian-claude) (knowledge base) = a complete system.
+
+### With claude-mem
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) for session continuity. Gbrain for persistent entities. **Complementary**.
+
+### With Cowork scheduled tasks
+
+```
+> Every Monday at 8am: review my brain and put together a brief
+  of priority clients/projects for the week.
+```
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Very operational work with no recurring entities | Without patterns, Gbrain adds little |
+| Strict compliance that prohibits unencrypted local data | Verify first |
+| Teams where info must be shared | Notion wins on collaboration |
+| No discipline to feed the brain | Empty = useless |
+
+---
+
+## Estimated ROI
+
+For a founder/freelancer/consultant with 10-30 active clients:
+
+| Without Gbrain | With Gbrain |
+|------------|------------|
+| 5-10 min before each call to refresh context | 30 seconds |
+| Occasional critical slip-ups | Zero (if you feed it well) |
+| Re-explaining to Claude every session | Zero |
+
+**~3-5h/week saved** + zero important slip-ups.
+
+---
+
+## Next steps
+
+- For a structured knowledge base with Markdown, [Obsidian + Claude](/boveda/obsidian-claude)
+- For memory across sessions at the app level, [claude-mem in 5 repos for mastering Claude](/boveda/cinco-repos-dominando-claude)
+- For Live Artifacts that show your brain as a dashboard, [Live Artifacts](/boveda/live-artifacts-cowork)

@@ -1,0 +1,91 @@
+---
+title: "Hook Format Python Files — black auto on Python post-edit (1,036 installs)"
+description: "Hook with 1,036 installs (top in post-tool). Runs the black formatter automatically on Python files after every Edit. PEP-8 guaranteed without you having to think about it."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "black"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-format-javascript-files", "hook-lint-on-save", "hook-dependency-checker"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/post-tool/format-python-files"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/format-python-files.json"
+---
+
+## What it is
+
+After every Edit to a Python file (`.py`), the hook runs `black` automatically. Hook event: `PostToolUse`.
+
+`black` is "the uncompromising Python code formatter": opinionated, non-configurable. Your code ends up PEP-8 + black style, no discussion.
+
+1,036 installs make it the top in the `post-tool` category — one of the most adopted hooks in the catalog.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `post-tool` |
+| Installs | **1,036 (top of post-tool)** |
+| Hook event | `PostToolUse` (Edit) |
+| External tool | `black` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook post-tool/format-python-files
+```
+
+Prerequisite: `black` installed (`pip install black` or `pipx install black`).
+
+For Claude:
+
+```
+I installed the post-tool/format-python-files hook. Verify that `black`
+is on PATH. Test it: ask Claude to edit a badly formatted Python file —
+it should come out PEP-8 afterwards.
+```
+
+## What you can do with this
+
+### Automatic PEP-8
+
+It doesn't matter how Claude indents or places spaces. After the edit, black reformats it according to convention.
+
+### Noise-free diffs
+
+No formatting noise in `git diff`. You only see semantic changes.
+
+### Combo with [Lint On Save](/boveda/hook-lint-on-save)
+
+Lint runs after format. Catch issues that format doesn't cover (unused imports, complexity, etc.).
+
+### For shared projects
+
+If your team uses black as the standard, this hook guarantees Claude respects it without you having to remember to ask.
+
+### For autonomous sessions
+
+Long `/goal` or `/loop` runs: the code stays well formatted without your intervention.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **Without black installed:** the hook fails.
+- **If your team uses another formatter** (autopep8, yapf, ruff): this hook is black-only.
+- **For projects with a different line length:** black default is 88. If you need another, configure it in `pyproject.toml`.
+- **For non-Python files:** this hook is .py-only. For JS use [Format JavaScript Files](/boveda/hook-format-javascript-files).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Format Python Files Hook](https://www.aitmpl.com/component/hooks/post-tool/format-python-files) — exact command.
+- **JSON config:** [format-python-files.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/post-tool/format-python-files.json).
+- **Official black:** [black.readthedocs.io](https://black.readthedocs.io).
+
+## Related resources
+
+- [Format JavaScript Files Hook](/boveda/hook-format-javascript-files) — the equivalent for JS/TS.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — combines format + lint.
+- [Dependency Checker Hook](/boveda/hook-dependency-checker) — the top of the catalog, complements this with supply chain.

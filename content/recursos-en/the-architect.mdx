@@ -1,0 +1,261 @@
+---
+title: "The Architect — a complete 16-section blueprint so Claude builds on its own"
+description: "You describe your idea and The Architect generates a file with 16 detailed sections (vision, stack, DB, APIs, frontend, auth, deploy, testing, skills). You drop it into a folder, open Claude Code, and it builds EVERYTHING without asking again. Open source, lives in Claude Code."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["planea-audita-construye", "all-deploy", "cyber-neo"]
+---
+
+## The idea
+
+You want to build a house. First, you need a **blueprint** that says where every wall, door, and window goes. Without it, the builder doesn't know what to do.
+
+**The Architect is that blueprint, but for software**. You describe your idea and it generates a file with **everything Claude Code needs** to build on its own — without asking you again.
+
+Repo: `Hainrixz/the-architect`. Open source.
+
+---
+
+## The flow — 4 steps
+
+| Step | Action |
+|------|--------|
+| 1 | You tell it what you want to build (SaaS, app, page, agent) |
+| 2 | It asks you specific questions (what for, who uses it, what need) |
+| 3 | It designs a complete blueprint with 16 sections |
+| 4 | You open Claude Code in the blueprint's folder and tell it "build" |
+
+---
+
+## Installation
+
+### Option A — Git
+
+```bash
+git clone https://github.com/Hainrixz/the-architect.git \
+  && cd the-architect \
+  && claude
+```
+
+### Option B — ZIP
+
+Download the ZIP → unzip it → `cd ~/Downloads/the-architect-main && claude`
+
+---
+
+## The blueprint's 16 sections
+
+| # | Section | Covers |
+|---|---------|-------|
+| 01 | Project vision | What you're going to build and why |
+| 02 | Tech stack | Tools and languages |
+| 03 | Directory structure | How to organize files |
+| 04 | DB schemas | Tables, relationships, models |
+| 05 | API specifications | Endpoints, methods, responses |
+| 06 | Frontend architecture | Components, pages, navigation |
+| 07 | Visual design | Colors, typography, spacing |
+| 08 | Authentication flows | Login, sign-up, permissions |
+| 09 | **Build order** ⭐ | Exact step by step for Claude Code |
+| 10 | Environment configuration | Variables, config |
+| 11 | Dependencies | Packages and libraries |
+| 12 | Deploy | How and where to publish |
+| 13 | Testing | What to test and how |
+| 14 | Recommended skills | Skills that help |
+| 15 | Builder instructions | Your project's CLAUDE.md |
+| 16 | Constraints and rules | Non-negotiable limits |
+
+**#9 (build order)** is the key. It's what lets Claude Code build **without asking**.
+
+---
+
+## Full workflow
+
+### Step 1 — Generate the blueprint
+
+Open Claude Code in The Architect's folder:
+
+```bash
+cd the-architect && claude
+```
+
+You tell it:
+
+```
+> I want to build [YOUR IDEA IN 1-2 LINES]
+```
+
+The Architect interviews you (3-7 questions). Then it generates the blueprint in Markdown format.
+
+### Step 2 — Create the new project's folder
+
+```bash
+mkdir mi-proyecto-nuevo
+cd mi-proyecto-nuevo
+```
+
+### Step 3 — Paste the blueprint
+
+Save the blueprint The Architect generated as `BLUEPRINT.md` in `mi-proyecto-nuevo/`.
+
+### Step 4 — Open Claude Code there
+
+```bash
+claude
+```
+
+You tell it:
+
+```
+> Read BLUEPRINT.md and build the project following the exact order
+  in section 9 (build order).
+
+  If you have to make a decision that isn't in the blueprint, flag it
+  as [VERIFY] and keep going. Tell me about them at the end.
+```
+
+Claude builds **the entire project**. You come back when it's done.
+
+---
+
+## Use cases
+
+### 1. New SaaS
+
+```
+Idea: SaaS for inventory management for mid-sized LATAM retail.
+Stack open.
+```
+
+The Architect interviews you about features, users, pricing. Then it generates a complete blueprint: Next.js + Supabase + Stripe + Vercel.
+
+### 2. Complex landing (not a simple Vercel/Webflow)
+
+```
+Idea: Landing with interactive pieces: calculator, live demo, blog.
+Stack: Next.js + MDX.
+```
+
+A blueprint with all the pages, components, MDX setup, blog integration.
+
+### 3. Custom agent for a client
+
+```
+Idea: Agent that processes WhatsApp orders for a bakery.
+Tools: WhatsApp Business API, Google Calendar, Stripe.
+```
+
+A blueprint with MCPs, processing logic, integrations.
+
+### 4. Ambitious side project
+
+```
+Idea: Social hiking app. Tracking, maps, friends, gamification.
+```
+
+A complete blueprint of the whole app. You decide which phases to tackle.
+
+---
+
+## The Plan → Build → Deploy → Protect trilogy
+
+The Architect is part of a trilogy:
+
+| # | Piece | What for |
+|---|-------|----------|
+| 1 | [Plan Mode](/boveda/planea-audita-construye) | Audit before touching anything |
+| 2 | **The Architect** | Generates a complete blueprint |
+| 3 | [All Deploy](/boveda/all-deploy) | Ships to production with preview + rollback |
+| 4 | [Cyber Neo](/boveda/cyber-neo) | Audits security |
+
+Each link exists so that **you don't improvise on the next one**.
+
+---
+
+## Anti-patterns
+
+### 1. Skipping the interviews
+
+The Architect asks you questions **on purpose**. If you skip them by answering "whatever," the blueprint comes out generic. **Answer in detail**.
+
+### 2. Not reviewing the blueprint before building
+
+The blueprint has 16 sections for a reason. **Read the whole thing** before asking Claude to build. You'll catch decisions you would have made differently.
+
+### 3. Building everything at once with no checkpoints
+
+For large projects, split the build into phases. Sections 1-6 today, 7-12 tomorrow, etc. **Not 16 sections in one go**.
+
+### 4. Ignoring section 9 (order)
+
+It's the critical section. If Claude doesn't respect it, **the project comes out broken**. Ask it explicitly to follow it.
+
+### 5. Asking for tech you don't handle
+
+If Architect suggests Rust and you only know JavaScript, **you're going to suffer**. In the questions, **mention your technical constraints**.
+
+---
+
+## Powerful combinations
+
+### With Plan Mode
+
+```
+> Before asking Architect to build, open Plan Mode
+> and audit the blueprint.
+
+  Ask for 3 alternatives for each important architectural decision.
+```
+
+[Plan Mode](/boveda/planea-audita-construye) + The Architect = **an audited plan** before building.
+
+### With All Deploy
+
+Once it's built, [All Deploy](/boveda/all-deploy) ships it to production following the order in section 12 of the blueprint.
+
+### With Cult UI
+
+```
+> In section 7 (visual design), use Cult UI components
+  for the frontend. "shadcn default" blueprints look generic.
+```
+
+[Cult UI](/boveda/cult-ui) for premium components.
+
+### With building skills
+
+If in section 14 (recommended skills) The Architect proposes skills that don't exist, **build them with** [building skills](/boveda/crea-claude-skills).
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| A 1-file quick fix | Overkill |
+| Modifying an existing project | The Architect is for greenfield |
+| You need fast iteration | Better: a direct prompt |
+| Experimental project with no commitment | A formal blueprint doesn't pay off |
+
+---
+
+## Comparison with alternatives
+
+| Tool | When |
+|------|--------|
+| **The Architect** | Complete blueprint for a serious new project |
+| [Instant Landing](/boveda/instant-landing) | Landing only, a single run |
+| [Claude Web Builder](/boveda/claude-web-builder) | Landing with a no-code flow |
+| [Mobile app stack](/boveda/stack-app-movil-ia) | Specific stack for mobile |
+
+Architect's sweet spot: **a new project that needs clear structure**.
+
+---
+
+## Next steps
+
+- To audit the blueprint before building, [Plan Mode](/boveda/planea-audita-construye)
+- For automated deploy after building, [All Deploy](/boveda/all-deploy)
+- For a security audit before production, [Cyber Neo](/boveda/cyber-neo)

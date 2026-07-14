@@ -1,0 +1,411 @@
+---
+title: "Cult UI — 75 premium components + 2 official skills so Claude stops shipping flat UI"
+description: "Open-source shadcn registry with 75 premium components (text-animate, cosmic-button, dynamic-island, hero-liquid-metal) + 2 official skills for Claude Code (components-build with 16 rules co-authored by Hayden Bleasel and shadcn, fixing-motion-performance). MIT, free."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "shadcn", "tailwind"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-disenador-web", "claude-animador-web", "5-skills-diseno-claude"]
+---
+
+## The problem
+
+Everyone who builds pages with Claude Code or Cursor suffers the same thing:
+
+- Ask for a landing → you get flat shadcn
+- Ask for a dashboard → you get flat shadcn
+- Ask for a store → you get the same boring template as always
+
+**It's not Claude**. It's that without a library of premium pieces and a rules file, it defaults to flat shadcn. And flat shadcn is nice but **everyone already has it**.
+
+**Cult UI** is 75 open-source premium components + 2 official skills for Claude that make it follow the spec without reminders.
+
+Repo: `nolly-studio/cult-ui`. ~4.2k stars. MIT.
+
+---
+
+## What changes
+
+| Before (shadcn default) | After (Cult UI) |
+|------------------------|-------------------|
+| Flat buttons with hover color | `cosmic-button`: glowing edges, Silicon Valley style |
+| Hero with H1 + gray paragraph | `hero-liquid-metal`: liquid metal text, Apple keynote style |
+| Square toast | `dynamic-island`: the iPhone one as a notification system |
+| Static text | `text-animate`: letters assembling frame by frame |
+
+The difference between "template" and "real product" is **5-6 components with personality**.
+
+---
+
+## What almost nobody knows — the 2 official skills
+
+Here's the secret. Beyond components, the repo ships **2 official skills** for Claude Code that live in `.claude/skills/`.
+
+### Skill 1 — `components-build`
+
+16 rules Claude follows when it builds/refactors UI components:
+
+- accessibility
+- as-child
+- composition
+- data-attributes
+- definitions
+- design-tokens
+- documentation
+- marketplaces
+- npm
+- overview
+- polymorphism
+- principles
+- registry
+- state
+- styling
+- types
+
+**Co-authored by Hayden Bleasel + shadcn**. Same spec that nolly-studio and shadcn use internally to keep things consistent.
+
+### Skill 2 — `fixing-motion-performance`
+
+An animation performance auditor. 9 categories of rules. Slash command `/fixing-motion-performance` to audit a specific file.
+
+Detects:
+- Layout reads/writes in the same frame
+- Animating width/height/top/left (instead of transform/opacity)
+- Misused `will-change`
+- setInterval vs requestAnimationFrame
+- Throttling of scroll/resize
+
+### Why they change everything
+
+Once downloaded to your project's `.claude/skills/`, **Claude reads them on its own at startup**. It follows the spec without you ever reminding it.
+
+Without the skills: Claude defaults to its own patterns.
+With the skills: Claude **respects the spec automatically**.
+
+---
+
+## The 12 registry categories
+
+Beyond the 4 highlights, the 75 components live in 12 categories:
+
+| Category | What for |
+|-----------|----------|
+| Animated text | Titles and reveals frame by frame |
+| Pixel typography | Retro hooks, version badges |
+| Buttons | cosmic, gradient, magnetic, glow, shimmer |
+| Cards | 3D, tilt, glassmorphism, animated borders |
+| iPhone-style / dynamic | dynamic-island, family-drawer, iOS modals |
+| Animated backgrounds | Aurora, mesh gradients, dot grids, particles |
+| Metallic shaders | hero-liquid-metal, shader-lens-blur (real WebGL) |
+| Heroes | Pre-built heroes (metallic, animated grid, typography-reveal) |
+| Carousels and 3D | Perspective, marquee, scrolling stacks |
+| Layout and navigation | Sidebars, scroll-blur navbars, Linear/Raycast command-menu |
+| AI and prompts | Auto-resize textareas, streaming chat bubbles |
+| Onboarding and forms | Animated steppers, Notion/Linear-style drawers |
+
+Full catalog with previews: `cult-ui.com`.
+
+---
+
+## The 4 with the most impact
+
+If you're only going to try 4, make it these. They change the face of a page in under a minute.
+
+### 1. text-animate
+
+Letters that assemble themselves like in a movie. In the H1 = the whole home changes.
+
+```bash
+npx shadcn@latest add https://cult-ui.com/r/text-animate.json
+```
+
+### 2. cosmic-button
+
+Buttons with glowing edges. Your main CTA goes from plain to premium in 1 second.
+
+```bash
+npx shadcn@latest add https://cult-ui.com/r/cosmic-button.json
+```
+
+### 3. dynamic-island
+
+The iPhone one, now for your page. Works as a toast, a notifications header, a featured widget.
+
+```bash
+npx shadcn@latest add https://cult-ui.com/r/dynamic-island.json
+```
+
+### 4. hero-liquid-metal
+
+Text that looks like melting metal. **The component that changes the feel** of the hero the most.
+
+```bash
+npx shadcn@latest add https://cult-ui.com/r/hero-liquid-metal.json
+```
+
+---
+
+## Required stack
+
+| Dependency | Version | Note |
+|-------------|---------|------|
+| **Tailwind CSS** | v4 (NOT v3) | Cult UI uses the v4 PostCSS plugin. On v3 the components come out unstyled |
+| **motion** | latest | NOT `framer-motion`. Framer Motion was renamed to `motion` |
+| **shadcn CLI** | `@latest` or `@beta` | Direct install with a URL works with @latest. The `@cult-ui/<name>` syntax requires @beta |
+| **Next.js** | 14+ recommended | Also works on Vite or Astro |
+| **clsx + tailwind-merge** | latest | For the `cn()` helper |
+
+---
+
+## Full setup — a single prompt
+
+Paste this into Claude Code from the project root. It verifies the stack, installs missing dependencies, configures the registry, and adds the first component as a smoke test.
+
+```
+I want to use Cult UI (https://cult-ui.com · github.com/nolly-studio/cult-ui)
+in this project. It's a shadcn registry, not an npm package. Do it in 5
+steps, confirming each one:
+
+1. VERIFY STACK
+   - Read package.json: Tailwind version, framework, whether shadcn is present
+     (components.json), whether motion or framer-motion is installed
+   - If Tailwind is v3, propose an upgrade to v4 (do NOT run it yet)
+   - If I have framer-motion: flag it. Cult UI uses motion, NOT framer-motion
+
+2. INITIALIZE SHADCN IF MISSING
+   - If there's no components.json: npx shadcn@latest init with reasonable
+     defaults (neutral palette, CSS variables, neutral base color)
+   - If it already exists: don't touch it
+
+3. INSTALL MISSING DEPENDENCIES
+   - motion (NOT framer-motion). If I have framer-motion, uninstall it first
+   - clsx and tailwind-merge if missing
+
+4. CONFIGURE THE @cult-ui REGISTRY
+   - Edit components.json and add the block:
+     "registries": {
+       "@cult-ui": "https://cult-ui.com/r/{name}.json"
+     }
+   - If it already had a registries block: merge without overwriting
+
+5. SMOKE TEST
+   - npx shadcn@latest add https://cult-ui.com/r/cosmic-button.json
+   - Confirm the file ended up in components/ui/
+   - Import it into a test page to verify it compiles
+
+If it fails:
+- "registry not found": use the direct URL instead of @cult-ui/
+- motion/react imports fail: verify you do NOT have framer-motion
+- Tailwind classes don't apply: confirm v4 with @tailwindcss/postcss
+
+At the end tell me: what got installed, files changed, and the command
+to add the next component.
+```
+
+---
+
+## Download the 2 official skills
+
+The skills live in the project's `.claude/skills/`.
+
+```
+Cult UI comes with 2 official skills that make Claude follow its spec
+automatically. I want them in this project.
+
+Steps:
+
+1. Create .claude/skills/ if it doesn't exist.
+
+2. Download the 2 skills from the nolly-studio/cult-ui repo:
+   - .claude/skills/components-build/
+   - .claude/skills/fixing-motion-performance/
+
+   Clean way:
+   git clone --depth 1 https://github.com/nolly-studio/cult-ui.git \
+     /tmp/cult-ui-skills
+   mkdir -p .claude/skills
+   cp -r /tmp/cult-ui-skills/.claude/skills/components-build .claude/skills/
+   cp -r /tmp/cult-ui-skills/.claude/skills/fixing-motion-performance \
+     .claude/skills/
+   rm -rf /tmp/cult-ui-skills
+
+3. Verify SKILL.md in each folder:
+   ls .claude/skills/components-build/SKILL.md
+   ls .claude/skills/fixing-motion-performance/SKILL.md
+
+4. Confirm how many files you copied and that SKILL.md reads fine.
+
+After copying, close the Claude Code session and reopen it. The skills
+are read at startup. From that moment on Claude respects the spec
+automatically.
+```
+
+After copying, **restart Claude Code**. The skills are read at startup.
+
+---
+
+## The daily flow
+
+You're working on a section. You spot something generic. You paste a prompt with the component + the section. Claude applies it while respecting the branding.
+
+### Prompt — specific component
+
+```
+I want to add [COMPONENT] from Cult UI in [WHERE].
+
+1. Add the component: npx shadcn@latest add https://cult-ui.com/r/[COMPONENT].json
+
+2. Read my globals.css and tailwind.config to extract the real design tokens
+   (palette, font-family, radius, spacing). Respect those tokens.
+
+3. Import it into [WHERE]:
+   - Replace the current equivalent element with the Cult UI version
+   - Keep the copy/text content intact
+   - Adjust props so it respects MY palette and MY font — don't leave me
+     the repo's demo style
+   - If it needs a wrapper to animate (Suspense, client-only dynamic import),
+     add it correctly
+
+4. Verify:
+   - Build/dev with no warnings
+   - The component is integrated, NOT slapped on like a sticker
+
+If I have the components-build skill loaded, follow it to the letter
+(accessibility, polymorphism, project design-tokens NOT hardcoded).
+
+At the end: files touched, before/after in 1 sentence, estimated FPS of
+the animations. If under 60, suggest /fixing-motion-performance.
+```
+
+### Prompt — audit a whole page
+
+```
+Audit [PATH, e.g. app/page.tsx] and tell me where Cult UI would add value.
+
+Your task is to AUDIT, not refactor. Produce this report:
+
+1. INVENTORY
+   - Key visual elements (hero, CTAs, cards, nav, footer, backgrounds)
+   - For each: which shadcn component/raw HTML I use today
+
+2. DIAGNOSIS
+   - Flag which ones feel generic / template-y
+   - Flag which ones are already good and should NOT be touched
+
+3. PROPOSAL WITH CULT UI
+   - For each generic one: the specific Cult UI component that replaces it
+   - Only components you know exist in the registry
+   - For each proposal: the exact install command
+   - Visual impact: high/low
+
+4. PRIORITIZED PLAN
+   - Order from highest to lowest impact
+   - Recommend starting with 2-3 high impact ones above the fold
+
+5. RISKS
+   - Will anything clash with my palette/typography?
+   - Does any component require extra setup (motion, shader support)?
+
+Don't add or install anything yet. Just the report.
+```
+
+---
+
+## 3 mixes that work
+
+### Product landing
+
+- `hero-liquid-metal` in the hero
+- `text-animate` in section titles
+- `cosmic-button` in CTAs
+- Animated backgrounds (aurora) in features
+
+### SaaS dashboard
+
+- Bento grid for metric cards
+- `shader-lens-blur` as a decorative sidebar background
+- `dynamic-island` as a notifications toast
+- Animated Linear-style command-menu
+
+### iPhone-style section
+
+- `dynamic-island` as a hero widget
+- `family-drawer` for modals with a stack effect
+- iOS transparencies in cards
+- Magnetic buttons instead of flat buttons
+
+---
+
+## Common mistakes + fix
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `npx shadcn add` fails with "project not initialized" | Missing `components.json` | `npx shadcn@latest init` first |
+| Component copies but doesn't animate | Missing `motion` | `pnpm add motion`. If you have `framer-motion`, uninstall it first |
+| Tailwind classes don't apply | You're on v3 | Migrate to Tailwind v4 |
+| `@cult-ui/<name>` doesn't resolve | You're using `shadcn@latest` | Switch to `@beta` or use the direct URL |
+| Claude keeps building generic UI | You didn't download the skills | Run the skills download prompt |
+
+---
+
+## Anti-patterns
+
+### 1. Installing Cult UI without the skills
+
+Without the 2 official skills, Claude **goes back to its defaults** and ends up ignoring the premium components. The skills are **what changes the game**.
+
+### 2. Trying to combine 75 components
+
+5-6 are **enough** for a premium landing. More is visual noise.
+
+### 3. Mixing `framer-motion` with `motion`
+
+Imports break. **Only one**. If you have framer-motion, uninstall it.
+
+### 4. Hardcoding the repo demo's colors
+
+The Cult UI demo uses specific colors. If you copy them literally, **you don't respect your brand**. Ask Claude to **respect `globals.css`** explicitly.
+
+### 5. Not running `/fixing-motion-performance`
+
+Animations that look nice on desktop can be **catastrophic on mobile**. Validate performance before deploy.
+
+---
+
+## Powerful combinations
+
+### With [Claude web animator](/boveda/claude-animador-web)
+
+Emil Kowalski Skill + Cult UI = professional motion design + premium components. A complete animation stack.
+
+### With [Claude web designer](/boveda/claude-disenador-web)
+
+Frontend Design Skill + Cult UI + Playwright = complete design with a real browser validating.
+
+### With [Claude Web Builder](/boveda/claude-web-builder)
+
+```
+> Generate a landing with Claude Web Builder.
+> Then audit it with Cult UI and replace the generic pieces
+  with premium components.
+```
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| Project with a different stack (Vue, Svelte) | It's shadcn = React-only |
+| Very intentionally minimalist brand | Cult UI is opulent, it clashes |
+| Critical performance on low-end mobile | Premium animations are heavy |
+| Super formal enterprise app | The aesthetic can be "too modern" |
+
+---
+
+## Next steps
+
+- For animations specifically with Emil Kowalski, [Claude web animator](/boveda/claude-animador-web)
+- For design with a real browser validating, [Claude web designer](/boveda/claude-disenador-web)
+- For the suite of 5 official design skills, [5 design skills](/boveda/5-skills-diseno-claude)

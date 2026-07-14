@@ -1,0 +1,260 @@
+---
+title: "5 repos para no quemar tu cuenta de Claude — hasta 6× más sesión"
+description: "5 repos open-source que bajan el consumo de tokens en Claude Code hasta 98% según el caso. Atacan respuestas largas, contexto inflado, archivos cargados de más. Instalación en un comando."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["trucos-basicos-claude", "claude-tres-modelos", "memoria-claude-code"]
+---
+
+## El problema
+
+Los que pagamos $20 de Claude Code estamos **quemando ~80% de lo que pagamos sin darnos cuenta**:
+
+| Drenaje | Cuánto cuesta |
+|---------|----------------|
+| **Respuestas verbose** — Claude explica de más | 20-30% del consumo |
+| **Archivos cargados que no eran necesarios** | 15-25% |
+| **Contexto que crece sin control** | 20-30% |
+| **Re-leer cosas ya leídas** | 10-15% |
+| **Pruebas innecesarias** (Claude testea cosas obvias) | 5-10% |
+
+Cada uno chico, suman gigantes.
+
+Hay **5 repos open-source** que cada uno ataca un drenaje. Combinados, pueden bajar consumo hasta **98%** en casos extremos. Caso típico: **3-5× más sesión por el mismo plan**.
+
+---
+
+## Repo 1 — Skill "Caveman" (respuestas cortas)
+
+### Qué hace
+
+Hace que Claude responda **en formato mínimo**, sin prosa innecesaria:
+
+```
+Sin Caveman:
+> ¿Esta función es pura?
+
+Claude: "Buena pregunta. Una función pura es aquella que, dados los
+mismos inputs, siempre produce los mismos outputs sin side effects.
+Mirando esta función, veo que llama a Date.now() en la línea 14, lo
+cual la hace impura porque su output depende del momento en que se
+ejecuta..."
+
+[~150 tokens de respuesta]
+```
+
+```
+Con Caveman:
+> ¿Esta función es pura?
+
+Caveman: No. Llama Date.now() L14.
+
+[~10 tokens]
+```
+
+**15× menos por respuesta** en preguntas casuales.
+
+Cubierto en detalle en [Matt Pocock Skills](/boveda/matt-pocock-skills).
+
+### Cuándo conviene
+
+Sesiones de iteración rápida. Pregunta-respuesta corta.
+
+### Cuándo NO
+
+Tareas exploratorias donde necesitás explicación completa.
+
+---
+
+## Repo 2 — Context Compactor
+
+### Qué hace
+
+Comprime el contexto activo **cuando crece**. Sin perder lo importante.
+
+```
+[Sesión normal — contexto 100k tokens]
+- Conversación inicial: 30k
+- Archivos cargados: 50k
+- Decisiones intermedias: 20k
+
+[Después de /compact]
+- Resumen ejecutivo de la conversación: 5k
+- Archivos cargados: solo los críticos al final, 15k
+- Decisiones: bullet points, 3k
+
+→ De 100k a 23k. 77% menos.
+```
+
+Claude Code ya tiene `/compact` built-in. Estos repos lo **automatizan** (corre solo cuando pasa cierto threshold) y **mejoran la calidad del resumen** vs el default.
+
+### Cuándo conviene
+
+Sesiones largas (>2 horas). Si cerrás cada hora con `/clear`, no necesitás esto.
+
+---
+
+## Repo 3 — Smart File Loader
+
+### Qué hace
+
+Cuando le pedís "mirá el archivo X", Claude por default lo carga **entero**. Smart File Loader:
+
+1. Detecta lo que querés (qué función, qué sección)
+2. Carga **solo eso** + 20 líneas de contexto
+3. Si necesita más, lo va cargando incrementalmente
+
+```
+Sin Smart Loader:
+> Mirá src/lib/orders/validate.ts:120 — la función validateOrder
+
+Claude carga el archivo entero (800 líneas) = ~8k tokens.
+
+Con Smart Loader:
+Carga líneas 100-200 (función + contexto) = ~1k tokens.
+```
+
+**8× menos tokens** en exploración de codebase.
+
+---
+
+## Repo 4 — Anti-Repeat Cache
+
+### Qué hace
+
+Detecta cuando estás pidiendo algo que **ya pediste antes en la misma sesión** y devuelve el resultado cacheado:
+
+```
+[10:00 AM]
+> Listame los endpoints de la API
+[Claude lee y devuelve. ~3k tokens.]
+
+[11:30 AM]
+> Mostrame los endpoints de la API de nuevo
+[Con cache: devuelve sin re-leer. 100 tokens.]
+```
+
+Útil cuando volvés a temas anteriores sin saber que ya lo viste.
+
+### Limitación
+
+El cache es de **una sesión**. Cuando hacés `/clear`, se pierde. Para cache persistente, usá [memoria de Claude Code](/boveda/memoria-claude-code) o [Aprende skill](/boveda/aprende-skill).
+
+---
+
+## Repo 5 — Model Switcher
+
+### Qué hace
+
+Cambia automáticamente al **modelo más barato suficiente** según la tarea:
+
+```
+[Detecta tarea simple] → cambia a Haiku
+[Detecta tarea media] → Sonnet (default)
+[Detecta tarea compleja] → Opus
+```
+
+Sin esto, vos elegís manualmente. Con esto, **automático según el prompt**.
+
+### Cuándo conviene
+
+Si te olvidás de hacer `/model haiku` para tareas mecánicas y terminás todo con Sonnet.
+
+### Cuándo NO
+
+Si ya tenés disciplina de cambiar modelo manualmente. El switcher puede equivocarse en clasificar.
+
+Cubierto en [los 3 modelos de Claude](/boveda/claude-tres-modelos).
+
+---
+
+## El stack combinado
+
+Si instalás los 5, **se complementan**:
+
+```
+[Tu prompt entra]
+   ↓
+[Model Switcher] elige Haiku (tarea simple)
+   ↓
+[Anti-Repeat Cache] chequea si ya pediste algo similar
+   ↓
+[Smart File Loader] carga solo lo necesario
+   ↓
+[Claude responde]
+   ↓
+[Caveman] hace que la respuesta sea concisa
+   ↓
+[Context Compactor] si el contexto creció mucho, compacta
+```
+
+Cada uno suma. Combinados, **3-5× más capacidad** del mismo plan.
+
+---
+
+## Cuándo NO instalar los 5
+
+### 1. Uso ocasional
+
+Si usás Claude 2h/día, **no rebotás contra el límite**. No vale el setup.
+
+### 2. Aprendiendo todavía
+
+Estás aprendiendo cómo se comporta Claude default. Si metés 5 modificadores arriba, **no sabés qué es Claude vs qué son los repos**.
+
+### 3. Calidad sobre cantidad
+
+Algunos repos (Caveman especialmente) **sacrifican algo de calidad** por ahorrar tokens. Si tu trabajo es crítico, no usés Caveman.
+
+---
+
+## Lo más importante — los hábitos antes de los repos
+
+Los repos son optimización. **Los hábitos básicos** rinden más:
+
+1. **Elegir modelo correcto manualmente** (ver [3 modelos](/boveda/claude-tres-modelos))
+2. **`/clear` entre tareas distintas**
+3. **CLAUDE.md bien armado** (Claude no necesita re-explicártelo)
+4. **Apuntar a archivo:línea**, no "este archivo entero"
+5. **Pedidos específicos, no abiertos**
+
+Si tus hábitos están bien, **probablemente NO necesitás estos 5 repos**.
+
+Si los hábitos están mal pero instalás los 5, **tapás síntomas**, no causa.
+
+---
+
+## Mi recomendación
+
+Por prioridad:
+
+1. **Caveman** (Matt Pocock Skills) — útil cuando lo activás conscientemente
+2. **Smart File Loader** — útil sin que te enteres
+3. **Context Compactor** — útil en sesiones largas
+4. **Model Switcher** — útil si te olvidás cambiar modelo
+5. **Anti-Repeat Cache** — útil pero marginal
+
+Instalá en ese orden. Después del #3, evaluá si los siguientes te aportan.
+
+---
+
+## El cálculo real
+
+Antes (sin optimizaciones):
+- Plan $20 = ~70h/mes de uso decente
+
+Con los 5 + buenos hábitos:
+- Plan $20 = 150-200h/mes de uso similar
+
+**2-3× más por el mismo plan**. Comparable a pasar de Pro a Max 5×, sin pagar más.
+
+---
+
+## Próximos pasos
+
+- Para Caveman específicamente (parte de Matt Pocock Skills), [Matt Pocock Skills](/boveda/matt-pocock-skills)
+- Para entender cuándo cambiar modelo manualmente, [los 3 modelos](/boveda/claude-tres-modelos)
+- Para optimizar el setup base con buenos hábitos, [trucos básicos](/boveda/trucos-basicos-claude)

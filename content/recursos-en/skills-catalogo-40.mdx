@@ -1,0 +1,258 @@
+---
+title: "Catalog of 40 useful skills — writing, research, code, email, data, personal"
+description: "The most widely shared skills from the community organized into 6 categories. It's not a list to install all of them — it's a menu you pick the 5 that best match your work from. With a recommended pack per profile and the minimal structure of any SKILL.md."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "claude-cowork"]
+publishedAt: "2026-05-23"
+readingTime: "13 min"
+relatedSlugs: ["anatomia-claude", "cinco-skills-necesarias", "trio-skills-claude-code"]
+---
+
+## The concept before the list
+
+The difference between "Claude turned on" and "Claude running your week" is **having well-built skills** for the jobs you repeat. A skill is **a `SKILL.md` file** in a folder — Claude reads it and knows the job without you having to explain it again.
+
+> The trap: people read "40 skills" and feel like they have to install all 40. **No. You pick 5 that match what you do.** The rest is noise.
+
+Here we split them into 6 categories + a recommended pack per profile at the end.
+
+---
+
+## Minimal anatomy of a SKILL.md
+
+Every skill follows the same format:
+
+```markdown
+---
+name: name-in-kebab
+description: One line explaining when Claude should activate this.
+  Include keywords the user will naturally use.
+---
+
+# Skill title
+
+[Instructions Claude follows when the skill activates]
+
+## Protocol
+1. First do X
+2. Then Y
+3. If Z happens, do W
+
+## Rules
+- DON'T do this
+- ALWAYS confirm this before that
+
+## Output format
+[Structure of the expected output]
+```
+
+Skills go in `~/.claude/skills/<name>/SKILL.md` (global) or `.claude/skills/<name>/SKILL.md` (per project).
+
+More details in [Claude anatomy](/boveda/anatomia-claude).
+
+---
+
+## Category 1 — Writing (7 skills)
+
+Useful skills if your work involves writing content often:
+
+| Skill | For what |
+|-------|----------|
+| `editor-tecnico` | Edit drafts keeping the voice but fixing clarity |
+| `traductor-tecnico` | EN → ES respecting untranslatable terms (see [translation skill](/boveda/skill-traduccion-tecnica)) |
+| `resumir-articulo` | Condense long articles into a TL;DR version + key takeaways |
+| `tweet-thread` | Turn a long post into a thread of 8-10 tweets |
+| `newsletter` | Rewrite pieces into newsletter format |
+| `tone-of-voice` | Adapt text to a specific tone you define |
+| `seo-headline` | Generate 5 SEO-friendly headline variants |
+
+**For whom**: content creators, marketing, PMs who write a lot.
+
+---
+
+## Category 2 — Research (7 skills)
+
+For research and analysis:
+
+| Skill | For what |
+|-------|----------|
+| `competitor-research` | Structured competitor analysis |
+| `market-sizing` | TAM/SAM/SOM with explicit methodology |
+| `paper-summary` | Structured summary of academic papers |
+| `interview-prep` | Preparing questionnaires for user interviews |
+| `pre-mortem` | Identify why a project could fail before starting |
+| `swot-analyzer` | SWOT analysis with critical judgment |
+| `data-storytelling` | Turn a dataset into a narrative for a presentation |
+
+**For whom**: founders, analysts, consultants, PMs.
+
+---
+
+## Category 3 — Code (7 skills)
+
+For developers:
+
+| Skill | For what |
+|-------|----------|
+| `code-reviewer` | Review a diff looking for bugs and violations (see [code reviewer](/boveda/skill-code-reviewer)) |
+| `test-generator` | Tests with happy path + edge cases ([automatic tests](/boveda/comando-tests-automaticos)) |
+| `refactor-safe` | Refactor without changing observable behavior |
+| `migration-checker` | Validate DB migrations before applying them |
+| `dependency-audit` | Audit deps for CVEs and outdated versions |
+| `api-design-review` | Review an API design before implementing |
+| `commit-message` | Generate structured commit messages from the diff |
+
+**For whom**: devs, tech leads, small teams.
+
+---
+
+## Category 4 — Email / Comms (6 skills)
+
+| Skill | For what |
+|-------|----------|
+| `triage-inbox` | Classify emails into reply/delegate/archive |
+| `respuesta-template` | Drafts in your voice learned from the sent folder |
+| `seguimiento-cliente` | Follow-ups in a tone appropriate to the history |
+| `nota-de-prensa` | Generate releases in press-friendly format |
+| `disculpa-profesional` | When something broke and you have to write to clients |
+| `propuesta-comercial` | Structured services proposal |
+
+**For whom**: founders, sales, customer success.
+
+---
+
+## Category 5 — Data (7 skills)
+
+| Skill | For what |
+|-------|----------|
+| `csv-analyzer` | Analyze a new CSV: schema, odd values, distributions |
+| `sql-builder` | Generate queries from natural language while validating the schema |
+| `excel-modeling` | Structured financial models (see [Claude Microsoft 365](/boveda/claude-microsoft-365)) |
+| `dashboard-design` | Design dashboards: which metrics, in what order, what to visualize |
+| `data-validator` | Validate data consistency before migrating it |
+| `outlier-detector` | Detect outliers in numeric datasets |
+| `report-generator` | Recurring reports with the same structure |
+
+**For whom**: analysts, ops, founders responsible for metrics.
+
+---
+
+## Category 6 — Personal / Productivity (6 skills)
+
+| Skill | For what |
+|-------|----------|
+| `brief-manana` | Daily brief when you start (see [9 prompts for Cowork](/boveda/nueve-prompts-cowork)) |
+| `reporte-semanal` | Friday report for team / management |
+| `planificador-semana` | Monday planning with top 3 priorities |
+| `revisor-decisiones` | Reflect on recent decisions to learn from them |
+| `prep-reunion` | Brief before each meeting with context + questions |
+| `journal-coach` | A coach for guided reflective journaling |
+
+**For whom**: anyone who values keeping their work organized.
+
+---
+
+## Recommended packs by profile
+
+Instead of installing everything, you pick the pack that matches your role:
+
+### Developer Pack (5 skills)
+
+```
+1. code-reviewer
+2. test-generator
+3. refactor-safe
+4. commit-message
+5. brief-manana
+```
+
+### Founder / Operator Pack (5 skills)
+
+```
+1. brief-manana
+2. triage-inbox
+3. reporte-semanal
+4. prep-reunion
+5. competitor-research
+```
+
+### Content Creator Pack (5 skills)
+
+```
+1. editor-tecnico
+2. tweet-thread
+3. newsletter
+4. tone-of-voice
+5. resumir-articulo
+```
+
+### Analyst / Data person Pack (5 skills)
+
+```
+1. csv-analyzer
+2. sql-builder
+3. dashboard-design
+4. data-storytelling
+5. report-generator
+```
+
+### PM / Product Pack (5 skills)
+
+```
+1. interview-prep
+2. competitor-research
+3. pre-mortem
+4. prep-reunion
+5. brief-manana
+```
+
+5 skills well-tuned for your work > 40 installed that you don't use.
+
+---
+
+## How to choose what to install
+
+Apply this filter:
+
+1. **Do I do this task at least once a week?** If not, you don't need a skill — a one-off prompt is enough.
+2. **Should the output be consistent across runs?** If yes, a skill is better (it ensures a repeatable format).
+3. **Do I want Claude to activate it automatically when it detects the pattern?** Skills activate on their own based on their description. If you want manual invocation, a slash command is enough.
+
+If all 3 are yes, make a skill. If not, save yourself the complexity.
+
+---
+
+## Anti-patterns
+
+### 1. Copy-pasting 40 SKILL.md files on day 1
+
+Claude gets confused with 40 skills active at the same time. Some trigger when they shouldn't. Start with **5**, see how they go, add more when you notice the gap.
+
+### 2. Generic skills like "help me with X"
+
+If the skill is generic, it adds nothing over Claude's default behavior. Useful skills are **specific to your context** (your business, your codebase, your conventions).
+
+### 3. Not tuning the `description`
+
+The `description` is what Claude reads to decide when to activate. If it's vague, the skill won't trigger. **Include concrete words** you'll use when asking for it naturally.
+
+### 4. Not iterating on your skills
+
+A skill isn't "install it and it's done." You improve them with use. If a skill produces mediocre outputs, **adjust the SKILL.md** — don't throw the skill away or resign yourself to it.
+
+---
+
+## The philosophy
+
+Having skills is like having professional checklists. They don't replace your judgment — **they encapsulate your best version of the job in a repeatable format**. The first time you build a skill well, it takes you 30 minutes. After that you use it 200 times.
+
+The ROI isn't the first time. It's the 200 times that come after.
+
+---
+
+## Next steps
+
+- If you've never created a skill, [code reviewer](/boveda/skill-code-reviewer) is the example explained most thoroughly step by step
+- For the combo of 5 that covers a whole cycle, [trio of skills](/boveda/trio-skills-claude-code) + [5 necessary skills](/boveda/cinco-skills-necesarias)
+- To understand what a skill is vs an MCP vs a plugin, [Claude anatomy](/boveda/anatomia-claude)

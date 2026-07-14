@@ -1,0 +1,85 @@
+---
+title: "Setting LangSmith Tracing — observability a LangSmith con env vars"
+description: "Setting con 75 installs. Configura env vars para mandar conversation traces a LangSmith. Variante setting del [LangSmith Tracing Hook](/boveda/hook-langsmith-tracing). Más simple — solo env vars."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "langsmith"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-langsmith-tracing", "setting-custom-telemetry", "mcp-logfire"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/telemetry/langsmith-tracing"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/langsmith-tracing.json"
+---
+
+## Qué es
+
+Setting que configura las env vars para que Claude Code mande traces a LangSmith:
+
+- `TRACE_TO_LANGSMITH: true`
+- `CC_LANGSMITH_API_KEY: <tu key>`
+- `CC_LANGSMITH_PROJECT: claude-code-project`
+- `CC_LANGSMITH_DEBUG: false`
+
+Es la versión setting (más simple, solo env vars) del [LangSmith Tracing Hook](/boveda/hook-langsmith-tracing) (que requiere jq + script de stop).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `telemetry` |
+| Installs | 75 |
+| Env vars | 4 (TRACE, API key, project, debug) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting telemetry/langsmith-tracing
+```
+
+Reemplazá `YOUR_API_KEY_HERE` con tu key real.
+
+Para Claude:
+
+```
+Instalé el setting telemetry/langsmith-tracing. Configurá la API key.
+Hacé una sesión corta y verificá que el trace llegó a mi LangSmith
+project.
+```
+
+## Qué podés hacer con esto
+
+### Observability sin scripting
+
+A diferencia del hook (que requiere bash + jq), este setting solo activa env vars. Más simple.
+
+### Para teams ya en LangSmith
+
+Si tu equipo usa LangSmith para otras LLM apps, agregar Claude Code centraliza observability.
+
+### Combo con [Custom Telemetry](/boveda/setting-custom-telemetry)
+
+Custom Telemetry para OTel generic. LangSmith Tracing para LangSmith específicamente.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin cuenta LangSmith:** no funciona.
+- **Para uso casual:** observability serio es overkill.
+- **Privacy:** los traces incluyen conversaciones. Para data sensible, validá.
+- **Costos LangSmith:** plan free tiene cap.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [LangSmith Tracing Setting](https://www.aitmpl.com/component/settings/telemetry/langsmith-tracing) — comando exacto.
+- **Config JSON:** [langsmith-tracing.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/langsmith-tracing.json).
+- **LangSmith oficial:** [langchain.com/langsmith](https://www.langchain.com/langsmith).
+
+## Recursos relacionados
+
+- [LangSmith Tracing Hook](/boveda/hook-langsmith-tracing) — versión hook con más control.
+- [Custom Telemetry Setting](/boveda/setting-custom-telemetry) — OTel generic alternativa.
+- [Logfire MCP](/boveda/mcp-logfire) — alternativa de observability.

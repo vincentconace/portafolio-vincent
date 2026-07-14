@@ -1,0 +1,110 @@
+---
+title: "HashiCorp Agent Skills — Terraform and Packer inside Claude Code"
+description: "HashiCorp's official marketplace (491⭐) with 5 plugins to generate Terraform code, modules, providers and Packer builders from Claude Code. Style guides, testing and HCP registry included."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "terraform", "packer"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["trifecta-perfecta", "agency-agents", "5-claude-skills-necesarias"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/agent-skills"
+github: "https://github.com/hashicorp/agent-skills"
+---
+
+## What it is
+
+HashiCorp published an official marketplace of Claude Code skills that makes Terraform and Packer first-class citizens inside the editor. There are 5 separate plugins: three aimed at Terraform (HCL code generation, modules, providers) and two at Packer (AWS/Azure/Windows builders + integration with the HCP Packer registry).
+
+The difference from writing Terraform in any editor is that these skills bake in HashiCorp's official style guide, generate tests when appropriate, and follow the patterns the company itself recommends — not the habits everyone picked up 4 years ago.
+
+It's a marketplace of skills, not a single plugin: you install the marketplace once and then choose which of the 5 plugins you plug in.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | HashiCorp |
+| Stars | 491 |
+| Type | Marketplace (5 plugins) |
+| Components | 15 skills + 2 MCPs |
+| Marketplace | `hashicorp/agent-skills` |
+
+### The 5 plugins
+
+| Plugin | What it's for |
+| --- | --- |
+| `terraform-code-generation` | Generate HCL, style guides and testing |
+| `terraform-module-generation` | Module design + Terraform Stacks |
+| `terraform-provider-development` | Build providers, resources, data sources, acceptance testing |
+| `packer-builders` | AWS, Azure and Windows images with Packer |
+| `packer-hcp` | Integration with the HCP Packer registry for image metadata |
+
+## How to install it
+
+```bash
+# 1) Add the HashiCorp marketplace
+/plugin marketplace add hashicorp/agent-skills
+
+# 2) Install the plugin you need (one or several)
+/plugin install terraform-code-generation@hashicorp-agent-skills
+/plugin install packer-builders@hashicorp-agent-skills
+```
+
+Or open `/plugin` and go to Discover — you'll see all 5 listed.
+
+To have Claude do everything:
+
+```
+Install the hashicorp/agent-skills marketplace and from it add
+terraform-code-generation and terraform-module-generation for me. Then
+show me which commands are now available.
+```
+
+## What you can do with this
+
+### Write Terraform that passes the official style guide
+
+Ask Claude for an S3 module with encryption, versioning and replication. With `terraform-code-generation` installed, what it generates already comes formatted according to HashiCorp's conventions, not whatever the model improvised.
+
+### Design a reusable module from scratch
+
+With `terraform-module-generation`, you describe the use case ("a VPC module for three environments with peering") and it hands you the full structure: `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf`, a README and the tests with `terraform test`.
+
+### Build a custom provider
+
+If your team maintains its own provider, `terraform-provider-development` assists you with scaffolding resources, data sources, actions and the acceptance testing harness.
+
+### Create golden images with Packer
+
+`packer-builders` covers the three typical scenarios (AWS AMIs, Azure Images, Windows). `packer-hcp` adds the integration with the HCP registry to version and track the images you generate.
+
+## Real benefits
+
+- **HashiCorp's official conventions** baked in — less style debate in code review.
+- **Tests generated alongside the code** — `terraform test` and acceptance tests aren't an afterthought.
+- **Maintained by the company** — when new features ship (Stacks, HCP Packer), the skills get updated there.
+- **Granular** — you install only the 1-2 plugins you use, not all 5 together.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you're just getting started with Terraform:** the skill assumes you understand provisioners, state, modules and plan/apply. It's not a tutorial.
+- **If you use OpenTofu and want to diverge from HashiCorp:** the style it generates is the official one. If you moved to OpenTofu on philosophical grounds, the conventions will be the same anyway.
+- **For very small infra (1-2 resources):** the overhead of skills + modules for three lines of HCL is overkill. Do it by hand.
+
+</Callout>
+
+## Get it from the source
+
+The skills live in HashiCorp's official repo. Núcleo IA just explains what they bring and when each one is worth using:
+
+- **Listing on aitmpl.com:** [Agent Skills · HashiCorp](https://www.aitmpl.com/plugins/agent-skills) — a list of the 5 plugins with short descriptions.
+- **Repo on GitHub:** [hashicorp/agent-skills](https://github.com/hashicorp/agent-skills) — the skills' code, issues, contributing.
+
+## Related resources
+
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — a plugin combo to design/audit/publish. It pairs with All Deploy to close the Terraform → real infra loop.
+- [Agency Agents](/boveda/agency-agents) — to understand the difference between agents, skills and plugins when you combine several marketplaces.
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — the base set that pairs well with verticals like this one.

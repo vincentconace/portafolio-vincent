@@ -1,0 +1,76 @@
+---
+title: "Setting Use Sonnet — switch to Claude 3.5 Sonnet"
+description: "Setting with 82 installs. Configure Claude Code to use Claude 3.5 Sonnet. Balance between speed/cost (vs Opus) and capability (vs Haiku). A reasonable default for coding work."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-use-haiku", "setting-custom-model", "setting-bedrock-configuration"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/model/use-sonnet"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/model/use-sonnet.json"
+---
+
+## What it is
+
+Overrides the model to `claude-3-5-sonnet-20241022`. A balance between capability and cost.
+
+Sonnet is the sweet spot for most coding work — better than Haiku, cheaper/faster than Opus.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `model` |
+| Installs | 82 |
+| Model | claude-3-5-sonnet-20241022 |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting model/use-sonnet
+```
+
+For Claude:
+
+```
+I installed the model/use-sonnet setting. Confirm that the active
+model is Sonnet.
+```
+
+## What you can do with this
+
+### Default balance
+
+For most coding work, Sonnet is the right choice.
+
+### Explicit override
+
+If your default is Haiku or Opus, this setting forces Sonnet.
+
+### For teams with a shared preference
+
+If your team standardizes on Sonnet, this setting enforces it.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If your default is already Sonnet:** it adds nothing.
+- **For small tasks:** [Use Haiku](/boveda/setting-use-haiku) reduces cost.
+- **For very complex tasks:** Opus may give better output (see [Custom Model](/boveda/setting-custom-model)).
+- **Sonnet 3.5 vs 4.x:** this setting is 3.5 specific. If you want a newer version, [Custom Model](/boveda/setting-custom-model).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Use Sonnet Setting](https://www.aitmpl.com/component/settings/model/use-sonnet) — exact command.
+- **JSON config:** [use-sonnet.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/model/use-sonnet.json).
+
+## Related resources
+
+- [Use Haiku Setting](/boveda/setting-use-haiku) — fast/cheap alternative.
+- [Custom Model Setting](/boveda/setting-custom-model) — granular control including 4.x versions.
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — for the AWS path.

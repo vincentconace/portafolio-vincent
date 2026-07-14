@@ -1,0 +1,276 @@
+---
+title: "Prompting 101 — 10 pilares para prompts profesionales"
+description: "Los 10 pilares que aplican los equipos de Anthropic para escribir prompts que ganan en producción. No es 'truquitos', es ingeniería: instrucciones claras, contexto suficiente, formato controlado, ejemplos donde importa. Con plantilla copiable."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "claude-api"]
+publishedAt: "2026-05-20"
+readingTime: "14 min"
+relatedSlugs: ["prompts-prd-ejecutivo", "prompt-debugging-sistematico", "mejora-prompts-plugin"]
+---
+
+## La idea base
+
+Prompt engineering no es magia ni recetario. Es **ciencia empírica**: escribís un prompt, ves el output, identificás qué falló, ajustás, volvés a correr. La diferencia entre un prompt amateur y uno profesional son 10 pilares específicos que reducen la varianza del output.
+
+Estos 10 pilares aplican a cualquier modelo serio (Claude, GPT, Gemini). El detalle de implementación cambia, los principios no.
+
+---
+
+## Los 10 pilares en orden de impacto
+
+### 1. Instrucciones claras
+
+Decile **exactamente qué hacer**, con verbo específico y scope acotado.
+
+❌ "Ayudame con el email."
+✅ "Reescribí el email de abajo en tono profesional, máximo 4 párrafos, sin saludos ni cierres."
+
+La diferencia: el primero requiere que Claude adivine la intención. El segundo le dice qué hacer (reescribir), cómo (profesional), restricciones (4 párrafos) y qué omitir (saludos/cierres).
+
+### 2. Contexto suficiente
+
+Pasale **el background que la tarea exige**. Sin contexto, Claude rellena con suposiciones.
+
+Si le pedís "evaluá este pitch de ventas" sin contar que es para B2B SaaS en LATAM, va a evaluarlo asumiendo el contexto más probable (probablemente US, probablemente B2C). El feedback va a ser genérico.
+
+Contexto típico:
+- **Quién es el usuario** del output
+- **Dominio**: industria, producto, audiencia
+- **Glosario**: jerga interna que Claude no sabe (productos internos, equipos, métricas custom)
+- **Restricciones**: lo que NO se debe hacer
+
+### 3. Cómo arreglás la información
+
+El **orden importa**. En un prompt largo, Claude pesa más lo del principio y lo del final que lo del medio.
+
+Patrón que funciona:
+
+```
+[Inicio: rol + objetivo]
+Sos X. Tu tarea es Y.
+
+[Medio: contexto extenso, ejemplos, datos]
+Acá va todo el background...
+
+[Final: instrucción precisa repetida + formato esperado]
+Ahora, devolveme [exactamente esto].
+```
+
+La instrucción crítica va dos veces: arriba como objetivo, abajo como recordatorio. Eso ancla a Claude en el "qué".
+
+### 4. Iteración empírica
+
+**Lanzá → leé → ajustá → relanzá.** No intentes el prompt perfecto al primer tiro. Saquen 5 outputs distintos con variaciones chicas y mirá cuál acierta mejor.
+
+Trucos:
+- Cambiá una sola variable por iteración (sino no sabés qué movió la aguja)
+- Anotá qué cambiaste y qué pasó
+- Buscá patrones: ¿"se vuelve verboso cuando le pido X"? Eso es información de cómo se comporta el modelo con ese patrón
+
+### 5. Reasoning paso a paso (CoT)
+
+Para tareas no triviales, pedile a Claude que **piense antes de responder**. Esto mejora la calidad del output dramáticamente en tareas de razonamiento.
+
+Formato simple:
+
+```
+Para resolver esto:
+1. Primero analizá [aspecto A]
+2. Después considerá [aspecto B]
+3. Recién entonces formulá la respuesta
+
+Razoná en voz alta cada paso, después devolveme la conclusión.
+```
+
+En modelos modernos, esto ocurre "internamente" (extended thinking), pero forzarlo en el prompt sigue funcionando.
+
+### 6. XML tags para estructurar input/output
+
+Cuando tu prompt tiene varias partes (contexto + datos + instrucción), envolverlas en tags XML ayuda a Claude a separar qué es qué.
+
+```
+<contexto>
+Sos un revisor técnico de un blog sobre ML.
+</contexto>
+
+<articulo>
+[contenido del artículo a revisar]
+</articulo>
+
+<criterios>
+1. Precisión técnica
+2. Claridad para audiencia intermedia
+3. Ejemplos accionables
+</criterios>
+
+<formato_de_salida>
+Devolveme JSON con: { precision: 1-10, claridad: 1-10, ejemplos: 1-10, comentarios: [...] }
+</formato_de_salida>
+```
+
+XML no es la única opción (también funcionan markdown headers o delimitadores tipo `###`), pero es la más confiable cuando hay muchos elementos.
+
+### 7. Ejemplos (few-shot) donde importa
+
+Para tareas con **formato específico** o **estilo difícil de explicar**, los ejemplos ganan al texto descriptivo.
+
+❌ "Devolveme la respuesta en formato de bullet conciso y profesional."
+
+✅ "Devolveme la respuesta en este formato:
+
+```
+Caso A:
+- Causa: ...
+- Impacto: ...
+- Acción: ...
+```
+
+Acá tres ejemplos buenos:
+
+[ejemplo 1]
+[ejemplo 2]
+[ejemplo 3]
+
+Ahora aplicá el formato a: [tu input]."
+
+3 ejemplos > 1 ejemplo > descripción. Pero **buenos ejemplos**, no random: deben cubrir variabilidad realista del input.
+
+### 8. Prefill del output
+
+Si querés un output que arranca de manera específica, **arrancalo vos**. Claude continúa desde ahí.
+
+API call típica:
+
+```python
+messages = [
+    {"role": "user", "content": "Analizame este código..."},
+    {"role": "assistant", "content": "Análisis estructurado:\n\n## Bugs detectados\n\n"}
+]
+```
+
+Claude va a continuar desde "## Bugs detectados". Esto fuerza el formato sin tener que pedir "responde con un header de Bugs". Útil para JSON, para listas estructuradas, para outputs que arrancan con un marker específico.
+
+### 9. Restricciones explícitas
+
+Decile **qué NO hacer**, no solo qué hacer.
+
+```
+Reescribime este email. Reglas:
+- Máximo 4 párrafos
+- Sin saludos ni firmas (van a ser auto-completados)
+- No uses la palabra "sinergia"
+- No prometas plazos que no estén en el email original
+- Si falta info crítica, no la inventes — marcá "❓ falta info"
+```
+
+Las restricciones explícitas eliminan los outputs que técnicamente respetan tu pedido pero no son lo que querías.
+
+### 10. Criterios de éxito + auto-evaluación
+
+Antes de aceptar un output, pedile a Claude que se **autoevalúe** contra criterios:
+
+```
+Antes de devolver tu respuesta final, repasala contra estos criterios:
+1. ¿Cumple el formato pedido?
+2. ¿Respeta las restricciones?
+3. ¿Falta info crítica que no se le pidió al usuario?
+
+Si fallás algún criterio, ajustá antes de devolver.
+```
+
+Esto reduce la cantidad de "ah, pero olvidaste X" en los outputs.
+
+---
+
+## Cómo se ve un prompt que aplica los 10 pilares
+
+```xml
+<rol>
+Sos un analista de ventas senior con 10 años en B2B SaaS LATAM.
+</rol>
+
+<tarea>
+Analizá la conversación de venta de abajo y producí un resumen accionable
+para el equipo comercial.
+</tarea>
+
+<contexto>
+- Producto: software de gestión de inventario para retailers medianos
+- Ticket medio: USD 8k/año
+- Geo: México y Colombia
+- Buyer típico: dueño de retail con 3-15 sucursales
+</contexto>
+
+<conversacion>
+[transcripción de la llamada]
+</conversacion>
+
+<formato>
+Devolveme JSON con esta forma exacta:
+
+{
+  "lead_qualification": "hot" | "warm" | "cold",
+  "señales_de_compra": [strings],
+  "objeciones": [{"objecion": str, "fuerza": 1-5}],
+  "próximo_paso": str,
+  "riesgo_principal": str
+}
+</formato>
+
+<restricciones>
+- No inventes información que no esté en la conversación
+- Si una señal/objeción es ambigua, no la incluyas
+- "próximo_paso" debe ser concreto (no "hacer seguimiento")
+</restricciones>
+
+<criterios_de_éxito>
+Antes de devolver, verificá:
+1. El JSON es válido (todas las keys, valores del tipo correcto)
+2. Todas las objeciones tienen evidencia en la conversación
+3. "próximo_paso" es accionable hoy
+</criterios_de_éxito>
+```
+
+Este prompt tiene los 10 pilares: rol claro (1), tarea explícita (1), contexto (2), estructura XML (6), formato preciso (1), restricciones (9), criterios de auto-eval (10).
+
+---
+
+## Errores comunes
+
+### Pedir "el mejor" output sin definir mejor
+
+"Dame el mejor email para esta situación." → ¿Mejor según qué? Conversión, claridad, brevedad, formalidad… Definí la métrica.
+
+### Ejemplos sesgados
+
+Si tus 3 ejemplos son del mismo tipo (todos casos exitosos, o todos del mismo segmento), Claude generaliza mal. Que los ejemplos **cubran variabilidad**: éxitos y fracasos, distintos segmentos, distintos formatos.
+
+### Contexto irrelevante = ruido
+
+Más contexto NO siempre es mejor. Si le pasás 5000 palabras de background para una tarea que requiere 500, Claude se distrae con info no relevante. Pasale lo **necesario**, no lo "por las dudas".
+
+### Iterar sin medir
+
+Cambiás el prompt, sale algo distinto, "parece mejor", lo dejás. ¿Realmente es mejor? Tené un **set de inputs de prueba** (5-10 casos) y corré las dos versiones del prompt contra todos. Decidí con data.
+
+---
+
+## Cuándo NO seguir los 10 pilares
+
+Para tareas chicas y conversacionales, los 10 pilares son overkill. "Reescribime esto en menos palabras" no necesita XML tags ni criterios de éxito.
+
+Aplicá la fuerza completa cuando:
+- El prompt se va a usar **muchas veces** (vale invertir en hacerlo bien)
+- La tarea es **crítica** (calidad importa más que velocidad)
+- El output va **directo a producción** (no hay revisión humana en el medio)
+
+Para tareas one-shot exploratorias, prompts cortos y directos están bien.
+
+---
+
+## Próximos pasos
+
+- Para tareas técnicas específicas, [prompt de debugging sistemático](/boveda/prompt-debugging-sistematico)
+- Para escribir PRDs, [prompts de PRD ejecutivo](/boveda/prompts-prd-ejecutivo)
+- Si tu equipo escribe prompts vagos seguido, instalá el [evaluador de prompts](/boveda/mejora-prompts-plugin)

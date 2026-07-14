@@ -1,0 +1,88 @@
+---
+title: "Setting Subagent Lifecycle Logger — audit trail of subagent invocations"
+description: "Setting with 7 installs. Audit trail using SubagentStart and SubagentStop lifecycle hooks. Every subagent spawn / finish generates a timestamped JSON entry. For auditing multi-agent workflows."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-context-timeline", "hook-command-logger", "hook-change-logger"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/hooks/subagent-lifecycle-logger"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/hooks/subagent-lifecycle-logger.json"
+---
+
+## What it is
+
+SubagentStart + SubagentStop hooks that log every subagent invocation with a timestamp. Every time Claude spawns or finishes a subagent, a JSON entry is recorded.
+
+For multi-agent workflows where you need to audit:
+- Which subagents ran
+- When they started / finished
+- How long they took
+- For what purpose
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `hooks` |
+| Installs | 7 |
+| Hook events | `SubagentStart` + `SubagentStop` |
+| Output | Timestamped JSON entries |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting hooks/subagent-lifecycle-logger
+```
+
+For Claude:
+
+```
+I installed the hooks/subagent-lifecycle-logger setting. Launch a task
+that uses subagents and show me the generated JSON log.
+```
+
+## What you can do with it
+
+### Audit multi-agent flows
+
+If your workflow launches 8 subagents for a goal, the log shows you what each one did.
+
+### Performance analysis
+
+Identify slow subagents by analyzing the timestamps.
+
+### Compliance trail
+
+For orgs that require documentation of AI agent invocations.
+
+### Combo with [Context Timeline Hook](/boveda/hook-context-timeline)
+
+Subagent Logger for structured JSON. Context Timeline for a visual view.
+
+### For autonomous sessions
+
+Long `/goal` runs that launch agents: the log is essential for the post-mortem.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use subagents:** the log stays empty.
+- **Only 7 installs:** very niche.
+- **If you want to log ALL tool calls:** [Command Logger Hook](/boveda/hook-command-logger) is broader.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Subagent Lifecycle Logger Setting](https://www.aitmpl.com/component/settings/hooks/subagent-lifecycle-logger) — exact command.
+- **JSON config:** [subagent-lifecycle-logger.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/hooks/subagent-lifecycle-logger.json).
+
+## Related resources
+
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visual browser view.
+- [Command Logger Hook](/boveda/hook-command-logger) — broader tool-call log.
+- [Change Logger Hook](/boveda/hook-change-logger) — CSV of file mutations.

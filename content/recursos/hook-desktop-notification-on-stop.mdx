@@ -1,0 +1,80 @@
+---
+title: "Hook Desktop Notification On Stop — aviso nativo cuando Claude termina de responder"
+description: "Hook con 90 installs que manda una notificación nativa del SO cada vez que Claude termina de responder. Una notificación por response — útil para sesiones largas donde te vas a hacer otra cosa."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["plugin-claude-notifications-go", "hook-discord-notifications", "hook-context-timeline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/monitoring/desktop-notification-on-stop"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/desktop-notification-on-stop.json"
+---
+
+## Qué es
+
+Cada vez que Claude Code termina de responder (Stop event), este hook dispara una notificación nativa del sistema operativo (macOS, Linux, Windows).
+
+A diferencia de [Discord Notifications](/boveda/hook-discord-notifications) (que va a un canal remoto) o [Claude Notifications Go](/boveda/plugin-claude-notifications-go) (que es plugin completo), este es la versión más simple: una notification del sistema, una por response.
+
+Hook event: `Stop`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `monitoring` |
+| Installs | 90 |
+| Hook event | `Stop` |
+| Output | Native desktop notification |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook monitoring/desktop-notification-on-stop
+```
+
+Para Claude:
+
+```
+Instalé el hook monitoring/desktop-notification-on-stop. Pedile a Claude
+que haga algo que tarde 20 segundos. Cuando termine debería sonar el
+notification de mi SO.
+```
+
+## Qué podés hacer con esto
+
+### Para sesiones largas
+
+Lanzás una tarea de 5 min, te vas a hacer otra cosa. Cuando vuelve el notification, ya está lista.
+
+### Sin webhooks ni servicios externos
+
+A diferencia de Discord/Slack notifications, este es solo SO. Sin internet, sin webhook URLs.
+
+### Combo con focus mode
+
+Si tenés focus mode activado en macOS, las notificaciones van a tu summary igual.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu workflow es interactivo continuo:** no aporta — siempre estás mirando.
+- **Si tu SO bloquea notifications:** algunos setups las bloquean por default. Habilítalas primero.
+- **Si necesitás notifications remotas** (avisarle a otra persona o que llegue al cel): mejor [Claude Notifications Go](/boveda/plugin-claude-notifications-go) o [Discord Notifications](/boveda/hook-discord-notifications).
+- **Para tareas cortas:** notification llega después de vos haber visto el output.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Desktop Notification On Stop Hook](https://www.aitmpl.com/component/hooks/monitoring/desktop-notification-on-stop) — comando exacto.
+- **Config JSON:** [desktop-notification-on-stop.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/monitoring/desktop-notification-on-stop.json).
+
+## Recursos relacionados
+
+- [Claude Notifications Go Plugin](/boveda/plugin-claude-notifications-go) — plugin con 6 tipos + webhooks + click-to-focus.
+- [Discord Notifications Hook](/boveda/hook-discord-notifications) — para canal remoto.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización en lugar de notification puntual.

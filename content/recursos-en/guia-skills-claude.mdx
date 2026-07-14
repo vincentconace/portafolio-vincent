@@ -1,0 +1,291 @@
+---
+title: "Claude Skills 0-to-100 — the official guide, made simple"
+description: "What a skill is, the 3 levels where they live (Claude.ai, Code, Cowork), how to upload your first one in 4 clicks, how to combine them with MCP connectors. A simplified version of Anthropic's official guide, written for someone who doesn't code."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude", "claude-code", "claude-cowork"]
+publishedAt: "2026-05-26"
+readingTime: "12 min"
+relatedSlugs: ["anatomia-claude", "skill-code-reviewer", "skills-catalogo-40"]
+---
+
+## What a skill is (60 seconds)
+
+A **skill** is a folder with an instructions file that you hand to Claude so it **always does the same task the same way**.
+
+It's like hiring someone and giving them a manual for their role. They read it once. Then whenever that task comes up, they follow the manual without you having to remind them.
+
+| Without a skill | With a skill |
+|-----------|-----------|
+| Every time you explain how you want the task done | You say "do X" and it applies the protocol |
+| Output varies between sessions | Consistent, structured output |
+| The knowledge lives in your head | The knowledge lives in the file |
+| If you hand it off to someone, you explain everything | You hand them the skills folder and you're done |
+
+---
+
+## The 3 levels where they live
+
+Skills can live in 3 different places. Each has its own use:
+
+| Level | Where | When it makes sense |
+|-------|-------|-----------------|
+| **Claude.ai (chat)** | Settings → Customize → Skills | Skills you want available in any conversation, without a specific project |
+| **Claude Code (local)** | `~/.claude/skills/` or the project's `.claude/skills/` | Technical skills (dev workflows, code review, automations) |
+| **Claude Cowork** | Workspace settings | Skills shared across a team (report templates, company prompts) |
+
+A skill can live at all 3 levels simultaneously. But typically you pick based on the use case.
+
+---
+
+## Anatomy of a skill
+
+Wherever it lives, a skill is a `SKILL.md` file with two parts:
+
+### Frontmatter
+
+```yaml
+---
+name: code-reviewer
+description: Reviews the current diff looking for bugs, vulnerabilities, and
+  convention violations. Activate when the user says "review it",
+  "code review", or "before merging".
+---
+```
+
+| Field | What it's for |
+|-------|----------|
+| `name` | Unique identifier, kebab-case |
+| `description` | **The most important part**: what Claude reads to decide when to activate the skill. It has to include the words you'll naturally use |
+
+### Body
+
+```markdown
+# Code Reviewer
+
+You are a senior code reviewer. Your job is to...
+
+## Protocol
+1. First read `git diff`
+2. Then analyze each hunk looking for...
+3. Return the report to me in this format:
+
+## Rules
+- DO NOT invent problems to fill the report
+- ALWAYS cite file:line
+- If everything is fine, say "all OK"
+
+## Output format
+[Expected structure]
+```
+
+The body is what Claude reads **when** it activates the skill. The `description` is what it reads **to decide whether to activate it**.
+
+---
+
+## How to upload your first skill — 4 clicks
+
+If you've never uploaded a skill at the Claude.ai level:
+
+<Step number={1} title="Build the skill locally">
+
+Create a `my-skill.md` file with frontmatter + body. **Minimum viable**:
+
+```markdown
+---
+name: my-first-skill
+description: A clear description of when to activate this skill.
+---
+
+# My first skill
+
+[Instructions]
+```
+
+</Step>
+
+<Step number={2} title="Compress into a ZIP">
+
+```bash
+mkdir my-first-skill
+mv my-skill.md my-first-skill/SKILL.md
+zip -r my-first-skill.zip my-first-skill/
+```
+
+The ZIP must contain a **folder** with the `SKILL.md` inside (not the loose file).
+
+</Step>
+
+<Step number={3} title="Upload from Claude.ai">
+
+1. Go to `claude.ai/customize/skills`
+2. Click "Upload Skill"
+3. Select your ZIP
+4. Confirm
+
+</Step>
+
+<Step number={4} title="Test it" last>
+
+Open a new conversation in Claude.ai and type something that matches your skill's `description`. If it activates, you'll see the "Using skill: my-first-skill" indicator.
+
+</Step>
+
+For Claude Code it's even simpler: drop the file in `~/.claude/skills/my-skill/SKILL.md` and it's available right away.
+
+---
+
+## The "skill creator" trick
+
+You don't have to write every skill by hand. There's a pattern: a **skill that generates skills**.
+
+```
+> I want a skill that helps me triage my inbox every morning.
+  It should classify emails into reply/delegate/archive and give me
+  drafts for the ones that need a response.
+
+  Generate the complete SKILL.md for me.
+```
+
+Claude (if it has the skill-creator installed) hands you the finished file. You review it, tweak details, save it. **Zero manual typing.**
+
+To build your own skill-creator:
+
+```markdown
+---
+name: skill-creator
+description: Generates SKILL.md files for Claude. Activate when the
+  user says "create a skill for me", "build me a skill for X", or asks to
+  generate a SKILL.md.
+---
+
+# Skill Creator
+
+When you're asked to generate a skill:
+
+## Step 1 - clarify
+Ask:
+1. What task does the skill do? (clear description, not generic)
+2. When should it activate? (words the user will say)
+3. What inputs does it need?
+4. What format should the output have?
+5. Are there hard rules (what NOT to do)?
+
+## Step 2 - generate
+With those answers, generate the SKILL.md following the structure:
+
+[SKILL.md template]
+
+## Rules
+- The frontmatter's `description` must be specific enough
+  that it only activates when it applies
+- The instructions must be ACTIONABLE (concrete verbs)
+- Always include "what NOT to do" if there are obvious risks
+- The expected output must be defined (format, length, structure)
+```
+
+Once you have this meta-skill, generating new skills is trivial.
+
+---
+
+## Combining skills with MCPs (connectors)
+
+Skills on their own are just text. **Connected to MCPs**, they can invoke real tools.
+
+Example: a skill to manage orders.
+
+`SKILL.md`:
+
+```markdown
+---
+name: manage-orders
+description: Queries and manages e-commerce orders. Activate
+  when the user asks about orders, tracking, or returns.
+---
+
+# Manage Orders
+
+For any order-related query:
+
+1. If the user mentions an order ID, query the `orders` MCP
+   with the `get_order` tool before responding.
+2. If they ask about generic status, list recent orders with
+   `list_orders` filtered by the mentioned date.
+3. NEVER invent order data. If the query fails or returns no
+   result, say so explicitly.
+```
+
+The skill **defines the behavior**. The MCP **provides access to the data**. Together they form a functional specialist.
+
+More on MCPs in [your own MCP server](/boveda/mcp-server-propio).
+
+---
+
+## The 5 patterns that work in production
+
+Of the skills that survive real-world use, these are the common patterns:
+
+### 1. Structured N-step workflow
+
+The skill defines a clear protocol: "first X, then Y, validate Z, output W". It works because it removes the variance in how Claude approaches the task.
+
+### 2. Specialist in a domain
+
+A skill that's an expert on a topic (legal, finance, SEO, etc.) with its own vocabulary and domain rules.
+
+### 3. Translator / Adapter
+
+Converts input in format A into output in format B following specific rules. E.g.: [technical translation skill](/boveda/skill-traduccion-tecnica).
+
+### 4. Auditor / Critic
+
+Looks at something and reports problems against defined criteria. E.g.: [code reviewer](/boveda/skill-code-reviewer).
+
+### 5. Structured generator
+
+Generates artifacts from a template and rules. E.g.: PRD generator, test generator.
+
+---
+
+## The 5 common mistakes
+
+### 1. A `description` that's too generic
+
+❌ `description: Helps you with code.`
+✅ `description: Reviews the current work's diff looking for bugs and violations. Activate at the end of a feature, before opening a PR, or when the user says "review it".`
+
+If Claude doesn't know **when** to activate the skill, it won't activate.
+
+### 2. Skills that are too long
+
+A 2000-word skill is too much. Claude gets distracted. **Keep them concise** — clear protocol + minimal rules + format. If you need more, split it into 2 related skills.
+
+### 3. No "what NOT to do"
+
+Negative rules are as important as positive ones. **List them explicitly**.
+
+### 4. Skills that overlap
+
+Having 3 skills with similar descriptions is confusing. **One skill per clear domain**.
+
+### 5. Not iterating
+
+A skill isn't "set it and forget it". If the output is mediocre, adjust the SKILL.md. **The first draft isn't the final one**.
+
+---
+
+## The full philosophy
+
+A well-built skill captures **your best version of a job**, encoded so Claude can replicate it every time.
+
+The investment is ~30 minutes per well-built skill. If you use it 100 times, it saves you 50+ hours vs. explaining the context every time. Obvious ROI.
+
+**But**: mediocre skills are noise. Well-made skills are leverage. The difference is the care put into the `description` (when to activate) and the rules (what to do and what not to do).
+
+---
+
+## Next steps
+
+- Your recommended first skill: [code reviewer](/boveda/skill-code-reviewer) — well explained step by step
+- For 40 useful skill ideas based on your role, [catalog of 40 skills](/boveda/skills-catalogo-40)
+- If the skill needs access to external data, [your own MCP server](/boveda/mcp-server-propio)

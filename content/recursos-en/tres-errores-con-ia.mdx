@@ -1,0 +1,210 @@
+---
+title: "Three mistakes with AI — it's not the AI, it's you (and the context rule)"
+description: "The 3 philosophical mistakes we make with any AI — Claude, ChatGPT, Gemini — and why the outputs come out mediocre. Spoiler: none of them have to do with the model. The context rule that fixes 80% of the problems."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "chatgpt"]
+publishedAt: "2026-05-04"
+readingTime: "8 min"
+relatedSlugs: ["prompting-10-pilares", "mejora-prompts-plugin"]
+---
+
+## The typical complaint
+
+> "I asked ChatGPT/Claude for X and it gave me garbage. AI is useless for Y."
+
+You hear this all the time. And in most cases, **the problem isn't the model**. It's one of these three philosophical mistakes in how you use it.
+
+When you fix those three, the outputs improve 10×. Without switching models, without paying for a premium plan, without tricks.
+
+---
+
+## Mistake 1 — Thinking the AI "knows what you want"
+
+The core mistake: you treat the AI as if it were a coworker who **knows you**. You tell it "make this better" the way you'd tell a teammate who already understands your context, your product, your audience, your tone.
+
+But the AI doesn't know you. Every conversation starts from scratch. It doesn't know what you do, it doesn't know who you're talking to, it doesn't know what matters to you, it doesn't know what you've already tried.
+
+### Symptom
+
+Short, generic requests:
+- "Make it better"
+- "Rewrite it more professionally"
+- "Optimize this for me"
+- "Give me ideas"
+
+### Fix
+
+**Treat the AI like a freelancer who joined your team today.** They need a briefing. Before you ask for anything, tell them:
+
+- Who you are / what you do
+- Who the output is for
+- What tone you're going for
+- What you've already ruled out
+- What "good" looks like to you
+
+Comparison:
+
+❌ "Give me name ideas for my startup."
+
+✅ "My startup is a B2B SaaS for inventory management aimed at mid-sized retailers in LATAM. Audience: store owners, 35-55, non-technical. I want a short name (1-2 words), pronounceable in Spanish, that doesn't sound like software but suggests control/order. Avoid generic words like 'management', 'cloud', 'tech'. Give me 10 options with a 1-line rationale each."
+
+The second one looks "too long," but that's the point: if you want a specific output, give a specific input.
+
+---
+
+## Mistake 2 — Not iterating on the prompt, iterating on the output
+
+The second mistake: the AI gives you something mediocre, and you respond "no, that's not it, do it again" or "can you do better?".
+
+That asks the AI to **guess what to change** without any new information. It's going to throw out another random variant.
+
+### Symptom
+
+Long conversations where every response is "no, not that either" without explaining what's missing.
+
+### Fix
+
+**Go back to the prompt, not the output.** If the output wasn't good, the prompt wasn't clear enough. Iterate on the prompt:
+
+```
+Iteration 1: "Give me name ideas for my startup."
+Output: mediocre
+
+[DON'T say "give me better ideas". Think: what did the prompt lack?]
+
+Iteration 2: [you add context] "My startup is... [like the example above]"
+Output: better, but the tone doesn't fit
+
+[What tone do you want? Define it in the prompt.]
+
+Iteration 3: "...the tone should sound like a premium but accessible brand, like Notion
+or Linear, not like Salesforce."
+Output: on target
+```
+
+Each iteration of the prompt **adds information**, not more demand. Mediocre output = incomplete input.
+
+---
+
+## Mistake 3 — Treating the output as final truth
+
+The third mistake: you accept whatever the AI throws out as-is. If it says "the code is fine" or "this is a good strategy," you take it at face value.
+
+This is dangerous because AIs are **very good at writing things that sound plausible**. They can be wrong and sound just as convincing as when they're right. There's no automatic "tone of doubt."
+
+### Symptom
+
+Copy/pasting the output without verifying it. Accepting the first answer as definitive.
+
+### Fix
+
+**The output is always a first draft.** Your job is to validate it:
+
+| Type of output | How you validate |
+|----------------|--------------|
+| Code | You run it, test it, check edge cases |
+| Analysis | You cross-check it against real data, look for cases where it doesn't hold |
+| Recommendation | You ask the AI for "arguments against" before accepting it |
+| Written content | You read it out loud, look at it through your audience's eyes |
+| Data / facts | You verify against the original source |
+
+A specific trick for analysis and recommendations — **ask for the counterargument**:
+
+```
+> You just recommended A over B. Now give me 3 strong reasons why
+  B would be better than A. Don't soften it.
+```
+
+The AI gives you the counterargument. You compare both sides. **That's where you make the decision.** That's 10× better than accepting the first recommendation.
+
+---
+
+## The context rule
+
+The 3 mistakes all converge on a single rule:
+
+> **The quality of the output is proportional to the quality of the input.**
+
+There's no way around this. Switching models (Claude → GPT → Gemini) can get you +20% in some cases. Improving your input gets you +300%.
+
+### How to tell if your input is good
+
+Before you send the prompt, read it and ask yourself:
+
+1. **Would a freelancer who just walked in understand what I want?**
+   If the answer is "it depends," context is missing.
+
+2. **Did I define what I consider "good"?**
+   Without criteria, the AI invents the criteria.
+
+3. **Did I mention what I DON'T want?**
+   Explicit constraints prevent the technically correct but undesired output.
+
+4. **Did I pass along the critical facts?**
+   Numbers, dates, specific names. The AI doesn't know them.
+
+5. **Did I define the output format?**
+   Without a format, you'll get whatever the AI thinks is reasonable. It usually won't match what you wanted.
+
+If all 5 answers are "yes," the output will be good. If not, you know exactly what to add to the prompt.
+
+---
+
+## The "blank page" test
+
+A simple heuristic to know whether you're falling into these mistakes:
+
+> If your prompt were the blank page handed to a newly hired consultant, **could they do the job with just that info?**
+
+If the answer is no, **the prompt is incomplete**.
+
+The AI isn't magic — it's a brilliant consultant with no context. The brilliance depends on the model. The context depends on you.
+
+---
+
+## Applied to concrete cases
+
+### Case 1 — "Write an email to my client"
+
+❌ "Write an email to my client Acme telling them we didn't make the deadline."
+
+Missing: why you didn't make it, when the new deadline is, what your relationship with Acme is like, what was promised, what you're delivering anyway, what tone they use.
+
+✅ "Write an email to Carlos, my contact at Acme. We've been working together for 6 months, we're relatively close but formal (I address him formally in writing). I had promised to deliver the reporting module on Friday the 30th. We didn't make it because of a bug we found in the integration with their SAP. Realistic new deadline: Friday the 6th (a week later). In the meantime, we can deliver the rest of the project that is ready. Tone: own the mistake, no long excuses, with a concrete plan. Maximum 6 lines."
+
+### Case 2 — "Optimize this for me"
+
+❌ "Optimize this function:"
+```python
+def get_users():
+    ...
+```
+
+Missing: optimize for what? Speed, memory, readability. How much does it matter? What's the current load?
+
+✅ "This function is called 100/sec in production. Current latency: 200ms. Target: under 50ms. It's bottlenecked by the query on line 8 (I saw it in NewRelic). We can't change the DB or add an external cache (no Redis). Propose optimizations that can be deployed in under 1 day."
+
+### Case 3 — "Make the code cleaner"
+
+❌ "Clean up this file."
+
+✅ "Refactor this file following our convention of [custom hooks in separate files, business logic in /domain/, validation with Zod]. DON'T change the module's public API (12 other files import it). DON'T touch the existing tests. List the proposed changes before applying them."
+
+---
+
+## The takeaway
+
+The 3 mistakes are really one mistake in different forms: **delegating decisions to the AI that require your context**.
+
+The AI doesn't know who you are, what matters to you, what you've already tried, or what "good" looks like to you. **That info is yours, and your job is to hand it over.**
+
+Once you accept this, you stop fighting with the outputs and start investing in better inputs. That's where real productivity with AI shows up.
+
+---
+
+## Next steps
+
+- To dig deeper into how to build good prompts, [Prompting 101 — 10 pillars](/boveda/prompting-10-pilares)
+- If you work on a team and your colleagues throw out vague prompts, install the [prompt evaluator](/boveda/mejora-prompts-plugin)
+- For PRDs and long documents, [executive PRD prompts](/boveda/prompts-prd-ejecutivo)

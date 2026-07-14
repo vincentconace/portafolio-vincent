@@ -1,0 +1,382 @@
+---
+title: "Agent View — varios Claude Code corriendo en paralelo dentro del mismo panel"
+description: "Anthropic publicó el 11 de mayo 2026 una vista nueva en Claude Code. Un panel donde ves varias sesiones de Claude trabajando al mismo tiempo: auditor de ads, generador de creativos, publicador. Requiere v2.1.139+. Cómo abrirlo, los 7 atajos, persistencia (sobrevive cerrar terminal, NO sobrevive sleep), y caso real de 3 agentes paralelos."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-ads", "higgsfield-mcp", "ecosistema-de-agentes"]
+---
+
+## Qué cambió el 11 de mayo de 2026
+
+Hasta esa fecha, si querías 3 agentes de Claude trabajando al mismo tiempo, abrías 3 terminales. Tenías que cambiar de ventana para chequear cada uno. Si uno se trababa esperando input, te enterabas tarde.
+
+**Agent View** es la respuesta de Anthropic: un panel dentro de Claude Code donde ves **todas tus sesiones activas, su estado y outputs** — desde la misma terminal.
+
+| Característica | Detalle |
+|----------------|---------|
+| Versión requerida | Claude Code 2.1.139 o superior |
+| Plan | Pro, Max, Team, Enterprise, API (NO Free) |
+| Estado | Research preview |
+| Comando | `claude agents` |
+
+---
+
+## Qué es y qué NO es
+
+### Es
+
+- Panel de sesiones **top-level** de Claude Code — cada fila es un agente independiente
+- **Persistente**: sesiones sobreviven cerrar la terminal
+- Reemplazo de tener varias ventanas abiertas
+- Compatible con skills (lanzás desde el panel sin re-pegar prompt)
+
+### NO es
+
+- **No muestra sub-agentes** que una sesión spawnea internamente
+- **No es orquestador automático** — vos seguís dando tareas a cada uno
+- **No multiplica cuota** — cada sesión activa cuenta contra tu plan
+- **No sobrevive** si tu máquina se duerme o reinicia (hay recovery)
+
+---
+
+## Pre-requisitos
+
+### Verificá versión
+
+```bash
+claude --version
+```
+
+Si te devuelve **menos de 2.1.139** → actualizá:
+
+```bash
+npm install -g @anthropic-ai/claude-code@latest
+```
+
+Si tenés app desktop, abrila — se ofrece auto-update.
+
+---
+
+## Abrir el panel
+
+```bash
+claude agents
+```
+
+(En **plural**. `claude agent` solo no funciona.)
+
+La primera vez está vacío. Normal — no lanzaste ningún agente todavía.
+
+---
+
+## Los 7 atajos de teclado
+
+| Tecla | Acción | Qué hace |
+|-------|--------|----------|
+| ← | Detach | Salís de la sesión y volvés al panel sin matarla |
+| → | Attach | Te metés a la sesión seleccionada para interactuar |
+| Space | Peek | Preview del último output sin attachar — chequeo rápido |
+| ↑↓ | Navegar | Te movés entre filas |
+| Esc | Salir | Cierra el panel entero (no usás esto para detachar) |
+| Ctrl+T | Pin | Fija una sesión arriba (no se pierde entre las demás) |
+| Ctrl+R | Rename | Le ponés nombre legible (no slug auto) |
+
+**Flow óptimo**: ↑↓ para encontrar, Space para peek, → solo si vas a interactuar. **Detachar con ←**, NO con Esc.
+
+---
+
+## Los 6 estados
+
+| Estado | Color | Significa |
+|--------|-------|-----------|
+| **Working** | Azul | Claude está ejecutando tools |
+| **Needs input** | Amarillo | Está esperando tu respuesta |
+| **Idle** | Gris | Abierta pero sin tarea actual |
+| **Completed** | Verde | Terminó OK, podés archivar |
+| **Failed** | Rojo | Terminó con error, attach para ver traceback |
+| **Stopped** | Gris oscuro | La paraste vos, queda para revisar |
+
+---
+
+## Lanzar tu primer agente
+
+### Ruta A — desde terminal limpia
+
+```bash
+claude --bg "tu tarea acá en una línea"
+```
+
+La sesión queda corriendo en background. Abrís el panel con `claude agents` y la ves.
+
+### Ruta B — desde sesión activa
+
+Si ya estás dentro de una sesión normal y querés mandarla al background:
+
+```
+> /bg
+```
+
+(o `/background`)
+
+### Tu primer test
+
+```bash
+# 1. Lanzá:
+claude --bg "listá los archivos de ~/Descargas ordenados por tamaño y dejá el resultado en /tmp/downloads.md"
+
+# 2. Inmediatamente:
+claude agents
+
+# 3. Vas a ver una fila nueva con tu tarea
+# 4. Observá cómo cambia de Working → Completed
+# 5. Apretá → para attachar y leer el output
+```
+
+Ya entendiste el ciclo completo.
+
+---
+
+## Caso real — 3 agentes en paralelo
+
+Caso que motiva la feature: agencia que todos los días audita ads, genera creativos nuevos para reemplazar fatigados, y publica al calendario.
+
+**Pre-requisitos**: tener instalado [Claude Ads](/boveda/claude-ads) + [Higgsfield MCP](/boveda/higgsfield-mcp).
+
+### Agente 1 — Auditor de anuncios
+
+```bash
+claude --bg "Corré /ads audit en todas mis cuentas. Anotá los 3 hallazgos más críticos con su impacto en gasto y dejá el resumen en ~/agent-view-runs/audit-\$(date +%Y-%m-%d).md"
+```
+
+### Agente 2 — Generador de creativos
+
+```bash
+claude --bg "Leé el último audit en ~/agent-view-runs/audit-*.md, identificá los 3 anuncios con peor CTR, y generá con Higgsfield 5 variantes nuevas para cada uno enfocadas en el hook que el audit propone. Guardá renders en ~/agent-view-runs/creativos/"
+```
+
+### Agente 3 — Publicador
+
+```bash
+claude --bg "Tomá creativos aprobados en ~/agent-view-runs/creativos/ y corré /ads publish --dry-run primero. Cuando confirme, publicá en mi cuenta principal con el calendario que recomendaste."
+```
+
+### Cómo se ve en el panel
+
+Después de lanzar los 3:
+
+```
+┌─ AGENTS ─────────────────────────────────────────┐
+│ ● auditor          Working       4m32s ago       │
+│ ● creativos        Needs input   2m18s ago       │
+│ ● publicador       Needs input   1m05s ago       │
+└──────────────────────────────────────────────────┘
+```
+
+Vos saltás con flechas, respondés cuando hace falta, el resto fluye.
+
+### Honestidad sobre el paralelismo
+
+Esto **no es paralelismo a nivel de modelo** — los 3 agentes comparten tu plan y rate limits. En Pro vas a notar que correr 3 simultáneos ralentiza a todos un poco. Para producción seria, **Max o Team** dan más margen.
+
+Comparado contra 3 terminales y vos saltando entre ellas, el ahorro de fricción es enorme.
+
+---
+
+## Persistencia — sobrevive y no sobrevive
+
+### Sobrevive
+
+- ✅ Cerrar la ventana de terminal
+- ✅ Salir del panel con Esc
+- ✅ Abrir otra sesión en otra terminal
+- ✅ Auto-updates de Claude Code
+- ✅ Logout/login del usuario
+
+### NO sobrevive
+
+- ❌ Dormir la máquina (sleep/suspend)
+- ❌ Apagar o reiniciar
+- ❌ Quedarse sin batería
+- ❌ Caída de red prolongada
+
+### Recovery después de sleep/reiniciar
+
+El estado queda en disco. Cuando volvés, las sesiones aparecen como **Stopped**. Las reactivás:
+
+```bash
+claude respawn --all
+```
+
+O una específica:
+
+```bash
+claude stop [nombre-sesion]
+```
+
+### Truco para trabajo nocturno
+
+Si dejás agentes overnight:
+
+```bash
+# En Mac, evitá que duerma:
+caffeinate -d &
+# Después dejás los agentes corriendo
+```
+
+Conectá la laptop a corriente. A la mañana, si igual durmió, `claude respawn --all` te devuelve todas en 10s.
+
+---
+
+## 5 prompts copy-paste para diferentes jornadas
+
+### 1. Auditor de anuncios overnight
+
+```
+> Sos mi auditor nocturno. Cuando despierte, quiero brief de
+  1 página con los 5 movimientos más rentables a hacer hoy.
+
+  Pasos:
+  1. /ads audit en todas mis cuentas (Meta, Google, TikTok)
+  2. Compará con auditoría de hace 7 días — qué empeoró
+  3. Filtrá ruido: solo hallazgos con impacto > $20/día
+  4. Rankear top 5 por (impacto × facilidad). Ignorá lo que
+     requiere creativo nuevo
+  5. Guardá en ~/briefs/$(date +%Y-%m-%d)-auditor.md con
+     estructura: hallazgo · impacto $ · acción · tiempo
+
+  Si algo crítico (cuenta deshabilitada, CPA muy alto, gasto
+  sin tracking), marcá Needs input y pedí respuesta.
+```
+
+### 2. Generador de creativos por lote
+
+```
+> Sos mi generador de creativos en background. Una hora mientras
+  me concentro en otra cosa.
+
+  1. Leé ~/briefs/hooks-de-la-semana.md (10 hooks, 3 industrias)
+  2. Para cada hook con Higgsfield MCP:
+     - 1 imagen estática 1:1
+     - 1 imagen 9:16 vertical
+     - 1 video 5 segundos
+  3. 3 variantes de tono por hook (urgencia, social proof, curiosidad)
+  4. Guardá en ~/creativos/$(date +%Y-%m-%d)/[hook]/[variante].ext
+  5. Generá index.md con thumbnails y copy sugerida
+
+  Si Higgsfield falla en una variante, saltala. Solo parate
+  si API key se rompe.
+```
+
+### 3. Publicador con cola de aprobación
+
+```
+> Sos mi publicador con cola de aprobación. Cuidamos cuenta.
+
+  Flujo:
+  1. Listá creativos "aprobado" en ~/creativos/$(date +%Y-%m-%d)/index.md
+  2. Por cada uno: /ads publish --dry-run, mostrame cuenta, horario,
+     budget inicial. Marcá Needs input
+  3. Cuando escriba "go N", publicá ese. "go all" → todos con
+     15 min delay entre uno y otro
+  4. Después de cada publish, anotá en
+     ~/logs/publicaciones-$(date +%Y-%m-%d).md con timestamp + URL
+  5. Si Zernio devuelve error de cuenta sin créditos, parate y avisame
+
+  NUNCA publiques sin mi "go" explícito.
+```
+
+### 4. Revisor de inbox de leads
+
+```
+> Sos mi revisor de inbox.
+
+  1. Conectate a Gmail (MCP ya configurado), filtrá sin leer
+     últimas 24h
+  2. Clasificá: lead caliente, lead frío, soporte, spam, otro
+  3. Para los 5 leads calientes top, redactá respuesta
+     personalizada, tono Latam, max 4 líneas, terminando con
+     pregunta concreta
+  4. Respuestas como BORRADORES en Gmail — nunca enviar automático
+  5. Resumen en ~/inbox/$(date +%Y-%m-%d).md: clasificados totales,
+     leads calientes con link a borrador, urgencias
+
+  Si algo legal o financieramente sensible, NO toques nada,
+  marcá Needs input.
+```
+
+### 5. Monitor de PRs
+
+```
+> Sos mi monitor de repo en background.
+
+  Tarea continua:
+  1. Cada 30 min, git fetch + revisar PRs nuevos o cambios en main
+  2. Para cada PR nuevo: leé diff, identificá riesgos (auth, pagos,
+     migrations, CI). Dejá comentario DRAFT en el PR — NO publicar
+     hasta que confirme
+  3. Si alguien mergeó a main: mini-changelog en
+     ~/changelog/diario-$(date +%Y-%m-%d).md (archivo, cambio en
+     1 línea, autor)
+  4. Si algo crítico (CI roto, dependencia CVE, secrets cambiados),
+     marcá Needs input y pausá
+
+  Cuando jornada termine (post 20pm), parate solo con resumen final.
+```
+
+---
+
+## Buenas prácticas — no quemes tu cuenta
+
+### Hacé esto
+
+1. **Empacá tareas recurrentes como skill** — lanzás con `/[skill]` sin re-pegar prompt
+2. **Renombrá sesiones con Ctrl+R** apenas las lanzás (`auditor-nocturno-meta` > `session-a7f3`)
+3. **Pineá con Ctrl+T** las críticas / de largo plazo
+4. **Parí los agentes** que ya no necesitás (cada activo consume cuota)
+
+### Evitá esto
+
+1. **No lances 10 agentes en plan Pro** — 3-4 activos es lo prudente
+2. **No uses Agent View para tareas de 30s** — es para tareas largas, batches, monitoreo
+3. **No asumas sobrevivencia al sleep** — `claude respawn --all` al volver
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Plan Free | No está disponible |
+| Sesiones de 30s | Overhead del panel > valor |
+| Solo usás chat-mode | Es feature para tareas autónomas largas |
+| Una sola cosa a la vez | Multi-paralelismo no aplica |
+
+---
+
+## Combinaciones potentes
+
+### Con Claude Ads + Higgsfield + Zernio
+
+El caso real de la sección 3 agentes. Pipeline completo de paid media automatizado.
+
+### Con [/loop](/boveda/claude-code-loop)
+
+`/loop` te deja iterar un agente con feedback. Combinás:
+- 1 agente en `/loop` mejorando algo iterativamente
+- 2-3 agentes en `/bg` haciendo tareas paralelas
+- Todo visible en Agent View
+
+### Con skills empacadas
+
+Tareas que repetís semanalmente → empaquetalas como skill → las lanzás desde el panel con un solo slash command. Mejor ROI de tiempo de la feature.
+
+---
+
+## Próximos pasos
+
+- Para los 3 agentes del caso real, [Claude Ads](/boveda/claude-ads) + [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para sistema multi-agente más amplio fuera de Claude Code, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para entender Managed Agents (la versión cloud, no local), [Managed Agents](/boveda/agentes-managed-claude)

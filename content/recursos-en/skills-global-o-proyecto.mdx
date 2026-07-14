@@ -1,0 +1,257 @@
+---
+title: "Global vs project skills — the rule for deciding well"
+description: "The problem isn't how many skills you have installed — it's WHERE. The rule: if you use it in 3+ different projects, it goes GLOBAL. If it's project-specific, it goes PROJECT. Plus: the difference between a skill, a tool/collection, and a plugin/repo that almost everyone confuses."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["crea-claude-skills", "skill-vault", "agencia-digital-completa"]
+---
+
+## The problem
+
+**What most people do**: see a cool skill → install it global → repeat with 14 more → a week later they have 15 global skills → work on a specific project → **Claude either doesn't use them or activates the wrong one**.
+
+**And you blame Claude**: "it's being lazy", "it doesn't get it". **That's not it**.
+
+Every global skill loads in **ALL your sessions**, even when you're coding something unrelated. **It clutters its context**. It makes it slower and less accurate.
+
+**The good news**: you don't have to install fewer skills. You have to install them **where they belong**. There's **a single rule**.
+
+---
+
+## The rule — just one
+
+> **Global if you use it EVERYWHERE. Project if it's specific.**
+
+Before installing any skill, ask yourself:
+
+**Am I going to use it in at least 3 different projects that are about different topics?**
+
+- **YES** → global
+- **NO** → only in the project where you need it
+
+### Global example
+
+**humanize-it** → fixes text so it sounds human. You use it in emails, scripts, landing pages, proposals. Anything with words. **Global**, no question.
+
+### Project example
+
+**pdf** → read/generate/OCR PDFs. It's only useful when the project works with PDFs. If you leave it global, Claude loads it while you're editing a landing page → **pure noise**. **Per project**.
+
+### Why it works
+
+Each project only turns on the skills that make sense there. Your global folder stays **clean**. Claude reads it without getting confused. When you open a specific project, you see global + that project's skills — exactly what you need.
+
+---
+
+## The 3 layers — skill, tool, plugin
+
+A lot of people call everything a "skill" and get confused. There are **3 different layers**:
+
+### 1. Skill
+
+A standalone capability with specific instructions. It lives in a folder with `SKILL.md`. Claude activates it when it detects its triggers.
+
+**Examples**: humanize-it, pdf, simplify.
+
+### 2. Tool / collection
+
+A package that bundles **several skills and commands together**.
+
+**Examples**: Superpowers, GSD (Get Shit Done).
+
+You don't install them as a skill — you **plug them in as a plugin**, and inside they bring many capabilities.
+
+### 3. Plugin / skills repo
+
+An **entire** repository or marketplace **full** of skills and agents.
+
+**Examples**: awesome-claude-skills, Marketing packages.
+
+You don't "install" it as a single thing — it's a **catalog**. You pick which skill to pull out and decide each one: global or project.
+
+### The rule applies the same way
+
+Whether it's a standalone skill, a collection, or a plugin — **if you're not going to use it in all your projects, there's no reason for it to live global**.
+
+---
+
+## Tier 1 — Global skills (classic candidates)
+
+Cross-cutting, stack-agnostic, useful almost every time you open Claude. If it fits this profile → `~/.claude/skills/` with no guilt.
+
+| Skill | What for |
+|-------|----------|
+| **humanize-it** | Text that sounds human. Emails, scripts, landings, posts. **100% global** |
+| **ui-ux-pro-max** | UI/UX intelligence, palettes, typography. If you build interfaces more than once/month |
+| **frontend-design** | Interface code with good taste. Cross-cutting across any frontend |
+| **simplify** | Reduce over-engineering. Applies to any code |
+| **code-reviewer** | Review code whenever you touch any project |
+| **claude-token-efficient** (CLAUDE.md) | Habits to not burn tokens. Always applies |
+
+---
+
+## Tier 2 — Per-project skills
+
+Specific to the project's domain or stack.
+
+| Skill | Why project |
+|-------|-------------|
+| **pdf** | Only if the project processes PDFs |
+| **n8n-mcp** | Only if you automate with n8n |
+| **stripe-mcp** | Only if you handle payments in that project |
+| **supabase-mcp** | Only projects with Supabase |
+| **shopify-mcp** | Only projects with Shopify |
+| **react-test-generator** | Only React projects with testing |
+| **deploy-vercel** | Only projects on Vercel |
+
+---
+
+## How to migrate from "all global" to "organized"
+
+### Step 1 — Audit what you have
+
+```bash
+ls ~/.claude/skills/
+```
+
+### Step 2 — For each skill, ask yourself
+
+Did I use it in my last 3 different projects?
+
+- **Yes** → keep it global
+- **No** → move it to the `.claude/skills/` of the project where you need it
+
+### Step 3 — Clean up
+
+```bash
+# Move the skill to a specific project
+mv ~/.claude/skills/[skill] ~/proyectos/mi-app/.claude/skills/
+
+# Or if you no longer use it, delete it
+rm -rf ~/.claude/skills/[skill]
+```
+
+### Step 4 — Restart Claude Code
+
+So it reloads the config.
+
+---
+
+## Prompts to audit
+
+### Audit your global skills with Claude
+
+```
+List all the skills I have in ~/.claude/skills/.
+
+For each one tell me:
+1. Name + description in 1 line
+2. Have I used it in this project?
+3. Is it cross-cutting (multiple domains) or specific?
+4. Recommendation: GLOBAL / MOVE TO PROJECT / UNINSTALL
+
+Apply the rule:
+- GLOBAL only if I use it in 3+ different projects
+- PROJECT if it's stack/domain-specific
+- UNINSTALL if I haven't used it in 3+ months
+```
+
+### Install a skill with the rule applied
+
+```
+I want to install [SKILL_URL].
+
+Before installing:
+1. Tell me what it does in 2 lines
+2. What kind of projects would it apply to?
+3. According to the rule (global if 3+ different projects, project if
+   specific): where do I install it?
+4. If it goes global, install it in ~/.claude/skills/
+   If it goes project, install it in ./.claude/skills/ (current project)
+
+Wait for my OK before installing.
+```
+
+---
+
+## Anti-patterns
+
+### 1. "Global just in case"
+
+❌ "Maybe I'll use it in another project" → global
+✅ If you're NOT using it in 3 projects yet, it goes project. **You move it to global when it's justified**.
+
+### 2. Piling up without auditing
+
+15 global skills you haven't used in 3 months **still keep loading**. Audit every 1-2 months.
+
+### 3. Confusing collections with skills
+
+If you "install" Superpowers global but only use 2 of its 30 skills, **all 30 load**. Better: extract only the ones you use.
+
+### 4. Forgetting to reset Claude Code
+
+If you change config and don't restart, Claude keeps using the old config. **Cmd+Q + reopen**.
+
+### 5. Not documenting your config
+
+After 6 months, you won't remember why you have a given skill. **CLAUDE.md** or a note in each project explaining the setup.
+
+---
+
+## Recommended structure
+
+```
+~/.claude/skills/                  # Global — 5-10 skills max
+├── humanizalo/
+├── simplify/
+├── code-reviewer/
+└── frontend-design/
+
+~/proyectos/cliente-A/.claude/skills/   # Project A
+├── stripe-mcp/
+└── supabase-mcp/
+
+~/proyectos/cliente-B/.claude/skills/   # Project B
+├── shopify-mcp/
+└── pdf/
+```
+
+Clean global. Each project its own specific skills.
+
+---
+
+## Powerful combinations
+
+### With Skill Vault
+
+[Skill Vault](/boveda/skill-vault) **audits** each skill before installing + tells you whether it goes global or project. It applies the rule automatically.
+
+### With building your own skills
+
+When you build your own [custom skills](/boveda/crea-claude-skills), apply the rule from day 1.
+
+### With Antigravity
+
+[Antigravity Skills](/boveda/agencia-digital-completa) has 978+. **Don't install them all global**. Pick 5-10 cross-cutting ones for global, the rest per project.
+
+---
+
+## When to break the rule
+
+| Case | Exception |
+|------|-----------|
+| Skill that needs SHARED context across projects | Global even if you use 1 project |
+| Experimental skill you want to try in any project | Temporarily global, decide later |
+| Enterprise skill shared with the team | Global with a README explaining usage |
+
+---
+
+## Next steps
+
+- To audit and organize your skills with an agent, [Skill Vault](/boveda/skill-vault)
+- To build your own skills applying the rule, [build Claude skills](/boveda/crea-claude-skills)
+- To understand what's in Antigravity and choose well, [Complete Digital Agency](/boveda/agencia-digital-completa)

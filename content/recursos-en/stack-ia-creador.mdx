@@ -1,0 +1,308 @@
+---
+title: "The AI stack for creators — the 6 tools + the master prompt"
+description: "The complete AI content production stack: script, image, video, voice, avatar, and automated DMs. How the 6 tools chain together and why a centralized master prompt beats scattered prompts in each tool."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude", "elevenlabs", "heygen"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["higgsfield-mcp", "andromeda-meta-ads", "claude-design"]
+---
+
+## The problem
+
+If you produce content with AI, within a few weeks you end up with **8-12 tools open in tabs**, each with its own login, its own separate credits, its own prompt style. Managing the pile takes more time than producing content.
+
+What follows is an **opinionated stack** of 6 tools that cover the creator's full cycle, **chained together by a master prompt** in Claude that orchestrates the rest.
+
+> Note: this is a specific stack. If your workflow is different (more editorial, less video, etc.), adapt it. The structure — tools + orchestrator — works even if you swap out every piece.
+
+---
+
+## The end-to-end flow
+
+```
+┌─ Master Prompt (Claude) ─┐
+│                            │
+│   Genera prompts para:     │
+│                            │
+│   1. Guion ────────► Claude (Opus + Sonnet)
+│   2. Imagen ───────► Nano Banana Pro / GPT Image
+│   3. Video ────────► Veo 3.1 / SeeDance 2 / Higgsfield
+│   4. Voz ──────────► ElevenLabs
+│   5. Avatar ───────► HeyGen
+│   6. DMs ──────────► ManyChat
+│                            │
+└────────────────────────────┘
+```
+
+You give the brief to the master prompt. It generates the **specific prompts** each tool needs, in the format each one expects. You copy-paste into each tool.
+
+---
+
+## The 6 tools
+
+### 1. Script — Claude (Opus 4.7 + Sonnet 4.6)
+
+For writing the content script:
+
+- **Sonnet** for quick drafts, simple iterations
+- **Opus** for complex scripts, elaborate hooks, non-obvious structure
+
+**Why Claude and not another**: reasoning about content structure (hook, development, payoff) tends to be stronger. And it keeps your voice if you feed it examples.
+
+For best results: build yourself a "voice writer" skill trained on your own writing (see [JARVIS in Obsidian](/boveda/jarvis-obsidian)).
+
+### 2. Image — Nano Banana Pro + ChatGPT Image
+
+For static visuals:
+
+- **Nano Banana Pro** for photoreal and editorial
+- **GPT Image** for stylized variants, illustration
+
+**Which one, when**: if you need a realistic person or a product photo → Nano Banana. If you need illustration / a non-photographic style → GPT Image.
+
+To integrate it into your Claude flow, check out [Higgsfield MCP](/boveda/higgsfield-mcp), which brings image models right into the chat.
+
+### 3. Video — Veo 3.1 / SeeDance 2
+
+Generative cinematic video:
+
+- **Veo 3.1** for realistic clips with complex motion
+- **SeeDance 2** for natural movement, physics
+
+**Which one, when**: it depends on the type of movement. For scenes with people → SeeDance (better at human motion). For environments / landscapes / products → Veo (better at cinematic composition).
+
+### 4. Voice — ElevenLabs
+
+For voiceover and narration:
+
+- Cloned voices (your own voice or an actor's)
+- 30+ languages with native-level quality
+- Fine control over emotion and tone
+
+**Typical workflow**:
+1. Claude writes the script
+2. You paste it into ElevenLabs
+3. You pick a voice
+4. You adjust pacing/emotion if needed
+5. You download the MP3
+
+If you're going to do a lot of this, you can clone **your own voice** and use it as a consistent author.
+
+### 5. Avatar — HeyGen
+
+To create a talking head of an avatar (your face or a generated one):
+
+- You clone your face once
+- You feed it text + audio (from ElevenLabs)
+- HeyGen lipsyncs with your avatar
+- Output: a video of "you" talking
+
+**When it shines**: educational content, talking heads for LinkedIn/YouTube Shorts, course presenters.
+
+**When NOT to**: if your authenticity of "being there" is part of your brand value, faking "your face" when it isn't really you feels off.
+
+### 6. DMs — ManyChat
+
+Not generative AI — it's **automation for Instagram/Facebook/WhatsApp DMs**.
+
+The last step of the creator flow: someone comments on your post, ManyChat sends them a DM with the lead magnet, and pulls them into your list.
+
+Connected to Claude via webhooks, Claude can personalize replies based on each lead's context.
+
+---
+
+## The master prompt
+
+What ties the stack together. A **skill in Claude** that knows:
+
+- Your niche / audience / brand
+- The format each tool expects (Nano Banana, Veo, ElevenLabs, etc.)
+- How to chain outputs (script → image prompt → video prompt)
+
+Example skill:
+
+```markdown
+---
+name: stack-creator
+description: Master prompt para producción de contenido. Activate cuando
+  pida producir reel/post/short/video. Encadena guion → visuals → audio.
+---
+
+# Stack Creator
+
+When I ask you to produce content, do the following:
+
+## Step 1 — Understand the brief
+Before generating anything, ask me for:
+- Platform (TikTok / Reels / YouTube Short / LinkedIn / etc.)
+- Target duration (seconds)
+- Goal (awareness / conversion / educate / entertain)
+- Hook style (if I want something specific)
+- Exact audience
+
+## Step 2 — Generate the script
+With Sonnet/Opus depending on complexity. Format:
+
+[FRAME 0-3s]: hook (visual description + audio + on-screen text)
+[FRAME 3-X]: development (each beat with visuals and voiceover)
+[FRAME X-end]: payoff + CTA
+
+Voice: my learned voice (check examples in ~/voz/).
+
+## Step 3 — Generate prompts for each tool
+
+For each element of the script, generate the specific prompt:
+
+### For image (Nano Banana Pro)
+"[dense visual description, photoreal style, 9:16 vertical, lighting X,
+mood Y, character details, no text overlay]"
+
+### For video (Veo / SeeDance)
+"[motion description, camera movement, duration, transitions]"
+
+### For voice (ElevenLabs)
+"[voiceover text with no formatting, one line per frame]"
+"Voice: my-cloned-voice
+Emotion: [calm/excited/serious]"
+
+### For avatar (HeyGen) - only if applicable
+"Avatar: my-avatar
+Script: [text to speak]"
+
+## Step 4 — Summarize the flow
+
+Give me back a structured doc with:
+1. The full script
+2. Prompts for each tool (copy-paste ready)
+3. Production order (what I do first, what second)
+4. Total estimated time
+
+## Rules
+
+- If I'm torn between Veo and SeeDance, recommend one with a reason
+- If the content doesn't need one of the 6 (e.g. it doesn't need an avatar),
+  skip it explicitly
+- My tone: [define your tone]
+- Constraints: [define what not to do]
+```
+
+With this skill, **a 3-line brief** turns into 6 prompts ready for 6 tools, in 30 seconds.
+
+---
+
+## Real workflow — producing a reel
+
+```
+[Master Prompt]
+> Reel para Instagram. 30 segundos. Sobre el problema típico de
+  founders SaaS: gastar plata en growth antes de tener product-market
+  fit. Audiencia: founders early-stage LATAM.
+
+[Master Prompt te genera:]
+
+GUION:
+[FRAME 0-3s]: Hook visual: founder mirando dashboard con números
+  bajos, cara de frustración. Texto: "Gasté $50k en Meta ads."
+[FRAME 3-15s]: Desarrollo: voiceover explica que sin PMF, el budget
+  acelera la caída. Visual: gráfico de embudo con leak en el medio.
+[FRAME 15-25s]: Solución: validar PMF primero. Visual: pre-PMF
+  checklist.
+[FRAME 25-30s]: CTA: "Hablo con 5 founders gratis esta semana, link
+  en bio."
+
+PROMPTS GENERADOS:
+
+🖼 IMAGEN (Nano Banana Pro):
+"Founder argentino 35, en su escritorio, mirando laptop con expresión
+de frustración. Iluminación natural de ventana. Cinemático, 9:16,
+photoreal."
+
+🎬 VIDEO (Veo):
+"Subtle camera push-in toward laptop screen. Founder slowly turns to
+look at camera, defeated expression. 3 seconds, 9:16."
+
+🎙 VOZ (ElevenLabs):
+"Gasté cincuenta mil dólares en publicidad antes de tener product-market
+fit. ¿Qué pasó? El embudo seguía leakeando. Cuando no tenés PMF, el
+budget no escala el negocio — acelera la caída."
+Voice: mi-voz-clonada
+Emotion: reflective
+
+🎭 AVATAR (HeyGen): no aplica este reel (usás el visual del founder)
+
+📩 DM (ManyChat trigger):
+Si comenta "MENTORÍA" → DM: "Hola [nombre], 5 founders por semana,
+agendá acá: [link]"
+
+ORDEN:
+1. Generar imagen (1 min)
+2. Animar con Veo (3 min)
+3. Voz en ElevenLabs (2 min)
+4. Editar en CapCut con voz + video (10 min)
+5. Subir + configurar ManyChat trigger (5 min)
+
+TOTAL: ~25 min para reel completo.
+```
+
+Without the stack and the master prompt: that reel takes 2-3 hours.
+
+---
+
+## Anti-patterns
+
+### 1. A stack with no master prompt
+
+If you have the 6 tools but you type the prompts by hand every time, **you lose 80% of the value**. The master prompt is what ties the pieces together.
+
+### 2. Too many tools
+
+6 is already a lot. If you add another 4 "for completeness," the overhead kills you. **Start with fewer** (3-4), add more when you notice the gap.
+
+### 3. Not cloning your voice
+
+ElevenLabs with a generic voice sounds like AI. With **your cloned voice**, it sounds like you. The difference is night and day for authenticity.
+
+### 4. An avatar for everything
+
+HeyGen is good but detectable. For content where authenticity matters, use your real face. Use an avatar for mass educational pieces, not for your personal brand reel.
+
+---
+
+## When this stack makes sense
+
+✅ You produce visual content frequently (weekly+)
+✅ Your business depends on consistent output
+✅ You have the budget for the credits (it's not free)
+✅ You're willing to iterate to reach good output
+
+❌ Occasional content → it's overkill
+❌ If your value is "being there live" → fake content doesn't apply
+❌ If your niche rejects visible AI content → evaluate your audience first
+
+---
+
+## The total cost
+
+Approximate monthly cost for medium use:
+
+| Tool | Cost |
+|-------------|-------|
+| Claude Pro | $20 |
+| Nano Banana Pro | $30 |
+| Veo / SeeDance | $30-50 (credits) |
+| ElevenLabs | $22 |
+| HeyGen | $30 |
+| ManyChat | $15 |
+| **Total** | **~$150/mo** |
+
+Compared to outsourcing production ($2000-5000/mo for a pro creator), the ROI is clear if you produce consistently.
+
+---
+
+## Next steps
+
+- To generate image/video directly from Claude (without jumping to other tools), [Higgsfield MCP](/boveda/higgsfield-mcp)
+- To point your produced content at Meta Ads with a system, [Andromeda — 8 Meta Ads rules](/boveda/andromeda-meta-ads)
+- To design visuals without code but more simply, [Claude Design](/boveda/claude-design)

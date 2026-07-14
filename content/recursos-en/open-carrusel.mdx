@@ -1,0 +1,252 @@
+---
+title: "Open Carrusel — the open source agent that replaces Canva for carousels"
+description: "An agent that builds Instagram carousels on its own. Load your brand once (colors, fonts, logo), describe the post, and it exports the images at the exact IG size. All local, no subscription, no watermark. Setup in 2 minutes."
+difficulty: "fácil"
+category: "agentes"
+tools: ["claude-code", "agentes"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["5-skills-diseno-claude", "cinco-habilidades-marketing", "stack-ia-creador"]
+---
+
+## The problem with Canva for carousels
+
+A 10-slide carousel in Canva:
+
+1. Drag boxes one by one
+2. Fight for visual consistency across slides
+3. Make 10 versions because "actually, let me change the order"
+4. Pay for Canva Pro to export without a watermark
+5. Templates that look just like everyone else's
+
+All of that for a single post.
+
+**Open Carrusel** is the open source answer. Repo: `Hainrixz/open-carrusel`.
+
+---
+
+## What it does in 1 line
+
+You tell Claude **"make a carousel about topic X, tone Y, my brand"** → Claude generates 6-10 slides with HTML/CSS, you preview them live, tweak, and it exports PNGs at the exact Instagram size (1:1, 4:5 or 9:16).
+
+| Before (Canva) | With Open Carrusel |
+|---------------|--------------------|
+| 30-60 min per carousel | 5-10 min |
+| Generic templates | Your brand applied automatically |
+| Cost: Canva Pro ~$13/month | Free, no subscription |
+| Watermark if you don't pay | No watermark |
+| Your data uploaded to the cloud | 100% local on your machine |
+
+---
+
+## Technical stack
+
+Open source MIT. Everything runs local:
+
+| Piece | What for |
+|-------|----------|
+| **Next.js 16 + React 19 + TS 5** | App Router, server components |
+| **Claude CLI as a subprocess** | Backend invokes Claude locally (no exposed API key) |
+| **slide-html.ts** | A single HTML/CSS feeds preview + export |
+| **Puppeteer + Sharp** | Headless screenshots at the exact IG size |
+| **@dnd-kit** | Drag-and-drop to reorder slides |
+| **async-mutex + local JSON** | Atomic writes to /data/ |
+
+`/data/` and `/public/uploads/` are **gitignored** — your brand and your carousels are yours.
+
+---
+
+## Setup — a single prompt
+
+You don't clone by hand, you don't fight with dependencies. Open Claude Code, paste this:
+
+```
+> Install and start open-carrusel from scratch.
+
+  Repository: https://github.com/Hainrixz/open-carrusel
+
+  Steps without asking me:
+  1. Go into Desktop, clone the repo with git clone
+  2. cd open-carrusel
+  3. npm install
+  4. npm run setup
+  5. npm run dev
+  6. When the server is up, open http://localhost:3000
+
+  If I hit any error (port in use, old Node,
+  permissions, Puppeteer needs Chrome) — diagnose it and fix it.
+  Don't ask me. Use another port if 3000 is taken.
+
+  When everything works, let me know with:
+  "Open Carrusel ready at http://localhost:<port> —
+   you can start designing your carousels now."
+```
+
+2 minutes later, you're designing.
+
+---
+
+## Slash commands
+
+| Command | What it does |
+|---------|----------|
+| `/start` | Starts the server |
+| `/stop` | Kills the server |
+| `/reset` | Clears local data (careful: it deletes brand.json) |
+| `/doctor` | Environment diagnostics |
+
+---
+
+## The full flow
+
+### Step 1 — Load references
+
+You upload screenshots of carousels you like. The agent analyzes them to detect your target aesthetic.
+
+Alternative: you tell it "find me fitness carousel inspiration" and Claude scrapes references.
+
+### Step 2 — Set up your brand (just once)
+
+```
+> Set up my brand:
+  - Primary color: #FF6B35
+  - Secondary color: #1A1A1A
+  - Heading font: Inter Bold
+  - Body font: Inter Regular
+  - Logo: /uploads/mi-logo.png
+  - Style: editorial, minimalist, high contrast
+```
+
+It's saved to `/data/brand.json`. Claude uses it **every time** without you repeating it.
+
+### Step 3 — Ask for the carousel
+
+```
+> A 6-slide carousel about "5 common mistakes when launching
+  a SaaS". Warm but professional tone. Final CTA:
+  "What was your worst mistake?".
+```
+
+Claude generates the HTML/CSS for each slide. You see them live.
+
+### Step 4 — Iterate
+
+- Drag to reorder (drag-and-drop)
+- Ask for changes to ONE slide without touching the others
+- Undo per slide (version history)
+
+```
+> Slide 3: change the background to an orange → coral gradient.
+  Keep the text.
+```
+
+### Step 5 — Export
+
+One click → Puppeteer takes screenshots at the exact size:
+
+- **1:1** (1080×1080) — classic feed
+- **4:5** (1080×1350) — vertical feed (more engagement)
+- **9:16** (1080×1920) — stories / reels cover
+
+It zips up the PNGs, ready to upload.
+
+---
+
+## Use cases
+
+### 1. Educational carousels
+
+Tips, lists, mini-lessons. **The format that gets saved most on Instagram**.
+
+```
+> Carousel "7 macOS keyboard shortcuts that change your life".
+  Slide 1: hook. Slides 2-8: one shortcut per slide with a description.
+  Final slide: CTA "which one do you use most?".
+```
+
+### 2. Product promos
+
+```
+> Launch carousel: new feature of my SaaS.
+  Slide 1: problem (large text over a dark background).
+  Slide 2: the new feature (screenshot with a call-out).
+  Slides 3-5: concrete benefits.
+  Slide 6: CTA "Try it free for 14 days".
+```
+
+### 3. Brand storytelling
+
+```
+> Carousel "How Ana went from 0 to 10k MRR in 8 months".
+  6 narrative slides. Inspirational but realistic tone.
+  Concrete data. Photo of Ana at the start and end.
+```
+
+### 4. Reusable templates
+
+When a carousel works, save it as a template:
+
+```
+> Save this carousel as the template "tip-educational".
+  Next time I ask for something similar, use this style.
+```
+
+Then:
+
+```
+> A "tip-educational" carousel about productivity
+  in remote work.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Not loading your brand up front
+
+The temptation: "I'll configure it later." If you don't, every carousel comes out with generic defaults. **Set it up once, save hours later**.
+
+### 2. 10 slides "because IG allows it"
+
+More slides ≠ more engagement. **5-7 is the sweet spot** in most cases. Only 10 if the story REALLY needs that depth.
+
+### 3. Small text on mobile
+
+Open Carrusel exports at the right size, but **you choose the font size**. Test on a real phone before publishing. Minimum 24px for headings, 18px for body text in the 1:1 format.
+
+### 4. The same brand for every client
+
+If you work with several clients, **each one needs its own separate `brand.json`**. Don't mix them. Better to keep separate folders per client.
+
+### 5. Accidental reset
+
+`/reset` deletes `/data/`. If you have a valuable brand.json and templates, **back it up** somewhere else before touching /reset.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|---------|
+| You need motion / video | Open Carrusel is for static images. For video, [Editor Pro Max](/boveda/cinco-habilidades-marketing) |
+| A team working collaboratively | It's local-first. For real collaboration, Figma is better |
+| Designs well outside the "Instagram grid" | If you need experimental, non-rectangular layouts, Figma still wins |
+| Producing 100+ carousels/day | For industrial volume, you need a custom pipeline |
+
+---
+
+## How it gives back to the community
+
+Open Carrusel is an **open source MIT gift**. If it helps you, you can:
+
+- ⭐ Star the [repo](https://github.com/Hainrixz/open-carrusel)
+- Fork + remix + ship your own variant
+- Share it with creators you know
+
+---
+
+## Next steps
+
+- For more design skills from Claude, [5 design skills](/boveda/5-skills-diseno-claude)
+- For the marketing equivalent (copy, ads), [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- For the full creator stack, [creator AI stack](/boveda/stack-ia-creador)

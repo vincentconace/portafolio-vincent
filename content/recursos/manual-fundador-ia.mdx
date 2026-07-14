@@ -1,0 +1,224 @@
+---
+title: "El manual del fundador IA — qué construir y por qué importa más que cómo"
+description: "Resumen accionable del Founder's Playbook de Anthropic. Las 3 verdades duras (construir es gratis, la IA te da la razón, tu experiencia es el foso), las 4 etapas (Idea/MVP/Lanzamiento/Escala) y prompts para cada una. Para fundadores técnicos y no técnicos."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude", "claude-code", "claude-cowork"]
+publishedAt: "2026-05-12"
+readingTime: "16 min"
+relatedSlugs: ["prompting-10-pilares", "tres-errores-con-ia", "prompts-prd-ejecutivo"]
+---
+
+## El cambio
+
+Hace 5 años, el fundador de startup se definía por lo que sabía hacer: el técnico escribía código, el no-técnico vendía. Quien no podía construir, no construía. Quien no podía vender, no vendía. Cada uno necesitaba el otro.
+
+Eso se rompió. En 2026, cualquiera con una idea y disciplina puede sacar software de producción usando IA, y cualquiera con habilidad técnica puede armar una estrategia de mercado decente sin haber vendido nunca. El muro entre **tener la idea** y **poder construirla** se cayó.
+
+Pero ojo: que sea más fácil construir no significa que sea más fácil tener éxito. **Construir ya es gratis**. Lo difícil ahora es saber **qué** construir. Esa es la idea central del Founder's Playbook de Anthropic, y la que vamos a desarmar acá.
+
+---
+
+## Las 3 verdades duras
+
+### 1. Construir ya es la parte fácil — por eso muchas startups fracasan
+
+El 42% de las startups muere porque construye algo que **nadie quería**. Antes esto pasaba porque construir era caro y tomaba meses: cuando te dabas cuenta del error, ya habías gastado todo. Ahora pasa por la razón opuesta: **construir es tan rápido que la gente se saltea la validación**.
+
+> En 4 horas con Claude Code tenés un MVP funcional. Eso es maravilloso si validaste primero. Es desastroso si no.
+
+**El antídoto**: antes de meterte un fin de semana entero a construir, pasá 5 días hablando con la gente que te lo compraría. No para validar la solución — para validar que **el problema existe y que alguien paga por arreglarlo**. El prototipo después sirve para tener mejores conversaciones, no como prueba de que la pegaste.
+
+### 2. La IA te da la razón, y eso te hunde
+
+Le preguntás "¿está buena mi idea?" y te dice que sí. Le pedís el tamaño del mercado y te tira un número que te hace sentir millonario. Le pedís nombres de competidores y te lista tres que están medio muertos.
+
+Esto NO es porque la IA "alucine" técnicamente. Es porque está entrenada para ser útil, y ser útil tiende a coincidir con confirmar lo que ya pensás. El sesgo de confirmación ahora viene con motor de búsqueda integrado.
+
+**El antídoto**: usá la IA como abogado del diablo, no como hype machine:
+
+```
+> Destruí mi idea. Encontrame los 5 competidores que me van a aplastar.
+  Dame las 7 razones más probables por las que esto fracasa. Asumí que
+  estoy enamorado de la idea y vos sos el inversor que tiene que decirme no.
+```
+
+La IA es mucho más útil tratando de demoler tu plan que tratando de defenderlo. Si sobrevive a la demolición, **ahí** tenés algo.
+
+### 3. Tu experiencia es el único foso defendible
+
+Lo que la IA puede hacer hoy, mañana cualquiera puede hacerlo. **No hay foso técnico**. El código que escribís con Claude lo escribe cualquiera con Claude. Los prompts que te funcionan, después de unos meses son commodity.
+
+¿Qué NO se replica? **Lo que vos sabés de tu dominio que el resto no.** Los detalles raros de tu industria. Lo que aprendiste haciendo durante 10 años. Las cosas que parecen obvias pero no lo son. Eso es lo único que un competidor con más plata y más gente no puede copiar.
+
+**El antídoto**: construí **sobre** tu experiencia, no a pesar de ella. Si trabajaste 8 años en logística, no armes una app de notas. Armá lo que necesitaba tu yo de hace 5 años en logística y nadie te dio.
+
+---
+
+## Las 4 etapas de toda startup
+
+El playbook divide el camino en 4 etapas. Cada una tiene **una meta distinta**, **criterios de salida distintos** y **errores típicos distintos**. Confundir las etapas es lo que mata startups.
+
+### Etapa 1 — Idea: validar antes de construir
+
+**Meta**: juntar evidencia de que el problema es real y que alguien paga por arreglarlo. **No estás construyendo nada todavía.**
+
+**Criterios para pasar a MVP**:
+- 10+ conversaciones con potenciales usuarios
+- Patrón claro de pain point repetido
+- Al menos 3 personas que dijeron "yo pagaría por eso" — no en abstracto, sino con un número
+- Tenés una hipótesis verificable: "X tipo de usuario va a pagar $Y por Z resultado"
+
+**Errores típicos**:
+- Empezar a codear el día 2
+- Validar con tu círculo cercano (van a decirte que sí por afecto)
+- Confundir "interés" con "compromiso"
+- Pasar a MVP sin precio explícito
+
+**Prompt útil para esta etapa**:
+
+```
+> Soy fundador de una startup en etapa idea. Mi hipótesis: [hipótesis].
+  Mi público objetivo: [perfil].
+
+  Generame:
+  1. Una guía de entrevista de 8 preguntas para validar (no dirigidas, no
+     sesgadas hacia el "sí")
+  2. Las 5 preguntas que NO debería hacer y por qué cada una está mal
+  3. Una matriz para clasificar las respuestas en: "validado", "señal
+     parcial", "indiferencia", "rechazo"
+```
+
+### Etapa 2 — MVP: convertir lo validado en producto
+
+**Meta**: poner la versión más chica posible de tu solución frente a usuarios reales y buscar **evidencia de uso**, no solo de interés.
+
+**Criterios para pasar a Lanzamiento**:
+- Usuarios reales lo están usando (no demos, uso continuo)
+- Alguien ya pagó (o se anotó en lista de espera con tarjeta)
+- Métrica de retención básica: vuelven la semana siguiente
+- Tenés feedback cualitativo que indica qué mejorar (no "está bueno" — algo accionable)
+
+**Errores típicos**:
+- Construir todas las features que pediste antes de cobrar
+- Lanzar gratis y "después monetizamos" (casi nunca pasa)
+- Pulir UI antes de tener uso
+- Asumir que silencio = problema; silencio puede ser indiferencia
+
+**Prompt útil para esta etapa**:
+
+```
+> Tengo el MVP de [producto]. Lo usan [N] personas. Las que volvieron
+  más de 2 veces son [perfil]. Las que se fueron son [otro perfil].
+
+  Ayudame a:
+  1. Identificar la diferencia clave entre los dos grupos
+  2. Diseñar 3 experimentos baratos para validar la diferencia
+  3. Decidir si pivoteo, ajusto o duplico la apuesta en el grupo que vuelve
+```
+
+### Etapa 3 — Lanzamiento: crecimiento que no dependa solo de vos
+
+**Meta**: pasar de tracción suelta a un **motor de crecimiento repetible**. Que el próximo cliente no dependa de que vos le mandes un DM personal.
+
+**Criterios para pasar a Escala**:
+- 1 canal de adquisición que funciona consistentemente
+- Costo de adquisición (CAC) conocido y razonable vs LTV
+- Onboarding que funciona sin tu intervención manual
+- Métricas de retención sólidas (no solo de novedad)
+
+**Errores típicos**:
+- Probar 10 canales en paralelo en lugar de profundizar en 1
+- Escalar marketing sin haber resuelto retención (regás un balde con agujero)
+- Contratar antes de tener proceso (más gente = más caos sin procesos)
+- Optimizar conversión cuando el problema es el producto
+
+**Prompt útil**:
+
+```
+> Tengo [N] usuarios con [tasa de retención]. Quiero pasar a Lanzamiento.
+
+  Auditá mi setup:
+  1. ¿La retención que reporto está sana o engañosa? (qué número mirar)
+  2. ¿Cuál es el primer canal que debería probar dado mi perfil de usuario
+     y mi presupuesto? (proponé 1, no 5)
+  3. ¿Qué tengo que tener resuelto ANTES de invertir en growth? (lista
+     ordenada por prioridad)
+```
+
+### Etapa 4 — Escala: construir un foso defendible
+
+**Meta**: profundidad acumulada — datos propietarios, expertise de dominio, integraciones que cuesta construir, marca que los competidores no pueden replicar fácil.
+
+**Criterios** (no son tanto "salida" como "estás acá si...")
+- Ingresos predecibles a 6 meses
+- Equipo más allá del fundador haciendo el trabajo del día a día
+- Datos/integraciones/relaciones que un competidor nuevo no tiene
+- Capacidad de tomar decisiones de inversión a 12+ meses
+
+**Errores típicos**:
+- Asumir que ganaste y dejar de iterar
+- Sobrescalar el equipo antes de necesitarlo
+- Diversificar producto antes de dominar el core
+- Olvidarse de seguir hablando con clientes
+
+---
+
+## Las 3 superficies de Claude — qué usar para qué
+
+| Superficie | Cuándo conviene | Por qué |
+|------------|------------------|---------|
+| **Claude (chat)** | Preguntas sueltas, brainstorms, reescrituras rápidas | Cero configuración, ideal para exploración |
+| **Claude Cowork** | Investigación, análisis de documentos, reportes | Acceso a tus archivos y conectores, sostiene contexto largo |
+| **Claude Code** | Construir, testear, deployear software | Modo plan, git, ejecuta código localmente |
+
+Una trampa común: usar Chat para lo que necesita Cowork (te falta contexto sostenido), o Cowork para lo que necesita Code (no puede ejecutar lo que escribe).
+
+Regla rápida: **si el output va a un sistema downstream (DB, deploy, archivo del proyecto), usás Cowork o Code. Si el output va a tu cabeza o a un doc en blanco, Chat alcanza.**
+
+---
+
+## Los 3 superpoderes del fundador IA
+
+El playbook agrupa en tres formas que la IA cambia tu rol:
+
+### 1. Investigación e inteligencia conversacional
+
+Antes: necesitabas un consultor para análisis competitivo, un abogado para entender un contrato, un financiero para armar el modelo.
+
+Ahora: un experto de guardia para cada dominio, a demanda. Análisis competitivo, tamaño de mercado, modelos financieros, redacción de PRDs y memos. Todo en horas, no semanas.
+
+### 2. Programar con agentes
+
+Antes: necesitabas un co-fundador técnico, una agencia, o meses de contratación para llegar al MVP.
+
+Ahora: describís en lenguaje natural lo que querés y un agente (Claude Code) lo construye, testea y deploya. **Vos decidís qué construir; la IA se encarga del cómo.**
+
+Esto NO significa que cualquiera sin experiencia técnica puede armar Stripe-killer en un fin de semana. Significa que las barreras de "no sé escribir código" desaparecen, pero las de "no sé qué es un buen sistema" persisten — y esa la sigue resolviendo tu criterio.
+
+### 3. Automatización de operaciones
+
+Antes: el fundador hace 40 cosas administrativas por semana porque no tiene equipo todavía.
+
+Ahora: muchas de esas 40 las hace un agente. CRM updates, reportes semanales, seguimiento de feedback, doc keep-up. Vos te concentrás en las decisiones que solo vos podés tomar.
+
+---
+
+## Qué hacer hoy
+
+Si estás arrancando ahora mismo:
+
+1. **Identificá en qué etapa estás** (Idea / MVP / Lanzamiento / Escala). No la que querés estar — la real.
+2. **Releé los criterios de salida de tu etapa actual**. ¿Cumplís todos? Si no, **eso** es lo que tenés que trabajar.
+3. **Usá el prompt de tu etapa** con Claude. Anotá lo que sale, ajustá.
+4. **Andá a hablar con 3 personas reales** esta semana. Sin pretexto de validar la solución — solo entender el problema mejor.
+
+El playbook entero se puede resumir en una frase: **invertí más tiempo en pensar qué construir, porque construir es ahora la parte fácil**.
+
+---
+
+## Próximos pasos
+
+- Para los prompts de validación de etapa Idea, [prompts de PRD ejecutivo](/boveda/prompts-prd-ejecutivo) te sirven (el PRD comparativo especialmente)
+- Para no caer en el sesgo de confirmación de la IA, [3 errores con IA](/boveda/tres-errores-con-ia)
+- Cuando llegues a la fase de construir, arrancá por [Claude Code 0-a-100](/boveda/guia-claude-code-completa)

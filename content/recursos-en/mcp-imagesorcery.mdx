@@ -1,0 +1,96 @@
+---
+title: "MCP ImageSorcery — image processing from Claude Code"
+description: "MCP server with 214 installs that provides tools for image processing from Claude Code. Resize, crop, format conversion, filters, batch processing — ImageMagick-style operations but scripted."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-elevenlabs", "mcp-filesystem-access", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/imagesorcery"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/imagesorcery.json"
+---
+
+## What it is
+
+ImageSorcery MCP gives you image processing capabilities from Claude Code: resize, crop, format conversion, filters, watermarks, batch processing.
+
+The typical use case is bulk operations that would otherwise be a bash loop with ImageMagick or a Python script with Pillow: "resize these 200 images to 1200x630 and export them as webp". You write it in natural language, and Claude orchestrates it.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 214 |
+| MCP server | `imagesorcery-mcp` |
+| Operations | Resize, crop, convert, filters, batch |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/imagesorcery
+```
+
+For Claude:
+
+```
+I installed the devtools/imagesorcery MCP. In `~/Pictures/blog-2026/`,
+resize all the images to 1600px wide keeping the aspect
+ratio, convert them to webp at quality 85, and save the output to
+`~/Pictures/blog-2026-optimized/`.
+```
+
+## What you can do with this
+
+### Web optimization
+
+"Reduce the size of all images larger than 500KB in my `public/images/` folder by converting them to webp at quality 80". Handy pre-deploy.
+
+### Resize per device
+
+"Generate 320, 640, 1024, and 1920 wide versions of these hero images, to serve them responsively". Covers srcset.
+
+### Batch watermarks
+
+"Apply my company logo in the bottom-right corner of the 50 photos in folder X, with opacity 0.4 and padding 20px".
+
+### Format conversion
+
+"Convert all the PNGs in this folder to JPG at quality 90, keeping the original name". To reduce the size of assets that don't need transparency.
+
+### Smart cropping
+
+"For each photo in X, crop to a centered 16:9 ratio. Then export as WebP".
+
+### Combined with [Filesystem Access](/boveda/mcp-filesystem-access)
+
+ImageSorcery does the processing; Filesystem Access lets you authorize access to the right folders. A natural combo.
+
+## Prerequisites
+
+- **Accessible images** (via [Filesystem Access](/boveda/mcp-filesystem-access) or paths Claude Code can already reach)
+- **Disk space** for outputs (bulk operations generate files)
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **For complex creative editing** (compositing, pro retouching): use Photoshop / GIMP / Affinity. ImageSorcery is for programmatic operations.
+- **For AI image generation** (Midjourney, DALL-E, Stable Diffusion): other tools.
+- **For very massive batches** (10k+ images): dedicated scripts with multiprocessing are more efficient.
+- **If you just need to touch up a single casual image:** open Preview / GIMP and you're done.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [ImageSorcery MCP](https://www.aitmpl.com/component/mcps/devtools/imagesorcery) — exact command.
+- **JSON config:** [imagesorcery.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/imagesorcery.json).
+
+## Related resources
+
+- [ElevenLabs MCP](/boveda/mcp-elevenlabs) — the equivalent for audio (generation, processing).
+- [Filesystem Access MCP](/boveda/mcp-filesystem-access) — to authorize the folders ImageSorcery will read/write.
+- [Agency Agents](/boveda/agency-agents) — to orchestrate pipelines like "scraping → image processing → publishing".

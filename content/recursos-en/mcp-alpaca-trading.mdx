@@ -1,0 +1,97 @@
+---
+title: "MCP Alpaca Trading — stocks, ETFs, crypto, and options from Claude Code"
+description: "MCP server that connects Claude Code with the Alpaca API to trade stocks, ETFs, crypto, and options. For research, backtesting, and assisted trading — with serious caveats for real use with real money."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "alpaca"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["tradingview-mcp", "plugin-claude-equity-research", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/integration/alpaca-trading"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/alpaca-trading.json"
+---
+
+## What it is
+
+Alpaca is one of the most popular brokers among developers who want to automate trading without wrestling with legacy APIs. It has a free paper trading platform and live trading in production. This MCP connects that API to Claude Code.
+
+With the MCP active, you ask Claude for real operations: "buy me 10 shares of NVDA at market", "show me my current portfolio", "place a limit order for SOL at 180 USD". Claude calls the Alpaca API for you.
+
+It works with stocks, ETFs, crypto, and options. And it supports paper trading (sandbox) and live (a real account with real money).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `integration` |
+| Installs | 28 |
+| MCP server | `alpaca-trading` |
+| Account required | Yes — Alpaca (free for paper trading) |
+| Operations | Stocks, ETFs, crypto, options |
+| Mode | Paper (sandbox) and Live |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp integration/alpaca-trading
+```
+
+The command downloads the MCP config and registers it in Claude Code. You'll need to set the Alpaca API keys (Key ID + Secret) as environment variables before using it.
+
+For Claude:
+
+```
+Install the MCP integration/alpaca-trading with
+`npx claude-code-templates@latest --mcp integration/alpaca-trading`.
+Then tell me which env vars I need to set (paper trading first).
+```
+
+## What you can do with this
+
+### Claude-assisted research
+
+"Show me the current portfolio, compare the sector weighting against the S&P 500, and give me 3 rebalancing ideas". Claude queries your real positions and reasons on top of them.
+
+### Backtesting with live data
+
+"Pull the last 6 months of SPY at 1h intervals and simulate a simple 20/50 moving-average crossover strategy". The MCP brings in the data; Claude runs the simulation.
+
+### Guided paper trading
+
+Before putting real money in, paper trading lets you test ideas. The MCP supports both modes — you flip a flag.
+
+### Crypto and options
+
+Alpaca covers crypto (BTC, ETH, SOL, etc.) and options. More complex operations (spreads, condors) you can build by asking Claude for the structure.
+
+## Prerequisites
+
+- **Alpaca account** (free): [alpaca.markets](https://alpaca.markets)
+- **API Key ID + Secret** generated from the dashboard
+- **Decision: paper or live**. Always start with paper.
+- **Node.js + Claude Code** up and running
+
+## When it's NOT a good idea
+
+<Callout type="danger" title="Before connecting Claude to your real money">
+
+- **NEVER start with a live account.** Test everything in paper first. If your prompt goes wrong, Claude can execute orders that empty your account.
+- **Trading is not financial advice.** This is plumbing. Investment decisions are yours, not the model's.
+- **Prompt injection risk:** if Claude reads external content (an article, an email) and that content contains trading instructions, it could execute them. Consider approval hooks.
+- **API rate limits and costs:** some operations (detailed historical data) may charge. Check the pricing.
+- **Crypto and options are volatile:** a magnitude error in sizing = a big loss. Validate magnitudes before approving.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Alpaca Trading MCP](https://www.aitmpl.com/component/mcps/integration/alpaca-trading) — exact command.
+- **JSON config on GitHub:** [davila7/claude-code-templates · alpaca-trading.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/alpaca-trading.json) — the MCP server definition.
+- **Alpaca official:** [alpaca.markets](https://alpaca.markets) — to open an account and generate API keys.
+
+## Related resources
+
+- [TradingView MCP](/boveda/tradingview-mcp) — for charting and technical analysis; complements Alpaca, which is for execution.
+- [Claude Equity Research](/boveda/plugin-claude-equity-research) — for buy/sell equity research before trading.
+- [Anatomy of Claude](/boveda/anatomia-claude) — to understand what an MCP server is.

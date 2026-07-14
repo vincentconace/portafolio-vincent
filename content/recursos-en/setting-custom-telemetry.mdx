@@ -1,0 +1,90 @@
+---
+title: "Setting Custom Telemetry — telemetry to your own endpoint or disable it"
+description: "Setting with 32 installs. Configure custom telemetry with your own endpoint or disable it with CLAUDE_CODE_ENABLE_TELEMETRY=0. For enterprises with their own observability or privacy requirements."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-logfire", "mcp-dynatrace", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/telemetry/custom-telemetry"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/custom-telemetry.json"
+---
+
+## What it is
+
+Configure how Claude Code handles telemetry:
+
+- `CLAUDE_CODE_ENABLE_TELEMETRY=0` — disables the default
+- `OTEL_METRICS_EXPORTER=custom` — uses a custom OTel exporter
+
+Useful for:
+- **Privacy:** disable telemetry entirely
+- **Enterprise observability:** send it to your own Grafana/Datadog/Logfire
+- **Compliance:** control where the data goes
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `telemetry` |
+| Installs | 32 |
+| Env vars | CLAUDE_CODE_ENABLE_TELEMETRY, OTEL_METRICS_EXPORTER |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting telemetry/custom-telemetry
+```
+
+For Claude:
+
+```
+I installed the telemetry/custom-telemetry setting. Tell me how to point
+the OTel exporter at my Logfire/Datadog/Grafana instance.
+```
+
+## What you can do with it
+
+### Privacy first
+
+`CLAUDE_CODE_ENABLE_TELEMETRY=0` keeps usage info from going to Anthropic.
+
+### Enterprise observability
+
+You send telemetry to your own OTel pipeline. Your Dynatrace/Grafana/Logfire sees Claude Code metrics alongside everything else.
+
+### Regional compliance
+
+Some countries require metrics to stay in local data centers. A custom exporter makes that possible.
+
+### Combo with [Logfire MCP](/boveda/mcp-logfire)
+
+Logfire MCP for queries. Custom Telemetry to send metrics to Logfire. A natural combo.
+
+### Combo with [Dynatrace MCP](/boveda/mcp-dynatrace)
+
+If your stack is Dynatrace, same pattern.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **For individual use:** you don't need serious observability.
+- **Without a configured OTel pipeline:** a custom exporter needs a destination.
+- **For Anthropic feature improvements:** disabling telemetry makes it harder for them to see patterns. A trade-off.
+- **Only 32 installs:** enterprise niche. Validate the implementation.
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [Custom Telemetry Setting](https://www.aitmpl.com/component/settings/telemetry/custom-telemetry) — the exact command.
+- **JSON config:** [custom-telemetry.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/telemetry/custom-telemetry.json).
+
+## Related resources
+
+- [Logfire MCP](/boveda/mcp-logfire) — OTel observability with Pydantic.
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — enterprise APM.
+- [Anatomy of Claude](/boveda/anatomia-claude) — telemetry options.

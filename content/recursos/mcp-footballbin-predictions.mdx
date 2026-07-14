@@ -1,0 +1,97 @@
+---
+title: "MCP Footballbin Predictions — pronósticos de Premier League y Champions"
+description: "MCP server que devuelve predicciones de partidos de la Premier League inglesa y la Champions League: marcadores half-time/full-time, próximo goleador, conteo de corners. Datos para análisis, no para apostar a ciegas."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-alpaca-trading", "anatomia-claude", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/integration/footballbin-predictions"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/footballbin-predictions.json"
+---
+
+## Qué es
+
+Footballbin Predictions es un servicio que provee pronósticos AI sobre partidos de fútbol — específicamente Premier League inglesa y Champions League. El MCP enchufa ese servicio a Claude Code. Le pedís predicciones, te devuelve:
+
+- Marcador half-time
+- Marcador full-time
+- Próximo goleador
+- Cantidad de corners
+
+Es nicho. Si construís apps de fantasy football, content sobre fútbol, o agents que tracken matches, te ahorra escribir el cliente de la API.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `integration` |
+| Installs | 51 |
+| Servidor MCP | `footballbin-predictions` |
+| Cobertura | Premier League + Champions League |
+| Cuenta requerida | Sí — Footballbin |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp integration/footballbin-predictions
+```
+
+Pre-requisito: cuenta en Footballbin y API key (si aplica).
+
+Para Claude:
+
+```
+Instalé el MCP integration/footballbin-predictions. Pediré la predicción
+del próximo partido del Real Madrid en Champions: marcador half-time,
+full-time, próximo goleador y corners.
+```
+
+## Qué podés hacer con esto
+
+### Content automatizado
+
+"Generame un post para Instagram con la predicción del partido X de hoy: visual del marcador esperado, top scorer estimado, corner count". Pipeline content para cuentas de fútbol.
+
+### Apps fantasy
+
+Si tu app de fantasy necesita scores estimados o probabilidades, el MCP da el feed. Útil para sugerir a usuarios qué jugadores levantar.
+
+### Análisis comparativo
+
+"Comparame las predicciones del MCP vs los resultados reales de los últimos 10 partidos del Liverpool. ¿Cuál es la accuracy?". Útil para validar antes de usar en producción.
+
+### Bots / agents temáticos
+
+Agent que tuitea predicciones antes de cada partido, las contrasta con el resultado, y arma un score de accuracy semanal.
+
+## Pre-requisitos
+
+- **Cuenta Footballbin** activa
+- **API key** si aplica
+- **Foco en Premier League / Champions:** otras ligas no están cubiertas
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de usar para apostar dinero">
+
+- **NO son recomendaciones de apuesta.** Son predicciones AI. Pueden estar mal. Usalas para entretenimiento, análisis o contenido — no para tirarle plata sin criterio propio.
+- **Cobertura limitada:** solo Premier League + Champions. Si tu interés es La Liga, Bundesliga, Serie A, NBA, NFL, etc., este MCP no aplica.
+- **Accuracy desconocida:** no hay benchmark público. Validá con histórico antes de confiar.
+- **Apuestas y legalidad:** apostar es regulado por país. Vos sos responsable.
+- **Solo 51 installs:** poca comunidad. Probá antes en sandbox.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Footballbin Predictions MCP](https://www.aitmpl.com/component/mcps/integration/footballbin-predictions) — comando exacto.
+- **Config JSON:** [footballbin-predictions.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/footballbin-predictions.json).
+
+## Recursos relacionados
+
+- [Alpaca Trading MCP](/boveda/mcp-alpaca-trading) — otro MCP de "decisiones con riesgo financiero". Comparten caveats similares.
+- [Anatomía de Claude](/boveda/anatomia-claude) — ubicar este MCP como conector a un servicio externo nicho.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que usen el MCP en pipelines de contenido o análisis.

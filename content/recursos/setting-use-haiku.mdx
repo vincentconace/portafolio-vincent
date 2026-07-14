@@ -1,0 +1,84 @@
+---
+title: "Setting Use Haiku — switch a Claude 3.5 Haiku para fast responses"
+description: "Setting con 103 installs. Configura Claude Code para usar Claude 3.5 Haiku como modelo principal. Más rápido y barato que Sonnet. Para tasks chicos donde priority es speed/cost."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-use-sonnet", "setting-custom-model", "setting-performance-optimization"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/model/use-haiku"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/model/use-haiku.json"
+---
+
+## Qué es
+
+Override del modelo a `claude-3-5-haiku-20241022`. Más rápido y barato que Sonnet, menos capaz para tareas complejas.
+
+Para tasks donde priority es speed o cost — ej. queries simples, lookups, edits chicos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `model` |
+| Installs | 103 |
+| Modelo | claude-3-5-haiku-20241022 |
+| Trade-off | Speed/cost vs capability |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting model/use-haiku
+```
+
+Para Claude:
+
+```
+Instalé el setting model/use-haiku. Confirmá que estoy usando Haiku
+ahora.
+```
+
+## Qué podés hacer con esto
+
+### Tasks chicos / cost-conscious
+
+Para queries que no necesitan capability completa de Sonnet.
+
+### Faster iteration
+
+Haiku responde más rápido. Para exploración rápida ayuda.
+
+### Cost reduction significativo
+
+Haiku es bastante más barato que Sonnet.
+
+### Combo con [Performance Optimization](/boveda/setting-performance-optimization)
+
+Performance Opt limita output. Use Haiku cambia model. Ambos reducen cost.
+
+### Anti vs [Use Sonnet](/boveda/setting-use-sonnet)
+
+Estos dos son opposites. Para complex code work, Sonnet.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para tasks complejos:** Haiku puede dar respuestas pobres. Sonnet/Opus mejor.
+- **Para code generation serio:** Haiku tiene menor calidad de output.
+- **Si tu workflow ya es lento por otros motivos:** speed gain puede no compensar quality loss.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Use Haiku Setting](https://www.aitmpl.com/component/settings/model/use-haiku) — comando exacto.
+- **Config JSON:** [use-haiku.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/model/use-haiku.json).
+
+## Recursos relacionados
+
+- [Use Sonnet Setting](/boveda/setting-use-sonnet) — más capable.
+- [Custom Model Setting](/boveda/setting-custom-model) — control granular.
+- [Performance Optimization Setting](/boveda/setting-performance-optimization) — combo cost reduction.

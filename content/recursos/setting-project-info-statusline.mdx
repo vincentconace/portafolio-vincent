@@ -1,0 +1,83 @@
+---
+title: "Setting Project Info Statusline — model + dir + Node version + Claude version (543 installs)"
+description: "Setting con 543 installs. Statusline informativo: model name, directory, Node.js version, Claude Code version. Perfect for multi-project environments con stacks variados."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-git-branch-statusline", "setting-context-monitor", "setting-minimal-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/project-info-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/project-info-statusline.json"
+---
+
+## Qué es
+
+Statusline informativo no-gimmicky. Muestra:
+- **Model** name
+- **Directory** del proyecto
+- **Node.js version** activa
+- **Claude Code version** instalada
+
+Perfect para **multi-project environments** donde rotás entre proyectos con stacks distintos (Node versions diferentes, etc.).
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 543 |
+| Muestra | Model + dir + Node + Claude version |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/project-info-statusline
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/project-info-statusline. Mostrame
+las 4 piezas de info actuales.
+```
+
+## Qué podés hacer con esto
+
+### Multi-project con Node versions distintas
+
+Si tu proyecto A usa Node 18 y B usa Node 20 (con `.nvmrc`), el statusline te confirma cuál tenés activa.
+
+### Detection de Claude Code version
+
+Para troubleshooting: la version te da context para buscar issues en docs.
+
+### Más info que [Minimal Statusline](/boveda/setting-minimal-statusline), menos que [Context Monitor](/boveda/setting-context-monitor)
+
+Punto medio. Info útil sin bars ni cost tracking.
+
+### Combo con [Git Branch Statusline](/boveda/setting-git-branch-statusline)
+
+Solo podés tener UN statusline. Compará: este (Node + Claude versions) vs Git Branch (branch + uncommitted). Elegí según prioridad.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si trabajás solo un proyecto siempre:** Node version es estática, no aporta.
+- **Si querés awareness de context %:** [Context Monitor](/boveda/setting-context-monitor) es la opción.
+- **Si tu terminal es muy estrecho:** 4 piezas pueden saturar.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Project Info Statusline Setting](https://www.aitmpl.com/component/settings/statusline/project-info-statusline) — comando exacto.
+- **Config JSON:** [project-info-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/project-info-statusline.json).
+
+## Recursos relacionados
+
+- [Git Branch Statusline Setting](/boveda/setting-git-branch-statusline) — alternativa git-focused.
+- [Context Monitor Setting](/boveda/setting-context-monitor) — el #1 info-rich.
+- [Minimal Statusline Setting](/boveda/setting-minimal-statusline) — la opción más simple.

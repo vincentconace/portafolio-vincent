@@ -1,0 +1,254 @@
+---
+title: "Memory Palace — agents with shared memory instead of siloed subagents"
+description: "The most common mistake when building multi-agent systems: giving each subagent its own isolated context. Result: they duplicate work, contradict each other, and lose key info. Alternative pattern: a shared memory that everyone reads from and updates."
+difficulty: "avanzado"
+category: "skills"
+tools: ["claude-code", "claude-api"]
+publishedAt: "2026-05-16"
+readingTime: "14 min"
+relatedSlugs: ["mcp-server-propio", "memoria-claude-code", "agent-view-paralelo"]
+---
+
+## The anti-pattern everyone falls into
+
+You get excited about the idea of "agent teams" and build something like this:
+
+```
+Research Agent      →  gathers info
+Planner Agent       →  makes a plan
+Implementer Agent   →  executes
+Reviewer Agent      →  validates
+```
+
+Each one with its own system prompt, its own context, its own tools. Sounds good. **It doesn't work** well in practice.
+
+What actually happens:
+
+- The Researcher gathers info but the Planner doesn't "see" all of it, only the summary the orchestrator passes along
+- The Planner proposes something the Researcher had already ruled out, but never found out
+- The Implementer executes based on the plan but discovers details that weren't there → it improvises
+- The Reviewer validates without knowing what constraints existed → either approves something bad or rejects something done right
+
+Each agent lives in its own **bubble**. Info travels between them through the orchestrator's bottleneck. You lose 60% of the context.
+
+---
+
+## The alternative: shared memory
+
+Instead of **subagents with isolated contexts**, a single process with **access to a shared, structured memory**.
+
+```
+        ┌─────────────────────────┐
+        │  Shared Memory          │
+        │  (versioned files)      │
+        └────────────┬────────────┘
+                     │  read/write
+        ┌────────────┴────────────┐
+        │                         │
+   ┌────▼─────┐             ┌────▼─────┐
+   │ Task A   │             │ Task B   │
+   │ (Claude) │             │ (Claude) │
+   └──────────┘             └──────────┘
+```
+
+The memory is a `.memory/` folder (or whatever name you pick) with structured files. Any "agent" (= a Claude invocation) reads and writes there. No info trapped in bubbles.
+
+---
+
+## Memory structure
+
+A concrete example for a "build a notifications feature" project:
+
+```
+.memory/
+├── README.md           ← how to navigate this memory
+├── goals.md            ← high-level objective
+├── decisions/          ← decisions made, with date and rationale
+│   ├── 2026-05-15-arquitectura.md
+│   └── 2026-05-16-stack-email.md
+├── research/           ← what was researched
+│   ├── libs-evaluadas.md
+│   └── benchmarks.md
+├── plan/
+│   ├── tasks.md        ← live task list with status
+│   └── current-task.md ← what's being worked on right now
+├── learnings/          ← things discovered during implementation
+│   └── ...
+└── open-questions.md   ← what's still to be decided
+```
+
+**Memory rules**:
+
+1. Any "agent" can read all of it at the start
+2. Anyone can write to their section
+3. Decisions are logged with date and author — they don't get "undone" silently
+4. If something is in `open-questions.md`, it's an explicit blocker
+
+---
+
+## The work loop
+
+Instead of an "orchestrator that calls subagents", a loop that:
+
+1. Reads the memory
+2. Decides the next action based on the state
+3. Executes it (could be a research task, an implementation task, whatever's next)
+4. Updates the memory
+5. Goes back to step 1
+
+You can implement this as:
+
+```python
+# pseudocode
+def loop():
+    while True:
+        state = load_memory('.memory/')
+        if state.has_blockers():
+            ask_user(state.blockers)
+            continue
+        next_task = state.pick_next_task()
+        if not next_task:
+            break  # nothing to do
+        result = run_claude(
+            system_prompt=AGENT_PROMPT,
+            context=state.relevant_context(next_task),
+            task=next_task,
+        )
+        update_memory(result)
+```
+
+`AGENT_PROMPT` doesn't change between iterations. What changes is **the context that gets passed to it**: a filtered view of the memory based on the current task.
+
+---
+
+## The pattern in Claude Code (no custom code)
+
+If you don't want to set up a code loop, you can implement it by hand inside Claude Code using skills.
+
+### Skill 1 — "context-load"
+
+```markdown
+---
+name: context-load
+description: Loads the relevant context from .memory/ for the current task.
+  Trigger it with "load context" or "read the memory".
+---
+
+Read the following files from .memory/ and summarize the state for me:
+
+1. .memory/goals.md (overall objective)
+2. .memory/plan/current-task.md (what's being worked on)
+3. .memory/decisions/ (all decisions made)
+4. .memory/open-questions.md (blockers)
+
+Give me a structured summary in 4 paragraphs:
+- Objective
+- Current task
+- Relevant decisions that apply
+- Blockers (if any)
+
+Do NOT read files not listed unless they're explicitly relevant.
+```
+
+### Skill 2 — "context-save"
+
+```markdown
+---
+name: context-save
+description: Updates .memory/ with the changes made. Trigger it at the end
+  of a session with "save what was done" or "update the memory".
+---
+
+Update the relevant .memory/ files with what was worked on in this session:
+
+1. If you made decisions, add them to .memory/decisions/<date>-<topic>.md
+2. If you advanced tasks, update .memory/plan/tasks.md (mark finished ones as done)
+3. If you discovered something important, add it to .memory/learnings/
+4. If a blocker came up, add it to .memory/open-questions.md
+
+Be concise. The memory is for future-you, not a diary.
+```
+
+Now every session starts with "load context" and ends with "save what was done". The state lives in versioned files, not in Claude's context.
+
+---
+
+## Comparison: siloed subagents vs shared memory
+
+| Aspect | Siloed subagents | Shared memory |
+|---------|--------------------|--------------------|
+| Initial setup | Complex (define each agent, its tools, its prompt) | Simple (define a file structure) |
+| Synchronization | Fragile (depends on the orchestrator) | Robust (state lives on disk) |
+| Debugging | Hard (you have to log each agent) | Easy (you look at the files) |
+| Token cost | High (each agent loads its own context) | Lower (you load only what's relevant) |
+| Fault tolerance | Low (if an agent fails, it loses its state) | High (the state is persisted) |
+| Human–agent iteration | Hard (humans don't see the internal contexts) | Trivial (humans read the .md files) |
+| Learning curve | Steep | Flat |
+
+The only case where siloed subagents win is when you need **extreme parallelism and the agents are genuinely independent** (e.g. processing 1000 images in parallel, each agent handling one). But that's not "agents collaborating" — it's "parallel workers".
+
+---
+
+## When this pattern is right for you
+
+✅ Multi-step tasks with dependencies (research → plan → implement → review)
+✅ Work that spans several sessions / days
+✅ Teams where multiple humans also collaborate (the memory is readable)
+✅ When you want traceability (what was decided, when, why)
+
+❌ Trivial one-shot tasks
+❌ Genuinely parallel workers with no shared info
+❌ When the process is fully exploratory and you don't want structure
+
+---
+
+## The minimal template
+
+If you want to try this pattern today, copy this into your repo:
+
+```bash
+mkdir -p .memory/{decisions,research,plan,learnings}
+touch .memory/{goals.md,open-questions.md,README.md}
+touch .memory/plan/{tasks.md,current-task.md}
+```
+
+`.memory/README.md`:
+
+```markdown
+# Project memory
+
+This folder is the "source of truth" for the state of the work. Any Claude
+session (or human) should:
+
+1. **Read** this memory when starting
+2. **Update** it when finishing
+
+## Key files
+
+- `goals.md`: high-level objective
+- `plan/tasks.md`: task list with status [todo|wip|done]
+- `plan/current-task.md`: detailed description of the current task
+- `decisions/`: technical decisions (format: YYYY-MM-DD-topic.md)
+- `research/`: research and benchmarks
+- `learnings/`: things discovered during implementation
+- `open-questions.md`: blockers that need a human decision
+```
+
+And add this to your `CLAUDE.md`:
+
+```markdown
+## Project memory
+
+Before touching code, read `.memory/README.md` and the files relevant to
+the requested task. When finished, update the memory with decisions and learnings.
+```
+
+That alone already changes how Claude operates in future sessions.
+
+---
+
+## Next steps
+
+- If you want to take it a step further, set up your [own MCP server](/boveda/mcp-server-propio) that exposes the memory with richer queries (semantic search, filters, etc.)
+- For a simpler version without formal structure, check out the [Claude Code memory guide](/boveda/memoria-claude-code)
+- If you're going to have several Claudes working in parallel over the same memory, read [multiple Claudes in parallel](/boveda/agent-view-paralelo)

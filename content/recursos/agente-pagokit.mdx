@@ -1,0 +1,358 @@
+---
+title: "Agente PagoKit"
+description: "Plugin gratis de Claude Code que elige y configura tu método de pago (Stripe, Mercado Pago, Wompi o Lemon Squeezy) en un solo comando. Genera el checkout completo con 5 candados de seguridad."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "stripe", "mercado-pago"]
+featured: true
+featuredOrder: 2
+badge: "nuevo"
+version: "v1.0"
+github: "https://github.com/Hainrixz/agente-pagokit"
+publishedAt: "2026-05-01"
+readingTime: "15 min"
+relatedSlugs: []
+---
+
+## Qué vas a lograr
+
+Al final de este recurso, tendrás:
+
+- Un **checkout funcional** integrado en tu proyecto, listo para recibir pagos reales
+- Tu **proveedor de pagos elegido** y configurado según el perfil de tus clientes
+- **5 candados de seguridad** implementados automáticamente (validación del lado servidor, firma de webhooks, etc.)
+- **14 archivos de código** generados por el agente que cubren desde el formulario hasta el webhook
+- Un **flujo de pagos probado** — no solo el frontend, sino la confirmación real del pago
+
+Lo que normalmente toma 2-3 días de integración, este plugin lo hace en un solo comando.
+
+---
+
+## ¿Cuál es tu caso?
+
+Antes de instalar, responde estas 3 preguntas para saber qué proveedor deberías usar. Las consecuencias de elegir mal van desde "pagos que no entran" hasta "clientes que no pueden pagar en efectivo".
+
+<ProviderSelector />
+
+---
+
+## Requisitos previos
+
+Antes de ejecutar el comando de instalación, asegúrate de tener todo esto listo. El agente asume que ya tienes el entorno preparado — si le falta algo, puede generar código que no funciona en tu contexto.
+
+<Checklist
+  storageKey="pagokit-prereqs"
+  items={[
+    "Node.js 18+ instalado (verifica con: node --version)",
+    "Claude Code instalado y funcionando (verifica con: claude --version)",
+    "Proyecto Next.js, Remix o Express ya iniciado",
+    "Cuenta creada en tu proveedor elegido (Stripe, Mercado Pago, Wompi o Lemon Squeezy)",
+    "API keys del proveedor a la mano (public key + secret key)",
+    "Variable de entorno DATABASE_URL configurada (si usas base de datos)",
+    "Git inicializado en tu proyecto (para que el agente pueda hacer commits)",
+  ]}
+/>
+
+---
+
+## Instalación en 3 pasos
+
+### Paso 1 — Añadir el plugin a Claude Code
+
+<Step number={1} title="Instalar el plugin desde GitHub">
+
+Este comando descarga el plugin y lo registra en tu instalación local de Claude Code. El plugin incluye el contexto completo del agente: qué preguntas hacer, cómo generar el código, y cómo validar que la integración funciona.
+
+**Por qué esto es importante:** Claude Code sin plugins no sabe nada sobre tu stack de pagos. El plugin le da instrucciones específicas sobre Stripe, Mercado Pago, Wompi y Lemon Squeezy — incluyendo las diferencias entre sus APIs y los errores comunes que hay que evitar.
+
+```bash
+claude plugins install github:Hainrixz/agente-pagokit
+```
+
+Después de este comando, deberías ver:
+
+```
+✓ Plugin "agente-pagokit" instalado correctamente (v1.0)
+✓ Comandos disponibles: configure-payment, test-payment, check-security
+```
+
+Si ves un error de permisos, ejecuta con `sudo` o verifica que tienes acceso de escritura al directorio de plugins de Claude.
+
+</Step>
+
+### Paso 2 — Configurar tu proveedor
+
+<Step number={2} title="Ejecutar el configurador interactivo">
+
+Este es el comando principal. Claude te hará exactamente 3 preguntas y luego generará todo el código de integración.
+
+**Por qué solo 3 preguntas:** El agente está diseñado para no abrumarte con opciones. Esas 3 preguntas (ubicación de clientes, modelo de cobro, y métodos de pago) determinan el 90% de las decisiones de arquitectura. El restante 10% se resuelve con los defaults más seguros.
+
+```bash
+claude configure-payment
+```
+
+El agente te presentará el flujo interactivo, generará los archivos, y al final mostrará un resumen de lo que creó y las variables de entorno que necesitas configurar.
+
+</Step>
+
+### Paso 3 — Agregar las variables de entorno
+
+<Step number={3} title="Configurar las API keys" last>
+
+El agente genera un archivo `.env.example` con todas las variables que necesitas. Copia este archivo a `.env.local` (Next.js) o `.env` (Express/Remix) y llena los valores con tus keys reales.
+
+**Por qué no las pide en el comando:** Las API keys nunca deben pasar por la línea de comandos — quedan en el historial del terminal. El archivo `.env` está en `.gitignore` por defecto, así que es el lugar correcto.
+
+```bash
+# Copiar el template
+cp .env.example .env.local
+
+# Abrir el archivo y llenar los valores
+# (usa tu editor favorito)
+```
+
+Ejemplo de lo que verás en `.env.example`:
+
+```bash
+# Generado por Agente PagoKit v1.0
+# NUNCA subas este archivo a Git
+
+# Tu proveedor elegido
+PAYMENT_PROVIDER=mercado-pago
+
+# Mercado Pago
+MP_PUBLIC_KEY=APP_USR-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+MP_ACCESS_TOKEN=APP_USR-0000000000000000-000000-xxxxxxxxxxxxxxxxxxxx
+MP_WEBHOOK_SECRET=tu_webhook_secret_aquí
+
+# URL de tu app
+NEXT_PUBLIC_APP_URL=https://tu-dominio.com
+```
+
+</Step>
+
+---
+
+## Las 3 preguntas del agente
+
+Cuando ejecutas `claude configure-payment`, el agente hace exactamente estas preguntas. Aquí explicamos el razonamiento detrás de cada una, para que tomes la decisión correcta.
+
+### Pregunta 1: ¿De dónde son tus clientes?
+
+Esta pregunta determina qué proveedor tiene la mejor cobertura y las menores comisiones para tu mercado.
+
+Si tus clientes son de **América Latina**, usar Stripe directamente significa que muchos pagos con tarjetas locales (especialmente débito) van a fallar o tener comisiones extra. Mercado Pago tiene contratos directos con todos los bancos de LATAM.
+
+Si tus clientes son **internacionales**, Stripe es el estándar. Su infraestructura cubre 135+ países con un solo contrato.
+
+<Callout type="warning" title="Error común">
+Usar Stripe para clientes mexicanos/argentinos porque "es más conocido". Las tasas de rechazo con tarjetas de débito locales pueden llegar al 30-40% con Stripe. Con Mercado Pago, esas mismas tarjetas tienen tasas de aprobación del 85-95%.
+</Callout>
+
+### Pregunta 2: ¿Pago único o suscripción?
+
+Esta pregunta determina la arquitectura del backend.
+
+Un **pago único** es simple: crear intención de pago → confirmar → webhook → marcar como pagado. 4 pasos.
+
+Una **suscripción** es diferente: crear cliente → crear suscripción → manejar renovaciones → manejar cancelaciones → manejar pagos fallidos → reintentos → dunning. 20+ eventos a manejar.
+
+El agente genera estructuras de base de datos distintas para cada caso. Si empiezas con la arquitectura de pago único y luego quieres cambiar a suscripciones, es una reescritura casi completa.
+
+<Callout type="tip" title="Si no sabes aún">
+Si tu modelo de negocio aún no está claro, elige "suscripción" aunque empieces con pago único. La arquitectura de suscripciones puede manejar pagos únicos (suscripción de duración indefinida), pero no al revés.
+</Callout>
+
+### Pregunta 3: ¿Solo digital o también efectivo?
+
+En América Latina, una parte significativa de la población adulta no tiene tarjeta de crédito. En México, el 54% de las transacciones de e-commerce incluyen algún componente en efectivo (OXXO Pay, CoDi, etc.).
+
+Si eliges **solo digital**, el flujo es síncrono: el pago se confirma en segundos.
+
+Si eliges **efectivo también**, el flujo es asíncrono: el cliente genera un código, paga en tienda/banco, y horas después llega el webhook de confirmación. Esto requiere una UI diferente ("esperando confirmación de pago") y manejo de estado en la base de datos.
+
+El agente genera ambos flujos correctamente, pero necesita saber cuál implementar.
+
+---
+
+## Los 4 proveedores explicados
+
+### Comparación rápida
+
+| Proveedor | Mejor para | Efectivo | Comisión aprox. | Suscripciones |
+|---|---|---|---|---|
+| **Mercado Pago** | LATAM completo | ✓ OXXO, Rapipago, etc. | 3.49% + IVA | ✓ Básico |
+| **Wompi** | Colombia | ✓ PSE, Nequi | 2.95% | ✓ |
+| **Stripe** | Internacional | ✗ | 2.9% + $0.30 | ✓ Avanzado |
+| **Lemon Squeezy** | Productos digitales | ✗ | 5% + $0.50 | ✓ + License keys |
+
+### Mercado Pago
+
+El gigante de pagos de LATAM. Si tu mercado es México, Argentina, Colombia, Chile, Brasil, Perú, Uruguay o Bolivia, esta es la opción con más cobertura.
+
+**Ventajas reales:**
+- Acepta métodos locales que Stripe no maneja: OXXO, Rapipago, Pago Fácil, PSE, Efecty, Baloto
+- Conversión de divisas automática (cobras en USD, el cliente paga en pesos locales)
+- Tasas de aprobación 15-20% más altas que Stripe para tarjetas locales
+
+**Consideración importante:** El dashboard de Mercado Pago tiene una curva de aprendizaje. Sus webhooks también tienen particularidades (topic, resource_id) que difieren de Stripe. El agente maneja esto, pero si quieres entender el código generado, vale la pena leer su documentación.
+
+### Wompi
+
+La mejor opción para Colombia específicamente. Integra directamente con PSE (el sistema de débito bancario colombiano), Nequi (billetera digital de Bancolombia), y las tarjetas nacionales.
+
+**Por qué no usarlo fuera de Colombia:** Su cobertura internacional es limitada. Si tienes clientes en otros países de LATAM, vas a necesitar un segundo proveedor de todas formas.
+
+### Stripe
+
+El estándar de la industria para pagos internacionales. Su documentación es la mejor del sector, y prácticamente todo el ecosistema de herramientas SaaS (Supabase, Vercel, etc.) tiene integraciones nativas con Stripe.
+
+**Cuándo es la elección correcta:**
+- Clientes en Europa, EE.UU. o Canada
+- Necesitas facturación avanzada (facturas, créditos, descuentos programáticos)
+- Quieres webhook reliability garantizada con reintentos automáticos
+- Tu stack ya usa otras integraciones de Stripe (Radar, Connect, etc.)
+
+### Lemon Squeezy
+
+El "Merchant of Record" — ellos son legalmente el vendedor, lo que significa que manejan el IVA de la UE, el sales tax de EE.UU., y el cumplimiento fiscal en 40+ países por ti.
+
+**Para quién es indispensable:**
+- Vendes software, cursos, ebooks, o cualquier producto digital
+- Tienes clientes en la UE o EE.UU. donde el IVA/sales tax digital es obligatorio
+- No quieres contratar un contador fiscal internacional
+
+**Trade-off:** Su comisión (5% + $0.50) es más alta. Pero comparado con multas fiscales de $10,000+ en la UE, es una inversión inteligente.
+
+---
+
+## Los 14 archivos generados
+
+El agente no genera un solo archivo monolítico. Genera una arquitectura limpia y separada que puedes mantener y escalar.
+
+### Resumen visual
+
+| Archivo | Qué hace |
+|---|---|
+| `components/checkout/CheckoutForm.tsx` | Formulario de pago con validación |
+| `components/checkout/PaymentMethodSelector.tsx` | Selector UI de método de pago |
+| `components/checkout/OrderSummary.tsx` | Resumen del pedido antes de pagar |
+| `components/checkout/SuccessPage.tsx` | Página de confirmación post-pago |
+| `app/api/payments/create-intent/route.ts` | Crea la intención de pago en el proveedor |
+| `app/api/payments/confirm/route.ts` | Confirma el pago desde el cliente |
+| `app/api/webhooks/payment/route.ts` | Recibe y procesa eventos del proveedor |
+| `app/api/webhooks/payment/handlers.ts` | Lógica de cada tipo de evento |
+| `lib/payments/provider.ts` | Abstracción del proveedor (fácil de cambiar) |
+| `lib/payments/validation.ts` | Validaciones del lado servidor |
+| `lib/payments/errors.ts` | Manejo de errores de pago |
+| `hooks/useCheckout.ts` | Hook de React para el estado del checkout |
+| `types/payments.ts` | TypeScript types para toda la integración |
+| `.env.example` | Template de variables de entorno |
+
+### Por qué esta arquitectura
+
+La separación en `lib/payments/provider.ts` es intencional: si algún día necesitas cambiar de Mercado Pago a Stripe (o viceversa), solo modificas ese archivo. El resto del código no sabe qué proveedor estás usando.
+
+---
+
+## Los 5 candados de seguridad
+
+Estos no son opcionales. Cada uno previene un vector de ataque real que ocurre en producción.
+
+### Candado 1: Validación del lado servidor
+
+**El problema que previene:** Un atacante puede modificar el precio en el frontend (con las DevTools del browser) antes de enviar el formulario. Si solo validas en el frontend, puede comprar un producto de $100 pagando $1.
+
+**Cómo funciona:** El archivo `validation.ts` verifica que el monto recibido en la API coincide con el precio real almacenado en tu base de datos, no con lo que envió el cliente.
+
+### Candado 2: Verificación de firma de webhook
+
+**El problema que previene:** Cualquiera puede hacer un POST a tu endpoint de webhook fingiendo ser Mercado Pago o Stripe. Sin verificación, tu sistema marcaría pedidos como pagados sin que nadie haya pagado.
+
+**Cómo funciona:** Cada proveedor incluye una firma criptográfica en el header del webhook. El agente genera código que verifica esta firma usando tu webhook secret antes de procesar cualquier evento.
+
+<Callout type="danger" title="Crítico">
+Este candado es el más importante. Sin él, cualquier persona con tu webhook URL puede confirmar pagos falsos. El agente siempre lo implementa por defecto.
+</Callout>
+
+### Candado 3: Idempotencia de webhooks
+
+**El problema que previene:** Los proveedores de pago reenvían webhooks si tu servidor no responde a tiempo. Sin idempotencia, el mismo pago se procesaría múltiples veces (doble entrega, doble crédito en saldo, etc.).
+
+**Cómo funciona:** El archivo `handlers.ts` guarda el ID de cada webhook procesado. Si llega el mismo webhook dos veces, el segundo se ignora.
+
+### Candado 4: Rate limiting en endpoints de pago
+
+**El problema que previene:** Ataques de fuerza bruta contra tarjetas (card testing attacks) — un bot intenta miles de números de tarjeta hasta encontrar uno que funcione. Esto no solo cuesta dinero en comisiones de intentos fallidos, sino que puede resultar en que tu cuenta de pagos sea suspendida.
+
+**Cómo funciona:** El endpoint `create-intent` está limitado a 10 intentos por IP por hora. Si se excede, retorna 429 Too Many Requests.
+
+### Candado 5: Nunca exponer la secret key al cliente
+
+**El problema que previene:** Si tu `MP_ACCESS_TOKEN` o `STRIPE_SECRET_KEY` llega al frontend (por error en el código o en las variables de entorno de Vercel), un atacante puede hacer cargos a tu cuenta o extraer datos de clientes.
+
+**Cómo funciona:** El agente separa explícitamente las variables de entorno en `NEXT_PUBLIC_*` (frontend, public) y sin prefijo (solo servidor). En la revisión de código, verifica que ninguna variable sensible tenga el prefijo `NEXT_PUBLIC_`.
+
+---
+
+## Playbook de implementación
+
+Sigue estos pasos en orden. El orden importa porque cada paso depende del anterior.
+
+**Paso 1 — Instalar y configurar (15 min)**
+Ejecuta `claude configure-payment`, responde las 3 preguntas, llena el `.env.local`.
+
+**Paso 2 — Probar en local con webhooks (10 min)**
+Usa ngrok o Stripe CLI para exponer tu localhost y recibir webhooks reales en desarrollo. El agente genera el comando exacto para esto.
+
+```bash
+# El agente incluye este comando en el output
+stripe listen --forward-to localhost:3000/api/webhooks/payment
+# o para ngrok:
+ngrok http 3000
+```
+
+**Paso 3 — Hacer un pago de prueba (5 min)**
+Cada proveedor tiene tarjetas de prueba. El agente incluye las más útiles en el archivo `TESTING.md` que genera:
+
+```
+Stripe - Pago exitoso: 4242 4242 4242 4242
+Stripe - Fondos insuficientes: 4000 0000 0000 9995
+Mercado Pago - Aprobado: 5031 7557 3453 0604
+```
+
+**Paso 4 — Verificar los 5 candados (10 min)**
+```bash
+claude check-security
+```
+Este comando analiza el código generado y verifica que los 5 candados estén implementados correctamente.
+
+**Paso 5 — Deploy y configurar webhooks en producción**
+En el dashboard de tu proveedor, agrega la URL de producción para los webhooks: `https://tu-dominio.com/api/webhooks/payment`
+
+---
+
+## Cuándo NO usar este plugin
+
+Agente PagoKit resuelve el 80% de los casos de uso. Estos son los casos en que necesitas una implementación custom:
+
+**Marketplaces con pagos split:** Si tienes múltiples vendedores y necesitas distribuir el pago automáticamente (Stripe Connect o Mercado Pago Marketplace), el agente no cubre ese flujo todavía.
+
+**Pagos en criptomonedas:** No incluido. Para esto, considera Coinbase Commerce o BTCPay Server.
+
+**Facturación electrónica legal (CFDI México):** El agente genera el checkout, pero no genera los XMLs de CFDI firmados que exige el SAT. Para eso necesitas una integración adicional con Facturama o similar.
+
+**Checkout embebido en apps móviles:** El código generado es para web. Para React Native o Flutter, las SDKs de los proveedores tienen implementaciones específicas para mobile.
+
+**Sistemas con compliance PCI DSS Level 1:** Si manejas más de 6 millones de transacciones al año, necesitas una certificación PCI completa que va más allá de lo que este plugin cubre.
+
+---
+
+## Recursos relacionados
+
+Si llegaste hasta aquí y estás implementando pagos, estos recursos de Núcleo IA te ayudarán con el siguiente nivel:
+
+- **Guía de webhooks en producción** — Cómo monitorear, reintentar y debuggear webhooks
+- **Variables de entorno en Vercel/Railway** — Gestión segura de secrets por ambiente
+- **Gestión de errores de pago con Claude Code** — Patrones para manejar declined cards, expiradas, y fondos insuficientes

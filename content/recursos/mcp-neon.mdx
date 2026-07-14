@@ -1,0 +1,100 @@
+---
+title: "MCP Neon — operar databases serverless Postgres desde Claude Code"
+description: "MCP server con 208 installs para Neon (Postgres serverless). Conecta a la Management API y a las databases: crear projects, branches efímeros, queries, schema migrations. La ventaja de Neon es branching como Git."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "neon", "postgres"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-pg-aiguide", "mcp-postgresql-integration", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/neon"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/neon.json"
+---
+
+## Qué es
+
+[Neon](https://neon.tech) es Postgres serverless con una sacada: branching de databases como Git branching. Creás un branch del DB en segundos para probar migrations o desarrollo, sin pisar prod. Pricing por compute time real, no por instance reservada.
+
+Este MCP conecta dos cosas a Claude Code:
+- **Management API** — crear/destruir projects, branches, endpoints
+- **Databases** — queries y ops sobre los datos
+
+Útil porque Neon es uno de los Postgres modernos más adoptados (especialmente en stack Next.js / Vercel) y el branching es feature que combina perfecto con AI workflows.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | 208 |
+| Servidor MCP | `Neon` |
+| Cuenta requerida | Sí — Neon + API key |
+| Diferenciador | Branching de DB tipo Git |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/neon
+```
+
+Pre-requisito: cuenta Neon + API key desde el dashboard.
+
+Para Claude:
+
+```
+Instalé el MCP database/neon. Configurá NEON_API_KEY y listame mis
+projects. Para el project X, mostrame los branches actuales con su
+size y last activity.
+```
+
+## Qué podés hacer con esto
+
+### Branching para test de migrations
+
+"Creame un branch `migration-test` desde `main` del project X. Aplicale la migration `add_tenant_id.sql` y validá que las queries existentes siguen funcionando. Si todo OK, decime cómo mergearlo a main".
+
+### Aprovisionamiento de databases efímeras
+
+"Para el proyecto Y, creame 3 branches con databases efímeras (cada una con `prefix `ci-pr-`+ número de PR) para correr tests en paralelo. Eliminalas después de cada run".
+
+### Queries y exploración
+
+Como [Postgres MCP](/boveda/mcp-postgresql-integration), te deja correr SQL directo. La diferencia: aprovecha features Neon-specific (autoscaling, point-in-time recovery).
+
+### Audit de uso y costos
+
+"Listame proyects que no se conectaron en 30+ días. Sugerime cuáles archivar para bajar costo".
+
+### Combo con [pg-aiguide](/boveda/plugin-pg-aiguide)
+
+Neon MCP para gestión de cluster. pg-aiguide para que Claude escriba mejor SQL. Combo natural para shops con Postgres serio.
+
+## Pre-requisitos
+
+- **Cuenta Neon** activa
+- **API key** desde dashboard
+- **Permisos** sobre los projects que vas a operar
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Neon:** este MCP es Neon-only. Para otros Postgres usá [postgresql-integration](/boveda/mcp-postgresql-integration) o [pg-aiguide](/boveda/plugin-pg-aiguide).
+- **Operaciones destructivas:** delete project, delete branch. Hooks de aprobación.
+- **Costos:** Neon cobra por compute. Branches efímeros consumen menos pero suman. Mirá tu plan.
+- **API key amplio:** un key con permiso sobre todo el account hereda eso. Restringí scope si posible.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Neon MCP](https://www.aitmpl.com/component/mcps/database/neon) — comando exacto.
+- **Config JSON:** [neon.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/neon.json).
+- **Neon oficial:** [neon.tech](https://neon.tech) — cuenta, docs.
+
+## Recursos relacionados
+
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — para que Claude escriba mejor Postgres. Combo natural con Neon.
+- [PostgreSQL Integration MCP](/boveda/mcp-postgresql-integration) — para Postgres genérico.
+- [All Deploy](/boveda/all-deploy) — para publicar apps que usan Neon.

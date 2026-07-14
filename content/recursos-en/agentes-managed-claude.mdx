@@ -1,0 +1,299 @@
+---
+title: "Managed Agents — 24/7 agents in Anthropic's cloud for less than $1/hour"
+description: "Anthropic lets you run agents on its infra. You describe what to do in plain English, Claude builds it. Cost: ~$0.70/h active, $0 while idle. No need to keep your computer on. What it can touch (everything cloud) and what it can't (your local disk). Step-by-step setup from platform.claude.com."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude", "agentes", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["schedule-agentes-nube", "ecosistema-de-agentes", "claude-piloto-automatico"]
+---
+
+## What Managed Agents are
+
+Anthropic lets you run agents in its cloud. You define what they have to do (in plain English, no code), connect external accounts with MCPs, and Claude puts them to work on its infra.
+
+**No computer needs to be on. No server needed. No programming needed.**
+
+| Dimension | Detail |
+|-----------|--------|
+| Cost | ~$0.70/h active with Opus, less with Sonnet |
+| Cost while idle | $0 (you only pay for real work) |
+| Setup | You describe it in plain English, Claude builds it |
+| Infra | Anthropic's servers |
+| Your computer | Does NOT need to be on |
+| Platform | `platform.claude.com` |
+
+---
+
+## Why it's disruptive
+
+### Alternatives you had before
+
+| Option | Problem |
+|--------|---------|
+| **Zapier / Make** | $20-50/month minimum, breaks often, limited capabilities |
+| **Programming your own agent** | Weeks of setup + endless maintenance |
+| **N8N self-hosted** | Your own server, updates, fixes when it breaks |
+| **Mac mini with [ecosystem](/boveda/ecosistema-de-agentes)** | $700+ hardware setup + electricity |
+
+### Managed Agents
+
+- Real **pay per use** (no monthly subscription)
+- Setup in natural language
+- Zero infra of your own
+- Auto-update with Anthropic releases
+
+For many use cases it's **the sweet spot**.
+
+---
+
+## What they can touch (and what they can't)
+
+### They can
+
+Since they live in the cloud, they have access to anything that lives on the internet:
+
+- **Email**: Gmail, Outlook
+- **Storage**: Google Drive, Dropbox, Notion
+- **Messaging**: WhatsApp Business, Slack, Telegram
+- **Calendars**: Google Calendar, Calendly
+- **CRMs**: HubSpot, Pipedrive
+- **E-commerce**: Shopify
+- **Dashboards**: any app with an API on the internet
+
+### They CAN'T
+
+Anything that lives only on your computer:
+
+- ❌ Your personal laptop
+- ❌ Files that live only on your local disk
+- ❌ Desktop apps (Photoshop, local Excel)
+- ❌ Printers, cameras, hardware
+- ❌ Internal private networks
+- ❌ Your personal WhatsApp (only the WhatsApp Business API)
+
+For tasks involving your local computer, use [Claude Code /loop](/boveda/claude-code-loop) on your machine, or a [dedicated Mac mini](/boveda/ecosistema-de-agentes).
+
+---
+
+## Setup in 4 steps
+
+### Step 1 — Create an account on platform.claude.com
+
+`platform.claude.com` (different from `claude.ai`). The same email works if you already have a Claude account. Opening it is free — you only pay when the agent works.
+
+### Step 2 — Enable a payment method
+
+Settings → Billing → add a card.
+
+**Critical**: set a **monthly limit** so you can sleep soundly. Recommended to start: $20-50/month.
+
+### Step 3 — Agent Quickstart
+
+From the dashboard, look for "Agent Quickstart". This is where you describe your agent in plain English.
+
+### Step 4 — Connect MCPs
+
+After building the agent, you connect it to the services it needs (Gmail, Calendar, etc.). Once per service, the keys are stored encrypted.
+
+---
+
+## Prompts for your first agents
+
+### Agent 1 — WhatsApp 24/7
+
+```
+> I want an agent that answers my clients' WhatsApp 24/7.
+
+  My business: [barbershop / clothing store / consulting].
+
+  It must:
+  - Greet with my tone (friendly, direct, in Spanish)
+  - Answer prices, hours, location
+  - Book appointments in my Google Calendar when they ask
+  - Hand the chat over to me if it's asked something it doesn't know
+  - Send me a daily summary in Gmail the next day
+
+  Connect: WhatsApp Business, Google Calendar, Gmail.
+```
+
+Claude:
+1. Asks you 4-6 refinement questions (specific tone, hours, common FAQs)
+2. Builds the agent
+3. Asks you to connect the 3 accounts
+4. Activates it
+
+Estimated cost: $5-30/month depending on message volume.
+
+### Agent 2 — Weekly business report
+
+```
+> I want an agent that builds me a weekly report every Monday at 8AM.
+
+  It must:
+  - Review Gmail and summarize what mattered last week
+  - Read my sales Google Sheet and pull totals + comparison vs
+    the previous week
+  - Review Google Calendar and list the important meetings for
+    the new week
+  - Put together a nice PDF with everything and send it by email
+  - Top 3 most urgent to-dos at the top
+
+  Connect: Gmail, Google Drive, Google Calendar.
+```
+
+Estimated cost: $3-8/month (runs once a week, ~30 min active).
+
+### Agent 3 — Competitor monitor
+
+```
+> I want an agent that checks my competitors every 3 days
+  and tells me about relevant changes.
+
+  My competitors:
+  - competidor1.com
+  - competidor2.com
+  - competidor3.com
+
+  It must:
+  - Visit their landing pages and compare against the previous snapshot
+  - Detect changes: prices, new features, promos
+  - Review their posts on LinkedIn and Twitter
+  - Send me a report by email only if it finds something notable
+
+  Connect: nothing (open browsing to the public web).
+```
+
+Estimated cost: $10-25/month.
+
+### Agent 4 — Light bookkeeping
+
+```
+> I want an agent that organizes my invoices.
+
+  It must:
+  - Check the Drive folder /facturas-2026/ every day
+  - For each new invoice: extract total, vendor, date,
+    description, category
+  - Add a row to my Google Sheet "Gastos 2026"
+  - If it detects a suspicious invoice (duplicate, weird amount),
+    pause and email me before recording it
+
+  Connect: Google Drive, Google Sheets, Gmail.
+```
+
+Estimated cost: $5-15/month.
+
+---
+
+## Tools the agent ships with out of the box
+
+Without you connecting them specifically, every Managed Agent has:
+
+| Tool | What for |
+|------|----------|
+| **Web browser** | Navigates, searches, extracts info from pages |
+| **File I/O** | Reads/writes in its workspace |
+| **Code runner** | Runs scripts for calculations, transformations |
+| **Cloud terminal** | Isolated mini-VM for tasks |
+
+---
+
+## How it charges (in detail)
+
+The pricing model is **per compute time of the active agent**:
+
+- **Sonnet**: ~$0.30/h active
+- **Opus**: ~$0.70/h active
+- **While idle (waiting for email, time, event)**: $0.00
+
+### Cost examples
+
+**Case 1 — WhatsApp bot with 50 messages/day**
+
+- ~30 seconds active per message × 50 = 25 min/day
+- 25 min × 30 days = ~12.5h/month
+- With Sonnet: 12.5 × $0.30 = **$3.75/month**
+
+**Case 2 — Complex weekly report (15 min active every Monday)**
+
+- 15 min × 4 weeks = 1h/month
+- With Opus: **$0.70/month**
+
+**Case 3 — 24/7 monitor checking every hour (5 min each time)**
+
+- 5 min × 24 checks = 2h/day
+- × 30 days = 60h/month
+- With Sonnet: **$18/month**
+
+For high volume, consider whether self-hosting is worth it.
+
+---
+
+## Model tip
+
+Start with **Sonnet**. It's 50%+ cheaper and enough for 80% of cases.
+
+Move to **Opus** when:
+- You need complex reasoning (multi-step decisions)
+- It's a critical task where a mistake is expensive
+- Your agent is failing on logic with Sonnet
+
+---
+
+## Anti-patterns
+
+### 1. No monthly limit
+
+Without a limit, a bug in the agent that leaves it in an infinite loop can spend **hundreds of dollars in hours**. **ALWAYS set a limit** from day 1.
+
+### 2. Agent without "protected critical steps"
+
+If your agent can send emails, make payments, delete files — without confirmation, **a mistake can be catastrophic**.
+
+**Rule**: for destructive / sensitive actions, ask Claude to mark them as "require human approval".
+
+### 3. Everything on Opus "just in case"
+
+Opus is 2-3x more expensive than Sonnet. For routine tasks (answering FAQs, moving data between sheets), **Sonnet is enough**. Reserve Opus for real reasoning.
+
+### 4. Living without observability
+
+If you never check the agent's logs, **you don't know whether it's doing the right thing**. Check weekly.
+
+### 5. Expecting it to 100% replace the human
+
+Managed Agents are **excellent for structured tasks**. For complex judgment (a difficult client, a business decision), **a human is still necessary**. Design agents that **escalate to a human** when appropriate.
+
+---
+
+## Comparison with alternatives
+
+| Approach | Local computer | Setup | Cost (typical) | When |
+|----------|----------------|-------|----------------|------|
+| **Managed Agents** | NO | Natural language | $3-50/month pay-per-use | Default if the task is cloud-only |
+| **[/schedule](/boveda/schedule-agentes-nube)** | NO | 1 line | Pay-per-use | Simple recurring tasks |
+| **[Claude Code /loop](/boveda/claude-code-loop)** | YES | Bash | $0 extra on top of your plan | Computer on + access to your disk |
+| **[Mac mini ecosystem](/boveda/ecosistema-de-agentes)** | Mac mini yes | Heavy setup | $700 + power | Total sovereignty + local MCPs |
+| **Zapier/Make** | NO | UI | $20-50/month fixed | Low volume + allergic to AI |
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| You need access to your local computer | Managed lives in the cloud |
+| Strict compliance (you can't send data to Anthropic) | Self-host |
+| Very high volume (>50 hours/month active) | Your own server may be cheaper |
+| Tasks with sub-second timing | Network latency kills the case |
+| Regulated industry with a strict audit trail | You need more control than managed gives |
+
+---
+
+## Next steps
+
+- For `/schedule` (a simpler subset of Managed Agents), [schedule in the cloud](/boveda/schedule-agentes-nube)
+- To scale up to a multi-agent system with a Mac mini, [agent ecosystem](/boveda/ecosistema-de-agentes)
+- To understand the "agent that decides on its own" pattern, [Claude on autopilot](/boveda/claude-piloto-automatico)

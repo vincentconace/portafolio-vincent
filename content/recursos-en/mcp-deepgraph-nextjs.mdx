@@ -1,0 +1,94 @@
+---
+title: "MCP DeepGraph Next.js — map your Next.js project as a navigable graph"
+description: "MCP server with 1,092 installs that analyzes your Next.js project as a graph: components, dependencies, routes and architecture. Claude understands the real shape of the project before touching anything."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "nextjs"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-deepgraph-react", "mcp-deepgraph-typescript", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-nextjs"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-nextjs.json"
+---
+
+## What it is
+
+DeepGraph Next.js is an MCP that builds a graph of the project: nodes (components, pages, layouts, API routes), edges (imports, props, calls to server actions). When Claude asks "which components does the header use", it queries the graph instead of guessing by reading scattered files.
+
+The difference with [Cartographer](/boveda/plugin-cartographer) (which maps any repo): DeepGraph is vertical on Next.js — it knows app router vs pages router, Server vs Client Components, nested layouts, route groups. For Next.js specifically, it goes deeper.
+
+1,092 installs make it the most adopted MCP in the `deepgraph` category and one of the most recognized for structural analysis.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `deepgraph` |
+| Installs | **1,092** |
+| MCP server | `DeepGraph Next.js MCP` |
+| Focus | Next.js (App Router + Pages Router) |
+| Cost | Free (check official pricing) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp deepgraph/deepgraph-nextjs
+```
+
+For Claude:
+
+```
+I installed the deepgraph/deepgraph-nextjs MCP. Show me the graph of my
+project: main routes, nested layouts, and which components are
+Server vs Client.
+```
+
+## What you can do with this
+
+### Fast onboarding to someone else's project
+
+"Map out all the layouts and which pages inherit from each one." Without reading file by file, you have the complete tree.
+
+### Impact analysis before a refactor
+
+"If I rename the `<Header>` component, which files break?" The MCP returns the exact list of imports.
+
+### Detect Server / Client Component misuse
+
+"List the Server Components that import `'use client'` code directly." It catches one of the most common sources of bugs in the App Router.
+
+### Inspecting route groups and dynamic routes
+
+"Show me all the dynamic routes and which params they receive." For SEO or routing audits.
+
+### Detecting circular imports or dead code
+
+"List the components that aren't imported by any other." Pre-deploy cleanup.
+
+## Prerequisites
+
+- **Next.js project** (App Router or Pages Router) accessible
+- **Node.js + Claude Code** working
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your project isn't Next.js:** check out the [React](/boveda/mcp-deepgraph-react), [TypeScript](/boveda/mcp-deepgraph-typescript) or [Vue](/boveda/mcp-deepgraph-vue) versions.
+- **For generic codebase analysis:** [Cartographer](/boveda/plugin-cartographer) is horizontal (any project).
+- **Very small projects:** a couple of pages don't need a graph. Just open the files directly.
+- **Runtime analysis:** the MCP is static. For runtime perf, use [Chrome DevTools MCP](/boveda/mcp-chrome-devtools).
+
+</Callout>
+
+## Grab it from the source
+
+- **Listing on aitmpl.com:** [DeepGraph Next.js MCP](https://www.aitmpl.com/component/mcps/deepgraph/deepgraph-nextjs) — exact command.
+- **JSON config:** [deepgraph-nextjs.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/deepgraph/deepgraph-nextjs.json).
+
+## Related resources
+
+- [DeepGraph React MCP](/boveda/mcp-deepgraph-react) — equivalent analysis for pure React projects (no Next).
+- [DeepGraph TypeScript MCP](/boveda/mcp-deepgraph-typescript) — for type analysis when it matters more than routing.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — best practices to get the most out of a loaded graph.

@@ -1,0 +1,259 @@
+---
+title: "Claude Artifacts — functional apps in the browser with no code"
+description: "Claude isn't just chat. Ask it for something complex (landing, dashboard, calculator, game, chatbot) and it opens a panel next to it with the FUNCTIONAL app running live. No downloads, right on claude.ai. Plus: the 'Claude inside Claude' trick — using the Claude API from an Artifact to build real AI chatbots."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["instant-landing", "claude-web-builder", "live-artifacts-cowork"]
+---
+
+## What they are
+
+When you ask Claude for something complex (a website, dashboard, game), instead of just replying with text, **it opens a panel on the right with something WORKING**.
+
+The buttons work. The charts move. The forms submit. It's as if Claude built you **a mini-app in real time**.
+
+| Feature | Detail |
+|----------------|---------|
+| Platform | `claude.ai` (web) |
+| Installation | None |
+| Plan required | Free works |
+| Output type | Functional HTML/JS/React |
+
+---
+
+## What makes them special
+
+### It's not an image, it's a real app
+
+You click buttons, type into fields, **you really interact**.
+
+### It updates live
+
+If something isn't to your liking, you tell Claude and it adjusts on the spot without starting over.
+
+### Zero installation
+
+You don't download anything. Everything runs in your browser in the same Claude window.
+
+---
+
+## 6 things you can build right now
+
+| Type | Examples |
+|------|----------|
+| **Websites** | Landings, portfolios, pricing pages with navigation, forms and responsive design |
+| **Dashboards** | Upload Excel/CSV → Claude builds charts, filters, tables |
+| **Tools** | Calculators, converters, palette generators, timers |
+| **Games** | Trivia, memory, snake, playable puzzles |
+| **Documents** | Letters, reports, presentations |
+| **Visualizations** | Animated charts, mind maps, flowcharts |
+
+---
+
+## Copy-paste examples
+
+### Full website
+
+```
+Create a website for the "Café Luna" coffee shop:
+- Home with an eye-catching hero
+- Menu with prices
+- "About us" section
+- Contact form
+
+Warm colors, modern design.
+```
+
+Result: a functional website in under 1 min in the right-hand panel.
+
+### Dashboard from data
+
+```
+Using the data in the file I uploaded, create an interactive dashboard:
+- Bar chart: sales by month
+- Pie chart: categories
+- Table with date filters
+- Summary with key numbers up top
+```
+
+### Custom calculator
+
+```
+Calculator for freelancers:
+- Input: hours/day, rate/hour, days/month
+- Output: monthly income, annual income, after taxes
+  (25%), after expenses (15%)
+
+Style: clean minimalist, dark theme.
+```
+
+### Game
+
+```
+Memory game with 12 cards (6 pairs).
+Theme: food emojis.
+Score is calculated by number of attempts.
+Smooth flip animations.
+```
+
+### Visualization
+
+```
+Interactive diagram of my family tree:
+- 4 generations
+- Clicking each person shows their info
+- Hover shows the relationship
+
+Data: [paste your data]
+```
+
+---
+
+## The superpower — Claude inside Claude
+
+Here comes the **trick nobody talks about**. You can create Artifacts that **use the Claude API internally**.
+
+That means: chatbots with real AI running in your browser, inside the Artifact.
+
+### How it works
+
+In your prompt, you ask Claude to use `window.claude.complete()` to call Claude from the Artifact.
+
+### Example — custom chatbot
+
+```
+Create a therapist-style chatbot. Use `window.claude.complete()`
+to respond with the real Claude.
+
+Bot system prompt:
+"You are an empathetic therapist. Listen without judging. Ask
+open-ended questions. DO NOT give direct advice — guide the person
+to find their own answer."
+
+UI: classic chat, bubble messages, auto-scroll,
+typing indicator while waiting for a response.
+```
+
+It opens a chatbot **that's functional with real AI**. No backend, no API key of your own, nothing.
+
+### Other superpower examples
+
+```
+> Recipe assistant that responds based on the ingredients I have
+```
+
+```
+> Content idea generator for my [X] niche
+```
+
+```
+> Pomodoro-style productivity coach with conversation
+```
+
+```
+> [Language] tutor that corrects my sentences
+```
+
+---
+
+## Anti-patterns
+
+### 1. Expecting production-grade
+
+Artifacts are for **prototypes / demos / internal tools**. For serious production, export the code and deploy it properly.
+
+### 2. Asking for complex backend features
+
+Artifacts live in the browser. No backend = no persistent DB, no real auth. For real auth → [mobile app stack](/boveda/stack-app-movil-ia) or [Claude Web Builder](/boveda/claude-web-builder).
+
+### 3. Forgetting that the superpower chatbot uses your quota
+
+Every call to `window.claude.complete()` **spends your plan**. Sharing your Artifact with lots of people = they all use your quota.
+
+### 4. Not iterating visually
+
+The first version is rarely perfect. **Iterate with feedback**: "shrink the padding", "change the main color to green", "add an animation on hover".
+
+### 5. Asking for many features at once
+
+Better: 1 feature → 2 features → 3 features. **Incremental**. If you ask for everything at once, Claude gets confused.
+
+---
+
+## How to share Artifacts
+
+### Share the link
+
+In the Artifact panel there's a "Share" button. It generates a public URL that anyone can open.
+
+### Sharing limitations
+
+- Whoever opens it sees the result
+- They do NOT see the conversation with Claude
+- If it uses the "superpower" (Claude inside Claude), it **consumes your quota**
+
+### Embed
+
+Some Artifacts can be embedded in other sites. Handy for portfolio showcases.
+
+---
+
+## Practical use cases
+
+### 1. Prototypes to validate ideas
+
+Before spending 2 weeks coding your idea, **build an Artifact in 30 min** and show it to 5 users. Validate before investing.
+
+### 2. Internal team tools
+
+Custom pricing calculator, KPI dashboard, template generator. **You don't need a dev**.
+
+### 3. Educational material
+
+A teacher explaining a concept: instead of static slides, an **interactive simulation**.
+
+### 4. Sales demos
+
+A prospect asks "what would something like this look like?" → right there in the meeting, an Artifact in 5 min showing the concept.
+
+### 5. Quick side projects
+
+Random idea on a Friday → Artifact on Saturday → share it on social media Sunday.
+
+---
+
+## Powerful combinations
+
+### With Cowork
+
+[Live Artifacts in Cowork](/boveda/live-artifacts-cowork) lets you iterate on Artifacts collaboratively.
+
+### With Claude Web Builder
+
+For **real production** (not just a prototype), export the idea from the Artifact and take it to [Claude Web Builder](/boveda/claude-web-builder).
+
+### With Instant Landing
+
+If you only need a landing, [Instant Landing](/boveda/instant-landing) is more professional. Artifacts are for something more interactive.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|-----|
+| Serious production with many users | No backend, doesn't scale |
+| App with real auth + persistent DB | For that you need a real backend |
+| Pixel-perfect design for a premium client | Artifacts are good but not perfect |
+| App with specific dependencies | Limited sandbox |
+
+---
+
+## Next steps
+
+- For a more professional landing, [Instant Landing](/boveda/instant-landing)
+- For production with a backend, [Claude Web Builder](/boveda/claude-web-builder)
+- For collaborative Artifacts, [Live Artifacts in Cowork](/boveda/live-artifacts-cowork)

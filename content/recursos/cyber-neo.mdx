@@ -1,0 +1,287 @@
+---
+title: "Cyber Neo — auditor de seguridad con 5 subagentes paralelos y 11 dominios"
+description: "Skill open source que escanea tu código con 5 subagentes en paralelo (60+ patrones de secretos, alineado con OWASP 2025) y genera reporte priorizado en tu Desktop. 100% solo lectura — nunca modifica nada. Funciona con JS/TS y Python."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "owasp"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["the-architect", "all-deploy", "protege-tu-app"]
+---
+
+## Qué es
+
+Pensalo como contratar **equipo de guardias de seguridad** para revisar tu casa. Cada guardia se especializa en algo distinto — uno revisa cerraduras, otro ventanas, otro alarmas. Van cuarto por cuarto y te dan informe.
+
+**Cyber Neo hace eso con tu código**. Claude despliega **5 subagentes trabajando al mismo tiempo**, cada uno revisando área distinta de seguridad. Al final, **reporte Markdown en tu Desktop** con todo ordenado por prioridad.
+
+Lo más importante: **100% solo lectura**. **Nunca modifica, borra ni cambia** ningún archivo. Solo mira y te cuenta lo que ve.
+
+Repo: `Hainrixz/cyber-neo`. MIT.
+
+| Métrica | Valor |
+|---------|-------|
+| Dominios de seguridad | 11 |
+| Patrones de secretos | 60+ |
+| Subagentes paralelos | 5 |
+| Lenguajes soportados | JS/TS + Python |
+| Modificación de archivos | **Cero** |
+| Standard | OWASP 2025 |
+
+---
+
+## Pre-requisitos
+
+- **Claude Code** instalado ([instalar Claude Code](/boveda/instalar-claude-code))
+
+---
+
+## Instalación
+
+### Opción A — Decirle a Claude
+
+```
+> Instalá este skill de ciberseguridad en mi Claude Code:
+  https://github.com/Hainrixz/cyber-neo
+
+  Clonalo en ~/.claude/skills/cyber-neo
+```
+
+### Opción B — Manual
+
+```bash
+git clone https://github.com/Hainrixz/cyber-neo.git \
+  ~/.claude/skills/cyber-neo
+```
+
+---
+
+## Cómo se usa
+
+Dentro de Claude Code, en la carpeta de tu proyecto:
+
+```
+/cyber-neo
+```
+
+Claude:
+1. Despliega 5 subagentes en paralelo
+2. Cada uno revisa un dominio específico
+3. Termina en 5-15 min según tamaño del proyecto
+4. **Guarda reporte en tu Desktop** como markdown
+
+---
+
+## Los 11 dominios que audita
+
+| # | Dominio | Cubre |
+|---|---------|-------|
+| 1 | Secrets management | API keys, tokens, passwords hardcoded |
+| 2 | Authentication | Login, session, JWT, OAuth |
+| 3 | Authorization | RBAC, permission checks, IDOR |
+| 4 | Input validation | XSS, SQLi, prototype pollution |
+| 5 | Output encoding | Encoding correcto en respuestas |
+| 6 | Cryptography | Algoritmos correctos, key management |
+| 7 | Error handling | Info leak en errores |
+| 8 | Logging | Datos sensibles en logs, audit trail |
+| 9 | Data protection | Encriptación at rest, in transit |
+| 10 | Communication | HTTPS, TLS, CORS |
+| 11 | Configuration | Headers, env vars, deployment config |
+
+Cubre **OWASP Top 10 + extras**.
+
+---
+
+## El reporte
+
+Sale en `~/Desktop/cyber-neo-report-[FECHA].md`. Estructura:
+
+```markdown
+# Cyber Neo Report — 2026-05-28
+
+## Resumen ejecutivo
+- 47 issues encontrados
+- 3 CRÍTICOS (fix inmediato)
+- 12 ALTOS
+- 22 MEDIOS
+- 10 BAJOS
+
+## Critical issues
+
+### 1. API key de Stripe hardcoded
+- Archivo: src/lib/stripe.ts:8
+- Severity: CRITICAL
+- Evidencia: const STRIPE_KEY = "sk_live_..."
+- Fix: mover a .env, usar process.env.STRIPE_KEY
+
+### 2. ...
+
+## High priority issues
+...
+
+## Medium priority issues
+...
+
+## Low priority issues
+...
+
+## Recomendaciones generales
+...
+```
+
+Cada issue con archivo, línea, evidencia, severity, **fix sugerido**.
+
+---
+
+## Casos de uso
+
+### 1. Pre-deploy en producción
+
+Antes de subir a producción:
+
+```
+> /cyber-neo
+```
+
+Si hay críticos, **NO deployás** hasta arreglarlos.
+
+### 2. Audit periódico de proyecto en producción
+
+Cada mes:
+
+```
+> /cyber-neo
+```
+
+Detectás drift de seguridad sin necesidad de auditor humano caro.
+
+### 3. Code review pre-merge
+
+Antes de mergear PR grande:
+
+```
+> /cyber-neo --since main
+```
+
+Solo revisa cambios del PR.
+
+### 4. Onboarding a proyecto nuevo
+
+Heredás codebase. Antes de tocar nada:
+
+```
+> /cyber-neo
+```
+
+Ves qué deuda de seguridad tiene **antes** de proponer cambios.
+
+### 5. Pitch a inversor / cliente
+
+Mostrás el reporte de Cyber Neo para demostrar que **tomás seguridad en serio**.
+
+---
+
+## Anti-patrones
+
+### 1. Correrlo y no actuar
+
+Tener el reporte no es lo mismo que **arreglar los issues**. **Calendarizá** los fixes.
+
+### 2. Confiar 100% en automated
+
+Cyber Neo es **automated audit**, no humano. Para producción crítica con compliance estricto, **complementá con auditor humano profesional**.
+
+### 3. Solo auditar pre-deploy una vez
+
+La seguridad **degrada con el tiempo**. Cada deploy puede introducir issues nuevos. **Audit periódico**.
+
+### 4. Ignorar los "low priority"
+
+Los low de hoy son los **critical de mañana** si se acumulan. Atendé hasta los low.
+
+### 5. Esperar audit perfecto
+
+Cyber Neo cubre OWASP + standards comunes. Vulnerabilidades **específicas de tu negocio** o **business logic** (autorización mal modelada, race conditions de pago) requieren ojo humano.
+
+---
+
+## Comparación con alternativas
+
+| Tool | Cuándo |
+|------|--------|
+| **Cyber Neo** | Audit gratis, integrado en Claude Code |
+| Snyk / Dependabot | Específico para deps con CVEs |
+| OWASP ZAP | Dynamic testing (runtime), no estático |
+| Auditor humano | Producción crítica, compliance estricto |
+| Burp Suite | Pentesting profundo |
+
+Sweet spot de Cyber Neo: **audit baseline antes de deploy** sin pagar consultora.
+
+---
+
+## La trilogía + Cyber Neo
+
+| # | Pieza | Para qué |
+|---|-------|----------|
+| 1 | [Plan Mode](/boveda/planea-audita-construye) | Auditar approach |
+| 2 | [The Architect](/boveda/the-architect) | Blueprint |
+| 3 | [All Deploy](/boveda/all-deploy) | Subir a producción |
+| 4 | **Cyber Neo** | Audit de seguridad pre-deploy |
+
+Cyber Neo va **entre construcción y deploy**.
+
+---
+
+## Combinaciones potentes
+
+### Con All Deploy
+
+```
+> /cyber-neo (audit completo)
+> Si OK, /all-deploy
+> Si hay criticals, NO deploy hasta arreglar
+```
+
+[All Deploy](/boveda/all-deploy).
+
+### Con The Architect
+
+The Architect tiene **sección 16 (restricciones y reglas)** que incluye lineamientos de seguridad. Cyber Neo verifica que la implementación los respete.
+
+### Con Protege tu app
+
+[Protege tu app](/boveda/protege-tu-app) son los **3 prompts** clave (RLS, CORS, security headers). Cyber Neo audita que estén bien implementados.
+
+---
+
+## Lo que NO audita
+
+Para mantener honestidad:
+
+- ❌ Runtime vulnerabilities (necesitás DAST tools)
+- ❌ Business logic flaws específicos de tu negocio
+- ❌ Social engineering risks
+- ❌ Physical security
+- ❌ Infrastructure-as-Code más allá de basics
+- ❌ Container security profunda
+
+Para esos, **auditor humano profesional**.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Compliance regulado (HIPAA, PCI-DSS) | Necesitás auditor certificado |
+| Producto enterprise crítico | Mejor pentesting profesional |
+| Stack no soportado (Go, Rust, etc.) | Cyber Neo solo JS/TS/Python por ahora |
+| Solo querés "checkmark" sin actuar | No aporta |
+
+---
+
+## Próximos pasos
+
+- Para el blueprint que define security rules, [The Architect](/boveda/the-architect)
+- Para deploy automático después del audit, [All Deploy](/boveda/all-deploy)
+- Para las 3 protecciones esenciales (RLS, CORS, headers), [Protege tu app](/boveda/protege-tu-app)

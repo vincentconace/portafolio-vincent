@@ -1,0 +1,107 @@
+---
+title: "MCP Serena — semantic code retrieval + editing for coding agents"
+description: "MCP server with 689 installs. Serena provides semantic code retrieval and editing tools — so Claude can understand and modify codebases without reading 1M tokens. Combines LSP + semantic indexing."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-claude-code-lsps", "mcp-deepgraph-react", "plugin-cartographer"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/serena"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/serena.json"
+---
+
+## What it is
+
+Serena solves a core problem when Claude operates on large codebases: reading file by file is token-expensive and slow. Serena's solution: combine the Language Server Protocol (LSP) with semantic indexing for intelligent retrieval. Claude asks "where is `getUser` defined" and Serena answers precisely, without Claude reading 100 files.
+
+Capabilities:
+- **Semantic retrieval** — search symbols, functions, types by meaning
+- **Editing tools** — Claude modifies code in a structured way (not string-replace)
+- **LSP integration** — supports several languages
+
+689 installs make it one of the most solid devtools MCPs in the catalog.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 689 |
+| MCP server | `serena` |
+| Stack | LSP + semantic search |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/serena
+```
+
+Prerequisite: a language supported by Serena with an available LSP.
+
+For Claude:
+
+```
+I installed the devtools/serena MCP. Show me the supported languages.
+Find all function definitions that return `Promise<User>`
+in my codebase.
+```
+
+## What you can do with this
+
+### Semantic symbol search
+
+"Find all the functions that handle authentication. Not by keyword — by meaning." More precise than grep.
+
+### Safe refactoring
+
+"I want to rename `getUser` to `fetchUser` across the whole codebase. Do it respecting scoping (don't touch `getUserName`, `getUserPreferences`)." Serena understands the AST.
+
+### Type inspection
+
+"In this component, where does the `User` type come from? Trace the chain of imports." Combinable with LSP.
+
+### Code understanding for large codebases
+
+"For this new feature, where should I add the code? Suggest the file + function based on existing patterns." Assisted onboarding.
+
+### Structured editing
+
+Compared to traditional string-replace (which can break code), Serena edits at the AST/LSP level. Safer.
+
+### Compared to [Cartographer](/boveda/plugin-cartographer)
+
+Cartographer maps the repo into a graph. Serena retrieves and edits. Complementary. Cartographer is a snapshot, Serena is interactive.
+
+### Compared to [DeepGraph](/boveda/mcp-deepgraph-react)
+
+DeepGraph focuses on a component graph (React, Next, TS, Vue). Serena is cross-language semantic retrieval. Different approaches.
+
+## Prerequisites
+
+- **Languages your project uses, supported by Serena**
+- **LSP servers installed** as needed
+- **A well-structured project** (Serena performs better on organized codebases)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **For small projects** (< 50 files): Claude reads directly, doesn't need Serena.
+- **Unsupported language:** check compatibility first.
+- **If you already use [Claude Code LSPs](/boveda/plugin-claude-code-lsps):** some cases overlap. See which one covers your need.
+- **For destructive or experimental editing:** Serena makes structured edits but you should still review before applying.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Serena MCP](https://www.aitmpl.com/component/mcps/devtools/serena) — exact command.
+- **JSON config:** [serena.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/serena.json).
+
+## Related resources
+
+- [Claude Code LSPs](/boveda/plugin-claude-code-lsps) — for simple, direct LSP when that's all you need.
+- [DeepGraph React](/boveda/mcp-deepgraph-react) — for stack-specific structural analysis (React, Next, etc.).
+- [Cartographer](/boveda/plugin-cartographer) — for mapping entire repos as a snapshot. Complementary to Serena.

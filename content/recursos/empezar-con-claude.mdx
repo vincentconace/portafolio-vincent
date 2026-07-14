@@ -1,0 +1,237 @@
+---
+title: "Empezar con Claude — guía ABC para quien viene de ChatGPT"
+description: "Si llegaste de ChatGPT y querés entender qué hace distinto a Claude, qué planes existen, cómo arrancar sin perderte y cuándo vale la pena el cambio. Para principiantes — sin jerga técnica."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["anatomia-claude", "claude-tres-modelos", "claude-code-setup-zero"]
+---
+
+## La pregunta más común
+
+> "Ya uso ChatGPT. ¿Por qué pasarme a Claude?"
+
+Respuesta corta: Claude y ChatGPT son **primos**, no enemigos. Cada uno tiene su perfil. Para algunas cosas Claude gana, para otras ChatGPT gana, para muchas son intercambiables.
+
+Lo que **sí** distingue a Claude:
+
+1. **Tiene acceso real a tu computadora** (con Claude Code) y a tus archivos (con Cowork)
+2. **Razonamiento en código** suele ser más fuerte
+3. **Contexto largo** — puede manejar conversaciones y archivos enormes sin perder hilo
+4. **Es más honesto cuando no sabe** (alucina menos, en general)
+5. **Ecosistema de skills + MCPs** abierto para extenderlo
+
+Lo que ChatGPT hace mejor:
+
+1. **Generación de imagen** (DALL-E integrado) — Claude no genera imágenes
+2. **Voz / audio nativo** más maduro
+3. **Plugins consumer** más establecidos
+4. **Curva de aprendizaje** un poco más suave para no técnicos
+
+**Si trabajás con código, docs largos o automatización**: Claude probablemente te suma. **Si lo usás para preguntas casuales y generar imágenes**: ChatGPT alcanza.
+
+---
+
+## Las 3 formas de usar Claude
+
+Esta es la primera fuente de confusión. Claude no es "una app" — son 3 superficies distintas:
+
+| Forma | Dónde está | Para qué |
+|-------|-----------|----------|
+| **Claude (chat)** | `claude.ai` o app desktop | Conversaciones, preguntas, brainstorms |
+| **Claude Cowork** | App desktop (no web) | Trabajo con tus archivos, calendar, email |
+| **Claude Code** | Terminal / CLI | Coding serio, automatización técnica |
+
+La mayoría empieza por chat. Después, según necesidad, suma Cowork o Code.
+
+Más detalle de cuándo cada una en [anatomía de Claude](/boveda/anatomia-claude).
+
+---
+
+## Los planes — cuál te conviene
+
+| Plan | Costo | Para quién |
+|------|-------|------------|
+| **Free** | $0 | Probarlo. Limitado en mensajes y modelos |
+| **Pro** | $20/mes | Uso individual diario. Acceso a Opus, conectores básicos |
+| **Max 5×** | $100/mes | Uso intensivo. 5× la capacidad de Pro |
+| **Max 20×** | $200/mes | Uso muy intensivo o trabajo profesional |
+| **Team** | $25/usuario/mes (5+) | Equipos chicos, gestión centralizada |
+| **Enterprise** | Cotizable | Empresas grandes, SSO, compliance, SLAs |
+
+**Recomendación**: arrancá con **Free para probar 1 semana**. Si lo usás todos los días y querés Opus + Cowork, pasá a **Pro**. La mayoría queda ahí cómodo.
+
+---
+
+## Tu primer día
+
+<Step number={1} title="Crear cuenta">
+
+[claude.ai](https://claude.ai) → sign up. Email o Google.
+
+</Step>
+
+<Step number={2} title="Probar el chat 30 min">
+
+Hacé preguntas que harías a ChatGPT, mirá las respuestas. Algunos prompts buenos para arrancar:
+
+```
+> Explicame [tema que conocés bien]. Quiero ver qué tan preciso es.
+
+> Reescribime este texto en tono más conciso: [pegás un texto].
+
+> Tengo este problema: [explicás algo de tu trabajo]. Proponeme
+  3 enfoques distintos para resolverlo.
+```
+
+Calibrá: ¿es preciso? ¿se acerca a lo que querés? ¿alucina o avisa cuando no sabe?
+
+</Step>
+
+<Step number={3} title="Si te gustó, bajar app desktop">
+
+[claude.ai/download](https://claude.ai/download). Mac o Windows.
+
+La app desktop te da acceso a:
+- Cowork (si pasaste a Pro)
+- Conectores (Gmail, Calendar, Drive, etc.)
+- Modo offline parcial
+- Cambio rápido de modelo
+
+</Step>
+
+<Step number={4} title="(Opcional) Probar Claude Code" last>
+
+Solo si trabajás con código:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude
+```
+
+Más detalle en [guía de setup completa](/boveda/claude-code-setup-zero).
+
+</Step>
+
+---
+
+## Lo que más confunde al principio
+
+### 1. "¿Cuál modelo elijo?"
+
+Claude tiene 3:
+
+- **Haiku 4.5**: rápido y barato, para preguntas chicas
+- **Sonnet 4.6**: default, para casi todo
+- **Opus 4.7**: el más potente, para cosas complejas
+
+Detalle de cuándo cada uno en [los 3 modelos](/boveda/claude-tres-modelos).
+
+**Si dudás, usá Sonnet** (default). Vas a ajustar con la experiencia.
+
+### 2. "¿Por qué a veces no quiere hacer algo?"
+
+Claude tiene **safety guidelines** — se niega a cosas como ayudar con código malicioso, contenido peligroso, etc. Si te niega algo que parece razonable, **reformulá** explicando el contexto (uso defensivo, educativo, etc.).
+
+A veces se equivoca y se niega a algo perfectamente OK. Es frustrante pero pasa. Reformular suele resolver.
+
+### 3. "¿Mis datos son privados?"
+
+Política actual de Anthropic (verificá la actualizada):
+
+- **No entrenan en tus conversaciones por default** (consumer)
+- **Borrás conversaciones** desde el dashboard
+- **Para enterprise** hay garantías más fuertes (BAAs, retention policies)
+
+Si tu data es muy sensible: **léete los términos** antes de pegarla. Y considerá Claude Code local con MCPs propios si necesitás cero data externa.
+
+### 4. "¿Por qué a veces alucina?"
+
+Todos los LLMs alucinan a veces. Claude **menos que otros pero igual lo hace**. Especialmente con:
+- Números específicos
+- Citas / referencias
+- Eventos recientes
+- Trivia de nicho
+
+**Regla**: para info verificable, **chequeá** o pedile a Claude que marque lo que NO está seguro.
+
+Más sobre esto en [tres errores con IA](/boveda/tres-errores-con-ia).
+
+---
+
+## Patrón típico de adopción
+
+Cómo evoluciona el uso para alguien que arranca:
+
+### Semana 1 — chat exploratorio
+
+Le hacés preguntas variadas, ves qué tan útil es. Decidís si pagás Pro.
+
+### Semana 2-4 — uso diario
+
+Lo incorporás como herramienta. Empezás a notar para qué sirve más y para qué no.
+
+### Mes 2 — productivo en serio
+
+Aprendés a escribir mejores prompts. Empezás a usar features avanzados (artifacts, conectores).
+
+### Mes 3 — armás workflow
+
+Si trabajás con código, agregás Claude Code. Si trabajás con docs, sumás Cowork. Conectás Gmail/Calendar.
+
+### Mes 6 — sistema
+
+Tenés skills propias, MCPs configurados, hooks automáticos. **Claude pasa de "herramienta que uso" a "infra de mi trabajo".**
+
+La mayoría de gente NO llega al mes 6. Quien llega, no vuelve a trabajar igual.
+
+---
+
+## Cuándo NO vale la pena
+
+Honestidad: no para todos.
+
+❌ **Si nunca lo usás más de 1-2 veces por semana**: el plan paid no se justifica
+❌ **Si tu trabajo es muy específico y los outputs no aplican**: investiga primero
+❌ **Si no estás dispuesto a iterar tus prompts**: las primeras versiones siempre son mediocres
+❌ **Si esperás magia "que haga todo solo"**: no es así, requiere participación
+
+Para quien sí trabaja con docs, código o decisiones recurrentes, **el ROI es real**.
+
+---
+
+## Errores típicos del primer mes
+
+### 1. Pedidos demasiado abiertos
+
+❌ "Ayudame con el código"
+✅ "Explicame qué hace src/lib/db.ts en 5 líneas"
+
+Cuanto más específico, mejor.
+
+### 2. Aceptar respuestas sin leer
+
+Claude propone algo, vos copy-paste a producción sin mirar. **Mal**. Siempre revisar.
+
+### 3. Sesiones eternas
+
+Dejar la sesión abierta 4 horas con 15 temas distintos. El contexto se contamina. **Usar `/clear` entre tareas distintas**.
+
+### 4. No usar el modelo correcto
+
+Todo con Sonnet → quemás cuota. Todo con Opus → quemás más. Aprendé los 3 modelos.
+
+### 5. Esperar perfección inmediata
+
+Los primeros 10 prompts de tu vida con Claude van a ser mediocres. **No te frustres** — iterás y mejoran.
+
+---
+
+## Próximos pasos
+
+- Si querés profundizar en cuándo usar cada modelo, [los 3 modelos de Claude](/boveda/claude-tres-modelos)
+- Para entender qué es skill, MCP, plugin, agente, [anatomía de Claude](/boveda/anatomia-claude)
+- Si vas a meter Claude Code, [setup de Claude Code](/boveda/claude-code-setup-zero) — 10 minutos
+- Para no caer en los errores típicos al pedirle cosas, [tres errores con IA](/boveda/tres-errores-con-ia)

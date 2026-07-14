@@ -1,0 +1,370 @@
+---
+title: "/goal — Claude won't drop the goal until it's done"
+description: "Anthropic shipped /goal on May 11, 2026. You set a completion condition and Claude keeps working turn after turn until an evaluator model (Haiku by default) confirms the condition is met. It solves the pain of Claude losing the thread halfway through a long task. Flagship combo with /plan."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["planea-audita-construye", "claude-code-loop", "claude-piloto-automatico"]
+---
+
+## The pain it solves
+
+You're working with Claude on a migration or a whole page. You gave it good context at the start. **By turn 5 it's already editing files you never asked for**, or it forgot about the test file, or it's sitting there waiting for you to guide it at every step.
+
+The pain isn't that Claude is bad at planning. It's that **after every turn it hands control back to you** and you have to push it again.
+
+---
+
+## The inversion `/goal` makes
+
+You set a **completion condition** at the start:
+
+> "All tests in test/auth pass and the build comes out green"
+
+And Claude starts working. When each turn ends, a **small, fast evaluator model** (Haiku by default) reads the conversation and decides:
+
+> Was the condition met?
+
+- **Yes** → the goal clears itself
+- **No** → Claude kicks off another turn with the evaluator's reason as guidance
+
+**Control does NOT return to you until the goal is achieved**.
+
+---
+
+## What it is and what it is NOT
+
+### It is
+
+- ✅ A condition evaluated by a small model at the end of each turn (yes/no + reason)
+- ✅ Automatic resumption if it's not met
+- ✅ A visible `◎ /goal active` indicator
+- ✅ Clears itself once met
+- ✅ Up to **4000 characters** per condition
+- ✅ Persists across `claude --resume` and `--continue`
+
+### It is NOT
+
+- ❌ It does NOT run tools on its own — Claude still does the executing
+- ❌ It does NOT read files live — only the transcript
+- ❌ It is NOT parallelism — it's sequential
+- ❌ It does NOT replace the main model's thinking
+- ❌ It is NOT the same as `/loop` (loop = by time, goal = by condition)
+- ❌ It does NOT work if hooks are disabled
+
+---
+
+## 4 real cases from the official docs
+
+| Case | Example condition |
+|------|-------------------|
+| **API migration** | "Every call site compiles and tests pass" |
+| **Complete design doc** | "All acceptance criteria are met" |
+| **Split a huge file** | "Each piece is under the line budget" |
+| **Clear the backlog** | "Process labeled issues until the queue is empty" |
+
+---
+
+## Prerequisites — 3 hard ones
+
+### 1. Trust dialog accepted
+
+The evaluator is part of hooks. The workspace has to be marked **trusted**. The first time, it asks you.
+
+### 2. Hooks enabled
+
+If you have hooks disabled in config, `/goal` won't work.
+
+### 3. Up-to-date version
+
+A recent Claude Code (post May 11, 2026).
+
+### If something fails
+
+`/goal` tells you **why** instead of doing nothing silently.
+
+---
+
+## How to use it
+
+### Set it
+
+```
+/goal all tests in test/auth pass and the build comes out green
+```
+
+Claude starts, and the `◎ /goal active` indicator appears.
+
+### Check status
+
+```
+/goal --status
+```
+
+Shows: the condition + how many turns it's been running + the last evaluation.
+
+### Clear it manually
+
+```
+/goal --clear
+```
+
+Aborts the goal even if it wasn't met.
+
+### Resume
+
+```
+claude --resume
+```
+
+The goal stays active. The counter resets.
+
+---
+
+## The anatomy of an effective condition
+
+The 3 ingredients from the official docs:
+
+### 1. Verifiable
+
+Something the evaluator can check by reading the transcript.
+
+❌ "The code is fine"
+✅ "The npm test command runs successfully (exit code 0)"
+
+### 2. Specific
+
+No ambiguity about when it's met.
+
+❌ "Migrate the auth"
+✅ "All calls to authenticateUser() use authV2 and tests/auth/* passes"
+
+### 3. Bounded
+
+Not so broad it takes days, not so small it's trivial.
+
+❌ "Refactor all the backend code"
+✅ "Split src/handlers/orders.ts (1200 lines) into files ≤300 lines while keeping tests green"
+
+---
+
+## The flagship combo — `/plan` + `/goal`
+
+```
+1. /plan [big task]
+   → Plan Mode designs the approach
+   → You audit (see Plan Mode)
+   → You approve
+
+2. /goal [condition from the plan]
+   → Claude executes the plan
+   → Doesn't let go until it's done
+```
+
+**Plan Mode** designs the path. **/goal** executes it without losing the thread.
+
+---
+
+## 5 ready-to-use conditions
+
+### 1. Waitlist landing page
+
+```
+/goal The landing page has a hero + email signup form + footer.
+The form validates email format, persists to /api/signups and shows
+a confirmation message. The build passes with no warnings and npm test
+passes all tests.
+```
+
+### 2. Refactoring a huge file
+
+```
+/goal src/handlers/orders.ts is split into files of at most
+300 lines each, all imports are updated, npm
+test passes, and npm run build comes out green.
+```
+
+### 3. Clearing the backlog
+
+```
+/goal All issues with the "tech-debt" label in this repo are
+either resolved (PR merged) or closed with a documented reason.
+The query "is:open label:tech-debt" returns 0 results.
+```
+
+### 4. Complete docs
+
+```
+/goal Every public function in src/lib/ has JSDoc with a description
++ parameters + example. The command "npm run docs:check" passes with no
+errors.
+```
+
+### 5. Migration to JWT
+
+```
+/goal All calls to authenticateWithSession() are
+replaced by authenticateWithJWT(). The tests in
+test/auth/jwt.test.ts pass. The test "sessions still work for
+existing users" stays green. npm run build comes out OK.
+```
+
+---
+
+## Auto mode + /goal — unattended execution
+
+```bash
+claude --auto --goal "[condition]"
+```
+
+Claude works **without asking for confirmation** turn by turn. It only stops when the goal is met or if something critical fails.
+
+**Careful**: combine it with [protection hooks](/boveda/claude-piloto-automatico) so it doesn't do damage.
+
+---
+
+## Headless mode with `claude -p`
+
+For CI / cron jobs:
+
+```bash
+claude -p "/goal [condition]" --no-interactive --max-turns 30
+```
+
+Useful for:
+- A CI pipeline that fixes failing tests automatically
+- A cron that clears the backlog every night
+- A build that auto-formats code before merge
+
+---
+
+## How the evaluator decides
+
+The evaluator is a **small, fast model** (Haiku by default). It reads the **conversation transcript** and responds:
+
+```json
+{
+  "completed": true | false,
+  "reason": "short reason"
+}
+```
+
+### Important
+
+- **It only reads the transcript**, not live files
+- If verification requires running code, Claude has to run it in a previous turn and the evaluator reads the output
+- If the transcript doesn't mention the verification, **the evaluator will say no** even if the condition is actually met
+
+---
+
+## Best practices
+
+### 1. Conditions verifiable in the transcript
+
+If your condition requires "verify X", make sure Claude **shows the result** of the verification in its turn.
+
+```
+/goal Tests pass: run `npm test` and show me the output. If the exit
+code is 0 and I see "All tests passed", it's met.
+```
+
+### 2. Turn limit
+
+To avoid infinite loops:
+
+```bash
+claude --max-turns 50
+```
+
+After 50, Claude stops even if the condition isn't met.
+
+### 3. Condition with explicit verification
+
+```
+/goal Migration done. VERIFICATION: at the end, run `grep -r
+"authenticateWithSession" src/` and it should return 0 results.
+Show me the command + output in your last turn.
+```
+
+You tell it EXACTLY how to verify.
+
+### 4. Exit early if it hits a blocker
+
+```
+/goal [task]. If you hit a technical blocker you can't resolve
+without my input, write ON YOUR TURN: "BLOCKER: [description]". The
+evaluator will see that and complete the goal as successful (you
+give me input later).
+```
+
+Avoids loops when it legitimately needs your input.
+
+### 5. Log the evaluator's reasons
+
+`/goal --status` shows you the reasons. **Review them periodically**. If the evaluator repeats the same reason for 5 turns, there's something Claude isn't achieving.
+
+---
+
+## Anti-patterns
+
+### 1. Condition too broad
+
+`"Make it good"` → the evaluator can't decide. **Infinite loop** or it ends badly.
+
+### 2. Condition not verifiable in the transcript
+
+`"The users are satisfied"` → the evaluator can't see that. **Impossible to meet**.
+
+### 3. Combining `/goal` with vague prompts
+
+`/goal fix this` → vague + ambiguous condition = catastrophe.
+
+### 4. Auto mode without protection hooks
+
+Auto + /goal + no hooks = **Claude can delete critical things**. Hooks FIRST.
+
+### 5. Not using `--max-turns`
+
+No limit + a badly written condition = **Claude runs forever** until you kill it. Always `--max-turns`.
+
+---
+
+## Powerful combinations
+
+### With Plan Mode
+
+Flagship combo: [Plan Mode](/boveda/planea-audita-construye) designs → `/goal` executes.
+
+### With `/loop`
+
+Key difference:
+- `/loop` runs by **time** (every X minutes)
+- `/goal` runs by **condition** (until it's met)
+
+For tasks with a clear success criterion → `/goal`.
+For recurring tasks with no "end" → [/loop](/boveda/claude-code-loop).
+
+### With autopilot
+
+[Autopilot](/boveda/claude-piloto-automatico) + auto mode + `/goal` = total autonomy. **Careful with permissions**.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Exploratory tasks with no "clear end" | No verifiable condition |
+| Creative work with no binary criterion | The evaluator can't decide |
+| Tasks that need your input mid-flight | The goal blocks you from stepping in |
+| Critical production with human audit | Autonomy isn't acceptable |
+
+---
+
+## Next steps
+
+- To design the plan before executing with /goal, [Plan Mode](/boveda/planea-audita-construye)
+- For recurring time-based tasks, [Claude Code /loop](/boveda/claude-code-loop)
+- For autopilot with permissions, [Claude autopilot](/boveda/claude-piloto-automatico)

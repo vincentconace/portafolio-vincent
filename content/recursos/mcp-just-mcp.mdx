@@ -1,0 +1,94 @@
+---
+title: "MCP Just — ejecutar comandos Just y task runners desde Claude"
+description: "MCP server con 193 installs que enchufa Just (el task runner moderno) a Claude Code. Listar tasks del Justfile, ejecutarlos, automatizar dev workflows sin salir del editor."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "just"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["claude-code-best-practices", "all-deploy", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/just-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/just-mcp.json"
+---
+
+## Qué es
+
+[Just](https://github.com/casey/just) es el "make moderno": un task runner simple y rápido, con sintaxis amigable y soporte para variables, scripts y dependencies entre tasks. Mucha gente lo usa en lugar de Make o scripts sueltos.
+
+Este MCP lo conecta a Claude Code: lista las tasks de tu Justfile, las ejecuta, y te muestra el output. Útil cuando tenés un Justfile con muchas tasks (build, test, deploy, lint, format, db-migrate, etc.) y querés que Claude las orqueste.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 193 |
+| Servidor MCP | `just-mcp` |
+| Requisito | Just instalado + Justfile en el proyecto |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/just-mcp
+```
+
+Pre-requisito: Just instalado (`brew install just`, `cargo install just`, etc.).
+
+Para Claude:
+
+```
+Instalé el MCP devtools/just-mcp. Listame las tasks disponibles en el
+Justfile de este proyecto y ejecutá la task `test`. Devolveme el output.
+```
+
+## Qué podés hacer con esto
+
+### Discovery de tasks
+
+"Listame las tasks del Justfile con su descripción". Útil cuando volvés a un proyecto y no te acordás qué hay.
+
+### Ejecución de pipelines
+
+"Corré `lint` después `test` después `build`". Claude las ejecuta en orden y reporta cualquier falla.
+
+### Onboarding al proyecto
+
+Para un newcomer al repo: "Mostrame qué hace cada task del Justfile y cuál corro primero para arrancar". Documentación viva.
+
+### Combinación con análisis
+
+"Si la task `test` falla, leé el output, identificá los tests que rompen y proponeme fix". Claude orquesta ejecución + diagnóstico.
+
+### Workflow tipo CI local
+
+"Corré toda la cadena de pre-commit (lint + format-check + typecheck + test) y reportame qué pasó/falló". Más prolijo que escribir un script bash.
+
+## Pre-requisitos
+
+- **Just instalado** en tu sistema
+- **Justfile** en el directorio raíz del proyecto (o donde Claude esté trabajando)
+- **Tasks bien nombradas y documentadas:** el MCP no inventa; lee lo que hay
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás Make o npm scripts:** este MCP es Just-only. Para Make hay equivalents o podés correr `make X` desde bash directo.
+- **Operaciones destructivas:** algunas tasks (`db:reset`, `deploy:prod`) pueden ser destructivas. Hooks de aprobación.
+- **Si tu proyecto no tiene Justfile:** podés crearlo, pero el MCP per se no setea Justfile por vos.
+- **Tasks que requieren credenciales:** las tasks que dependen de env vars/secrets requieren que esos secrets estén disponibles en la sesión donde Claude corre el MCP.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Just MCP](https://www.aitmpl.com/component/mcps/devtools/just-mcp) — comando exacto.
+- **Config JSON:** [just-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/just-mcp.json).
+- **Just oficial:** [github.com/casey/just](https://github.com/casey/just) — instalación y referencia.
+
+## Recursos relacionados
+
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para combinar tasks runners con AI.
+- [All Deploy](/boveda/all-deploy) — para deploy. Combina con Just para "task deploy" que invoque All Deploy.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector a un task runner externo.

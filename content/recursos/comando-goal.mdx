@@ -1,0 +1,243 @@
+---
+title: "Comando /goal — la meta que Claude no suelta"
+description: "Cómo armar (y cuándo usar) un slash command que setea un objetivo de sesión y obliga a Claude a no soltarlo, retomándolo cada vez que se desvía. Útil para tareas largas donde el problema no es el código, es la dispersión."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-09"
+readingTime: "9 min"
+relatedSlugs: ["hooks-automatizacion", "memoria-claude-code", "guia-claude-code-completa"]
+---
+
+## El problema que resuelve
+
+Trabajás en una tarea grande con Claude. A los 20 minutos descubre algo interesante en un archivo lateral y empieza a "limpiar también esto". 15 minutos después está refactorizando algo que no le pediste. Vos llegás a revisar y la tarea original está a la mitad.
+
+Es el problema de **agentes que se distraen con lo que encuentran**. Especialmente con tareas largas, donde el contexto se llena y la meta original empieza a competir con todas las exploraciones que fue haciendo.
+
+El comando `/goal` (lo armás vos como custom command) le pone un ancla.
+
+---
+
+## Cómo funciona
+
+`/goal "completar la feature de notificaciones email + persistencia + tests"`
+
+A partir de ahí, Claude:
+
+1. Guarda esa meta en una memoria de sesión
+2. Antes de cada acción significativa, se "pregunta" si esa acción aporta a la meta
+3. Si nota que está derivando, te avisa: "estoy yendo hacia X pero la meta era Y, ¿seguimos con X o vuelvo?"
+4. Antes de declarar "tarea terminada", verifica que el objetivo se cumplió
+
+No es magia — es un patrón forzado por el prompt del comando. Pero cambia cómo Claude se comporta en sesiones largas.
+
+---
+
+## El comando
+
+`~/.claude/commands/goal.md` (global, disponible en cualquier proyecto):
+
+```markdown
+---
+description: Setea una meta de sesión que Claude debe mantener visible y no abandonar.
+argument-hint: "<descripción de la meta>"
+---
+
+# Meta de sesión activada
+
+A partir de este momento, tu meta para esta sesión es:
+
+> $ARGUMENTS
+
+## Reglas durante esta sesión
+
+### 1. Mantené la meta visible
+Cada vez que respondas, internamente chequeá: "¿esto aporta directamente a la meta?"
+
+Si SÍ → seguí.
+Si NO → preguntá al usuario antes de continuar.
+
+### 2. No te distraigas con hallazgos
+Si mientras trabajás encontrás algo interesante pero NO relacionado con la meta
+(un bug en otro lado, una oportunidad de refactor, código sospechoso), **anotálo**
+en un archivo `.session-findings.md` y seguí con la meta. NO te desvíes.
+
+Formato:
+```
+[fecha hora] [archivo:línea] - descripción breve
+```
+
+### 3. Pedí confirmación antes de scope creep
+Si te das cuenta que la meta requiere algo no previsto (ej: una migración de DB
+que no estaba contemplada), parar y preguntar antes de hacerlo.
+
+### 4. Antes de declarar "listo"
+Cuando creas que terminaste, NO digas "listo" sin antes:
+
+a) Releer la meta original
+b) Listar punto por punto qué entregaste vs qué pedía la meta
+c) Identificar gaps (cosas pedidas que no hiciste)
+
+Si hay gaps, primero esos. Si no hay, recién ahí decí "listo, meta cumplida".
+
+### 5. Si el usuario cambia la meta
+Si en el medio el usuario dice algo que cambia la meta (ej. "ah, también
+agregame X"), confirmá: "¿X reemplaza la meta original o se suma?"
+
+## Status check
+
+A pedido del usuario con "/status" o "donde vamos", devolvé:
+
+- Meta: [la meta]
+- Avance: [qué se hizo]
+- Pendiente: [qué falta]
+- Findings anotados: [count] (no son blockers)
+- Próximo paso: [una acción concreta]
+```
+
+Después de definirlo, en cualquier sesión:
+
+```
+> /goal Refactorizar el módulo de auth para usar Clerk en lugar de Supabase Auth,
+        incluyendo migración de usuarios existentes y tests actualizados.
+
+Meta de sesión activada.
+Voy a empezar por listar los archivos que tocan auth para tener mapeo claro.
+¿OK?
+```
+
+---
+
+## El truco del `.session-findings.md`
+
+Lo más valioso del patrón no es el ancla en sí — es que **los hallazgos no se pierden**.
+
+Sin `/goal`:
+- Claude ve un bug random → o lo arregla (scope creep) o lo ignora (se pierde)
+- Hallazgos no se documentan
+
+Con `/goal`:
+- Claude anota el hallazgo en `.session-findings.md` y sigue con su meta
+- Al final de la sesión, vos abrís el archivo y tenés una lista de "cosas para mirar después"
+- Lo agregás al backlog del proyecto
+
+Ejemplo de un `.session-findings.md` real:
+
+```
+[2026-05-09 14:23] src/lib/db/orders.ts:45 — query sin index, está scanneando full table
+[2026-05-09 14:48] src/api/webhooks/stripe.ts:12 — falta verificación de firma idempotente
+[2026-05-09 15:10] tests/auth.test.ts — varios tests usan .skip(), revisar si siguen relevantes
+[2026-05-09 15:34] src/lib/email/templates.tsx — duplicación entre welcome y verification, mergear
+```
+
+Al final de la sesión:
+
+```
+> /status
+
+Meta: Refactor de auth a Clerk
+Avance: 12 de 14 archivos migrados, tests pasando
+Pendiente: migrar webhook de Stripe para usar nuevo userId, actualizar README
+Findings anotados: 4 (en .session-findings.md)
+Próximo paso: tocar src/api/webhooks/stripe.ts
+```
+
+Limpio. Sabés qué hiciste, qué falta, y qué viste de paso.
+
+---
+
+## Variantes útiles del comando
+
+### `/goal-strict` — modo muy estricto
+
+```markdown
+[mismo template + esta regla extra]
+
+### Modo estricto
+
+Si el usuario te pide algo que NO está en la meta:
+- Si es una pregunta corta: respondela en 1 línea y volvé a la meta
+- Si requiere acción real: respondé "eso no es parte de la meta actual. ¿lo
+  anoto en findings, lo agregamos a la meta, o lo dejamos para después?"
+
+NO ejecutes tareas fuera de la meta sin confirmación explícita.
+```
+
+Útil cuando vos mismo te disperás y le pedís a Claude cosas random a mitad de una tarea importante.
+
+### `/goal-deadline` — con presión de tiempo
+
+```markdown
+[mismo template + esta regla]
+
+### Con deadline
+
+Tu deadline para esta sesión es: $DEADLINE
+
+A medida que avances, calculá si vas a llegar. Si notás que NO vas a llegar,
+parar y proponer al usuario:
+
+- Reducir alcance (qué partes se pueden dejar para después)
+- Acelerar (qué pasos saltarse, con qué riesgo)
+- Pedir más tiempo
+
+Mejor renegociar a mitad que entregar incompleto al final.
+```
+
+### `/goal-pair` — modo pair programming
+
+```markdown
+[mismo template + esta regla]
+
+### Modo pair
+
+NO actúes solo. Cada cambio significativo, mostralo primero y esperá ok.
+El usuario es el "driver", vos el "navigator": opinás, sugerís, pero la
+ejecución la confirma el humano.
+```
+
+Para cuando querés mantener control fino sobre una sesión.
+
+---
+
+## Cuándo NO usar `/goal`
+
+- Sesiones cortas (menos de 20 min) — el overhead no compensa
+- Exploración / spike — querés que se distraiga porque estás explorando
+- Tareas mecánicas claras (renombrar, formatear) — no hay riesgo de derivar
+
+El comando brilla en tareas **medianas a largas con riesgo de scope creep**.
+
+---
+
+## El sesgo de "completar"
+
+Algo sutil que te va a ayudar: Claude tiende a declarar "listo" antes de tiempo. La regla #4 del comando ("antes de declarar listo, releé la meta y verificá") **reduce muchísimo** el "ah, también faltaba esto".
+
+Sin esa regla:
+```
+> Listo, terminé la migración a Clerk.
+[vos revisás y te falta actualizar 3 lugares más]
+```
+
+Con la regla:
+```
+> Antes de declarar listo, repaso contra la meta:
+  - Migración de usuarios: ✅
+  - Tests actualizados: ✅
+  - Cambios en API endpoints: ✅
+  - Documentación en README: ❌ no toqué el README
+  
+  Me falta actualizar el README. Lo hago ahora y reporto.
+```
+
+Esa pausa de auto-verificación es probablemente el feature más valioso del patrón.
+
+---
+
+## Próximos pasos
+
+- Si nunca creaste un slash command, mirá la [guía de Claude Code](/boveda/guia-claude-code-completa) — sección de comandos custom
+- Para combinarlo con automatización, [hooks de Claude Code](/boveda/hooks-automatizacion) — podés hookear `Stop` para que limpie/archive `.session-findings.md`
+- Para tareas que duran varias sesiones, combinalo con [Memory Palace](/boveda/memory-palace-agentes) — la memoria persistente complementa el goal de sesión

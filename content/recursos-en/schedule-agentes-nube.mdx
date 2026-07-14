@@ -1,0 +1,258 @@
+---
+title: "The /schedule command — cloud agents that run with your computer off"
+description: "The command that puts recurring tasks to run in Anthropic's cloud. You don't need your computer on. Natural-language syntax: frequency + task + integrations in a single line. When it beats local scheduled tasks."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["agentes-managed", "claude-code-loop", "ecosistema-de-agentes"]
+---
+
+## What it solves
+
+If your agents have to run 24/7, you used to have 2 options:
+
+| Option | Problem |
+|--------|--------|
+| **Your computer always on** | Power consumption, heat, noise. And if it reboots, the agents die |
+| **Dedicated Mac mini** ([ecosystem](/boveda/ecosistema-de-agentes)) | $700+ upfront investment, maintenance is on you |
+
+The `/schedule` command is the **3rd option**: Anthropic runs your tasks in its cloud. **No computer needed, no server needed**.
+
+---
+
+## Simple syntax
+
+Natural language in a single line:
+
+```
+/schedule [frequency] [task] [integrations]
+```
+
+### Examples
+
+```
+/schedule every day at 8am, read my Gmail inbox and put together my
+   daily brief. Post it to my Notion.
+
+/schedule every Monday 9am, review last week's Shopify orders and
+   send me a report by email.
+
+/schedule every 2 hours, monitor mentions of "mybrand" on Reddit and
+   alert me if there's a complaint.
+
+/schedule every Friday 5pm, generate a weekly report from the HubSpot
+   CRM and send it to the team on Slack.
+```
+
+Claude **infers**:
+- The equivalent cron schedule
+- Which connectors it needs
+- Which outputs / actions
+
+---
+
+## What it does under the hood
+
+When you run `/schedule`:
+
+1. **Claude creates a Managed Agent** in Anthropic's cloud (see [Managed Agents](/boveda/agentes-managed))
+2. **Sets up the cron** according to your frequency
+3. **Configures the connectors** it needs (prompts you for auth if you don't have them)
+4. **Confirms** the setup and the next run
+
+From then on, **your computer doesn't need to be on**. The task runs on Anthropic's infrastructure.
+
+---
+
+## Comparison with alternatives
+
+| Approach | Computer on | Cost | When |
+|----------|-------------|------|------|
+| **`/schedule`** | NO | Pay-per-use (~$0.70/h active) | Default for tasks that DON'T require your computer |
+| **[Claude Code `/loop`](/boveda/claude-code-loop)** | YES | Your Claude plan | If your computer is on all day and you want zero extra cost |
+| **Mac mini with [ecosystem](/boveda/ecosistema-de-agentes)** | (Mac mini yes) | $700 upfront + electricity | When you need local MCPs / private data |
+| **Classic cron (Linux server)** | (server yes) | $5-50/month VPS | Mechanical tasks with no LLM |
+
+**Sweet spot for `/schedule`**: tasks that require LLM reasoning + run on a regular basis + don't require access to your local computer.
+
+---
+
+## Cases where it shines
+
+### 1. Daily brief with no computer
+
+```
+/schedule every weekday 7am: read my calendar, my unanswered email
+and my pending tasks in Notion. Put together my daily brief.
+Send it to me by email at 7:15am.
+```
+
+You wake up → the brief is already in your inbox. Your computer can be off.
+
+### 2. Mention monitoring
+
+```
+/schedule every 4h: scrape Reddit and Twitter looking for "mybrand".
+If you find a negative mention or a complaint, alert me on Telegram
+immediately. If there are 5+ positive mentions, summarize them for me at the end of the day.
+```
+
+24/7 monitoring with nothing running on your computer.
+
+### 3. Automated executive reports
+
+```
+/schedule every Monday 9am: put together the week's report in HubSpot:
+- New leads
+- Deals moved
+- Pipeline updates
+- Top 3 priorities for the week
+
+Post it in the #weekly-report channel on Slack.
+```
+
+Your team gets the report automatically every Monday. You don't have to type anything.
+
+### 4. Tasks that need exact timing
+
+```
+/schedule the 1st of every month at 9am: close the accounting period.
+- Generate the P&L
+- Reconcile the accounts
+- Send me a draft to review
+```
+
+If this depended on your computer being on + your intervention, it **got missed** when you went on vacation. With `/schedule` it runs on its own.
+
+---
+
+## What you CAN'T do with `/schedule`
+
+### 1. Access your local computer
+
+`/schedule` runs in Anthropic's cloud. **It can't read files** off your disk. It can't run commands on your computer.
+
+For that you need to:
+- Upload the files to the cloud (Drive, S3, etc.)
+- Or use [Claude Code /loop](/boveda/claude-code-loop) on your local computer
+
+### 2. Access local MCPs
+
+If your MCP runs on `localhost:1234`, **`/schedule` can't invoke it**. It only works with MCPs that are reachable from the internet (Supabase, HubSpot, Gmail, etc.).
+
+### 3. Interactive sessions
+
+`/schedule` runs and finishes. **It doesn't wait for your input**. If the task requires human decisions in the middle, it's not for `/schedule` — use [Claude Code /loop](/boveda/claude-code-loop) or schedule Cowork.
+
+### 4. Very high volume
+
+If your task is "check something every 30 seconds", `/schedule` isn't a good fit. For high frequency, a **dedicated server** is cheaper and faster.
+
+---
+
+## The real cost
+
+Like [Managed Agents](/boveda/agentes-managed):
+
+| Frequency | Active time / month | Approx cost |
+|-----------|---------------------|-------------|
+| Daily, 5 min each time | ~2.5h | ~$1.75 |
+| Every hour, 2 min each time | ~24h | ~$17 |
+| Every 15 min, 1 min each time | ~48h | ~$34 |
+
+For occasional use (1-5 schedules), **low cost**. For many high-frequency schedules, evaluate whether a dedicated server is worth it.
+
+---
+
+## Modifying / canceling
+
+```
+/schedule list
+```
+
+Shows you all your active schedules.
+
+```
+/schedule edit <id>
+```
+
+Lets you modify an existing one (change frequency, modify the task).
+
+```
+/schedule pause <id>
+```
+
+Pauses it temporarily. It won't run until you re-enable it.
+
+```
+/schedule cancel <id>
+```
+
+Permanent cancellation.
+
+---
+
+## Anti-patterns
+
+### 1. Duplicate schedules
+
+Creating `/schedule daily 8am ...` 3 times because you forgot you already set it up. **Result**: 3 runs a day, 3× cost. **Audit with `/schedule list`**.
+
+### 2. Schedules with no clear output
+
+```
+/schedule daily 8am: review the business
+```
+
+What exactly does it do? What does it deliver to you? Without a specific output, it's **useless**. Be concrete:
+
+```
+/schedule daily 8am: review the Shopify KPIs, compare them against
+yesterday, send me an email if there are variations >10%.
+```
+
+### 3. Schedules for trivial tasks
+
+```
+/schedule every hour: give me the current date
+```
+
+This costs money for something `date` resolves in 0.001 seconds. **Schedules are for real LLM work, not for trivial commands.**
+
+### 4. Not documenting
+
+After 10 active schedules, **you don't remember what each one does**. Keep a doc:
+
+```markdown
+# My active schedules
+
+| ID | Frequency | What it does | Output |
+|----|-----------|--------------|--------|
+| 1 | Daily 8am | Daily brief | Email |
+| 2 | Monday 9am | HubSpot report | Slack #weekly |
+| 3 | Every 4h | Mention monitor | Telegram |
+```
+
+---
+
+## When `/schedule` is worth it
+
+✅ Regular tasks that require LLM reasoning
+✅ Your computer isn't on 24/7
+✅ The integrations are cloud (Gmail, Slack, Shopify, etc.)
+✅ Low-to-medium volume (dozens of runs per month, not thousands)
+
+❌ Tasks that require access to your local computer
+❌ Tasks that require local MCPs
+❌ Very high volume
+❌ Critical / destructive actions with no supervision
+
+---
+
+## Next steps
+
+- To understand Managed Agents in depth (what `/schedule` uses under the hood), [managed agents](/boveda/agentes-managed)
+- If your computer is on and you'd rather have zero extra cost, [Claude Code /loop](/boveda/claude-code-loop)
+- For more complex multi-agent systems, [agent ecosystem](/boveda/ecosistema-de-agentes)

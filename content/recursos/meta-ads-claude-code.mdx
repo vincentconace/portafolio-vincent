@@ -1,0 +1,260 @@
+---
+title: "Claude Code Meta Ads — operar campañas desde la terminal con guardrails"
+description: "Sistema para conectar Meta Marketing API con Claude Code y operar campañas autónomamente con guardrails de seguridad. Convertís lenguaje natural en operaciones válidas sobre la jerarquía Campaign → Ad Set → Ad. Estado PAUSED por default, confirmaciones explícitas, límites de gasto."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "meta"]
+publishedAt: "2026-05-28"
+readingTime: "5 min"
+relatedSlugs: ["claude-meta-ads", "meta-ads-cli-oficial", "claude-ads"]
+---
+
+## Qué es
+
+Sistema para **conectar Meta Marketing API con Claude Code** y operar campañas más autónomamente con **guardrails de seguridad**.
+
+Tagline: *"Este anuncio es ilimitado"*.
+
+| Característica | Detalle |
+|----------------|---------|
+| Cómo opera | MCP + Claude Code |
+| Input | Lenguaje natural |
+| Output | Operaciones válidas sobre Meta Ads |
+| Estado default | **PAUSED** |
+| Confirmaciones | Explícitas para cada cambio |
+
+---
+
+## Qué hace
+
+### 1. Convierte lenguaje natural → operaciones
+
+```
+> Creá campaña para "Black Friday 2026". Objetivo: ventas.
+  Budget diario: $200. Audiencia: clientes existentes + lookalike 1%.
+```
+
+Claude lo traduce a llamadas válidas a la Marketing API.
+
+### 2. Opera la jerarquía Campaign → Ad Set → Ad
+
+Crea, lee, optimiza campañas a los 3 niveles. No solo "crear ad" — entiende **estructura completa** de Meta.
+
+### 3. Aplica guardrails
+
+Para evitar errores caros:
+- **PAUSED por default**
+- Confirmaciones explícitas
+- Límites de gasto
+- Validación de policies
+
+### 4. Logs y trazabilidad
+
+Cada cambio queda con ID + razón. Si algo sale mal, **podés rastrear**.
+
+---
+
+## Diferencia vs alternativas
+
+| Aspecto | **Claude Code Meta Ads** (este) | [Claude Meta Ads](/boveda/claude-meta-ads) | [Meta Ads CLI Oficial](/boveda/meta-ads-cli-oficial) |
+|---------|--------------------------------|---------------------------------------------|----------------------------------------------------|
+| Por quién | Comunidad | Comunidad (AgriciDaniel/claude-ads) | **Meta oficial** |
+| Setup | MCP custom | Script + token | MCP oficial Meta |
+| Plataformas | Solo Meta | Multi (incluyendo Meta) | Solo Meta |
+| Guardrails | Custom MCP rules | Skill rules | PAUSED by default |
+| Updates | Tu maintenance | Comunidad | Meta maintain |
+
+Este proyecto es **approach DIY con MCP**. Para producción más estable, usá CLI oficial.
+
+---
+
+## Setup
+
+### Pre-requisitos
+
+- **Claude Code** instalado y validado con `claude doctor`
+- **App de Meta** registrada en developers.facebook.com
+- **System User token** generado
+- Cuenta de Meta Business
+
+### Paso 1 — Credenciales
+
+```bash
+# .env (NO commitear)
+META_ACCESS_TOKEN=tu_system_user_token
+META_AD_ACCOUNT_ID=act_xxxxx
+META_BUSINESS_ID=xxxxx
+```
+
+Agregá `.env` a `.gitignore`.
+
+### Paso 2 — Configurar MCP
+
+`.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "meta-ads": {
+      "command": "node",
+      "args": ["./scripts/meta-ads-server.js"],
+      "env": {
+        "META_ACCESS_TOKEN": "${META_ACCESS_TOKEN}",
+        "META_AD_ACCOUNT_ID": "${META_AD_ACCOUNT_ID}"
+      }
+    }
+  }
+}
+```
+
+### Paso 3 — Verificar
+
+```
+> /mcp
+```
+
+`meta-ads` debe aparecer como conectado.
+
+---
+
+## Reglas de seguridad CRÍTICAS
+
+### 1. Siempre PAUSED por default
+
+Cualquier campaña/ad set/ad creado **arranca en PAUSED**. Vos lo activás manual.
+
+### 2. Confirmación explícita
+
+Antes de cualquier write operation, Claude **muestra resumen y espera**:
+
+```
+> Voy a crear:
+  - Campaña "Black Friday" (PAUSED)
+  - Budget diario: $200
+  - 2 ad sets: cliente existente + LAL 1%
+  - 3 creatives por ad set
+
+  Total gasto si lo activás: $200/día × 7 días = $1,400
+
+  ¿Procedo? [s/n]
+```
+
+### 3. Límites de gasto hard-coded
+
+```
+MAX_DAILY_BUDGET_PER_AD: $100
+MAX_TOTAL_DAILY: $500
+```
+
+Si proponés algo por encima, Claude **se rehúsa**.
+
+### 4. Una API call a la vez
+
+Para evitar throttling y patrones de bot:
+
+```
+sleep 2 entre cada call
+```
+
+Ver [Claude Meta Ads](/boveda/claude-meta-ads) para por qué esto es crítico.
+
+---
+
+## Flow típico
+
+### Audit
+
+```
+> Auditá mi cuenta. SOLO lectura. Mostrame:
+  - Estado de campañas activas
+  - CPA actual vs target
+  - Top 3 issues a arreglar
+```
+
+### Acción simple
+
+```
+> Pausá los 2 ad sets con CPA > $50.
+  Mostrame cuáles son ANTES de pausar.
+```
+
+### Crear nueva campaña
+
+```
+> Creá campaña "Webinar Inscripciones":
+  - Objetivo: leads
+  - Daily budget: $50
+  - Audiencia: B2B SaaS founders LATAM
+  - 1 ad set, 3 creatives
+  - Status: PAUSED (yo activo manual)
+
+  Mostrame setup ANTES de crear.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Confiar en auto-activar
+
+NUNCA. Aunque parezca repetitivo, **vos activás campañas**.
+
+### 2. Sin confirmation prompts
+
+Si Claude detecta que `--no-confirm` está activo, **se rehúsa**. Es por algo.
+
+### 3. Múltiples cambios en paralelo
+
+Meta detecta y banea. **Secuencial siempre**.
+
+### 4. Subir imágenes por API
+
+NO. Ver [Claude Meta Ads](/boveda/claude-meta-ads) para por qué. Generá brief, subí desde Ads Manager.
+
+### 5. Hardcode tokens
+
+NUNCA en código. **Siempre `.env` + .gitignore**.
+
+---
+
+## Comparación con Claude Ads (suite)
+
+[Claude Ads](/boveda/claude-ads) es **multi-plataforma** (Meta + Google + TikTok + más). Si vas a manejar varias plataformas, **Claude Ads gana**.
+
+Este proyecto es **específico para Meta** con setup propio.
+
+---
+
+## Combinaciones potentes
+
+### Con Andromeda
+
+[Andromeda 8 reglas Meta](/boveda/andromeda-rules-for-claude) es framework conceptual. Este sistema es **ejecución técnica**.
+
+### Con Claude Copywriter
+
+```
+> Generá 5 variantes copy con Claude Copywriter.
+> Pasalas por /humanizalo.
+> Subí los assets manualmente.
+> Acá: crear estructura de campaña con esos creativos.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Recién empezás con Ads | Aprendé fundamentos primero |
+| Querés suite multi-plataforma | Claude Ads |
+| Producción crítica enterprise | CLI oficial de Meta |
+| Sin paciencia para setup MCP custom | Skill open source ya armada |
+
+---
+
+## Próximos pasos
+
+- Para setup seguro con skill open source, [Claude Meta Ads](/boveda/claude-meta-ads)
+- Para CLI oficial de Meta, [Meta Ads CLI Oficial](/boveda/meta-ads-cli-oficial)
+- Para suite multi-plataforma, [Claude Ads](/boveda/claude-ads)

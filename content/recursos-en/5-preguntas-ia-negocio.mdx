@@ -1,0 +1,349 @@
+---
+title: "5 questions before adding AI to your business (you don't need the Mac Mini)"
+description: "The hype says you need an expensive Mac Mini to 'get into AI'. False. What you're missing isn't hardware — it's clarity about your business. 5 questions with copy-paste prompts so Claude can interview you, audit your process, and hand you a 3-phase AI plan. Last one: turn it into a reusable skill."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["mejores-practicas-claude", "agencia-marketing-claude", "claude-fabrica-a-pro"]
+---
+
+## The myth
+
+A wave of people buying the same expensive Mac Mini "to get into AI". It's a symptom of a deeper mistake: **believing AI is a hardware problem**.
+
+It isn't.
+
+If you're going to add AI to your business, the most powerful tool **already runs in any browser**, on the laptop you have today. What really holds you back isn't the machine — it's that **AI doesn't know your business**. And it's not going to guess.
+
+Before you spend a dime on equipment, spend **one hour** answering 5 questions almost nobody asks you.
+
+---
+
+## The 5 questions
+
+| # | Question | What for |
+|---|----------|----------|
+| 1 | What produces the result? | You isolate the steps that make real money |
+| 2 | Where is it written? | You turn tacit knowledge into a doc |
+| 3 | What shouldn't exist anymore? | You audit what's excess (don't automate fat) |
+| 4 | What's the simplest version? | You strip the process to its essential form |
+| 5 | How do I add AI? | Claude hands you a 3-phase plan |
+
+You do the first 4 with Claude acting as your consultant. For the 5th you paste everything back and it hands you the plan.
+
+---
+
+## Question 1 — What produces the result?
+
+The steps that **actually produce** your sales, not the pretty theory.
+
+You'll be surprised how many people don't even know how their own business works. Before automating anything, you need to know **what moves the needle**.
+
+### Prompt
+
+```
+You are a direct, practical operations consultant. Help me
+identify which steps of my business produce my results
+(sales, customers, deliveries) and which are just habit or theory.
+
+My business is: [describe in 2-3 sentences: what you sell, to whom,
+how you make money].
+
+Ask me questions ONE AT A TIME (max 2 together) and wait for my
+answer before continuing.
+
+Start from the end: ask me the exact moment a customer pays me,
+and let's work backwards from there to the first contact.
+
+Your goal: by the time we finish, we have a clear picture, in order,
+of the real path that takes a customer from meeting me to paying me,
+marking which steps produce the result and which are only there
+because "that's how it's always been done".
+
+Don't let me dress it up. If something adds nothing, tell me.
+```
+
+### What to expect
+
+15-30 min of interview. Claude will ask you:
+- "How do you receive the first contact?"
+- "What happens between them asking the price and buying?"
+- "What do you do / what does your team do?"
+
+At the end, you'll have a clear picture that many **didn't have before** doing this exercise.
+
+---
+
+## Question 2 — Where is it written?
+
+If AI can't see it, it can't help you. You need to turn the conversation from question 1 into a **structured document**.
+
+### Prompt
+
+Continue the same conversation from question 1 with:
+
+```
+Take everything we discussed about how my business works and
+turn it into a clear, ordered process document.
+
+Structure it like this:
+1. Goal of the process in one line
+2. Steps in numbered order
+3. Who does each step
+4. What tool is used / where it's done
+5. Roughly how long each step takes
+
+Write it in simple language, as if you were explaining it to
+someone who starts tomorrow and knows nothing about the business.
+
+If you're missing info for any step, DON'T make it up — mark it
+with [MISSING: ...] so I can complete it.
+
+Deliver it ready to save as a file called proceso.md.
+```
+
+### The output
+
+You end up with `proceso.md`, which is the **raw material for everything else**. Without this, the following steps don't apply.
+
+---
+
+## Question 3 — What shouldn't exist anymore?
+
+You take your steps and delete what's excess. **There's no point automating a step that shouldn't even exist**.
+
+First you trim the fat, then you add AI.
+
+### Prompt
+
+```
+Here's my written process:
+
+[paste the full proceso.md]
+
+Audit it like a consultant who gets paid to find fat.
+
+For EACH step tell me:
+1. Does this matter to the customer or only to me?
+2. What would happen if I deleted it tomorrow?
+3. Is it done for a good reason or just because it's always been done?
+
+At the end, give me a short list of steps to eliminate, with one
+sentence on why each one. Be direct, DON'T spare my feelings.
+
+If a step is sacred and untouchable, tell me that too and explain
+why.
+```
+
+### What's going to hurt
+
+You'll see that you have:
+- Steps you add "just in case"
+- Triple confirmations nobody asks for
+- Internal bureaucracy that adds nothing for the customer
+- Manual work that generates no value
+
+Some will be easy to cut. Others will hurt. **Cut them anyway**.
+
+---
+
+## Question 4 — What's the simplest version?
+
+You remove pieces, merge steps, make crystal clear who does what, how, when and why.
+
+The simplest version that gives the same results **is the one you'll use to add AI**.
+
+### Prompt
+
+```
+With the steps that survived the audit, build the simplest
+version of my process that still gives me the same results.
+
+Rules:
+- Merge steps where it makes sense
+- Eliminate unnecessary handoffs and waits
+- On each step make crystal clear who does it, what they do, when and why
+
+Deliver it in 2 parts:
+1. The final process, clean and numbered
+2. A short summary of what changed vs the original version and what I gained
+
+This version is the one I'll use for AI — write it so that
+anyone (or any AI) can follow it without asking me anything.
+```
+
+---
+
+## Question 5 — How do I add AI?
+
+This is where **Claude hands you the plan**. Give it all the context:
+
+### Master prompt
+
+```
+Act as a practical, honest AI strategist, NOT a guru
+selling snake oil.
+
+My business: [what you sell, to whom, how you make money]
+
+Simple process: [paste the simple version from step 4]
+
+My current tools: [e.g.: WhatsApp, Excel, Gmail, Instagram]
+
+What eats most of my time: [describe the heaviest part]
+
+Context: I DON'T know how to code. Low budget.
+
+Analyze my process step by step and give me:
+
+1. In which exact steps AI would save me the most time or money.
+   Order them by impact vs effort (easiest and most profitable first).
+
+2. For each one, what I can do TODAY with just Claude in the
+   browser, without installing anything.
+
+3. What I'd need to take further down the line to Claude Code or
+   automation, and why.
+
+4. What's NOT worth automating yet (so I don't waste time).
+
+Close with a 3-phase plan:
+- This week
+- This month
+- Later on
+
+Tell me the first concrete step I should take TODAY.
+NO theory — actionable steps.
+```
+
+### The result
+
+A **prioritized list** worth 10x more than any "AI for business" course:
+
+- What you solve today in the chat
+- What you take to Claude Code later
+- What's NOT worth touching yet
+
+---
+
+## Taking it to Claude Code
+
+The chat is perfect for thinking. **Claude Code** can:
+- Read your real files (proceso.md, Excel, templates)
+- Create things that stay saved
+- Repeat work for you
+
+You don't need to be a programmer. You talk to it just like in the chat — except now it has hands.
+
+### Setup (one time only)
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Or use the desktop app / web version. See [setup zero](/boveda/claude-code-setup-zero).
+
+### Your first prompt in Claude Code
+
+```
+> You're working in my business folder.
+  Read the file proceso.md to understand how I operate.
+
+  I want to build the first automation from my plan:
+  [paste step #1 by impact vs effort]
+
+  Before creating or touching files, explain to me in plain English
+  what you're going to do and why, as if I did NOT know how to program
+  (because I don't).
+
+  Let's go step by step. After each step, tell me what we did
+  and what's next.
+
+  If you need something from me (key, data, decision), ask me
+  instead of making it up.
+```
+
+---
+
+## The agent that repeats the method
+
+The most powerful part: instead of running the 5 questions by hand every time, **package them into a skill**. You install it once and call it by name next time.
+
+### Prompt to create the skill
+
+```
+> Create a Claude Code skill called "diagnostico-negocio".
+
+  Its job: walk a person through the 5 questions that
+  prepare a business process before adding AI.
+
+  In order:
+  1. Ask the questions one by one, waiting for an answer
+     (what produces the result, where it's written, what's excess,
+     what's the simple version)
+  2. Keep writing everything into proceso.md as we go
+  3. Audit which steps are excess and propose which to eliminate
+  4. Deliver the simplest version of the process
+  5. Close with a 3-phase AI plan + first step for today
+
+  Create it with a well-written SKILL.md file.
+
+  When you're done, explain to me in plain English:
+  - How to install it
+  - How to use it again next time without repeating anything
+```
+
+### How you reuse it
+
+```
+> Use the diagnostico-negocio skill to analyze my
+  after-sales process.
+```
+
+It walks you through the 5 questions again with the new context.
+
+---
+
+## Anti-patterns
+
+### 1. Skipping the questions and jumping straight to 5
+
+If you paste "build me an AI plan" without going through 1-4, Claude hands you **a generic plan**. The value is in the context you build.
+
+### 2. Buying hardware "just in case"
+
+If you haven't answered the 5 questions yet, **you don't need a Mac Mini or anything**. Your current laptop + claude.ai is enough for this whole process.
+
+### 3. Wanting to automate everything at once
+
+The 3-phase plan is **on purpose**. If you try to add AI to 8 steps at once, **none of them work**. Start with 1, validate, then continue.
+
+### 4. Not writing down the answers
+
+If you answer the 5 questions "in your head" without writing, **it's useless**. AI needs text. The practice of **writing it down** also clarifies your thinking.
+
+### 5. Over-analyzing and never executing
+
+The whole process is **one hour**. If you spent 3 days "preparing the questions", you're already procrastinating. Do it raw, come out with a plan B, adjust later.
+
+---
+
+## ROI of the exercise
+
+| Investment | Return |
+|-----------|---------|
+| Mac Mini "for AI" | $700 + nothing concrete |
+| "AI for business" course | $300-1500 + hours of video |
+| 1h with the 5 questions | $0 + clear plan actionable today |
+
+If after the exercise you discover you **do need more compute** for something specific, then buy the Mac Mini. **With justification**, not because it's trendy.
+
+---
+
+## Next steps
+
+- For general principles that apply to any project with Claude, [Claude best practices](/boveda/mejores-practicas-claude)
+- To scale into a marketing agency, [marketing agency Claude](/boveda/agencia-marketing-claude)
+- To take your business to "pro factory" with systems, [Claude factory to pro](/boveda/claude-fabrica-a-pro)

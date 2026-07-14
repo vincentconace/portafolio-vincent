@@ -1,0 +1,310 @@
+---
+title: "Conectar Claude a Meta Ads sin que te bloqueen la cuenta"
+description: "La skill oficial trae las reglas de Meta integradas, opera en PAUSED por default y pide confirmación antes de cada cambio. Setup paso a paso + las reglas que NO podés violar si querés que tu cuenta sobreviva."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "meta-ads"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["andromeda-meta-ads", "cloud-ads-flow", "agencia-marketing-claude"]
+---
+
+## Antes de hacer nada — las reglas duras de Meta
+
+Meta puede **suspender o banear cuentas** por uso de API que considere abusivo. No es teórico, **pasa**. Reglas no negociables:
+
+| Violación | Consecuencia |
+|-----------|--------------|
+| Crear ads en estado ACTIVE programáticamente | Cuenta en revisión |
+| Cambios masivos sin pausas | Throttling + flag |
+| Spend cambios bruscos (>3× en 24h) | Account hold |
+| Bidding agresivo automatizado | Suspensión |
+| Skipear los Limits oficiales de la API | Token revocado |
+
+La skill oficial **respeta estas reglas por diseño**. Si hacés un script propio que no las respeta, **vas a perder la cuenta**.
+
+> Mantra: **cualquier cambio crítico, pasa por estado PAUSED primero. Vos pasás a ACTIVE manualmente desde Ads Manager.**
+
+---
+
+## Cómo funciona la skill oficial
+
+La skill viene con **3 protecciones built-in**:
+
+### 1. Default PAUSED
+
+Cualquier ad / ad set / campaña que crees con la skill **arranca en PAUSED**.
+
+```
+> Creame nueva campaña con presupuesto $20/día, audiencia X, creativo Y.
+
+[Skill crea la campaña en PAUSED]
+[Te avisa: "Campaña creada en PAUSED. Activala desde Ads Manager cuando
+quieras lanzarla."]
+```
+
+No hay forma de que la skill cree ads activos automáticamente.
+
+### 2. Confirmación antes de cambios
+
+Para cualquier acción que **modifica** algo existente:
+
+```
+> Cambiá el budget de la campaña X de $50 a $200.
+
+Skill:
+  ATENCIÓN: cambio de presupuesto +300%.
+
+  Riesgo según Meta:
+  - Cambios bruscos pueden meter la cuenta en revisión
+  - Recomendado: subir gradualmente (50 → 100 → 200) en 3 días
+
+  ¿Procedo igual? (sí / gradualmente / cancelar)
+```
+
+Te avisa **del riesgo** antes de ejecutar.
+
+### 3. Modo solo-lectura por default
+
+Si solo querés **leer** (reportes, análisis), el modo lectura no toca nada:
+
+```
+{
+  "mcpServers": {
+    "meta-ads": {
+      "env": {
+        "META_ADS_MODE": "read-only"
+      }
+    }
+  }
+}
+```
+
+Con esto, Claude **puede consultar** todo pero **no puede modificar nada**. Cero riesgo.
+
+---
+
+## Setup paso a paso
+
+<Step number={1} title="Configurar Business Manager">
+
+En Meta Business Suite:
+1. Settings → Users → System Users → Create
+2. Nombre: "claude-api" (o el que quieras)
+3. Role: Employee (NO admin)
+4. Asignar al Business Account
+5. Generar token con permisos mínimos:
+   - `ads_read` (necesario para lectura)
+   - `ads_management` (solo si vas a modificar)
+   - **NO** marcar `business_management` (overkill, peligroso)
+
+</Step>
+
+<Step number={2} title="Token con expiración corta">
+
+Cuando generes el token, **NO uses long-lived sin expiración**. Configurá:
+- Expiración: 60 días (renovable)
+- Restricción de IP: tu IP / tu rango
+
+Si el token se filtra, daño limitado a 60 días.
+
+</Step>
+
+<Step number={3} title="Instalar la skill">
+
+```bash
+mkdir -p ~/.claude/skills/meta-ads
+curl https://raw.githubusercontent.com/anthropics/skills/main/meta-ads/SKILL.md \
+  -o ~/.claude/skills/meta-ads/SKILL.md
+```
+
+(O instalación oficial según el método de tu setup.)
+
+</Step>
+
+<Step number={4} title="Configurar settings.json" last>
+
+```json
+{
+  "mcpServers": {
+    "meta-ads": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/meta-ads-mcp"],
+      "env": {
+        "META_ACCESS_TOKEN": "${META_TOKEN}",
+        "META_AD_ACCOUNT_ID": "act_XXXXXXXX",
+        "META_ADS_MODE": "read-only"
+      }
+    }
+  }
+}
+```
+
+**Empezá con `read-only`**. Cuando ya conocés bien el comportamiento (2-4 semanas), podés pasar a modo write.
+
+</Step>
+
+---
+
+## Los 4 modos
+
+| Modo | Permite | Cuándo |
+|------|---------|--------|
+| `read-only` | Solo consultas | Default recomendado. Análisis, reportes. |
+| `paused-only` | Crear/modificar en PAUSED | Cuando ya querés iterar pero con safety net |
+| `write` | Cambios reales (con confirmación) | Operación normal después de tener experiencia |
+| `auto` | Sin confirmación | NUNCA recomendado. Solo en sandbox/test account. |
+
+Mi recomendación: **6 meses en `read-only` o `paused-only`** antes de pasar a `write`. Después, **nunca `auto`**.
+
+---
+
+## Lo que la skill te deja hacer
+
+### Análisis (modo read-only)
+
+```
+> Reporte de los últimos 30 días:
+- Top 5 ad sets por ROAS
+- Audience overlap entre las 8 campañas activas
+- Creativos con creative fatigue (decay >30%)
+- Cambios de CPA semana sobre semana
+```
+
+```
+> Identificá ad sets con CPA por encima del target ($25):
+- Cuál pausarías
+- Cuál duplicarías presupuesto si bajara CPA
+- Cuál refactorizarías creativos
+```
+
+### Creación (modo paused-only o write)
+
+```
+> Creame nueva campaña para [producto X] con:
+- Objetivo: conversion
+- Daily budget: $30
+- Audiencia: lookalike 1% de mis compradores últimos 90 días
+- 5 ad sets con diferentes creativos (los que generé con Higgsfield)
+- A/B testing entre los 5
+
+Crear en PAUSED. Yo activo desde Ads Manager.
+```
+
+### Cambios (modo write)
+
+```
+> El ad set X tiene buen ROAS. Subí el budget de $20 a $30.
+  Gradualmente: hoy $25, mañana $30. Sin saltos bruscos.
+```
+
+---
+
+## Las cosas que NO debe hacer la skill
+
+### NUNCA
+
+- Activar campañas/ads/ad sets automáticamente
+- Cambiar budget en >50% sin confirmación explícita
+- Crear audiencias sin tu approval (las audiencias mal hechas te bannean)
+- Editar pixel events
+- Modificar Conversion API setup
+- Cambiar billing / método de pago
+
+### NO se debe automatizar sin supervisión
+
+Aunque técnicamente posible:
+
+- Reglas de "pausa todo lo que tiene CPA > X" — el límite no captura contexto (a veces vale dejar correr)
+- Crear ads diarios automáticamente — sin supervisión humana, calidad cae rápido
+- Responder comments / DMs por API — Meta detecta y banea
+
+---
+
+## Workflow recomendado seguro
+
+### Día a día (modo read-only)
+
+```
+[Mañana]
+> /report-ads
+[Te da el resumen del día anterior]
+
+[Identificás algo a optimizar]
+> Ad set Y tiene CPA alto. Investigame por qué.
+[Skill investiga creative, audience, bidding]
+
+[Decidís acción]
+> Pausá ad set Y desde mi laptop manualmente.
+[Vos lo pausás en Ads Manager — NO la skill]
+```
+
+### Optimización semanal (modo paused-only)
+
+```
+[Lunes]
+> Basado en el performance de la semana, proponé 5 ads nuevos:
+  - 2 variantes del hook ganador
+  - 2 variantes del creativo ganador
+  - 1 audiencia nueva basada en lookalike
+
+  Crealos en PAUSED. Yo decido cuáles activar.
+
+[Vos revisás los 5 en Ads Manager, activás los que querés]
+```
+
+### Lanzamiento de campaña nueva (modo write con confirmación)
+
+Solo cuando estás 100% seguro del plan:
+
+```
+> Tengo plan completo de la nueva campaña [pegás el plan].
+  Implementá. Cada cambio crítico, pedí confirmación.
+```
+
+---
+
+## Anti-patrones que te van a banear
+
+### 1. Token sin restricción de IP
+
+Si tu token vive en `.env` que commiteás por error → bot lo encuentra → opera tu cuenta hasta cero. **Restringí IPs en el token.**
+
+### 2. Auto-mode sin supervisión
+
+"Voy a poner Claude a manejar todo solo durante mis vacaciones". **No**. Una semana sin supervisión + un cambio raro de Meta API = cuenta en revisión.
+
+### 3. Volumen alto de cambios
+
+50 cambios por hora = flag automático en Meta. **Espaciá** los cambios.
+
+### 4. Tokens viejos
+
+Token de hace 2 años con permisos generosos = riesgo. **Rotalos cada 90 días.**
+
+### 5. Ignorar warnings de la skill
+
+Cuando la skill te avisa "esto puede traer riesgos" y vos respondés "dale igual", **la próxima vez que algo se rompe, no tenés a quién culpar**.
+
+---
+
+## Si tu cuenta entra en revisión
+
+Pasa eventualmente. Pasos:
+
+1. **Pausá la skill inmediatamente** (cambiá a `read-only`)
+2. **Revoca el token** que estaba activo
+3. **Contactá soporte de Meta** explicando: uso de API oficial, fines legítimos
+4. **Esperá**. Pueden ser días.
+5. Cuando se resuelva, generá token nuevo con permisos más restrictivos
+6. Volvé al setup con más cuidado
+
+**Cuentas que se banean definitivamente** son las que cometen las violaciones múltiples veces. Una vez, generalmente perdonan si justificás.
+
+---
+
+## Próximos pasos
+
+- Para el sistema completo de marketing post-Andromeda, [Andromeda — 8 reglas Meta Ads](/boveda/andromeda-meta-ads)
+- Para automatizar el loop semanal de ads, [Cloud Ads Flow](/boveda/cloud-ads-flow)
+- Para combo de marketing más amplio (Meta + Google + más), [agencia marketing](/boveda/agencia-marketing-claude)

@@ -1,0 +1,266 @@
+---
+title: "Claude Small Business — 15 habilidades pre-armadas para tu PyME"
+description: "El plug-in que mete 15 habilidades + 15 flujos dentro de Cowork: cobranza, márgenes, cierre mensual, leads, contratos, contenido, RRHH. Con 7 conectores nativos (QuickBooks, PayPal, HubSpot, etc.). Para dueños que no tienen equipo especializado todavía."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-cowork", "quickbooks", "hubspot"]
+publishedAt: "2026-05-16"
+readingTime: "10 min"
+relatedSlugs: ["claude-finanzas", "claude-microsoft-365", "nueve-prompts-cowork"]
+---
+
+## Qué es
+
+Anthropic publicó un plug-in para PyMEs que vive como **toggle dentro de Claude Cowork**. Cuando lo activás, Cowork gana **15 habilidades + 15 flujos** que cubren 6 áreas:
+
+| Área | Lo que cubre |
+|------|--------------|
+| Finanzas | Cobranza, márgenes, cierre de mes |
+| Ventas | Triaje de leads, follow-up |
+| Marketing | Estrategia de contenido, calendario editorial |
+| Operaciones | Compras, inventario, vendors |
+| RRHH | Onboarding, documentos, reviews |
+| Atención al cliente | Triaje de tickets, respuestas |
+
+Es como tener **15 empleados especializados a tiempo parcial** adentro de Cowork — sin contratar a nadie. Cada habilidad funciona como slash-command que invoca con los conectores correctos.
+
+---
+
+## Las habilidades nombradas (las más útiles)
+
+De las 15 habilidades del plug-in, estas son las que aportan más valor inmediato a una PyME típica:
+
+### 1. Cazador de facturas
+
+Persigue facturas vencidas o por vencer. Cada lunes:
+
+- Identifica facturas con vencimiento esta semana
+- Para cada una, drafted un email de cobranza adaptado al cliente (firme con los morosos, gentil con los nuevos, cordial con los habituales)
+- No manda nada — te deja los drafts listos para revisar
+
+Cobra sin ser tú el que escribe el email incómodo.
+
+### 2. Analizador de márgenes
+
+Conecta a tu sistema contable, analiza los márgenes por:
+
+- Producto (cuáles tienen margen real, cuáles vendés "sin saberlo a pérdida")
+- Cliente (clientes que parecen grandes pero te dejan poco)
+- Canal (qué canal de venta es el más rentable)
+
+Genera un reporte mensual con las 3 acciones concretas de mayor impacto.
+
+### 3. Cierre de mes
+
+Equivalente PyME de [Claude Finanzas Monthly Close](/boveda/claude-finanzas) pero más liviano:
+
+- Revisa que todas las transacciones del mes estén categorizadas
+- Genera P&L y balance preliminar
+- Compara contra mes anterior
+- Marca anomalías para que las revises
+
+### 4. Triador de leads
+
+Cuando entra un lead nuevo (formulario, email, WhatsApp), la habilidad:
+
+- Lo enriquece con info pública (LinkedIn, sitio web)
+- Lo clasifica: hot / warm / cold según criterios que vos definís
+- Para los hot: drafted email de respuesta inmediata
+- Para los warm: agenda en tu calendar un follow-up
+- Para los cold: agrega a una secuencia de nurturing
+
+### 5. Estratega de contenido
+
+Genera tu calendario editorial:
+
+- Basado en tu nicho + tu audiencia + lo que ya publicaste
+- Pillar topics + variaciones por canal (LinkedIn, blog, newsletter)
+- Briefs de cada pieza con hook, ángulo, CTA
+
+### 6. Revisor de contratos
+
+Le pegás un contrato (PDF, DOCX) y te devuelve:
+
+- Resumen ejecutivo en 1 página
+- Cláusulas que requieren atención (auto-renovación, penalidades, exclusividad)
+- Diff vs tu contrato estándar (si tenés uno cargado)
+- Recomendaciones de negociación
+
+**No reemplaza abogado** — te da el draft de revisión que un abogado después valida.
+
+### Las otras 9
+
+Las restantes cubren: onboarding de empleado nuevo, gestor de vendors, respondedor de tickets de soporte, generador de propuestas comerciales, reconciliador de pagos, monitor de inventario, planificador de compras, generador de reportes para inversionistas, gestor de campañas pagadas.
+
+---
+
+## Los 7 conectores nativos
+
+Lo que distingue al plug-in de "Claude responde con conocimiento general" es que **conecta a tus sistemas reales**:
+
+| Conector | Para qué |
+|----------|----------|
+| **QuickBooks** | Datos contables, facturas, P&L |
+| **PayPal** | Transacciones, cobros, conciliación |
+| **HubSpot** | CRM, leads, pipeline de ventas |
+| **Canva** | Generación y edición de contenido visual |
+| **DocuSign** | Contratos firmados, status de firmas |
+| **Google Workspace** | Gmail, Calendar, Drive, Docs |
+| **Microsoft 365** | Outlook, Excel, Word, Teams |
+
+Las habilidades **usan estos conectores automáticamente**. No tenés que copiar/pegar datos entre sistemas.
+
+> Si tu stack no incluye ninguno de estos, el plug-in pierde gran parte del valor. Revisá la lista antes de activarlo.
+
+---
+
+## Cómo se prende
+
+3 pasos:
+
+<Step number={1} title="Activar el plug-in">
+
+Dos caminos en paralelo:
+
+- **Camino A**: ir a `claude.com/solutions/small-business` y activar desde ahí
+- **Camino B**: abrir Cowork → Marketplace de Plugins → buscar "Small Business" → Enable
+
+Ambos llegan al mismo lugar.
+
+</Step>
+
+<Step number={2} title="Conectar las fuentes que vas a usar">
+
+Settings → Connectors. **Solo activá las que realmente usás**:
+
+- Si facturás con QuickBooks → activalo
+- Si tu CRM es otro (no HubSpot) → no actives HubSpot
+- Si no usás DocuSign → salta
+
+Cada conector pide OAuth. Las credenciales se quedan en tu provider, no en Claude.
+
+</Step>
+
+<Step number={3} title="Crear un Cowork Project con el contexto de tu negocio" last>
+
+Las habilidades funcionan mucho mejor cuando saben de tu negocio. Creá un Cowork Project con un `CLAUDE.md` que incluya:
+
+```markdown
+# Mi Negocio
+
+## Qué hacemos
+[1 párrafo claro]
+
+## Quiénes son nuestros clientes
+[perfil + ticket promedio + ciclo de venta típico]
+
+## Nuestro stack
+- Contable: QuickBooks
+- CRM: HubSpot
+- Pagos: PayPal + transferencias
+- Equipo: 4 personas
+
+## Convenciones
+- Idioma: español
+- Tono al cliente: cordial pero firme
+- Productos principales: [lista]
+- Productos descontinuados: [lista — para que no los mencione]
+
+## Reglas duras
+- NO mandar emails sin mi aprobación
+- NO actualizar precios sin mi confirmación
+- Mostrarme drafts antes de cualquier comunicación externa
+```
+
+Con eso, todas las habilidades operan con contexto de tu negocio específico.
+
+</Step>
+
+---
+
+## El primer mes — qué activar y en qué orden
+
+No actives todo el día 1. Sugerencia de ramp-up:
+
+### Semana 1 — Foundations
+
+- Solo conectores: QuickBooks + email + calendar
+- Habilidad: **Cazador de facturas** (cobranza es ROI inmediato)
+- Habilidad: **Cierre de mes** (probarlo con un mes ya cerrado, comparar contra lo que hiciste a mano)
+
+### Semana 2 — Sales
+
+- Sumar conector: HubSpot (o tu CRM)
+- Habilidad: **Triador de leads**
+- Habilidad: **Estratega de contenido**
+
+### Semana 3 — Operaciones
+
+- Habilidad: **Analizador de márgenes**
+- Habilidad: **Revisor de contratos**
+
+### Semana 4 — Ampliación
+
+- Activar el resto solo si lo necesitás. **Resistí la tentación de activar todo "por las dudas".**
+
+---
+
+## Anti-patrones
+
+### 1. Activar las 15 desde el día 1
+
+Cada habilidad necesita un poco de tuning para tu negocio. Activar 15 en paralelo significa que ninguna queda bien afinada. **Una por semana** es realista.
+
+### 2. Confiar en outputs sin revisar
+
+Estas habilidades hacen drafts del 80%. **Vos sos el 20%**. Si dejás que el cazador de facturas mande emails de cobranza sin revisar, vas a quemar relaciones con clientes.
+
+### 3. Sin conectores reales
+
+Si activás el plug-in pero no conectás QuickBooks, HubSpot, etc., las habilidades operan sin datos reales y te van a tirar genérico. **Sin conectores, el plug-in es 30% del valor.**
+
+### 4. Sin `CLAUDE.md` del negocio
+
+Habilidades sin contexto = respuestas genéricas. El doc de tu negocio es lo que hace que el Triador de leads clasifique tus leads, no leads genéricos.
+
+---
+
+## Cuándo NO conviene
+
+### 1. Tu stack no incluye los conectores nativos
+
+Si tu contable es Xero, tu CRM es Pipedrive, tu pagos es Stripe — los conectores no aplican. Algunos funcionan con APIs custom pero perdés mucho del valor "out of the box".
+
+### 2. Sos solo (1 persona)
+
+Si manejás todo solo, capaz [9 prompts para Cowork](/boveda/nueve-prompts-cowork) sea mejor approach. Son slash-commands ligeros que cubren parecido sin el overhead del plug-in entero.
+
+### 3. Equipo grande (>20 personas)
+
+Si ya tenés equipo, lo más probable es que necesités algo más custom. [Claude Financial Services](/boveda/claude-finanzas) (si es vertical financiera) o agentes especializados propios son mejor fit.
+
+---
+
+## El cálculo de ROI real
+
+Para una PyME típica (4-8 personas):
+
+| Tarea | Tiempo manual / semana | Con el plug-in |
+|-------|-------------------------|-----------------|
+| Cobranza (cazador de facturas) | 3h | 30 min revisión |
+| Triador de leads | 5h | 1h revisión |
+| Cierre de mes | 8h | 1h revisión |
+| Reportes para dueño | 4h | 20 min |
+| Triaje de soporte | 6h | 1h |
+
+**~25h/semana ahorradas** si las 5 habilidades están bien afinadas. Costo del plug-in + Cowork: depende del plan (típicamente $20-100/mes).
+
+Si tu hora vale más de $5, ya estás en positivo.
+
+---
+
+## Próximos pasos
+
+- Si tu negocio es vertical finanzas, [Claude Financial Services](/boveda/claude-finanzas) tiene agentes más especializados
+- Para trabajo más artesanal con prompts específicos, [9 prompts para Cowork](/boveda/nueve-prompts-cowork)
+- Para entender la diferencia entre superficie Claude/Cowork/Code, [anatomía de Claude](/boveda/anatomia-claude)

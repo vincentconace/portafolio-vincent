@@ -1,0 +1,94 @@
+---
+title: "MCP Trello — boards, cards y workflow de Trello desde Claude Code"
+description: "MCP server para Trello con 176 installs. Crear y manejar boards, lists y cards desde Claude. Útil para equipos que organizan trabajo en Trello y querés AI orquestando movimientos de cards."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "trello"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-monday", "mcp-google-workspace", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/mcp-server-trello"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mcp-server-trello.json"
+---
+
+## Qué es
+
+Trello es la pizarra Kanban más popular. Boards, lists, cards. La descripción inline en aitmpl es genérica — para detalles, [JSON de configuración](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mcp-server-trello.json) y la doc oficial del proyecto.
+
+Este MCP conecta a tu cuenta Trello para que Claude opere boards y cards desde el editor. Útil cuando organizás trabajo en Trello pero codeás en Claude.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 176 |
+| Servidor MCP | `trello` |
+| Cuenta requerida | Sí — Trello + API key + token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/mcp-server-trello
+```
+
+Pre-requisito: cuenta Trello + API key + token desde [trello.com/app-key](https://trello.com/app-key).
+
+Para Claude:
+
+```
+Instalé el MCP devtools/mcp-server-trello. Configurá API key + token y
+listame mis boards. Mostrame las cards en estado "Doing" del board X.
+```
+
+## Qué podés hacer con esto
+
+### Triage de tareas
+
+"En el board X, listame las cards más viejas que no se movieron en 14 días. Por cada una, decime si necesita revivir, archivar o bumpear prioridad".
+
+### Sync con código
+
+"Para cada PR que cerré hoy, mové la card relacionada a `Done` en el board X". Pipeline de actualización post-merge.
+
+### Creación de cards desde código
+
+"De los issues que cerré este sprint, creame cards de retro: lessons learned y action items para el próximo sprint".
+
+### Búsqueda cross-board
+
+"En todos mis boards, buscame cards con label `urgent` que no se movieron en la última semana".
+
+### Notificaciones a equipos
+
+Combinado con [Slack u otros](/boveda/mcp-google-workspace), cuando una card crítica se mueve a Done, Claude puede notificar al canal correspondiente.
+
+## Pre-requisitos
+
+- **Cuenta Trello** activa
+- **API key + token** desde el dev panel
+- **Permisos** sobre los boards que vas a manipular
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás otra plataforma de gestión** ([monday.com](/boveda/mcp-monday), Asana, Notion, ClickUp): este MCP es Trello-only.
+- **Operaciones destructivas:** archivar / eliminar cards por error. Hooks de aprobación.
+- **Token amplio:** un token deja a Claude operar todos tus boards visibles. Tratalo como credential seria.
+- **Workflow ya manual cómodo:** si tu interacción con Trello es casual, el MCP suma overhead.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Trello MCP](https://www.aitmpl.com/component/mcps/devtools/mcp-server-trello) — comando exacto.
+- **Config JSON:** [mcp-server-trello.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/mcp-server-trello.json).
+- **Trello dev panel:** [trello.com/app-key](https://trello.com/app-key).
+
+## Recursos relacionados
+
+- [Monday MCP](/boveda/mcp-monday) — para equipos en monday.com.
+- [Google Workspace MCP](/boveda/mcp-google-workspace) — para sync con Calendar / Sheets si tu workflow combina.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que muevan cards reactivamente a eventos.

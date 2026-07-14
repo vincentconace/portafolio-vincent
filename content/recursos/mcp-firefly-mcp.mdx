@@ -1,0 +1,86 @@
+---
+title: "MCP Firefly — servicios AI para asistencia de desarrollo en Claude Code"
+description: "MCP server con 144 installs que conecta Firefly AI services con Claude Code: análisis de código y sugerencias inteligentes. Para equipos que ya usan Firefly y quieren integrarlo en su workflow de Claude."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "firefly"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-codacy", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/firefly-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/firefly-mcp.json"
+---
+
+## Qué es
+
+Firefly MCP conecta los servicios de Firefly AI a Claude Code para asistencia avanzada de desarrollo, análisis de código y sugerencias inteligentes. La info pública en aitmpl es genérica — para el detalle exacto de capacidades, mirá la [config JSON](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/firefly-mcp.json) y la doc oficial de Firefly.
+
+Si tu equipo usa Firefly como su capa de AI para devs, este MCP elimina el cambio de contexto: las recomendaciones de Firefly aparecen dentro de Claude.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 144 |
+| Servidor MCP | `firefly` |
+| Cuenta requerida | Sí — Firefly |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/firefly-mcp
+```
+
+Pre-requisito: cuenta Firefly + credenciales que el server pida.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/firefly-mcp. Decime las env vars que necesito
+setear y mostrame qué tools expone el server (mirá el JSON de
+configuración si la doc inline es genérica).
+```
+
+## Qué podés hacer con esto
+
+### Sugerencias asistidas durante desarrollo
+
+Si Firefly ofrece sugerencias de código, refactors o detección de patterns, el MCP las trae a tu sesión Claude. Combinar con la generación de Claude da segundo cerebro.
+
+### Análisis de código
+
+Para auditorías que Firefly tiene como funcionalidad: pedirle a Claude que las dispare y muestre resultados en el editor.
+
+### Validar el alcance real
+
+Por la info limitada en aitmpl: pegale al MCP una pregunta directa "qué tools exponés" y Claude te listará. Es la forma más confiable de saber qué hacer con él.
+
+## Pre-requisitos
+
+- **Cuenta Firefly** activa
+- **Credenciales** que el server pida (token / API key)
+- **Verificar el JSON de configuración:** la descripción inline es escueta
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Firefly:** obvio.
+- **Info limitada para evaluar:** la descripción en aitmpl es genérica. Antes de comprometerte, mirá la doc oficial del proveedor.
+- **Solapamiento con plugins de code review:** si ya usás [CodeRabbit, Codacy o autofix-bot](/boveda/plugin-claude-plugins-official), verificá que Firefly aporte algo distinto.
+- **144 installs es medio:** comunidad probando moderada. Probá en sandbox.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Firefly MCP](https://www.aitmpl.com/component/mcps/devtools/firefly-mcp) — comando exacto.
+- **Config JSON:** [firefly-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/firefly-mcp.json) — definición real del server.
+
+## Recursos relacionados
+
+- [Codacy MCP](/boveda/mcp-codacy) — análisis de calidad de código con plataforma alternativa.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — combinar análisis de tools externos con buenas prácticas locales.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que actúen sobre los hallazgos del MCP.

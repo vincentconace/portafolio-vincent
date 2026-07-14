@@ -1,0 +1,232 @@
+---
+title: "Núcleo Web: armá tu landing profesional sin saber programar"
+description: "Guía paso a paso para usar Núcleo Web, el starter de Claude Code que arma landings profesionales para negocios LatAm. Qué es, qué lográs, cómo instalarlo, las 7 fases del flujo, los 6 tipos de proyecto que podés armar, integraciones (WhatsApp, Mercado Pago), deploy a Vercel y dominio propio. En español y sin vueltas."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude-code", "nucleo-web", "vercel"]
+publishedAt: "2026-06-25"
+readingTime: "12 min"
+badge: "nuevo"
+featured: true
+featuredOrder: 1
+github: "https://github.com/vincentconace/nucleo-web"
+relatedSlugs: ["instalar-claude-code-terminal", "cual-plan-claude", "hablarle-a-claude", "claude-code-setup-zero"]
+---
+
+## Qué es Núcleo Web
+
+Núcleo Web es un asistente que arma **landing pages profesionales** por vos, charlando. Corre sobre [Claude Code](/boveda/instalar-claude-code-terminal): vos respondés preguntas sobre tu negocio y la IA diseña, programa y publica la página. **No necesitás saber programar.**
+
+No son plantillas genéricas: cada página se diseña a medida, mobile-first, con modo claro/oscuro, SEO y las integraciones que un negocio de Latinoamérica realmente usa (WhatsApp, Mercado Pago, SEO local).
+
+<Callout type="tip" title="Gratis y de código abierto">
+Núcleo Web es **gratis** y open source: cualquiera puede mirar el código, clonarlo y usarlo. Abrí el repo en [GitHub](https://github.com/vincentconace/nucleo-web) cuando quieras.
+</Callout>
+
+---
+
+## Propósito
+
+Bajar a cero la barrera técnica para tener presencia web profesional. En vez de contratar a alguien, pelearte con un constructor de páginas o copiar un template que se nota hecho con IA, **describís tu negocio y obtenés un sitio real, tuyo y editable.**
+
+## Objetivo
+
+Que en **una sola sesión** pases de "no tengo página" a una landing publicada con URL en vivo, lista para compartir y para vender.
+
+## Resultados — qué te llevás
+
+| Resultado | Detalle |
+|-----------|---------|
+| **Página en vivo** | URL pública desplegada gratis en Vercel |
+| **Código tuyo** | Next.js + Tailwind + TypeScript, 100% editable |
+| **Diseño a medida** | Colores, tipografías y secciones pensados para tu rubro |
+| **Mobile + modo oscuro** | Responsive de 375px a 1440px, toggle claro/oscuro |
+| **Integraciones LatAm** | Botón de WhatsApp, pagos con Mercado Pago, SEO local |
+| **Dominio propio (opcional)** | Conectás tu `.com` cuando quieras (~USD 10–15/año) |
+
+---
+
+## Requisitos
+
+Marcá lo que ya tenés listo (se guarda en tu navegador):
+
+<Checklist storageKey="nucleo-web-requisitos" items={["Claude Code instalado y andando", "Plan de Claude activo (Pro/Max/Team o Console con créditos)", "Node.js 18 o superior", "Git instalado", "Cuenta de Vercel (opcional, solo para dominio propio)"]} />
+
+<Callout type="info" title="¿Te falta alguno?">
+**Claude Code:** seguí la guía de [instalar Claude Code en la terminal](/boveda/instalar-claude-code-terminal). **Plan:** mirá [cuál plan Claude](/boveda/cual-plan-claude) — el Free no incluye Claude Code. **Node.js:** descargá la LTS de `nodejs.org`. **Git:** suele venir instalado; si no, `git-scm.com`.
+</Callout>
+
+<Callout type="warning" title="Núcleo Web vive adentro de Claude Code">
+Si todavía no tenés Claude Code andando, frená acá y hacé primero esa guía. Todo lo demás corre dentro de Claude Code.
+</Callout>
+
+---
+
+## Instalación y arranque
+
+<Step number={1} title="Verificá Node.js">
+
+```bash
+node --version
+```
+
+Si ves `v18` o mayor, listo. Si no, instalá la LTS desde `nodejs.org` y reabrí la terminal.
+
+</Step>
+
+<Step number={2} title="Cloná Núcleo Web">
+
+```bash
+git clone https://github.com/vincentconace/nucleo-web.git && cd nucleo-web
+```
+
+</Step>
+
+<Step number={3} title="Arrancá Claude">
+
+Dentro de la carpeta `nucleo-web`:
+
+```bash
+claude
+```
+
+Claude lee el archivo de instrucciones del proyecto y **se convierte en Núcleo Web**. Te va a saludar y arrancar el flujo.
+
+</Step>
+
+<Step number={4} title="Escribile en español" last>
+
+Núcleo Web detecta tu idioma del primer mensaje. Si escribís en español, todo el flujo sigue en español rioplatense. Un simple:
+
+```
+hola, quiero armar mi página
+```
+
+ya alcanza para empezar.
+
+</Step>
+
+---
+
+## Cómo funciona: las 7 fases
+
+Vos solo tomás **decisiones**; la IA hace toda la mecánica (escribir archivos, instalar dependencias, testear, optimizar).
+
+### Fase 0 — Punto de partida
+Elegís cómo arrancar (ver "Tres formas de empezar" más abajo) y, si vas desde cero, el tipo de proyecto.
+
+### Fase 1 — Descubrimiento (las preguntas)
+4 rondas cortas: qué hace tu negocio, a quién le vendés, cuál es la acción principal (CTA), beneficios, contacto, testimonios, redes, idioma. **Pausa clave:** después de la ronda visual, Claude te muestra la dirección de diseño (colores + vibe + estructura) y **espera tu OK** antes de seguir. Cambiar acá te ahorra rehacer trabajo después.
+
+### Fase 2 — Sistema de diseño
+Define los hex exactos, las Google Fonts y el "arquetipo" de landing según tu rubro. Podés pedir ajustes antes de seguir.
+
+### Fase 3 — Andamiaje
+Verifica Node, crea el proyecto Next.js, instala shadcn/ui y los componentes que tu página necesita. Cero intervención tuya.
+
+### Fase 4 — Construcción
+Escribe todas las secciones con copy "humanizado" (sin sonar a IA), arma el modo claro/oscuro, cablea las integraciones y deja todo responsive.
+
+### Fase 5 — Vista previa y control de calidad
+Levanta el server en `localhost:3000`, saca screenshots, corre auditoría SEO y un checklist (contraste WCAG AA, headings, alt text, links de WhatsApp/Mercado Pago, build OK). Le das feedback ("el hero se siente frío", "más grande el botón") y **lo cambia al toque**, las veces que haga falta.
+
+### Fase 6 — Deploy
+Cuando estás conforme, lo publica en Vercel con un comando y te devuelve la **URL en vivo** (no necesitás cuenta para el preview).
+
+### Fase 7 — Dominio propio (opcional)
+Si querés tu `.com`, te guía registrador por registrador (Vercel, Cloudflare, Namecheap o Domweb para `.com.ar`) y conecta el DNS.
+
+---
+
+## La galería: qué proyectos podés armar
+
+Núcleo Web arma 6 tipos de proyecto de fábrica y adapta las preguntas, las secciones y las integraciones a cada caso. ¿No sabés cuál es el tuyo? Respondé esto y te decimos qué armar (con el prompt listo para copiar):
+
+<ProjectPicker />
+
+¿Querés verlos todos? Explorá cada tipo y llevate el prompt que más te sirva:
+
+<ProjectGallery />
+
+---
+
+## Tres formas de empezar
+
+No siempre arrancás de una hoja en blanco. Núcleo Web te deja:
+
+1. **Desde cero** — elegís el tipo de proyecto y respondés las preguntas.
+2. **Reconstruir un sitio existente** — le pasás la URL; analiza colores, tipografías y estructura, y propone una versión mejorada.
+3. **Desde tu Instagram** — le pasás tu perfil/bio/capturas y arma la página a partir de eso.
+
+En los casos 2 y 3 Claude **pre-rellena** las respuestas y vos solo confirmás o corregís.
+
+---
+
+## Integraciones pensadas para LatAm
+
+| Integración | Qué hace | Cuándo se activa |
+|-------------|----------|------------------|
+| **WhatsApp** | Botón con mensaje precargado (`wa.me`) | Contacto por defecto |
+| **Mercado Pago** | Botón de pago con tu link (sin backend) | Si vendés o cobrás seña |
+| **SEO local** | Datos `LocalBusiness` (JSON-LD) | Si tenés local físico |
+| **Formspree** | Formularios de contacto reales | Opcional, si das tu form ID |
+
+---
+
+## Deploy: tu página en vivo
+
+Cuando le digas que estás listo, Núcleo Web:
+
+1. Verifica que el build pase (`npm run build`).
+2. Publica con su skill de deploy:
+
+```bash
+bash .claude/skills/vercel-deploy/scripts/deploy.sh site
+```
+
+Te devuelve una **URL de preview** ("¡tu página está online!") y una **URL para reclamarla** en tu cuenta gratis de Vercel y dejarla permanente.
+
+> Alternativa si ya tenés Vercel CLI: `npx vercel --yes`.
+
+---
+
+## Dominio propio (opcional)
+
+¿Querés `tunegocio.com` en vez de la URL de Vercel? El hosting sigue gratis; el dominio cuesta ~USD 10–15/año. Núcleo Web te guía según el registrador:
+
+- **Vercel Domains** — lo más simple, conecta solo.
+- **Cloudflare** — mejor precio, un poco más técnico.
+- **Namecheap** — barato y amigable para principiantes.
+- **Domweb** — argentino, factura en ARS, soporta `.com.ar`.
+
+---
+
+## Si algo falla
+
+### "node: command not found"
+Instalá Node.js LTS desde `nodejs.org` y reabrí la terminal.
+
+### Claude no arranca como Núcleo Web
+Asegurate de correr `claude` **dentro** de la carpeta `nucleo-web` (ahí está el archivo de instrucciones que lo transforma).
+
+### El build falla en el deploy
+Pedile: "corré `npm run build` y arreglá los errores". Núcleo Web los lee y los corrige solo.
+
+### Quiero seguir editando después
+El código queda en la carpeta `site/`. Corré `npm run dev` cuando quieras y volvé a desplegar tras los cambios.
+
+---
+
+## Próximos pasos
+
+- ¿Todavía no instalaste Claude Code? [Instalalo en la terminal](/boveda/instalar-claude-code-terminal)
+- Aprendé a pedirle las cosas bien: [hablarle a Claude](/boveda/hablarle-a-claude)
+- Dejá tu entorno fino: [setup zero](/boveda/claude-code-setup-zero)
+
+---
+
+## Fuentes oficiales
+
+- **Repo**: `github.com/vincentconace/nucleo-web`
+- **Claude Code**: `code.claude.com/docs`
+- **Vercel**: `vercel.com/docs`

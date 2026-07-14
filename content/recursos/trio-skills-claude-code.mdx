@@ -1,0 +1,240 @@
+---
+title: "Trío de skills para Claude Code — pensar, planear, pulir"
+description: "Tres skills usadas en orden que tapan los huecos por donde se rompen las apps hechas con IA: una interroga antes de escribir código, otra arma el plan y aísla cada función, otra le saca el look de IA al diseño. La secuencia importa."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-15"
+readingTime: "11 min"
+relatedSlugs: ["cinco-skills-necesarias", "spec-kit", "skill-code-reviewer"]
+---
+
+## Por qué tres
+
+Casi todos los que usamos Claude Code pasamos por lo mismo: la app arranca bien, a los dos días se rompe. No es que Claude programe mal — es que **le faltan 3 habilidades que no trae de fábrica**, y los tres huecos son distintos:
+
+1. **El malentendido del arranque** — Claude entiende algo distinto a lo que vos querías
+2. **El código nuevo que pisa el viejo** — los cambios rompen lo que ya funcionaba
+3. **El diseño que grita "esto lo hizo una IA"** — gradientes morados, Inter por todos lados, cards anidadas
+
+Hay 3 skills, cada una tapando uno de esos huecos. Lo importante: **se usan en orden**. Pensar → Planear → Pulir. Saltearse pasos hace que las que vienen no aporten su valor.
+
+| Paso | Skill | Hueco que tapa |
+|------|-------|----------------|
+| 1. Pensar | Grill Me | El malentendido del arranque |
+| 2. Planear | OpenSpec | El código nuevo que rompe el viejo |
+| 3. Pulir | Impeccable | El look de IA en el diseño |
+
+---
+
+## 1. Pensar — Grill Me
+
+Antes de escribir una línea, ejecutás la skill y Claude **te interroga**. Pregunta una por una:
+
+- ¿Qué querés construir exactamente?
+- ¿Para quién es?
+- ¿Cuáles son los casos borde?
+- **¿Qué NO debe hacer?** ← el más importante
+
+No escribe código hasta que el alcance queda claro **para vos** y verbalizado.
+
+### Por qué funciona
+
+Si te salteás este paso, Claude no se queda quieto: construye lo que **él se imaginó**. La mayoría de proyectos no se arruinan programando — se arruinan en el malentendido del primer minuto.
+
+Cuando vos respondés las preguntas, dos cosas pasan:
+
+1. **Cierras tu propia ambigüedad** — te dabas cuenta que no tenías clara la respuesta. Mejor enterarse antes de codear que después.
+2. **Le pasás el contexto a Claude estructurado** — todo lo respondido queda como input formal de la spec, no perdido en un párrafo libre.
+
+### Cuándo es overkill
+
+Tareas chicas obvias ("agregame un comentario a esta función") no necesitan interrogatorio. La skill es para **arranques de feature o módulo nuevo**, no para edits triviales.
+
+### Patrón mental
+
+Es la versión skill del [PRD ejecutivo](/boveda/prompts-prd-ejecutivo) en escala chica. Mismo principio: **clarificar antes de ejecutar**.
+
+---
+
+## 2. Planear — OpenSpec
+
+Una vez que el alcance está claro (gracias a Grill Me), `openspec` arma una **carpeta** con:
+
+- El plan en pasos numerados
+- Las specs por función / módulo
+- Tests propuestos por unidad
+- Una estructura de archivos esperada
+
+Y lo más importante: **aísla cada función** para que los cambios nuevos no pisen los viejos.
+
+### Cómo aísla
+
+El patrón: cada unidad de cambio tiene un "contrato" declarado (input/output) y un set de tests. Cuando Claude implementa la unidad N, se le obliga a **no modificar las unidades 1..N-1 que ya tienen sus tests pasando**.
+
+Si necesita cambiar algo de una unidad anterior, tiene que:
+
+1. Declarar explícitamente que va a hacerlo
+2. Verificar que el nuevo cambio no rompe los tests existentes
+3. Actualizar la spec correspondiente
+
+Suena pesado, pero **previene el problema típico**: "agregué la feature B y se rompió la A que ya funcionaba".
+
+### Cuándo aporta más
+
+- Proyectos con varias features que se construyen secuencialmente
+- Trabajos donde la spec inicial es chica pero crece (sin esto, la spec se vuelve un parche de parches)
+- Equipos donde más de una persona toca el mismo módulo
+
+### Cuándo NO
+
+Scripts one-shot, prototipos rápidos, exploración. El overhead de mantener specs estructuradas no se justifica.
+
+### Complementa al spec-kit
+
+Si ya leíste [spec-driven development con Claude](/boveda/spec-kit), OpenSpec es **una implementación opinada** del mismo principio. La diferencia: el spec-kit es un patrón mental; OpenSpec es una skill que aplica el patrón con su propia estructura de carpetas.
+
+---
+
+## 3. Pulir — Impeccable
+
+La parte final. Trae **20+ comandos** para limpiar los gestos visuales que delatan que el código vino de IA.
+
+### Qué arregla
+
+| Gesto de IA | Qué hace Impeccable |
+|-------------|----------------------|
+| Todo en Inter | Sugiere combinaciones de tipografía |
+| Gradientes morados/azules genéricos | Propone paletas más interesantes |
+| Cards anidadas dentro de cards | Aplana la jerarquía |
+| Padding inconsistente | Estandariza con escala (4/8/12/16/24/32) |
+| Bordes redondeados al gusto del LLM | Define un radius system coherente |
+| Botones con casi mismo peso visual | Diferencia primario/secundario/ghost |
+| Emojis en todas las secciones | Te pregunta cuál es necesario |
+| Glassmorphism por todos lados | Lo reserva para donde aporta |
+
+### Cómo se usa
+
+No es un solo comando — son 20+. Algunos son automáticos ("auditar y arreglar todo"), otros son específicos ("quitar emojis del header", "unificar el sistema de tipografía").
+
+```
+> /impeccable audit
+[lista los problemas detectados]
+
+> /impeccable fix typography
+[unifica el sistema tipográfico]
+
+> /impeccable fix radius
+[estandariza border-radius]
+```
+
+### Trampa común
+
+Si no hiciste el paso 1 (Grill Me) y el paso 2 (OpenSpec), pulir es maquillaje sobre un esqueleto roto. Si la app funciona mal, no importa que tenga buenas tipografías.
+
+---
+
+## El flujo completo — un ejemplo
+
+Imaginá que vas a armar una landing nueva para tu producto SaaS. La secuencia ideal:
+
+### Día 1: Pensar
+
+```
+> /grill-me
+
+Claude:
+  ¿Cuál es el objetivo principal de esta landing?
+  > Convertir visitantes en trial signups.
+
+  ¿Qué acción definís como conversión exactamente?
+  > Email submit en el formulario del hero.
+
+  ¿Qué NO debe hacer la landing?
+  > No mostrar precio (eso va a la página /pricing). No tener navbar pesada
+    que distraiga. No usar lenguaje técnico.
+
+  ¿Quién es el visitante principal?
+  > Founder de startup early stage, busca rapidez, no técnico.
+
+  ... [15 minutos de interrogatorio]
+```
+
+Al final tenés un brief escrito que Claude entiende, y vos también.
+
+### Día 2: Planear
+
+```
+> /openspec plan landing
+
+Claude:
+  Voy a estructurar el trabajo en estos pasos:
+  1. Hero con email capture (specs: ...)
+  2. Sección de social proof (specs: ...)
+  3. Bloque de features (3 max)
+  4. Testimonial
+  5. CTA final
+
+  Te genero la carpeta docs/specs/landing/ con cada uno separado.
+  Voy a aislar los componentes — el hero no toca el resto, el bloque
+  features no toca el hero, etc.
+```
+
+### Día 3-4: Implementar
+
+Aquí no es ninguna skill especial — es Claude Code normal, pero **guiado por las specs** del paso anterior. Cada feature implementada respeta su contrato.
+
+### Día 5: Pulir
+
+```
+> /impeccable audit landing/
+
+Claude:
+  Encontré:
+  - Hero: tipografía Inter en todo, propongo Inter + Lora para diferenciar
+  - 4 sombras distintas en cards, vamos a unificar
+  - Padding entre secciones varía 48px–96px sin patrón
+  - Botón primario y secundario casi iguales
+
+> /impeccable fix all
+```
+
+Y queda una landing que no se ve "hecha por IA en 4 horas".
+
+---
+
+## Cuándo el trío te sobra
+
+Tres casos:
+
+### 1. Edits triviales
+
+Si vas a cambiar una variable de nombre o agregar un comentario, no necesitás interrogatorio + plan + pulido. Pedile el cambio y listo.
+
+### 2. Prototipos descartables
+
+Si lo que construís es para demoarlo en una reunión mañana y nunca más se mira, el overhead del trío no se paga. Code-and-throw está OK acá.
+
+### 3. Equipo sin disciplina de specs
+
+Si nadie del equipo va a leer las specs que OpenSpec genera, terminás con artefactos no usados. Antes de instalar, asegurate de que el flujo lo va a usar gente real.
+
+---
+
+## El patrón general
+
+El trío encapsula una idea más amplia que aplica a cualquier trabajo con IA:
+
+> **Pensá. Planeá. Hacé. Pulí. En ese orden.**
+
+El error universal es saltar directo a "hacé". La IA acompaña ese error porque está entrenada para ser inmediatamente útil. Las skills como Grill Me y OpenSpec son **fricciones intencionales** que te obligan a no saltar.
+
+Si te resistís al overhead, recordá: las apps que se rompen a los dos días son **siempre** las que se construyeron salteando los dos primeros pasos.
+
+---
+
+## Próximos pasos
+
+- Si querés más skills del catálogo, [las 5 necesarias](/boveda/cinco-skills-necesarias) cubre un combo distinto
+- Para entender la filosofía spec-first sin OpenSpec específicamente, [spec-driven development](/boveda/spec-kit)
+- Para review automático del output, [skill code-reviewer](/boveda/skill-code-reviewer) cierra el loop

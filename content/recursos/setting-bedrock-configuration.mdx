@@ -1,0 +1,88 @@
+---
+title: "Setting Bedrock Configuration — usar Claude vía AWS Bedrock"
+description: "Setting con 116 installs. Configura Claude Code para usar Amazon Bedrock como provider de AI en vez del API direct de Anthropic. Para enterprises con AWS billing, compliance y data residency."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "aws", "bedrock"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-aws-credentials", "setting-custom-headers", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/api/bedrock-configuration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/bedrock-configuration.json"
+---
+
+## Qué es
+
+Setting que apunta Claude Code a usar **Amazon Bedrock** como provider del modelo, en vez del API direct de Anthropic. Útil cuando:
+
+- Tu organización ya tiene AWS billing centralizado
+- Necesitás compliance específico de AWS (HIPAA BAA, FedRAMP, etc.)
+- Data residency en regiones AWS específicas
+- Auditoría unificada con resto de servicios AWS
+
+Configura `CLAUDE_CODE_USE_BEDROCK=1` y `AWS_BEARER_TOKEN_BEDROCK` con tu API key de Bedrock.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `api` |
+| Installs | 116 |
+| Env vars | CLAUDE_CODE_USE_BEDROCK, AWS_BEARER_TOKEN_BEDROCK |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting api/bedrock-configuration
+```
+
+Después seteás el token real en tu env.
+
+Para Claude:
+
+```
+Instalé el setting api/bedrock-configuration. Mostrame qué env vars
+necesito setear y la URL endpoint de Bedrock para mi región.
+```
+
+## Qué podés hacer con esto
+
+### Centralizar billing en AWS
+
+Tu org ya tiene AWS contract. Bedrock factura ahí, no separado a Anthropic.
+
+### Compliance enterprise
+
+Si necesitás BAA HIPAA con AWS, Bedrock lo permite. API direct de Anthropic puede no aplicar.
+
+### Data residency específica
+
+Bedrock corre en regions AWS específicas. Si necesitás us-east-1 para compliance, tenés control.
+
+### Combo con [AWS Credentials Setting](/boveda/setting-aws-credentials)
+
+AWS Credentials para SSO/credential refresh. Bedrock Configuration para apuntar al provider correcto. Combo enterprise natural.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de habilitar">
+
+- **Si no tenés AWS account ni Bedrock activado:** pasos previos necesarios.
+- **Para uso individual:** Bedrock puede ser más caro que API direct de Anthropic.
+- **Si tu region AWS no tiene Bedrock:** verificá disponibilidad.
+- **Models pueden diferir:** Bedrock no siempre tiene la última versión de Claude. Validá lo que necesitás.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Bedrock Configuration Setting](https://www.aitmpl.com/component/settings/api/bedrock-configuration) — comando exacto.
+- **Config JSON:** [bedrock-configuration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/api/bedrock-configuration.json).
+- **AWS Bedrock docs:** [docs.aws.amazon.com/bedrock](https://docs.aws.amazon.com/bedrock).
+
+## Recursos relacionados
+
+- [AWS Credentials Setting](/boveda/setting-aws-credentials) — combo natural enterprise.
+- [Custom Headers Setting](/boveda/setting-custom-headers) — para enterprise auth.
+- [Anatomía de Claude](/boveda/anatomia-claude) — modelo de configuración.

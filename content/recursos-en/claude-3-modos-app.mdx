@@ -1,0 +1,256 @@
+---
+title: "Claude Chat, Cowork, and Code — the 3 modes in a single app"
+description: "You download Claude once and get 3 different tools: Chat with Projects to reason over your data, agentic Cowork with Live Artifacts and Computer Use, and Claude Code in the terminal. When to use each mode and how they complement each other."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude", "claude-code", "claude-cowork"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["anatomia-claude", "empezar-con-claude", "dominar-cowork"]
+---
+
+## The structure that confuses everyone
+
+Someone recommended Claude. You download it. You run into **3 different modes** in the same app and you have no idea which one to use for what.
+
+The metaphor that helps:
+
+| Mode | Analogy | What it's for |
+|------|----------|----------|
+| **Chat** | The brain thinking | Reasoning, brainstorming, asking |
+| **Cowork** | The brain with arms | Working with your files, apps, calendar |
+| **Code** | The brain with an editor | Building software |
+
+**One app, one account, one subscription.** All 3 modes are inside.
+
+---
+
+## Mode 1 — Claude Chat
+
+### What it is
+
+The traditional chat. You talk to it, it answers. **No access to your files / apps by default.**
+
+### What makes it better than ChatGPT: Projects
+
+Inside Chat there's a feature called **Projects**: a workspace that **keeps context** across conversations.
+
+Each project has:
+- Project **instructions** (always loaded in every new conversation)
+- A **knowledge base** (files / docs you load once)
+- **Conversations** linked to the project
+
+Example: Project "Your business."
+- Instructions: "I'm the founder of SaaS X, tone Y, avoid Z..."
+- Knowledge: your PRD, brand guide, customer personas
+- Conversations: brainstorms, drafts, decisions
+
+Every time you start a new chat inside the project, **Claude already knows the context**. No need to repeat it.
+
+### When Chat is the right choice
+
+✅ Loose exploratory questions
+✅ Brainstorming without access to your data
+✅ Reasoning about something you paste into the prompt
+✅ Learning / looking up general info
+
+### When NOT to use it
+
+❌ You need it to touch real files → Cowork or Code
+❌ Extended workflow with many pieces → Cowork
+❌ Serious coding on a repo → Code
+
+---
+
+## Mode 2 — Claude Cowork
+
+### What it is
+
+**Agentic**: it acts on your real data. It lives in the desktop app (not on the web).
+
+### 3 key features
+
+#### 1. Connectors
+
+Gmail, Calendar, Drive, Notion, HubSpot, Microsoft 365, and more. Once connected, Claude **reads/writes** in those systems.
+
+```
+> Which unanswered emails do I have from the client Acme?
+
+[Claude queries Gmail, answers you]
+```
+
+#### 2. Live Artifacts
+
+Editable artifacts that **update live** while you chat. Ideal for iterating on a doc, deck, or spreadsheet without jumping between apps.
+
+#### 3. Computer Use
+
+Claude can **operate your computer**: open apps, click, fill out forms. **In a controlled sandbox** (it won't break your system), but the actions still happen.
+
+### Other important features
+
+- **Scheduled Tasks**: have it run every morning / Monday / etc. (see [9 prompts for Cowork](/boveda/nueve-prompts-cowork))
+- **Plugins**: pre-built packages (e.g. [Claude Small Business](/boveda/claude-small-business))
+- **Skills**: reusable behaviors
+- **Sub-agent coordination**: split tasks across parallel sub-agents
+
+### When Cowork is the right choice
+
+✅ You work with your email / calendar / drives daily
+✅ You need recurring reports with your real data
+✅ You want an "operations assistant" that runs systems you already use
+
+### When NOT to use it
+
+❌ Coding on a git repo → Code is better
+❌ Loose questions that don't require your systems → Chat is enough
+❌ Critical operations without a double check → trust mode is risky
+
+---
+
+## Mode 3 — Claude Code
+
+### What it is
+
+The **CLI** for development. It runs in the terminal. It touches your git repo directly.
+
+### What it does that the rest don't
+
+- **Access to the entire codebase**: reads, edits, runs tests, makes commits
+- **Hooks**: event-driven automations (format on save, tests on commit)
+- **Local skills**: living in `~/.claude/skills/`
+- **Local MCPs**: connectors that run on your machine
+- **Plan mode + auto mode**: fine-grained control over what it runs and what it asks about
+
+### When Code is the right choice
+
+✅ Coding on a specific repo
+✅ Refactors, debugging, features
+✅ Technical workflow with git
+✅ Power users who want to extend it with skills/MCPs/hooks
+
+### When NOT to use it
+
+❌ Non-technical tasks (management, comms, analysis) → Cowork
+❌ Quick exploratory questions → Chat
+❌ You don't have a git repo → Code is for repos
+
+---
+
+## When each one wins — a practical table
+
+| Task | Ideal mode |
+|-------|------------|
+| "Explain concept X to me" | Chat |
+| "Brainstorm ideas for Y" | Chat |
+| "Summarize my inbox for the day" | Cowork |
+| "Schedule a meeting with María on Friday" | Cowork |
+| "Analyze this real Excel file" | Cowork |
+| "Find the contract with Z in my Drive" | Cowork |
+| "Refactor auth to Clerk in my repo" | Code |
+| "Commit + push the changes" | Code |
+| "Tests for the orders module" | Code |
+| "Generate a board deck" | Cowork (Live Artifacts) or [Claude Design](/boveda/claude-design) |
+
+---
+
+## The mistake of using the wrong mode
+
+### Anti-pattern 1 — Chat for everything
+
+You paste an Excel file into Chat and ask for analysis. It works, but it's limited:
+- It can't ask you for more data
+- It doesn't update the file
+- Each conversation starts from scratch
+
+For recurring analysis or cross-referencing data: **Cowork**.
+
+### Anti-pattern 2 — Cowork for coding
+
+Cowork can touch files in Drive, but **it's not a code editor**. For serious refactors:
+- It doesn't have git context
+- It doesn't run tests easily
+- It has no hooks or technical skills
+
+For real code: **Code**.
+
+### Anti-pattern 3 — Code for management
+
+Code is terminal-first. For sending emails, checking the calendar, or generating executive reports: **Cowork**.
+
+Each mode is optimized for one domain. Using the wrong one works, but **poorly**.
+
+---
+
+## The typical power-user flow
+
+Whoever uses all 3 modes combines them:
+
+```
+[Morning — Cowork]
+Daily brief, email triage, the day's agenda
+
+[Midday — Code]
+Building / refactoring / debugging the product
+
+[Afternoon — Cowork]
+Weekly report, follow-ups, meeting prep
+
+[When you're exploring something new — Chat]
+Brainstorm, questions, learning
+
+[Big decisions — Chat with a Project]
+Reasoning with the project's context loaded
+```
+
+All 3 are complementary. **Whoever uses just one is getting 30% of the potential value.**
+
+---
+
+## How to get started (if you already have an account)
+
+<Step number={1} title="Download the desktop app">
+
+[claude.ai/download](https://claude.ai/download) → Mac / Windows. It opens Chat and Cowork in the same app.
+
+</Step>
+
+<Step number={2} title="Create your first Project in Chat">
+
+Sidebar → New Project. Load:
+- The project instructions
+- 2-3 base docs for the knowledge
+
+Try a conversation that uses that context.
+
+</Step>
+
+<Step number={3} title="Connect 1 connector in Cowork">
+
+Settings → Connectors → Gmail (the most useful one to start with). OAuth.
+
+Try: "which unanswered emails do I have from the last 3 days?"
+
+</Step>
+
+<Step number={4} title="(If you code) Install Code" last>
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude
+```
+
+More detail in [Claude Code setup](/boveda/claude-code-setup-zero).
+
+</Step>
+
+After that, **all 3 modes are ready**. You use whichever fits the task.
+
+---
+
+## Next steps
+
+- If you want to go deeper into Cowork specifically, [master Cowork](/boveda/dominar-cowork)
+- To go deeper into Code, [complete Claude Code guide](/boveda/guia-claude-code-completa)
+- To understand the difference between skill, MCP, and plugin, [anatomy of Claude](/boveda/anatomia-claude)

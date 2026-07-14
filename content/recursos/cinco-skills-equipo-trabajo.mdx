@@ -1,0 +1,260 @@
+---
+title: "5 skills para armar tu equipo de trabajo con Claude"
+description: "Las 5 habilidades meta que convierten Claude en un equipo: una crea skills desde cero, otra las construye bien, otra busca skills existentes, otra te interroga sobre tu idea y la última arma el plan del proyecto. Setup y orden recomendado."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["guia-skills-claude", "trio-skills-claude-code", "cinco-skills-necesarias"]
+---
+
+## La idea
+
+Claude puede convertirse en **5 personas al mismo tiempo** si tenés las skills correctas. **5 meta-skills** que se usan para producir más skills, o para estructurar trabajo.
+
+| Skill | Rol |
+|-------|-----|
+| **Skill Creator** | Genera SKILL.md desde una conversación |
+| **Write a Skill** | Refina y mejora skills existentes |
+| **Find Skills** | Busca skills relevantes en repos públicos |
+| **Grill Me** | Te interroga antes de empezar |
+| **Write a PRD** | Arma el blueprint estructurado |
+
+Las 5 son **meta-herramientas** — no resuelven tu trabajo directamente, **te ayudan a estructurar cómo Claude resuelve tu trabajo**.
+
+---
+
+## Skill 1 — Skill Creator
+
+### Qué hace
+
+Cuando pedís "creame una skill para X", Skill Creator:
+
+1. Te entrevista sobre la tarea (5-7 preguntas)
+2. Identifica patrones reutilizables
+3. Genera el `SKILL.md` siguiendo best practices
+4. Lo guarda en `~/.claude/skills/<nombre>/`
+
+### Por qué importa
+
+Sin esta skill: armás SKILL.md a mano, con esfuerzo, y la calidad varía.
+Con esta skill: **proceso estructurado** que genera skills consistentes.
+
+### Cuándo usarla
+
+Cuando detectás que **repetís el mismo tipo de tarea** y quisieras tenerla estructurada en skill.
+
+Ejemplo:
+
+```
+> Cada vez que termino feature, le pido a Claude que actualice el
+  CHANGELOG, ejecute los tests, valide types y haga commit con formato
+  específico.
+
+  Skill Creator: armame una skill que haga esto en orden.
+```
+
+Genera la skill. Próxima vez que digas "terminé feature, hace lo de cierre", la skill se activa sola.
+
+---
+
+## Skill 2 — Write a Skill
+
+### Qué hace
+
+A diferencia de Skill Creator (genera nueva), **Write a Skill refina las existentes**:
+
+```
+> Write a Skill: mirá mi skill code-reviewer en ~/.claude/skills/code-reviewer.
+  Auditá:
+  - ¿El description es lo suficientemente específico para activarse correctamente?
+  - ¿El protocolo está claro?
+  - ¿Faltan reglas duras?
+  - ¿Algún anti-patrón en cómo está escrita?
+
+  Proponé v2 mejorada. Mantené lo que funciona.
+```
+
+Tus primeras skills son mediocres (todo el mundo arranca así). **Write a Skill las pule** sin que vos las reescribas de cero.
+
+---
+
+## Skill 3 — Find Skills
+
+### Qué hace
+
+Busca skills relevantes en repos públicos según tu necesidad:
+
+```
+> Find Skills: necesito algo para auditar performance de mi Next.js app.
+
+[Find Skills]
+  Buscando...
+
+  Encontré 3 skills relevantes:
+  1. nextjs-performance-audit (Vercel Labs, 2.3k★)
+     - Audita Core Web Vitals
+     - Detecta bundle size issues
+     - Reporta hydration mismatches
+
+  2. react-perf (community, 800★)
+     - Más enfocado en React, menos Next-specific
+
+  3. web-vitals-monitor (Google, 4k★)
+     - Más enfocado a monitoreo en producción
+
+  ¿Te instalo alguna o querés más detalle?
+```
+
+Te ahorra **horas de buscar en GitHub a mano**.
+
+### El truco
+
+Find Skills accede a catálogos de skills curados:
+- Vercel Labs
+- Anthropic Skills
+- Comunidad (repos con `.claude-skill` tag)
+
+Si encontrás algo perfecto, **instalás con 1 línea**.
+
+---
+
+## Skill 4 — Grill Me
+
+### Qué hace
+
+Te interroga **antes** de empezar tareas grandes:
+
+```
+> Quiero armar el sistema de notificaciones.
+> /grill-me
+
+[Grill Me]
+  Antes de tirar código, contame:
+  
+  1. ¿Qué tipos de notificación? (email / push / in-app / SMS)
+  2. ¿Por usuario o broadcast?
+  3. ¿Permitís configuración por usuario? (qué quiere recibir / cuándo)
+  4. ¿Horarios de no-molestar?
+  5. ¿Throttling? (cuántas máx por día por usuario)
+  6. ¿Templates fijos o dinámicos?
+  7. ¿Quién dispara las notificaciones? (eventos del sistema / acciones manuales)
+  
+  Esperá. Respondé las 7 antes de cualquier código.
+```
+
+Cubierto también en [trío de skills](/boveda/trio-skills-claude-code) y [Matt Pocock Skills](/boveda/matt-pocock-skills).
+
+**Si solo instalás una de las 5, instalá esta** — es la que más previene desastres de scope.
+
+---
+
+## Skill 5 — Write a PRD
+
+### Qué hace
+
+Después de Grill Me, **estructura las respuestas en PRD formal**:
+
+```
+> Write a PRD: con todo lo que me preguntaste y respondí, armame el
+  PRD del feature.
+
+[Write a PRD]
+  Generado en docs/prds/notificaciones.md:
+
+  # PRD: Sistema de notificaciones
+  
+  ## 1. Resumen
+  ...
+  
+  ## 2. Usuario objetivo
+  ...
+  
+  ## 3. User stories
+  - Como user, quiero recibir email cuando...
+  - Como admin, quiero configurar...
+  
+  ## 4. Modelo de datos
+  ...
+  
+  [todas las secciones del PRD]
+```
+
+Tenés artefacto formal. Lo versionás en git. Si después otro dev entra, **el PRD lo onboardea**.
+
+Cubierto en detalle en [prompts de PRD ejecutivo](/boveda/prompts-prd-ejecutivo).
+
+---
+
+## El orden de uso
+
+Las 5 no son alternativas — **se usan en orden** para arrancar proyectos:
+
+```
+1. Find Skills    → "¿hay skill que haga esto?"
+   ↓ (si no encontrás)
+2. Grill Me      → entender bien qué construir
+3. Write a PRD   → formalizar el plan
+4. Skill Creator → si surge patrón, crear skill nueva
+5. Write a Skill → refinar la skill con el tiempo
+```
+
+Es **el flow de la fábrica de skills**.
+
+---
+
+## Cuándo conviene cada una
+
+| Skill | Cuándo usarla |
+|-------|---------------|
+| **Find Skills** | Antes de empezar — siempre vale buscar si ya existe algo |
+| **Grill Me** | Antes de tareas >3 archivos o módulo nuevo |
+| **Write a PRD** | Cuando vas a comprometerte con la feature por días/semanas |
+| **Skill Creator** | Después de hacer la misma tarea 3+ veces a mano |
+| **Write a Skill** | Cada 2-4 semanas — refiná skills con uso real |
+
+---
+
+## Anti-patrones
+
+### 1. Crear skill para todo
+
+Si solo vas a usar algo 1 o 2 veces, **no hagas skill**. Pesa el setup contra beneficio.
+
+### 2. PRDs gigantes para features chicas
+
+Si tu feature es de 2 horas, **no necesita PRD de 5 páginas**. PRD lite alcanza.
+
+### 3. Saltarse Find Skills
+
+"Voy a crear mi skill desde cero". A veces la rueda ya está. **Buscá primero, creá después**.
+
+### 4. Skill Creator sin revisar el output
+
+Lo que genera Skill Creator es **base sólida pero no final**. Editá para tu contexto específico.
+
+### 5. Grill Me y después saltarse las respuestas
+
+Te interroga, vos respondés con detalle, después arranca a codear **ignorando** lo que respondiste. Pasa más seguido de lo que parece. **El output de Grill Me es input del trabajo, no diversión.**
+
+---
+
+## El meta-patrón
+
+Estas 5 skills son **infrastructure** — no resuelven tu trabajo directamente.
+
+Pero **el ROI compuesto** es enorme:
+
+- Sin estas 5: cada proyecto arrancás de cero, repitiendo errores
+- Con estas 5: cada proyecto se beneficia del anterior (skills acumuladas, PRDs consistentes, patrones identificados)
+
+**Mes 1**: 5 horas instalando + tuneando. **Mes 3**: trabajás 30% más rápido. **Mes 6**: tu carpeta de skills es ventaja competitiva.
+
+---
+
+## Próximos pasos
+
+- Para profundizar en cómo armar skills bien, [guía completa de skills](/boveda/guia-skills-claude)
+- Para el trío más opinado de skills focado en código, [trío de skills para Claude Code](/boveda/trio-skills-claude-code)
+- Para 40 ideas concretas de skills útiles, [catálogo de 40 skills](/boveda/skills-catalogo-40)

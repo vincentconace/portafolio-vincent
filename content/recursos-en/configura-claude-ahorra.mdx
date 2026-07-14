@@ -1,0 +1,315 @@
+---
+title: "5 Claude settings that double your plan's performance"
+description: "Projects (upload files ONCE), Profile (Claude always knows you), Haiku for the simple stuff, splitting your usage into two 5h blocks, and Extra Usage as a backup. Each setting explained step by step. Your plan performs twice as well after 5 min of setup."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["cinco-errores-claude", "cual-plan-claude", "cambia-de-modelo"]
+---
+
+## The problem
+
+Your plan is a **bucket of water**. Every message is like pouring out a glass. The problem: most people **leave the tap open** without realizing it. The water drains away, and the bucket runs dry by midday.
+
+These 5 settings are about **closing the tap**. You're not using less Claude — you're just no longer **wasting** what you already have.
+
+**Total setup: 5 minutes. Performance: 2x.**
+
+---
+
+## The 5 settings
+
+| # | Setting | What it's for |
+|---|---------------|----------|
+| 1 | **Projects** | Files uploaded once, not in every chat |
+| 2 | **Profile** | Claude always knows you without you repeating yourself |
+| 3 | **Haiku for the simple stuff** | Don't use a Ferrari to go to the store |
+| 4 | **Split usage into 2 blocks** | Take advantage of the 5h window |
+| 5 | **Extra Usage** | A safety net for critical moments |
+
+---
+
+## Setting 1 — Claude Projects
+
+### The mistake
+
+Every new chat, you upload the same files: brand guide, product list, tone of voice, your company data. Claude has to **read them from scratch every time**.
+
+It's like bringing your résumé to your boss every morning so they remember who you are.
+
+### The solution
+
+**Projects** are folders with persistent context:
+- You upload files **once**
+- You set project instructions
+- Every chat inside has that context **without spending tokens** re-loading it
+
+### Step-by-step setup
+
+1. Open `claude.ai`
+2. Sidebar → **"Projects"**
+3. **"Create Project"** → name it (e.g., "My Company", "Marketing")
+4. Upload your files: brand guide, data, PDFs, whatever you always use
+5. Add **custom instructions** — this is a prompt included in every chat
+6. Every chat **inside the project** already has context
+
+### Result
+
+The same files that used to drain your account **10 times a day** are now read **once**.
+
+See [Cowork workflow](/boveda/claude-cowork-workflow) for a more powerful desktop version with scheduled tasks.
+
+---
+
+## Setting 2 — Your Profile (Memory)
+
+### The mistake
+
+You start every conversation with:
+- "I'm a designer"
+- "Casual tone"
+- "My company is called..."
+- "My audience is..."
+
+That's **3-5 messages** you waste just introducing yourself. Claude **doesn't remember you** between chats.
+
+### The solution
+
+The **Profile** is global context that applies to **all conversations**:
+
+### Step-by-step setup
+
+1. `claude.ai` → click your photo (bottom left corner)
+2. **"Settings"**
+3. **"Profile"** section
+4. Write who you are, your professional context, your preferences
+
+### Profile example
+
+```
+I'm the founder of a digital marketing agency in LATAM.
+
+Context:
+- Services: SEO, content, paid media for B2B SaaS
+- Team: 5 people
+- Main clients: Series A startups in LATAM
+
+Preferences:
+- Always respond in Latin American Spanish
+- Professional but approachable tone
+- Bullets, not long paragraphs
+- Include metrics when relevant
+- No emojis in formal docs
+```
+
+Claude applies this to **ALL** conversations automatically.
+
+### Bonus
+
+It works inside Projects too. You can have:
+- A global profile (your general identity)
+- A per-project profile (specific context)
+
+Both are applied together.
+
+---
+
+## Setting 3 — Haiku for the simple stuff
+
+### The mistake
+
+You use **Sonnet** (a powerful model) for EVERYTHING:
+- Proofreading a text
+- Translating a paragraph
+- Organizing a list
+- Rephrasing a sentence
+
+It's like using a **Ferrari to go to the corner store**. It works, but you're burning premium fuel.
+
+### The solution
+
+Claude has different "brains":
+
+| Model | What it's for | Cost |
+|--------|----------|-------|
+| **Opus** | Complex reasoning, critical decisions | The most expensive |
+| **Sonnet** | Standard tasks, mid-size code | Balanced |
+| **Haiku** | Mechanical, simple tasks | **Almost nothing** |
+
+### When to use each
+
+**Use Haiku for**:
+- Fixing spelling/grammar
+- Translating texts
+- Organizing ideas into lists
+- Answering direct questions
+- Rephrasing a paragraph
+- Synthesizing structured info
+
+**Use Sonnet for**:
+- Building code
+- Analyzing long documents
+- Business strategy
+- Long, complex content
+- Solving technical problems
+
+**Use Opus for**:
+- Architectural decisions
+- Very complex debugging
+- Deep multi-step analysis
+
+### How to switch
+
+Model selector above the text field → pick one. See [switch models](/boveda/cambia-de-modelo) for more options.
+
+---
+
+## Setting 4 — Split your usage into 2 blocks
+
+### The mistake
+
+You sit down with Claude **in one long stretch**. In 2 hours it's gone. You've got 6 hours of work left without Claude.
+
+You burned through the whole bucket in one sitting.
+
+### The truth about the 5h window
+
+Claude has a **rolling 5-hour window**. Whatever you used at 9am **no longer counts** by 2pm — it's freed up.
+
+It's like a buffet that lets you go back for seconds every 5h. If you eat everything in the first round, you're left with nothing. If you eat a little now and some later, **you eat all day**.
+
+### How to organize yourself
+
+| Time | What to do |
+|------|-----------|
+| 9-11am | Block 1: Claude for your most important tasks |
+| 11am-2pm | Work WITHOUT Claude (emails, meetings, calls) |
+| 2-4pm | Block 2: your usage reset, Claude again |
+| 4-6pm | Work WITHOUT Claude |
+
+If you organize your day into 2 blocks, you **double your plan** without paying more.
+
+### Extra tip
+
+During **off-peak hours**, the models run faster. See [five Claude mistakes](/boveda/cinco-errores-claude) — mistake #5 about peak hours.
+
+---
+
+## Setting 5 — Extra Usage (with a limit)
+
+### The mistake
+
+You're in the middle of an important project (a client presentation, code that almost works, a campaign wrapping up) and Claude **stops**.
+
+You're left halfway, you lose momentum, and everything you'd built up goes cold.
+
+### The solution
+
+**Extra Usage** is a backup battery:
+- When your normal plan runs out
+- It kicks in automatically
+- You're only charged for the extra you use
+- **You set the monthly limit**
+
+### Step-by-step setup
+
+1. `claude.ai` → profile → **"Settings"**
+2. **"Usage"** section
+3. Enable **"Extra Usage"**
+4. Set a **monthly limit** (start low: $5-10 USD)
+
+### When to use it
+
+✅ A critical project you can't stop
+✅ A client waiting on a delivery
+✅ A task with a hard deadline
+
+❌ NOT for daily use
+❌ NOT to replace a higher plan
+
+It's a **safety net for critical moments**, not for constant use. If you use it regularly, better to **upgrade your plan** ([which Claude plan](/boveda/cual-plan-claude)).
+
+---
+
+## Quick reference card
+
+| # | Setting | Action |
+|---|---------------|--------|
+| 1 | Projects | Files uploaded ONCE |
+| 2 | Profile | Settings → Profile, write who you are |
+| 3 | Haiku | Model selector, use it based on the task |
+| 4 | 2 blocks | Work 9-11am + 2-4pm |
+| 5 | Extra Usage | Settings → Usage, $5-10 limit |
+
+---
+
+## The savings combo
+
+| Setting | Estimated savings |
+|---------------|-----------------|
+| None | Baseline |
+| Projects only | +30% performance |
+| + Profile | +15% more |
+| + Selective Haiku | +25% more |
+| + 2 blocks | +40% more |
+| **All 5 together** | **~2x performance** |
+
+Without paying more. Just by no longer wasting.
+
+---
+
+## Anti-patterns
+
+### 1. Applying everything on day 1
+
+If you enable all 5 at once without understanding each one, you'll be confused. Better: 1 per day. **By day 5** you've got everything.
+
+### 2. Using Haiku for everything
+
+Haiku is **mechanical**, not deep reasoning. If you ask for complex strategy from Haiku, it'll give you something simplistic. **Each model for its task**.
+
+### 3. Relying on "Extra Usage" as a plan
+
+If you enable $50/month of extra and always spend it, **you should switch plans**. Max at $100 is cheaper than Pro at $20 + $50 extra.
+
+### 4. Not reviewing your Profile periodically
+
+Your role/company/context changes. **Every 3-6 months, review your Profile** and update it.
+
+### 5. Projects with EVERYTHING mixed together
+
+If you dump client A + client B + personal stuff into a single Project, **the context gets contaminated**. One project per separate context.
+
+---
+
+## When NOT to save (seriously)
+
+If your critical work depends on Claude and you're on the Pro $20 plan, **don't obsess over saving**. The time you spend optimizing to save $20 would be better invested in the Max $100 plan and focusing on the work.
+
+The 5 settings always apply. "Obsessing over saving" does not.
+
+---
+
+## Combinations with other resources
+
+### With the 5 mistakes
+
+[The 5 mistakes](/boveda/cinco-errores-claude) are **bad habits**. The 5 settings are **technical setup**. The two combined maximize savings.
+
+### With repos that don't burn your account
+
+[5 repos that don't burn your account](/boveda/cinco-repos-no-quemar-cuenta) are an **advanced layer**. Start with the basic settings, then add the repos.
+
+### With Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) trims verbose output. It's the **next layer** after the settings.
+
+---
+
+## Next steps
+
+- For the basic habits that most affect your account, [5 Claude mistakes](/boveda/cinco-errores-claude)
+- To understand which plan to choose, [which Claude plan](/boveda/cual-plan-claude)
+- To switch models based on the task, [switch models](/boveda/cambia-de-modelo)

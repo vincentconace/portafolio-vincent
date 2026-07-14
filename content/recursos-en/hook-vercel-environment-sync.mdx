@@ -1,0 +1,91 @@
+---
+title: "Hook Vercel Environment Sync — sync env vars local ↔ Vercel"
+description: "Hook with 240 installs. Syncs environment variables between your local development and Vercel deployments. Detects changes in .env files and propagates them. Avoids 'works on my machine'."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-vercel-auto-deploy", "hook-env-file-protection", "all-deploy"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/vercel-environment-sync"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/vercel-environment-sync.json"
+---
+
+## What it is
+
+Detects changes in `.env*` files and propagates env vars between your local development and Vercel (production, staging, preview).
+
+Hook events:
+- `PostToolUse` — when you edit .env
+- `SessionStart` — sync at startup to detect drift
+
+Solves "works locally but not in prod" when env vars weren't set in Vercel.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 240 |
+| Hook events | `PostToolUse` + `SessionStart` |
+| Direction | local ↔ Vercel |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/vercel-environment-sync
+```
+
+Prerequisites: Vercel CLI auth + linked project.
+
+For Claude:
+
+```
+I installed the automation/vercel-environment-sync hook. Compare my local
+env vars against Vercel production. Identify drift.
+```
+
+## What you can do with it
+
+### Catch "works on my machine"
+
+You add `NEW_API_KEY` in `.env.local` and Claude implements a feature with it. The hook detects that it's missing in Vercel and propagates it.
+
+### Drift audit
+
+At the start of a session, the hook compares local vs Vercel and alerts you to any differences.
+
+### Multi-env safety
+
+If your local and Vercel staging should match but diverge, the hook flags it.
+
+### Combo with [Vercel Auto Deploy](/boveda/hook-vercel-auto-deploy)
+
+Env sync + auto deploy = complete pipeline: local changes get propagated and deployed together.
+
+### Combo with [Env File Protection](/boveda/hook-env-file-protection)
+
+Env Protection blocks accidental Writes to .env. Env Sync propagates legitimate changes to Vercel. Complementary layers.
+
+## When it's NOT a good fit
+
+<Callout type="danger" title="Before syncing prod env vars">
+
+- **Direction matters:** syncing local → prod without review = catastrophic. Configure an explicit direction.
+- **Sensitive secrets:** make sure the hook does NOT accidentally push local secrets to Vercel.
+- **No Vercel:** doesn't apply.
+- **For multi-team:** one dev's sync can overwrite another's changes. Coordinate.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Vercel Environment Sync Hook](https://www.aitmpl.com/component/hooks/automation/vercel-environment-sync) — exact command.
+- **JSON config:** [vercel-environment-sync.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/vercel-environment-sync.json).
+
+## Related resources
+
+- [Vercel Auto Deploy Hook](/boveda/hook-vercel-auto-deploy) — natural combo.
+- [Env File Protection Hook](/boveda/hook-env-file-protection) — blocks accidental Writes.
+- [All Deploy](/boveda/all-deploy) — for multi-platform.

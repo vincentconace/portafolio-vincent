@@ -1,0 +1,121 @@
+---
+title: "N-Skills — marketplace curado de Numman Ali con 5 plugins de alto valor"
+description: "Marketplace de numman-ali (943⭐) con 5 plugins curados que andan en Claude Code, Codex y openskills: Z.AI, multi-agent orchestrator (Gastown), dev-browser, orchestration y open-source-maintainer."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["5-claude-skills-necesarias", "claude-codex-equipo", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/n-skills"
+github: "https://github.com/numman-ali/n-skills"
+---
+
+## Qué es
+
+N-Skills es un marketplace pequeño y curado de Numman Ali. Solo 5 plugins, pero todos pasaron su filtro personal. La filosofía es la opuesta a los marketplaces gigantes de 100+: menos es más, cada plugin tiene un propósito claro y vale la pena su slot.
+
+Funciona cross-tool: Claude Code, Codex y openskills. Si rotás entre herramientas, N-Skills te sigue.
+
+Los 5 plugins:
+- `zai-cli` — Z.AI: vision, search, reader y exploración de GitHub vía MCP
+- `gastown` — orquestador multi-agent con vocabulario propio (convoys, polecats, rigs, slinging work)
+- `dev-browser` — browser automation con persistent page state (de Sawyer Hood)
+- `orchestration` — coordinación multi-agent para tareas que se descomponen en paralelo
+- `open-source-maintainer` — mantenimiento end-to-end de repos open-source
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | Numman Ali (numman-ali) |
+| Stars | 943 |
+| Tipo | Marketplace (5 plugins curados) |
+| Componentes | 5 skills |
+| Cross-tool | Claude Code, Codex, openskills |
+| Marketplace | `numman-ali/n-skills` |
+
+### Los 5 plugins en detalle
+
+| Plugin | Autor | Para qué |
+| --- | --- | --- |
+| `zai-cli` | Numman Ali | Z.AI vision, search, reader, GitHub exploration via MCP |
+| `gastown` | Numman Ali | Multi-agent orchestrator con vocabulario propio (gas town/convoys/polecats/rigs) |
+| `dev-browser` | Sawyer Hood | Browser automation con persistent page state — navega, fill forms, screenshots, scraping, testing |
+| `orchestration` | Numman Ali | Multi-agent orchestration con cc-mirror tasks y TodoWrite, para coord sofisticada o descomposición paralela |
+| `open-source-maintainer` | Numman Ali | Triage de issues, review de PRs, contributor activity, maintenance reports |
+
+## Cómo se instala
+
+```bash
+# 1) Marketplace
+/plugin marketplace add numman-ali/n-skills
+
+# 2) Plugins según uso
+/plugin install dev-browser@numman-ali-n-skills
+/plugin install orchestration@numman-ali-n-skills
+/plugin install open-source-maintainer@numman-ali-n-skills
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalé n-skills de numman-ali. Mi uso principal es [mantener un repo
+OSS / hacer browser automation / orquestar agents]. Recomendame qué
+plugins de los 5 me convienen y cómo combinarlos.
+```
+
+## Qué podés hacer con esto
+
+### Browser automation con estado persistente
+
+`dev-browser` mantiene el estado entre llamadas. Logueás una vez, hacés varias acciones — el browser no se reinicia entre cada una. Diferencia clave con [Playwright Skill](/boveda/plugin-playwright-skill) que es model-invoked sin estado mantenido.
+
+### Mantener un repo open-source sin volverte loco
+
+`open-source-maintainer` cubre los cuatro dolores típicos: triage de issues nuevos, review de PRs entrantes, análisis de actividad de contributors, generación de reportes de salud del repo. Si mantenés un OSS solo, vale el slot.
+
+### Orquestación multi-agent seria
+
+`orchestration` está diseñado específicamente para tareas que se descomponen en subtareas paralelas. Cuando una sola sesión de Claude no alcanza porque hay 8 cosas a hacer al mismo tiempo, este plugin las coordina.
+
+### Vocabulario propio con Gastown
+
+`gastown` es interesante: el autor armó un orquestador con palabras propias ("convoys", "polecats", "rigs", "slinging work"). El uso es: vos hablás en ese vocabulario y Claude entiende qué orquestar. Suena gimmicky pero ayuda cuando querés activar comportamientos específicos sin escribir prompts largos.
+
+### Z.AI como tooling adicional
+
+`zai-cli` te da acceso a Z.AI (vision, search, reader) vía MCP. Útil si querés capacidades que el stack Claude/Codex no cubre.
+
+## Beneficios reales
+
+- **Curación rigurosa** — solo 5 plugins, todos con propósito claro.
+- **Cross-tool** — los plugins andan en Claude Code, Codex y openskills.
+- **Dev-browser con estado persistente** — único en el catálogo.
+- **`open-source-maintainer`** — pocos plugins se enfocan en mantener OSS.
+- **No te abruma** con 200 opciones.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si querés un marketplace que cubra todo:** N-Skills son 5 plugins focales. Para variedad, mirá [buildwithclaude](/boveda/plugin-buildwithclaude) o [Claude Plugins Official](/boveda/plugin-claude-plugins-official).
+- **`gastown` requiere aprender vocabulario propio:** si no querés invertir en eso, te queda como ornamento.
+- **`zai-cli` necesita cuenta Z.AI:** sin eso, el plugin no sirve.
+- **Para browser automation sin estado mantenido:** [Playwright Skill](/boveda/plugin-playwright-skill) puede ser más simple.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [N-Skills](https://www.aitmpl.com/plugins/n-skills) — los 5 plugins.
+- **Repo en GitHub:** [numman-ali/n-skills](https://github.com/numman-ali/n-skills) — código, criterios de curación, issues.
+
+## Recursos relacionados
+
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — el set mínimo base. Combina bien con un curado pequeño como N-Skills.
+- [Claude + Codex en equipo](/boveda/claude-codex-equipo) — N-Skills es cross-tool, este recurso da el contexto del patrón.
+- [Agency Agents](/boveda/agency-agents) — para entender la diferencia entre los orquestadores `gastown` y `orchestration`.

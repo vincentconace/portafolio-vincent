@@ -1,0 +1,234 @@
+---
+title: "Apify MCP — 1500+ pre-built scrapers connected to Claude"
+description: "Apify has ready-made scrapers for Google Maps, LinkedIn, Instagram, Facebook and almost any site. Connected to Claude via MCP, you ask in natural language and it brings back enriched lead lists. When it beats writing your own scrapers and when it's overkill."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude", "apify", "mcp"]
+publishedAt: "2026-05-26"
+readingTime: "9 min"
+relatedSlugs: ["scrapling-leads", "plugin-n8n-mcp", "mcp-server-propio"]
+---
+
+## What Apify is (60 seconds)
+
+Apify is a platform with **1500+ ready-made scrapers** ("actors", in their jargon). Each one pulls info from a specific site:
+
+- Google Maps Actor → listings with phone, address, rating
+- LinkedIn Companies → companies with size, industry, founded year
+- Instagram Profile → posts, followers, public contact info
+- Facebook Pages → reviews, contact, recent posts
+- ... and 1500 more for specific sites
+
+The difference versus writing your own scraper (e.g. [Scrapling](/boveda/scrapling-leads)):
+
+| Apify | Your own scraper |
+|-------|----------------|
+| Already built, you just configure it | You build it from scratch |
+| Maintenance included (if the site changes, they fix it) | You maintain it |
+| Paid plan ($$$ per usage) | Just your machine/time |
+| Output in standard formats | You format it yourself |
+
+For people who don't want to code and need lists NOW, Apify wins. For heavy use or custom cases, doing it yourself is cheaper long term.
+
+---
+
+## MCP connection
+
+Apify exposes an official MCP. Inside Claude:
+
+### Setup
+
+`.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "apify": {
+      "command": "npx",
+      "args": ["-y", "@apify/mcp-server"],
+      "env": {
+        "APIFY_TOKEN": "${APIFY_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+You get the token from your account at `apify.com` → Account → Integrations.
+
+### Test it
+
+```
+> List the 5 most useful Apify actors for pulling B2B leads.
+```
+
+Claude queries the Apify catalog and returns the actors with a description and cost per run.
+
+---
+
+## Use cases
+
+### Case 1 — Local B2B leads
+
+```
+> I need a list of gyms in downtown Buenos Aires.
+  For each one I want:
+  - Name
+  - Address
+  - Phone
+  - Website URL
+  - Google rating and number of reviews
+  - Exact category (Crossfit / Functional / Traditional / etc.)
+
+  Use Apify's Google Maps actor. Filter for those with a rating >4
+  and more than 20 reviews (signals of a real operation).
+
+  Output CSV to /tmp/gimnasios.csv
+```
+
+Claude invokes the actor, waits for the result (typically 1-3 min), and returns the CSV ready to go.
+
+### Case 2 — Target account enrichment
+
+You have a CSV with 50 companies but only the name:
+
+```
+> Take /tmp/empresas-input.csv and for each company look it up on LinkedIn
+  Companies via Apify:
+  - LinkedIn URL
+  - Size (employee range)
+  - Industry
+  - Founding year
+  - Headquarters
+
+  If you don't find an exact match, flag "uncertain match" and pass the 2
+  most likely results.
+
+  Output enriched.csv
+```
+
+### Case 3 — Competitor research on social media
+
+```
+> My competitor X has an Instagram account @competidor_x.
+
+  I want to see:
+  - Last 30 posts with engagement (likes, comments)
+  - Most-used hashtags
+  - Posting frequency (how many per week, which days)
+  - Their 5 posts with the MOST engagement (what they have in common)
+
+  Use Apify's Instagram Profile Scraper.
+
+  Return a structured analysis, not just raw data.
+```
+
+Useful for defining your own content strategy based on what works for the competition.
+
+### Case 4 — Recurring monitoring
+
+```
+> Every Monday at 9am:
+
+  1. Pull the new Google Maps reviews for my business (apify)
+  2. Filter them against the ones I already have in reviews-archive.csv
+  3. For the new ones, classify them: positive / negative / mixed
+  4. For the negative ones, draft a reply
+  5. Send me the summary on Slack
+```
+
+Combined with [hooks](/boveda/hooks-automatizacion) or with [n8n MCP](/boveda/plugin-n8n-mcp), it runs on its own every Monday.
+
+---
+
+## The real cost
+
+Apify has a free plan with limited credits, then it scales by usage.
+
+| Plan | Approx cost | For what |
+|------|-------------|----------|
+| Free | $0 | Testing, occasional cases |
+| Starter | $49/month | 1-2 lists per week |
+| Scale | $499/month | Recurring pipelines |
+
+Each actor has its own price per run (it varies: $0.01 to $5 depending on how heavy it is).
+
+**Realistic math**: a list of 500 Google Maps leads costs ~$2-5. If it saves you 4 hours of scraping by hand, the ROI is clear.
+
+---
+
+## Apify vs Scrapling vs your own MCP
+
+Three approaches to scraping with Claude:
+
+| | Apify MCP | [Scrapling MCP](/boveda/scrapling-leads) | [Your own MCP](/boveda/mcp-server-propio) |
+|---|-----------|--------|-------------|
+| Setup | 5 min | 10 min | 1-3 hours |
+| Cost | Paid per usage | Free | Free |
+| Maintenance | Apify does it | You | You |
+| Sites covered | 1500+ | Any | Any (you build it) |
+| Quality | High | Good | Depends |
+| For occasional use | ✅ |  | ❌ |
+| For heavy use | $$ expensive | ✅ | ✅ |
+| For custom sites | depends on the catalog | ✅ | ✅ |
+
+Rules:
+
+- **Occasional use of popular sites** → Apify wins
+- **Heavy use of the same sites** → Scrapling wins
+- **Custom sites or specific logic** → your own MCP wins
+
+---
+
+## Anti-patterns
+
+### 1. Using Apify for everything
+
+If each list costs $2-5 and you build 50 lists per month, that's $100-250/month. **High volume = consider Scrapling or your own**.
+
+### 2. Trusting scraped data 100%
+
+Apify is good but **it's not perfect**. Outdated addresses, old phone numbers, info that changed. **Validate before running outreach**.
+
+### 3. Mass email harvesting
+
+As with any scraping: pulling emails and doing mass cold spam ends with your domain blacklisted. **Outreach allowed, spam not.**
+
+### 4. Skipping the reading of the scraped sites' Terms
+
+LinkedIn, Instagram, Facebook **prohibit scraping in their Terms**. Apify makes it technically possible, but the legal risk is yours. Sites like Google Maps are more permissive for reasonable commercial use.
+
+---
+
+## The legal warning (same as Scrapling)
+
+Scraping is a **legal gray zone**:
+
+- ✅ Public info without login, reasonable use, respecting robots.txt
+- ⚠️ Large volumes, personal data, sites with restrictive Terms
+- ❌ Paywall bypass, login with fake credentials, republishing content
+
+Anti-spam laws (CAN-SPAM, LGPD, GDPR) **apply to the use**, not to the scraping itself. Collecting emails is 50% of the risk; sending them mass cold spam is the other 50%.
+
+If you work in B2B with respectful outreach to sites with public info, it's generally fine. **If your plan is mass spam, no tool will save you.**
+
+---
+
+## When Apify wins
+
+✅ You need lists from popular sites (Maps, LinkedIn, etc.)
+✅ Low-to-medium use (no more than $100/month in credits)
+✅ You want zero scraper maintenance
+✅ You need clean, standard output
+
+❌ Very high volume or zero budget → another solution
+❌ Very custom sites not covered → your own MCP
+❌ Strict compliance on your client's side → each platform's official API
+
+---
+
+## Next steps
+
+- For a free alternative with more manual work, [Scrapling MCP](/boveda/scrapling-leads)
+- To automate the "scraping → enrichment → outreach" flow, [n8n MCP plugin](/boveda/plugin-n8n-mcp)
+- To understand the MCP pattern in general, [your own MCP server](/boveda/mcp-server-propio)

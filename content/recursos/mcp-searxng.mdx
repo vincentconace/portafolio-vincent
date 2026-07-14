@@ -1,0 +1,99 @@
+---
+title: "MCP SearXNG — búsqueda web sin tracking, privacy-first"
+description: "MCP server para SearXNG, el metasearch engine privacy-respecting. Búsquedas web a través de múltiples engines (Google, Bing, DuckDuckGo) sin tracking. Para usuarios que querés búsqueda sin que te perfilen."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "searxng"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-jina-ai", "mcp-firecrawl", "mcp-context7"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/searxng"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/searxng.json"
+---
+
+## Qué es
+
+[SearXNG](https://searxng.org) es un metasearch engine open source: hacés una búsqueda, SearXNG la dispara contra varios engines (Google, Bing, DuckDuckGo, Wikipedia, Reddit, GitHub, etc.) y te devuelve resultados unificados — sin tracking, sin perfilarte, sin cookies.
+
+Este MCP enchufa SearXNG a Claude Code. Le pedís a Claude que busque algo y consulta tu instancia de SearXNG (self-hosted o pública) en vez de un engine específico.
+
+La ventaja: no le mandás tus queries a Google ni a OpenAI; van a tu SearXNG. Privacy-first.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `web` |
+| Installs | 17 |
+| Servidor MCP | `searxng` |
+| Modelo | Metasearch privacy-respecting |
+| Costo | Gratis (self-host o instancia pública) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp web/searxng
+```
+
+Pre-requisito: URL de una instancia SearXNG (self-hosted o pública). Para self-hosting, mirá el [docker repo](https://github.com/searxng/searxng-docker).
+
+Para Claude:
+
+```
+Instalé el MCP web/searxng. Configurá SEARXNG_URL. Buscame "MCP server
+Anthropic" y devolveme los top 5 resultados con título, URL y snippet.
+```
+
+## Qué podés hacer con esto
+
+### Búsqueda sin tracking
+
+"Buscame `<query>` sin que mi search history quede registrada en Google ni en otros engines". Cero perfilamiento.
+
+### Multi-engine en un query
+
+SearXNG consulta varios engines a la vez y combina resultados. Útil cuando un solo engine no tiene cobertura completa.
+
+### Filtros y categorías
+
+SearXNG permite filtrar por categoría (general, imágenes, videos, news, science, files). El MCP debería respetar esos filtros.
+
+### Self-hosted para teams
+
+Si tu org tiene una instancia SearXNG self-hosted, este MCP le da uso AI. Búsqueda interna privacy-first.
+
+### Combo con [Jina AI](/boveda/mcp-jina-ai)
+
+SearXNG para search; Jina para grounding/fact-checking. Privacy-first todo el flow.
+
+## Pre-requisitos
+
+- **URL de SearXNG** (self-host o instancia pública)
+- **Para self-host:** Docker o Python + las deps
+- **Para uso productivo:** considerá self-host (las públicas pueden ser bloqueadas por engines)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin SearXNG corriendo:** el MCP necesita una instancia. Setear self-host es overhead si solo querés búsquedas casuales.
+- **Para search con APIs estructuradas:** SearXNG devuelve resultados estilo browser. Para data API (Google Search JSON, Bing API), otros MCPs.
+- **Solo 17 installs:** comunidad probando reducida. Verificá tools disponibles en el JSON.
+- **Latencia:** consultar varios engines suma tiempo. Para queries instantáneas, single-engine puede ser más rápido.
+- **Engines pueden bloquear:** instancias públicas de SearXNG suelen ser detectadas y bloqueadas. Self-host con rotation es la opción seria.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [SearXNG MCP](https://www.aitmpl.com/component/mcps/web/searxng) — comando exacto.
+- **Config JSON:** [searxng.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/searxng.json).
+- **SearXNG oficial:** [searxng.org](https://searxng.org).
+- **Setup docker:** [github.com/searxng/searxng-docker](https://github.com/searxng/searxng-docker).
+
+## Recursos relacionados
+
+- [Jina AI MCP](/boveda/mcp-jina-ai) — grounding + fact-checking, complementario.
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — para procesar URLs específicas (no búsqueda).
+- [Context7 MCP](/boveda/mcp-context7) — para info de docs (no búsqueda general).

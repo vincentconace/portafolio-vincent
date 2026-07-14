@@ -1,0 +1,97 @@
+---
+title: "Setting Custom Model — override del modelo Claude default"
+description: "Setting con 116 installs. Override del modelo Claude default con una versión custom o alternativa. Útil para testing de nuevas versiones, modelos org-specific o usar Haiku en vez de Sonnet por costo."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-bedrock-configuration", "setting-custom-headers", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/global/custom-model"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/custom-model.json"
+---
+
+## Qué es
+
+Override del modelo default que usa Claude Code. Configura:
+- `model` — el modelo principal (ej. `claude-3-5-sonnet-20241022`)
+- `ANTHROPIC_SMALL_FAST_MODEL` — el modelo secundario para tasks rápidos (ej. Haiku)
+
+Útil para:
+- Testing nuevas versiones antes de adoptarlas
+- Usar modelo org-specific (custom-trained)
+- Tunear costo: Haiku para tasks chicos, Sonnet para complejos
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `global` |
+| Installs | 116 |
+| Settings | `model`, `ANTHROPIC_SMALL_FAST_MODEL` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting global/custom-model
+```
+
+Editá tu config con los modelos reales:
+
+```json
+{
+  "model": "claude-3-5-sonnet-20241022",
+  "env": {
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-3-5-haiku-20241022"
+  }
+}
+```
+
+Para Claude:
+
+```
+Instalé el setting global/custom-model. Mostrame los modelos
+disponibles para mi API key y sugerí qué combinación me conviene
+para mi uso (eng eligiendo entre costo y capability).
+```
+
+## Qué podés hacer con esto
+
+### Cost control
+
+Tasks chicos a Haiku (mucho más barato). Tasks complejos a Sonnet/Opus.
+
+### Testing de versions
+
+Cuando sale modelo nuevo, podés probarlo en proyectos específicos sin migrar todo.
+
+### Para teams con tier diferente
+
+Equipo dev con Sonnet, equipo data con modelo específico.
+
+### Combo con [Bedrock Configuration](/boveda/setting-bedrock-configuration)
+
+Si usás Bedrock, los IDs de modelo son distintos. Custom Model permite especificar el ID correcto.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si el default te alcanza:** no agregues complejidad.
+- **Si especificás model que no existe:** Claude Code falla. Verificá los IDs exactos.
+- **Models nuevos a veces tienen breaking changes:** validá compatibility con tu workflow antes de poner en prod.
+- **Costo:** ojo de pasar a un modelo más caro sin querer.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Custom Model Setting](https://www.aitmpl.com/component/settings/global/custom-model) — comando exacto.
+- **Config JSON:** [custom-model.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/custom-model.json).
+
+## Recursos relacionados
+
+- [Bedrock Configuration Setting](/boveda/setting-bedrock-configuration) — para Bedrock + custom model combo.
+- [Custom Headers Setting](/boveda/setting-custom-headers) — para auth/routing.
+- [Anatomía de Claude](/boveda/anatomia-claude) — model selection patterns.

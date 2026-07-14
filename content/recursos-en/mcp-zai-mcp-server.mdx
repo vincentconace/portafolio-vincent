@@ -1,0 +1,99 @@
+---
+title: "MCP Z.AI Vision — vision capabilities with GLM-4.6V"
+description: "MCP server with 81 installs. Vision MCP based on Z.AI's GLM-4.6V model: image analysis, OCR, descriptions. For multimodal apps or visual processing."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "zai"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-imagesorcery", "mcp-markitdown", "mcp-web-reader"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/zai-mcp-server"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/zai-mcp-server.json"
+---
+
+## What it is
+
+Z.AI Vision MCP uses the **GLM-4.6V** model (Z.AI's vision-language model) for visual tasks: image analysis, advanced OCR, descriptions, Q&A over images.
+
+Typical use: hand it an image and ask for info. "What's in this image?", "Extract the text from this screenshot", "Describe these products visually for me".
+
+It's one of the 4 Z.AI MCPs in the catalog. If your stack uses the Z.AI ecosystem, keeping a single provider keeps things simple.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 81 |
+| MCP server | `zai-mcp-server` |
+| Model | Z.AI GLM-4.6V (vision) |
+| Account required | Yes — Z.AI |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --mcp devtools/zai-mcp-server
+```
+
+Prerequisite: Z.AI account + API key.
+
+For Claude:
+
+```
+I installed the devtools/zai-mcp-server MCP. Set up the credentials.
+For this image [path], describe what it contains and extract the
+visible text (OCR).
+```
+
+## What you can do with it
+
+### Advanced OCR
+
+"Extract text from this screenshot of a PDF with a complex table. Preserve the row/column structure." GLM-4.6V is serious about OCR.
+
+### Image analysis
+
+"For this photo, describe: visible objects, context, dominant colors, anything notable for accessibility." Generates useful alt text.
+
+### Visual Q&A
+
+"In this architecture diagram, which component receives requests from the client?" Inspection of visuals.
+
+### Comparison
+
+"Compare these 2 images and give me the visible differences." Useful for visual regression testing.
+
+### Visual document processing
+
+If you combine it with [MarkItDown](/boveda/mcp-markitdown) (which converts PDFs/images to markdown), Z.AI Vision can add extra analysis of the embedded images.
+
+## Prerequisites
+
+- **Z.AI account** with a suitable plan
+- **API key**
+- **Accessible images** (local path or URL)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If your use case is just simple OCR:** local Tesseract may be enough, for free.
+- **For vision tasks with native Claude:** Claude has built-in vision in some cases. Compare against the cost.
+- **Compliance:** Z.AI is Chinese. Check whether your org allows sending images to that service.
+- **Sensitive data in images:** an image with personal info goes to the Z.AI server. Have a clear policy.
+- **Costs:** vision models charge per processed image. Check the pricing.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Z.AI Vision MCP](https://www.aitmpl.com/component/mcps/devtools/zai-mcp-server) — exact command.
+- **JSON config:** [zai-mcp-server.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/zai-mcp-server.json).
+- **Z.AI:** [open.bigmodel.cn](https://open.bigmodel.cn).
+
+## Related resources
+
+- [ImageSorcery MCP](/boveda/mcp-imagesorcery) — for processing (not analyzing) images.
+- [MarkItDown MCP](/boveda/mcp-markitdown) — for converting PDFs and images to markdown. A natural combo.
+- [Web Reader MCP](/boveda/mcp-web-reader) — another MCP from the Z.AI ecosystem.

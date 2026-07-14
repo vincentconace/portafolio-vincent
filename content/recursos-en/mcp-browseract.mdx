@@ -1,0 +1,98 @@
+---
+title: "MCP BrowserAct — cloud structured extraction from Amazon, YouTube, Maps, Reddit and more"
+description: "BrowserAct MCP server: cloud browser automation with structured extraction from Chinese + Western platforms. Covers Amazon, YouTube, Google Maps, Google News, Reddit, WeChat, Zhihu."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "browseract"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-apify", "mcp-brightdata", "browser-harness"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web-data/browseract"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/browseract.json"
+---
+
+## What it is
+
+BrowserAct is a cloud browser automation platform focused on structured data extraction. What sets it apart from [Apify](/boveda/mcp-apify) and [Bright Data](/boveda/mcp-brightdata) is its coverage of the Asian market: in addition to Amazon, YouTube, Google Maps and Reddit, it supports WeChat and Zhihu — core platforms in China that other scrapers don't touch.
+
+If your use case needs data from mainstream Chinese platforms, or you want an alternative to Apify/Bright Data focused on structured data (not raw HTML), this MCP is the one to reach for.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web-data` |
+| Installs | 24 |
+| MCP server | `browseract` |
+| Platforms covered | Amazon, YouTube, Google Maps, Google News, Reddit, WeChat, Zhihu, others |
+| Account required | Yes — BrowserAct |
+| Output | Structured (JSON) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp web-data/browseract
+```
+
+You'll need a BrowserAct account and API key.
+
+For Claude:
+
+```
+Install the web-data/browseract MCP. Let's set the credentials and get me
+the top 10 products for an Amazon search for [keyword], with
+price, rating and review count in JSON format.
+```
+
+## What you can do with this
+
+### E-commerce intelligence
+
+"Show me the top 50 products on Amazon US for `mechanical keyboard`, sorted by reviews, with price and rating." Output already structured, not raw scraping.
+
+### Market research in China
+
+"Find me Zhihu conversations about `<a topic>` with more than 100 upvotes in the last 6 months." Accessible data that doesn't show up in other tools.
+
+### Trends on YouTube
+
+"Pull the data from the last 30 videos on channel X: views, likes, comments, publish date." For performance analysis.
+
+### Local business intelligence
+
+"Restaurants in Buenos Aires with a rating above 4.5 and more than 200 reviews, sorted by most recent review." A Maps + News + Reddit combination.
+
+### Compared with alternatives
+
+- **vs [Apify](/boveda/mcp-apify):** Apify has a broader catalog (5000+ Actors) and a free tier. BrowserAct is more focused but covers WeChat/Zhihu.
+- **vs [Bright Data](/boveda/mcp-brightdata):** Bright Data is enterprise-grade with 60+ tools. BrowserAct is lighter and more affordably priced.
+
+## Prerequisites
+
+- **An active BrowserAct account**
+- **API token** from the dashboard
+- **Use cases that fit** the sites it covers (it doesn't scrape any URL)
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **For sites outside the catalog:** BrowserAct covers specific platforms. If you need to scrape a random site, [Bright Data Web Unlocker](/boveda/mcp-brightdata) or [browser-use](/boveda/mcp-browser-use-mcp-server) are better.
+- **If you need enterprise scale:** Bright Data is still the serious option for very high volume.
+- **If your use is indie and low-volume:** Apify's free tier may be enough.
+- **WeChat/Zhihu — regulatory caveat:** scraping Chinese platforms carries specific regulation. Check it.
+- **24 installs is low:** less community testing = fewer known issues. Try it in a sandbox before relying on it seriously.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [BrowserAct MCP](https://www.aitmpl.com/component/mcps/web-data/browseract) — exact command.
+- **Config JSON:** [browseract.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/browseract.json) — definition.
+
+## Related resources
+
+- [Apify MCP](/boveda/mcp-apify) — an alternative with a free tier and a broader catalog. Compare them before choosing.
+- [Bright Data MCP](/boveda/mcp-brightdata) — enterprise grade. If your volume justifies it.
+- [Browser Harness](/boveda/browser-harness) — for when you need your own personal session, not generic scrapers.

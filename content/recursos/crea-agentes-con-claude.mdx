@@ -1,0 +1,340 @@
+---
+title: "Cómo crear agentes con Claude Code — de la idea al agente corriendo"
+description: "Flow de 6 pasos para convertir una idea en agente funcional: Plan Mode → describir → Claude investiga → plan → aprobar → Auto Mode construye. Si no sabés qué agente crear, hay prompt de descubrimiento. Conexión a MCPs externos y programación con /loop."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code", "agentes", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["claude-code-loop", "agentes-managed-claude", "agent-view"]
+---
+
+## Qué es un agente
+
+Un agente es un **Claude con un trabajo específico**. Tiene:
+- Tarea definida
+- Acceso a las tools que necesita
+- Capacidad de trabajar autónomamente
+
+Es como contratar un empleado especializado: le decís qué hacer, le das acceso a herramientas, **trabaja solo**.
+
+### Ejemplos de agentes útiles
+
+| Agente | Qué hace |
+|--------|----------|
+| **Code Reviewer** | Revisa cada PR que abrís, detecta bugs, sugiere mejoras |
+| **Email Organizer** | Clasifica inbox por prioridad, redacta borradores de respuesta |
+| **Site Monitor** | Vigila tu site, detecta caídas, te notifica con reporte |
+| **Lead Qualifier** | Lee leads nuevos, los clasifica, agenda follow-up |
+| **Content Republisher** | Toma tu blog post, lo adapta a 5 redes sociales |
+| **Daily Briefer** | Cada mañana arma brief: email, calendar, KPIs |
+
+---
+
+## El flujo completo — 6 pasos
+
+### Paso 1 — Abrí Claude Code en tu proyecto
+
+```bash
+claude
+```
+
+### Paso 2 — Entrá en Plan Mode
+
+```
+Shift+Tab
+```
+
+Plan Mode convierte a Claude en arquitecto. Investiga tu proyecto, entiende el contexto, **diseña sin tocar nada**.
+
+### Paso 3 — Describí tu agente
+
+Sé específico: **qué tarea hace, qué lo dispara, qué resultado esperás**.
+
+#### Ejemplo
+
+```
+> Quiero agente que revise automáticamente mis PRs.
+
+  El agente debe:
+  1. Leer archivos modificados en cada PR
+  2. Detectar bugs potenciales, problemas de seguridad,
+     código duplicado
+  3. Verificar que siga los estándares del proyecto
+     (ESLint, TypeScript strict)
+  4. Dejar comentarios directamente en el PR con sugerencias
+     específicas
+
+  Investigá mi proyecto y diseñá un plan completo para
+  construirlo.
+```
+
+### Paso 4 — Claude investiga + entrega plan
+
+Claude explora tu proyecto:
+- Revisa estructura
+- Detecta stack
+- Lee config files
+- Identifica convenciones
+
+Y te entrega un **plan detallado**: archivos a crear, dependencias, orden de implementación.
+
+### Paso 5 — Revisá el plan y ajustá
+
+Lo leés. Si algo no convence:
+
+```
+> Ajustá el plan:
+  - Cambiá el trigger de "PR open" a "PR ready for review"
+  - El reporte va por Slack, no por email
+  - Excluí archivos en /generated/ del análisis
+```
+
+**Todavía estás en modo seguro** — nada se tocó.
+
+### Paso 6 — Aprobá y ejecutá
+
+```
+Shift+Tab  →  Auto Mode
+```
+
+Claude tiene contexto completo + plan aprobado. Construye:
+- Crea archivos
+- Instala dependencias
+- Configura MCPs necesarios
+- Te deja agente **funcionando**
+
+---
+
+## Si no sabés qué agente crear
+
+No necesitás llegar con idea clara. **Dejá que Claude te entreviste**.
+
+### Prompt de descubrimiento
+
+```
+> Hacéme preguntas sobre mi día a día, mi trabajo y mis
+  tareas repetitivas.
+
+  Basándote en mis respuestas, sugerí 3 agentes que podrían
+  automatizar las tareas más tediosas.
+
+  Para cada agente, incluí:
+  - Qué haría exactamente
+  - Qué herramientas necesitaría
+  - Cuánto tiempo me ahorraría por semana
+  - Complejidad estimada de construirlo (fácil/medio/complejo)
+
+  Después de sugerir, preguntame cuál quiero construir
+  primero.
+```
+
+Claude te va a preguntar:
+- ¿Qué hacés en un día típico?
+- ¿Qué tareas más te aburren?
+- ¿Qué cosas hacés más de 3 veces por semana?
+- ¿Qué información manejás constantemente?
+
+De ahí salen los **agentes que necesitabas pero no sabías** que necesitabas.
+
+---
+
+## Cómo Claude conecta con herramientas externas
+
+Cuando tu agente necesita **interactuar con sistemas externos** (Gmail, GitHub, DB, APIs), Claude usa **MCP** (Model Context Protocol).
+
+MCP es el puente entre Claude y herramientas externas. Y lo bueno: Claude **detecta automáticamente** qué MCPs necesita tu agente y te incluye la instalación en el plan.
+
+### MCPs típicos para agentes
+
+| MCP | Para qué |
+|-----|----------|
+| **Gmail MCP** | Agentes de email |
+| **GitHub MCP** | Code review, PRs, issues |
+| **Browser MCP** | Automatización web, scraping |
+| **Notion MCP** | Docs, knowledge management |
+| **Slack MCP** | Comunicación, notificaciones |
+| **Stripe MCP** | Pagos y facturación |
+| **Supabase MCP** | Database operations |
+
+Ver [tu propio MCP server](/boveda/mcp-server-propio) para construir uno custom.
+
+### Instalación manual de un MCP
+
+Si Claude no lo configura automático:
+
+```bash
+claude mcp add gmail-mcp -- npx -y @anthropic/gmail-mcp
+```
+
+Pero típicamente: **vos describís el agente, Claude detecta los MCPs, los configura solo**.
+
+---
+
+## Programá tu agente con /loop
+
+Un agente que solo corre cuando lo invocás es **una herramienta**. Un agente que corre solo en horarios definidos es un **empleado digital**.
+
+`/loop` ejecuta tu agente en intervalos regulares.
+
+### Ejemplos
+
+**Revisar PRs cada 2h**:
+
+```
+> /loop 2h revisá los PRs abiertos y dejá comentarios de
+  code review siguiendo los estándares del proyecto
+```
+
+**Organizar email cada mañana**:
+
+```
+> /loop daily 8am organizá mi bandeja de entrada, clasificá
+  correos por prioridad y redactá borradores para los de
+  alta prioridad
+```
+
+**Monitorear sitio cada 5 min**:
+
+```
+> /loop 5m verificá que mi sitio esté online y reportá
+  cualquier error a Slack #alertas
+```
+
+Para guía completa de `/loop` ver [Claude Code /loop](/boveda/claude-code-loop).
+
+---
+
+## Anti-patrones
+
+### 1. Empezar sin Plan Mode
+
+Si saltás directo a "construime el agente", **Claude construye lo primero que entiende**. Probablemente no es lo que querés. Plan Mode te evita 2-3 iteraciones de retrabajo.
+
+### 2. Descripción vaga
+
+```
+> Hacéme un agente de email
+```
+
+vs
+
+```
+> Agente que clasifica email entrante en 4 buckets:
+  hot lead, cold lead, support, spam. Para hot lead, redactá
+  respuesta de 4 líneas tono Latam. Para spam, archivá
+  automático. Para support, asignás label "support" para
+  que mi VA lo procese.
+```
+
+Especificidad → agente correcto en 1 round.
+
+### 3. Crear agente sin trigger claro
+
+Si el agente "corre cuando vos lo decís", **no es agente — es comando**. El valor está en la autonomía. Definí claramente: **cron, evento, condición**.
+
+### 4. No iterar después de la primera versión
+
+Tu primera versión va a tener gaps. Después de 1 semana de uso real, **revisá los logs**, identificá qué falló, mejorá el system prompt del agente.
+
+### 5. Agentes para tareas no-repetitivas
+
+Si la tarea pasa **1-2 veces**, hacela manualmente. Agentes solo justifican setup si la tarea es **recurrente** (10+ veces/mes mínimo).
+
+---
+
+## Niveles de agente
+
+### Nivel 1 — Reactivo (responde cuando le pedís)
+
+Agente que vive en `.claude/agents/` y se invoca con `@nombre-agente`. Funciona cuando vos lo llamás.
+
+**Ejemplo**: `@reviewer` para code review on-demand.
+
+### Nivel 2 — Programado (loop)
+
+`/loop interval` o `/schedule cron`. Corre en intervalos sin tu intervención.
+
+**Ejemplo**: agente que cada hora chequea métricas.
+
+### Nivel 3 — Reactivo a eventos externos
+
+Webhook-based. Ejemplo: GitHub PR open → triggera agente.
+
+**Ejemplo**: code review automático en cada PR.
+
+### Nivel 4 — Multi-agente coordinado
+
+Varios agentes que se comunican y delegan entre sí.
+
+**Ejemplo**: agente sales (clasifica leads) → agente nurturing (sequencia emails) → agente closing (agenda calls).
+
+Empezá en Nivel 1. Subí a Nivel 2-3 cuando el flujo manual te aburre.
+
+---
+
+## Comparación de plataformas para agentes
+
+| Plataforma | Bueno para | Ver |
+|------------|------------|-----|
+| **Claude Code local** | Agentes con acceso a tu compu/repo | Este recurso |
+| **Managed Agents** | Agentes 24/7 en cloud sin tu compu | [agentes managed](/boveda/agentes-managed-claude) |
+| **/schedule** | Tareas recurrentes simples | [schedule en nube](/boveda/schedule-agentes-nube) |
+| **Agent View** | Múltiples agentes paralelos | [agent view](/boveda/agent-view) |
+| **Ecosistema Mac mini** | Sistemas complejos multi-agente | [ecosistema](/boveda/ecosistema-de-agentes) |
+
+---
+
+## Casos de uso por industria
+
+### Para freelance dev
+
+- **PR Auditor**: revisa código propio antes de commit
+- **Client Brief Generator**: cada cliente, brief semanal de avance
+- **Lead Qualifier**: clasifica inquiries entrantes
+
+### Para creator
+
+- **Content Republisher**: blog → 5 redes
+- **Comment Moderator**: filtrá spam/trolls de comentarios
+- **Newsletter Drafter**: cada semana, draft basado en tus posts
+
+### Para founder
+
+- **Daily Briefer**: cada mañana, brief de email + KPIs + calendar
+- **Investor Updater**: mensualmente, update auto a inversores
+- **Customer Support Triage**: clasifica + responde tickets simples
+
+### Para agencia
+
+- **Client Reporter**: cada semana, reporte automático por cliente
+- **Lead Researcher**: investiga prospects entrantes
+- **Asset Generator**: variantes de creativos para A/B
+
+---
+
+## Combinaciones potentes
+
+### Con Skills custom
+
+[Crear skills](/boveda/crea-claude-skills) que tu agente usa. Skills = modulares, agentes = reutilizan skills.
+
+### Con Agent View
+
+[Agent View](/boveda/agent-view) te deja correr 3-5 agentes paralelos. Combinás con `/loop` y tenés **departamento operativo entero** corriendo solo.
+
+### Con Computer Use
+
+Si tu agente necesita operar apps sin API, [computer use](/boveda/claude-control-remoto) le da las manos.
+
+### Con Memory persistente
+
+[claude-mem](/boveda/cinco-repos-dominando-claude) hace que tu agente recuerde decisiones entre runs.
+
+---
+
+## Próximos pasos
+
+- Para programar agentes con loops e intervalos, [Claude Code /loop](/boveda/claude-code-loop)
+- Para agentes 24/7 sin tu compu, [Managed Agents](/boveda/agentes-managed-claude)
+- Para ver múltiples agentes paralelos, [Agent View](/boveda/agent-view)

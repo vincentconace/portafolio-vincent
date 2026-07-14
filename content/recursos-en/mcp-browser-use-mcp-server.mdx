@@ -1,0 +1,102 @@
+---
+title: "MCP Browser-Use — AI agents that control real browsers"
+description: "MCP server with 1,636 installs that plugs browser-use into Claude Code. Browser-use is the open-source framework that lets AI agents control Chrome/Chromium robustly, with a simplified DOM built for LLMs."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "browser-use"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["browser-harness", "plugin-playwright-skill", "agent-browser"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/browser_automation/browser-use-mcp-server"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/browser-use-mcp-server.json"
+---
+
+## What it is
+
+[browser-use](https://github.com/browser-use/browser-use) is one of the most popular frameworks for letting LLMs control browsers. Its differentiator: instead of handing the model raw HTML (expensive in tokens and confusing), it processes the DOM and passes a simplified, actionable representation. The model decides the action (click, type, scroll), browser-use executes it, and comes back.
+
+This MCP packages browser-use as an MCP server. When Claude activates it, you get real browser capabilities: navigate, fill forms, scrape, log in with your session, test flows.
+
+With 1,636 installs it's the second most adopted browser_automation MCP, after Chrome DevTools. That signals maturity.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `browser_automation` |
+| Installs | 1,636 |
+| MCP server | `browser-server` |
+| Framework | [browser-use](https://github.com/browser-use/browser-use) |
+| Browser | Chrome / Chromium |
+| Cost | Open source (browser-use is MIT) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp browser_automation/browser-use-mcp-server
+```
+
+Prerequisites: Python + Chromium or Chrome installed. browser-use pulls its own deps.
+
+For Claude:
+
+```
+Install the MCP browser_automation/browser-use-mcp-server. Verify that
+I have Chrome installed and open a test session: navigate to
+example.com, take a screenshot, and return the page title.
+```
+
+## What you can do with this
+
+### Web task automation
+
+"Go to Amazon, search for `noise cancelling headphones`, sort by reviews, and bring me the top 5 with price, rating, and review count." browser-use orchestrates the flow step by step.
+
+### Assisted E2E testing
+
+"Go to `localhost:3000/signup`, try the form with an invalid email + short password, verify it shows the correct errors, and screenshot it." More conversational than Cypress.
+
+### Scraping with your own session
+
+Unlike [BrightData](/boveda/mcp-brightdata) or [Apify](/boveda/mcp-apify), here you use YOUR session: your LinkedIn, your Twitter, your dashboard for any SaaS. Useful for tasks that require login.
+
+### Onboarding to complex sites
+
+"Go to the admin panel of [SaaS], navigate to `Settings > Integrations > API Keys` and show me which keys have been created." Without having to remember the path yourself.
+
+### Compared to [Playwright Skill](/boveda/plugin-playwright-skill)
+
+Playwright Skill is model-invoked and writes custom Playwright scripts for each task. Browser-use is more interactive: the agent navigates step by step, deciding what to do.
+
+Key difference: browser-use is more conversational and robust to sites that change. Playwright Skill is better when you want a reproducible script.
+
+## Prerequisites
+
+- **Chrome / Chromium** installed
+- **Python 3.x** (browser-use is Python)
+- **Reasonable memory** (Chrome eats RAM)
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **Sites with strict TOS:** scraping LinkedIn, Instagram, etc. with your session can lead to an account ban. Use a dedicated account or read their TOS.
+- **Token cost:** every action asks the model to decide what to do. Long workflows burn tokens.
+- **For stable production automations:** traditional Playwright (no LLM) is more reliable. browser-use shines at exploration and one-off tasks.
+- **Conflicts with your everyday Chrome:** running browser-use over your main profile can get weird (cookies, tabs). Use a dedicated profile or headless.
+- **Latency:** every action is model + execution. Slower than a direct script.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Browser-Use MCP Server](https://www.aitmpl.com/component/mcps/browser_automation/browser-use-mcp-server) — exact command.
+- **JSON config:** [browser-use-mcp-server.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/browser-use-mcp-server.json) — definition.
+- **browser-use upstream:** [github.com/browser-use/browser-use](https://github.com/browser-use/browser-use) — the core project, MIT.
+
+## Related resources
+
+- [Browser Harness](/boveda/browser-harness) — similar pattern but as a skill, with a community catalog of pre-written sites.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — a more scripted alternative; better for reproducible tests.
+- [Agent Browser](/boveda/agent-browser) — Vercel's take on the same problem. Compare them before adopting one.

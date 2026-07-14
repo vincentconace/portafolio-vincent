@@ -1,0 +1,292 @@
+---
+title: "Claude SEO — skill con 13 comandos que convierte a Claude en especialista SEO"
+description: "Skill open source de Claude Code. Agrega 13 slash commands: auditoría técnica, análisis de contenido/keywords, reportes y un agente automático (/seo-fix) que arregla problemas con tu aprobación. Cubre meta tags, schema, headings, performance, internal linking."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["cinco-habilidades-marketing", "claude-copywriter", "andromeda-meta-ads"]
+---
+
+## Por qué un skill, no un prompt
+
+Un prompt SEO se pierde al cerrar la conversación. Cada vez que necesitás auditar tu site, lo pegás de vuelta.
+
+**Claude SEO** es un skill que vive en tu proyecto. Se activa automáticamente cuando Claude detecta que necesitás SEO. Tiene acceso directo a:
+
+- Tu sitemap
+- Tu código
+- Tus archivos de contenido (MDX, Markdown, HTML)
+- Tus assets (imágenes, schemas)
+
+Y puede hacer **cambios reales** en tu codebase con tu aprobación.
+
+Repo: `skills-sh/claude-seo`.
+
+---
+
+## Instalación
+
+```bash
+# Opción A
+npx skills.sh install claude-seo
+
+# Opción B (manual)
+git clone https://github.com/skills-sh/claude-seo .claude/skills/claude-seo
+```
+
+Verificar: corré cualquier comando de abajo. Si Claude responde con análisis, está activo.
+
+---
+
+## Los 13 comandos
+
+### Auditoría técnica (5 comandos)
+
+Analizan la estructura técnica — lo que Google necesita para crawlear e indexar.
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-audit` | Auditoría completa (meta tags, headings, alt, links rotos, sitemap, robots, canonical) |
+| `/seo-speed` | Performance — bundle size, imágenes sin optimizar, scripts bloqueantes, Core Web Vitals |
+| `/seo-structure` | Arquitectura — jerarquía URLs, internal linking, profundidad clicks, páginas huérfanas |
+| `/seo-crawl` | Crawlability — robots.txt, noindex, canonical duplicados, redirect chains |
+| `/seo-schema` | Structured data (JSON-LD) — tipos, campos requeridos, validación, oportunidades rich snippets |
+
+### Contenido y keywords (5 comandos)
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-keywords` | Densidad, ubicación en headings, presencia en meta, variaciones semánticas |
+| `/seo-meta` | Genera meta titles + descriptions optimizados (longitud, keywords, CTR) |
+| `/seo-headings` | Jerarquía H1-H6, keywords en H1, longitud, sugerencias por página |
+| `/seo-content` | Longitud, legibilidad, thin content, duplicación interna, gaps temáticos |
+| `/seo-images` | Alt text, tamaño, formato (WebP/AVIF), lazy loading, nombres descriptivos |
+
+### Reportes y automatización (3 comandos)
+
+| Comando | Qué hace |
+|---------|----------|
+| `/seo-report` | Reporte SEO completo en markdown con puntuación y plan priorizado |
+| `/seo-compare` | Comparativa lado a lado (tu página vs competidor o vs otra propia) |
+| `/seo-fix` | El agente. Audita, prioriza, **corrige automáticamente** con diff aprobable |
+
+---
+
+## El flow recomendado
+
+### Día 1 — Diagnóstico
+
+```
+> /seo-audit
+```
+
+Te da puntuación general + lista priorizada de issues.
+
+```
+> /seo-report
+```
+
+Markdown completo que podés compartir con cliente/equipo.
+
+### Día 2 — Quick wins automáticos
+
+```
+> /seo-fix
+```
+
+El agente itera sobre el reporte. Para cada issue:
+
+1. Te muestra el problema
+2. Propone el fix
+3. Te muestra **diff** del cambio
+4. Esperá tu aprobación
+
+Vos decidís qué aplicar. Quick wins típicos:
+- Meta titles/descriptions faltantes
+- Alt text en imágenes
+- H1 duplicado o ausente
+- Schema básico (Organization, BreadcrumbList)
+
+### Día 3+ — Issues estructurales
+
+Para temas que requieren decisiones más profundas (re-arquitectura, content strategy), usá comandos específicos:
+
+```
+> /seo-structure
+```
+
+Te detecta páginas huérfanas, profundidad de clicks excesiva, falta de internal linking.
+
+```
+> /seo-content
+```
+
+Te marca pages con thin content (menos de 300 palabras), duplicación interna, gaps frente a competidores.
+
+---
+
+## Casos de uso
+
+### 1. Site recién lanzado — auditoría baseline
+
+```
+> Acabamos de lanzar miapp.com. Hacé auditoría SEO completa:
+
+  1. /seo-audit primero
+  2. /seo-schema para asegurar JSON-LD bien armado
+  3. /seo-meta para validar todos los titles/descriptions
+  4. /seo-report consolidado al final
+
+  Dame priorización por impacto/esfuerzo (matriz 2x2).
+```
+
+### 2. Site con 6+ meses — análisis profundo
+
+```
+> Site con 200 páginas, 6 meses online. Notamos tráfico
+  estancado.
+
+  1. /seo-structure — ¿hay páginas huérfanas?
+  2. /seo-content — ¿thin content o duplicación?
+  3. /seo-keywords — ¿estamos rankeando para lo que esperamos?
+  4. /seo-compare vs nuestros 2 competidores principales:
+     [competidor1.com] y [competidor2.com]
+
+  Dame plan de acción de 90 días.
+```
+
+### 3. Pre-deploy — validación
+
+Antes de deploy, corré:
+
+```
+> /seo-crawl
+```
+
+Detecta cosas catastróficas que se cuelan en deploys:
+- `noindex` accidental en homepage
+- Canonical apuntando a staging
+- Robots.txt bloqueando producción
+- Redirect loops
+
+### 4. Optimización imágenes en bulk
+
+```
+> Site con 800 imágenes en /public/. Muchas pesadas, mal optimizadas.
+
+  /seo-images con flag de auto-fix para:
+  - Generar alt text descriptivos (no genéricos)
+  - Convertir JPGs/PNGs a WebP donde aplica
+  - Renombrar archivos descriptivamente
+
+  Mostrame TODO en diff antes de aplicar.
+```
+
+---
+
+## El poder de `/seo-fix`
+
+Este es el comando estrella. Combina los otros 12 + un agente que decide qué arreglar.
+
+Flow:
+
+```
+1. Vos: > /seo-fix
+2. Claude SEO:
+   - Corre auditoría completa
+   - Detecta 47 issues
+   - Prioriza por impacto en rankings (alta/media/baja)
+   - Filtra los que puede arreglar sin romper nada (~25-30)
+   - Te propone aplicar en orden
+
+3. Para cada fix:
+   - Muestra ANTES y DESPUÉS
+   - Espera tu OK / SKIP / EDIT
+   - Aplica solo si aprobás
+
+4. Issues estructurales (los que NO puede arreglar solo):
+   - Te los lista al final con sugerencias
+   - Ej: "agregá blog para targetear keyword X"
+```
+
+Resultado típico: en 30 min, tu sitio tiene **20-30 mejoras SEO aplicadas**. Para llegar a lo mismo con SEMrush + dev senior, tardás 1-2 días.
+
+---
+
+## Anti-patrones
+
+### 1. Correr `/seo-fix` sin revisar diffs
+
+Tentación: "todo aprobado, dale". **Error**. A veces el fix automático rompe contexto editorial.
+
+Ejemplo: Claude detecta que `<h1>` tiene "muchas palabras" y lo acorta. Si ese h1 estaba afinado por tu equipo de contenido, pierde sentido.
+
+**Regla**: aprobar individual, no en bulk.
+
+### 2. SEO sin contenido
+
+Claude SEO **optimiza** lo que tenés. Si tu contenido es genérico, ningún meta title te va a salvar. Primero contenido sólido, después SEO.
+
+### 3. Obsesión con schema
+
+Schema markup ayuda a **rich snippets**, no a rankings directos. Si tu site no tiene tráfico todavía, schema no es prioridad. Primero contenido + technical SEO básico.
+
+### 4. Comparar contra competidores chicos
+
+`/seo-compare` solo aporta si el competidor está **arriba tuyo**. Comparar contra alguien que está peor te da falsa confianza.
+
+### 5. Ignorar `/seo-speed`
+
+Page speed es ranking factor real. Si Core Web Vitals están rojos, los demás fixes pesan menos. Empezá por velocidad si está mal.
+
+---
+
+## Combinaciones potentes
+
+### Con Claude Copywriter
+
+```
+> /seo-content me detectó 12 páginas con thin content.
+
+  Para cada una:
+  1. Identificá la query target
+  2. Expandí el contenido a 800-1200 palabras
+  3. Pasá el draft por /humanizer
+  4. Validá con /seo-content que ya no es thin
+```
+
+Combinás SEO + [humanizer](/boveda/claude-copywriter) en un solo flow.
+
+### Con Marketing Skills
+
+```
+> Acabo de publicar 5 artículos nuevos.
+
+  1. Marketing Skills: armame estrategia de distribución
+     (email, redes, comunidades)
+  2. Claude SEO: /seo-meta para optimizar SEO de los 5
+  3. Claude SEO: /seo-schema para agregar Article schema
+```
+
+[5 skills marketing](/boveda/cinco-habilidades-marketing) + Claude SEO = pipeline content marketing entero.
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| E-commerce enterprise con 50k+ productos | Mejor SEMrush/Ahrefs + dev team |
+| SEO local extremo (Google Business focused) | Claude SEO no toca GBP optimization |
+| Black hat SEO | Claude SEO es opinionated en buenas prácticas |
+| SEO en otro idioma que no español/inglés | Calidad variable en idiomas no-mayoritarios |
+
+---
+
+## Próximos pasos
+
+- Para humanizar el contenido que generás post-SEO, [Claude Copywriter](/boveda/claude-copywriter)
+- Para suite completa de marketing (no solo SEO), [5 skills marketing](/boveda/cinco-habilidades-marketing)
+- Para Meta Ads con sistema (otra vertical de distribución), [Andromeda Meta Ads](/boveda/andromeda-meta-ads)

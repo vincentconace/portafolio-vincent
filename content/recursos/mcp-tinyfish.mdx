@@ -1,0 +1,100 @@
+---
+title: "MCP TinyFish — web browsing y extraction con stealth browser + progress streaming"
+description: "MCP server con 81 installs. TinyFish Web Agent: navegación web + data extraction con real-time progress, async tasks y stealth browser profiles. Para scraping que necesita evadir bot detection."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "tinyfish"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-mcp-server-browserbase", "mcp-brightdata", "mcp-firecrawl"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web/tinyfish"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/tinyfish.json"
+---
+
+## Qué es
+
+TinyFish es una plataforma de web agents enfocada en data extraction con dos cosas distintivas:
+1. **Real-time progress streaming** — sabés en qué está el agent mientras corre, no solo el resultado final
+2. **Stealth browser profiles** — el browser se camufla como tráfico real, no como bot
+
+Pensado para extracción donde otros tools fallan por anti-bot. Comparable con [Browserbase](/boveda/mcp-mcp-server-browserbase) pero con foco más extracción + streaming.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `web` |
+| Installs | 81 |
+| Servidor MCP | `tinyfish` |
+| Diferenciadores | Streaming progress + stealth profiles + async tasks |
+| Cuenta requerida | Sí — TinyFish |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp web/tinyfish
+```
+
+Pre-requisito: cuenta TinyFish + API key.
+
+Para Claude:
+
+```
+Instalé el MCP web/tinyfish. Configurá la API key. Quiero extraer
+products de una page de Amazon. Lanzá la task async con stealth
+profile y mostrame el progress mientras corre.
+```
+
+## Qué podés hacer con esto
+
+### Scraping con anti-bot
+
+"Andá a una page que tiene Cloudflare. Con stealth profile, navegá y extraé los listings". Donde browser local fracasa, TinyFish puede pasar.
+
+### Async tasks con progress
+
+"Lanzá la task de scrap de 200 páginas. Mientras corre, mostrame progress cada 30s. Cuando termine, devolveme todos los resultados unificados".
+
+### Multi-page extraction
+
+"Recorre toda la pagination del sitio X y extraé todos los items. Reportame total y errores si los hay".
+
+### Data extraction estructurada
+
+"De esta page de producto, extraé `nombre`, `precio`, `descripción`, `specs`, `reviews count` como JSON".
+
+### Comparado con [Bright Data](/boveda/mcp-brightdata) / [Browserbase](/boveda/mcp-mcp-server-browserbase)
+
+- **Bright Data:** enterprise scale, 60+ tools, más caro
+- **Browserbase:** cloud browser + Stagehand, más generalista
+- **TinyFish:** focal en extraction + stealth, pricing más accesible probablemente
+
+## Pre-requisitos
+
+- **Cuenta TinyFish** con plan apto
+- **API key**
+- **Casos de uso donde stealth y streaming agregan valor**
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para sites sin anti-bot:** [Firecrawl](/boveda/mcp-firecrawl) o un script propio es más simple.
+- **Costos:** stealth profiles + cloud browsers cobran. Mirá pricing.
+- **Legal:** evadir bot detection puede violar TOS. Responsabilidad legal es tuya.
+- **Solo 81 installs:** comunidad probando reducida.
+- **Para scrap puntual:** sumar otro servicio puede ser overkill.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [TinyFish MCP](https://www.aitmpl.com/component/mcps/web/tinyfish) — comando exacto.
+- **Config JSON:** [tinyfish.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web/tinyfish.json).
+
+## Recursos relacionados
+
+- [Browserbase MCP](/boveda/mcp-mcp-server-browserbase) — cloud browser + Stagehand. Comparalas.
+- [Bright Data MCP](/boveda/mcp-brightdata) — enterprise grade web data.
+- [Firecrawl MCP](/boveda/mcp-firecrawl) — para scraping simple sin anti-bot.

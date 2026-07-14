@@ -1,0 +1,96 @@
+---
+title: "MCP PostgreSQL Documentation — docs de Postgres adentro del prompt"
+description: "MCP server con 291 installs que provee documentación de PostgreSQL y skills para escribir mejor código Postgres. Anti-hallucination para SQL: Claude consulta docs reales en vez de adivinar features."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "postgresql"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["plugin-pg-aiguide", "mcp-postgresql-integration", "mcp-context7"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/postgresql-documentation"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/postgresql-documentation.json"
+---
+
+## Qué es
+
+Este MCP no conecta a tu DB. Conecta a la **documentación oficial de PostgreSQL**. La sacada: cuando Claude va a escribir SQL o hablar de features Postgres, consulta los docs reales en vez de tirar de memoria.
+
+Es similar a [Context7](/boveda/mcp-context7) (que cubre librerías genéricas) pero especializado en Postgres. Y complementa a [pg-aiguide](/boveda/plugin-pg-aiguide) — pg-aiguide es un plugin oficial de Timescale con skills y MCP; este MCP es más focal: solo docs.
+
+Útil cuando:
+- Trabajás con features menos comunes (window functions, recursive CTEs, JSON operators avanzados)
+- Estás migrando entre versiones y querés saber qué cambió
+- Querés que Claude no invente sintaxis o flags
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `database` |
+| Installs | 291 |
+| Servidor MCP | `postgres-documentation` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp database/postgresql-documentation
+```
+
+Para Claude:
+
+```
+Instalé el MCP database/postgresql-documentation. Quiero usar
+LATERAL JOIN en una query compleja. Consultame los docs y mostrame
+la sintaxis correcta + 2 ejemplos representativos.
+```
+
+## Qué podés hacer con esto
+
+### Anti-hallucination en SQL avanzado
+
+"Para implementar paginación eficiente sobre 100M rows, ¿qué patron usa Postgres? Consulta los docs y mostrame el approach correcto con keyset pagination". Claude cita docs en vez de inventar.
+
+### Aprender features nuevas
+
+"En Postgres 16, ¿qué hay nuevo en JSON operations vs 14? Listame las features con ejemplos".
+
+### Resolver dudas sintácticas precisas
+
+"¿Cuál es la sintaxis correcta de `GENERATED COLUMNS` en Postgres? Identificá la versión mínima requerida".
+
+### Migration helpers
+
+"Estoy migrando una query de MySQL a Postgres. La query usa `GROUP_CONCAT`. ¿Cuál es el equivalente en Postgres y cuál es la nota de performance?".
+
+### Optimización con index types
+
+"¿Cuándo conviene un GiST index vs GIN vs BTREE? Consultame los docs y dame árbol de decisión".
+
+## Pre-requisitos
+
+- **Node.js + Claude Code** funcionando
+- **Conexión a internet** (consulta docs online)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si solo necesitás queries básicas:** Claude conoce SQL básico de memoria. El MCP suma valor en features avanzadas.
+- **Si usás [pg-aiguide](/boveda/plugin-pg-aiguide):** ya incluye docs + skills + MCP. Verificá overlap.
+- **Si tu DB no es Postgres:** no aplica.
+- **Para data operations en tu DB:** este MCP es solo docs. Combinalo con [postgresql-integration](/boveda/mcp-postgresql-integration).
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [PostgreSQL Documentation MCP](https://www.aitmpl.com/component/mcps/database/postgresql-documentation) — comando exacto.
+- **Config JSON:** [postgresql-documentation.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/postgresql-documentation.json).
+- **Postgres docs:** [postgresql.org/docs](https://www.postgresql.org/docs/).
+
+## Recursos relacionados
+
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — el plugin oficial de Timescale que combina docs + skills + más. Compará primero.
+- [PostgreSQL Integration MCP](/boveda/mcp-postgresql-integration) — para conectarte a tu DB y ejecutar. Combo natural: docs + execution.
+- [Context7 MCP](/boveda/mcp-context7) — para anti-hallucination en general (no solo Postgres).

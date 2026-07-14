@@ -1,0 +1,231 @@
+---
+title: "Claude Design — diseñador visual de Anthropic para slides, sites y apps"
+description: "Claude Design vive en claude.ai/design — entrás, hablás y te arma presentaciones, páginas web y apps clickeables sin salir del chat. Sin skills externas ni Claude Code. Cuándo conviene, los 4 modos de iterar y el handoff a Code cuando crece el proyecto."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude", "claude-design"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["claude-trabajo-creativo", "cult-ui-claude", "trifecta-perfecta"]
+---
+
+## Qué es
+
+**Claude Design** es un producto de Anthropic Labs que vive en `claude.ai/design`. Entrás, hablás natural, te arma:
+
+1. **Presentaciones** (slides)
+2. **Páginas web** (landings, microsites)
+3. **Apps clickeables** (prototipos navegables)
+
+Sin instalar skills, sin abrir Claude Code, sin saber código. Está **incluido en Pro / Max / Team / Enterprise** — no es producto aparte que pagás.
+
+La diferencia con pedirle a Claude Code "armame una landing":
+
+| Claude Code | Claude Design |
+|-------------|---------------|
+| Genera código | Genera artefactos visuales editables |
+| Vivís en archivos | Vivís en chat con previews |
+| Para devs | Para cualquiera |
+| Output = repo | Output = link compartible o handoff a Code |
+
+Es el equivalente de **Figma + Slides + Webflow** unidos, pero con LLM al frente.
+
+---
+
+## Las 3 "cubetas"
+
+### Cubeta 1 — Presentaciones
+
+```
+> Armame un deck de board para Q3:
+  - Resumen ejecutivo (1 slide)
+  - Métricas del trimestre (1 slide con tabla + 2 charts)
+  - Highlights del producto (3 slides con visuales)
+  - Tema del trimestre que viene (2 slides)
+  - Apéndice con benchmarks (2 slides)
+
+  Tono: profesional pero accesible. Paleta: verde / negro / blanco
+  hueso. Tipografía editorial.
+```
+
+Claude Design te tira el deck completo. Lo ves en preview, podés editarlo slide por slide en el mismo chat.
+
+### Cubeta 2 — Páginas web
+
+```
+> Necesito landing de mi SaaS de gestión de inventario para retailers.
+
+  Estructura:
+  - Hero con email capture
+  - 3 features principales
+  - Social proof (logos + 1 testimonial)
+  - Pricing (3 tiers)
+  - FAQ
+  - CTA final
+
+  Tono: profesional, no técnico. Para dueños de retail 35-55.
+  Mood: confianza, control, sin ser corporativo.
+```
+
+Genera la landing entera con HTML/CSS/JS funcional. Le hacés cambios hablando.
+
+### Cubeta 3 — Apps clickeables
+
+```
+> Armame un prototipo clickeable de una app para tomar pedidos en
+  restaurant:
+  - Pantalla 1: lista de mesas
+  - Pantalla 2: menú con categorías
+  - Pantalla 3: pedido en curso con items
+  - Pantalla 4: cierre y pago
+
+  Que se pueda navegar entre pantallas. Estilo iOS nativo.
+```
+
+Te tira el prototipo navegable. Sirve para mostrar al cliente, validar UX, antes de entrar a codear de verdad.
+
+---
+
+## Los 4 modos de iterar
+
+Lo interesante no es la primera versión — es **cómo iterás**.
+
+### Modo 1 — Cambios globales
+
+```
+> Cambiá toda la paleta a más cálida — beiges, naranjas suaves,
+  acentos dorados en lugar de azul.
+```
+
+Aplica a todo. Útil para cambios estructurales de marca.
+
+### Modo 2 — Cambios por sección
+
+```
+> Solo en el hero: hacé el título más corto y agregale una imagen
+  de fondo que sea más editorial (no stock photo genérica).
+```
+
+Aísla la sección. El resto queda intocado.
+
+### Modo 3 — Comentarios inline
+
+Click derecho sobre un elemento → "Comentar". Escribís el cambio que querés ahí mismo:
+
+```
+> "Este botón debería ser primario, no secundario"
+> "Sacá el icono, queda apretado"
+> "Más espacio entre este bloque y el siguiente"
+```
+
+Claude lo aplica solo al elemento. **Workflow más rápido para iteraciones finales.**
+
+> Caveat: a veces los comentarios inline fallan en interpretar exactamente qué cambiar. Si pasa, repetilo con más detalle.
+
+### Modo 4 — Variantes A/B
+
+```
+> Generame 3 variantes del hero con distintos hooks:
+  A: enfocado en ahorro de tiempo
+  B: enfocado en evitar errores
+  C: enfocado en control de inventario en tiempo real
+```
+
+Te tira las 3 lado a lado. Elegís cuál seguir.
+
+---
+
+## El handoff a Claude Code
+
+Llega un momento donde el proyecto crece y Claude Design no alcanza. Necesitás:
+
+- Backend real (no mock)
+- Integración con APIs / DB
+- Lógica compleja
+- Versionado en git
+- Deploy a producción
+
+Para eso está el **handoff a Code**. Con un click, Claude Design exporta:
+
+- El código completo (HTML/CSS/JS o framework elegido)
+- Un repo nuevo o existente
+- Listo para abrir en Claude Code y seguir trabajando
+
+**El flow ideal**:
+
+1. **Claude Design**: exploración visual, validación con cliente, iteración rápida
+2. **Handoff a Code**: cuando el diseño está aprobado y necesitás producir
+3. **Claude Code**: backend, integraciones, deploy
+
+Sin Claude Design: vas a Claude Code desde el día 1 → iterar visualmente es lento.
+Con: separás "qué construir" (Design) de "cómo construirlo bien" (Code).
+
+---
+
+## Las 7 reglas honestas (lo que NO te dicen)
+
+### 1. No es Figma
+
+Si esperás herramienta de diseño profesional con control granular pixel-perfect, no es esto. Es **conversational design** — gran 80%, pero el 20% final requiere edición manual.
+
+### 2. Los comentarios inline a veces fallan
+
+Cuando funcionan, hermoso. Cuando no, frustrante. Si un comentario no se aplica como esperabas, **escribilo de nuevo más explícito** o cambialo desde el chat principal.
+
+### 3. Las apps clickeables NO son apps reales
+
+Son prototipos. Sin DB, sin backend, sin auth real. Sirven para **validar con humanos**, no para producción.
+
+### 4. El bug del chat de pestaña
+
+Si abrís muchas pestañas con Claude Design en paralelo, a veces el chat se desincroniza. **Cerrá las pestañas que no estés usando** activamente.
+
+### 5. La paleta se "pega"
+
+Si en una conversación usaste colores X, en pedidos siguientes los va a sugerir. Si querés salir de esa paleta, **decirlo explícitamente**: "olvidá la paleta anterior, vamos con [nueva]".
+
+### 6. Tipografía limitada
+
+No es Adobe Fonts. El catálogo es de Google Fonts + algunas custom. Si tu marca usa una font privada / paga, vas a tener que hacer handoff a Code y meterla manual.
+
+### 7. No reemplaza un diseñador real
+
+Para necesidades estratégicas (sistema de diseño completo, identidad de marca, ilustración custom), un diseñador humano sigue ganando. Claude Design es **acelerador**, no reemplazo.
+
+---
+
+## Comparación rápida
+
+| Tarea | Claude Design | Figma | Cult UI + Code | Webflow |
+|-------|---------------|-------|----------------|---------|
+| Setup | 0 min | 5 min | 30 min | 15 min |
+| Primer prototipo navegable | 5 min | 1h | 30 min | 30 min |
+| Control granular | ⚠️ medio | ✅ alto | ⚠️ medio | ✅ alto |
+| Output exportable a código | ✅ Code | con plugin | ✅ ya es código | ✅ |
+| Curva de aprendizaje | nula | media | media | baja |
+| Costo | incluido en Pro | $$ | gratis | $$$ |
+
+**Para validar ideas rápido y mostrar a stakeholders**: Claude Design gana.
+**Para diseño de producto serio con sistema**: Figma o Code con sistema propio.
+
+---
+
+## Cuándo usarlo
+
+✅ MVPs y validación temprana
+✅ Decks ejecutivos / board updates
+✅ Microsites de marketing
+✅ Mockups para mostrar a clientes / inversores
+✅ Cuando no sos diseñador y necesitás algo decente rápido
+
+❌ Sistema de diseño de un producto serio
+❌ Apps que van a producción tal cual (necesitan backend real)
+❌ Materiales de marca finales (identity, logos, etc.)
+
+---
+
+## Próximos pasos
+
+- Si vas a llevar el diseño a producción, [Cult UI con Claude Code](/boveda/cult-ui-claude) para salir del look genérico al codear
+- Si tu workflow ya pasa por Adobe / Blender / etc., [Claude para trabajo creativo](/boveda/claude-trabajo-creativo)
+- Para el patrón completo "diseñar + blindar + deployar", [trifecta perfecta](/boveda/trifecta-perfecta)

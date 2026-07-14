@@ -1,0 +1,232 @@
+---
+title: "Núcleo Web: build a professional landing page without knowing how to code"
+description: "Step-by-step guide to using Núcleo Web, the Claude Code starter that builds professional landing pages for LatAm businesses. What it is, what you get, how to install it, the 7 phases of the flow, the 6 project types you can build, integrations (WhatsApp, Mercado Pago), deploy to Vercel and your own domain. Straight to the point."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude-code", "nucleo-web", "vercel"]
+publishedAt: "2026-06-25"
+readingTime: "12 min"
+badge: "nuevo"
+featured: true
+featuredOrder: 1
+github: "https://github.com/vincentconace/nucleo-web"
+relatedSlugs: ["instalar-claude-code-terminal", "cual-plan-claude", "hablarle-a-claude", "claude-code-setup-zero"]
+---
+
+## What Núcleo Web is
+
+Núcleo Web is an assistant that builds **professional landing pages** for you, just by chatting. It runs on top of [Claude Code](/boveda/instalar-claude-code-terminal): you answer questions about your business and the AI designs, codes and publishes the page. **You don't need to know how to code.**
+
+These aren't generic templates: each page is designed from scratch, mobile-first, with light/dark mode, SEO and the integrations a Latin American business actually uses (WhatsApp, Mercado Pago, local SEO).
+
+<Callout type="tip" title="Free and open source">
+Núcleo Web is **free** and open source: anyone can look at the code, clone it and use it. Open the repo on [GitHub](https://github.com/vincentconace/nucleo-web) whenever you like.
+</Callout>
+
+---
+
+## Purpose
+
+To bring the technical barrier of having a professional web presence down to zero. Instead of hiring someone, wrestling with a page builder or copying a template that clearly looks AI-made, **you describe your business and get a real site that's yours and editable.**
+
+## Goal
+
+That in **a single session** you go from "I don't have a page" to a published landing with a live URL, ready to share and to sell.
+
+## Results — what you walk away with
+
+| Result | Details |
+|-----------|---------|
+| **Live page** | Public URL deployed for free on Vercel |
+| **Code that's yours** | Next.js + Tailwind + TypeScript, 100% editable |
+| **Custom design** | Colors, fonts and sections tailored to your industry |
+| **Mobile + dark mode** | Responsive from 375px to 1440px, light/dark toggle |
+| **LatAm integrations** | WhatsApp button, payments with Mercado Pago, local SEO |
+| **Your own domain (optional)** | Connect your `.com` whenever you want (~USD 10–15/year) |
+
+---
+
+## Requirements
+
+Check off what you already have ready (it's saved in your browser):
+
+<Checklist storageKey="nucleo-web-requisitos" items={["Claude Code installed and running", "Active Claude plan (Pro/Max/Team or Console with credits)", "Node.js 18 or higher", "Git installed", "Vercel account (optional, only for your own domain)"]} />
+
+<Callout type="info" title="Missing any of these?">
+**Claude Code:** follow the guide on [installing Claude Code in the terminal](/boveda/instalar-claude-code-terminal). **Plan:** check out [which Claude plan](/boveda/cual-plan-claude) — the Free one doesn't include Claude Code. **Node.js:** download the LTS from `nodejs.org`. **Git:** it usually comes pre-installed; if not, `git-scm.com`.
+</Callout>
+
+<Callout type="warning" title="Núcleo Web lives inside Claude Code">
+If you don't have Claude Code running yet, stop here and do that guide first. Everything else runs inside Claude Code.
+</Callout>
+
+---
+
+## Installation and getting started
+
+<Step number={1} title="Check Node.js">
+
+```bash
+node --version
+```
+
+If you see `v18` or higher, you're set. If not, install the LTS from `nodejs.org` and reopen the terminal.
+
+</Step>
+
+<Step number={2} title="Clone Núcleo Web">
+
+```bash
+git clone https://github.com/vincentconace/nucleo-web.git && cd nucleo-web
+```
+
+</Step>
+
+<Step number={3} title="Start Claude">
+
+Inside the `nucleo-web` folder:
+
+```bash
+claude
+```
+
+Claude reads the project's instruction file and **becomes Núcleo Web**. It will greet you and kick off the flow.
+
+</Step>
+
+<Step number={4} title="Write to it in English" last>
+
+Núcleo Web detects your language from the first message. If you write in English, the whole flow continues in English. A simple:
+
+```
+hi, I want to build my page
+```
+
+is enough to get started.
+
+</Step>
+
+---
+
+## How it works: the 7 phases
+
+You only make **decisions**; the AI handles all the mechanics (writing files, installing dependencies, testing, optimizing).
+
+### Phase 0 — Starting point
+You choose how to start (see "Three ways to begin" below) and, if you're starting from scratch, the project type.
+
+### Phase 1 — Discovery (the questions)
+4 short rounds: what your business does, who you sell to, what the main action is (CTA), benefits, contact, testimonials, socials, language. **Key pause:** after the visual round, Claude shows you the design direction (colors + vibe + structure) and **waits for your OK** before continuing. Changing things here saves you from redoing work later.
+
+### Phase 2 — Design system
+It defines the exact hex values, the Google Fonts and the landing "archetype" based on your industry. You can request adjustments before continuing.
+
+### Phase 3 — Scaffolding
+It checks Node, creates the Next.js project, installs shadcn/ui and the components your page needs. Zero intervention from you.
+
+### Phase 4 — Building
+It writes every section with "humanized" copy (that doesn't sound like AI), builds the light/dark mode, wires up the integrations and leaves everything responsive.
+
+### Phase 5 — Preview and quality control
+It spins up the server on `localhost:3000`, takes screenshots, runs an SEO audit and a checklist (WCAG AA contrast, headings, alt text, WhatsApp/Mercado Pago links, build OK). You give it feedback ("the hero feels cold", "make the button bigger") and **it changes it right away**, as many times as needed.
+
+### Phase 6 — Deploy
+When you're happy, it publishes on Vercel with one command and gives you back the **live URL** (you don't need an account for the preview).
+
+### Phase 7 — Your own domain (optional)
+If you want your `.com`, it guides you registrar by registrar (Vercel, Cloudflare, Namecheap or Domweb for `.com.ar`) and connects the DNS.
+
+---
+
+## The gallery: what projects you can build
+
+Núcleo Web builds 6 project types out of the box and adapts the questions, the sections and the integrations to each case. Not sure which one is yours? Answer this and we'll tell you what to build (with the prompt ready to copy):
+
+<ProjectPicker />
+
+Want to see them all? Explore each type and grab the prompt that suits you best:
+
+<ProjectGallery />
+
+---
+
+## Three ways to begin
+
+You don't always start from a blank page. Núcleo Web lets you:
+
+1. **From scratch** — you pick the project type and answer the questions.
+2. **Rebuild an existing site** — you give it the URL; it analyzes colors, fonts and structure, and proposes an improved version.
+3. **From your Instagram** — you give it your profile/bio/screenshots and it builds the page from that.
+
+In cases 2 and 3 Claude **pre-fills** the answers and you just confirm or correct.
+
+---
+
+## Integrations built for LatAm
+
+| Integration | What it does | When it activates |
+|-------------|----------|------------------|
+| **WhatsApp** | Button with a pre-loaded message (`wa.me`) | Contact by default |
+| **Mercado Pago** | Payment button with your link (no backend) | If you sell or charge a deposit |
+| **Local SEO** | `LocalBusiness` data (JSON-LD) | If you have a physical location |
+| **Formspree** | Real contact forms | Optional, if you provide your form ID |
+
+---
+
+## Deploy: your page live
+
+When you tell it you're ready, Núcleo Web:
+
+1. Checks that the build passes (`npm run build`).
+2. Publishes with its deploy skill:
+
+```bash
+bash .claude/skills/vercel-deploy/scripts/deploy.sh site
+```
+
+It gives you back a **preview URL** ("your page is online!") and a **URL to claim it** in your free Vercel account and make it permanent.
+
+> Alternative if you already have the Vercel CLI: `npx vercel --yes`.
+
+---
+
+## Your own domain (optional)
+
+Want `yourbusiness.com` instead of the Vercel URL? The hosting stays free; the domain costs ~USD 10–15/year. Núcleo Web guides you based on the registrar:
+
+- **Vercel Domains** — the simplest, connects on its own.
+- **Cloudflare** — better price, a bit more technical.
+- **Namecheap** — cheap and beginner-friendly.
+- **Domweb** — Argentine, bills in ARS, supports `.com.ar`.
+
+---
+
+## If something breaks
+
+### "node: command not found"
+Install Node.js LTS from `nodejs.org` and reopen the terminal.
+
+### Claude doesn't start as Núcleo Web
+Make sure you run `claude` **inside** the `nucleo-web` folder (that's where the instruction file that transforms it lives).
+
+### The build fails on deploy
+Ask it: "run `npm run build` and fix the errors". Núcleo Web reads them and corrects them on its own.
+
+### I want to keep editing afterwards
+The code stays in the `site/` folder. Run `npm run dev` whenever you want and redeploy after your changes.
+
+---
+
+## Next steps
+
+- Haven't installed Claude Code yet? [Install it in the terminal](/boveda/instalar-claude-code-terminal)
+- Learn how to ask it for things properly: [talking to Claude](/boveda/hablarle-a-claude)
+- Fine-tune your environment: [setup zero](/boveda/claude-code-setup-zero)
+
+---
+
+## Official sources
+
+- **Repo**: `github.com/vincentconace/nucleo-web`
+- **Claude Code**: `code.claude.com/docs`
+- **Vercel**: `vercel.com/docs`

@@ -1,0 +1,83 @@
+---
+title: "Hook Change Logger — todas las mutations a CSV para demos y auditoría"
+description: "Hook que registra cada file mutation a un CSV: timestamp, tool, file path, action, details. Cubre Edit, MultiEdit, Write y Bash. Ideal para demos, audits y reproducir sesiones."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-change-tracker", "hook-command-logger", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/change-logger"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/change-logger.json"
+---
+
+## Qué es
+
+Cada vez que Claude muta archivos (Edit, MultiEdit, Write) o ejecuta Bash, este hook agrega una row a un CSV con: timestamp, tool usado, file path, action, details. Hook event: `PostToolUse` sobre los 4 tools.
+
+Súper útil para:
+- **Demos** — al final de la sesión, mostrás el CSV con todo lo que se hizo.
+- **Auditoría** — qué archivos tocó Claude, en qué orden.
+- **Reproducir sesiones** — alguien quiere replicar tu workflow, vos le pasás el CSV.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `automation` |
+| Installs | 61 |
+| Hook event | `PostToolUse` (Edit, MultiEdit, Write, Bash) |
+| Output | CSV con timestamp + tool + path + action + details |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook automation/change-logger
+```
+
+Para Claude:
+
+```
+Instalé el hook automation/change-logger. Decime dónde queda el CSV
+y mostrame las primeras filas después de un par de ediciones.
+```
+
+## Qué podés hacer con esto
+
+### Demos sin video
+
+Al final de la sesión, abrís el CSV y mostrás la cronología. Más útil que un screen recording largo.
+
+### Audit trail
+
+Para proyectos sensibles o compliance: el CSV te da histórico de qué se modificó cuándo.
+
+### Análisis de productividad
+
+¿Cuántas mutaciones por sesión? ¿Qué archivos tocás más seguido? ¿Cuál fue el time-to-first-edit?
+
+### Comparado con [Change Tracker](/boveda/hook-change-tracker)
+
+Change Tracker es más simple (log básico, 1,127 installs). Change Logger es más completo (CSV estructurado). Para demos serias, este. Para tracking casual, el otro.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si solo querés saber qué tocó Claude:** `git status` y `git diff` ya te lo dan.
+- **Para sesiones muy largas:** el CSV crece. Limpiá periódicamente.
+- **Data sensible:** los `details` pueden incluir snippets. Si manejás secrets, validá qué exactamente se registra.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Change Logger Hook](https://www.aitmpl.com/component/hooks/automation/change-logger) — comando exacto.
+- **Config JSON:** [change-logger.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/change-logger.json).
+
+## Recursos relacionados
+
+- [Change Tracker Hook](/boveda/hook-change-tracker) — versión más simple, más adoptada.
+- [Command Logger Hook](/boveda/hook-command-logger) — para loggear los commands, no las mutations.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas de audit.

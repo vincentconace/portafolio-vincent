@@ -1,0 +1,100 @@
+---
+title: "MCP Sentry — error tracking y debugging asistido desde Claude"
+description: "MCP server con 270 installs para Sentry, enfocado en human-in-the-loop coding agents y dev workflows. Acceso a issues, traces, releases y context de Sentry desde Claude Code."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "sentry"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["mcp-sentry-local", "mcp-dynatrace", "mcp-logfire"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/sentry"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/sentry.json"
+---
+
+## Qué es
+
+Sentry es la plataforma de error tracking y APM más adoptada. Issues con stack traces, performance metrics, release tracking, alerts. Este MCP conecta tu cuenta a Claude Code con foco específico: **human-in-the-loop coding agents y dev workflows**.
+
+Significado práctico: el MCP está pensado para que Claude (con vos supervisando) use Sentry como context para debugging asistido — leer issues, traces, contexto del error, y proponer fixes.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 270 |
+| Servidor MCP | `sentry` |
+| Cuenta requerida | Sí — Sentry + API token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/sentry
+```
+
+Pre-requisito: cuenta Sentry + API token con scopes apropiados.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/sentry. Configurá las credenciales y listame
+los issues abiertos del proyecto X con > 10 occurrences en las últimas
+24h. Para los top 3, leé stack trace y dame root cause + suggested fix.
+```
+
+## Qué podés hacer con esto
+
+### Triage de issues
+
+"Listame issues abiertos del proyecto en producción agrupados por: critical / unresolved / regression. Para los critical, dame contexto y prioridad sugerida".
+
+### Debugging asistido
+
+"Issue X tiene 500 occurrences en las últimas 2 horas. Leé el stack trace, contexto del request, breadcrumbs y proponé qué cambió y dónde fixearlo. Si necesitás ver el código de la función X, pegalo".
+
+### Análisis de release
+
+"Después de release v2.1.0, ¿qué errores nuevos aparecieron que no existían en v2.0? Comparame issue rates pre/post-deploy".
+
+### Correlación con deploys
+
+"Cuando se desplegó X commit, ¿qué errores nuevos se introdujeron? Mostrame los issues que aparecieron en esa ventana".
+
+### Performance issues
+
+"Listame transactions con p95 > 2s en el último día. Para las top 3, dame el span dominante y sugerí optimization".
+
+### Resolver issues por bloque
+
+"Para todos los issues con label `legacy` que no se reprodujeron en los últimos 30 días, agrupalos y proponé marcarlos como resolved".
+
+## Pre-requisitos
+
+- **Cuenta Sentry** activa
+- **API token** con scopes correctos
+- **Acceso a los projects** que vas a consultar
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Operaciones destructivas:** delete issues / resolve sin context. Hooks de aprobación.
+- **Token amplio:** un token con org admin deja a Claude ver todo. Restringí scope.
+- **Solapamiento con alternativas:** [Logfire](/boveda/mcp-logfire), [Dynatrace](/boveda/mcp-dynatrace), [Grafana](/boveda/mcp-grafana). Mirá si tu observability ya está cubierta antes de sumar.
+- **Si usás Sentry Self-Hosted on-prem:** verificá si este MCP lo soporta (algunos asumen Sentry.io).
+- **Privacy de stack traces:** algunos stack traces tienen PII en variables. Tené cuidado al pegarlos a Claude.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Sentry MCP](https://www.aitmpl.com/component/mcps/devtools/sentry) — comando exacto.
+- **Config JSON:** [sentry.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/sentry.json).
+- **Sentry oficial:** [sentry.io](https://sentry.io).
+
+## Recursos relacionados
+
+- [Sentry Local MCP](/boveda/mcp-sentry-local) — versión local oficial (vía npx).
+- [Dynatrace MCP](/boveda/mcp-dynatrace) — APM alternativa enterprise.
+- [Logfire MCP](/boveda/mcp-logfire) — observability moderno con OTel.

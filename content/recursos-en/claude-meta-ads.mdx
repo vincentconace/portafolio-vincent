@@ -1,0 +1,316 @@
+---
+title: "Claude + Meta Ads — how to connect them WITHOUT getting your account banned"
+description: "Connecting Claude directly to Meta Ads without precautions ends with a disabled account in days. The official skill has Meta's rules built in: it operates in PAUSED by default, no media uploads via API, no bulk operations. What NOT to do + 'safe' prompts with hard rules."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "meta", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-ads", "andromeda-meta-ads", "claude-copywriter"]
+---
+
+## Why this guide is critical
+
+Connecting Claude directly to Meta Ads without precautions is **the fastest way to lose your account**.
+
+Real case (from the community):
+
+> They connected Claude directly. They asked it to "create 15 creative variants and turn them on." Claude:
+> 1. Tried to upload images via the API (Meta doesn't allow it)
+> 2. Fired off 15 creates + 15 activates in under 1 min
+> To Meta, that looks like a bot.
+>
+> At 12h: token hit with 429.
+> At 48h: Meta Developers app disabled.
+> Day 3: ad account under manual review.
+> Recovery: 2 weeks of back-and-forth with support.
+
+The **official Claude Ads skill** exists specifically to prevent this. It has Meta's rules built in, operates in PAUSED by default, and asks for confirmation before every change.
+
+---
+
+## The 4 rules that get you banned (read BEFORE installing)
+
+Meta doesn't publish these rules by name, but it enforces them in real time.
+
+### Rule 1 — DON'T upload media via API
+
+**What people do wrong**: "Claude, upload this video to the campaign." Claude tries to do it with the Marketing API.
+
+**Why you get banned**: The official Marketing API **does NOT allow multipart media upload** from third-party apps. When your token tries to upload binaries, Meta flags the app as suspicious.
+
+**The right way**: Claude prepares the final copy + creative specs + brief. **You upload the file from Ads Manager**. Claude only references an existing `creative_id` to clone, pause, or measure.
+
+### Rule 2 — DON'T fire API calls in parallel
+
+**What people do wrong**: Claude decides "I'm going to audit 15 ad sets in parallel" and fires off 15 simultaneous requests.
+
+**Why you get banned**: Meta enforces **rate limits per token and per app**. Going over triggers 429 and puts you into escalating throttling. If the app keeps the pattern up, Meta deactivates it for abusive use.
+
+**The right way**: In every prompt, specify "one account at a time, wait before continuing." The skill has cool-downs built in. You audit serially, not in batches.
+
+### Rule 3 — DON'T activate campaigns in a loop
+
+**What people do wrong**: "Create 10 variants and turn them all on." Claude does 10 creates + 10 activates with no pause.
+
+**Why you get banned**: Meta detects bulk activation as **suspicious automation**. It's a classic pattern for fraudulent scripts.
+
+**The right way**: The skill creates everything in **PAUSED by default**. Always. You activate from Ads Manager after reviewing. **DON'T give Claude permission to turn campaigns on automatically**.
+
+### Rule 4 — DON'T make bulk changes without confirming
+
+**What people do wrong**: "Update all 30 ad sets with this new audience" or "raise the budget of all of them by 50%."
+
+**Why you get banned**: Bulk changes trigger **fraud detection**. An edit across 30 entities in 2 seconds isn't something a person does.
+
+**The right way**: Claude first lists the affected ad sets with IDs. You confirm them one by one, or authorize a small subset. **The skill forces explicit confirmation**.
+
+### The mother rule
+
+> If the skill says "I need confirmation," **DON'T override it**. Auto mode is convenient right up until it turns your account into a fraud script in Meta's eyes.
+
+---
+
+## Prerequisites
+
+- **Claude Code** installed
+- **Meta Business account** with an active FB Page or IG
+- **Python 3.10+** (optional, for landing page analysis with Playwright)
+
+---
+
+## Setup — 3 steps
+
+### Step 1 — Install the Claude Ads skill
+
+```bash
+# macOS/Linux
+curl -fsSL https://raw.githubusercontent.com/AgriciDaniel/claude-ads/main/install.sh | bash
+
+# Windows PowerShell
+irm https://raw.githubusercontent.com/AgriciDaniel/claude-ads/main/install.ps1 | iex
+```
+
+This installs:
+- 17 specialized sub-skills
+- 10 agents (6 audit + 4 creative)
+- 23 reference files with official rules
+
+Everything **local on your machine**.
+
+### Step 2 — Create an app in Meta Developers
+
+1. Go to `developers.facebook.com`
+2. Click "Create App" → type **Business**
+3. Under permissions, enable:
+   - `ads_management`
+   - `ads_read`
+   - `business_management`
+   - `read_insights`
+4. Generate an **Access Token** from Tools → Graph API Explorer
+5. Copy it (it's the key you'll hand to Claude)
+
+**Important**: never share your token. Claude uses it only in your local session.
+
+### Step 3 — Connect Claude
+
+```bash
+claude
+```
+
+When it asks, share:
+- Access Token
+- Ad account ID (starts with `act_`)
+- Industry / type of business
+
+---
+
+## The protections the skill applies
+
+Once installed, the skill **automatically blocks** dangerous behaviors:
+
+| Protection | Detail |
+|------------|--------|
+| **Campaigns in PAUSED** | Nothing is ever activated directly |
+| **Budget cap $100/day** | If projected > $100, it asks for confirmation |
+| **Prohibited content** | Detects violations (illegal products, explicit content) |
+| **Special Ad Categories** | If you sell housing/employment/credit, it activates restrictions |
+| **No automatic changes** | Recommends, but does NOT execute without your approval |
+| **3x Kill rule** | If CPA > 3x target, flags it to pause |
+
+These protections **are what separates a healthy account from a banned one**.
+
+---
+
+## Your first audit
+
+### Prompt
+
+```
+> Meta Ads — full audit of my account.
+
+  My industry: [YOUR INDUSTRY]
+  Approximate monthly spend: $[YOUR BUDGET]
+  Main objective: [sales / leads / traffic]
+
+  Connect to my account and give me a report with:
+  - Health Score 0-100
+  - Key findings
+  - Specific recommendations
+```
+
+Typical output:
+- Current score
+- Top 5 issues with impact on spend
+- Quick wins (1h or less)
+- Structural issues (days/weeks)
+
+---
+
+## The 4 "safe" prompts — copy-paste
+
+Vague prompts are the main reason Claude ends up doing 15 things at once. These 4 carry the rules **written line by line**.
+
+### 1. Read-only audit
+
+Your first contact. Claude ONLY reads and reports.
+
+```
+> Meta Ads — READ-ONLY mode.
+
+  Audit my account and report Health Score + the 3 most urgent things.
+
+  Non-negotiable rules:
+  1. READ only. Do NOT create, edit, activate, or delete ANYTHING.
+  2. ONE API call at a time, 2-second cool-down
+     between requests.
+  3. If you find something that requires action, list it with IDs
+     and stop. Ask me before executing any change.
+```
+
+### 2. Pause underperformers
+
+When you already have a finding and want to pause:
+
+```
+> Meta Ads — review ad sets with CPA 3x the target in the last 7 days.
+
+  1. List them FIRST with: name, ID, current CPA, spend
+  2. Do NOT pause anything yet
+  3. Wait for my exact list of which ones to pause. If I send you 5 IDs,
+     you pause those 5 and nothing else.
+  4. When pausing, do it one at a time, 2-second cool-down between calls.
+```
+
+### 3. Prepare a creative WITHOUT uploading it
+
+To avoid the classic mistake of asking it to upload media:
+
+```
+> Meta Ads — prepare a new ad based on [INSPIRATION].
+
+  Deliverable:
+  1. Final headline + primary text + description, with 3
+     variants of each
+  2. Image/video brief (dimensions, aspect ratio, 3 scenes)
+  3. Recommended targeting with reasons
+  4. Do NOT try to upload image or video via API. I upload them
+     from Ads Manager. You only prepare the brief as text.
+```
+
+### 4. Audit Pixel + Conversions API
+
+To detect broken tracking without touching config:
+
+```
+> Meta Ads — audit ONLY the Meta Pixel and the CAPI.
+
+  Report:
+  1. Current Event Match Quality + gap versus ideal
+  2. Duplicate events between pixel and CAPI
+  3. Events being lost (pageview, purchase, lead)
+  4. Recommendations by priority
+
+  Rules: Do NOT edit ANYTHING in the config. If you find a
+  misconfigured event, list it by name and stop.
+```
+
+---
+
+## Final tip
+
+If one of your prompts **does NOT include** the phrase:
+
+> "Don't make changes without my permission"
+
+or
+
+> "ONE API call at a time"
+
+**assume Claude is going to improvise**. With Meta, improvising **costs you the account**.
+
+---
+
+## Anti-patterns (summary)
+
+### 1. Skipping the 4 rules
+
+The rules aren't suggestions. They're what separates a **functional account from a banned one**.
+
+### 2. Vague prompts
+
+"Claude, just handle it" → disaster. **Specificity** saves the account.
+
+### 3. Activating without reviewing
+
+Even though the skill creates in PAUSED, eventually **you activate**. If you turn on 10 poorly built things, they still burn money. Review before activating.
+
+### 4. Ignoring confirmations
+
+When the skill says "I need confirmation," it's to protect you. **Confirm consciously**, don't just fire off an automatic "yes."
+
+### 5. Parallel multi-account
+
+If you manage 5 client accounts, **DON'T audit them all at once**. One by one. Cool-down between accounts too.
+
+---
+
+## Powerful combinations
+
+### With Andromeda
+
+[Andromeda — 8 Meta rules](/boveda/andromeda-meta-ads) is the conceptual framework for Meta Ads. Claude Meta Ads is the safe technical implementation.
+
+### With Claude Copywriter
+
+So the ad copy does NOT sound like AI:
+
+```
+> Generate the ad copy with Meta Ads.
+  Then run it through /humanizer so it doesn't sound like AI.
+```
+
+[Claude Copywriter](/boveda/claude-copywriter) + Claude Meta Ads.
+
+### With Claude Ads (multi-platform)
+
+If you manage Meta + Google + TikTok, [Claude Ads](/boveda/claude-ads) is the orchestrator. Meta Ads specifically covers the FB/IG part.
+
+---
+
+## When it's NOT a good fit
+
+| Case | Why |
+|------|-----|
+| Enterprise account with strict compliance | Use the official Meta Business Suite |
+| No time to read the 4 rules | You got it wrong — don't install |
+| You expect "Claude handles everything automatically" | That's NOT what it's for |
+| Agency work with SLAs | The manual model is more predictable |
+
+---
+
+## Next steps
+
+- For a multi-platform suite (Meta + Google + TikTok), [Claude Ads](/boveda/claude-ads)
+- For the conceptual Meta Ads framework, [Andromeda — 8 Meta rules](/boveda/andromeda-meta-ads)
+- To humanize copy before uploading, [Claude Copywriter](/boveda/claude-copywriter)

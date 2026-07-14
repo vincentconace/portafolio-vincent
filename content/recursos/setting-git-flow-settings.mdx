@@ -1,0 +1,101 @@
+---
+title: "Setting Git Flow Settings — Git Flow completo: statusline + permissions + hooks (all-in-one)"
+description: "Setting con 147 installs. Configuración completa Git Flow todo-en-uno: statusline con flow status, permissions, env vars, workflow enforcement con hooks. Para teams que adoptan Git Flow seriamente."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["hook-validate-branch-name", "hook-prevent-direct-push", "hook-conventional-commits"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/git/git-flow-settings"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/git/git-flow-settings.json"
+---
+
+## Qué es
+
+Configuración all-in-one para teams que adoptan Git Flow seriamente. Combina:
+
+- **Statusline** custom mostrando Git Flow status en tiempo real
+- **Permissions** (allow 21 + deny 6) tuned para Git Flow
+- **Env vars** que definen prefixes y branch names:
+  - `GIT_FLOW_MAIN_BRANCH: main`
+  - `GIT_FLOW_DEVELOP_BRANCH: develop`
+  - `GIT_FLOW_PREFIX_FEATURE: feature/`
+  - `GIT_FLOW_PREFIX_RELEASE: release/`
+  - `GIT_FLOW_PREFIX_HOTFIX: hotfix/`
+  - `GIT_FLOW_VERSION_TAG_PREFIX: v`
+- **Hooks PreToolUse** (3 hooks) para workflow enforcement
+
+Es la opción "todo-armado" para enforce Git Flow consistente.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `git` |
+| Installs | 147 |
+| Componentes | statusLine + permissions + env + hooks |
+| Branches default | main + develop |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting git/git-flow-settings
+```
+
+Para Claude:
+
+```
+Instalé el setting git/git-flow-settings. Verificá que todos los
+componentes están activos: statusline, permissions, hooks. Si mi
+branch main se llama distinto (ej. master), mostrame cómo cambiar
+las env vars.
+```
+
+## Qué podés hacer con esto
+
+### Git Flow enforcement consistente
+
+Setting único enforce TODOS los aspectos: naming, permissions, statusline awareness.
+
+### Onboarding de teams a Git Flow
+
+En vez de explicar 4 cosas distintas, instalás este setting y todos lo usan.
+
+### Statusline con Git Flow context
+
+Ves en qué tipo de branch estás (feature/release/hotfix) y si estás en compliance.
+
+### Combo con hooks individuales
+
+Si querés más control, podés desactivar el bundle y usar hooks individuales:
+- [Validate Branch Name](/boveda/hook-validate-branch-name)
+- [Prevent Direct Push](/boveda/hook-prevent-direct-push)
+- [Conventional Commits](/boveda/hook-conventional-commits)
+
+### Compliance audit
+
+Si tu org requiere Git Flow para releases, este setting lo enforce automáticamente.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu equipo no usa Git Flow:** otro workflow (trunk-based, GitHub Flow) necesita setting distinto.
+- **Si querés más granularidad:** hooks individuales dan más control que el bundle.
+- **Si tus branch names son distintos:** ajustá env vars antes.
+- **Para repos personales / experimentales:** Git Flow es overhead.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Git Flow Settings Setting](https://www.aitmpl.com/component/settings/git/git-flow-settings) — comando exacto.
+- **Config JSON:** [git-flow-settings.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/git/git-flow-settings.json).
+
+## Recursos relacionados
+
+- [Validate Branch Name Hook](/boveda/hook-validate-branch-name) — hook individual de naming.
+- [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push) — hook individual anti-push direct.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — hook individual de commit format.

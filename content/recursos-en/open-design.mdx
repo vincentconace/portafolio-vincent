@@ -1,0 +1,260 @@
+---
+title: "Open Design — the free replacement for Claude Design (local-first)"
+description: "Open-source alternative to Claude Design that lives on your machine. 71 brand styles loaded (Linear, Stripe, Apple, Tesla), 19 capabilities, works with any agent (Claude Code, Codex, Cursor, Gemini). Zero extra subscription if you connect it to a local model."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "open-design"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-design", "huashu-design", "cult-ui-claude"]
+---
+
+## What it solves
+
+If you use [Claude Design](/boveda/claude-design) heavily, you know 2 problems:
+
+1. **It burns tokens fast** — every design iteration eats into your quota
+2. **Sometimes it feels generic** — the default output sounds like "standard shadcn UI"
+
+**Open Design** (from `nexu-io`) is the **local-first, open-source, Apache-2.0** alternative:
+
+- Lives on YOUR machine (not in Anthropic's cloud)
+- Automatically detects your agent (Claude Code, Codex, Cursor, Gemini, Qwen)
+- Uses it as an **engine** without consuming "extra" tokens — just the ones you already spend with your agent
+- **Connected to a local model** (Llama, Qwen), **zero cost per use**
+
+---
+
+## What it brings
+
+### 71 pre-loaded brand styles
+
+You don't have to describe "like Linear" or "like Stripe". Open Design **knows those styles**:
+
+| Categories | Examples |
+|------------|----------|
+| **Tech enterprise** | Stripe, Linear, Vercel, Notion, GitHub, Figma |
+| **Consumer premium** | Apple, Tesla, Airbnb, Spotify |
+| **B2B SaaS** | Slack, Asana, HubSpot, Salesforce |
+| **Editorial / Media** | NYT, The Verge, Medium, Substack |
+| **E-commerce** | Shopify, Stripe Checkout, Apple Store |
+| **Fintech** | Mercury, Wise, Cash App, Robinhood |
+| **Design / Creative** | Dribbble, Figma Community, Awwwards |
+
+You ask: "build me the landing in Linear style with a Stripe palette". It understands it **without further explanation**.
+
+### 19 capabilities
+
+| # | Capability | Output |
+|---|-----------|--------|
+| 1 | Landing pages | Functional HTML/CSS/JS |
+| 2 | Dashboards | Complete UI with mocked charts |
+| 3 | Mobile apps | That look like a real iPhone app (not a generic mockup) |
+| 4 | Editorial decks | Exportable PPTX |
+| 5 | Financial reports | PDF or web |
+| 6 | Marketing emails | Responsive HTML |
+| 7 | Brand books | PDF with a complete system |
+| 8 | Logos / variants | Editable SVG |
+| 9 | Social media posts | PNG / video |
+| 10 | Infographics | SVG / PDF |
+| 11 | Product packaging mockup | 3D render |
+| 12 | Print materials | Print-ready PDF |
+| 13 | Consistent iconography | SVG set |
+| 14 | Spacing / typography system | JSON tokens |
+| 15 | Tailwind / shadcn components | TSX ready to paste |
+| 16 | Low-fi wireframes | Editable SVG |
+| 17 | User flow diagrams | Mermaid / SVG |
+| 18 | Animated icon system | Lottie JSON |
+| 19 | Hardware mockups (laptop/phone with your screen) | PNG |
+
+Much more complete than the official Claude Design (which covers 3-4 of these).
+
+---
+
+## How it works
+
+### The daemon
+
+Open Design runs a **local daemon** (a background process) that:
+
+1. **Automatically detects** which CLI you have active (Claude Code, Codex, Cursor, etc.)
+2. **Inserts** its capabilities as available skills
+3. **Uses the CLI as the LLM engine** — it doesn't make its own API calls
+4. **Generates artifacts** in `~/open-design/output/`
+
+Result: when you work with Claude Code, **Open Design is an "addon"** that extends your design capabilities with no extra costs.
+
+### Local-first
+
+All your data:
+- Brand templates
+- Generated outputs
+- Your personal config
+
+**Lives on your machine**. Nothing gets uploaded. Total privacy.
+
+---
+
+## Setup
+
+### Requirements
+
+- Any CLI agent: Claude Code, Codex, Cursor, Gemini, Qwen
+- Node.js 18+
+- Disk space: ~2GB (includes the 71 brand templates)
+
+### Installation
+
+```bash
+> Install Open Design for me following the official nexu-io/open-design README
+```
+
+Claude Code:
+1. Clones the repo
+2. Installs deps
+3. Starts the daemon
+4. Detects your active agent
+5. Confirms it's running
+
+### Verify
+
+```
+> Design me a simple landing in Linear style
+
+[Open Design intercepts the request]
+[Generates HTML/CSS with Linear style]
+[Shows you a preview in a local browser]
+```
+
+---
+
+## The key question — does it win over official Claude Design?
+
+| Aspect | Official Claude Design | Open Design |
+|---------|------------------------|-------------|
+| Cost per use | Tokens from your plan | **Zero** (if you use a local model) or "tokens from your plan" if you use Claude |
+| Capabilities | 3-4 (landings, slides, clickable apps) | 19 |
+| Pre-loaded brand templates | 0 | 71 |
+| Customization | Limited | Total (open-source) |
+| Privacy | Goes through Anthropic | Local |
+| UX | Polished, integrated into claude.ai | More DIY |
+| Support / Docs | Official | Community |
+| Setup | Zero (already in your plan) | 15-30 min |
+
+**Open Design wins on flexibility + cost**.
+**Claude Design wins on polish + native integration**.
+
+If you produce design work intensively, the Open Design setup is worth it. If it's occasional use, Claude Design is enough.
+
+---
+
+## The zero-cost trick with a local model
+
+To **really** get zero cost, connect Open Design to a local model with [Ollama](/boveda/cinco-repos-ai-engineer):
+
+```bash
+ollama pull qwen3.5-coder
+ollama pull llama3.3
+```
+
+In Open Design's config:
+
+```json
+{
+  "engine": "ollama",
+  "model": "qwen3.5-coder"
+}
+```
+
+Now every design:
+- **Doesn't consume Claude tokens**
+- **Doesn't consume credits of any kind**
+- Runs on your local GPU/CPU
+- Latency a bit higher than Claude (5-15s instead of 2-3s)
+
+**Trade-off**: quality slightly lower than Claude/GPT on complex designs. For 80% of operational cases, **good enough**.
+
+---
+
+## Cases where it shines
+
+### 1. Agency producing lots of designs
+
+If you produce 50+ pieces per week, the token cost with official Claude Design eats at you. Open Design + Ollama = **zero marginal cost**.
+
+### 2. Freelance designer experimenting
+
+Try 20 variants of a landing to present to a client, without burning through a subscription.
+
+### 3. Education / learning
+
+Design students who can't afford Claude Pro can use Open Design + a local model for free.
+
+### 4. Compliance / privacy
+
+A client whose designs can't pass through third parties (NDAs, government, military) → local Open Design complies.
+
+### 5. Fast iteration with a fixed brand
+
+If your brand is "Linear-style" and you're going to produce 100 pieces in that style, **you load the template once** and it always comes out consistent.
+
+---
+
+## The honest part — limitations
+
+### 1. More complex setup
+
+Claude Design is "open claude.ai/design and you're done". Open Design requires 15-30 min of setup.
+
+### 2. Small community
+
+If you hit a bug or have a question, **fewer answers** than with the official Anthropic product.
+
+### 3. Local models have a quality ceiling
+
+For designs where you really need "the best possible model", **Claude/GPT still win**. Ollama is 80-90% but not 100%.
+
+### 4. Brand templates can be outdated
+
+The 71 styles are a snapshot in time. If Linear redesigns its website, **the template can become outdated**. The community updates them but there's lag.
+
+---
+
+## Anti-patterns
+
+### 1. Asking for "Linear style" for a product that is NOT Linear
+
+If your product is a jewelry e-commerce store, **Linear style doesn't apply**. Linear is a UI very specific to technical B2B SaaS. Use the template that matches your market.
+
+### 2. Wanting to replace Figma
+
+Open Design generates artifacts. **It's not a professional design editor**. For iterative review with a team, Figma still wins.
+
+### 3. Not customizing for your brand
+
+Even if you use "Linear style", **your brand is yours**. Customize the palette, fonts, tone. Otherwise it comes out as a "Linear-clone" that looks like a random startup.
+
+### 4. Local model without a decent GPU
+
+On CPU alone, models with 20B+ parameters are **super slow** (1+ min per generation). You need a decent GPU (8GB+ VRAM) for smooth use.
+
+---
+
+## When it's worth it
+
+✅ You produce design work frequently
+✅ You want zero marginal cost (with a local model)
+✅ Privacy / compliance that prohibits data in an external cloud
+✅ Your hardware supports a decent local model
+
+❌ Occasional use → official Claude Design is enough
+❌ You don't have time for a 30-min setup
+❌ You need the highest level of quality → Claude/GPT still win
+
+---
+
+## Next steps
+
+- For Anthropic's simpler official version, [Claude Design](/boveda/claude-design)
+- For 7 design capabilities inside Claude Code, [Huashu Design](/boveda/huashu-design)
+- If you want to run local models, [5 repos to become an AI engineer](/boveda/cinco-repos-ai-engineer) covers Ollama

@@ -1,0 +1,185 @@
+---
+title: "Claude + Codex en equipo — combinar los dos planes de $20"
+description: "Claude Code y Codex de OpenAI no compiten — se complementan. Patrón para hacer que conviven en la misma carpeta: Claude planea y revisa, Codex ejecuta tareas mecánicas en paralelo. Cuándo conviene y cuándo es overkill."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "codex", "openai"]
+publishedAt: "2026-05-17"
+readingTime: "10 min"
+relatedSlugs: ["guia-claude-code-completa", "hooks-automatizacion"]
+---
+
+## La pregunta detrás del título
+
+¿Vale la pena pagar dos suscripciones de IA — Claude $20 y Codex $20 — en lugar de una sola de plan superior?
+
+Respuesta corta: **depende de cómo trabajás**. Para uso solo, una suscripción premium probablemente alcanza. Para uso intensivo con tareas paralelas, dos suscripciones de $20 te dan más capacidad real que una de $200.
+
+La diferencia no es solo precio — es que **son herramientas con personalidades distintas**. Y cuando las hacés convivir, sale más que la suma.
+
+---
+
+## En qué son buenos cada uno
+
+| Tarea | Claude Code | Codex |
+|-------|-------------|-------|
+| Razonamiento sobre arquitectura | ✅ Excelente | 🟡 Promedio |
+| Code review profundo | ✅ Excelente | 🟡 Promedio |
+| Tareas mecánicas en batch | 🟡 Bien | ✅ Excelente |
+| Refactors grandes guiados | ✅ Excelente | 🟡 Bien |
+| Generación masiva de boilerplate | 🟡 Bien | ✅ Excelente |
+| Manejo de contexto largo | ✅ Excelente | 🟡 Más limitado |
+| Velocidad para tareas chicas | 🟡 Normal | ✅ Más rápido |
+| Integración con herramientas locales | ✅ Hooks + MCP | 🟡 Menos extensible |
+
+**Resumen**: Claude es mejor "ingeniero senior" — discute, plantea opciones, revisa con criterio. Codex es mejor "junior ágil" — tareas claras, las ejecuta rápido, no se traba pensando.
+
+---
+
+## El patrón: dos terminales, una carpeta
+
+La forma más simple de tenerlos conviviendo es trivial: dos terminales abiertas en el mismo proyecto.
+
+```
+Terminal 1:                    Terminal 2:
+$ cd mi-app                    $ cd mi-app
+$ claude                       $ codex
+```
+
+Trabajan sobre los mismos archivos. Git detecta los cambios y vos decidís qué commitear. Conflictos los resolvés como con cualquier colaborador.
+
+**Lo que cambia es cómo dividís el trabajo entre los dos.**
+
+---
+
+## Patrón A — Claude planea, Codex ejecuta
+
+Para refactors grandes donde el "qué hacer" requiere criterio pero el "hacerlo" es mecánico.
+
+### Fase 1 — Claude diseña
+
+En Claude:
+```
+> Necesito migrar todas las funciones de src/lib/api/ de fetch directo a usar
+  el cliente axios con interceptors. Hay ~30 funciones. Antes de tocar nada,
+  proponé el patrón nuevo en 1 archivo de ejemplo y listame los archivos a tocar.
+```
+
+Claude piensa, te muestra el patrón en `src/lib/api/auth.ts`, y te tira una lista de 30 archivos. Vos revisás el patrón.
+
+### Fase 2 — Codex aplica
+
+Después, en Codex (terminal aparte):
+```
+> Tengo este patrón aplicado en src/lib/api/auth.ts. Aplicalo en estos 29
+  archivos: [pegás la lista]. Sigué el mismo patrón exacto. No cambies la
+  lógica de negocio, solo la capa de transporte.
+```
+
+Codex itera rápido sobre los 29 archivos. Mientras tanto, vos en Claude podés ir revisando otros temas o auditando lo que Codex va haciendo.
+
+### Por qué funciona
+
+- Claude pensó **una vez** sobre el patrón → calidad de diseño
+- Codex ejecuta **30 veces** sin distraerse → velocidad
+- Vos sos el integrador → ves el avance en git
+
+---
+
+## Patrón B — Trabajos paralelos independientes
+
+Cuando tenés dos tareas que NO se pisan:
+
+| Terminal Claude | Terminal Codex |
+|-----------------|----------------|
+| Debugging del bug en checkout | Generar tests E2E para flow de login |
+| Diseño de la API nueva | Escribir docs de los endpoints existentes |
+| Code review del PR de auth | Migrar 40 componentes a v2 de la libreria de UI |
+
+Mientras uno está "pensando", el otro está "ejecutando". Productividad multiplicada.
+
+**Atención**: tienen que ser tareas **realmente independientes**. Si las dos tocan los mismos archivos, vas a tener conflictos constantes.
+
+---
+
+## Patrón C — Code review cruzado
+
+El más subutilizado y el más rentable.
+
+1. Le pedís a Codex que implemente algo: feature A
+2. Cuando termina, copiás el diff
+3. En Claude (otra sesión limpia, sin contexto previo): "revisame este diff, buscá bugs y violaciones de las convenciones del proyecto"
+4. Claude te tira los problemas
+5. Volvés a Codex con la lista para que arregle
+
+Por qué funciona: cada uno tiene **sus blind spots distintos**. Lo que a Codex se le escapa (especialmente edge cases sutiles), Claude lo agarra. Y viceversa.
+
+<Callout type="tip" title="Funciona también con otro modelo de Claude">
+Si no tenés Codex, podés hacer code review cruzado entre Claude Sonnet y Claude Opus. No es lo mismo (mismos blind spots a veces) pero sirve para tareas no triviales.
+</Callout>
+
+---
+
+## Cuándo NO conviene tener dos
+
+- **Uso bajo o casual** (menos de 2 horas al día): una sola alcanza
+- **Equipo de uno solo**: difícil sacar provecho del paralelo, te vas a confundir
+- **Proyectos muy chicos**: no hay tareas paralelas que dividir
+- **Sin disciplina de git**: si no commiteás seguido, los dos pisándose es un dolor
+
+---
+
+## Setup que vale la pena
+
+Si decidís adoptarlo, dos cosas que ayudan:
+
+### 1. Branches separadas por tarea
+
+En vez de los dos trabajando en `main`:
+
+```bash
+# Para la tarea que hace Claude
+git checkout -b feature/auth-refactor
+
+# Para la tarea que hace Codex
+git checkout -b feature/migrate-axios
+```
+
+Mergeás cuando cada uno termine. Cero conflictos en el medio.
+
+### 2. Convenciones compartidas
+
+Ambos leen tu `CLAUDE.md` (Claude sí explícitamente; Codex también si lo pegás como contexto al inicio). Mantenelo actualizado para que ambos sigan las mismas reglas.
+
+---
+
+## El costo real
+
+| Setup | Costo mensual | Capacidad efectiva |
+|-------|---------------|--------------------|
+| Claude Pro $20 | $20 | ~70-100h/mes uso intensivo |
+| Codex Plus $20 | $20 | ~50-80h/mes uso intensivo |
+| Los dos | $40 | ~120-180h, con paralelismo |
+| Claude Max $200 | $200 | ~400h+ pero secuencial |
+
+Para alguien que trabaja 6-8h por día con IA, los dos de $20 dan más por menos. Para alguien que necesita capacidad pura (no paralelismo), el plan grande es mejor.
+
+---
+
+## Cuándo migrar a un solo plan grande
+
+Cuando notes que:
+- El paralelismo no lo aprovechás (siempre estás esperando a uno)
+- Las tareas son más razonamiento que ejecución
+- Querés contextos muy largos sin compactar
+- El switching mental entre dos terminales te cansa
+
+En ese caso, plan grande de Claude solo > los dos de $20.
+
+---
+
+## Próximos pasos
+
+- Si vas a probar este patrón, arrancá con el **patrón A** (planeo + ejecución). Es el más fácil de entender el valor.
+- Si tu workflow es solo Claude por ahora, primero exprimí lo que ya tenés con la [guía completa](/boveda/guia-claude-code-completa) antes de sumar otra herramienta.
+- Si terminás adoptándolo, configurar [hooks](/boveda/hooks-automatizacion) en ambos para que respeten las mismas convenciones evita inconsistencias.

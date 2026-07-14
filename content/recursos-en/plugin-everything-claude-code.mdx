@@ -1,0 +1,120 @@
+---
+title: "Everything Claude Code — the most-starred agent harness in the catalog (113k⭐)"
+description: "Plugin by affaan-m with 113k stars (the most-starred in the aitmpl.com catalog). 'The agent harness performance optimization system': skills, instincts, memory, security, and cross-tool research-first development."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex", "cursor"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["memoria-claude-code", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/everything-claude-code"
+github: "https://github.com/affaan-m/everything-claude-code"
+---
+
+## What it is
+
+113k stars: it's the most-starred plugin in the aitmpl.com catalog. Above Claude Mem (42k), above Claude HUD (14k), above any marketplace. When a single piece pulls together that much backing, it's worth paying attention to.
+
+The author's subtitle nails it: "The agent harness performance optimization system." It's not a marketplace or a complete workflow — it's a **system** that optimizes how the agent harness (the layer connecting the LLM with the tools and the environment) operates. It brings five pillars:
+
+- **Skills** — specific capabilities
+- **Instincts** — default behaviors that avoid typical mistakes
+- **Memory** — smart persistence across sessions
+- **Security** — guards and validations
+- **Research-first development** — the pattern of investigating before implementing
+
+It works in Claude Code, Codex, Opencode, Cursor "and beyond." The author (affaan-m) maintains a dedicated site at [ecc.tools](https://ecc.tools) with detailed docs.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | affaan-m |
+| Stars | **113k** (absolute top of the catalog) |
+| Type | Single plugin (complete system) |
+| Components | skills, agents, commands, hooks |
+| Cross-tool | Claude Code, Codex, Opencode, Cursor |
+| Marketplace | `affaan-m/everything-claude-code` |
+| Official site | [ecc.tools](https://ecc.tools) |
+
+### The 5 pillars of the system
+
+| Pillar | What it solves |
+| --- | --- |
+| Skills | Reusable capabilities |
+| Instincts | Default behaviors — avoids typical bad decisions |
+| Memory | Persistent context across sessions (compare against [Claude Mem](/boveda/plugin-claude-mem)) |
+| Security | Guards that block risky operations |
+| Research-first | Investigates before implementing — anti "Claude made up something that won't compile" |
+
+## How to install it
+
+```bash
+/plugin marketplace add affaan-m/everything-claude-code
+/plugin install everything-claude-code@affaan-m-everything-claude-code
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install everything-claude-code from the affaan-m marketplace. Then read the docs
+at ecc.tools and summarize what the 5 pillars (skills, instincts, memory,
+security, research-first) do in one paragraph each.
+```
+
+## What you can do with this
+
+### Get a Claude Code that "thinks before acting"
+
+The **research-first** pillar is probably the most impactful: before it starts editing, Claude investigates the area of the code it's about to touch. Less "it implemented something that doesn't connect to the rest" and more "it understood the context, then acted."
+
+### Persistent memory without fighting the setup
+
+Memory across sessions, just like [Claude Mem](/boveda/plugin-claude-mem) but integrated with the other 4 pillars. If you're only going to install one, compare them first — both solve the same problem with different philosophies.
+
+### Instincts that cover the typical mistakes
+
+The concept of "instincts" is interesting: default behaviors Claude applies without asking, based on what the community has already identified as common mistakes. Things like "before deleting a file, check whether it's under version control," or "before pushing, run the tests."
+
+### Real cross-tool support
+
+If tomorrow you switch from Claude Code to Cursor or Codex, the 5 pillars come with you. For mixed teams this is valuable.
+
+### Performance optimization
+
+The author calls it a "performance optimization system" for a reason. The system cuts down useless iterations, avoids re-reading files, prioritizes relevant skills, and so on. Fewer tokens consumed for the same result.
+
+## Real benefits
+
+- **113k stars** — the community voted en masse.
+- **Cross-tool** — you're not locked into a specific harness.
+- **Clear philosophy** (the 5 pillars) — you know what you're getting.
+- **Memory + security + research integrated** — you don't have to combine 3 plugins.
+- **Dedicated site with docs** ([ecc.tools](https://ecc.tools)) — solid support.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you're just getting started with Claude Code:** installing a "complete system" without understanding Claude Code first can bury the basic learning. Start with the official [Claude Code Setup](/boveda/claude-code-setup) and a couple of skills.
+- **Overlap with `claude-mem`:** both cover memory. Don't install both right away — pick one.
+- **Overlap with your own security hooks:** if you've already set up security hooks by hand, the "instincts" may duplicate rules.
+- **It's not a toolkit, it's an opinionated system:** you'll inherit the author's decisions. If you disagree, you'll have to tune it.
+- **Token cost of research-first:** investigating before acting spends more. Efficiency wins in the long run, but the first run is more expensive.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Everything Claude Code](https://www.aitmpl.com/plugins/everything-claude-code) — exact command.
+- **GitHub repo:** [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) — code, issues.
+- **Official site:** [ecc.tools](https://ecc.tools) — full docs.
+
+## Related resources
+
+- [Claude Code Memory](/boveda/memoria-claude-code) — the native memory. Useful for comparing against Everything's memory pillar.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — to evaluate whether the "instincts" align with what the official docs recommend.
+- [Agency Agents](/boveda/agency-agents) — to understand the difference between agents and the "instincts" this system proposes.

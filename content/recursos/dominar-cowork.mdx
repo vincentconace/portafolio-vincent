@@ -1,0 +1,253 @@
+---
+title: "Dominar Claude Cowork — el manual del compañero de trabajo"
+description: "Qué es Cowork (no es chat, no es Claude Code) y cuándo conviene cada superficie. Los 4 pasos para tener un proyecto funcionando con conectores reales (Gmail, Calendar, Notion, Drive), las features clave y cuándo es momento de graduarte a Claude Code."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-cowork"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["anatomia-claude", "nueve-prompts-cowork", "guia-claude-code-completa"]
+---
+
+## Las 3 superficies, una vez más
+
+Claude tiene 3 superficies:
+
+| Superficie | Para qué |
+|------------|----------|
+| **Claude (chat)** | Preguntas sueltas, brainstorms, sin proyecto específico |
+| **Claude Cowork** | Trabajo agéntico con tus archivos, calendar, email, drives |
+| **Claude Code** | Construir, testear, deployar software |
+
+**Cowork es la del medio**. No es chat (no tiene memoria persistente ni conectores reales) ni es Code (no toca tu repo ni ejecuta builds). Es **el espacio donde Claude actúa como compañero de trabajo agéntico** sobre tu universo de info personal/empresarial.
+
+Vive solo en la **app de escritorio**, no en el navegador. Si entrás por claude.ai/web no vas a verlo.
+
+---
+
+## Los 4 pasos para tener algo funcionando
+
+<Step number={1} title="Descargar la app desktop">
+
+[claude.ai/download](https://claude.ai/download). Macs y Windows.
+
+Importante: tu cuenta tiene que tener plan pagado (Pro, Max o Team) para usar Cowork. No hay tier gratis para esto.
+
+</Step>
+
+<Step number={2} title="Crear tu proyecto con README">
+
+En la app, "New Project". Acá viene lo crítico que la mayoría salteea: **el README**.
+
+Es como el `CLAUDE.md` para Claude Code, pero para Cowork. Define cómo opera dentro del proyecto. Estructura mínima:
+
+```markdown
+# Mi proyecto
+
+## Quién soy
+Founder de [empresa], stage [seed/growth/etc], equipo de [N personas].
+Industria: [...]. Audiencia: [...].
+
+## Qué estoy haciendo este trimestre
+[Foco principal de los próximos 3 meses]
+
+## Cómo trabajamos
+- Comms: Slack interno, email para clientes
+- CRM: HubSpot
+- Docs: Notion
+- Tono externo: cordial pero directo, sin diplomacia falsa
+
+## Reglas duras
+- NUNCA mandar emails sin mostrarme draft
+- NUNCA actualizar precios sin confirmación
+- Antes de cualquier acción en HubSpot, mostrame el cambio
+- Mantené historial de decisiones en notion (carpeta "Decisiones")
+
+## Mis pendientes top
+- [actualizar cuando cambien]
+```
+
+Sin un README claro, Cowork opera **genérico**. Con README bien escrito, opera **como si conociera tu negocio**.
+
+</Step>
+
+<Step number={3} title="Conectar las fuentes que necesités">
+
+Settings → Connectors. Activá solo las que vas a usar:
+
+| Conector | Para qué |
+|----------|----------|
+| **Gmail** | Leer/draftear emails (no manda sin confirmar) |
+| **Google Calendar** | Ver agenda, agendar |
+| **Google Drive** | Buscar y leer docs |
+| **Notion** | Leer y editar pages |
+| **Microsoft 365** | Outlook + OneDrive + SharePoint |
+| **HubSpot** | CRM data |
+| **Shopify** | E-commerce data |
+| **Stripe** | Datos de pagos / suscripciones |
+
+**Anti-patrón**: activar todas "por las dudas". Cada conector pide permisos. Activá solo las que te sirvan.
+
+</Step>
+
+<Step number={4} title="Probar con tareas reales" last>
+
+No empieces con el caso más complejo. Arrancá con queries simples:
+
+```
+> ¿Qué reuniones tengo hoy?
+```
+
+Claude consulta calendar, te responde. Verificás que ves lo que esperás.
+
+Después:
+
+```
+> Resumime los emails sin responder de los últimos 3 días. Marcame
+  cuáles requieren mi respuesta hoy.
+```
+
+Subís complejidad solo cuando ves que las cosas básicas funcionan.
+
+</Step>
+
+---
+
+## Las features clave (14 si las contás todas)
+
+Cowork tiene muchas. Las que importan para empezar:
+
+### 1. Projects
+
+Cada proyecto es un espacio aislado con su README, sus conectores autorizados, su historial. Podés tener proyecto "Mi negocio", "Personal", "Side project", etc.
+
+**Importante**: el contexto NO se mezcla entre proyectos. Lo que aprendiste en uno no contamina el otro.
+
+### 2. Scheduled Tasks
+
+Tareas que corren automáticas en horario fijo. Útil para:
+
+- Brief de mañana (7am cada hábil)
+- Reporte semanal (viernes 5pm)
+- Limpiar inbox (cada lunes)
+
+Más sobre esto en [9 prompts para Cowork](/boveda/nueve-prompts-cowork).
+
+### 3. Plugins
+
+Paquetes pre-armados de skills + flujos. Ejemplos: [Claude Small Business](/boveda/claude-small-business), [Claude Financial Services](/boveda/claude-finanzas).
+
+### 4. Skills
+
+Igual que en Claude Code — comportamientos reutilizables. Ver [guía de skills](/boveda/guia-skills-claude).
+
+### 5. Computer Use
+
+Cowork puede operar tu compu (abrir apps, hacer clicks, llenar formularios) en sandbox controlado. **Poderoso y riesgoso** — el sandbox previene daño, pero las acciones igual ocurren.
+
+### 6. Live Artifacts
+
+Artifacts que se actualizan en tiempo real durante la conversación. Útil para iterar sobre un doc / spreadsheet en vivo.
+
+### 7. Permission Modes
+
+- **Ask each time**: confirma antes de cada acción
+- **Allow safe**: permite lecturas + drafts sin confirmar; pide para cosas destructivas
+- **Trust mode**: ejecuta todo (PELIGROSO — no usar salvo escenarios muy específicos)
+
+**Default recomendado**: "Ask each time" hasta que vos sepas qué confiarle.
+
+### 8. Spreadsheets nativas
+
+Editor de spreadsheet integrado. Útil para análisis sin abrir Excel/Google Sheets.
+
+### 9. Sub-agent Coordination
+
+Para tareas complejas, Cowork puede coordinar varios sub-agentes en paralelo. Patrón similar a [ecosistema de agentes](/boveda/ecosistema-de-agentes) pero managed.
+
+### 10. Code Execution Isolation
+
+Cuando Cowork ejecuta código (Python, scripts), corre en sandbox aislado. No puede romper tu sistema.
+
+Las otras 4 (artifacts publicados, file uploads avanzados, vault, etc.) las descubrís con uso.
+
+---
+
+## Cuándo Cowork vs Chat vs Code
+
+| Tarea | Superficie ideal |
+|-------|------------------|
+| Pregunta suelta | Chat |
+| Brainstorm rápido sin contexto | Chat |
+| "Resumime estos emails" | Cowork |
+| "Buscame en mi Drive..." | Cowork |
+| "Agendame una reunión" | Cowork |
+| Análisis de un Excel real | Cowork |
+| Editar código del proyecto | Code |
+| Hacer un commit / push | Code |
+| Refactor de varios archivos | Code |
+| Setup de hooks / skills técnicas | Code |
+
+Regla general: **si tocás archivos/emails/calendar/docs externos → Cowork**. **Si tocás código de un repo → Code**.
+
+---
+
+## Cuándo "graduarte" a Claude Code
+
+Cowork es el **on-ramp**. Code es el **profundo**.
+
+Vas a querer pasar a Code cuando:
+
+- Empezás a hacer trabajo técnico real (no solo gestión)
+- Necesitás hooks automáticos en tu workflow
+- Querés MCPs custom o skills más sofisticadas
+- Necesitás ejecutar código contra repos reales
+
+**No es uno o el otro** — vas a usar ambos. Pero típicamente el **balance se inclina a Code** cuando tu trabajo es técnico, y se queda en **Cowork** cuando tu trabajo es más gestión/ops/comercial.
+
+---
+
+## Anti-patrones
+
+### 1. README genérico o vacío
+
+Sin README, Cowork es genérico. **Ese archivo es el 50% del valor.**
+
+### 2. Conectar todos los conectores el día 1
+
+Cada conector es permiso adicional. **Activá solo los que vas a usar esta semana.** Sumás cuando los necesités.
+
+### 3. Modo "Trust" sin entender riesgos
+
+"Trust" significa que Claude puede actuar sin confirmar. Eso incluye mandar emails, cambiar datos en CRM, modificar archivos. **Solo activá en flows muy específicos y predecibles**, nunca como default.
+
+### 4. Esperar lo mismo que Claude Code
+
+Cowork no toca tu repo ni ejecuta builds. Si esperás eso, vas a frustrarte. **Las dos superficies son complementarias, no equivalentes.**
+
+### 5. Saltearse Cowork "porque ya uso Code"
+
+Code es bueno en su dominio. Para gestión operativa (emails, calendar, docs), **Cowork es mejor**. No subestimar.
+
+---
+
+## El error de framing más común
+
+Mucha gente trata a Cowork como "Chat con más features". No es eso.
+
+**Cowork es un asistente con acceso real a tu vida laboral.** La diferencia es enorme:
+
+- Chat: "¿Cómo escribir un email de seguimiento?"
+- Cowork: "Mirá los emails sin responder, identificá quién requiere follow-up, drafteame respuestas para los 3 más urgentes."
+
+El segundo opera sobre tu data real. El primero solo genera contenido genérico.
+
+**Si lo usás solo como chat, estás desperdiciando 80% del valor.**
+
+---
+
+## Próximos pasos
+
+- Para 9 prompts probados de Cowork específicos, [9 prompts para Cowork](/boveda/nueve-prompts-cowork)
+- Para entender la separación Cowork / Chat / Code, [anatomía de Claude](/boveda/anatomia-claude)
+- Cuando estés listo para sumar Claude Code, [guía completa](/boveda/guia-claude-code-completa)

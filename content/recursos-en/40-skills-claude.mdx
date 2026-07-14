@@ -1,0 +1,318 @@
+---
+title: "40 Claude skills — copy, paste, and use them today"
+description: "Almost nobody uses the most powerful part of Claude: skills. A skill = a SKILL.md file you drop in a folder for Claude to read. The difference between Claude turned on and Claude running your week is that folder. 40 skills, 6 categories (writing, research, code, email, data, personal)."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["crea-claude-skills", "skills-global-o-proyecto", "agencia-digital-completa"]
+---
+
+## The simple idea
+
+A Claude **skill** is:
+- A `SKILL.md` file
+- With YAML frontmatter (`name`, `description`)
+- And a body with instructions
+- In a folder
+
+Claude **reads it** automatically. From that moment on, it knows that job **without you having to explain it again**.
+
+> **The difference between Claude turned on and Claude running your week is that folder**.
+
+---
+
+## The key piece — `description`
+
+The most important field in the frontmatter is `description`. It's read as a **trigger**:
+
+```yaml
+description: Use it when the user wants to write cold email
+```
+
+Every time your prompt matches, Claude **auto-invokes** the skill.
+
+That's why good skills start with **"Use it when..."** — it's not style, it's a contract with the engine.
+
+---
+
+## Minimal example
+
+```markdown
+---
+name: thread-architect
+description: Use it when you want to turn a topic, article, or
+  idea into an X thread.
+---
+
+You write X threads that people bookmark.
+
+When invoked:
+1. Ask for the core idea if it wasn't given
+2. Open with a punchy one-line hook
+3. 5-9 body tweets
+4. Closer with a CTA
+```
+
+That's a complete skill. **Build it ONCE, use it ALWAYS**.
+
+---
+
+## The 6 categories
+
+| Category | Skills | For |
+|-----------|--------|------|
+| **Writing** | 1-7 | Threads, posts, copy, personalized emails |
+| **Research** | 8-14 | Investigating, synthesizing, comparing |
+| **Code** | 15-21 | Debugging, refactor, tests, reviews |
+| **Email** | 22-27 | Inbox, drafts, follow-ups, triage |
+| **Data** | 28-34 | CSV/Excel analysis, viz, queries |
+| **Personal** | 35-40 | Productivity, journaling, planning |
+
+40 skills total. **They cover what most people do every day**.
+
+---
+
+## Installation — 3 surfaces
+
+### 1. Claude.ai / Desktop / Cowork
+
+1. Create a folder named after the skill (e.g. `thread-architect`)
+2. Drop `SKILL.md` inside it
+3. Compress the folder as a `.zip`
+4. Settings → Skills → **Add Skill** → upload the zip
+
+### 2. Claude Code (global)
+
+```bash
+mkdir -p ~/.claude/skills/[NAME]
+# Drop SKILL.md inside
+```
+
+### 3. Claude Code (per project)
+
+```bash
+mkdir -p .claude/skills/[NAME]
+# Drop SKILL.md inside
+```
+
+Apply the [global vs project](/boveda/skills-global-o-proyecto) rule — global for cross-cutting skills, project for specific ones.
+
+---
+
+## The packs by profile
+
+### Creator Pack (5 skills)
+
+1. **thread-architect** — Turn an idea into an X thread
+2. **hook-master** — Generate 10 hooks for a post
+3. **instagram-caption** — Professional IG captions
+4. **newsletter-drafter** — Draft a newsletter from notes
+5. **transcript-to-content** — Turn a podcast/video into a post
+
+### Founder Pack (5 skills)
+
+1. **investor-update** — Monthly update for investors
+2. **competitor-watch** — Competitive analysis
+3. **prd-generator** — PRD from an informal brief
+4. **okrs-builder** — Quarterly OKRs
+5. **inbox-triage** — Inbox prioritization
+
+### Marketer Pack (5 skills)
+
+1. **angle-explorer** — 10 angles for a campaign
+2. **ad-copy-variants** — 5 ad copy variants
+3. **email-sequence** — 5-email welcome sequence
+4. **landing-audit** — Landing page conversion audit
+5. **content-calendar** — Monthly editorial calendar
+
+### Dev Pack (5 skills)
+
+1. **code-reviewer** — Senior-style review
+2. **test-generator** — Unit tests
+3. **commit-message** — Commit messages with the why
+4. **changelog-builder** — Changelog from commits
+5. **api-doc-writer** — API docs
+
+### Personal Productivity Pack (5 skills)
+
+1. **daily-journal** — Structured journal
+2. **weekly-review** — GTD-style weekly review
+3. **decision-framework** — Framework for complex decisions
+4. **meeting-notes** — Structured meeting notes
+5. **gtd-inbox** — Process a GTD inbox
+
+---
+
+## Anatomy of a well-built skill
+
+### 1. Clear frontmatter
+
+```yaml
+---
+name: descriptive-kebab-case
+description: Use it when [SPECIFIC TRIGGER]
+version: 1.0.0
+---
+```
+
+### 2. Initial context
+
+Who you are, Claude, what role you take on when invoked.
+
+### 3. Numbered steps
+
+Claude responds better to steps than to prose.
+
+### 4. Edge cases
+
+What to do if info is missing, if the input is ambiguous.
+
+### 5. Output format
+
+Expected structure (bullets, table, code, etc.).
+
+See [creating claude skills](/boveda/crea-claude-skills) to go deeper on architecture.
+
+---
+
+## Skill example — "hook-master"
+
+```markdown
+---
+name: hook-master
+description: Use it when you want to generate hooks for posts, tweets,
+  videos, or reels.
+version: 1.0.0
+---
+
+You're a copywriter specialized in hooks that stop the scroll.
+
+When invoked:
+
+1. Ask for context:
+   - Which platform? (X, IG, TikTok, LinkedIn)
+   - What topic?
+   - Who's the audience?
+   - What's the goal? (engagement, leads, virality)
+
+2. Generate 10 hooks. For each one, specify:
+   - The hook (text)
+   - Why it works, in 1 line
+   - Best format (text/image/video)
+
+3. Vary the techniques:
+   - 2 with a direct question
+   - 2 with a counterintuitive stat
+   - 2 personal/confessional
+   - 2 with contrast (before/after)
+   - 2 with a curiosity gap
+
+4. At the end, mark the 3 with the most viral potential given my context.
+
+NEVER use:
+- "X things that will change your life"
+- "The secret nobody tells you"
+- "You'll be amazed"
+- Other overused clichés
+
+WHENEVER possible, cite specifics:
+✅ "I've spent 18 months building SaaS. Only 2 things moved MRR."
+❌ "I learned a lot building SaaS"
+```
+
+---
+
+## Real use cases
+
+### 1. Generate 5 pieces of content in 20 min
+
+```
+> Use hook-master for 5 angles on "growth for B2B SaaS".
+> For the best 3, use thread-architect to build a complete
+  thread.
+```
+
+### 2. Process your inbox in 10 min
+
+```
+> Use inbox-triage on my Gmail.
+> For the urgent ones, use email-drafter for drafts.
+```
+
+### 3. Automatic code review
+
+```
+> For the last 10 commits on main, use code-reviewer.
+> Generate a prioritized report.
+```
+
+---
+
+## Anti-patterns
+
+### 1. Installing 40 without using them
+
+Each skill takes up context. If you have 40 active, **Claude gets distracted**. Install the ones from the **pack that matches your role**, add more as needed.
+
+### 2. Skills with vague descriptions
+
+```yaml
+description: For writing well
+```
+
+vs
+
+```yaml
+description: Use it when the user wants to turn a podcast
+  transcript into an SEO-optimized blog post.
+```
+
+Specificity = correct activation.
+
+### 3. Copying without understanding
+
+The 40 skills are a **baseline**. They apply universal principles. But **adapt** them to your specific niche.
+
+### 4. Not iterating
+
+If a skill gives you mediocre output, **edit it**. It's a file, you modify it. Skills get better with use.
+
+### 5. Skipping the correct installation per surface
+
+Skills in a zip for web ≠ skills in `.claude/skills/` for Code. **Each surface has its own way**.
+
+---
+
+## Powerful combinations
+
+### With Skill Vault
+
+[Skill Vault](/boveda/skill-vault) audits and organizes the 40 (+ the ones you add).
+
+### With creating your own skills
+
+The 40 are a **base**. For your specific workflow, [create your own](/boveda/crea-claude-skills).
+
+### With Antigravity
+
+[Antigravity Skills](/boveda/agencia-digital-completa) has 978+. **40 skills** are a smaller curation.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| You don't have recurring patterns | Skills pay off with repetition |
+| You only use Claude 1-2x/week | The setup doesn't pay off |
+| Your workflow is very custom | Build them yourself |
+
+---
+
+## Next steps
+
+- To create your own custom skills, [create Claude skills](/boveda/crea-claude-skills)
+- To audit and organize your library, [Skill Vault](/boveda/skill-vault)
+- To understand global vs project, [skills global or project](/boveda/skills-global-o-proyecto)

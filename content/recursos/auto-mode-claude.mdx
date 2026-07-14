@@ -1,0 +1,271 @@
+---
+title: "Auto Mode — dejá de aceptar cada acción de Claude"
+description: "Los 3 modos para reducir la fricción de 'aceptar/rechazar' constante: Plan Mode, Auto Mode y Bypass Permissions. Cómo activar cada uno en chat, app y terminal, sus diferencias y cuándo NO usarlos."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "8 min"
+relatedSlugs: ["claude-code-setup-zero", "plan-mode-auditar", "trucos-basicos-claude"]
+---
+
+## El problema del click-to-accept
+
+Si usás Claude Code todo el día, conocés el patrón:
+
+```
+> Hacé X
+Claude: ¿Permitís ejecutar `ls`?
+Vos: y
+Claude: ¿Permitís leer src/foo.ts?
+Vos: y
+Claude: ¿Permitís ejecutar `npm test`?
+Vos: y
+Claude: ¿Permitís editar src/foo.ts?
+Vos: y
+Claude: ¿Permitís ejecutar `git diff`?
+Vos: y
+...
+```
+
+30 confirmaciones por hora. **Tu cerebro pone los ojos en blanco** y empezás a dar "y" sin leer realmente.
+
+Los 3 modos resuelven esto, **con distintos trade-offs**.
+
+---
+
+## Los 3 modos
+
+| Modo | Qué pide | Cuándo conviene |
+|------|----------|------------------|
+| **Plan Mode** | Propone plan, **nada se ejecuta** | Para auditar decisiones grandes antes de actuar |
+| **Auto Mode** | Auto-aprueba acciones inocuas, **pregunta solo por las riesgosas** | Día a día de uso intensivo |
+| **Bypass Permissions** | Auto-aprueba **TODO** | Solo en sandbox / dev / cuando sabés exactamente qué hacés |
+
+Por defecto, Claude está en **"Ask each time"** — pregunta todo. Los 3 modos son alternativas según el riesgo que aceptes.
+
+---
+
+## Plan Mode
+
+Cubierto en detalle en [Plan Mode — el momento donde TÚ decidís](/boveda/plan-mode-auditar). Resumen:
+
+- Claude propone el plan en texto
+- Vos validás
+- **Nada se ejecuta** hasta que apruebes el plan entero
+- Para decisiones de arquitectura, libs nuevas, refactors grandes
+
+Cómo activar:
+- Terminal: `Shift + Tab` dos veces
+- App: toggle en UI
+- Indicador "PLAN MODE" visible
+
+---
+
+## Auto Mode
+
+### Qué hace
+
+Claude **decide solo** qué acciones aprobar:
+
+- **Edits en archivos no críticos** → ejecuta sin preguntar
+- **Reads / Greps / Lists** → ejecuta sin preguntar
+- **Comandos en allowlist** → ejecuta sin preguntar
+- **Acciones que tocan auth/payments/prod** → siempre pide
+- **Comandos destructivos** (`rm`, `git push --force`, etc.) → siempre pide
+
+Es el balance entre **"ask each time" molesto** y **"trust mode" peligroso**.
+
+### Cómo activar
+
+#### En chat (claude.ai)
+
+Settings → Advanced → Auto Mode: ON.
+
+#### En la app desktop
+
+Settings → Code → Auto Mode: ON.
+
+#### En terminal
+
+```
+/auto on
+```
+
+O en `~/.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "mode": "auto"
+  }
+}
+```
+
+### Cómo se ve en acción
+
+Antes (sin Auto Mode):
+
+```
+> Refactorizá src/lib/orders/validate.ts
+
+¿Permitir Read src/lib/orders/validate.ts? [y/n]: y
+¿Permitir Edit src/lib/orders/validate.ts? [y/n]: y
+¿Permitir Read tests/orders.test.ts? [y/n]: y
+¿Permitir Edit tests/orders.test.ts? [y/n]: y
+¿Permitir Bash(npm test)? [y/n]: y
+```
+
+Después (con Auto Mode):
+
+```
+> Refactorizá src/lib/orders/validate.ts
+
+[Claude lee, edita, corre tests sin preguntar]
+[Reporta: "Cambios aplicados. Tests pasan. ¿Algo más?"]
+```
+
+5 confirmaciones → 0.
+
+### Cuándo conviene
+
+✅ Workflow donde el 80% son edits "seguros"
+✅ Te cansa el "y/n" constante
+✅ Confiás en tu CLAUDE.md como guardrail
+
+### Cuándo NO
+
+❌ Estás aprendiendo Claude Code todavía
+❌ Trabajás en código sensible sin tests
+❌ No tenés git limpio (no podés revertir fácil)
+
+---
+
+## Bypass Permissions
+
+### Qué hace
+
+Auto-aprueba **TODO**, incluso acciones destructivas. **Sin confirmación de nada.**
+
+### Cómo activar
+
+⚠️ Antes de mostrar el comando: leé "cuándo NO usar" más abajo.
+
+#### Terminal
+
+```
+claude --dangerously-skip-permissions
+```
+
+O en settings:
+
+```json
+{
+  "permissions": {
+    "mode": "bypass"
+  }
+}
+```
+
+El nombre del flag ("dangerously-skip") es intencional. Anthropic te avisa.
+
+### Cuándo conviene
+
+✅ **Sandbox aislado** (Docker container, VM dedicada)
+✅ **Tarea muy específica y predecible** donde sabés que no va a hacer nada raro
+✅ **Pipelines de CI/CD** donde Claude opera sobre código y vos revisás el output
+
+### Cuándo NUNCA
+
+❌ Compu personal con repos sensibles
+❌ Cuando estás cansado / distraído
+❌ Cuando recién instalaste skills/plugins y no las testeaste
+❌ Producción
+❌ "Solo por hoy porque tengo apuro"
+
+---
+
+## Combinación recomendada
+
+El setup más balanceado para uso diario:
+
+```json
+{
+  "permissions": {
+    "mode": "auto",
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git status:*)",
+      "Bash(ls:*)",
+      "Read",
+      "Edit"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(npm uninstall:*)"
+    ]
+  }
+}
+```
+
+- **Auto Mode** base
+- **Allowlist explícita** de comandos seguros frecuentes (cero fricción)
+- **Denylist explícita** de comandos peligrosos (nunca se ejecutan, ni con bypass)
+
+Con esto, el día a día es **fluido pero protegido**.
+
+---
+
+## El flag para arrancar la sesión en un modo específico
+
+```bash
+claude --auto              # Arranca en Auto Mode
+claude --plan              # Arranca en Plan Mode
+claude --bypass            # ⚠️ Arranca en Bypass (no recomendado salvo casos)
+```
+
+Útil cuando sabés qué modo te conviene **antes** de arrancar.
+
+---
+
+## Anti-patrones
+
+### 1. Bypass por costumbre
+
+Si activás Bypass "porque es más rápido", **te vas a comer un problema serio en algún momento**. La lógica "Claude siempre acertó hasta ahora" falla cuando aparece el caso edge.
+
+### 2. Auto Mode sin denylist
+
+Auto Mode aprueba muchas cosas. **Sin denylist explícita** de cosas peligrosas, eventualmente alguna pasa.
+
+### 3. Plan Mode para todo
+
+Para edits chicos, Plan Mode agrega fricción innecesaria. **Plan Mode es para decisiones**, no para edits triviales.
+
+### 4. Mezclar modos sin querer
+
+Si activaste Bypass para una tarea específica y te olvidaste de desactivarlo, **la próxima sesión arranca igual**. Verificá el modo al inicio de cada sesión grande.
+
+---
+
+## El cambio de mindset
+
+| Antes | Después |
+|-------|---------|
+| Vos sos el guardia que aprueba todo | Vos sos el arquitecto que setea reglas |
+| Cada acción requiere tu atención | Solo las acciones nuevas / riesgosas |
+| Lentitud constante | Velocidad fluida |
+| Pero todo es seguro | Pero requiere setear bien permissions |
+
+La inversión es **15 min de leer tu `permissions.allow` y `deny` la primera vez**. Después rinde por meses.
+
+---
+
+## Próximos pasos
+
+- Para profundizar en Plan Mode específicamente, [Plan Mode — el momento donde decidís](/boveda/plan-mode-auditar)
+- Si arrancás Claude Code desde cero y no tenés CLAUDE.md, [setup de Claude Code](/boveda/claude-code-setup-zero)
+- Para los 4 trucos generales que cambian tu uso, [trucos básicos](/boveda/trucos-basicos-claude)

@@ -1,0 +1,319 @@
+---
+title: "Instalar Claude — guía completa app desktop + CLI por terminal"
+description: "Dos formas de instalar Claude: la app desktop (la más fácil, Mac/Windows) o Claude Code por terminal (para devs). Cubrimos ambas en español: requisitos, instalación, primer arranque, verificación, comandos básicos y cómo actualizar."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-code-setup-zero", "cual-plan-claude", "hablarle-a-claude"]
+---
+
+## Dos caminos según tu nivel
+
+| Camino | Para quién |
+|--------|------------|
+| **App Desktop** | Cualquier persona, sin tocar terminal |
+| **Claude Code CLI** | Devs que ya viven en terminal |
+
+Los dos son **gratis empezar**. Plan Free para probar, después upgradeás a Pro/Max si necesitás más uso (ver [cuál plan Claude](/boveda/cual-plan-claude)).
+
+---
+
+## Camino A — App Desktop (recomendado para empezar)
+
+### Descargar
+
+`claude.ai/download` — el sitio detecta tu OS y te muestra el botón correcto.
+
+Soporta:
+- **macOS** 13+
+- **Windows** 10 (1809+)
+
+### Instalar
+
+| OS | Cómo |
+|----|------|
+| Mac | Abrí el `.dmg`, arrastrá Claude a Applications |
+| Windows | Doble click al `.exe`, seguí el wizard |
+
+### Login
+
+Primera vez que la abrís te pide cuenta. Si no tenés, **creala gratis** — empezás en plan Free.
+
+### Qué te da la app desktop
+
+3 herramientas en una sola interfaz:
+
+| Herramienta | Para qué |
+|-------------|----------|
+| **Claude (chat)** | Asistente IA. Preguntas, análisis, escritura, research |
+| **Claude Code** | Agente de código embebido. Lee tu proyecto, edita, corre comandos |
+| **Cowork** | Coding colaborativo. Trabaja en background mientras vos seguís |
+
+---
+
+## Camino B — Claude Code por terminal (para devs)
+
+### Requisitos previos
+
+| Requirement | Cómo verificar |
+|-------------|----------------|
+| OS soportado | macOS 13+, Windows 10 1809+, Ubuntu 20.04+, Debian 10+, Alpine 3.19+ |
+| Mínimo 4GB RAM | (típicamente sí) |
+| Internet | (típicamente sí) |
+| En Windows: Git for Windows | `git --version` |
+| Tu país está soportado por Anthropic | Lista en docs |
+
+### Instalación nativa
+
+**macOS / Linux / WSL**:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows PowerShell**:
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Windows CMD**:
+
+```cmd
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+### Instalación con package manager
+
+**Homebrew (macOS)**:
+
+```bash
+brew install --cask claude-code
+```
+
+**WinGet (Windows)**:
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+### Lo que NO instalar
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+**Está deprecado**. Si venís de tutoriales viejos, no uses ese método.
+
+---
+
+## Primer arranque
+
+### En un proyecto existente
+
+```bash
+cd ~/proyectos/mi-app
+claude
+```
+
+### Crear proyecto nuevo
+
+```bash
+mkdir mi-proyecto && cd mi-proyecto && claude
+```
+
+### Flujo de autenticación
+
+1. Al correr `claude`, se abre flow de login
+2. Elegí método:
+   - **Claude App** (más común, login con tu cuenta)
+   - **Console** (para API)
+   - **Bedrock** (AWS enterprise)
+   - **Vertex AI** (GCP enterprise)
+3. Termina login
+4. Listo — podés pedir tareas
+
+---
+
+## Verificación
+
+### Versión instalada
+
+```bash
+claude --version
+```
+
+Debería mostrarte algo como `2.1.x`.
+
+### Diagnóstico completo
+
+```bash
+claude doctor
+```
+
+Te chequea:
+- Versión
+- Permisos
+- Conexión a Anthropic
+- Plugins instalados
+- Configuración
+
+Si no marca errores críticos, **entorno listo**.
+
+---
+
+## Los comandos básicos
+
+| Comando | Para qué |
+|---------|----------|
+| `/init` | Crea CLAUDE.md inicial del proyecto |
+| `/help` | Muestra todos los comandos disponibles |
+| `/clear` | Limpia contexto actual (sin perder proyecto) |
+| `/compact` | Resume conversación para usar menos contexto |
+| `/review` | Pide code review de cambios |
+| `/model` | Cambia modelo (ver [cambia de modelo](/boveda/cambia-de-modelo)) |
+| `/plugin` | Gestiona plugins instalados |
+| `/skills` | Lista skills activas |
+
+---
+
+## Actualizar Claude Code
+
+### Si instalaste con curl/irm (nativo)
+
+**Actualizaciones automáticas en segundo plano**. No tenés que hacer nada.
+
+### Con Homebrew
+
+```bash
+brew upgrade claude-code
+```
+
+### Con WinGet
+
+```powershell
+winget upgrade Anthropic.ClaudeCode
+```
+
+### App Desktop
+
+Auto-update cuando la abrís. Si está vieja, te ofrece update.
+
+---
+
+## Cuándo elegir cada camino
+
+### App Desktop ideal si:
+
+✅ Nunca tocaste terminal en tu vida
+✅ Querés probar Claude rápido sin setup
+✅ Te interesa Cowork (proyectos, tareas programadas)
+✅ Usás Dispatch desde celular
+✅ Trabajás en multi-tab (chat + code + cowork)
+
+### Claude Code CLI ideal si:
+
+✅ Ya vivís en terminal (tmux, vim, neovim)
+✅ Trabajás mucho con git
+✅ Querés integrar con tu workflow de dev existente
+✅ Te molestan las apps gráficas pesadas
+✅ Usás múltiples proyectos en paralelo (cd entre ellos)
+
+**Ambos no se excluyen**. La app desktop instala el CLI por debajo. Podés usar los dos.
+
+---
+
+## Anti-patrones de instalación
+
+### 1. Usar tutoriales antiguos con `npm install -g`
+
+Deprecado. Usá `curl` o `brew`/`winget`.
+
+### 2. Instalar sin verificar requisitos
+
+Si tu OS no está soportado, vas a chocar. **Verificá primero**.
+
+### 3. Sin Git en Windows
+
+Sin Git for Windows, varios features de Claude Code rompen. **Instalalo primero**.
+
+### 4. Olvidarse del país soportado
+
+Algunos países tienen restricciones por compliance. Si te tira "country not supported", necesitás VPN (con cuidado: viola TOS de Anthropic).
+
+### 5. No verificar con `claude doctor`
+
+`claude doctor` te dice si algo no anda **antes** de empezar a trabajar. **Corrélo después de instalar**.
+
+---
+
+## Troubleshooting común
+
+### "command not found: claude"
+
+Path no incluye Claude. En macOS/Linux, verificá:
+
+```bash
+echo $PATH | tr ':' '\n' | grep -i claude
+```
+
+Si no aparece, agregalo a tu `~/.zshrc` o `~/.bashrc`.
+
+### "Cannot connect to Anthropic"
+
+Verificá:
+- Internet funciona
+- Tu país está soportado
+- No hay firewall corporativo bloqueando
+
+### Versión vieja después de upgrade
+
+A veces el package manager no fuerza upgrade real:
+
+```bash
+brew uninstall claude-code
+brew install --cask claude-code
+```
+
+### Permisos de macOS
+
+Primera vez te puede pedir permisos de accesibilidad (para Computer Use, hooks, etc.). Acceptá en System Preferences → Security → Privacy.
+
+---
+
+## Próximos pasos según tu objetivo
+
+### Querés ahorrar tokens desde día 1
+
+Después de instalar, leé [setup zero](/boveda/claude-code-setup-zero) y [Token Efficient](/boveda/claude-token-efficient).
+
+### Vas a trabajar con código
+
+[Guía Claude Code completa](/boveda/guia-claude-code-completa) y [5 skills equipo dev](/boveda/5-skills-equipo-dev).
+
+### Querés saber cómo hablarle bien
+
+[Hablarle a Claude](/boveda/hablarle-a-claude) y [mejores prácticas Claude](/boveda/mejores-practicas-claude).
+
+### Vas a usar agentes
+
+[Crear agentes con Claude](/boveda/crea-agentes-con-claude) y [crear skills](/boveda/crea-claude-skills).
+
+---
+
+## Fuentes oficiales
+
+- **Descargas**: `claude.ai/download`
+- **Planes**: `claude.ai/pricing`
+- **Docs CLI**: `code.claude.com/docs`
+- **Quickstart**: `code.claude.com/docs/en/quickstart`
+
+---
+
+## Próximos pasos
+
+- Para setup post-instalación con buenas prácticas, [setup zero](/boveda/claude-code-setup-zero)
+- Para entender qué plan elegir, [cuál plan Claude](/boveda/cual-plan-claude)
+- Para aprender a hablarle a Claude desde el primer día, [hablarle a Claude](/boveda/hablarle-a-claude)

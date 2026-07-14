@@ -1,0 +1,233 @@
+---
+title: "Blender MCP — modelar 3D con Claude en lenguaje natural"
+description: "Conector MCP que mete Claude adentro de Blender. Crear objetos, aplicar materiales, configurar iluminación y exportar — todo desde la conversación. Útil para prototipado rápido, escenas product shot y workflows 3D sin pelearte con la UI."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude", "blender", "mcp"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["claude-trabajo-creativo", "mcp-server-propio", "higgsfield-mcp"]
+---
+
+## Para quién es esto
+
+Blender es **gratis y poderoso, pero su curva de aprendizaje es brutal**. Si abriste Blender alguna vez y te encontraste con 800 botones, sabés a qué me refiero.
+
+Blender MCP cambia la ecuación: en lugar de aprender dónde está cada control, **le decís a Claude qué querés** y él opera Blender por vos. Crear objetos, materiales, iluminación, render — todo desde conversación.
+
+No reemplaza saber Blender. **Reduce la fricción** para quien ya entiende los conceptos pero no tiene memorizada la UI.
+
+---
+
+## Lo que hace
+
+Una vez instalado, Claude tiene acceso a tools como:
+
+| Tool | Qué hace |
+|------|----------|
+| `create_object` | Crear primitivas (cubo, esfera, cilindro, plano, suzanne) |
+| `transform_object` | Posición, rotación, escala |
+| `apply_modifier` | Subdivision, bevel, mirror, array, etc. |
+| `create_material` | Materiales con parámetros (color, roughness, metallic) |
+| `apply_material_to` | Asignar material a objeto |
+| `setup_lighting` | Luces (point, sun, area) con intensidad |
+| `setup_camera` | Posicionar cámara, FOV |
+| `render_image` | Renderizar la escena al formato/resolución que pidas |
+| `export_object` | Exportar a OBJ, FBX, GLB, USD |
+| `download_asset` | Descargar assets de Hyper3D / Sketchfab / PolyHaven |
+
+No son todos. Pero estos son los que cubren el 80% del trabajo común.
+
+---
+
+## Setup — 3 pasos
+
+<Step number={1} title="Bajar el addon de Blender">
+
+Bajá el ZIP del repo del MCP. Después en Blender:
+
+1. Edit → Preferences → Add-ons
+2. Install → seleccionás el ZIP
+3. Habilitá el addon "Blender MCP"
+4. En el panel lateral del 3D viewport, vas a ver una pestaña "Blender MCP"
+
+</Step>
+
+<Step number={2} title="Arrancar el server en Blender">
+
+En el panel "Blender MCP", apretás **"Start Server"**. Esto abre un puerto local (típicamente 9876) que el MCP server fuera de Blender va a consultar.
+
+**Importante**: el server tiene que estar corriendo **mientras** uses Claude. Si cerrás Blender, se desconecta.
+
+</Step>
+
+<Step number={3} title="Conectar Claude" last>
+
+En `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "blender": {
+      "command": "npx",
+      "args": ["-y", "blender-mcp-server"],
+      "env": {
+        "BLENDER_PORT": "9876"
+      }
+    }
+  }
+}
+```
+
+Reiniciá Claude Code. Probá:
+
+```
+> ¿Qué objetos hay actualmente en la escena de Blender?
+```
+
+Claude consulta, te devuelve la lista. Si responde, conectado.
+
+</Step>
+
+---
+
+## Casos de uso
+
+### Caso 1 — Product shot rápido
+
+```
+> Necesito un product shot de una taza de café para ecommerce.
+
+  1. Modelá una taza estilizada (no realista perfecto, estilo editorial)
+  2. Apoyala sobre un plano blanco infinito
+  3. Iluminá con setup de estudio: 1 luz key blanda arriba-izquierda,
+     1 fill suave a la derecha, 1 rim atrás para separar del fondo
+  4. Cámara a 45° desde arriba ligeramente
+  5. Render 4K PNG con transparencia
+
+  Salida: /tmp/taza-render.png
+```
+
+Lo que tomaría 30-60 min en Blender se hace en 3-5 min de conversación.
+
+### Caso 2 — Iteración de variantes
+
+```
+> Tengo la escena actual con la taza renderizada. Generame 5 variantes:
+  - V1: igual pero con material de cerámica craquelada
+  - V2: vidrio transparente con líquido marrón adentro
+  - V3: metal cepillado dorado
+  - V4: porcelana con patrón floral azul
+  - V5: madera tallada estilo japonés
+
+  Para cada una, mismo setup de iluminación. Render a /tmp/variants/.
+```
+
+A/B testing visual para presentar al cliente.
+
+### Caso 3 — Setup de escena complejo
+
+```
+> Necesito un setup para renderizar un mockup de zapatilla:
+
+  - Mesa de madera oscura como base
+  - Zapatilla principal en el centro (uso el modelo que tengo en
+    /assets/shoe.fbx)
+  - 2 zapatillas secundarias detrás, fuera de foco
+  - Hojas verdes pequeñas alrededor (motivo natural)
+  - HDRI de estudio para iluminación general
+  - Cámara con depth of field, foco en la zapatilla central
+
+  Bajá las hojas y la mesa de PolyHaven si no tengo modelos.
+```
+
+Claude importa, posiciona, ilumina. Vos validás y exportás.
+
+### Caso 4 — Modelado paramétrico
+
+```
+> Hacé una pieza de joyería: un anillo simple con un diamante
+  pequeño centrado.
+
+  - Anillo: torus de oro mate, grosor 2mm, diámetro interno 17mm
+  - Diamante: geometría octaédrica 4mm encima
+  - Render macro con luz brillante para que el diamante refleje
+
+  Versiones: oro amarillo, oro rosa, oro blanco. 3 renders.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Esperar resultados pixel-perfect al primer prompt
+
+Como cualquier IA generativa de visual, **requiere iteración**. La primera versión sirve para ver dirección. Vas ajustando.
+
+### 2. Pedir cosas que requieren skill avanzada de Blender
+
+Animación character, fluid simulation, hair particles, sculpting orgánico — esto **no se hace bien** desde un MCP. Para esos casos, abrí Blender directo.
+
+### 3. Olvidar guardar progreso
+
+El estado vive en Blender. Si cerrás Blender sin guardar, perdés el trabajo. **Guardá el .blend** periódicamente (con `Ctrl+S` directo en Blender, no por Claude).
+
+### 4. Generar render gigantes en computadora chica
+
+Renders 4K pueden tardar 10-30 min en hardware modesto. **Empezá con preview 1080p**, validás la composición, después subís a 4K para el final.
+
+---
+
+## Cuándo conviene
+
+✅ Conocés Blender pero no querés pelearte con la UI para tareas comunes
+✅ Hacés product shots / mockups frecuentes
+✅ Necesitás iterar muchas variantes
+✅ Tu workflow ya pasa por Claude y querés sumar 3D
+
+❌ Sos modelador 3D profesional — la UI directa es más rápida que pasar por chat
+❌ Animación character / VFX serio
+❌ Querés "que Claude haga modelos increíbles sin que sepas nada" — no funciona así
+
+---
+
+## Tip importante — el rol de Claude vs Blender
+
+Claude no **reemplaza** tu criterio visual. Te ayuda a operar Blender más rápido. Si vos no sabés qué hace un buen product shot, Claude tampoco lo va a saber por vos.
+
+Lo que sí hace bien:
+- **Setup mecánico**: "luz a 45°, intensidad 8, temperatura 5500K" — no tenés que recordar dónde están esos controles
+- **Iteración**: cambios pequeños son comandos de 1 línea
+- **Composición de escena**: ubicar y orientar objetos según descripción
+- **Importación/exportación**: formatos, paths, conversiones
+
+Lo que no:
+- **Decidir si una composición es buena**
+- **Inventar un estilo visual desde cero**
+- **Resolver problemas raros de render** (denoiser, motion blur, etc.)
+
+Si lo usás como **acelerador de un workflow que ya entendés**, gana. Si esperás que reemplace expertise, decepciona.
+
+---
+
+## Combinaciones útiles
+
+### Con Higgsfield para referencia visual
+
+1. Le pedís a [Higgsfield](/boveda/higgsfield-mcp) que genere una **imagen de referencia** de mood
+2. Le pasás esa imagen a Claude + Blender
+3. Le pedís "armá una escena 3D que tenga este mood"
+
+Híbrido entre generación y modelado tradicional.
+
+### Con Claude para Trabajo Creativo
+
+Si tenés también [los conectores oficiales de Anthropic](/boveda/claude-trabajo-creativo), el de Blender es **más afinado** para flujos 3D específicos. El MCP open-source es más experimental.
+
+---
+
+## Próximos pasos
+
+- Para entender MCPs en general y construir uno propio, [tu propio MCP server](/boveda/mcp-server-propio)
+- Si necesitás generar visuales sin modelar (foto/video puro), [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para integración con la suite Adobe + Affinity + Blender de Anthropic, [Claude para trabajo creativo](/boveda/claude-trabajo-creativo)

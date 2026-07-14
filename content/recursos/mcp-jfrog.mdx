@@ -1,0 +1,98 @@
+---
+title: "MCP JFrog — acceso directo a la JFrog Platform desde Claude Code"
+description: "MCP server que da a tus agents acceso a JFrog Platform services. Artifactory, Xray, distribution — operar artefactos, security scanning y supply chain desde Claude sin abrir la UI."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "jfrog"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-codacy", "all-deploy", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/jfrog"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jfrog.json"
+---
+
+## Qué es
+
+JFrog es una de las plataformas más usadas en enterprise para artifact management y software supply chain: Artifactory para artefactos (Docker, npm, Maven, etc.), Xray para security scanning, Distribution para release management.
+
+Este MCP da a Claude acceso a esos servicios. La descripción inline en aitmpl es genérica — el detalle exacto de tools expuestas está en el [JSON de configuración](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jfrog.json).
+
+Útil para equipos enterprise donde JFrog es la fuente de verdad de artefactos y supply chain.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 78 |
+| Servidor MCP | `jfrog` |
+| Cuenta requerida | Sí — JFrog (Artifactory, Xray) |
+| Autenticación | API token / access token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/jfrog
+```
+
+Pre-requisito: cuenta JFrog y access token.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/jfrog. Mostrame qué tools expone el server y
+listame los repositories de Artifactory que mi user puede ver.
+```
+
+## Qué podés hacer con esto
+
+### Inspección de artefactos
+
+"Listame los artefactos en el repo `docker-prod` ordenados por última actualización. Para los 5 más recientes, dame metadata".
+
+### Security findings con Xray
+
+"Buscame vulnerabilidades critical en los artefactos publicados en la última semana, agrupadas por componente". Útil para triage de seguridad.
+
+### Búsqueda de versiones
+
+"En el repo `libs-release`, ¿qué versiones de `my-lib` hay publicadas y desde cuándo?". Histórico para entender lifecycle.
+
+### Audit de uso
+
+"¿Qué artefactos no se descargaron en los últimos 90 días? Candidatos a archivado".
+
+### Integración con release management
+
+Si tu pipeline publica a JFrog Distribution, el MCP te deja consultar status de releases desde Claude.
+
+## Pre-requisitos
+
+- **Cuenta JFrog** con plan apto
+- **Access token** con permisos sobre los servicios relevantes
+- **Verificar el JSON de configuración** para entender exactly qué expone
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás JFrog:** obvio. Para Docker Hub, GitHub Packages, etc., otros MCPs o tooling directo.
+- **Permisos amplios:** un token de admin deja a Claude operar todo. Restringí scope.
+- **Para análisis de calidad de código:** [Codacy](/boveda/mcp-codacy) está más enfocado a ese punto. JFrog Xray es para supply chain security.
+- **Costos:** JFrog Enterprise se cobra. Validá tu plan antes de uso intenso.
+- **Solo 78 installs:** comunidad probando reducida. Probá antes en sandbox.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [JFrog MCP](https://www.aitmpl.com/component/mcps/devtools/jfrog) — comando exacto.
+- **Config JSON:** [jfrog.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/jfrog.json) — la fuente de verdad sobre tools y operaciones.
+- **JFrog Platform:** [jfrog.com](https://jfrog.com) — cuenta y docs.
+
+## Recursos relacionados
+
+- [Codacy MCP](/boveda/mcp-codacy) — para code quality. Combina con JFrog Xray (security) para tener ambos ángulos.
+- [All Deploy](/boveda/all-deploy) — para publicación de artefactos a hosting, paso siguiente cuando ya están en JFrog.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas para integrar tools enterprise con criterio.

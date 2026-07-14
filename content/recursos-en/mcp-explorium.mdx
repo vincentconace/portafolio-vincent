@@ -1,0 +1,101 @@
+---
+title: "MCP Explorium — 150M companies and 800M professionals for B2B prospecting"
+description: "Explorium MCP: live B2B data with 150M+ businesses, 800M+ professionals, 4,000+ signals and 50+ sources. For building lead lists, prospecting and bulk enrichment from Claude Code."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "explorium"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["apify-clientes-ilimitados", "mcp-apify", "mcp-brightdata"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/web-data/explorium"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/explorium.json"
+---
+
+## What it is
+
+Explorium is a B2B data platform: it catalogs 150M+ businesses, 800M+ professionals and 4,000+ signals (fundings, hiring, tech stack, etc.) compiled from 50+ sources. It competes directly with ZoomInfo and Apollo in the B2B data space.
+
+This MCP plugs the Explorium API into Claude Code. You ask Claude "build me a list of Heads of Engineering at B2B SaaS companies with 100-500 employees in Latam that grew headcount 50%+ in the last year" and Claude queries Explorium, filters by signals and returns the list.
+
+Useful for sales, lead generation, market research and quick due diligence.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `web-data` |
+| Installs | 1 (just published) |
+| MCP server | `explorium` |
+| Account required | Yes — Explorium (paid, no obvious free tier) |
+| Coverage | 150M companies + 800M professionals |
+| Signals | 4,000+ (hiring, funding, tech, etc.) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp web-data/explorium
+```
+
+Prerequisite: Explorium account + API key.
+
+For Claude:
+
+```
+I installed the web-data/explorium MCP. Once the credentials are set,
+build me a list of 50 B2B SaaS companies in the United States with
+50-200 employees that raised a Series A in the last 12 months.
+Give me back the name, domain, headcount, funding date and CEO.
+```
+
+## What you can do with this
+
+### Segmented lead lists
+
+"Build me a list of companies in `<industry>` with `<criteria>` and filter by `<signal>`". The MCP returns CRM-ready records.
+
+### Enrichment of existing leads
+
+"I have this list of 200 emails. Enrich it with current title, company, headcount, tech stack". Useful for SDRs.
+
+### Hunt companies in the moment
+
+"Companies that have had `<signal>` (fund raising, expansion, executive hire, layoffs) in the last 30 days, in `<sector>`". Useful for outreach timing.
+
+### Competitive mapping
+
+"Companies that show up as competitors of `<company>` in public signals". To understand the landscape.
+
+### Tech stack intelligence
+
+"Of the 100 largest SaaS companies in Europe, what % use `<your competitor product>`?". Useful for battlecards.
+
+## Prerequisites
+
+- **Active Explorium account** (enterprise plans)
+- **API key**
+- **Use cases that fit B2B** (not for B2C or private individuals)
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you use it">
+
+- **Without a paid account, it doesn't work:** there's no significant free tier.
+- **Data quality varies by geography:** for very small markets, coverage may be lower.
+- **Compliance:** GDPR / CCPA apply. Coverage of private professionals is a gray area depending on jurisdiction. Validate.
+- **vs [Apollo](/boveda/plugin-claude-plugins-official) / ZoomInfo:** they're competitors. If you already have one working, don't add another unless it has different coverage.
+- **Only 1 install:** not much community testing yet. Try it in a sandbox.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Explorium MCP](https://www.aitmpl.com/component/mcps/web-data/explorium) — exact command.
+- **JSON config:** [explorium.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/web-data/explorium.json).
+- **Official Explorium:** [explorium.ai](https://www.explorium.ai) — account and pricing.
+
+## Related resources
+
+- [Apify unlimited clients](/boveda/apify-clientes-ilimitados) — close pattern (lead gen) using specific Apify Actors.
+- [Apify MCP](/boveda/mcp-apify) — more DIY alternative but with a real free tier.
+- [Bright Data MCP](/boveda/mcp-brightdata) — for scraping B2B data from public sources with enterprise infra.

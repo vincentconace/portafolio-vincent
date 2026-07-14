@@ -1,0 +1,257 @@
+---
+title: "Claude Financial Services — the 6 pre-built agents for finance"
+description: "Anthropic released a set of 6 specialized finance agents that live inside Cowork: pitch decks, credit memos, KYC, reconciliation, actuarial, and monthly close. With native connectors to Bloomberg, S&P, and the Office suite. When it's worth it and when it's not."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-cowork", "excel", "bloomberg"]
+publishedAt: "2026-05-19"
+readingTime: "10 min"
+relatedSlugs: ["claude-microsoft-365", "claude-small-business", "nueve-prompts-cowork"]
+---
+
+## What it is
+
+Anthropic released **Claude Financial Services**: a layer of Claude built for people who live in Excel, PowerPoint, and reports — bankers, analysts, controllers, or any business owner who deals with close, budgeting, and valuations.
+
+It comes as **6 pre-built agents** inside Claude Cowork. There's nothing to train — you turn them on like a plug-in.
+
+| Agent | What it's for |
+|--------|----------|
+| **Pitch Books** | Investor presentations with valuations and comparables already formatted |
+| **Credit Memos** | Complete credit memo with DSCR, LTV, risk flags |
+| **KYC** | Structured Know Your Customer file |
+| **Ledger Reconciliation** | Account and general ledger reconciliation |
+| **Actuarial Review** | Review of actuarial models |
+| **Monthly Close** | End-to-end monthly close |
+
+The key thing: **they work on your real files**. They don't export, they don't redo. They edit the Excel cells and leave a visible audit trail so you can review before accepting.
+
+---
+
+## The connectors that come built in
+
+| Source | What it's for |
+|--------|----------|
+| Microsoft 365 | Access to Excel, PowerPoint, Word, Outlook, OneDrive |
+| **Bloomberg** | Real-time market data |
+| **S&P Capital IQ** | Comparables, valuations, financial data |
+| **FactSet** | Financial statements, estimates |
+| **PitchBook** | Private companies, deals, fundraising |
+| **Morningstar** | Fund data, ratings, analysis |
+| **LSEG (Refinitiv)** | Market data, news, sanctions lists |
+
+The real value: no more copy & paste from Capital IQ → Excel. The agents query the source directly.
+
+---
+
+## The 6 agents in detail
+
+### 1. Pitch Books
+
+Builds decks for investors. Inputs: target company + sector + transaction type. Output: PowerPoint with:
+
+- Cover + executive summary
+- Investment thesis
+- Market analysis with size and growth
+- Comparables with a pre-formatted table (querying S&P / FactSet)
+- Valuation (DCF, multiples, precedent transactions)
+- Risks and mitigations
+
+**When it shines**: when you've decided on the approach and need to materialize the deck. It doesn't replace strategic analysis.
+
+### 2. Credit Memos
+
+Traditional credit memo. Inputs: borrower + proposed structure + financial statements. Output:
+
+- Description of the credit (amount, term, collateral)
+- Financial analysis (ratios: DSCR, LTV, leverage, coverage)
+- Borrower analysis (industry, management, track record)
+- Collateral structure
+- Risk flags (concentration, covenants, dependencies)
+- Recommendation
+
+**When it shines**: when the information is on the table and you need the formal document. It does **not** decide whether to approve or reject — that's on you.
+
+### 3. KYC
+
+Know Your Customer file:
+
+- Legal identification (corporate structure, beneficial owners)
+- Sanctions screening (querying LSEG / OFAC)
+- Source of funds / source of wealth
+- Risk rating per your institution's matrix
+- Missing documentation listed
+
+**When it shines**: banks and fintechs with regulated onboarding. For a small business that just needs to "check whether a client is legitimate," this is overkill.
+
+### 4. Ledger Reconciliation
+
+Reconciles accounts:
+
+- Bank reconciliation (bank statement vs ledger)
+- Intercompany reconciliation
+- Accounts receivable / payable against subledger
+- Identification of unreconciled items with a proposed adjustment
+
+**When it shines**: month/quarter-end close. Cuts to hours what is otherwise days of manual work.
+
+### 5. Actuarial Review
+
+Review of actuarial models (insurance, pensions). Useful for verifying the consistency of a model built by someone else, not for building from scratch.
+
+### 6. Monthly Close
+
+The full monthly close:
+
+- Adjustments and reclassifications
+- Automatic accruals based on history
+- P&L vs budget with variance analysis
+- Reports for management with commentary
+
+**When it shines**: companies with a ritualized monthly close where 70% is repetitive every month. The remaining 30% (things unique to that month) you flag yourself.
+
+---
+
+## How to turn it on
+
+4 steps:
+
+<Step number={1} title="Check your plan">
+
+To use Excel + the Office add-in you need **Claude Pro or Max** (the $20/month plan doesn't include the Excel add-in on lower tiers). Check your account before you start.
+
+</Step>
+
+<Step number={2} title="Enable the plug-in in Cowork">
+
+In Cowork → Settings → Plug-ins → **Financial Services** → Enable.
+
+If it doesn't show up, your account may not have access yet (the rollout was gradual by region).
+
+</Step>
+
+<Step number={3} title="Connect the sources you're going to use">
+
+You don't have to connect everything. Only the ones you'll use:
+
+- Bloomberg / S&P / FactSet → only if you have them under contract
+- Microsoft 365 → almost always needed
+- PitchBook → if you work with private equity / VC
+
+Each connector is OAuth with your account. The credentials stay with your provider, not with Claude.
+
+</Step>
+
+<Step number={4} title="Try it with a real file" last>
+
+Open an Excel with real data (not a demo). Turn on Claude. Ask it for something concrete:
+
+```
+I have the general ledger for October 2025 in this Excel. Do the
+reconciliation against the bank statement in the "Banco" tab.
+
+Rules:
+- Highlight in yellow the differences you can't explain
+- For each difference, propose an adjustment with justification
+- DO NOT modify the original numbers — add a "suggested adjustment" column
+- Give me a summary in the first free cell
+```
+
+Claude does the work. You review before accepting changes.
+
+</Step>
+
+---
+
+## 2 starter prompts
+
+### Prompt 1 — Comparables for a valuation
+
+```
+I'm valuing [company] in the [sector] sector. I need a comparables table
+for my model.
+
+INPUTS:
+- Target company: [name, ticker if public]
+- Metrics to compare: EV/Revenue, EV/EBITDA, P/E LTM and forward
+- Universe: 8-12 public comparables + 5 recent transactions
+
+OUTPUT in Excel:
+- "Públicos" tab: table with the 8-12 companies + metrics + means and medians
+- "Precedent Transactions" tab: table with the 5 transactions + multiples paid
+- "Resumen" tab: implied valuation range for my target
+
+Use S&P Capital IQ and FactSet. If a metric isn't available, mark it N/A.
+DO NOT make up numbers.
+```
+
+### Prompt 2 — Credit memo for a loan
+
+```
+I need the credit memo for a financing proposal.
+
+BORROWER: [company]
+PROPOSED STRUCTURE:
+- Amount: USD X
+- Term: Y years
+- Rate: Z% (fixed/variable)
+- Collateral: [type]
+- Covenants: [if any]
+
+ATTACHED DOCUMENTATION: last 3 years of financial statements in this Excel
+
+MEMO STRUCTURE (standard):
+1. Executive summary + recommendation
+2. Borrower description (industry, management, ownership)
+3. Financial analysis (DSCR, LTV, leverage ratios, trends)
+4. Transaction analysis (use of funds, sources & uses)
+5. Collateral and structure
+6. Risks and mitigations (industry, financial, operational)
+7. Proposed terms
+
+RULES:
+- Calculate the actual ratios from the financial statements (don't make them up)
+- If critical info is missing, mark it as "[missing info]"
+- Final recommendation based on evidence, not optimism
+```
+
+---
+
+## When it's NOT worth it
+
+### 1. A small business with basic accounting
+
+If your monthly close is 3 hours by hand with no Bloomberg or S&P, the plug-in is overkill. The [9 prompts for Cowork](/boveda/nueve-prompts-cowork) will probably serve you better.
+
+### 2. You don't have the paid sources
+
+Bloomberg costs ~$2k/month/seat. S&P Capital IQ ~$15k/year. If you don't have them, the agents can work with public data but lose much of their value.
+
+### 3. A regulated sector where AI isn't accepted
+
+Some banks/insurers still can't use AI in formal regulatory documents for compliance reasons. Check before setting up the flow.
+
+### 4. You're going to blindly trust the outputs
+
+**This is the most important thing**: the agents generate **80% drafts**. The remaining 20% — including any sensitive data — you have to review yourself. If your plan is "Claude does it, I approve without reading," don't use this in finance.
+
+---
+
+## The trap of pre-built agents
+
+These 6 are good starting points but they're **opinionated**. Their structure, their chosen ratios, their formats — it all reflects decisions made by Anthropic + examples from top clients.
+
+If your institution has its own standards (a different memo format, custom ratios, its own risk scale), the default outputs won't match. **You have to adjust them** for your institution. There are 2 options:
+
+1. **Custom prompts**: give the agent your specific rules on each invocation
+2. **Your own Skills**: build a skill that extends the agent with your rules
+
+Option 2 scales better for recurring use.
+
+---
+
+## Next steps
+
+- To fully understand the 2 surfaces (add-in vs connector), [Claude for Microsoft 365](/boveda/claude-microsoft-365)
+- If you're a small business and want something simpler, [Claude Small Business](/boveda/claude-small-business)
+- To automate recurring reports with custom prompts, [9 prompts for Cowork](/boveda/nueve-prompts-cowork)

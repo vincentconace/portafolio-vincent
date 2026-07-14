@@ -1,0 +1,299 @@
+---
+title: "Managed Agents — agentes 24/7 en la nube de Anthropic por menos de $1/hora"
+description: "Anthropic te deja correr agentes en su infra. Vos describís qué hacer en español, Claude lo arma. Cost: ~$0.70/h activo, $0 en espera. No necesita tu compu prendida. Qué puede tocar (todo lo cloud) y qué no (tu disco local). Setup paso a paso desde platform.claude.com."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude", "agentes", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["schedule-agentes-nube", "ecosistema-de-agentes", "claude-piloto-automatico"]
+---
+
+## Qué son los Managed Agents
+
+Anthropic te deja correr agentes en su nube. Vos definís qué tienen que hacer (en español, sin código), conectás cuentas externas con MCPs, y Claude los pone a trabajar en su infra.
+
+**No necesitás compu prendida. No necesitás server. No necesitás programar.**
+
+| Dimensión | Detalle |
+|-----------|---------|
+| Costo | ~$0.70/h activo con Opus, menos con Sonnet |
+| Costo en espera | $0 (solo pagás trabajo real) |
+| Setup | Vos describís en español, Claude arma |
+| Infra | Servidores de Anthropic |
+| Tu compu | NO necesita estar prendida |
+| Plataforma | `platform.claude.com` |
+
+---
+
+## Por qué es disruptivo
+
+### Alternativas que tenías antes
+
+| Opción | Problema |
+|--------|----------|
+| **Zapier / Make** | $20-50/mes mínimo, se rompe seguido, capacidades limitadas |
+| **Programar tu propio agente** | Semanas de setup + mantenimiento eterno |
+| **N8N self-hosted** | Tu propio server, updates, fixes cuando rompe |
+| **Mac mini con [ecosistema](/boveda/ecosistema-de-agentes)** | Setup hardware $700+ + electricidad |
+
+### Managed Agents
+
+- **Pay per use** real (no suscripción mensual)
+- Setup en lenguaje natural
+- Cero infra propia
+- Auto-update con releases de Anthropic
+
+Para muchos casos de uso es **el sweet spot**.
+
+---
+
+## Qué pueden tocar (y qué no)
+
+### Sí pueden
+
+Como viven en la nube, tienen acceso a lo que vive en internet:
+
+- **Email**: Gmail, Outlook
+- **Storage**: Google Drive, Dropbox, Notion
+- **Mensajería**: WhatsApp Business, Slack, Telegram
+- **Calendarios**: Google Calendar, Calendly
+- **CRMs**: HubSpot, Pipedrive
+- **E-commerce**: Shopify
+- **Dashboards**: cualquier app con API en internet
+
+### NO pueden
+
+Lo que vive solo en tu compu:
+
+- ❌ Tu laptop personal
+- ❌ Archivos solo en tu disco local
+- ❌ Apps desktop (Photoshop, Excel local)
+- ❌ Impresoras, cámaras, hardware
+- ❌ Redes privadas internas
+- ❌ Tu WhatsApp personal (solo WhatsApp Business API)
+
+Para tareas con tu compu local, usás [Claude Code /loop](/boveda/claude-code-loop) en tu máquina, o un [Mac mini dedicada](/boveda/ecosistema-de-agentes).
+
+---
+
+## Setup en 4 pasos
+
+### Paso 1 — Crear cuenta en platform.claude.com
+
+`platform.claude.com` (distinto a `claude.ai`). Mismo email funciona si ya tenés cuenta Claude. Gratis abrirla — solo pagás cuando agente trabaja.
+
+### Paso 2 — Activar método de pago
+
+Settings → Billing → agregá tarjeta.
+
+**Crítico**: setea un **límite mensual** para dormir tranquilo. Recomendado para empezar: $20-50/mes.
+
+### Paso 3 — Agent Quickstart
+
+Del dashboard, buscá "Agent Quickstart". Acá es donde describís tu agente en español.
+
+### Paso 4 — Conectar MCPs
+
+Después de armar el agente, lo conectás a los servicios que necesita (Gmail, Calendar, etc.). Una vez por servicio, las keys se guardan encriptadas.
+
+---
+
+## Prompts para tus primeros agentes
+
+### Agente 1 — WhatsApp 24/7
+
+```
+> Quiero agente que conteste WhatsApp de mis clientes 24/7.
+
+  Mi negocio: [barbería / tienda de ropa / consultoría].
+
+  Debe:
+  - Saludar con mi tono (amable, directo, en español)
+  - Contestar precios, horarios, ubicación
+  - Agendar citas en mi Google Calendar cuando piden
+  - Pasarme el chat si pregunta algo que no sabe
+  - Mandarme resumen diario en Gmail al día siguiente
+
+  Conectar: WhatsApp Business, Google Calendar, Gmail.
+```
+
+Claude:
+1. Te hace 4-6 preguntas de refinamiento (tono específico, horarios, FAQs comunes)
+2. Arma el agente
+3. Te pide conectar las 3 cuentas
+4. Lo activa
+
+Costo estimado: $5-30/mes según volumen de mensajes.
+
+### Agente 2 — Reporte semanal de negocio
+
+```
+> Quiero agente que cada lunes 8AM me arme reporte semanal.
+
+  Debe:
+  - Revisar Gmail y resumir lo importante de la semana pasada
+  - Leer mi Google Sheet de ventas y sacar totales + comparativa vs
+    semana anterior
+  - Revisar Google Calendar y listar juntas importantes de
+    semana nueva
+  - Armar PDF bonito con todo y enviarlo por email
+  - Top 3 pendientes más urgentes hasta arriba
+
+  Conectar: Gmail, Google Drive, Google Calendar.
+```
+
+Costo estimado: $3-8/mes (corre una vez por semana, ~30 min activo).
+
+### Agente 3 — Monitor de competencia
+
+```
+> Quiero agente que cada 3 días revise a mis competidores
+  y me avise cambios relevantes.
+
+  Mis competidores:
+  - competidor1.com
+  - competidor2.com
+  - competidor3.com
+
+  Debe:
+  - Visitar sus landing pages y comparar contra snapshot anterior
+  - Detectar cambios: precios, features nuevas, promos
+  - Revisar sus posts en LinkedIn y Twitter
+  - Mandarme reporte por email solo si encuentra algo notable
+
+  Conectar: nada (browse abierto a web pública).
+```
+
+Costo estimado: $10-25/mes.
+
+### Agente 4 — Contabilidad ligera
+
+```
+> Quiero agente que organice mis facturas.
+
+  Debe:
+  - Cada día revisar Drive folder /facturas-2026/
+  - Para cada factura nueva: extraer total, proveedor, fecha,
+    concepto, categoría
+  - Agregar fila a mi Google Sheet "Gastos 2026"
+  - Si detecta factura sospechosa (duplicado, monto raro),
+    pausá y avisame por email antes de registrar
+
+  Conectar: Google Drive, Google Sheets, Gmail.
+```
+
+Costo estimado: $5-15/mes.
+
+---
+
+## Herramientas que el agente trae de fábrica
+
+Sin que las conectes específicamente, cada Managed Agent tiene:
+
+| Tool | Para qué |
+|------|----------|
+| **Web browser** | Navega, busca, extrae info de páginas |
+| **File I/O** | Lee/escribe en su workspace |
+| **Code runner** | Ejecuta scripts para cálculos, transformaciones |
+| **Cloud terminal** | Mini-VM aislada para tareas |
+
+---
+
+## Cómo cobra (en detalle)
+
+Modelo de pricing es **por compute time del agente activo**:
+
+- **Sonnet**: ~$0.30/h activo
+- **Opus**: ~$0.70/h activo
+- **En espera (esperando email, hora, evento)**: $0.00
+
+### Ejemplos de costo
+
+**Caso 1 — Bot WhatsApp con 50 mensajes/día**
+
+- ~30 segundos activo por mensaje × 50 = 25 min/día
+- 25 min × 30 días = ~12.5h/mes
+- Con Sonnet: 12.5 × $0.30 = **$3.75/mes**
+
+**Caso 2 — Reporte semanal complejo (15 min activo cada lunes)**
+
+- 15 min × 4 semanas = 1h/mes
+- Con Opus: **$0.70/mes**
+
+**Caso 3 — Monitor 24/7 chequeando cada hora (5 min cada vez)**
+
+- 5 min × 24 chequeos = 2h/día
+- × 30 días = 60h/mes
+- Con Sonnet: **$18/mes**
+
+Para volumen alto, considerar si conviene self-host.
+
+---
+
+## Tip de modelo
+
+Empezá con **Sonnet**. Es 50%+ más barato y suficiente para 80% de casos.
+
+Pasá a **Opus** cuando:
+- Necesitás razonamiento complejo (decisiones multi-step)
+- Es tarea crítica donde error es caro
+- Tu agente está fallando en lógica con Sonnet
+
+---
+
+## Anti-patrones
+
+### 1. Sin límite mensual
+
+Sin límite, un bug en el agente que lo deje en loop infinito puede gastar **cientos de dólares en horas**. **SIEMPRE seteá límite** desde el día 1.
+
+### 2. Agente sin "pasos críticos protegidos"
+
+Si tu agente puede mandar emails, hacer pagos, borrar archivos — sin confirmación, **un error puede ser catastrófico**.
+
+**Regla**: para acciones destructivas / sensibles, pedile a Claude que las marque como "require human approval".
+
+### 3. Todo en Opus "por las dudas"
+
+Opus es 2-3x más caro que Sonnet. Para tareas rutinarias (responder FAQs, mover datos entre sheets), **Sonnet alcanza**. Reservá Opus para razonamiento real.
+
+### 4. Vivir sin observabilidad
+
+Si nunca revisás los logs del agente, **no sabés si está haciendo lo correcto**. Revisá semanalmente.
+
+### 5. Esperar que reemplace 100% al humano
+
+Managed Agents son **excelentes para tareas estructuradas**. Para juicio complejo (cliente difícil, decisión de negocio), **humano sigue siendo necesario**. Diseñá agentes que **escalen a humano** cuando aplica.
+
+---
+
+## Comparación con alternativas
+
+| Approach | Compu local | Setup | Costo (típico) | Cuándo |
+|----------|-------------|-------|----------------|--------|
+| **Managed Agents** | NO | Lenguaje natural | $3-50/mes pay-per-use | Default si la tarea es cloud-only |
+| **[/schedule](/boveda/schedule-agentes-nube)** | NO | 1 línea | Pay-per-use | Tareas recurrentes simples |
+| **[Claude Code /loop](/boveda/claude-code-loop)** | SÍ | Bash | $0 adicional sobre tu plan | Compu prendida + acceso a tu disco |
+| **[Mac mini ecosistema](/boveda/ecosistema-de-agentes)** | Mac mini sí | Setup pesado | $700 + luz | Soberanía total + MCPs locales |
+| **Zapier/Make** | NO | UI | $20-50/mes fijo | Volumen bajo + alergia a IA |
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás acceso a tu compu local | Managed vive en nube |
+| Compliance estricto (no podés mandar data a Anthropic) | Self-host |
+| Volumen muy alto (>50 horas/mes activo) | Server propio puede ser más barato |
+| Tareas con timing sub-segundo | Latencia de red mata caso |
+| Industria regulada con audit trail estricto | Necesitás mayor control que el que da managed |
+
+---
+
+## Próximos pasos
+
+- Para `/schedule` (subset más simple de Managed Agents), [schedule en la nube](/boveda/schedule-agentes-nube)
+- Para escalar a sistema multi-agente con Mac mini, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- Para entender el patrón "agente que decide solo", [Claude piloto automático](/boveda/claude-piloto-automatico)

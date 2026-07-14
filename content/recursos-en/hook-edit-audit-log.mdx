@@ -1,0 +1,76 @@
+---
+title: "Hook Edit Audit Log — logging edits to .claude/edit-log.txt"
+description: "A hook that records every edit in a local project audit file (.claude/edit-log.txt) with timestamps. Cross-session change tracking without relying on git alone."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-change-tracker", "hook-change-logger", "hook-command-logger"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/edit-audit-log"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/edit-audit-log.json"
+---
+
+## What it is
+
+After each use of the Edit tool, the hook writes an entry to the project's `.claude/edit-log.txt` with a timestamp + the path of the modified file. Hook event: `PostToolUse`.
+
+The log is **project-local** (not global) — it lives in `.claude/` inside the project. If you work across multiple projects, each one has its own trail.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `development-tools` |
+| Installs | 22 |
+| Hook event | `PostToolUse` (Edit) |
+| Output | `.claude/edit-log.txt` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook development-tools/edit-audit-log
+```
+
+For Claude:
+
+```
+I installed the development-tools/edit-audit-log hook. After a couple
+of edits, show me the contents of `.claude/edit-log.txt`.
+```
+
+## What you can do with it
+
+### Cross-session tracking per project
+
+Each project has its own `edit-log.txt`. Useful when you rotate between several and want to see recent activity without opening git log.
+
+### Version the audit (or not)
+
+You can decide whether to commit the log (so the team can see it) or ignore it in `.gitignore`.
+
+### Compared with [Change Tracker](/boveda/hook-change-tracker)
+
+Change Tracker is more popular (1,127 installs). Both do simple tracking. Either one works — pick based on your path/format preference.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **Only 22 installs:** more widely adopted alternatives exist.
+- **If you already use [Change Tracker](/boveda/hook-change-tracker):** overlap.
+- **If you want more data per entry:** [Change Logger](/boveda/hook-change-logger) has a full CSV.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Edit Audit Log Hook](https://www.aitmpl.com/component/hooks/development-tools/edit-audit-log) — exact command.
+- **JSON config:** [edit-audit-log.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/edit-audit-log.json).
+
+## Related resources
+
+- [Change Tracker Hook](/boveda/hook-change-tracker) — a more widely adopted alternative.
+- [Change Logger Hook](/boveda/hook-change-logger) — full CSV with more detail.
+- [Command Logger Hook](/boveda/hook-command-logger) — logs commands, not just edits.

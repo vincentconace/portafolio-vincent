@@ -1,0 +1,82 @@
+---
+title: "Setting Vercel Multi Env Status — production + preview simultaneously"
+description: "Setting with 104 installs. Monitors production and preview environments simultaneously with color-coded indicators. For teams handling multiple deployment targets."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-vercel-deployment-monitor", "setting-vercel-error-alert-system", "setting-zero-config-deployment-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/vercel-multi-env-status"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-multi-env-status.json"
+---
+
+## What it is
+
+A statusline that monitors both production and preview environments at the same time. Color-coded indicators:
+- Green = healthy
+- Yellow = warning
+- Red = error
+
+For teams managing multiple targets — production stable + preview testing in parallel.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 104 |
+| Envs monitored | Production + Preview |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting statusline/vercel-multi-env-status
+```
+
+For Claude:
+
+```
+I installed the statusline/vercel-multi-env-status setting. Show me the
+current status of prod vs preview.
+```
+
+## What you can do with it
+
+### Cross-env awareness
+
+You know whether prod is still healthy while you test in preview.
+
+### Catch divergences
+
+If preview passes but prod has an error, the statusline flags it.
+
+### For teams with lots of branches
+
+Every PR generates a preview deploy. The statusline summary gives you a quick view.
+
+### Combo with [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor)
+
+Multi Env (this one) covers both. Deployment Monitor covers one. Alternatives depending on preference.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you only have one env:** [Vercel Deployment Monitor](/boveda/setting-vercel-deployment-monitor) is enough.
+- **Without Vercel:** doesn't apply.
+- **For error tracking specifically:** [Error Alert System](/boveda/setting-vercel-error-alert-system).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Vercel Multi Env Status Setting](https://www.aitmpl.com/component/settings/statusline/vercel-multi-env-status) — exact command.
+- **JSON config:** [vercel-multi-env-status.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-multi-env-status.json).
+
+## Related resources
+
+- [Vercel Deployment Monitor Setting](/boveda/setting-vercel-deployment-monitor) — single env.
+- [Vercel Error Alert System Setting](/boveda/setting-vercel-error-alert-system) — focus on errors.
+- [Zero Config Deployment Monitor Setting](/boveda/setting-zero-config-deployment-monitor) — auto-detect.

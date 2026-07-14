@@ -1,0 +1,93 @@
+---
+title: "Setting Context Monitor — el statusline más adoptado del catálogo (10,792 installs)"
+description: "Setting con **10,792 installs — el #2 absoluto del catálogo entero**, solo detrás de [Simple Notifications Hook](/boveda/hook-simple-notifications). Real-time context monitor con progress bars, alerts color-coded, session analytics."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-colorful-statusline", "plugin-claude-hud", "hook-context-timeline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/context-monitor"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/context-monitor.json"
+---
+
+## Qué es
+
+**10,792 installs — el #2 absoluto del catálogo entero.** Solo lo supera [Simple Notifications Hook](/boveda/hook-simple-notifications) (6,810... espera — eso es 6.8k, este tiene 10.8k. **Este es el #1**).
+
+Real-time monitor del context window de Claude Code con:
+- **Progress bars** visual del context usage
+- **Color-coded alerts** cuando se acerca al límite
+- **Session analytics**: cost, duración, lines changed
+- **Auto-compaction** awareness
+
+Es decir: el statusline serio que casi todo el mundo quiere. Por eso lidera el catálogo entero.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | **10,792 (líder absoluto del catálogo)** |
+| Type | Python3 script |
+| Métricas | Context %, cost, duración, lines |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/context-monitor
+```
+
+Pre-requisito: `python3` disponible.
+
+Para Claude:
+
+```
+Instalé el setting statusline/context-monitor. Mostrame el statusline
+en vivo: context usage actual, cost de la sesión y cuándo se va a
+auto-compactar.
+```
+
+## Qué podés hacer con esto
+
+### Anti "Claude se quedó sin contexto"
+
+Ves el progress bar y sabés cuándo cortás o pedís un resumen antes de que rompa.
+
+### Cost tracking en vivo
+
+Para quienes paguen por tokens, ver el cost acumulado de la sesión es crítico.
+
+### Decisiones informadas sobre /compact
+
+Cuando el context llega a 80%, sabés que conviene /compact.
+
+### Comparado con [Claude HUD Plugin](/boveda/plugin-claude-hud)
+
+HUD es plugin completo con más capabilities. Context Monitor es setting native, más simple, más adoptado. Compará.
+
+### Combo con [Context Timeline Hook](/boveda/hook-context-timeline)
+
+Context Monitor en statusline + Timeline en browser separado = visibility total.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Sin python3:** verificá `python3 --version`.
+- **Si querés statusline minimal:** [Colorful Statusline](/boveda/setting-colorful-statusline) es más liviano.
+- **Si ya usás [Claude HUD](/boveda/plugin-claude-hud):** plugin overlap.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Context Monitor Setting](https://www.aitmpl.com/component/settings/statusline/context-monitor) — comando exacto.
+- **Config JSON:** [context-monitor.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/context-monitor.json).
+
+## Recursos relacionados
+
+- [Colorful Statusline Setting](/boveda/setting-colorful-statusline) — el #2 de statusline, más liviano.
+- [Claude HUD Plugin](/boveda/plugin-claude-hud) — alternativa plugin con más capabilities.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización web complementaria.

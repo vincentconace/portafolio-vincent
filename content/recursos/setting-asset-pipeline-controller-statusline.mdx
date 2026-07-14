@@ -1,0 +1,93 @@
+---
+title: "Setting Asset Pipeline Statusline — statusline para asset processing"
+description: "Setting con 84 installs. Statusline custom que monitorea asset pipeline: textures, modelos 3D, audio compression, platform variants. Nicho para game dev y multimedia."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["plugin-claude-hud", "hook-context-timeline", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/asset-pipeline-controller-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/asset-pipeline-controller-statusline.json"
+---
+
+## Qué es
+
+Setting que configura un statusline custom para proyectos con asset pipelines pesados:
+
+- **Texture processing** (compression, format conversion)
+- **Model optimization** (3D meshes, LOD generation)
+- **Audio compression** (ogg, mp3, opus)
+- **Platform-specific variants** (PC vs mobile vs console)
+
+Muestra queue de procesamiento, status actual y métricas.
+
+Nicho: game dev, multimedia apps, AR/VR.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 84 |
+| Setting key | `statusLine` |
+| Foco | Asset processing pipelines |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/asset-pipeline-controller-statusline
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/asset-pipeline-controller-statusline.
+Mostrame el comando que ejecuta para generar el statusline y
+verificá que tengo Python3 disponible (el setting usa python).
+```
+
+## Qué podés hacer con esto
+
+### Visibility de pipeline durante development
+
+Mientras codeás, ves en statusline cuántas textures faltan procesar, qué modelo está optimizándose.
+
+### Para projects con muchos assets
+
+Game dev típicamente tiene cientos de textures + modelos. El statusline te da awareness sin abrir herramientas externas.
+
+### Multi-platform tracking
+
+Si compilás para PC + mobile + Switch, el statusline puede mostrar progress por target.
+
+### Combo con [Context Timeline Hook](/boveda/hook-context-timeline)
+
+Statusline en editor + Context Timeline en browser = doble visibility de lo que pasa.
+
+### Comparado con [Claude HUD](/boveda/plugin-claude-hud)
+
+Claude HUD es genérico (context, tools, todos). Asset Pipeline es nicho game dev. Si tu uso es game dev, este aporta más value.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no hacés game dev / multimedia:** este statusline no tiene caso.
+- **Si tu pipeline está en otro lado** (CI/CD): el statusline puede no reflejarlo.
+- **Solo 84 installs:** muy nicho. Validá implementación.
+- **Para proyectos JS/TS web:** [Claude HUD](/boveda/plugin-claude-hud) es más útil.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Asset Pipeline Statusline Setting](https://www.aitmpl.com/component/settings/statusline/asset-pipeline-controller-statusline) — comando exacto.
+- **Config JSON:** [asset-pipeline-controller-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/asset-pipeline-controller-statusline.json).
+
+## Recursos relacionados
+
+- [Claude HUD Plugin](/boveda/plugin-claude-hud) — statusline genérico más adoptado.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización web complementaria.
+- [Anatomía de Claude](/boveda/anatomia-claude) — configuración base.

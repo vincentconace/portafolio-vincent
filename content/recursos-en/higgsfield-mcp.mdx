@@ -1,0 +1,232 @@
+---
+title: "Higgsfield MCP — generate cinematic image and video from Claude"
+description: "The official connector that brings Higgsfield's models (Seedance 2.0, GPT Images 2.0 and more) inside Claude. The agent builds video and image without leaving the chat — handy for overnight batches, creative A/B testing and automated cinematic production."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude", "mcp", "higgsfield"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["claude-trabajo-creativo", "mcp-server-propio", "andromeda-meta-ads"]
+---
+
+## The idea
+
+Higgsfield released its **official MCP server** that brings its image and video models inside Claude. A single URL, a 3-step install, and Claude can now generate cinematic visual content **without leaving the chat**.
+
+Before: you went to the Higgsfield UI, generated, downloaded, came back to Claude with the assets, and explained what you wanted to do with them. **4 steps, context lost between hops.**
+
+Now: you tell Claude "generate 5 hero variants for my landing page" and it runs the whole cycle inside the session.
+
+The project's thesis:
+
+> *Let your agents build content while you sleep.*
+
+For creators who produce a lot of visual content, the shift is big.
+
+---
+
+## Which models are inside
+
+Via the MCP, Claude has access to:
+
+| Model | What for |
+|--------|----------|
+| **Seedance 2.0** | Cinematic video (realistic motion, physics, complex scenes) |
+| **GPT Images 2.0** | High-quality images, photoreal and stylized |
+| Secondary models | Specialized variants (anime, product shots, motion graphics) |
+
+This isn't "Midjourney stuffed into Claude" — these are **distinct models**, each with its own sensibility. Some shine for video, others for photoreal, others for stylized work.
+
+---
+
+## Setup — 3 steps
+
+<Step number={1} title="Higgsfield account">
+
+Go to [higgsfield.ai](https://higgsfield.ai) and set up an account. You need an active subscription for the MCP to work (generations consume your credits).
+
+Generate an API token from the dashboard. Store it safely.
+
+</Step>
+
+<Step number={2} title="Connect the MCP in Claude">
+
+`.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "higgsfield": {
+      "url": "https://mcp.higgsfield.ai/mcp",
+      "type": "http",
+      "headers": {
+        "Authorization": "Bearer ${HIGGSFIELD_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+In your shell, export the variable:
+
+```bash
+echo 'export HIGGSFIELD_TOKEN="hf_..."' >> ~/.zshrc
+source ~/.zshrc
+```
+
+</Step>
+
+<Step number={3} title="Test it" last>
+
+In Claude:
+
+```
+> List the models available in Higgsfield.
+```
+
+Claude invokes the MCP and returns the current list with their capabilities. If it responds, you're connected.
+
+</Step>
+
+---
+
+## Use cases
+
+### Case 1 — Overnight batch of variants
+
+```
+> I need 12 hero image variants for A/B testing.
+  Product: inventory management SaaS.
+  Audience: mid-sized retail owners in LATAM.
+
+  For each variant I want:
+  - Style: 4 photorealistic, 4 minimalist illustration, 4 with
+    editorial composition
+  - Mood: professional, non-technical, a sense of control
+  - Format: 1920x1080
+
+  Generate the 12 with Higgsfield. Save to /tmp/hero-variants/.
+  For each one add a .txt file with the exact prompt used
+  (to iterate later if one works).
+```
+
+You give it the command before going to sleep. In the morning you have all 12 with their prompts. **4-6 hours of work compressed into 1 invocation.**
+
+### Case 2 — Cinematic video from a brief
+
+```
+> Generate a 15-second video for a Meta Ads ad.
+
+  Product: meditation app.
+  Audience: professionals aged 28-45 with work stress.
+  Hook (first 3 sec): person closing their laptop with an overwhelmed look.
+  Development: gradual shift to calm — posture, expression, background.
+  Close: app open on the phone, person breathing calmly.
+  Mood: editorial, not spammy. Apple Health ads style.
+
+  Use Seedance 2.0. Vertical 9:16. No text overlay — to add in post.
+```
+
+Claude passes the brief to the video model, returns the result, and you review it and tweak the prompt if needed. **Video iteration in 1 continuous chat** instead of hopping between apps.
+
+### Case 3 — Consistent production system
+
+You load a brand guide into Claude (colors, tone, references). Then you ask:
+
+```
+> Generate the 5 visuals I need for the Q3 campaign, respecting
+  the brand guide I loaded.
+
+  1. Landing hero
+  2. LinkedIn banner (1584x396)
+  3. Instagram square post
+  4. Story 9:16
+  5. Email header (600x200)
+
+  A single visual variant but adapted to each format.
+  Generate with Higgsfield. Output to /tmp/campania-q3/.
+```
+
+Every output respects the brand. No visual ends up off-brand.
+
+### Case 4 — Iteration with feedback
+
+```
+> I generated this hero yesterday (see /tmp/hero-v1.png). The client told me
+  it lacks "warmth" and that the person looks "too serious".
+
+  Generate v2 with those adjustments. Keep the composition and main colors,
+  change the person's expression and add warm tones to the background.
+```
+
+The iteration loop with the client drops from days to hours.
+
+---
+
+## Anti-patterns
+
+### 1. Generating giant batches with no criteria
+
+100 random variants solve nothing. Before generating, **decide what you're exploring** (styles, angles, moods) and cap it at 8-12 per exploration.
+
+### 2. Expecting perfection on the first prompt
+
+Like any generative model, it takes **iteration**. The first batch is for finding direction. The 3rd-4th batch is usually the good one.
+
+### 3. Not saving the winning prompts
+
+When a variant works, **the prompt is a brand asset**. Save it in a doc (or a skill) to replicate the style later on.
+
+### 4. Using it for every kind of image
+
+Higgsfield shines at cinematic and photoreal. For UI icons, technical illustrations, diagrams — use other, more specific tools (Figma, Excalidraw, etc.).
+
+---
+
+## When this pattern is worth it
+
+✅ You produce visual content regularly (weekly+)
+✅ You need A/B testing with many variants
+✅ Your workflow already runs through Claude/Cowork — adding visual content is natural
+✅ You accept the cost of Higgsfield credits
+
+❌ An occasional image → Midjourney/web is enough
+❌ Conceptual work where you need to explore visually yourself first
+❌ Production under strict regulation (you need granular traceability of each asset)
+
+---
+
+## The ROI math
+
+For creators / agencies / marketers:
+
+| Typical task | By hand | With MCP |
+|--------------|--------|---------|
+| 10 hero variants for A/B | 4-6 hours | 30-60 min + credits |
+| Hero + adaptations (5 formats) | 6-8 hours | 1-2h + credits |
+| 15s video from a brief | 2-4 days (hiring) | 1-2h |
+
+**Main variable**: Higgsfield credits. For intensive production, it's worth carefully calculating whether the paid plan pays off vs the value delivered.
+
+---
+
+## The general pattern
+
+Higgsfield + Claude is **one instance of the "creative generation MCP" pattern**. The same principle applies to:
+
+| MCP | What for |
+|-----|----------|
+| Higgsfield | Cinematic image + video |
+| ElevenLabs (potential) | Audio + voiceovers |
+| Suno (potential) | Music |
+| Local Stable Diffusion | Image without paid credits |
+
+Each with its own sensibility. Same flow: Claude orchestrates, the specialized model executes.
+
+---
+
+## Next steps
+
+- For integration with more established creative apps (Adobe, Blender, Ableton), [Claude for creative work](/boveda/claude-trabajo-creativo)
+- To use what you generate in Meta Ads campaigns systematically, [Andromeda — 8 rules for Meta Ads](/boveda/andromeda-meta-ads)
+- To understand MCPs in general, [your own MCP server](/boveda/mcp-server-propio)

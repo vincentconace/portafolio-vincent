@@ -1,0 +1,77 @@
+---
+title: "MCP GitHub Official — the 'official' version of the GitHub MCP in the catalog"
+description: "MCP server tagged as 'github-official' on aitmpl. Functionally similar to the popular [GitHub Integration](/boveda/mcp-github-integration), but with fewer installs (84). Compare before deciding which one to install."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "github"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-github-integration", "anthropic-github", "claude-codex-equipo"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/github-official"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/github-official.json"
+---
+
+## What it is
+
+The "github-official" variant of the GitHub MCP in the aitmpl catalog. The inline description is terse ("GitHub") and the concrete details live in the [JSON config](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/github-official.json).
+
+The natural question: how does it differ from the more popular [GitHub Integration](/boveda/mcp-github-integration) (2,867 installs vs 84)? The main difference is which MCP server implementation it uses under the hood — the catalog lists both as separate entries.
+
+For practical use: if you're starting from scratch, [GitHub Integration](/boveda/mcp-github-integration) has more adoption and almost certainly more community maintenance. This "official" variant is here in case you have a preference for a specific implementation that the JSON reveals.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `devtools` |
+| Installs | 84 |
+| MCP server | `github-official` |
+| Key difference | Different implementation vs [github-integration](/boveda/mcp-github-integration) |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp devtools/github-official
+```
+
+Prerequisites: a GitHub Personal Access Token.
+
+For Claude:
+
+```
+I installed the devtools/github-official MCP. Show me which tools it exposes vs
+what github-integration would expose, so I can tell whether one is worth using
+over the other.
+```
+
+## What you can do with it
+
+The same as with [GitHub Integration](/boveda/mcp-github-integration): read repos, manage issues and PRs, releases, search. The difference, again, lies in what exactly each MCP exposes and how it implements it.
+
+For concrete use cases, check the examples in [GitHub Integration MCP](/boveda/mcp-github-integration) — they apply almost 1:1.
+
+## Prerequisites
+
+- **GitHub account** + Personal Access Token with the right scopes.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you already have `github-integration` installed:** don't install both. Names and tools will collide.
+- **Without clear info on the difference:** the description on aitmpl is generic. If your case is standard, [GitHub Integration](/boveda/mcp-github-integration) (more widely adopted) is the safe option.
+- **Only 84 installs:** far fewer people in the community testing it than the integration version. Issues may be less visible.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [GitHub Official MCP](https://www.aitmpl.com/component/mcps/devtools/github-official) — exact command.
+- **JSON config:** [github-official.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/github-official.json) — the source of truth for understanding which implementation it uses.
+
+## Related resources
+
+- [GitHub Integration MCP](/boveda/mcp-github-integration) — the version with 2,867 installs. Probably the one you want.
+- [Anthropic GitHub](/boveda/anthropic-github) — to complement it with Anthropic's official templates.
+- [Claude + Codex as a team](/boveda/claude-codex-equipo) — a relevant cross-tool pattern when both models operate on the same repo.

@@ -1,0 +1,363 @@
+---
+title: "JARVIS en Obsidian — segundo cerebro con Claude que escribe en tu voz"
+description: "Cómo construir un segundo cerebro real: Obsidian + Claude Code + 4 skills + un ritual diario de 20 min. Captura sin fricción, conexiones cruzadas entre notas y output en tu voz después de ~30 días. La arquitectura completa, no la versión 'instalá esto y listo'."
+difficulty: "avanzado"
+category: "skills"
+tools: ["claude-code", "obsidian"]
+publishedAt: "2026-05-27"
+readingTime: "16 min"
+relatedSlugs: ["claude-obsidian", "memoria-claude-code", "memory-palace-agentes"]
+---
+
+## La diferencia con un "asistente"
+
+Tony Stark no construyó JARVIS en un día. JARVIS no era un chatbot — era un sistema que **conocía a Tony**: sus prioridades, su forma de pensar, sus preferencias, su contexto histórico. Anticipaba.
+
+La diferencia con un chatbot:
+
+| Chatbot | JARVIS |
+|---------|--------|
+| Cada conversación empieza de cero | Sabe quién sos, qué hiciste ayer |
+| Responde lo que le preguntás | Anticipa lo que probablemente necesitás |
+| Genérico — habla como Claude | Escribe en tu voz |
+| Vive en una pestaña separada | Vive donde vos guardás info |
+
+Construir esto en serio toma **~30 días de uso disciplinado**, no "5 min y listo". Esta guía es el setup base. El sistema empieza a sorprenderte después de un mes.
+
+---
+
+## Las piezas
+
+| Pieza | Para qué |
+|-------|----------|
+| **Obsidian (vault local)** | Tu base de conocimiento — archivos markdown en tu disco |
+| **Claude Code** | El motor que lee/escribe el vault |
+| **4 skills custom** | Captura, conexión, brief, voice writer |
+| **Ritual diario de 20 min** | Lo que hace que el sistema realmente aprenda tu contexto |
+
+Todo corre con tu suscripción de Claude Pro/Max — **sin API key extra**, sin nubes paralelas. Tu vault vive en tu disco.
+
+---
+
+## Arquitectura del vault
+
+La estructura importa más de lo que parece. Una mala arquitectura → Claude se pierde.
+
+```
+~/Documents/jarvis-vault/
+├── 00-inbox/              ← captura cruda, sin clasificar
+├── 01-permanente/         ← conocimiento estable, conectado
+│   ├── conceptos/
+│   ├── proyectos/
+│   ├── personas/
+│   └── decisiones/
+├── 02-diario/             ← 1 archivo por día YYYY-MM-DD.md
+├── 03-output/             ← lo que el sistema produce para vos
+│   ├── briefs/
+│   ├── drafts/
+│   └── reportes/
+├── 04-voz/                ← tu corpus para que Claude aprenda tu voz
+│   └── ejemplos/
+└── CLAUDE.md              ← el manual del sistema
+```
+
+**Reglas de la arquitectura**:
+
+- `inbox/` es desechable — todo entra acá primero
+- `permanente/` es lo que vale para futuro yo — las notas que volvés a leer
+- `diario/` es histórico — qué pasó ese día
+- `output/` es lo que el sistema te entrega — separado para no confundir con tus notas
+- `voz/` son ejemplos de cómo escribís — Claude aprende de ahí
+
+---
+
+## El `CLAUDE.md` del sistema
+
+Lo más crítico. Esto es lo que define el "JARVIS" — su comportamiento, sus prioridades, su forma de operar.
+
+Estructura mínima:
+
+```markdown
+# JARVIS Vault
+
+## Quién soy
+[2-3 líneas: tu rol, tu industria, en qué fase de carrera estás]
+
+## Qué estoy haciendo actualmente
+[Proyectos activos, foco principal del trimestre]
+
+## Mi voz al escribir
+- Tono: [directo / cálido / sarcástico / formal / etc.]
+- Voseo / tuteo: [voseo argentino]
+- Palabras que SÍ uso: [...]
+- Palabras que NO uso: [...]
+- Estructura: [empiezo con punch line / construyo a contexto / etc.]
+- Referencias: [estilo Maciej Cegłowski / estilo Paul Graham / etc.]
+
+## Cómo opero
+- Decisiones importantes → docs en permanente/decisiones/ con fecha
+- Aprendizajes nuevos → permanente/conceptos/
+- Personas que aparecen seguido → permanente/personas/`[nombre].md`
+- Reuniones / interacciones → diario/`[fecha].md`
+
+## Comportamiento esperado del sistema
+- Al capturar info nueva, identificar si conecta con notas existentes
+- Antes de "guardar" duplicar, BUSCAR primero si existe relacionada
+- Si encontrás contradicción con nota previa, decímelo (no la pisés silenciosamente)
+- En outputs (briefs, drafts), USAR mi voz (consultar 04-voz/ejemplos/)
+- Después de cada sesión, sugerir 1-2 conexiones cruzadas no obvias
+```
+
+Editás esto a lo largo del primer mes a medida que descubrís qué falta.
+
+---
+
+## Las 4 skills
+
+### Skill 1 — capture
+
+Para que cualquier "anótame esto" se guarde bien:
+
+```markdown
+---
+name: capture
+description: Captura algo en el vault. Activate con "anotame", "guardá",
+  "registrá", "capturá", "para futuro yo".
+---
+
+# Capture
+
+Cuando el usuario pida capturar algo:
+
+1. Pensá qué es: ¿concepto? ¿decisión? ¿persona? ¿proyecto?
+2. Buscá si ya existe nota relacionada en `01-permanente/`
+3. Si existe → **actualizar** (no duplicar)
+4. Si no existe → crear en la subcarpeta correcta con `[[wikilinks]]`
+   a notas relacionadas
+5. Mostrame resumen: archivo, sección, cambios
+
+Si no estás seguro a dónde va, ponelo en `00-inbox/` y avísame para
+clasificar después.
+
+NO uses tags. Usá wikilinks.
+NO mezcles capturas con docs producidos. Estos van en permanente, los
+docs producidos en output.
+```
+
+### Skill 2 — connect
+
+Para que el grafo de conocimiento crezca:
+
+```markdown
+---
+name: connect
+description: Busca conexiones cruzadas en el vault. Activate cuando
+  preguntemos por un tema o cuando termine una sesión.
+---
+
+# Connect
+
+Cuando se mencione un tema:
+
+1. Buscá todas las notas en el vault que mencionen el tema (grep)
+2. Identificá las 3-5 más relevantes
+3. Devolveme las conexiones interesantes (no obvias)
+4. Si alguna conexión te sorprende, marcala explícitamente
+
+Cuando termine una sesión:
+
+1. Releé las notas modificadas en la sesión
+2. Identificá 1-2 conexiones no obvias entre ellas
+3. Sugerime si quiero hacer wikilinks nuevos
+```
+
+### Skill 3 — brief
+
+Para que cada mañana arranques con contexto:
+
+```markdown
+---
+name: brief
+description: Genera el brief del día. Activate cada mañana o cuando
+  pida "brief", "qué hay hoy", "preparame el día".
+---
+
+# Brief
+
+Producir brief en `03-output/briefs/`[fecha].md`` con:
+
+## Foco del día
+[Mirá proyectos activos + qué quedó abierto ayer en diario/]
+
+## Lo importante
+[Top 3 cosas que hoy podrían mover la aguja]
+
+## Pendientes
+[Lo no cerrado de los últimos 3 días]
+
+## Personas que esperan algo de mí
+[Notas en personas/ con "pendiente_mio: true" o equivalente]
+
+## Sugerencia
+[1 cosa que noté que vale la pena hacer pero no te dije]
+```
+
+### Skill 4 — voice-writer
+
+La más sutil — escribir en tu voz:
+
+```markdown
+---
+name: voice-writer
+description: Genera contenido en mi voz. Activate cuando pida draft,
+  reescribime, escribime un email, post, thread, etc.
+---
+
+# Voice Writer
+
+Antes de generar:
+1. LEÉ 3 ejemplos al azar de `04-voz/ejemplos/`
+2. Identificá mi tono, ritmo, estructura, palabras favoritas
+
+Cuando escribas:
+- Usá MI estructura (no la default de Claude)
+- Mantené las palabras que YO uso
+- Evitá: jerga corporativa, "Importante destacar", "En conclusión",
+  emojis a menos que sean parte de mi voz, listas vacías
+- Si vas a usar una metáfora, mirá si yo uso metáforas — si no,
+  no metas
+
+Después de generar:
+- Pregúntate: "¿esto suena a [mi nombre]?"
+- Si no, reescribilo antes de mostrarme
+```
+
+---
+
+## El ritual diario de 20 minutos
+
+Sin esto, el sistema **no aprende**. Las skills sin ritual son inertes.
+
+### Mañana (10 min)
+
+```
+[Abrís Claude Code en el vault]
+> /brief
+[Leés el brief que generó, decidís foco real]
+
+> Capturá lo que decidí: hoy el foco es X porque Y.
+```
+
+Claude genera el brief, vos lo leés/ajustás, y queda registrado lo que decidiste hacer.
+
+### Durante el día (captura continua)
+
+Cuando algo merece guardarse:
+
+```
+> capturá: el cliente Acme me dijo que el problema X que tenían
+  con Stripe lo resolvieron migrando a Y. Razón: latencia.
+```
+
+Claude lo guarda en `personas/acme.md` o donde corresponda, con wikilinks.
+
+### Tarde / cierre (10 min)
+
+```
+> Cerrá el día. Resumime qué pasó hoy, qué se cumplió, qué quedó
+  abierto. Anotalo en diario/.
+
+> Buscá conexiones cruzadas entre las notas que modifiqué hoy y
+  el resto del vault.
+```
+
+Claude genera el cierre del día + sugiere conexiones. **Las conexiones son el oro** — relaciones que vos no habrías notado.
+
+---
+
+## Los 4 plugins recomendados de Obsidian
+
+Sin entrar en detalle profundo (no es una guía de Obsidian), los plugins que más aportan a este setup:
+
+| Plugin | Para qué |
+|--------|----------|
+| **Templater** | Templates para notas nuevas (diario, persona, decisión) |
+| **Dataview** | Queries sobre tu vault (ej. "personas con pendiente_mio: true") |
+| **Periodic Notes** | Auto-crear el archivo diario/`[fecha].md` |
+| **Excalidraw** (opcional) | Para diagramas, mapas mentales que Claude no genera |
+
+Sin ellos el sistema funciona. Con ellos, el quality of life sube.
+
+---
+
+## Cómo crece después del día 30
+
+Lo interesante no es el día 1. Es el día 30.
+
+A los 30 días tu vault tiene:
+- ~30 notas diarias con contexto real
+- ~50-100 notas permanentes acumuladas
+- ~20-40 personas con su historial
+- ~10+ decisiones documentadas
+
+En ese punto, **Claude empieza a ser útil de verdad**:
+
+```
+> Necesito decidir si contratamos a este vendor nuevo.
+
+Claude:
+  Antes de decidir, mirá:
+  - decisiones/2026-03-12-vendor-anterior.md (criterios que usaste antes)
+  - personas/juan-vendor-actual.md (tu relación con el vendor actual,
+    incluye que prometió cosas y no cumplió)
+  - permanente/conceptos/criterios-evaluacion-vendors.md (framework que
+    armaste en febrero)
+
+  Basado en eso, te sugiero estos 3 criterios duros y 2 blandos para
+  comparar el nuevo vendor.
+```
+
+Eso no sale de un chatbot. Sale de un sistema que **conoce tu contexto**.
+
+---
+
+## Anti-patrones
+
+### 1. Esperar magia el día 1
+
+Sin 30 días de captura, el sistema es solo Claude+Obsidian básico. **La inversión es tiempo**, no setup.
+
+### 2. Capturar todo sin curar
+
+Si capturás 50 cosas al día sin pensar, el vault se vuelve basura. Capturá **lo que vale para futuro yo**, no todo.
+
+### 3. No actualizar las skills
+
+A medida que descubrís cómo querés operar, **editás las skills**. El SKILL.md no es para siempre — es para esta versión de vos.
+
+### 4. Confiar en la voz al 100% antes de tiempo
+
+`voice-writer` necesita 20-30 ejemplos buenos en `04-voz/` para funcionar bien. Antes de eso, va a sonar parcialmente a Claude.
+
+### 5. Sin ritual
+
+Skills + Obsidian sin ritual diario = sistema muerto. **El ritual es lo que lo mantiene vivo**.
+
+---
+
+## Cuándo no vale la pena
+
+- Si no tenés disciplina para 20 min/día sostenido durante un mes
+- Si no escribís nada en general (no hay corpus para aprender voz)
+- Si tu trabajo no requiere recordar contexto histórico
+- Si pensás que es "automatización" — es **sistema vivo**, requiere participación
+
+Para quien sí tiene el perfil, es una de las inversiones de mayor ROI de IA personal.
+
+---
+
+## Próximos pasos
+
+- Para la versión más simple sin el setup completo, [Claude + Obsidian](/boveda/claude-obsidian)
+- Para entender memoria persistente en general, [memoria infinita para Claude Code](/boveda/memoria-claude-code)
+- Si vas a tener varios agentes coordinándose sobre la memoria, [Memory Palace](/boveda/memory-palace-agentes)

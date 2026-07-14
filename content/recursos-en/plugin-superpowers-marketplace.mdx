@@ -1,0 +1,135 @@
+---
+title: "Superpowers Marketplace — a curated collection by obra with 9 powerful plugins"
+description: "obra's plugin marketplace (747⭐) with 9 curated plugins: superpowers (TDD + debugging + collab), Chrome DevTools direct, episodic memory, Strunk Jr style, session driver, double-shot-latte (anti 'continue?') and more."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["memoria-claude-code", "goal-claude-code", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/superpowers-marketplace"
+github: "https://github.com/obra/superpowers-marketplace"
+---
+
+## What it is
+
+Superpowers Marketplace is the personal curation of **obra** (Jesse Vincent, a well-known figure in the Anthropic ecosystem). It's small (9 plugins) but each one is carefully thought out and maintained. The style is "what I use every day." Since the original Superpowers (also in this marketplace) is included in Anthropic's [Claude Plugins Official](/boveda/plugin-claude-plugins-official), this marketplace is where you'll find the more recent versions and the experimental siblings.
+
+The 9 plugins:
+- `superpowers` — the core: TDD + debugging + collaboration patterns
+- `superpowers-chrome` — direct Chrome DevTools Protocol (BETA)
+- `episodic-memory` — semantic memory across sessions
+- `elements-of-style` — clear writing based on Strunk Jr. (1918)
+- `superpowers-lab` — experimental: tmux automation, MCP discovery, Slack, headless Windows VM
+- `superpowers-developing-for-claude-code` — for building plugins/skills/MCPs
+- `superpowers-dev` — DEV branch (don't install alongside other versions)
+- `claude-session-driver` — control other Claude Code sessions as workers via tmux
+- `double-shot-latte` — eliminates "Would you like me to continue?"
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | obra (Jesse Vincent) |
+| Stars | 747 |
+| Type | Marketplace (9 plugins) |
+| Components | commands, mcps, skills |
+| Marketplace | `obra/superpowers-marketplace` |
+
+### The plugins explained
+
+| Plugin | What it's for |
+| --- | --- |
+| `superpowers` | TDD red/green, systematic debugging, collab patterns, brainstorming, subagent dev — the core |
+| `superpowers-chrome` | Direct Chrome DevTools Protocol. Skill (17 CLI commands) + MCP (`use_browser`). Zero deps, auto-start Chrome. BETA |
+| `elements-of-style` | Strunk Jr. rules (1918) for clear, concise, grammatically correct writing |
+| `episodic-memory` | Semantic search of past conversations. Memory across sessions |
+| `superpowers-lab` | Experimental: tmux automation for interactive CLIs, MCP server discovery, duplicate function detection, Slack messaging, headless Windows VM |
+| `superpowers-developing-for-claude-code` | Skills + official docs + self-update for developing plugins, skills, MCP servers and extensions |
+| `superpowers-dev` | DEV branch. You MUST uninstall other versions first |
+| `claude-session-driver` | Launch, control and monitor other Claude Code sessions as workers via tmux |
+| `double-shot-latte` | Eliminates "Would you like me to continue?" interruptions. Claude decides on its own whether to keep going |
+
+## How to install it
+
+```bash
+# 1) Marketplace
+/plugin marketplace add obra/superpowers-marketplace
+
+# 2) Core + 2-3 that suit you
+/plugin install superpowers@obra-superpowers-marketplace
+/plugin install episodic-memory@obra-superpowers-marketplace
+/plugin install double-shot-latte@obra-superpowers-marketplace
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+I installed obra/superpowers-marketplace. I want to start with the core
+(superpowers) plus 2-3 more. My main use case is [TDD / browser automation /
+autonomous loops / etc.]. Recommend which ones and in what order.
+```
+
+## What you can do with this
+
+### Automatic TDD red/green
+
+`superpowers` brings the full TDD red/green pattern: you write the expected behavior, Claude generates the failing test (red), then implements until it passes (green). It's the author's opinionated version.
+
+### Brainstorming + systematic debugging
+
+The plugin proposes specific patterns: when you start something new, guided brainstorming; when something breaks, debugging with hypotheses + verification, not "let's try stuff."
+
+### Chrome direct with no middlemen
+
+`superpowers-chrome` gives you direct CDP (Chrome DevTools Protocol). Lower level than Playwright. For tasks where you need fine-grained browser control without Playwright's abstractions. BETA: lightly tested, use with judgment.
+
+### Semantic memory across sessions
+
+`episodic-memory` indexes your past conversations with semantic search. When you ask for "what we discussed about X last week," it retrieves the relevant context. Compare it with [Claude Mem](/boveda/plugin-claude-mem) — they're different approaches to the same problem.
+
+### Writing that respects the classics
+
+`elements-of-style` applies Strunk Jr.'s rules when Claude writes. Result: more concise docs, READMEs, and copy. If "inflated AI language" bothers you, this plugin is an ally.
+
+### Claude workers controlled via tmux
+
+`claude-session-driver` lets you launch other Claude Code sessions as workers that you control from a master session. Multi-agent with real sessions, not simulated agents.
+
+### Goodbye to "Would you like me to continue?"
+
+`double-shot-latte` eliminates the interruptions where Claude asks whether to keep going. The plugin itself evaluates whether continuing makes sense and decides. For long autonomous sessions, it removes friction.
+
+## Real benefits
+
+- **Curated by a trustworthy figure** (obra) with a presence in the Anthropic ecosystem.
+- **9 focused plugins** — each one has a clear purpose.
+- **`double-shot-latte` solves a real pain point** that other plugins don't address.
+- **`superpowers-chrome` with direct CDP** — a low-level alternative to Playwright.
+- **`episodic-memory` with semantic search** — a serious option against Claude Mem.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **`superpowers-chrome` is marked BETA** — use it with judgment in serious code.
+- **`superpowers-dev` requires uninstalling other versions** first. Version conflicts.
+- **`double-shot-latte` can lead to very long runs**: if Claude always decides to continue, you can burn through tokens without realizing it. Set a cap.
+- **`claude-session-driver` requires tmux** installed and working. It doesn't work well on native Windows.
+- **Overlap between `episodic-memory` vs `claude-mem` vs native memory:** first evaluate what native memory already covers before layering on one or both.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Superpowers Marketplace](https://www.aitmpl.com/plugins/superpowers-marketplace) — all 9 plugins.
+- **Repo on GitHub:** [obra/superpowers-marketplace](https://github.com/obra/superpowers-marketplace) — code, issues.
+
+## Related resources
+
+- [Claude Code Memory](/boveda/memoria-claude-code) — the native memory. Compare it with `episodic-memory` before choosing.
+- [/goal — the goal Claude won't let go of](/boveda/goal-claude-code) — combo with `double-shot-latte` for autonomous sessions without interruptions.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — good practices that complement the `superpowers` patterns (TDD, debugging).

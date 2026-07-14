@@ -1,0 +1,115 @@
+---
+title: "Compound Engineering — Every Inc.'s methodology as a Claude Code plugin"
+description: "Official Every Inc. plugin (11k⭐) that brings the 'Compound Engineering' philosophy into Claude Code: each unit of work makes the next one easier. 2 plugins, 41 skills, 6 agents, 1 MCP."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["claude-codex-equipo", "agency-agents", "aprende-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/compound-engineering-plugin"
+github: "https://github.com/EveryInc/compound-engineering-plugin"
+---
+
+## What it is
+
+Every Inc. is a media company that writes about applied AI. One of its best-known theses is "Compound Engineering" — the idea that each unit of engineering work should make the next one easier. Not just shipping the feature; shipping the feature **and** clearing the path for what comes next.
+
+This plugin brings that philosophy down to concrete operations inside Claude Code. The main plugin (`compound-engineering` by Kieran Klaassen) ships 41 skills and 6 agents focused on building "skills that teach Claude to do the next similar tasks better." It's meta-tooling: you use Claude to improve how Claude works.
+
+The second plugin (`coding-tutor` by Nityesh Agarwal) uses the same principle to teach you: personalized tutorials that use your real codebase as the example, with spaced repetition.
+
+It works in Claude Code, Codex and more.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | EveryInc (Every Inc.) |
+| Stars | 11k |
+| Type | Marketplace (2 plugins) |
+| Components | 42 skills, 6 agents, 1 MCP, 3 commands |
+| Marketplace | `EveryInc/compound-engineering-plugin` |
+| Official guide | [every.to/guides/compound-engineering](https://every.to/guides/compound-engineering) |
+
+### The 2 plugins
+
+| Plugin | Author | What it's for |
+| --- | --- | --- |
+| `compound-engineering` | Kieran Klaassen | 41 skills + 6 agents + 1 MCP so each task makes the next one easier |
+| `coding-tutor` | Nityesh Agarwal | Personalized tutorials with your real codebase, spaced repetition, quizzes |
+
+## How to install it
+
+```bash
+# 1) Marketplace
+/plugin marketplace add EveryInc/compound-engineering-plugin
+
+# 2) Install one or both
+/plugin install compound-engineering@EveryInc-compound-engineering-plugin
+/plugin install coding-tutor@EveryInc-compound-engineering-plugin
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install compound-engineering-plugin from the EveryInc marketplace. Then read
+the philosophy at every.to/guides/compound-engineering and show me the 3
+most representative use cases of the compound-engineering plugin.
+```
+
+## What you can do with it
+
+### Make each task lower the friction of the next
+
+The compound pattern is: you build the feature, but you also capture the learnings in a new skill, update `CLAUDE.md` with what you discovered, leave a command that others can reuse. The next time something similar comes up, it's already half-solved.
+
+### Turn repeated patterns into skills
+
+`compound-engineering` helps you spot when you're doing something for the third time and package it as a skill so Claude does it on its own in the future. Compare it with [crea-claude-skills](/boveda/crea-claude-skills) — Compound Engineering is the ongoing philosophy, "Crea Claude Skills" is the one-off pattern.
+
+### Tutorials that use your own codebase
+
+`coding-tutor` doesn't show you generic examples. It takes your repo, identifies a concept you want to learn (for example "how hooks work in this project") and builds the tutorial using your real code. With spaced-repetition quizzes so it doesn't slip away.
+
+### Improve the team's setup, not just your own
+
+The skills you leave in `compound-engineering` are shareable. If you work in a team and everyone uses Claude Code, what one person learns becomes available to all.
+
+### Philosophy applied, not just preached
+
+Every writes a lot about this. The plugin is the "show, don't tell" version. If the idea resonates but you don't know how to apply it, the plugin gives you the rails.
+
+## Real benefits
+
+- **11k stars** — the philosophy has real traction, it's not marketing.
+- **Skills shareable across projects** — the "compound" works cross-repo too.
+- **`coding-tutor` is unique** — there's nothing equivalent that uses your real codebase.
+- **Works cross-tool** (Claude Code, Codex) — you're not locked in.
+- **Accessible official guide** ([every.to](https://every.to/guides/compound-engineering)) — the theory is well explained.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **If your usage is one-shot:** Compound Engineering shines on continuous work on the same project. For isolated tasks it doesn't add as much.
+- **If you don't have a culture of capturing learnings:** the plugin is about capturing and packaging. If your team isn't like that, the generated skills will go unused.
+- **`coding-tutor` consumes tokens:** spaced repetition + quizzes over your codebase = lots of calls. Watch your quota.
+- **It's not a shortcut:** capturing learnings takes extra work. The investment pays off after several sessions, not on the first one.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Compound Engineering Plugin](https://www.aitmpl.com/plugins/compound-engineering-plugin) — both plugins.
+- **GitHub repo:** [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) — code, issues.
+- **Official guide:** [every.to/guides/compound-engineering](https://every.to/guides/compound-engineering) — the full philosophy explained by Every.
+
+## Related resources
+
+- [Aprende Skill](/boveda/aprende-skill) — the first step if you're just getting what a skill is. Compound Engineering assumes you already have that down.
+- [Agency Agents](/boveda/agency-agents) — to tell the plugin's 6 agents apart from the agents in other marketplaces.
+- [Claude + Codex on a team](/boveda/claude-codex-equipo) — Compound Engineering works in both; this resource gives the cross-tool context.

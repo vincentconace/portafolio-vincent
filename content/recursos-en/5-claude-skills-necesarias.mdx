@@ -1,0 +1,210 @@
+---
+title: "5 Essential Claude Skills — search, connect, browse, audit, design"
+description: "A combo of 5 skills (Vercel Labs + Anthropic) that close the full Claude Code loop. find-skills is the meta-skill that installs the other 4 for you. After that: mcp-builder connects APIs, agent-browser navigates the web, web-design-guidelines audits design, frontend-design generates with style."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["agent-browser", "5-skills-equipo-trabajo", "creador-de-habilidades"]
+---
+
+## The combo
+
+Claude Code starts out powerful but **it's missing hands**. These 5 skills fill the gaps: finding what's missing, connecting to your tools, getting onto the internet, auditing, and designing.
+
+The key thing: the first one, **find-skills**, is a meta-skill. Once installed, the other 4 get installed **for you** from within Claude — you don't have to search GitHub anymore.
+
+| # | Skill | Role | Team |
+|---|-------|-----|--------|
+| 01 | find-skills | Searches | Vercel Labs |
+| 02 | mcp-builder | Connects | Anthropic |
+| 03 | agent-browser | Navigates | Vercel Labs |
+| 04 | web-design-guidelines | Audits | Vercel Labs |
+| 05 | frontend-design | Designs | Anthropic |
+
+---
+
+## 01 — find-skills (the meta-skill)
+
+### What it does
+
+You tell it in plain language "I need something to audit my design" or "I want to connect Claude to Notion" and it dives into the skills.sh catalog, finds the one that fits, and installs it.
+
+### Why it goes first
+
+It's the **gateway** to the rest. Without it, you install the other 4 by hand, one at a time. With it, you just tell Claude and you're done.
+
+### Installation (the only manual one)
+
+```bash
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+---
+
+## 02 — mcp-builder (connect APIs)
+
+### What it does
+
+You describe a tool or API you use and it builds the MCP server that connects Claude to it. It supports Python and TypeScript, and walks you through 4 phases: research, build, review, test.
+
+### Honesty
+
+You don't write the server code yourself, **but there is code** — Claude writes it from your description. The skill knows how to do it right.
+
+### Installation
+
+```bash
+npx skills add https://github.com/anthropics/skills --skill mcp-builder
+```
+
+Or `/plugin marketplace add anthropics/skills` if you prefer the plugin.
+
+---
+
+## 03 — agent-browser (Claude's eyes)
+
+### What it does
+
+It gives Claude a **real browser**: it visits pages, clicks, pulls info, and tests your site like a person.
+
+### The technical trick
+
+Instead of sending full screenshots (expensive), it builds a numbered menu of buttons/links and sends only that. It uses **up to 10x fewer tokens** than Claude for Chrome or Playwright.
+
+| Tool | Tokens per action |
+|------|-------------------|
+| Claude for Chrome | ~3,000 |
+| Playwright | ~3,000 |
+| agent-browser | ~300 |
+
+### Installation
+
+```bash
+npx skills add https://github.com/vercel-labs/agent-browser
+```
+
+See [Agent Browser](/boveda/agent-browser) for the full guide.
+
+---
+
+## 04 — web-design-guidelines (auditor)
+
+### What it does
+
+It takes over 100 of Vercel's design rules (accessibility, performance, typography, focus, responsive) and **reviews your page**. It tells you what's wrong.
+
+### Important
+
+**It does NOT design**. It's a reviewer, not a generator. The one that designs is #5.
+
+### Installation
+
+```bash
+npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines
+```
+
+---
+
+## 05 — frontend-design (kills the AI look)
+
+### What it does
+
+It brings aesthetic directions with pre-paired typography (minimalist, brutalist, retro-futurist, editorial) and pushes Claude to actually pick one **for real** instead of the generic default.
+
+### Why it matters
+
+It dodges the telltale signs of AI: overused fonts, cliché purple gradients, cookie-cutter layouts. Your page stops looking "machine-made".
+
+### Installation
+
+```bash
+npx skills add https://github.com/anthropics/claude-code --skill frontend-design
+```
+
+---
+
+## The easy route — find-skills installs the rest
+
+After installing find-skills, paste this into Claude Code:
+
+```
+I have find-skills installed. Use it to find and install these 4 skills, one by one, confirming each installation:
+
+1. mcp-builder (Anthropic) — MCP servers
+2. agent-browser (Vercel) — real browser
+3. web-design-guidelines (Vercel) — design audit
+4. frontend-design (Anthropic) — visual styles
+
+For each one: search the catalog, show me the command, install it, verify. If any of them doesn't show up, tell me. Don't make up names.
+```
+
+---
+
+## The flow in order
+
+```
+1. SEARCH     → find-skills brings you what you need
+2. CONNECT    → mcp-builder links Claude with your tools
+3. NAVIGATE   → agent-browser gets onto the web
+4. AUDIT      → web-design-guidelines reviews
+5. DESIGN     → frontend-design generates with judgment
+```
+
+You ask for a page → Claude builds it → tests it in the browser → audits it → and leaves it with style. All in the same thread.
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 5 on day one
+
+Every skill adds context that Claude reads. If you're just starting out, **install find-skills on its own** and let it bring you the rest when you need them.
+
+### 2. You don't code or touch the web
+
+If you use Claude only to write or research, the two design skills and agent-browser are **overkill for you**. find-skills on its own is enough.
+
+### 3. A one-off task today
+
+For a 5-minute task ("read this link and summarize it for me"), don't download the full combo.
+
+### 4. You already have your set dialed in
+
+If you know exactly what you use, don't load skills just to load them. Each one is **extra context** in every response.
+
+---
+
+## Powerful combinations
+
+### With [skill creator](/boveda/creador-de-habilidades)
+
+find-skills searches for what exists. Skill Creator **builds you a new one** if there isn't one.
+
+### With [Claude Code setup](/boveda/instalar-claude-code)
+
+First the base setup, then this combo.
+
+### With [5 skills for your team](/boveda/5-skills-equipo-trabajo)
+
+Another curated combo, complementary.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You just installed Claude Code | Get familiar with the basics first |
+| You don't touch web design | The 2 UI ones don't apply |
+| You already have your set | Don't load skills just to load them |
+| Team with restrictions | Check your policies before installing |
+
+---
+
+## Next steps
+
+- For the deep dive on #3, [Agent Browser](/boveda/agent-browser)
+- To create your own skills, [skill creator](/boveda/creador-de-habilidades)
+- For another combo of 5, [5 skills for your team](/boveda/5-skills-equipo-trabajo)

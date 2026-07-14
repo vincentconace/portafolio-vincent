@@ -1,0 +1,253 @@
+---
+title: "5 skills that change everything — Claude without apps is a phone without apps"
+description: "The 5 core skills every Claude user should have. Skill Creator (the factory), Humanize It (kills the AI tone), Marketing Skills (40+ tools), UI UX Pro Max (pro design), Superpowers (autopilot with subagents). All free, all on GitHub."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["creador-de-habilidades", "humanizalo", "29-habilidades-de-marketing"]
+---
+
+## The analogy
+
+Using Claude without skills is like a **phone without apps**. It technically works — but you're missing 90% of the potential.
+
+These 5 are the "essential apps." Free. They install in seconds. They work for beginners and experts alike.
+
+| # | Skill | Function |
+|---|-------|---------|
+| 01 | Skill Creator | Your personal App Store — creates skills |
+| 02 | Humanize It | Kills the AI tone in any text |
+| 03 | Marketing Skills | 40+ marketing tools in one |
+| 04 | UI UX Pro Max | Design with 67 pro styles |
+| 05 | Superpowers | Autopilot with subagents |
+
+---
+
+## 01 — Skill Creator (the factory)
+
+### What it is
+
+Claude's App Store. An **official Anthropic** skill for creating, testing, and evaluating your own skills.
+
+You describe what you want in plain language, and in under 5 minutes you have a skill ready.
+
+### Why it comes first
+
+With this one you can **create the others**. If a skill doesn't exist, you build it yourself.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/skill-creator
+```
+
+### Example
+
+```
+/skill-creator I want a skill that generates professional PDF reports of my meetings. It takes notes in text and builds a PDF with sections, key points, and next steps.
+```
+
+See [skill creator](/boveda/creador-de-habilidades) to dig deeper.
+
+---
+
+## 02 — Humanize It (kills the AI tone)
+
+### What it is
+
+It detects more than 40 AI writing patterns and **removes** them. It evaluates across 6 dimensions (vocabulary, structure, formatting, tone, communication, signals) and rewrites.
+
+### The insight
+
+"In today's landscape...", "It's crucial to highlight...", "Without a doubt..." — every AI text has the same turns of phrase. Humanize It hunts them down and kills them.
+
+### Installation
+
+```bash
+git clone https://github.com/Hainrixz/humanizalo.git ~/.claude/skills/humanizalo
+```
+
+### Example
+
+```
+/humanizalo In today's digital marketing landscape, it's crucial to highlight that content strategies play a vital role...
+```
+
+See [Humanize It](/boveda/humanizalo) for the details.
+
+---
+
+## 03 — Marketing Skills (40+ tools)
+
+### What it is
+
+40+ skills specialized in marketing — copywriting, emails, ads, pricing, SEO, retention, referrals. By Corey Haines.
+
+### The math
+
+Hiring 40 real specialists = thousands of dollars a month. This skill puts those 40 experts **inside Claude**. Free.
+
+### Installation
+
+```bash
+npx skills add coreyhaines31/marketingskills
+```
+
+### Example
+
+```
+Use marketing skills for a launch strategy for my online photography course. Price: $97. Audience: beginners 25-40. Include landing copy, a 5-email sequence, 3 IG ads, and a pricing strategy.
+```
+
+See [29 marketing skills](/boveda/29-habilidades-de-marketing) for the details.
+
+---
+
+## 04 — UI UX Pro Max (pro design)
+
+### What it is
+
+It gives Claude a "designer's eye." 67 design styles, 161 palettes, 57 typography pairings, 161 product types, 99 UX guidelines.
+
+### The insight
+
+When you ask for design without this skill, Claude gives you **something ordinary**. With it, you say "Notion style" or "brutalist" and it knows **exactly** what that means.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+```
+
+### Example
+
+```
+Design a landing page for my productivity app in a Notion-like minimal style. Neutral-tone palette. Inter typography + serif for headings. Hero, features grid, pricing, footer.
+```
+
+---
+
+## 05 — Superpowers (autopilot)
+
+### What it is
+
+It puts Claude on autopilot. You give it the end goal and it:
+- Plans out the tasks
+- Creates specialized sub-agents in parallel
+- Reviews its own code with TDD
+- Delivers everything working
+
+### The difference
+
+Normal: you tell it step by step. With Superpowers: you tell it **the destination** and it drives.
+
+### Installation
+
+```bash
+npx superpowers@latest init
+```
+
+### Example
+
+```
+Use superpowers to build a to-do list app with auth, DB, and deploy. Stack: Next.js + Supabase + Vercel. Plan first, split it across sub-agents, deliver it working.
+```
+
+See [4 Claude superpowers](/boveda/4-superpoderes-claude) for a deep dive.
+
+---
+
+## Quick reference
+
+| Skill | For | Command |
+|-------|----------|---------|
+| Skill Creator | Creating skills | "/skill-creator I want..." |
+| Humanize It | Removing AI tone | "/humanizalo + text" |
+| Marketing Skills | Marketing strategy | "Launch my product" |
+| UI UX Pro Max | Pro design | "Notion-style landing" |
+| Superpowers | Dev with sub-agents | "Build this app" |
+
+---
+
+## Install them all at once
+
+```bash
+claude install-skill https://github.com/anthropics/skills/tree/main/skills/skill-creator && \
+git clone https://github.com/Hainrixz/humanizalo.git ~/.claude/skills/humanizalo && \
+npx skills add coreyhaines31/marketingskills && \
+claude install-skill https://github.com/nextlevelbuilder/ui-ux-pro-max-skill && \
+npx superpowers@latest init
+```
+
+Paste it and you're done.
+
+---
+
+## Anti-patterns
+
+### 1. Installing all 5 on day 1
+
+You pile on context that Claude reads in every response. **Install one, master it, then the next.**
+
+### 2. Humanizing EVERYTHING
+
+For technical docs or contracts, humanizing can **break precision**. Save it for marketing/blog/social.
+
+### 3. Marketing Skills without context
+
+40+ skills is a lot. If you ask for generic "marketing," the output is generic. **Be specific** about the product, audience, and goal.
+
+### 4. UI UX Pro Max without picking a style
+
+If you don't tell it which style you want, Claude picks any of them. **Ask for a specific style** (brutalist, Notion-like, glass).
+
+### 5. Superpowers for small tasks
+
+For a 20-line script, Superpowers is overkill. Save it for **real projects** with several moving pieces.
+
+---
+
+## Powerful combinations
+
+### Marketing Skills → Humanize It
+
+```
+1. Marketing Skills generates 5 sales emails
+2. /humanizalo on each one before sending
+```
+
+Emails that sell without sounding like AI.
+
+### Skill Creator → all of them
+
+If you need something none of the other 4 does, **Skill Creator builds it for you**.
+
+### Superpowers + UI UX Pro Max
+
+```
+> Build the app with superpowers.
+  In the design phase, use UI UX Pro Max with a brutalist style.
+```
+
+Autopilot with visual taste.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You only use chat.claude.ai | These are for Claude Code |
+| Corporate restrictions | Check policies first |
+| You just installed Claude Code | Get familiar first |
+| One-shot projects | Not worth the setup |
+
+---
+
+## Next steps
+
+- For a deep dive on Skill Creator, [skill creator](/boveda/creador-de-habilidades)
+- For details on Humanize It, [Humanize It](/boveda/humanizalo)
+- For the full marketing suite, [29 marketing skills](/boveda/29-habilidades-de-marketing)

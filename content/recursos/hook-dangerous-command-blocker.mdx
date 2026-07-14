@@ -1,0 +1,89 @@
+---
+title: "Hook Dangerous Command Blocker — bloqueo determinístico de comandos catastróficos (820 installs)"
+description: "Hook con 820 installs que bloquea comandos shell peligrosos con seguridad multi-nivel. Cubre rm -rf /, dd, mkfs, paths críticos. Defense in depth básica para cualquier sesión Claude Code."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-ai-bash-guard", "hook-backup-before-edit", "plugin-claude-forge"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/dangerous-command-blocker"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/dangerous-command-blocker.json"
+---
+
+## Qué es
+
+Diferente al [AI Bash Guard](/boveda/hook-ai-bash-guard) (que usa un sub-agent de Claude para evaluar), este hook usa **blocklist determinística multi-nivel** para bloquear comandos catastróficos. Patterns:
+
+- `rm -rf /` y variaciones obvias
+- `dd if=...` directo a disco
+- `mkfs.*` que formatea filesystems
+- `:(){ :|:& };:` (fork bomb)
+- Operaciones sobre paths críticos del sistema
+
+Hook event: `PreToolUse` sobre Bash. Bloqueo instantáneo sin costo de tokens (no usa LLM).
+
+820 installs lo posicionan como el segundo hook de seguridad más adoptado.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `security` |
+| Installs | 820 |
+| Hook event | `PreToolUse` (Bash) |
+| Mecanismo | Pattern matching determinístico |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook security/dangerous-command-blocker
+```
+
+Para Claude:
+
+```
+Instalé el hook security/dangerous-command-blocker. Probá: pedile a
+Claude que ejecute `rm -rf /tmp/test` — debería bloquearse. Después
+con `ls /tmp/test` — debería pasar.
+```
+
+## Qué podés hacer con esto
+
+### Defense in depth básica
+
+Como pinto cualquier sesión Claude Code. El costo es cero (no consume tokens), el beneficio puede ser enorme (evita borrar tu home).
+
+### Combo con [AI Bash Guard](/boveda/hook-ai-bash-guard)
+
+Determinístico (este) + AI-driven (Guard) = doble red. El determinístico catch los obvios; el AI cubre variaciones creativas.
+
+### Para sesiones autónomas
+
+Si dejás Claude corriendo con `/goal`, este hook es básicamente obligatorio. Sin él, un decision erróneo del modelo es catastrófico.
+
+### Costo cero, beneficio alto
+
+No consume tokens. No hay razón para no instalarlo salvo que tu workflow legítimamente necesite `rm -rf` etc. (raro).
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu workflow legítimo usa `dd`, `mkfs`, etc.:** sysadmins genuinos pueden necesitarlos. El hook bloquea sin distinguir intent.
+- **Para shells contenedores efímeros:** si Claude opera en un container que se descarta, los destructivos son menos riesgosos. Igual el hook no daña.
+- **Si esperás muchos falsos positivos:** mirá los patterns primero.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Dangerous Command Blocker Hook](https://www.aitmpl.com/component/hooks/security/dangerous-command-blocker) — comando exacto.
+- **Config JSON:** [dangerous-command-blocker.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/dangerous-command-blocker.json).
+
+## Recursos relacionados
+
+- [AI Bash Guard Hook](/boveda/hook-ai-bash-guard) — combo defense in depth: determinístico + AI.
+- [Backup Before Edit Hook](/boveda/hook-backup-before-edit) — otra capa de seguridad para edits.
+- [Claude Forge Plugin](/boveda/plugin-claude-forge) — framework con 6 layers de seguridad que incluye patterns similares.

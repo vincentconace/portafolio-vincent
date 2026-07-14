@@ -1,0 +1,109 @@
+---
+title: "MCP Context7 — docs siempre actualizados de librerías en tu prompt (11k installs)"
+description: "MCP server de Upstash, el más adoptado del catálogo (11,211 installs). Inyecta documentación version-specific de librerías directo en el prompt de Claude. Anti 'Claude inventa una API que no existe'."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "context7"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["5-claude-skills-necesarias", "anatomia-claude", "plugin-claude-plugins-official"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/context7"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/context7.json"
+---
+
+## Qué es
+
+Context7 de Upstash es **el MCP más instalado** del catálogo aitmpl.com: 11,211 installs. Por encima de Chrome DevTools (2.6k), por encima de cualquier otro. La pregunta es por qué.
+
+Resuelve un problema fundamental: los LLMs alucinan APIs. Le pedís a Claude que use Next.js 14 con un hook nuevo y te tira un código que parece correcto pero usa una API que no existe (o que existió en v12 y desapareció).
+
+Context7 inyecta documentación oficial y version-specific de librerías directamente en el prompt. Cuando vas a usar `next/server`, Claude consulta los docs reales de Next.js 14 antes de escribir código. Resultado: menos invención, más uso correcto de APIs.
+
+Sumalo con `use context7` al final de tu prompt y listo.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | **11,211 (top absoluto del catálogo)** |
+| Servidor MCP | `context7` |
+| Autor | Upstash |
+| Costo | Gratis (Upstash mantiene el servicio) |
+| También incluido en | [Anthropic Official Marketplace](/boveda/plugin-claude-plugins-official) |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/context7
+```
+
+Para Claude:
+
+```
+Instalé el MCP devtools/context7. Después tirá un ejemplo: pedile a
+Claude que escriba un endpoint en Next.js 14 con app router agregando
+"use context7" al final del prompt. Comparame contra el output sin
+context7 para que vea la diferencia.
+```
+
+## Qué podés hacer con esto
+
+### Activar con "use context7"
+
+El uso típico: agregás `use context7` al final de tu prompt. Claude entonces consulta los docs oficiales antes de responder.
+
+```
+Escribime un Server Component en Next.js 14 que use el nuevo hook de
+streaming. use context7
+```
+
+### Soporte para muchísimas librerías
+
+Context7 cubre cientos de librerías populares: React, Next.js, Vue, Svelte, Tailwind, Prisma, Supabase, Vercel SDK, OpenAI SDK, Anthropic SDK, FastAPI, Django, Rails, Laravel, Express, Hono, etc. Si tu librería es mainstream, está.
+
+### Version-specific
+
+La gran sacada: en vez de "docs generales", trae docs **de la versión que estás usando**. Si tu `package.json` dice `next: 14.2.0`, Context7 trae docs de 14.x, no de 15 ni de 13.
+
+### Anti-hallucination en frameworks
+
+Frameworks con APIs que cambian seguido (Next.js, Vercel SDK) son donde más perdés tiempo por hallucination. Context7 ahí brilla.
+
+### Compatible con cualquier flujo
+
+No tenés que cambiar tu workflow. Solo agregás `use context7` cuando tu pregunta involucra una librería específica. Las preguntas generales no lo necesitan.
+
+## Beneficios reales
+
+- **El más adoptado del catálogo** — 11k installs no son por accident.
+- **Reduce hallucination de APIs** dramáticamente.
+- **Version-specific** — no docs genéricos.
+- **Gratis** — Upstash mantiene el servicio.
+- **Trivial activación** — `use context7` al final del prompt.
+- **Mantenido por una empresa seria** (Upstash) y curado en el marketplace oficial de Anthropic.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Casi siempre conviene, pero...">
+
+- **Para preguntas que no son de código:** si pedís "qué te parece este diseño UX", Context7 no aporta.
+- **Si tu librería es muy nicho o privada:** puede no estar indexada. Verificá lookup primero.
+- **Latencia mínima:** cada `use context7` agrega un round-trip al servicio. En la práctica imperceptible, pero existe.
+- **Si ya tenés un CLAUDE.md detallado** con tu stack: Context7 ayuda igual, pero el incremental marginal es menor.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Context7 MCP](https://www.aitmpl.com/component/mcps/devtools/context7) — comando exacto.
+- **Config JSON:** [context7.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/context7.json) — definición.
+- **Context7 oficial:** [context7.com](https://context7.com) — docs, librerías cubiertas.
+- **Upstash:** [upstash.com](https://upstash.com) — empresa detrás.
+
+## Recursos relacionados
+
+- [5 Claude Skills necesarias](/boveda/5-claude-skills-necesarias) — Context7 entra cómodo en el "set base" que conviene tener instalado siempre.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para entender por qué un MCP que inyecta docs es tan poderoso (es como darle a Claude bibliotecas vivas).
+- [Claude Plugins Official](/boveda/plugin-claude-plugins-official) — Context7 también está curado ahí como `context7` (community-managed).

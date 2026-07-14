@@ -1,0 +1,85 @@
+---
+title: "Hook Plan Gate — avisa cuando editás prod sin spec aprobado"
+description: "Hook con 74 installs. Quality gate que advierte cuando editás production code sin que haya un .spec.md aprobado en el proyecto. Para teams con spec-driven development."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["spec-kit", "hook-file-protection", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/quality-gates/plan-gate"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/plan-gate.json"
+---
+
+## Qué es
+
+Para teams con spec-driven development: antes de editar production code, debería haber un `.spec.md` documentando el cambio. Este hook verifica que exista uno reciente (default: últimos 14 días) y warn si no.
+
+Hook event: `PreToolUse`.
+
+Encaja con la filosofía de [Spec Kit](/boveda/spec-kit) y workflows similares.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `quality-gates` |
+| Installs | 74 |
+| Hook event | `PreToolUse` |
+| Trigger | Edit a prod code sin .spec.md reciente |
+| Ventana | 14 días por default |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook quality-gates/plan-gate
+```
+
+Para Claude:
+
+```
+Instalé el hook quality-gates/plan-gate. Mostrame los .spec.md
+existentes y cuáles entran dentro de los últimos 14 días. Si edito
+prod code sin spec reciente, debería warn.
+```
+
+## Qué podés hacer con esto
+
+### Enforce spec-first development
+
+Cualquier cambio en prod requiere un spec aprobado. El hook lo enforce sin tener que recordarlo.
+
+### Combo con [Spec Kit](/boveda/spec-kit)
+
+Spec Kit genera y mantiene specs. Plan Gate enforce que existan. Combo natural.
+
+### Para teams enterprise
+
+Compliance y traceability: cada cambio en prod tiene su spec documentado y auditable.
+
+### Para sesiones autónomas
+
+Claude con `/goal` no toca prod sin spec. Red de seguridad para autonomous workflows.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu equipo no usa spec-driven:** el hook agrega fricción.
+- **Para repos personal / experimental:** specs son overhead.
+- **Si tu definición de "prod code" no es clara:** el hook puede ser ambiguo.
+- **Sin Spec Kit u otra fuente de specs:** vas a crear .spec.md a mano cada vez.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Plan Gate Hook](https://www.aitmpl.com/component/hooks/quality-gates/plan-gate) — comando exacto.
+- **Config JSON:** [plan-gate.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/plan-gate.json).
+
+## Recursos relacionados
+
+- [Spec Kit](/boveda/spec-kit) — toolkit para Spec-Driven Development, combo natural.
+- [File Protection Hook](/boveda/hook-file-protection) — para bloquear edits a critical files.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — workflows estructurados.

@@ -1,0 +1,371 @@
+---
+title: "How to build your own Claude skills — anatomy, loading levels and examples"
+description: "A guide to building Claude Code skills from scratch. The anatomy of SKILL.md (frontmatter + instructions), the 3 levels of progressive loading (metadata → instructions → resources), best practices, common mistakes, and a complete code-reviewer example ready to copy."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["aprende-skill", "comando-de-sistema", "5-skills-equipo-dev"]
+---
+
+## What is a Skill
+
+A Skill is a **modular superpower** you give to Claude. It's a folder with:
+- Instructions in natural language
+- Optional: reference files
+- Optional: helper scripts
+
+Claude **loads it automatically** when it detects that it applies. It works in Claude Code, the API, claude.ai and the Agent SDK.
+
+Unlike prompts (which you have to remember), skills **live with the project** and activate on their own.
+
+---
+
+## Minimal anatomy
+
+Every skill needs a `SKILL.md` file:
+
+```markdown
+---
+name: mi-skill
+description: Describe what it does in the third person
+version: 1.0.0
+---
+
+# Instructions
+
+Here go the natural-language instructions
+that Claude will follow when it activates this skill.
+```
+
+### Typical structure
+
+```
+mi-skill/
+├── SKILL.md           # required
+├── REFERENCE.md       # optional — extra context
+└── scripts/           # optional — helper scripts
+    └── lint.sh
+```
+
+---
+
+## Build your first skill — step by step
+
+### Step 1 — Create the directory
+
+```bash
+mkdir -p mi-skill
+```
+
+### Step 2 — Create SKILL.md
+
+```bash
+cat > mi-skill/SKILL.md << 'EOF'
+---
+name: mi-skill
+description: Generates concise summaries of code files
+version: 1.0.0
+---
+
+# Instructions
+
+When the user asks for a code summary:
+1. Read the specified file
+2. Identify the main function
+3. Summarize in 2-3 sentences what it does and how
+EOF
+```
+
+### Step 3 — (Optional) Reference file
+
+```bash
+cat > mi-skill/REFERENCE.md << 'EOF'
+# Additional context
+
+Project style rules:
+- Functions max 30 lines
+- Naming: camelCase for variables, PascalCase for classes
+- Tests required for business logic
+EOF
+```
+
+### Step 4 — Decide the scope
+
+| Scope | Path | When |
+|-------|------|------|
+| **Personal/global** | `~/.claude/skills/mi-skill/` | Applies to all your projects |
+| **Per project** | `.claude/skills/mi-skill/` | Only this repo, shared via git |
+
+For project-specific skills (with team conventions), use **per-project**. For personal utilities (your own workflow), use **global**.
+
+---
+
+## The 3 levels of progressive loading
+
+Claude uses **lazy loading** to avoid saturating the context. Each skill loads across 3 levels:
+
+### Level 1 — Metadata
+
+Claude reads **only the frontmatter** (`name` + `description`). With that it decides whether the skill is relevant to the current task.
+
+**Implication**: your `description` is critical. If it's ambiguous, Claude loads skills that don't apply. If it's too specific, it won't load skills that actually would.
+
+### Level 2 — Instructions
+
+If it decides the skill is relevant, it **loads the body of SKILL.md** with all the instructions.
+
+### Level 3 — Resources
+
+Only if it needs more context for a specific task does it read **REFERENCE.md** and helper files.
+
+### How to take advantage of this
+
+Your SKILL.md should be **concise**. Detailed info goes in REFERENCE.md. If everything is in SKILL.md:
+- It loads every time the skill applies
+- It consumes unnecessary context
+- It slows down the response
+
+Typical split:
+- **SKILL.md**: the 5-10 core instructions
+- **REFERENCE.md**: edge-case details, tables, long examples
+
+---
+
+## Best practices
+
+### Keep SKILL.md under 500 lines
+
+If it grows beyond that, **split it into smaller skills**. Monolithic skills become unmanageable.
+
+### Description in the third person
+
+✅ "Generates unit tests for JavaScript functions"
+❌ "I generate unit tests..."
+❌ "Unit tests"
+
+Claude reads the description as "this skill does X." The third person matches that mental model.
+
+### Gerund naming when it fits
+
+✅ `code-reviewing`
+✅ `api-documenting`
+✅ `pricing-strategizing`
+
+It communicates the action + state of the skill.
+
+### Test across several models
+
+Your skill may work perfectly in Opus but break in Haiku (less context, less reasoning). **Test it in at least Sonnet + Haiku** before publishing.
+
+### Feedback loop for destructive actions
+
+```markdown
+BEFORE:
+- Deleting files
+- Modifying production config
+- Making commits/pushes
+- Any non-reversible action
+
+Confirm with the user:
+"I'm going to [action]. Should I proceed? [y/n]"
+```
+
+### Concrete instructions
+
+❌ "Make the best possible design"
+❌ "Try to be efficient"
+✅ "Generate 3 variants. For each one include: palette, typography, structure"
+
+Vagueness → vague results.
+
+---
+
+## What NOT to do
+
+### 1. Generic names
+
+❌ `helper`, `utils`, `my-skill`
+✅ `email-marketing-copy`, `react-test-generator`
+
+### 2. Hardcoded paths
+
+❌ `C:\Users\Pedro\proyecto\config.json`
+✅ `${PROJECT_ROOT}/config.json` or relative paths
+
+### 3. Everything in a single skill
+
+❌ An "agencia-completa" skill with marketing + dev + design
+✅ Separate skills that combine as needed
+
+### 4. Circular dependencies
+
+❌ Skill A calls skill B which calls skill A
+✅ Linear dependencies with clear directions
+
+### 5. Giant REFERENCE.md
+
+❌ 5000 lines of "just in case"
+✅ Only what's needed for the cases SKILL.md mentions
+
+---
+
+## Complete example — code-reviewer
+
+```markdown
+---
+name: code-reviewer
+description: Reviews code looking for bugs, security vulnerabilities and performance improvements
+version: 1.0.0
+---
+
+# Code Reviewer
+
+When the user asks for a code review:
+
+1. Read the specified files or the staged changes in git
+2. Analyze in this order:
+   - Potential bugs and logic errors
+   - Security vulnerabilities (OWASP top 10)
+   - Performance issues (N+1 queries, unnecessary loops)
+   - Readability and maintainability
+3. Present findings grouped by severity:
+   - CRITICAL — must be fixed before merge
+   - WARNING — recommended to fix
+   - SUGGESTION — optional improvement
+4. For each finding include:
+   - File and line
+   - Description of the problem
+   - Suggested fix code
+5. At the end, give a verdict:
+   - APPROVE — all good
+   - APPROVE WITH CHANGES — criticals resolved, warnings post-merge
+   - REQUEST CHANGES — there are blocking criticals
+
+If REFERENCE.md is available, use its project style
+conventions when evaluating readability.
+
+If the review is for >500 changed lines, suggest that the user
+split the PR before continuing.
+```
+
+Copy it, modify it, and you've got your first skill.
+
+---
+
+## Where skills work
+
+| Platform | How |
+|------------|------|
+| **Claude Code** | Local path: `.claude/skills/` or `~/.claude/skills/` |
+| **API** | Via `container.skills` in the request (beta header) |
+| **claude.ai** | Upload as a project, applies to all conversations |
+| **Agent SDK** | Programmatic integration |
+
+---
+
+## Recommended workflow to iterate
+
+### Day 1 — Spot the pattern
+
+You notice you're repeating the same prompt 3+ times. That's a skill candidate.
+
+### Day 2 — Minimal draft
+
+Turn the prompt into a basic SKILL.md (15-20 lines). Test it.
+
+### Day 3-7 — Iterate with real use
+
+Every time it activates but something fails:
+1. Note what was missing
+2. Add it to SKILL.md
+3. Test again
+
+### Day 7+ — Optimize
+
+Once the skill works consistently:
+- Move details to REFERENCE.md
+- Refine `description` for better automatic activation
+- Version it (`version: 1.1.0`)
+
+### Day 30+ — Share
+
+If it works well for you, **consider publishing it**:
+- Push to your repo
+- Add it to the plugin marketplace
+- Other people can benefit
+
+---
+
+## Skill-specific anti-patterns
+
+### 1. Skills that duplicate a tiny workflow
+
+If your skill is "open file Y and read it," it's not a skill — it's a command.
+
+Skills add value **when there's a decision + a structured workflow**.
+
+### 2. Skills with contradictory instructions
+
+If your SKILL.md says "always X" and then "except when Y," **clarify**. Clear rules > lists of exceptions.
+
+### 3. No testing on real projects
+
+A skill that works on your project may break on another with a different stack. **Test it on at least 2-3 different projects** before declaring it ready.
+
+### 4. Versioning ignored
+
+If you never change `version`, you **can't** roll back badly applied changes. Version from day 1.
+
+### 5. No usage docs
+
+`description` is for Claude. But humans also need to know **how to invoke the skill**. Add a brief README if you share it.
+
+---
+
+## Use cases for your first skills
+
+### 1. A recurring workflow in your job
+
+If every Monday you do "X, Y, Z," turn it into a `lunes-routine` skill.
+
+### 2. Team conventions
+
+If your team has custom rules (naming, structure, review checklist), package them as a `team-standards` skill.
+
+### 3. Boilerplate generation
+
+If your stack has specific templates (React component + test + story + docs), make a `new-component` skill.
+
+### 4. Domain-specific analysis
+
+If you work in a specific industry (legal, medical, finance), make a skill that applies your domain knowledge.
+
+### 5. Integration with your own tooling
+
+If your team has its own CLI/scripts, make a skill that knows when and how to invoke them.
+
+---
+
+## Powerful combinations
+
+### With [system command](/boveda/comando-de-sistema)
+
+Use that meta-prompt to **design the content** of your skill before writing it. It saves you iterations.
+
+### With [learn skill](/boveda/aprende-skill)
+
+If you need a deeper mental model of how Claude uses skills, read it before investing time creating many.
+
+### With [skill creator](/boveda/5-skills-equipo-dev)
+
+Anthropic's official `skill-creator` skill generates custom skills by describing them. A shortcut when you have an idea but no time to write the SKILL.md by hand.
+
+---
+
+## Next steps
+
+- For a deep mental model of skills, [learn skill](/boveda/aprende-skill)
+- To use Skill Creator (a skill that creates skills), [5 dev-team skills](/boveda/5-skills-equipo-dev)
+- For meta-prompts that generate system prompts (similar but at another level), [system command](/boveda/comando-de-sistema)

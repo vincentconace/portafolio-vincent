@@ -1,0 +1,132 @@
+---
+title: "Knowledge Work Plugins — Anthropic's official marketplace for Cowork (11k⭐)"
+description: "Anthropic's official marketplace with 39 plugins for knowledge workers on Claude Cowork. Productivity, sales, finance, legal, marketing, HR, data, design, ops — all verticalized for office work."
+difficulty: "fácil"
+category: "plugins"
+tools: ["claude-code", "claude-cowork"]
+publishedAt: "2026-05-29"
+readingTime: "5 min"
+relatedSlugs: ["dominar-cowork", "claude-cowork-code", "claude-small-business"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/knowledge-work-plugins"
+github: "https://github.com/anthropics/knowledge-work-plugins"
+---
+
+## What it is
+
+This is the official marketplace that Anthropic maintains specifically for [Claude Cowork](/boveda/dominar-cowork) — not the programming-focused Claude Code, but the office "coworker." If your world is Gmail + Calendar + Notion + Slack + Drive and you want Claude to move fluidly across those tools, this is **the** marketplace.
+
+39 plugins in total, organized by role/function. The philosophy is to verticalize: instead of "Claude that does everything," it gives you a role-specific pack (sales, finance, legal, marketing, etc.) that already ships with the workflows and templates for that job.
+
+11k stars indicate that the community adopted it massively. And since it's from Anthropic, it comes with the official guarantee.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | Anthropic |
+| Stars | 11k |
+| Type | Official marketplace (39 plugins) |
+| Components | 118 skills, 15 commands, 5 agents |
+| Target | Claude Cowork (knowledge workers) |
+| Marketplace | `anthropics/knowledge-work-plugins` |
+
+### Packs by role/function
+
+| Pack | Skills | Who it's for |
+| --- | --- | --- |
+| `productivity` | 4 | Tasks, calendar, context memory |
+| `enterprise-search` | 5 | Search across Gmail, chat, docs, wikis |
+| `cowork-plugin-management` | 2 | Build your own plugins for your team |
+| `sales` | 9 | Prospect, outreach, deal strategy |
+| `finance` | 8 | Journal entries, reconciliation, financial statements |
+| `data` | 10 | SQL, datasets, visualizations, storytelling |
+| `legal` | 9 | Contract review, NDA, compliance, briefs |
+| `marketing` | 8 | Content, campaigns, performance |
+| `customer-support` | 5 | Triage, drafts, knowledge base |
+| `product-management` | 8 | Feature specs, roadmaps, user research |
+| `engineering` | 10 | Standups, code review, incident response, docs |
+| `human-resources` | 9 | Recruiting, onboarding, performance reviews |
+| `design` | 7 | Critique, design system, UX writing, a11y audits |
+| `operations` | 9 | Vendor management, processes, capacity, compliance |
+| `brand-voice` (Tribe AI) | 3 skills, 5 agents, 3 commands | Discover and enforce brand voice |
+| `pdf-viewer` | 1 skill, 4 commands | View, annotate, sign PDFs in an interactive viewer |
+
+### Third-party integrations included
+
+Slack by Salesforce, Apollo.io, Common Room, Sanity, ZoomInfo, Mintlify, Daloopa (financial data), Zapier, Intercom, CockroachDB, Prisma, Fastly, Cloudinary, Nimble, BrightData, SearchFit SEO, Atlan, ai-firstify, Product Tracking Skills, Postiz, Figma.
+
+## How to install it
+
+```bash
+# 1) Marketplace
+/plugin marketplace add anthropics/knowledge-work-plugins
+
+# 2) Install the packs for your role
+/plugin install productivity@anthropics-knowledge-work-plugins
+/plugin install enterprise-search@anthropics-knowledge-work-plugins
+/plugin install sales@anthropics-knowledge-work-plugins  # or marketing, finance, etc.
+```
+
+Or `/plugin` → Discover.
+
+For Claude (in Cowork):
+
+```
+Install the anthropics/knowledge-work-plugins marketplace. My role is
+[sales / marketing / finance / etc.] and my stack is [Gmail + Notion +
+Slack + HubSpot, for example]. Recommend the 3-4 packs to start with.
+```
+
+## What you can do with this
+
+### Have a productive Cowork from day 1
+
+The `productivity` pack sets up tasks + calendar + context memory. The `enterprise-search` pack lets you search everything at once. With just those two, you go from "Claude answers questions" to "Claude works with you in the office."
+
+### Cover an entire role without hiring a specialist
+
+If your team doesn't have a PM, install `product-management` and Claude assists you with specs, roadmaps, user research synthesis. If you don't have legal, `legal` helps you with NDAs and contract review. It doesn't replace the specialist, but it fills a lot of gaps.
+
+### Consistent brand voice automatically
+
+`brand-voice` (from Tribe AI) discovers your voice from existing docs, generates guidelines, and validates AI-generated content. Useful for marketing teams tired of manually reviewing every output.
+
+### PDFs with real annotations
+
+`pdf-viewer` lets you view and annotate PDFs inside Cowork. Mark up contracts, signatures, forms. Without having to open another app.
+
+### Integrate with your stack without writing MCPs
+
+Salesforce Slack, Apollo, ZoomInfo, Mintlify, Zapier — all verified by Anthropic. You connect without wrestling with setup or worrying about security.
+
+## Real benefits
+
+- **Official from Anthropic** — the best guarantee of quality and maintenance.
+- **Vertical by role** — the `sales` pack already ships with the 9 sales workflows, you don't have to build them.
+- **Designed for Cowork** specifically — it's not Claude Code adapted for the office.
+- **Integrates with a real enterprise Workspace** — Slack, Apollo, ZoomInfo, etc.
+- **11k stars** = proven massive adoption.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you use Claude Code (not Cowork):** the packs are designed for Cowork. Much of what they offer doesn't apply to a dev in the terminal.
+- **If you're not on the Claude Max plan:** [Cowork requires the Max plan](/boveda/dominar-cowork). Check first.
+- **Don't install all 39 packs at once:** you'll have 118 skills loaded. Pick 3-4 based on your role.
+- **Overlap with [Claude Small Business](/boveda/claude-small-business):** Small Business also covers roles. See which fits you before installing both.
+- **Some integrations require paid accounts** (Apollo, ZoomInfo, Mintlify). The plugin connects — you pay for the account.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Knowledge Work Plugins](https://www.aitmpl.com/plugins/knowledge-work-plugins) — all 39 packs.
+- **Repo on GitHub:** [anthropics/knowledge-work-plugins](https://github.com/anthropics/knowledge-work-plugins) — code, issues, contributing.
+
+## Related resources
+
+- [Master Cowork](/boveda/dominar-cowork) — the base Cowork manual. Essential before installing these packs.
+- [Claude Cowork & Code](/boveda/claude-cowork-code) — when Cowork vs Code is the better fit. If you haven't decided yet, read it first.
+- [Claude Small Business](/boveda/claude-small-business) — an alternative for small business. Compare scope before choosing.

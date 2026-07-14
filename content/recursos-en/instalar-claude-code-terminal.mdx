@@ -1,0 +1,214 @@
+---
+title: "Install Claude Code in your terminal — step by step (Windows and Mac)"
+description: "A step-by-step guide to installing Claude Code in the terminal, on Mac and Windows: requirements, one-command install, first launch, login, verifying with claude doctor, and how to update. Clear and to the point."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude-code"]
+publishedAt: "2026-06-09"
+readingTime: "5 min"
+badge: "nuevo"
+relatedSlugs: ["instalar-claude-code", "claude-code-setup-zero", "cual-plan-claude", "hablarle-a-claude"]
+---
+
+## What you'll accomplish in 5 minutes
+
+Claude Code running in your terminal: an AI agent that reads your project, edits files, and runs commands for you. This guide covers **Mac and Windows**, from scratch all the way to verifying that everything works.
+
+You don't need to know how to code to follow it. Just copy and paste commands.
+
+---
+
+## Step 0 — Check the requirements
+
+| Requirement | Minimum |
+|-----------|--------|
+| **Mac** | macOS 13 or higher |
+| **Windows** | Windows 10 (1809) or higher |
+| RAM | 4 GB |
+| Internet | Yes (the AI runs in the cloud) |
+| Account | Claude Pro/Max/Team, or Console with API credits |
+
+⚠️ The **claude.ai Free plan does not include Claude Code**. If you don't have a plan yet, check out [which Claude plan](/boveda/cual-plan-claude) before you start.
+
+---
+
+## Installing on Mac
+
+### Step 1 — Open Terminal
+
+`Cmd + Space` → type "Terminal" → Enter.
+
+### Step 2 — Paste the install command
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+That downloads and installs the official binary. It takes less than a minute.
+
+**Alternative if you use Homebrew:**
+
+```bash
+brew install --cask claude-code
+```
+
+### Step 3 — Close and reopen Terminal
+
+This reloads the PATH and makes the `claude` command available.
+
+---
+
+## Installing on Windows
+
+### Step 1 — Open PowerShell
+
+`Win + X` → "Terminal" (or search for "PowerShell" in the Start menu). You don't need to open it as administrator.
+
+### Step 2 — Paste the install command
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+**Alternative with WinGet:**
+
+```powershell
+winget install Anthropic.ClaudeCode
+```
+
+**If you use CMD instead of PowerShell:**
+
+```cmd
+curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+```
+
+### Step 3 — Install Git for Windows (recommended)
+
+Claude Code works without this, but with Git for Windows it unlocks its full Bash tool.
+
+Download it from `git-scm.com/downloads/win`, install it with the default options, and verify with:
+
+```powershell
+git --version
+```
+
+### Step 4 — Close and reopen the terminal
+
+Same as on Mac: it reloads the PATH.
+
+> 💡 **What about WSL?** It's optional. Claude Code runs natively on Windows. If you already live in WSL 2, install it *inside* the WSL terminal using the Mac/Linux command.
+
+---
+
+## ⛔ The method you should NOT use
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+If you're coming from an old YouTube tutorial, stop: the npm method is **deprecated**. Use the native installer (`curl`/`irm`) or your system's package manager. Bonus: the native installer **auto-updates on its own**.
+
+---
+
+## First launch and login (same on Mac and Windows)
+
+### Step 1 — Go into a project folder
+
+```bash
+cd path/to/your/project
+```
+
+Don't have one? Create an empty one:
+
+```bash
+mkdir my-first-project && cd my-first-project
+```
+
+### Step 2 — Start Claude Code
+
+```bash
+claude
+```
+
+### Step 3 — Log in
+
+The first time, your browser opens to authenticate you:
+
+1. Choose **Claude account** if you have a Pro/Max/Team plan (the most common case)
+2. Or **Console account** if you're going to pay per API usage
+3. Confirm in the browser and go back to the terminal
+
+The login is saved: you never have to do it again.
+
+### Step 4 — Try it out
+
+Write to it in plain English, like you would to a person:
+
+```
+explain what's in this project
+```
+
+If it responds, you're done. **You've got an AI agent in your terminal.**
+
+---
+
+## Verification — 2 commands
+
+| Command | What it does |
+|---------|----------|
+| `claude --version` | Shows the installed version |
+| `claude doctor` | Full diagnostic: installation, connection, configuration |
+
+If `claude doctor` doesn't flag any errors, your environment is all set.
+
+---
+
+## How to update
+
+| Install method | How it updates |
+|----------------------|-------------------|
+| Native installer (`curl`/`irm`) | **On its own, automatically** |
+| Homebrew | `brew upgrade claude-code` |
+| WinGet | `winget upgrade Anthropic.ClaudeCode` |
+
+Want to force an update right now? `claude update`.
+
+---
+
+## If something goes wrong
+
+### "command not found: claude" / "command not recognized"
+
+Close and reopen the terminal (90% of the time that's it). If it persists on Windows, restart the PC so it picks up the new PATH.
+
+### The login doesn't open the browser
+
+Copy the URL that appears in the terminal and paste it manually into the browser.
+
+### "Country not supported"
+
+Anthropic doesn't operate in every country. Check the list at `anthropic.com/supported-countries`.
+
+### Anything else
+
+```bash
+claude doctor
+```
+
+It tells you exactly what's wrong before you waste time guessing.
+
+---
+
+## Next steps
+
+- Set up Claude Code from scratch with best practices: [setup zero](/boveda/claude-code-setup-zero)
+- Learn how to ask for things the right way from day 1: [talking to Claude](/boveda/hablarle-a-claude)
+- Terminal not your thing? There's also the desktop app: [full install guide](/boveda/instalar-claude-code)
+
+---
+
+## Official sources
+
+- **Setup**: `code.claude.com/docs/en/setup`
+- **Quickstart**: `code.claude.com/docs/en/quickstart`
+- **Plans**: `claude.ai/pricing`

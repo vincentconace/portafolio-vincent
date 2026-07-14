@@ -1,0 +1,260 @@
+---
+title: "Live Artifacts in Cowork — your own control panel without Claude Code"
+description: "Anthropic launched Live Artifacts in Cowork: live dashboards connected to your connectors (Gmail, Calendar, social) and MCPs (Shopify, CRM). Every time you open the panel, it refreshes itself with fresh data. Your own custom app, no coding required."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude", "cowork"]
+publishedAt: "2026-05-28"
+readingTime: "6 min"
+relatedSlugs: ["claude-cowork-workflow", "artefactos-claude", "claude-cowork-code"]
+---
+
+## What it is
+
+A **Live Artifact** is a panel (dashboard, tracker, mini-app) that Claude builds for you inside Cowork. Connected to the **connectors and MCPs** you already have turned on.
+
+Every time you open it, **it pulls fresh data from each connection and re-renders**.
+
+Like your own custom app, **without a single line of code**.
+
+---
+
+## Why it matters
+
+### Before
+
+If you wanted a dashboard that mixed emails + calendar + sales metrics, you had 3 options:
+
+1. Pay for a BI tool ($30-100/month)
+2. Ask Claude the same questions every day
+3. Open Claude Code and program a frontend with MCPs
+
+Option 3 gives you power **but it burns tokens and time**.
+
+### Now
+
+You tell Claude in Cowork to build a Live Artifact with that data. It handles it. When you come back tomorrow and open it, **it's already there with the day's info**. You didn't program anything. You didn't spin up a server. You just talked.
+
+---
+
+## Where it gets the data
+
+Live Artifacts are NOT magic. They use the **connectors and MCPs** you already have set up in Claude Desktop:
+
+| Connector / MCP | What for |
+|-----------------|----------|
+| Gmail | Pending emails, unread, relevant threads |
+| Google Calendar | Events for the day/week |
+| Google Drive | Recent docs |
+| Notion | Tasks, pages |
+| Slack | Messages, channels |
+| Shopify MCP | Orders, products, metrics |
+| HubSpot MCP | Pipeline, deals |
+| Stripe MCP | Payments, MRR, churn |
+| Your custom MCP | Whatever you connect |
+
+If you don't have anything connected, Claude **asks you to turn on integrations first**.
+
+---
+
+## Prerequisites
+
+- **Claude Desktop** (doesn't work on web)
+- **Pro or Max plan** (Cowork isn't on Free)
+- **At least 1 connector** or MCP configured
+
+---
+
+## How to create your first Live Artifact
+
+### Step 1 — Open Cowork
+
+In Claude Desktop, left panel → **Cowork**.
+
+### Step 2 — Ask for the artifact
+
+```
+> Build me a dashboard that shows:
+  - My unread emails from today (prioritized)
+  - Calendar events for this week
+  - Top 5 pipeline prospects (HubSpot)
+
+  Update every time I open the artifact.
+```
+
+Claude designs the artifact, connects it to the connectors, and saves it.
+
+### Step 3 — Use it
+
+When you open it again, **fresh data automatically**.
+
+---
+
+## Use cases
+
+### 1. Daily command center for a founder
+
+```
+> Live Artifact "My day":
+
+  Section 1 — URGENT INBOX
+  - Top 5 unread emails that mention my name
+  - Emails from the last 24h with the word "urgent" or "deadline"
+
+  Section 2 — TODAY'S CALENDAR
+  - Events in the next 8h
+  - Detected conflicts
+  - Free time for focus
+
+  Section 3 — BUSINESS KPIS
+  - Current MRR (Stripe MCP)
+  - New signups in the last 24h
+  - Top 3 deals in pipeline (HubSpot)
+
+  Section 4 — TO-DOS
+  - Notion tasks due "today"
+  - Unanswered Slack mentions
+```
+
+Every morning you open it → **what matters today** on one screen.
+
+### 2. Weekly tracker for a creator
+
+```
+> Live Artifact "Week in content":
+
+  - Posts published in the last 7 days with engagement
+  - Top 3 hooks that performed best
+  - Upcoming scheduled posts (Buffer / Notion)
+  - Comments pending a reply
+  - Growth metrics (followers, reach)
+```
+
+### 3. Sales dashboard for a sales rep
+
+```
+> Live Artifact "My sales":
+
+  - Pipeline deals by stage (HubSpot)
+  - Calls scheduled in the next 48h
+  - Overdue follow-ups
+  - Quota progress vs the month's target
+  - Top 3 accounts to call TODAY (prioritized by value × probability)
+```
+
+### 4. Custom mini-CRM
+
+```
+> Live Artifact "My active clients":
+
+  For each client:
+  - Last contact (Gmail thread)
+  - Next scheduled touchpoint (Calendar)
+  - Project status (Notion)
+  - Pending payments (Stripe)
+
+  Sorted by urgency.
+```
+
+### 5. SaaS health check
+
+```
+> Live Artifact "App health":
+
+  - Status of last deploys (Vercel MCP)
+  - Errors in Sentry over the last 24h
+  - MRR + churn rate
+  - Open support tickets (Linear)
+  - Failed cron jobs (any)
+```
+
+---
+
+## Difference from (regular) Artifacts
+
+| Aspect | [Artifacts](/boveda/artefactos-claude) | Live Artifacts |
+|---------|----------------------------------------|----------------|
+| Platform | Regular chat | Cowork only |
+| Data | Static at creation | **Refresh on every open** |
+| Connectors | No | **Yes** |
+| MCPs | No | **Yes** |
+| Persistence | In that conversation | Persistent, reusable |
+
+Live Artifacts are **Artifacts with live data**.
+
+---
+
+## Anti-patterns
+
+### 1. Wanting 20 sections in one artifact
+
+More sections = more data on each refresh = slower. **3-5 sections max**.
+
+### 2. No prioritization
+
+Showing "all unread emails" = 50 unfiltered emails = useless. **Prioritize**: top 5, urgent ones, specific mentions.
+
+### 3. Constant refresh in the background
+
+Every refresh consumes quota. **Don't set auto-refresh every 1 min** unless it's critical.
+
+### 4. Sensitive data shared
+
+If you share the Live Artifact, **whoever sees it has access to your data**. Be careful with profile + private metrics.
+
+### 5. Forgetting it needs Cowork
+
+Live Artifacts do NOT work in regular chat. Only in **Cowork**. If your task is one-off, a regular Artifact is enough.
+
+---
+
+## Powerful combinations
+
+### With Scheduled Tasks
+
+[Cowork workflow](/boveda/claude-cowork-workflow) lets you schedule tasks. You combine:
+- A scheduled task generates a daily summary
+- A Live Artifact shows it, refreshed
+
+### With Dispatch
+
+[Claude Dispatch](/boveda/claude-dispatch) lets you interact with your Cowork from your phone. **Live Artifact from the subway**.
+
+### With custom MCPs
+
+If you build your own MCP (internal CRM, legacy system), a Live Artifact shows it as a dashboard.
+
+---
+
+## Limitations
+
+### Performance with many connectors
+
+If your Live Artifact queries 10 MCPs, **the refresh can take 30-60s**. For responsiveness, max 4-5 connectors.
+
+### No real-time collaboration
+
+You see it. If you want your team to see **the same artifact**, you have to share it manually.
+
+### Limited styling
+
+Standard Cowork UI. For custom premium designs, [Artifacts](/boveda/artefactos-claude) with HTML/CSS give you more control.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| One-off task | A regular Artifact is enough |
+| You need real-time collaboration | Notion/Linear win |
+| Super sensitive data | Risk of leak when sharing |
+| Free plan | Not included |
+
+---
+
+## Next steps
+
+- For the full Cowork workflow (not just Live Artifacts), [Cowork workflow](/boveda/claude-cowork-workflow)
+- For regular Artifacts (no live data), [Claude Artifacts](/boveda/artefactos-claude)
+- For Claude's 3 modes (chat/cowork/code), [Claude Cowork Code](/boveda/claude-cowork-code)

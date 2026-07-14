@@ -1,0 +1,347 @@
+---
+title: "Cómo hablarle a Claude — los 4 elementos que cambian todo"
+description: "Dejá de recibir respuestas genéricas. La fórmula: rol (quién es Claude), contexto (tu situación), pedido específico (qué querés), formato (cómo lo querés). Antes vs después con 3 ejemplos reales. 5 plantillas listas para usar."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["mejores-practicas-claude", "comando-de-sistema", "cinco-errores-claude"]
+---
+
+## El problema real
+
+Todos le hablamos mal a Claude.
+
+Pensá en Claude como un empleado que recién llegó a tu empresa:
+- Es buenísimo en todo
+- **Pero no te conoce**
+
+Si solo le decís "necesito que me hagas esto", **no sabe**:
+- Para quién es
+- En qué tono
+- Por qué lo estás pidiendo
+- Qué formato esperás
+
+**Resultado: respuestas genéricas**.
+
+---
+
+## La fórmula — 4 elementos
+
+### 1. ¿Quién es? (rol)
+
+> "Sos un experto en..."
+
+Cuando le decís quién es, **activás todo su conocimiento** sobre ese tema.
+
+❌ "Hacéme un texto"
+✅ "Sos copywriter experto en marketing digital para startups B2B"
+
+La diferencia es enorme. Sin rol, Claude usa promedio genérico. Con rol, **se enfoca** en el conocimiento relevante.
+
+### 2. Tu situación (contexto)
+
+> "Estoy preparando A para crear B porque necesito C"
+
+Cuando Claude entiende tu contexto, **toma mejores decisiones**. No adivina — trabaja con lo que vos le das.
+
+❌ "Necesito una landing page"
+✅ "Estoy lanzando un curso de cocina saludable, mi audiencia son mamás de 30-45 que quieren comer mejor pero sin tiempo, y necesito capturar emails para mi launch en 3 semanas"
+
+### 3. Qué querés (pedido específico)
+
+> "Hacéme un A porque necesito resultado B"
+
+Entre **más claro** seás con lo que necesitás, **más precisa** la respuesta.
+
+❌ "Hacéme una app"
+✅ "Hacéme un componente de calendario con horarios disponibles, que mande confirmación por WhatsApp"
+
+Especificidad gana.
+
+### 4. Cómo lo querés (formato/tono)
+
+> "Que sea profesional, con estos colores, así A, B, C"
+
+El formato, el tono, las dimensiones técnicas, las restricciones. **Todo lo que define cómo se ve y se siente** el resultado.
+
+❌ (sin esto, Claude usa defaults)
+✅ "Tono cercano como hablándole a un amigo. Bullets, no párrafos. Cada post con hook + desarrollo + CTA. Español Latam. Sin emojis."
+
+---
+
+## Recordá
+
+**No siempre necesitás los 4**. Para preguntas rápidas, no escribas un ensayo. Pero cuando el resultado **importa** — código, estrategia, contenido — los 4 hacen toda la diferencia.
+
+---
+
+## Antes vs después — 3 ejemplos
+
+### Ejemplo 1 — App
+
+**Antes**:
+```
+Necesito una app para agendar citas
+```
+
+**Después**:
+```
+Sos desarrollador senior en Next.js.
+
+Estoy construyendo sistema de citas para mi clínica dental
+porque mis pacientes se quejan de que no pueden agendar
+fuera de horario.
+
+Quiero componente de calendario que muestre horarios
+disponibles y mande confirmación por WhatsApp.
+
+Que sea responsive, colores claros, botones grandes para
+personas mayores.
+```
+
+### Ejemplo 2 — Automatización
+
+**Antes**:
+```
+Automatizame esto
+```
+
+**Después**:
+```
+Sos experto en automatización con tools no-code.
+
+Estoy perdiendo 2h/día copiando datos de Google Sheet a mi CRM
+porque lo hago manual.
+
+Quiero automatización que tome filas nuevas del Sheet y las
+suba al CRM cada mañana.
+
+Tools gratuitas. Explicame paso a paso. Manejo de errores
+básico incluido.
+```
+
+### Ejemplo 3 — Contenido
+
+**Antes**:
+```
+Escribime contenido para Instagram
+```
+
+**Después**:
+```
+Sos copywriter experto en redes para emprendedores latinos.
+
+Estoy lanzando mi curso online de cocina saludable y necesito
+llenar mi embudo de ventas.
+
+Quiero 5 posts tipo carrusel sobre errores comunes al
+cocinar sano.
+
+Tono cercano como hablándole a un amigo, cada post con hook
+y CTA, en español Latam.
+```
+
+---
+
+## 5 plantillas listas
+
+Copiá la que te aplique, completá los `[corchetes]` con lo tuyo, pegá en Claude.
+
+### 1. Automatización
+
+```
+Sos experto en automatización de procesos y tools
+no-code/low-code.
+
+Estoy [TU SITUACIÓN — ej: "perdiendo 3h/día copiando datos
+de Excel a otro sistema"] porque necesito [EL RESULTADO —
+ej: "que ese proceso se haga solo cada mañana"].
+
+Quiero que me diseñes automatización que [QUÉ ESPECÍFICO —
+ej: "tome datos nuevos del Excel, valide, y suba
+automático al CRM"].
+
+Requisitos:
+- Tools gratuitas o bajo costo
+- Explicame paso a paso
+- Incluí qué hacer si algo falla
+- Lenguaje simple, sin tecnicismos innecesarios
+```
+
+### 2. Desarrollo de software
+
+```
+Sos developer senior especializado en [TU STACK —
+ej: "Next.js, React, Tailwind"].
+
+Estoy construyendo [TU PROYECTO — ej: "app para que clientes
+agenden citas"] porque necesito [OBJETIVO — ej: "dejar de
+coordinar horarios por WhatsApp"].
+
+Quiero que me construyas [LO ESPECÍFICO — ej: "componente
+de calendario con selección de horarios y confirmación
+por email"].
+
+Requisitos:
+- Código limpio y comentado donde aporte
+- Responsive (mobile + desktop)
+- Usar [TECH ESPECÍFICA — ej: "shadcn/ui para componentes"]
+- Manejo de errores básico incluido
+```
+
+### 3. Contenido y marketing
+
+```
+Sos copywriter experto en [TU NICHO —
+ej: "marketing digital para emprendedores latinos"].
+
+Estoy preparando [QUÉ — ej: "contenido para mi cuenta de IG"]
+porque necesito [OBJETIVO — ej: "atraer clientes para mi
+servicio de consultoría"].
+
+Quiero que me escribas [LO ESPECÍFICO — ej: "5 posts tipo
+carrusel sobre errores al emprender"].
+
+Requisitos:
+- Tono cercano y directo, como hablándole a un amigo
+- Cada post con hook + desarrollo + CTA
+- Español Latam
+- Que genere interacción (preguntas, opiniones)
+```
+
+### 4. Análisis de datos
+
+```
+Sos analista de datos experto en [TU ÁREA —
+ej: "métricas de marketing digital y GA4"].
+
+Estoy analizando [QUÉ — ej: "datos de ventas del último
+trimestre"] porque necesito [OBJETIVO — ej: "entender por qué
+bajaron las conversiones en marzo"].
+
+Quiero que me ayudes a [LO ESPECÍFICO — ej: "identificar
+patrones, posibles causas y qué acciones tomar"].
+
+Requisitos:
+- Presentá hallazgos con bullets claros
+- Incluí números relevantes
+- Dame 3 acciones concretas para esta semana
+- Si necesitás más datos, preguntame antes de inventar
+```
+
+### 5. Estrategia de negocio
+
+```
+Sos consultor de negocios especializado en [TU INDUSTRIA —
+ej: "servicios profesionales y consultoría"].
+
+Estoy en etapa donde [SITUACIÓN — ej: "tengo clientes pero
+no escalo más allá de $5k/mes"] porque necesito [OBJETIVO —
+ej: "plan para llegar a $15k/mes en 90 días"].
+
+Quiero que me diseñes [LO ESPECÍFICO — ej: "estrategia de
+crecimiento con acciones semanales"].
+
+Requisitos:
+- Realista con mis recursos: [DESCRIBÍ — ej: "solo yo,
+  sin equipo, 6h/día disponibles"]
+- Priorizá acciones por impacto (primero lo que mueve aguja)
+- Métricas para saber si voy bien
+- Sin teoría genérica — pasos accionables
+```
+
+---
+
+## Pro tips
+
+### 1. No siempre necesitás los 4
+
+Para "¿qué hora es?" no necesitás 4 párrafos. Para "diseñame mi estrategia de crecimiento", sí.
+
+### 2. Iterá sin miedo
+
+Si la primera respuesta no es perfecta, **no empieces de cero**. Decile a Claude qué cambiar:
+- "Hacelo más corto"
+- "Cambiá el tono a más casual"
+- "Agregá más detalle en la parte de pricing"
+
+Claude mejora con cada iteración. Pero ojo: editá el mensaje original, no mandes nuevos (ver [5 errores Claude](/boveda/cinco-errores-claude)).
+
+### 3. Guardá tus mejores prompts
+
+Cuando un prompt te dé output increíble, **guardalo**. Empezás tu colección de plantillas. Con el tiempo tenés un arsenal que te ahorra horas.
+
+Tools para guardar:
+- Notion / Obsidian
+- GitHub Gists
+- Tu propio repo de prompts
+- Custom GPTs / Projects en Claude
+
+### 4. Pedile que pregunte si tiene dudas
+
+Agregá al final:
+
+```
+Si algo no está claro o necesitás más info para hacer bien
+el trabajo, preguntame ANTES de empezar.
+```
+
+Esto evita que Claude invente o asuma.
+
+### 5. Explicá restricciones
+
+Si tenés limitaciones, **decilas**:
+
+- "No tengo presupuesto para tools paid"
+- "Mi equipo solo conoce JavaScript, no Python"
+- "El cliente prefiere materiales en PDF, no Google Docs"
+
+Restricciones explícitas → soluciones realistas.
+
+---
+
+## Anti-patrones
+
+### 1. Prompts conversacionales
+
+❌ "Hola Claude, ¿cómo estás? Quería preguntarte si podrías..."
+
+Saludos consumen tokens. Saltá directo al pedido.
+
+### 2. Múltiples preguntas en mensajes separados
+
+❌ Mensaje 1: "¿Cuál es la mejor librería para X?"
+❌ Mensaje 2: "¿Cómo se instala?"
+❌ Mensaje 3: "¿Tenés ejemplo?"
+
+✅ Mensaje 1: "Sobre X, contestame: cuál es mejor, cómo se instala, ejemplo básico"
+
+### 3. "Hacelo bonito"
+
+Vaguedad mata. ¿Qué es "bonito"? ¿Minimalista? ¿Maximalista? ¿Corporate? Sé específico.
+
+### 4. Aceptar el primer output sin revisión
+
+Si te entregó algo en 5 segundos sobre un tema complejo, **probablemente está incompleto o errado**. Revisá con criterio.
+
+### 5. Pedirle que "decida vos"
+
+Si vos no podés decidir, **vas a aceptar cualquier cosa**. Mejor que Claude te dé 2-3 opciones con pros/contras para que **vos elijas**.
+
+---
+
+## La regla mental
+
+> Claude es un empleado nuevo que es brillante pero NO te conoce.
+> Cada prompt es como darle brief a ese empleado.
+> A más brief, mejor resultado.
+
+---
+
+## Próximos pasos
+
+- Para principios más amplios de buen Claude, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para crear system prompts reutilizables, [comando de sistema](/boveda/comando-de-sistema)
+- Para no quemar cuota con malos hábitos, [5 errores Claude](/boveda/cinco-errores-claude)

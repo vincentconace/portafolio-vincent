@@ -1,0 +1,80 @@
+---
+title: "Hook Command Logger — log every Claude command (673 installs)"
+description: "Hook with 673 installs that logs every Claude Code command to a file with timestamps. For auditing, debugging, and understanding which tools Claude uses in a session."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-change-tracker", "hook-context-timeline", "hook-change-logger"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/command-logger"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/command-logger.json"
+---
+
+## What it is
+
+Before each tool use (Bash, Edit, Write, Read, etc.), this hook appends an entry to the log: timestamp + tool name + basic args. Hook event: `PreToolUse`.
+
+Useful for understanding Claude's behavior: which tools does it use? In what order? Are there repetitive patterns you could automate?
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `development-tools` |
+| Installs | 673 |
+| Hook event | `PreToolUse` |
+| Output | Log with timestamps + tool usage |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --hook development-tools/command-logger
+```
+
+For Claude:
+
+```
+I installed the development-tools/command-logger hook. Tell me where the
+log lives and show me the first 10 entries after doing 2-3 tasks.
+```
+
+## What you can do with it
+
+### Tool audit
+
+Know exactly which tools Claude used during the session. For compliance or to understand behavior.
+
+### Debugging when something goes wrong
+
+If Claude behaved oddly, you look at the log and reconstruct what it did step by step.
+
+### Spot patterns to optimize
+
+If you see Claude always uses the same sequence Read → Edit → Bash → Read, you can build a skill that does it in a single step.
+
+### Combo with [Change Tracker](/boveda/hook-change-tracker)
+
+Command Logger records which tools were used (including reads). Change Tracker records only the mutations. Combine them for a complete audit.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before you install">
+
+- **For very intensive sessions:** lots of tool calls = big log. Log rotation recommended.
+- **If tool arg contents are sensitive:** some args may include sensitive paths or snippets. Validate what gets recorded.
+- **If you already use [Context Timeline](/boveda/hook-context-timeline):** there's overlap (Timeline also shows tool usage).
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Command Logger Hook](https://www.aitmpl.com/component/hooks/development-tools/command-logger) — exact command.
+- **JSON config:** [command-logger.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/command-logger.json).
+
+## Related resources
+
+- [Change Tracker Hook](/boveda/hook-change-tracker) — combo: tools + mutations.
+- [Change Logger Hook](/boveda/hook-change-logger) — for a structured CSV of mutations.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visual browser view of tool usage + context.

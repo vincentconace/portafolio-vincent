@@ -1,0 +1,101 @@
+---
+title: "Claude Mem — persistent memory across Claude Code sessions"
+description: "A plugin by thedotmack (42k⭐, the most-starred in the ecosystem) that captures everything Claude does, compresses it with AI, and re-injects relevant context into future sessions. Memory that survives shutdown."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["memoria-claude-code", "claude-code-best-practices", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-mem"
+github: "https://github.com/thedotmack/claude-mem"
+---
+
+## What it is
+
+Claude Mem is probably the most impactful plugin in the catalog, and its 42k stars confirm it: alongside [claude-hud](/boveda/agent-view) it sits at the absolute top. What it does: it captures everything that happens in a Claude Code session (which files it edited, which tools it called, which reasoning it followed), compresses it with AI using the agent-sdk, and when you open a new session it injects the relevant context from before.
+
+In simple terms: Claude stops "forgetting" between sessions. What it learned yesterday about your project is available today without having to re-explain it.
+
+It's the difference between "every session starts from scratch" and "Claude has persistent memory of the project." For large repos and iterative work, the change is huge.
+
+It works with `skills` and `hooks` — the plugin hooks in to record what happens and uses skills that load the compressed context when you start up.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | thedotmack |
+| Stars | 42k (top of the catalog) |
+| Type | Single plugin (skills + hooks) |
+| Marketplace | `thedotmack/claude-mem` |
+| Official site | [claude-mem.ai](https://claude-mem.ai) |
+| Mechanics | Capture + AI compression + on-load re-injection |
+
+## How to install it
+
+```bash
+/plugin marketplace add thedotmack/claude-mem
+/plugin install claude-mem@thedotmack-claude-mem
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install the claude-mem plugin from the thedotmack marketplace. Then
+explain to me how to invoke it to save memory and how previous
+memories are loaded when opening a new session.
+```
+
+## What you can do with this
+
+### Have Claude remember your project between sessions
+
+You spent 3 hours in a session refactoring the auth module. Tomorrow you open a new session and Claude doesn't remember anything. With claude-mem, it does: the decisions, the relevant files, and the workarounds you applied all show up.
+
+### Repeatable onboarding for multiple sessions
+
+When someone on the team (or you on a new machine) opens Claude Code in the repo, the previous memories load. You don't have to rewrite the `CLAUDE.md` every time or re-explain the architecture.
+
+### An implicit knowledge graph of the project
+
+Session after session, claude-mem builds a "compressed history" of the project. It's different from a static `CLAUDE.md`: it's generated, it evolves, and it focuses on what you actually used.
+
+### Compared to Claude Code's built-in memory
+
+Claude Code 2.x ships with native memory, but it's more focused on user preferences. claude-mem is deeper: it captures what Claude did, not just what you said. They're complementary — not rivals. Compare with [Claude Code Memory](/boveda/memoria-claude-code) to see the nuances.
+
+## Real benefits
+
+- **The most-starred plugin in the catalog** (42k) — the community voted.
+- **Automatic memory** — you don't have to decide what to save; the agent-sdk decides.
+- **AI compression** — it doesn't store everything raw (that would be unmanageable); it stores a summarized, relevant version.
+- **Compatible with Claude Code's native memory**, they don't step on each other.
+- **Its own site with docs** ([claude-mem.ai](https://claude-mem.ai)).
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **For one-shot projects:** if you open Claude for a 20-minute task and never return to that repo, you don't need persistent memory. It's overhead.
+- **Privacy / sensitive:** the memories are stored on disk. If you work with sensitive code (clients, healthcare, finance), understand where it's saved before enabling it.
+- **Token cost:** the compression uses the agent-sdk, which consumes tokens. For heavy use, keep an eye on your quota.
+- **If your `CLAUDE.md` already covers what you need:** a good hand-curated `CLAUDE.md` can be cleaner than an auto-generated memory full of noise.
+- **Version / compatibility:** memory plugins are sensitive to Claude Code updates. If you hit an error after an update, check compatibility first.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Mem](https://www.aitmpl.com/plugins/claude-mem) — exact command.
+- **GitHub repo:** [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) — code, issues, examples.
+- **Official site:** [claude-mem.ai](https://claude-mem.ai) — docs and demos.
+
+## Related resources
+
+- [Claude Code Memory](/boveda/memoria-claude-code) — the native memory in Claude Code 2.x. Compare what that covers first before layering on claude-mem.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — what to put in `CLAUDE.md` and how it complements generated persistent memory.
+- [Anatomy of Claude](/boveda/anatomia-claude) — how to place claude-mem on the mental map (it's a plugin that combines skills + hooks).

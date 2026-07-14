@@ -1,0 +1,239 @@
+---
+title: "The 3 Claude models — when to use each without burning your plan"
+description: "Haiku 4.5 to think, Sonnet 4.6 to build, Opus 4.7 for what matters. The strategy to make your $20 quota last a full day of work — with examples by use case and when NOT to use Opus."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["trucos-basicos-claude", "guia-claude-code-completa", "codex-plugin-hack"]
+---
+
+## The mistake every Pro subscriber makes
+
+You open Claude, type anything, it answers. By noon your quota is at 80%. By 4pm you're bouncing off the limit.
+
+**The problem isn't Claude. It's you using the wrong model for everything.**
+
+Claude has 3 models with distinct profiles. Use them well and your $20 plan lasts a whole week of heavy work. Use them badly and you won't even make it to the afternoon.
+
+| Model | Tier | For what |
+|--------|------|----------|
+| **Haiku 4.5** | Light | Thinking, quick questions, summaries |
+| **Sonnet 4.6** | Medium (default) | Building, day-to-day, 80% of the work |
+| **Opus 4.7** | Heavy | What matters: decisions, big refactors, complex reasoning |
+
+---
+
+## Model 1 — Haiku 4.5 (for thinking)
+
+### Profile
+
+- **The fastest** of the 3
+- **Barely touches your quota** — you spend very little per turn
+- Responds in milliseconds, not seconds
+- Good at mechanical tasks and simple queries
+
+### When to use it
+
+✅ Everyday questions ("what's the difference between X and Y?")
+✅ Short summaries
+✅ Brainstorming ideas (bouncing around, not deep analysis)
+✅ Simple rewrites (change tone, shorten text)
+✅ Searching within docs ("what does this text say about X?")
+✅ Format conversion (JSON ↔ Markdown, CSV ↔ table)
+✅ Quick translations
+✅ Grammar / typo checks
+
+### When NOT to
+
+❌ Complex refactors
+❌ Architecture decisions
+❌ Analysis with many interrelated variables
+❌ Anything where "failing" has a high cost
+
+### How to activate it
+
+In Claude chat: `/model haiku`
+In Claude Code: `/model claude-haiku-4-5`
+
+---
+
+## Model 2 — Sonnet 4.6 (for building)
+
+### Profile
+
+- **A reasonable default** for almost everything
+- Balance between quality and cost
+- What you'll use 70-80% of the time
+- Good enough at code, writing, and reasoning
+
+### When to use it
+
+✅ Day-to-day coding (features, bug fixes)
+✅ Standard code review
+✅ Analysis with concrete data
+✅ Drafts of docs / posts / serious emails
+✅ Implementations that touch 2-5 files
+✅ Iterating on something already thought through
+✅ Anything where Haiku is too small but Opus is overkill
+
+### When NOT to
+
+- For trivial tasks: you're bumping up a tier for no reason → wasted quota
+- For very complex reasoning where you need depth → Opus is better
+
+### Default
+
+If you don't specify a model, **Sonnet is the default**. That's fine — most of the time it's the right choice.
+
+---
+
+## Model 3 — Opus 4.7 (for what matters)
+
+### Profile
+
+- **The most powerful**
+- More expensive per turn
+- Slower (seconds vs milliseconds)
+- Better reasoning, better at complex code, better at multi-step tasks
+
+### When to use it
+
+✅ Structural refactors that touch >5 files
+✅ Architecture decisions
+✅ Debugging subtle bugs that no smaller model can crack
+✅ Comparative analysis with many variables
+✅ Reasoning that requires many chained steps
+✅ Specs / PRDs for complex products
+✅ When you already tried Sonnet and it fell short
+
+### When NOT to
+
+❌ Trivial tasks (you're giving away quota)
+❌ Small edits
+❌ Exploratory conversation
+❌ When you're short on time (it's slower)
+
+### How to activate it
+
+```
+/model opus
+```
+
+> **Fast mode**: Opus has a "fast" mode that gives quicker output without dropping down to Sonnet. Useful when you're in a tight iterative loop. Turn it on with `/fast`.
+
+---
+
+## Effort level (orthogonal to model)
+
+Independent of which model you pick, you can adjust the **effort level** (extended thinking):
+
+| Effort | When |
+|--------|--------|
+| `low` | Mechanical tasks, quick answers |
+| `medium` | A reasonable default |
+| `high` | Complex tasks, multi-step reasoning |
+| `ultrathink` | The deepest, for genuinely hard problems |
+
+**Practical combination**: Sonnet + `ultrathink` can beat Opus + `low` in many cases for less cost. Worth experimenting with.
+
+---
+
+## The strategy to avoid burning your plan
+
+### Typical pattern for efficient use
+
+```
+Morning — think and plan (Haiku):
+- "What tasks do I have today"
+- "Summarize my unanswered emails"
+- "Brainstorm for Monday's post"
+
+Midday — build (Sonnet):
+- The day's coding
+- Doc drafts
+- Code reviews
+
+Afternoon — complex decisions (Opus, sparingly):
+- "How do I refactor this auth module"
+- "Debug the intermittent bug"
+
+Wrap-up — Haiku again:
+- Summarize the day
+- Note down learnings
+```
+
+Whoever does **everything with Sonnet or Opus** burns quota on things Haiku could handle. Whoever does **everything with Haiku** hits a wall when they need depth.
+
+---
+
+## 12 practical examples
+
+| Case | Recommended model |
+|------|---------------------|
+| "What's the difference between map and reduce in JS?" | Haiku |
+| "Rewrite this paragraph in a more concise tone" | Haiku |
+| "List the files modified today" | Haiku |
+| "Convert this JSON to a markdown table" | Haiku |
+| "Implement a login endpoint" | Sonnet |
+| "Code review this PR" | Sonnet |
+| "Draft the email for Acme" | Sonnet |
+| "Analyze this CSV and make a report" | Sonnet |
+| "Migrate auth from Supabase to Clerk (12 files)" | Opus |
+| "Decide between Postgres vs MongoDB for my case" | Opus |
+| "Debug this intermittent bug that shows up at random" | Opus |
+| "Design the architecture for microservices" | Opus |
+
+---
+
+## Difference between plans — Pro $20 vs Max
+
+| Plan | Real capacity |
+|------|----------------|
+| Pro $20 | ~70-100h/month at medium use. If you use the 3 models well, it's enough for heavy work |
+| Max 5× $100 | 4-5× the capacity of Pro. Useful if Opus is your main model |
+| Max 20× $200 | 15-20× Pro. Only if it's Opus + intensive use all day |
+
+**Rule**: if your quota runs out on Pro but you **use the 3 models well**, the problem is usage, not the plan. If you **use all 3 well** and still bounce off the limit, that's when Max makes sense.
+
+---
+
+## When NOT to use Opus (what people forget)
+
+Opus is tempting "because it's the best." But:
+
+### 1. For small edits
+
+Asking Opus to "add a comment to this function" is like asking a surgeon to cut your sandwich. Expensive and slow.
+
+### 2. For massive parallel tasks
+
+If you have 50 files to rename variables in, Sonnet or even Haiku plow through them much faster and cheaper.
+
+### 3. When you already know the answer
+
+If you just need Claude to implement something clear, Sonnet is enough. Opus thinks more → slower → more expensive, with no better output.
+
+### 4. For exploratory conversation
+
+Brainstorms, early ideas, bouncing around — Haiku is perfect. Opus is overthinking relative to what it adds.
+
+---
+
+## 6 operating rules
+
+1. **Default Sonnet, switch to Haiku for small ones, Opus for hard ones**
+2. **If you bounce off the limit, check your usage first — don't auto-upgrade your plan**
+3. **Summaries and translations → always Haiku**
+4. **Architecture decisions → always Opus**
+5. **Mix models in the same session** — there's no penalty
+6. **When in doubt, try Sonnet first, escalate if it falls short**
+
+---
+
+## Next steps
+
+- For more detail on Claude Code in general, [complete guide](/boveda/guia-claude-code-completa)
+- If you bounce off the limit, the [Claude + Codex hack](/boveda/codex-plugin-hack) moves heavy load to Codex
+- For the 4 tricks that really change how you use Claude, [basic tricks](/boveda/trucos-basicos-claude)

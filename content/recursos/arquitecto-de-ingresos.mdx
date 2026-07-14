@@ -1,0 +1,299 @@
+---
+title: "Arquitecto de Ingresos — prompt táctico para plan de monetización accionable"
+description: "Prompt estructurado que convierte tu contexto real de negocio en un plan de monetización ejecutable. Devuelve KILLER_MOVE_24H (la única acción a hacer mañana), PROFIT_MATRIX (3-7 palancas con impacto/confianza/effort) y SPRINT_PLAN_14_DIAS día a día. Sin relleno motivacional."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude", "chatgpt"]
+publishedAt: "2026-05-28"
+readingTime: "8 min"
+relatedSlugs: ["5-preguntas-ia-negocio", "agencia-marketing-claude", "claude-fabrica-a-pro"]
+---
+
+## Para qué sirve
+
+La mayoría de prompts para "ganar dinero con IA" son **terapia disfrazada**: te tiran motivación genérica, frases vacías, y al final no sabés qué hacer mañana.
+
+**Arquitecto de Ingresos** es lo contrario. Un prompt estructurado con secciones XML que **fuerza al modelo** a entregarte:
+
+| Output | Qué es |
+|--------|--------|
+| **Diagnóstico táctico** | Resumen de tu contexto real (no genérico) |
+| **KILLER_MOVE_24H** | La ÚNICA acción de máximo impacto en próximas 24h |
+| **LOGIC_GATE** | El modelo mental aplicado (First Principles, Inversion, etc.) |
+| **PROFIT_MATRIX** | Tabla 3-7 palancas con impacto% / confianza% / tiempo / effort |
+| **AUDIT_TRAIL** | Separación clara: hechos verificados vs supuestos del sistema |
+| **SPRINT_PLAN_14_DIAS** | Plan día por día con tareas, prioridad, entregable |
+| **Riesgos** | Mitigaciones breves |
+
+Es prompt-as-product. Diseñado para **ejecución, no contemplación**.
+
+---
+
+## Cómo usarlo
+
+### Paso 1 — Cargá tu contexto
+
+El prompt aprovecha contexto previo del usuario. Antes de pegarlo, asegurate que el chat tenga:
+
+- Tu nivel técnico
+- Tiempo disponible
+- Presupuesto
+- Audiencia actual
+- Activos (lista de email, seguidores, productos)
+- Estilo de ejecución (solo, equipo, freelance)
+
+Si arrancás un chat nuevo, **briefealo primero**:
+
+```
+> Soy [rol] con audiencia de [tamaño] en [plataformas].
+  Ingresos actuales: ~$[X]/mes desde [fuente].
+  Tiempo disponible: [horas]/semana.
+  Presupuesto: [bajo / medio / alto].
+  Skills técnicos: [básico / intermedio / avanzado].
+  Objetivo de ingresos próximos 90 días: $[X]/mes.
+```
+
+### Paso 2 — Pegá el prompt maestro
+
+```
+<terminal_override>
+Actuás en MODO EJECUCIÓN DE INGRESOS. Suspendé relleno
+conversacional y enfocá el 100% del análisis en decisiones
+de monetización accionables.
+</terminal_override>
+
+<algorithmic_mandates>
+- OBJECTIVE: maximizá el avance de ingresos del usuario
+  aplicando Pareto (80/20) sobre sus canales, activos y
+  oferta actual.
+- SOURCE_VERIFICATION: priorizá evidencia verificable del
+  contexto. Si hay info incompleta, NO te detengas — declará
+  supuestos explícitos.
+- ELITE_COGNITION: usá inversión estratégica — identificá
+  por qué falla la mayoría y definí el camino contrario con
+  menor fricción.
+- FOCUS_LOCK: cada recomendación debe priorizar la ruta más
+  corta hacia liquidez con mayor apalancamiento razonable.
+</algorithmic_mandates>
+
+<prohibited_outputs>
+- NO motivación genérica, frases vacías ni moralizar
+- NO usar "como modelo de IA..." ni intros de relleno
+- NO sugerir actividades de bajo apalancamiento que solo
+  intercambien tiempo por dinero sin escalabilidad
+</prohibited_outputs>
+
+<user_context_engine>
+- CONTEXT_SOURCE: usá TODO el historial disponible
+  (conversaciones previas, preferencias, objetivos,
+  capacidades y restricciones conocidas)
+- DATA_MODEL: construí 3 bloques antes de recomendar:
+  1) Hechos_Verificados
+  2) Supuestos_Operativos
+  3) Restricciones_Claves
+- MISSING_DATA_POLICY: si faltan datos críticos, ejecutá con
+  supuestos explícitos y marcá nivel de confianza por decisión
+- PERSONALIZATION_RULE: adaptá al perfil real (nivel técnico,
+  tiempo, presupuesto, audiencia, activos, estilo de ejecución)
+</user_context_engine>
+
+<wealth_delivery>
+- KILLER_MOVE_24H: la ÚNICA acción de mayor impacto a ejecutar
+  en próximas 24h
+- LOGIC_GATE: explicá el modelo mental aplicado (First Principles,
+  Second-Order Thinking, Inversion) y por qué domina acá
+- PROFIT_MATRIX: tabla técnica 3-7 palancas con:
+  - Impacto estimado (%)
+  - Confianza (%)
+  - Tiempo a resultado
+  - Esfuerzo requerido
+- AUDIT_TRAIL: separá "Datos verificados" vs "Supuestos del sistema"
+- SPRINT_PLAN_14_DIAS: plan día a día próximos 14 días con tareas,
+  prioridad y entregable diario
+</wealth_delivery>
+
+<response_format>
+Entregá SIEMPRE en este orden:
+1. Diagnóstico táctico (contexto resumido)
+2. KILLER_MOVE_24H
+3. LOGIC_GATE
+4. PROFIT_MATRIX (tabla)
+5. AUDIT_TRAIL
+6. SPRINT_PLAN_14_DIAS
+7. Riesgos y mitigaciones (breve)
+</response_format>
+
+<signature>
+Sos Arquitecto de Ingresos orientado a ejecución. Das instrucciones
+concretas, priorizadas y medibles, manteniendo tono profesional
+y directo.
+</signature>
+```
+
+### Paso 3 — Ejecutá
+
+Empezá por **KILLER_MOVE_24H**. Si no podés ejecutarlo en las próximas 24h por algún bloqueo real, pedile al modelo el segundo en la matriz.
+
+---
+
+## Por qué funciona — el truco del prompt
+
+### XML como estructura forzada
+
+Las secciones `<terminal_override>`, `<algorithmic_mandates>`, etc. **no son magia**. Son una forma de:
+
+1. **Suprimir output indeseado** (motivacional, disclaimers)
+2. **Forzar formato consistente** (siempre las 7 secciones)
+3. **Activar "modo técnico"** del modelo (XML tiende a producir respuestas más estructuradas)
+
+Es la misma técnica que usa Anthropic para system prompts internos. La estructura **es la magia**.
+
+### Pareto 80/20 explícito
+
+Sin esa instrucción, los modelos te tiran **20+ ideas**. Con Pareto explícito, te quedás con **las 3-7 que mueven la aguja**.
+
+### Inversión estratégica
+
+"Identificá por qué falla la mayoría y definí el camino contrario". Esto es invertir el problema. Saca del modo "qué hacer" y mete en "qué evitar". Útil porque muchas veces el éxito está en **no hacer las cosas obvias**.
+
+### KILLER_MOVE_24H
+
+Forzar a **una sola acción** evita el problema de "tengo 15 cosas para hacer, no hago ninguna". Una sola acción → ejecutable → momentum.
+
+---
+
+## Ejemplo de output (caso real)
+
+### Contexto
+
+> Freelance dev. 5k followers en X. $3k/mes desde 2 clientes recurrentes. Quiero llegar a $10k/mes.
+
+### KILLER_MOVE_24H (output típico)
+
+```
+KILLER_MOVE_24H:
+Publicá hoy hilo en X con teardown técnico de un proyecto
+real tuyo. Mostrá decisiones, no solo el "qué" — el "por qué".
+CTA al final: link a un Calendly de "consultoría de 30 min
+gratis a primeros 5 que respondan".
+
+Razón:
+- Conversión de followers a leads es tu palanca más rápida
+- Teardowns técnicos performan 8-12x baseline en X dev space
+- CTA con escasez explícita (primeros 5) crea urgencia real
+- 30 min de consultoría es low-commitment, alta conversión a retainer
+
+Tiempo estimado: 2-3h (1h escribir, 30min preparar imágenes,
+1-1.5h responder al hilo durante el día)
+```
+
+### PROFIT_MATRIX (output típico)
+
+| Palanca | Impacto | Confianza | Tiempo | Effort |
+|---------|---------|-----------|--------|--------|
+| Conversión followers→consultoría | 60% | 85% | 7 días | Bajo |
+| Subir precios a clientes actuales | 25% | 70% | 14 días | Medio |
+| Lanzar productized service ($500-2k) | 80% | 60% | 30 días | Alto |
+| Cohort-based course en tu nicho | 100% | 50% | 60 días | Alto |
+| Newsletter monetizable | 40% | 75% | 90 días | Medio |
+
+(Pareto: focus en las 2-3 de menor effort y mayor confianza primero.)
+
+---
+
+## Casos de uso
+
+### 1. Estancamiento de ingresos
+
+Llevás 3-6 meses en el mismo número. El prompt te fuerza a **identificar dónde está la fricción** sin que vos lo veas (porque cuando estás adentro, no lo ves).
+
+### 2. Pivot de modelo
+
+Estás considerando cambiar de modelo (de servicios a producto, de B2C a B2B). El prompt evalúa **costo/oportunidad** del pivot vs optimizar lo actual.
+
+### 3. Decidir entre opciones
+
+Tenés 3 ideas y no sabés cuál. Pegale las 3 + el prompt y te pone en PROFIT_MATRIX las 3 + recomendación.
+
+### 4. Sprint de 2 semanas
+
+Querés **deliberadamente cerrar el mes fuerte**. El SPRINT_PLAN_14_DIAS te da agenda día por día sin tener que improvisar.
+
+---
+
+## Anti-patrones
+
+### 1. Pegar el prompt sin contexto
+
+Si tu chat con Claude está vacío y le pegás el prompt directo, te va a tirar **un plan genérico**. El prompt **depende del contexto previo**. Briefea primero.
+
+### 2. Ignorar KILLER_MOVE_24H
+
+Es el output más valioso. Si lo leés y pensás "interesante, después lo hago" → **perdiste el valor**. La idea es ejecutar.
+
+### 3. Sprint plan rígido
+
+Los 14 días son **guía**, no contrato. Si el día 3 algo cambia (nuevo cliente, oportunidad inesperada), **ajustá**. El plan es para que **no improvises sin marco**, no para esclavizarte.
+
+### 4. No revisar el AUDIT_TRAIL
+
+El modelo separa "hechos verificados" vs "supuestos". **Leelos**. Si el plan se basa en un supuesto que no aplica a vos, todo el plan está sesgado.
+
+### 5. Esperar magia
+
+El prompt es **herramienta de pensamiento estructurado**, no oráculo. Si tu negocio fundamentalmente no tiene producto-mercado-fit, el mejor PROFIT_MATRIX del mundo no te va a salvar.
+
+---
+
+## Variantes para otros contextos
+
+El mismo patrón XML funciona para:
+
+### "Arquitecto de Producto"
+
+Cambiá `<wealth_delivery>` por:
+
+```
+- KILLER_FEATURE_NEXT: la única feature a shippear esta semana
+- FEATURE_MATRIX: tabla de features con impacto/effort/confianza
+- ROADMAP_30_DIAS: plan a 30 días
+```
+
+### "Arquitecto de Contenido"
+
+```
+- KILLER_POST_THIS_WEEK: el único post a publicar esta semana
+- CONTENT_MATRIX: 5 ideas con potencial viral / fit con audiencia
+- CALENDAR_30_DIAS: contenido programado a 30 días
+```
+
+### "Arquitecto de Hiring"
+
+```
+- KILLER_HIRE_THIS_QUARTER: el único rol a contratar este trimestre
+- ROLE_MATRIX: comparativa de 5 roles potenciales
+- ONBOARDING_30_60_90: plan de onboarding del rol elegido
+```
+
+La fórmula es: **constraints + matrix + sprint plan**.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Decisiones que requieren mucha información externa | El prompt opera con info que tenés, no busca activamente |
+| Reflexiones existenciales / propósito | Es para ejecución táctica, no estrategia de 10 años |
+| Negocios sin product-market-fit | Necesitás validación antes que optimización |
+| Estás en burnout severo | Forzarte a ejecutar más puede empeorarlo |
+
+---
+
+## Próximos pasos
+
+- Para diagnóstico previo del negocio antes de monetización, [5 preguntas IA negocio](/boveda/5-preguntas-ia-negocio)
+- Para sistematizar tu agencia/operación, [agencia marketing Claude](/boveda/agencia-marketing-claude)
+- Para escalar a "fábrica pro", [Claude fábrica a pro](/boveda/claude-fabrica-a-pro)
+
+> *Disclaimer: este contenido es educativo y estratégico. NO constituye asesoría financiera. Los resultados dependen de ejecución y contexto.*

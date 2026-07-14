@@ -1,0 +1,90 @@
+---
+title: "Setting Unity Project Dashboard Statusline — scene + build target + asset pipeline"
+description: "Setting con 91 installs. Statusline custom para Unity devs. Muestra scene info, build target (iOS/Android/PC/etc.), asset pipeline status, Unity version. Para gamedev Unity específico."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "unity"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-game-performance-monitor-statusline", "setting-multiplatform-build-status-statusline", "setting-asset-pipeline-controller-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/unity-project-dashboard-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/unity-project-dashboard-statusline.json"
+---
+
+## Qué es
+
+Statusline focused en Unity dev workflow. Muestra:
+- **Scene info** (scene actual)
+- **Build target** (iOS/Android/Mac/Windows/etc.)
+- **Asset pipeline status**
+- **Unity version**
+
+Para devs Unity específicamente. Contexto rich del editor visible en statusline.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | 91 |
+| Engine | Unity |
+| Type | Python3 script |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/unity-project-dashboard-statusline
+```
+
+Pre-requisito: Python3 disponible.
+
+Para Claude:
+
+```
+Instalé el setting statusline/unity-project-dashboard-statusline.
+Mostrame el state actual de mi project Unity.
+```
+
+## Qué podés hacer con esto
+
+### Scene + build context constante
+
+Sabés en qué scene estás trabajando sin buscar.
+
+### Detection de build target switching
+
+Si cambiás de iOS a Android target, el statusline lo confirma.
+
+### Asset pipeline awareness
+
+Mientras Claude codea, ves si assets están processing en background.
+
+### Combo con [Game Performance Monitor](/boveda/setting-game-performance-monitor-statusline)
+
+Unity Dashboard cubre editor context. Game Performance cubre runtime. Solo podés tener un statusline.
+
+### Combo con [Multiplatform Build Status](/boveda/setting-multiplatform-build-status-statusline)
+
+Unity Dashboard cubre editor. Multiplatform Build cubre builds finales. Diferentes phases del workflow.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Unity:** no aplica. Para Unreal hay otros options.
+- **Si tu workflow no toca Unity Editor:** menos util.
+- **Para web dev:** otros statuslines.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Unity Project Dashboard Statusline Setting](https://www.aitmpl.com/component/settings/statusline/unity-project-dashboard-statusline) — comando exacto.
+- **Config JSON:** [unity-project-dashboard-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/unity-project-dashboard-statusline.json).
+
+## Recursos relacionados
+
+- [Game Performance Monitor Statusline](/boveda/setting-game-performance-monitor-statusline) — runtime metrics.
+- [Multiplatform Build Status Statusline](/boveda/setting-multiplatform-build-status-statusline) — builds finales.
+- [Asset Pipeline Controller Statusline](/boveda/setting-asset-pipeline-controller-statusline) — asset processing.

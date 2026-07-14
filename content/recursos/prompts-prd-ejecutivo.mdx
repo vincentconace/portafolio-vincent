@@ -1,0 +1,239 @@
+---
+title: "Prompts: PRD ejecutivo desde un brief de 2 líneas"
+description: "Una colección de 3 prompts probados que convierten un brief mínimo ('necesitamos pricing dinámico') en un PRD listo para mostrar al equipo: contexto, problema, propuesta, criterios de éxito y riesgos. Para PMs, founders y técnicos."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "chatgpt"]
+publishedAt: "2026-05-06"
+readingTime: "7 min"
+relatedSlugs: ["prompt-debugging-sistematico", "skill-traduccion-tecnica"]
+---
+
+## Por qué este recurso existe
+
+Escribir un PRD desde cero te toma 1-2 horas si tenés práctica. Si nunca lo hiciste, te toma más y probablemente queda mal estructurado. Pero un buen PRD no es magia — es seguir una estructura clara con secciones obligatorias.
+
+Estos 3 prompts cubren los casos típicos:
+1. **PRD completo** (3-5 páginas) para features grandes
+2. **PRD lite** (1 página) para iteraciones rápidas
+3. **PRD comparativo** cuando tenés 2-3 opciones y necesitás justificar la elegida
+
+Todos asumen que tenés un brief de 1-3 líneas. Lo que sigue es trabajo del LLM con las preguntas correctas.
+
+---
+
+## Prompt 1 — PRD completo
+
+Copialo tal cual. Reemplazá solo el bloque `<BRIEF>`:
+
+```
+Sos un Product Manager senior. Te paso un brief y necesito que generes un PRD completo siguiendo esta estructura exacta.
+
+BRIEF:
+<BRIEF>
+Acá tu brief de 1-3 líneas.
+Ejemplo: "Necesitamos pricing dinámico que ajuste precios según demanda y stock en tiempo real."
+</BRIEF>
+
+CONTEXTO DEL PRODUCTO:
+<CONTEXTO>
+Acá descripción de 1 párrafo: qué es el producto, quiénes son los usuarios principales, en qué etapa está (early, growth, mature).
+</CONTEXTO>
+
+ESTRUCTURA DEL PRD (no te saltees secciones, ni cambies nombres):
+
+# [Título de la feature]
+
+## 1. Resumen ejecutivo
+3-4 líneas. ¿Qué construimos, para quién, y qué problema resuelve?
+
+## 2. Problema
+- Cuál es el problema actual (con evidencia si existe)
+- A quién le pasa (segmento de usuario específico)
+- Por qué importa ahora (timing, oportunidad, riesgo de no hacerlo)
+
+## 3. Propuesta
+- Solución en 1 párrafo
+- 3-5 user stories en formato "Como [rol] quiero [acción] para [beneficio]"
+- Out of scope explícito: qué NO incluye esta feature
+
+## 4. Criterios de éxito
+- 2-3 métricas cuantitativas con umbral concreto (ej: "Aumentar conversión en checkout +15% en 60 días")
+- 1 métrica cualitativa (ej: "Reducir tickets de soporte sobre el tema en un 40%")
+
+## 5. Diseño y experiencia
+- Flujo principal en 4-6 pasos
+- Estados especiales: empty, error, loading, edge cases
+- Decisiones de UX importantes con justificación
+
+## 6. Requerimientos técnicos
+- Componentes nuevos vs existentes que se reusan
+- Cambios en base de datos (si hay)
+- Integraciones externas
+- Performance esperada (latencia, throughput)
+
+## 7. Riesgos y mitigaciones
+- 3-5 riesgos concretos (técnicos, de negocio, de adopción)
+- Para cada uno: mitigación o cómo monitoreamos
+
+## 8. Plan de release
+- Fases (si aplica)
+- Feature flag y rollout (gradual / 100%)
+- Criterio de rollback
+
+REGLAS:
+- Si te falta info crítica para llenar una sección, escribí "❓ Necesito definir: [pregunta concreta]" y seguí con el resto. NO inventes datos de negocio.
+- Para las métricas, proponé umbrales realistas basados en el contexto. Si no podés, dejá "❓".
+- No metas jerga innecesaria. Lenguaje claro.
+- Largo total: 700-1500 palabras.
+```
+
+---
+
+## Prompt 2 — PRD lite (1 página)
+
+Para iteraciones rápidas o features pequeñas. Misma estructura comprimida:
+
+```
+Sos PM senior. Necesito un PRD lite de máximo 1 página (400-500 palabras).
+
+BRIEF:
+<BRIEF>
+Tu brief acá.
+</BRIEF>
+
+ESTRUCTURA:
+
+# [Título]
+
+## Qué construimos y por qué
+2-3 líneas con la propuesta y el problema que ataca.
+
+## User stories (3 max)
+"Como X quiero Y para Z" — solo las críticas.
+
+## Cómo medimos éxito
+1 métrica cuantitativa con umbral, 1 cualitativa.
+
+## Scope
+- ✅ Incluye: [lista corta]
+- ❌ No incluye: [lista corta, lo que vas a sacar de las quejas anticipadas]
+
+## Riesgos top 3
+Bullets cortos: riesgo + mitigación en una línea.
+
+## Plan
+1 párrafo: cómo lo lanzamos, con qué flag, en cuánto tiempo.
+
+REGLAS:
+- Conciso, accionable, sin relleno.
+- Si falta info, ❓ con la pregunta concreta.
+```
+
+---
+
+## Prompt 3 — PRD comparativo
+
+Cuando ya tenés 2-3 enfoques posibles y necesitás documentar la decisión:
+
+```
+Sos PM senior. Estoy evaluando varias opciones para resolver el mismo problema y necesito un documento comparativo que justifique la decisión.
+
+CONTEXTO:
+<BRIEF>
+El problema en 1-2 líneas.
+</BRIEF>
+
+OPCIONES:
+<OPCIONES>
+Opción A: [nombre + descripción de 1-2 líneas]
+Opción B: [nombre + descripción]
+Opción C: [nombre + descripción] (si hay)
+</OPCIONES>
+
+ESTRUCTURA:
+
+# Decisión: [Título del problema]
+
+## Contexto
+1 párrafo con el problema y por qué estamos decidiendo ahora.
+
+## Opciones evaluadas
+
+Para cada una:
+### Opción [N]: [Nombre]
+- **Descripción**: 2-3 líneas
+- **Pros**: 3-5 bullets concretos
+- **Contras**: 3-5 bullets concretos
+- **Esfuerzo estimado**: pequeño / medio / grande
+- **Riesgo**: bajo / medio / alto + por qué
+
+## Comparativa
+
+Tabla:
+| Criterio | Opción A | Opción B | Opción C |
+|----------|----------|----------|----------|
+| Time to market | ... | ... | ... |
+| Costo de mantenimiento | ... | ... | ... |
+| Reversibilidad | ... | ... | ... |
+| Impacto en usuarios actuales | ... | ... | ... |
+
+## Recomendación
+Opción elegida + 3-4 líneas justificando por qué (no por qué las otras son malas, sino por qué ésta es la mejor para el momento actual).
+
+## Qué pasa si nos equivocamos
+1 párrafo: cómo nos damos cuenta del error, y qué tan caro es revertir.
+
+REGLAS:
+- Honesto en los contras. Si la opción elegida tiene contras serios, mencionalos.
+- No vendas la opción que te toca recomendar. Mostrar el análisis vale más.
+- Si te faltan criterios importantes, agregalos a la tabla.
+```
+
+---
+
+## Tips para sacarle más jugo
+
+<Callout type="tip" title="Hacé varias pasadas">
+La primera respuesta del LLM va a tener huecos marcados con ❓. **Esos huecos son el valor real**: te están diciendo dónde tenés que pensar como humano. Respondelos vos, pegalos al prompt, y pedí v2.
+</Callout>
+
+### Iteración común
+
+```
+Acá tu respuesta inicial. Ahora:
+
+- En sección 4 (criterios), los umbrales que propusiste son optimistas. Bajalos: la conversión nuestra histórica es 2.3%, no esperamos +15% sino +5-8%.
+- En sección 7, sumá un riesgo: dependencia de Stripe (estamos a punto de evaluar Adyen).
+- La user story 3 está demás. Sacala.
+
+Regenerá el PRD con esos ajustes.
+```
+
+### Pedido de stakeholders
+
+Después del PRD, pedí:
+
+```
+Resumime este PRD en:
+1. Un mensaje de Slack de 4 líneas para presentar al equipo
+2. Un email de 1 párrafo para sponsors ejecutivos
+3. 3 talking points para defender la decisión en una reunión
+
+Tono: directo, sin jerga, asumiendo audiencia técnica para 1 y 3, no-técnica para 2.
+```
+
+---
+
+## Limitaciones
+
+- **No reemplaza research**: el LLM no sabe qué quieren tus usuarios. Le das los hechos vos.
+- **No sabe tu stack**: si tu equipo no puede entregar una opción técnica, esto no lo va a saber. Pasale ese contexto.
+- **No piensa por vos**: el ❓ es una feature, no un bug. Llenarlos sin pensar es peor que no usar el prompt.
+
+---
+
+## Próximos pasos
+
+- Combiná con [prompt de debugging sistemático](/boveda/prompt-debugging-sistematico) si necesitás analizar opciones técnicas en detalle.
+- Si trabajás con un equipo, armá un PRD template en Notion/Linear con los mismos headings — así el output del LLM se pega directo sin reformatear.

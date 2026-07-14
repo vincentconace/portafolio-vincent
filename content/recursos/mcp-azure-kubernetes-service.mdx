@@ -1,0 +1,100 @@
+---
+title: "MCP Azure Kubernetes Service — operar AKS desde Claude Code"
+description: "MCP server oficial de Microsoft para AKS. Le da a Claude la capacidad de inspeccionar, debuggear y operar clusters de Azure Kubernetes Service usando lenguaje natural en vez de kubectl + az CLI."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "azure", "kubernetes"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["all-deploy", "anatomia-claude", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/azure-kubernetes-service"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/azure-kubernetes-service.json"
+---
+
+## Qué es
+
+AKS-MCP es la implementación de Microsoft del Model Context Protocol para Azure Kubernetes Service. Es un puente que le permite a Claude interactuar con tus clusters de AKS sin que vos tengas que correr cada comando de `kubectl` o `az aks` a mano.
+
+En la práctica: cuando le pedís a Claude "mostrame los pods que están en CrashLoopBackOff", no tenés que pegarle la salida de `kubectl get pods -A`. El MCP llama directamente al API server de AKS, trae el estado y Claude razona con eso.
+
+Es uno de los MCPs verticales más útiles si tu infra vive en Azure y trabajás con clusters K8s todos los días.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 95 |
+| Servidor MCP | `aks` |
+| Cuenta requerida | Sí — Azure con acceso a tus AKS clusters |
+| Autenticación | Azure CLI (`az login`) o service principal |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/azure-kubernetes-service
+```
+
+Pre-requisitos: Azure CLI (`az`) instalado y autenticado a tu suscripción (`az login`).
+
+Para Claude:
+
+```
+Instalá el MCP devtools/azure-kubernetes-service. Verificá que estoy
+autenticado en Azure con `az account show` y listame los clusters AKS
+disponibles en mi suscripción.
+```
+
+## Qué podés hacer con esto
+
+### Diagnóstico de pods con problemas
+
+"Mostrame los pods en estado anómalo en todos los namespaces y dame los últimos 50 logs de cada uno". En vez de iterar manualmente, Claude trae todo y resume.
+
+### Análisis de uso de recursos
+
+"¿Qué deployment está consumiendo más CPU en el cluster de prod? Compará con la semana pasada". Claude consulta métricas y arma comparativa.
+
+### Operaciones controladas
+
+"Reducí el replica count de `payments-api` de 5 a 2 en staging para liberar nodos". Claude ejecuta el `kubectl scale` correspondiente — con tu aprobación si configuraste hooks de seguridad.
+
+### Drift detection
+
+"Compará el manifest actual de `prod/api-gateway` con lo que tengo versionado en `infra/k8s/prod/`". Detectás cambios manuales en cluster que rompen GitOps.
+
+### Onboarding a un cluster ajeno
+
+Heredás un cluster sin docs. "Mapeame todos los namespaces, los deployments en cada uno y las relaciones entre services". Claude arma el inventario que te ahorra horas de exploración.
+
+## Pre-requisitos
+
+- **Azure CLI** instalado y autenticado (`az login`)
+- **Permisos** en la suscripción para ver/operar los clusters AKS
+- **Cluster AKS** corriendo (obvio, pero importante)
+- **Si querés escribir** (scale, delete): hooks de aprobación recomendados
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de instalar en infra de producción">
+
+- **Operaciones destructivas sin gate:** Claude podría ejecutar `kubectl delete deployment` si no configurás hooks. Para prod, **siempre** poné un hook que pida confirmación humana antes de cualquier escritura.
+- **Permisos amplios:** si tu cuenta tiene Owner sobre la suscripción, Claude hereda ese poder. Considerá usar una cuenta de servicio con permisos mínimos (read-only en prod, escritura solo en dev).
+- **No cubre clusters en otro cloud:** este MCP es AKS-only. Para EKS, GKE, Rancher hay otros.
+- **Solo Kubernetes, no toda Azure:** para Storage, App Service, Functions, Cosmos DB necesitás otros MCPs.
+- **Audit logs:** todo lo que Claude ejecute queda en el log de Azure. Si te pasás de operaciones, va a quedar el rastro.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Azure Kubernetes Service MCP](https://www.aitmpl.com/component/mcps/devtools/azure-kubernetes-service) — comando exacto.
+- **Config JSON:** [azure-kubernetes-service.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/azure-kubernetes-service.json) — definición.
+- **Docs Azure:** [docs.microsoft.com/azure/aks](https://docs.microsoft.com/azure/aks).
+
+## Recursos relacionados
+
+- [All Deploy](/boveda/all-deploy) — para publicar a producción una vez que tu cluster está sano. AKS-MCP es para operar lo que ya está corriendo.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar el MCP en el mapa (el "cable" a Azure).
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que usen este MCP en automatizaciones complejas (alertas, autohealing).

@@ -1,0 +1,86 @@
+---
+title: "Hook Discord Notifications — minimal Discord alert when Claude finishes"
+description: "Hook with 140 installs. Simple Discord notification when Claude or a subagent finishes. Requires DISCORD_WEBHOOK_URL. The lightest option for remote alerts."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "discord"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-discord-detailed-notifications", "hook-discord-error-notifications", "hook-desktop-notification-on-stop"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/automation/discord-notifications"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-notifications.json"
+---
+
+## What it is
+
+The minimal version of Discord notifications. When Claude or a subagent finishes, it sends a message to the channel. No details, no error filters — just "done".
+
+Hook events: `Stop` + `SubagentStop`.
+
+Prerequisite: the `DISCORD_WEBHOOK_URL` env var (you create the webhook from Server Settings → Integrations → Webhooks).
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `automation` |
+| Installs | 140 |
+| Hook events | `Stop` + `SubagentStop` |
+| Env var | `DISCORD_WEBHOOK_URL` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook automation/discord-notifications
+```
+
+Set the webhook URL:
+
+```bash
+export DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/.../..."
+```
+
+## What you can do with it
+
+### Remote alert when it finishes
+
+It pings your Discord channel when Claude completes a task. Handy when you're away from the editor.
+
+### Subagent completion detection
+
+If your workflow uses subagents, it notifies you as each one finishes. Great for tracking long orchestrations.
+
+### Team activity channel
+
+If several devs run Claude Code, all completions land in the same channel. Instant visibility.
+
+### Compared to alternatives
+
+| Hook | When it alerts | Detail |
+| --- | --- | --- |
+| [Discord Notifications (this one)](/boveda/hook-discord-notifications) | Stop + SubagentStop | Minimal |
+| [Discord Detailed](/boveda/hook-discord-detailed-notifications) | SessionStart + Stop | With context |
+| [Discord Error](/boveda/hook-discord-error-notifications) | Long-running + errors | Problems only |
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't use Discord:** obviously. For Slack or Telegram there are other patterns or [Claude Notifications Go](/boveda/plugin-claude-notifications-go).
+- **For very frequent sessions:** notification spam.
+- **Without a configured webhook:** it does nothing.
+- **If you want to know exactly what happened:** use the Detailed version.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Discord Notifications Hook](https://www.aitmpl.com/component/hooks/automation/discord-notifications) — exact command.
+- **JSON config:** [discord-notifications.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/automation/discord-notifications.json).
+
+## Related resources
+
+- [Discord Detailed Notifications Hook](/boveda/hook-discord-detailed-notifications) — with context, more useful for team awareness.
+- [Discord Error Notifications Hook](/boveda/hook-discord-error-notifications) — only when something goes wrong.
+- [Desktop Notification On Stop Hook](/boveda/hook-desktop-notification-on-stop) — a local alternative without webhooks.

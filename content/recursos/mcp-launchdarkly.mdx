@@ -1,0 +1,102 @@
+---
+title: "MCP LaunchDarkly — feature flags y experimentación desde Claude Code"
+description: "MCP oficial de LaunchDarkly. Manejá feature flags, segments y experiments desde Claude Code. Útil para equipos que ya viven en LaunchDarkly y querés AI orquestando releases con flags."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "launchdarkly"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["all-deploy", "claude-code-best-practices", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/launchdarkly"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/launchdarkly.json"
+---
+
+## Qué es
+
+LaunchDarkly es la plataforma de feature flags más usada en enterprise: gestión, rollouts graduales, targeting por segmento, experimentación A/B, kill switches. Si tu equipo libera con flags (lo más sano), seguramente ya estás ahí o pensando en mudarte.
+
+Este MCP **oficial** de LD conecta tu cuenta a Claude Code. En vez de cambiar al dashboard para crear un flag, ajustar un target, o subir un rollout, le pedís a Claude.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 88 |
+| Servidor MCP | `LaunchDarkly` |
+| Autor | LaunchDarkly (oficial) |
+| Cuenta requerida | Sí — LaunchDarkly + API token |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/launchdarkly
+```
+
+Pre-requisito: cuenta LD + API access token con scopes apropiados.
+
+Para Claude:
+
+```
+Instalé el MCP devtools/launchdarkly. Después de setear el API token,
+listame los flags del environment `production` que estén en rollout
+parcial (no 0% ni 100%), con su targeting actual.
+```
+
+## Qué podés hacer con esto
+
+### Inspección de flags
+
+"¿Qué flags están activos en prod? Cuáles llevan más de 90 días en rollout sin progress?". Tracking de flag debt.
+
+### Rollouts graduales
+
+"El flag `new-checkout` está en 10%. Subílo a 25% para usuarios en el segment `beta-testers`". Operaciones de rollout sin abrir UI.
+
+### Kill switch rápido
+
+"Apagame el flag X en prod ahora — algo está roto en el rollout". Para incidentes, el speed importa.
+
+### Segments y targeting
+
+"Crear un segment `lat-am-mobile` con users de México + Argentina + Colombia + Chile en device mobile. Después poner el flag Y a 100% para ese segment".
+
+### Experimentación
+
+"Listame los experimentos activos con menos de 1000 conversions y dame el power statistical actual de cada uno". Útil para saber qué experiments están listos para conclusión.
+
+### Cleanup de flags muertos
+
+"Buscame flags servidos al 100% durante más de 60 días — candidatos a eliminar del código". Anti flag-debt.
+
+## Pre-requisitos
+
+- **Cuenta LaunchDarkly** activa
+- **API access token** con scopes correctos
+- **Environments correctos** identificados (prod, staging, dev)
+- **Hooks de aprobación** muy recomendables para writes en prod
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de habilitar writes a producción">
+
+- **Apagar/encender flags por error en prod:** catastrófico potencial. Hooks de aprobación SIEMPRE.
+- **API tokens amplios:** un token con scope total deja a Claude operar todo. Restringí scope al mínimo.
+- **Si tu plataforma es otra** (ConfigCat, Optimizely, Split, GrowthBook, Unleash): este MCP es LD-only.
+- **Para experimentos críticos:** Claude consulta data, pero las decisiones de "ship or kill" siguen siendo humanas.
+- **Compliance:** algunos environments tienen restricciones de quién puede cambiar flags. Validá antes.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [LaunchDarkly MCP](https://www.aitmpl.com/component/mcps/devtools/launchdarkly) — comando exacto.
+- **Config JSON:** [launchdarkly.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/launchdarkly.json).
+- **LaunchDarkly oficial:** [launchdarkly.com](https://launchdarkly.com) — cuenta, docs.
+
+## Recursos relacionados
+
+- [All Deploy](/boveda/all-deploy) — para publicar a producción. Flags + deploy = pipeline serio.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — buenas prácticas con tools que afectan producción.
+- [Agency Agents](/boveda/agency-agents) — para orquestar agents que reaccionen a métricas con autoflag adjustment (con caveats).

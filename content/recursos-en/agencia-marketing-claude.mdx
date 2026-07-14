@@ -1,0 +1,286 @@
+---
+title: "Your own marketing agency with 3 open-source tools"
+description: "A combo of 3 tools covering the core agency jobs: auditing what's running, diagnosing why traffic is dropping, and creating new content. All free and right next to Claude — it doesn't replace human judgment but it speeds up all the operational work."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "google-ads", "meta-ads"]
+publishedAt: "2026-05-27"
+readingTime: "11 min"
+relatedSlugs: ["andromeda-meta-ads", "stack-ia-creador", "higgsfield-mcp"]
+---
+
+## The thesis
+
+A marketing agency has **3 core jobs**:
+
+1. **Audit** what's already running (campaigns, ads, landing pages)
+2. **Diagnose** what's failing when results drop
+3. **Create** new content / creatives
+
+Each one can be sped up with an open-source tool. Combined, **they let you do in a morning what takes a traditional agency a week**.
+
+> Important: this **does not replace judgment**. If you've never run ads, learn that first. If you already have the craft, the combo saves you hours of operational work + separate Midjourney/Sora/Higgsfield subscriptions.
+
+---
+
+## The combo
+
+| Job | Tool | What it does |
+|---------|-------------|----------|
+| **Audit** | Claude Ads | Audits campaigns on Google, Meta, TikTok, YouTube + 7 platforms with 250+ checks per ad |
+| **Diagnose** | TopRank | Connects to Search Console + Google Ads to understand why traffic dropped |
+| **Create** | Open Generative AI | 200+ image/video models without paying for separate subscriptions |
+
+All open-source, integrable with Claude Code.
+
+---
+
+## Tool 1 — Claude Ads (audit)
+
+### What it audits
+
+Feed it your paid media accounts. For each active ad, it runs 250+ checks:
+
+#### Creative
+- Hook quality (first 3 seconds)
+- Ad ↔ landing coherence
+- Variants present (if they're all the same, that's a problem)
+- Accessible typography / contrast
+
+#### Targeting
+- Overlapping audiences (you're competing against your own campaigns)
+- Audiences too small (the algorithm doesn't learn)
+- Audiences too broad (high CAC)
+
+#### Bidding
+- CPA / CPM vs your industry benchmark
+- Abnormal cost fluctuation
+- Budget allocation across campaigns
+
+#### Tracking
+- Pixel working correctly
+- Critical events firing
+- Clean UTMs
+
+#### Compliance
+- Disclaimers present where required
+- Platform-prohibited terms
+
+### How to use it
+
+```
+> Audit my active Meta campaigns from the last month.
+
+Give me a prioritized report:
+🔴 Critical (fix this week)
+🟡 Improvable (worth reviewing)
+🟢 OK
+```
+
+For each finding: file / ad / line + a concrete action.
+
+---
+
+## Tool 2 — TopRank (diagnose)
+
+### What it's for
+
+Your organic traffic dropped 30% last month. **Why?**
+
+The obvious options:
+- Google changed something
+- You lost keywords
+- A competitor moved ahead
+- A technical bug on your site
+
+TopRank connects to:
+- **Google Search Console**
+- **Google Ads**
+- **GA4**
+
+And gives you a structured diagnosis:
+
+### Typical output
+
+```
+TRAFFIC DROP DIAGNOSIS
+
+Period analyzed: last 30 days vs previous 30
+Total drop: -32% organic sessions
+
+DETECTED CAUSES (ordered by impact):
+
+1. LOSS OF POSITIONS ON KEY KEYWORDS (-18%)
+   - "buy product X" fell from pos 3 → pos 8
+   - "product X reviews" fell from pos 5 → pos 14
+   - 8 more keywords dropped significantly
+
+   Probable cause: competitor Y published a long-form article on March 5
+   with the same structure. Now it ranks above you.
+
+   Recommendation: update your piece with +500 words and a new data point
+   they don't have.
+
+2. TECHNICAL INDEXING PROBLEM (-9%)
+   - 47 new URLs were not indexed
+   - Possible cause: sitemap.xml was not updated
+
+3. SEASONALITY (-5%)
+   - This is normal in your industry for this month
+   - No action required
+```
+
+**3 concrete actions instead of "it could be a lot of things, go investigate"**.
+
+---
+
+## Tool 3 — Open Generative AI (create)
+
+### What it is
+
+An **interface** that gives you access to 200+ generative models without having a subscription to each one. Instead of paying for Midjourney + Sora + Veo + Higgsfield + Kling separately, you use this interface and pay for actual usage.
+
+Models included:
+- **Image**: Stable Diffusion, DALL-E 3, Midjourney (via API), Flux, Nano Banana
+- **Video**: Veo 3, SeeDance, Sora (when there's an API), Kling
+- **Audio**: ElevenLabs, Suno
+- **Others**: upscalers, background removers, face swap, etc.
+
+### Why it's worth it
+
+| Traditional stack | Open Generative AI |
+|-------------------|---------------------|
+| Midjourney $30 + Sora $30 + ElevenLabs $30 + ... | A single subscription or pay-per-use |
+| Each one with its own login, its own prompt format | A single conversational interface |
+| Want to try a new model? New subscription | It's already in the catalog |
+
+### How it's used
+
+```
+> Generate a photoreal image of a product on a soft gray background,
+  camera at 45° from above, studio lighting, 4K.
+
+  Try with: Nano Banana, Flux and SD3 — show me the 3 side by side.
+  I'll pick which one to keep iterating on.
+```
+
+You compare output from 3 models in one request. **Impossible with separate subscriptions.**
+
+---
+
+## The full "agency" flow
+
+How the 3 tools chain together in a real case:
+
+### Monday — weekly audit
+
+```
+> /weekly-audit
+```
+
+Claude Ads runs the audit. It gives you a report. You identify 2 urgent problems:
+- A Meta ad with rising CAC
+- A drop in organic traffic
+
+### Monday afternoon — diagnosis
+
+```
+> For the ad with rising CAC: dig deeper. Audience fatigue?
+  Creative fatigue? A change in the competitor's bidding?
+
+> For the organic drop: run TopRank and show me the causes.
+```
+
+Both give you a structured diagnosis.
+
+### Tuesday — create new creatives
+
+```
+> For the ad with audience fatigue: I need 5 new creative
+  variants. Use Open Generative AI:
+  - Style: editorial photoreal
+  - Hook: different from the current ones (the current ones are product shots,
+    these I want people-centric)
+  - Variations of the pain point we cover in the copy
+
+  Generate the 5 with different prompts. Show me side by side.
+```
+
+### Wednesday — implement fixes
+
+```
+> For organic traffic:
+  1. Update the piece that lost position using TopRank's
+     guidance (add 500 words + a new data point)
+  2. Re-publish the sitemap.xml for the 47 unindexed URLs
+
+  For the new creatives:
+  1. Upload the 5 to Meta Ads as variants in the same campaign
+  2. Set up A/B testing 80/20 against the originals for 7 days
+```
+
+### Friday — verify
+
+```
+> Report for the week:
+  - Initial audit vs now
+  - Creative variants: which performed best over the 7 days
+  - Organic traffic: did it improve after the fixes?
+```
+
+**A week** of agency work: 1 day of yours with the tools.
+
+---
+
+## Anti-patterns
+
+### 1. Expecting it to replace judgment
+
+The 3 tools assist **decisions**, they don't make them. If you don't understand marketing, the tools won't teach it to you — they only speed up what you already know (or make you execute faster what you **don't** know, which can be worse).
+
+### 2. Auditing without acting
+
+Claude Ads gives you 50 findings. **You implement 5 critical ones**, the rest wait or get closed as "not applicable". If you only audit and don't act, you're wasting your time.
+
+### 3. Generating 100 creatives without testing
+
+Open Generative AI can generate volume. **You don't need 100 images — you need the 5 that perform**. Iterate with discipline, not with quantity.
+
+### 4. Changing everything at once
+
+If you audit and change 12 things at the same time, you don't know what moved the needle. **Isolated changes** to measure the real effect.
+
+---
+
+## When this combo wins
+
+✅ You run your own marketing (in-house, not an agency)
+✅ Enough volume to make the setup worth it (>$2k/month in paid media)
+✅ You know how to interpret the outputs and make decisions
+✅ You accept that it's a process, not a magic button
+
+❌ No paid media budget → there's nothing to audit
+❌ You need executive reports with certified compliance
+❌ You expect an "automated agency" that decides strategy
+
+---
+
+## The real cost
+
+| Component | Cost |
+|------------|-------|
+| Claude Pro | $20-100/month |
+| Claude Ads (open source) | $0 + cost of API calls to platforms |
+| TopRank (open source) | $0 + Search Console / Ads API free |
+| Open Generative AI | Pay-per-use, typically $30-150/month |
+| **Total** | **$50-250/month** |
+
+Compared to a traditional agency ($3000-15000/month for maintenance), the ROI is enormous — if you have the craft to use them well.
+
+---
+
+## Next steps
+
+- To go deeper on Meta Ads specifically with a system, [Andromeda — 8 Meta Ads rules](/boveda/andromeda-meta-ads)
+- For the full content creation stack (not just paid), [Creator AI Stack](/boveda/stack-ia-creador)
+- If all you need is cinematic video, [Higgsfield MCP](/boveda/higgsfield-mcp)

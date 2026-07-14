@@ -1,0 +1,353 @@
+---
+title: "Claude from stock to pro — 4 free tools that change everything"
+description: "Out of the box, Claude sometimes looks weak, and it's not your fault. It's missing 4 pieces: Sequential Thinking (think before you speak), Superpowers (autopilot with sub-agents), Context7 (always up-to-date docs), and Code Simplifier (short, clean code). All 4 are free. How to install them and when each one is worth it."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "skills", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["5-skills-equipo-dev", "mejores-practicas-claude", "cinco-repos-dominando-claude"]
+---
+
+## The problem
+
+**Out of the box**, Claude is fine for simple tasks. For serious work:
+
+1. **It rushes** — it answers without thinking through the logical chain
+2. **It needs micromanagement** — you have to tell it every step
+3. **It uses outdated info** — its training cutoff was months ago
+4. **It over-writes** — 200 lines when 30 would do
+
+4 open source tools solve each one of those 4 problems. **All free**, all installable in minutes.
+
+| Tool | Solves |
+|-------------|----------|
+| **Sequential Thinking** | "Answers without thinking" |
+| **Superpowers** | "Needs micromanagement" |
+| **Context7** | "Uses outdated info" |
+| **Code Simplifier** | "Writes long code" |
+
+---
+
+## 1. Sequential Thinking
+
+### The problem
+
+You ask it for something complex and Claude starts writing immediately. Two paragraphs in you realize it **went down the wrong path** because it didn't analyze the problem properly.
+
+### The solution
+
+Sequential Thinking forces it to:
+
+1. **Pause** before answering
+2. **Break down** the problem into steps
+3. **Verify** each step before moving on
+4. **Ask** if info is missing instead of making it up
+
+### Installation
+
+```bash
+git clone https://github.com/mrgoonie/claudekit-skills.git \
+  ~/.claude/skills/claudekit-skills
+```
+
+### Usage
+
+```
+> Think step by step:
+
+  I have a Shopify store. Sales dropped 30% this month but
+  traffic went up 15%. What could be happening and what do I check first?
+```
+
+Claude will:
+1. List possible hypotheses (10-15 reasons)
+2. Prioritize them by likelihood
+3. Suggest how to verify each one
+4. Order them from "easy to check" to "complex"
+
+Without Sequential Thinking, it just throws out "could be X or Y, check analytics".
+
+### When it shines
+
+- Diagnosing complex problems
+- Planning features before coding
+- Analyzing business decisions
+- Any task with an "it depends"
+
+---
+
+## 2. Superpowers
+
+### The problem
+
+Claude traditionally works like a **manual car**. You tell it every step:
+
+```
+> "First build the Navbar component"
+> "Now build the Hero"
+> "Now connect it to the API"
+> "Now write tests"
+```
+
+It's tiring. And you lose time coordinating.
+
+### The solution
+
+Superpowers turns Claude into **autopilot**:
+
+1. You tell it the **final destination** ("build a to-do app with auth")
+2. Claude plans the full route
+3. It creates **specialized sub-agents** that work in parallel
+4. Built-in TDD (tests first)
+5. It reviews its own code
+6. It delivers it working
+
+It's an official project validated by Anthropic.
+
+### Installation
+
+```bash
+npx superpowers@latest init
+```
+
+### Usage
+
+```
+> Use superpowers to build a to-do list app with
+  authentication, database, and deploy.
+
+  Stack: Next.js + Supabase + Vercel.
+
+  Plan everything first, split up the tasks, review yourself,
+  deliver it working.
+```
+
+A 1-3h session vs 8-12h without Superpowers.
+
+### When it shines
+
+- Complete projects (not fixes)
+- Long tasks where you don't want to supervise step by step
+- TDD workflows
+- Large refactors
+
+### When NOT
+
+- Quick fixes (overkill)
+- When you already have a tuned flow with custom prompts
+- Very creative/exploratory tasks
+
+More details in [top 10 April 2026](/boveda/top-10-claude-abril-2026) and [5 skills dev team](/boveda/5-skills-equipo-dev).
+
+---
+
+## 3. Context7
+
+### The problem
+
+Claude's training cutoff is **months back**. Libraries change every day:
+
+- React 19 shipped new features
+- Next.js 16 changed things in App Router
+- Tailwind v4 modified the config
+- Supabase rotated APIs
+
+Claude generates code with **deprecated APIs** because it doesn't know they changed. Result: weird errors you can't debug because "the code looks fine".
+
+### The solution
+
+Context7 is an MCP server that gives Claude access to **up-to-date official documentation** for thousands of libraries. Before generating code that uses library X, it consults the real docs.
+
+Zero invented APIs. Zero deprecated methods.
+
+### Installation
+
+```bash
+npx -y @anthropic-ai/claude-code mcp add context7 -- \
+  npx -y @upstash/context7-mcp@latest
+```
+
+### Usage
+
+```
+> Use context7 to check the latest documentation for
+  Next.js App Router. Then create a page with server actions,
+  authentication middleware, and error handling.
+
+  Make sure to use the MOST CURRENT syntax (not the syntax from
+  old versions).
+```
+
+### When it shines
+
+- You're starting a new project with very up-to-date libs
+- Your project uses a specific version you know changed APIs
+- Migrating between major versions
+
+### When NOT
+
+- Legacy stack where the old version is what your prod uses (you want the old code, not the new one)
+- Very niche libraries that Context7 doesn't cover
+- No internet (Context7 fetches docs in real time)
+
+---
+
+## 4. Code Simplifier
+
+### The problem
+
+Claude has a tendency to:
+
+- Create abstractions for a single use ("just in case")
+- Unnecessary wrappers
+- Generic configurations for hypothetical cases
+- 200 lines for something that needs 30
+
+Result: a **bloated** codebase, hard to maintain, with bugs hidden in the leftover code.
+
+### The solution
+
+Official Anthropic skill. After every code generation, it reviews it with judgment:
+
+- Is this used more than once? If not → inline
+- Does this abstraction reduce real complexity? If not → remove
+- Does this wrapper add anything? If not → out
+
+Result: **short, readable, maintainable** code.
+
+### Installation
+
+```bash
+claude install-skill https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier
+```
+
+### Usage
+
+**Apply to existing code**:
+
+```
+> /simplify Review the code we wrote in this session.
+
+  Remove what's unnecessary, simplify what you can, make sure
+  each file has fewer than 300 lines.
+
+  If something can be done more simply, do it.
+```
+
+**Force simplicity from the start**:
+
+```
+> Build a contact form with validation and email
+  sending.
+
+  IMPORTANT: the SIMPLEST AND SHORTEST code possible.
+  No unnecessary abstractions. No over-engineering.
+  If it can be done in 50 lines, do NOT use 200.
+```
+
+### When it shines
+
+- Small/medium projects that need to be maintainable
+- After long sessions where Claude accumulated complexity
+- When you inherit a codebase and need a cleanup
+
+### When NOT
+
+- Enterprise systems where the abstractions are **on purpose** (DDD, hexagonal)
+- Libraries that need flexibility (more config → better API)
+- Code that's going to be extended massively (premature simplification)
+
+---
+
+## Install all 4 in one go
+
+```bash
+git clone https://github.com/mrgoonie/claudekit-skills.git \
+  ~/.claude/skills/claudekit-skills && \
+npx superpowers@latest init && \
+npx -y @anthropic-ai/claude-code mcp add context7 -- \
+  npx -y @upstash/context7-mcp@latest && \
+claude install-skill https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier
+```
+
+---
+
+## How they work together
+
+```
+1. You: > Build an analytics dashboard with Next.js + Supabase
+
+2. Sequential Thinking:
+   "Pause. Before coding, plan:
+    - 3 views (overview, detail, comparison)
+    - 4 API endpoints
+    - 2 DB schemas
+    - Integrated auth flow"
+
+3. Superpowers:
+   Creates sub-agents:
+   - Backend: schemas + endpoints
+   - Frontend: 3 views in parallel
+   - Tests: for the 4 endpoints
+
+4. Context7:
+   Before generating Server Actions, checks the current Next.js 16 docs.
+   Before Supabase queries, checks the v3 docs.
+
+5. Code Simplifier:
+   After each component, reviews.
+   "The formatNumber helper is used once — inline.
+    The filter context provider only holds 1 piece of data — direct useState.
+    The custom hook useDashboardData is 200 LOC for 2 fetches — refactor."
+
+6. Result: functional dashboard, current syntax, clean code,
+   under 2h.
+```
+
+Without the 4, same dashboard: 6-10h with bloated code, a mix of versions.
+
+---
+
+## Anti-patterns
+
+### 1. Turning on all 4 for trivial tasks
+
+For "change this text for me", all 4 are overkill. Turn them on based on complexity.
+
+### 2. Context7 without internet
+
+Context7 fetches docs in real time. Without internet, it fails. For offline, disable it.
+
+### 3. Superpowers with a vague plan
+
+Superpowers plans based on what you tell it. If you say "make something cool", the plan is vague → scattered execution. **A specific brief** = a robust plan.
+
+### 4. Code Simplifier without reviewing
+
+Sometimes it over-simplifies. If it removes an abstraction that **you actually needed**, revert. It's not infallible.
+
+### 5. Sequential Thinking on creative tasks
+
+For brainstorming, Sequential Thinking can **kill the spark**. For free creative work, leave it off.
+
+---
+
+## Estimated ROI
+
+| Tool | Without tool (month) | With tool (month) | Savings |
+|------|----------------|----------------|--------|
+| Sequential Thinking | Rework from misunderstanding: ~5h | ~1h | 4h |
+| Superpowers | Manual coordination: ~10h | ~3h | 7h |
+| Context7 | Debugging deprecated APIs: ~4h | ~1h | 3h |
+| Code Simplifier | Maintaining bloated code: ~6h | ~2h | 4h |
+
+**~18h/month** saved for an intensive dev. That's the equivalent of $400-1000/month in value.
+
+---
+
+## Next steps
+
+- For more skills from the ecosystem, [5 skills dev team](/boveda/5-skills-equipo-dev)
+- For general principles of good Claude use, [Claude best practices](/boveda/mejores-practicas-claude)
+- For similar repos with different focuses, [5 repos mastering Claude](/boveda/cinco-repos-dominando-claude)

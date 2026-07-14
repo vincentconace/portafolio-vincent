@@ -1,0 +1,317 @@
+---
+title: "Restaurar fotos viejas o borrosas con NanoBanana MCP en Claude Code"
+description: "NanoBanana es un MCP server que conecta Claude con Google Gemini para generar y restaurar imágenes. Setup en 2 minutos, API key gratis, output 4K. Acá está el prompt afinado para restauración ultra-realista sin look IA."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code", "mcp", "gemini"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["higgsfield-mcp", "5-skills-diseno-claude", "mcp-server-propio"]
+---
+
+## Qué es NanoBanana
+
+**NanoBanana** es un MCP server (`github.com/zhongweili/nanobanana-mcp-server`) que conecta Claude Code con **Google Gemini** para:
+
+- Restaurar fotos dañadas, borrosas, baja calidad
+- Generar imágenes nuevas desde texto
+- Procesar a resolución **4K** con calidad fotográfica real
+
+A diferencia de servicios web (donde subís tu foto y esperás), NanoBanana corre desde Claude — la foto **nunca sale de tu compu** salvo para invocar la API de Gemini.
+
+| Característica | Detalle |
+|----------------|---------|
+| Output | 4K |
+| Costo | Gratis (API Gemini tier free) |
+| Setup | 2 minutos |
+| Aspect ratios | 1:1, 4:3, 16:9, 9:16, 21:9 |
+| Modelos | NB2 (Gemini Flash) y Pro |
+
+---
+
+## Setup en 3 pasos
+
+### Paso 1 — API Key de Gemini (gratis)
+
+1. Andá a `aistudio.google.com`
+2. Login con cuenta Google
+3. Click en **"Get API Key"** o "Create API Key"
+4. Copiala
+
+La API gratis de Gemini tiene **límites generosos** para uso personal. No la compartas, no la subas a repos públicos.
+
+### Paso 2 — Instalar el MCP server
+
+El método más rápido: pegale esto a Claude Code:
+
+```
+> Instalá el MCP server nanobanana-mcp-server desde
+  github.com/zhongweili/nanobanana-mcp-server
+
+  Usá uvx: uvx nanobanana-mcp-server@latest
+
+  Configuralo con mi API key de Gemini: TU_API_KEY_AQUI
+
+  Asegurate de que quede funcionando y verificá con un
+  test simple (generar imagen "un gato").
+```
+
+Alternativa manual:
+
+```bash
+pip install nanobanana-mcp-server
+```
+
+### Paso 3 — Verificar
+
+Una vez instalado, Claude debería tener acceso a la tool `generate_image`. Probá:
+
+```
+> Generá imagen 1024x1024 de "un café con leche sobre madera,
+  estilo cinematográfico". Usá NanoBanana.
+```
+
+Si te devuelve PNG, **conectado**.
+
+---
+
+## El prompt afinado de restauración
+
+Este es el prompt que mejor resultado da para restaurar fotos sin que se vea "IA-generado":
+
+```
+Aplicá restauración fotográfica ultra-realista con textura de
+piel natural, detalles precisos y aspecto fotográfico profesional.
+
+Salida en resolución 4K con enfoque nítido pero natural,
+iluminación cinematográfica moderna, iluminación volumétrica sutil,
+gradación de color profesional, profundidad de campo sutil y HDR.
+
+La salida debe verse como una fotografía real tomada con una
+cámara de cine de alta gama con estética raw. NO generada por IA,
+NO ilustrada, NO excesivamente nítida, NO con aspecto plástico.
+
+NO apliques reinterpretación creativa, cambios de estilo,
+alteraciones de identidad, remodelación facial ni características
+exageradas. SIN estilos de caricatura, pintura ni ilustración.
+SIN sobre-enfoque, desenfoque, ruido, grano de película ni
+artefactos JPEG.
+```
+
+### Cómo usarlo
+
+```
+> Ruta de la foto: /Users/yo/Pictures/foto-abuela-1985.jpg
+
+  Aplicá el prompt de restauración profesional [pegás el prompt
+  de arriba].
+
+  Output: 4K, aspect ratio 4:3 (mantener original).
+  Guardar en: /Users/yo/Pictures/restored/
+```
+
+---
+
+## Variantes del prompt
+
+### Para foto familiar antigua
+
+```
+> [Prompt base de restauración]
+
+  Contexto adicional: es foto familiar de los años 70/80.
+  Tonos cálidos, ligeramente desvanecidos. Mantené esa estética
+  vintage en la gradación — NO la "modernices". Solo arreglá
+  daños físicos (rayones, manchas) y nitidez.
+```
+
+### Para foto de documento / scaneado
+
+```
+> [Prompt base]
+
+  Es un documento escaneado. Priorizá:
+  - Legibilidad del texto
+  - Eliminación de manchas y dobleces
+  - NO inventes contenido en zonas ilegibles — dejalas
+    ligeramente borrosas para que se note que falta info
+```
+
+### Para retrato profesional
+
+```
+> [Prompt base]
+
+  Es un headshot corporativo. Objetivos:
+  - Piel natural (NO photoshop excesivo)
+  - Ojos con definición pero NO sobreprocesados
+  - Iluminación corregida si está sub/sobre expuesta
+  - Mantené arrugas, lunares, imperfecciones reales — son parte
+    de la identidad
+```
+
+### Para golden hour
+
+```
+> [Prompt base]
+
+  Ajuste creativo adicional: simulá iluminación de golden hour
+  (sol bajo, tonos cálidos dorados, luz lateral). Sutil — sin
+  exagerar el efecto.
+```
+
+---
+
+## Modelos disponibles
+
+| Modelo | Cuándo |
+|--------|--------|
+| **NB2 (Gemini Flash)** | Default. Velocidad + 4K. Para mayoría de fotos. |
+| **Pro** | Composiciones complejas que requieren más análisis (multi-sujeto, escenas con muchos elementos) |
+
+Para especificar:
+
+```
+> Restaurá con modelo Pro
+```
+
+---
+
+## Aspect ratios
+
+NanoBanana soporta:
+
+- **1:1** — Instagram feed clásico
+- **4:3** — formato foto estándar
+- **16:9** — widescreen, banner
+- **9:16** — vertical, Stories/Reels
+- **21:9** — ultra-wide cinematográfico
+
+```
+> Restaurá esta foto. Aspect ratio: 16:9. Si la foto original
+  no encaja, NO crops importantes — mejor agregá fondo plausible.
+```
+
+---
+
+## Output
+
+Por defecto se guardan en `./nanobanana-output/` dentro del directorio actual.
+
+Para cambiar:
+
+```bash
+export IMAGE_OUTPUT_DIR=/Users/yo/Pictures/restored
+```
+
+O en `.env`:
+
+```
+IMAGE_OUTPUT_DIR=/path/to/output
+```
+
+---
+
+## Casos de uso
+
+### 1. Archivo familiar
+
+Tu colección de fotos de papá/mamá/abuelos de los 60s-90s. Muchas borrosas, rayadas, descoloridas.
+
+```
+> Acá hay 12 fotos en /Users/yo/family-archive/.
+  Restaurá las 12 una por una con el prompt profesional.
+  Mantené tonos vintage en las B&W.
+  Output en /Users/yo/family-restored/.
+  Nombrá cada output como original + "-HD" sufijo.
+```
+
+### 2. Producto e-commerce
+
+Tu shop tiene fotos viejas, low-res. Restaurás todo el catálogo:
+
+```
+> Procesame las fotos en /products/old/.
+  - Restauración a 4K
+  - Aspect ratio 1:1 (centrado en producto)
+  - Fondo blanco puro
+  - Iluminación neutral profesional
+
+  Output: /products/hd/
+```
+
+### 3. Retratos profesionales
+
+Vos o tu cliente tiene headshots viejos y necesita versiones HD para LinkedIn/web:
+
+```
+> Retrato profesional: /headshots/raw/juan.jpg
+  Restaurá con prompt profesional + iluminación tipo estudio
+  (Rembrandt o split lighting). Aspect 1:1.
+```
+
+### 4. Documentos históricos
+
+Cartas, papers, fotos de archivo:
+
+```
+> Documento escaneado /docs/carta-1972.jpg
+  Restaurá priorizando legibilidad. NO inventes texto.
+  Output a 4K en B&W.
+```
+
+---
+
+## Anti-patrones
+
+### 1. Esperar reconstrucción mágica de rostros
+
+Si la foto original tiene la cara muy borrosa (10x10 pixels), NanoBanana **no puede inventar la cara real**. Lo que va a entregar es **una cara plausible** que NO es la persona original. Para fotos familiares, esto puede ser **inaceptable**.
+
+**Regla**: si la cara no se ve claro en el original, no esperés milagros. Aceptá la limitación.
+
+### 2. Sobre-procesar
+
+Restaurar = arreglar daños. **No re-inventar la foto**. Si pedís "haceme parecer mas joven" o "cambiá fondo", **no es restauración**, es manipulación.
+
+### 3. No leer los outputs antes de batch grande
+
+Antes de procesar 100 fotos, **probá con 3-5**. Si el prompt no te gusta, **ajustalo**. Después corré batch.
+
+### 4. Subir contenido sensible sin pensarlo
+
+Gemini API procesa tus fotos en servidores de Google. Para fotos privadas/sensibles, **leé las políticas** de Gemini antes de subir.
+
+### 5. Usar el mismo prompt para todo
+
+Foto de boda vs foto de documento vs producto requieren **prompts distintos**. Lo que es ideal para skin tones puede destrozar un texto escaneado.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Fotos profesionales para imprenta a gran tamaño | Necesitás >4K, mejor Topaz Gigapixel o tools dedicadas |
+| Restauración forense (legal, médica) | NanoBanana inventa donde falta info — no admisible legalmente |
+| Video frame-by-frame | NanoBanana es foto-by-foto, no optimizado para video |
+| Volumen industrial (1000+ fotos/día) | Tier free de Gemini va a tener rate limit |
+
+---
+
+## Costo
+
+API Gemini free tier es **muy generoso** para uso personal:
+
+- ~1500 requests/día de NB2
+- ~50 requests/día de Pro
+
+Para uso comercial intenso (e-commerce con miles de productos), considerá upgrade al tier paid de Gemini.
+
+---
+
+## Próximos pasos
+
+- Para video + imagen cinematográfica con otros modelos, [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para diseño UI (no fotos), [5 skills diseño](/boveda/5-skills-diseno-claude)
+- Para entender MCPs en general, [tu propio MCP server](/boveda/mcp-server-propio)

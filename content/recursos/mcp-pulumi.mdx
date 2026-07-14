@@ -1,0 +1,111 @@
+---
+title: "MCP Pulumi — IaC en lenguajes reales desde Claude Code"
+description: "MCP server oficial de Pulumi para Infrastructure as Code. Diferencia con Terraform: Pulumi usa TS/Python/Go reales, no HCL. Para equipos que prefieren código sobre DSLs."
+difficulty: "avanzado"
+category: "mcp"
+tools: ["claude-code", "pulumi"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-agent-skills", "all-deploy", "mcp-azure-kubernetes-service"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/pulumi"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/pulumi.json"
+---
+
+## Qué es
+
+[Pulumi](https://www.pulumi.com) es la alternativa a Terraform que usa lenguajes reales (TypeScript, Python, Go, .NET, Java) en lugar de HCL. Mismo enfoque IaC: declarás recursos, Pulumi los aprovisiona y mantiene state.
+
+Este MCP **oficial** de Pulumi habilita IaC development capabilities para agents. Te deja:
+- Inspeccionar stacks y resources
+- Preview cambios
+- Aplicar updates
+- Manejar state y backends
+
+Útil para equipos que tomaron Pulumi en vez de Terraform y querés que Claude opere infra desde el editor.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 88 |
+| Servidor MCP | `pulumi` |
+| Autor | Pulumi (oficial) |
+| Lenguajes | TypeScript, Python, Go, .NET, Java |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/pulumi
+```
+
+Pre-requisitos:
+- Pulumi CLI instalado
+- Login a Pulumi Cloud (`pulumi login`) o backend self-hosted
+- Stack(s) Pulumi en el proyecto
+
+Para Claude:
+
+```
+Instalé el MCP devtools/pulumi. Listame los stacks del proyecto actual.
+Para el stack `prod`, hacé preview de cambios sin aplicar y mostrame
+qué recursos cambiarían.
+```
+
+## Qué podés hacer con esto
+
+### Preview seguro de cambios
+
+"Hacé `pulumi preview` del stack X y mostrame qué recursos van a crearse, modificarse y eliminarse. Para los `delete`, validá si son esperados". Patrón anti accidental destroy.
+
+### Inspección de state
+
+"Para el stack `production`, listame los resources actuales agrupados por tipo. Identificá los más críticos (databases, network)".
+
+### Sync code ↔ infra
+
+"En `main.ts`, agregué un S3 bucket nuevo. Hacé preview y validá que el plan matchea. Si OK, aplicalo a `dev` (no a `prod`)".
+
+### Multi-stack ops
+
+"Comparame los stacks `dev`, `staging` y `prod`. Identificá divergencias en config o resources que no deberían existir".
+
+### Genera código IaC desde lenguaje natural
+
+"Generame Pulumi code (TypeScript) que aprovisione: VPC con 3 AZs, subnet pública/privada, RDS Postgres, ALB con HTTPS desde ACM". Combinás generación + revisión.
+
+### Combinado con [Agent Skills HashiCorp](/boveda/plugin-agent-skills)
+
+Si tu org usa ambos, podés tener Claude operando Terraform y Pulumi según equipo. El MCP de Pulumi cubre la otra mitad.
+
+## Pre-requisitos
+
+- **Pulumi CLI** instalado y configurado
+- **Login** a backend (Pulumi Cloud o self-hosted)
+- **Cloud credentials** correctas (AWS, GCP, Azure según provider)
+- **Proyecto Pulumi** existente
+
+## Cuándo NO conviene
+
+<Callout type="danger" title="Antes de aplicar a producción">
+
+- **Operaciones destructivas:** `pulumi destroy`, `delete resource`. Catastrófico si sale mal. Hooks de aprobación SIEMPRE para prod.
+- **Permisos cloud amplios:** las credentials cloud que usa Pulumi heredan todo. Restringí a IAM mínimo necesario.
+- **Si usás Terraform:** este MCP es Pulumi-only. Para Terraform, mirá [Agent Skills HashiCorp](/boveda/plugin-agent-skills).
+- **State conflicts:** si varios devs / agents operan el mismo stack en paralelo, podés corrupt state. Coordinen.
+- **Para learning:** el MCP no enseña Pulumi. Si recién arrancás, leé los tutoriales primero.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Pulumi MCP](https://www.aitmpl.com/component/mcps/devtools/pulumi) — comando exacto.
+- **Config JSON:** [pulumi.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/pulumi.json).
+- **Pulumi oficial:** [pulumi.com](https://www.pulumi.com).
+
+## Recursos relacionados
+
+- [HashiCorp Agent Skills](/boveda/plugin-agent-skills) — para Terraform y Packer si tu org usa también HashiCorp.
+- [All Deploy](/boveda/all-deploy) — para deploy de apps. Pulumi aprovisiona infra; All Deploy publica apps encima.
+- [Azure Kubernetes Service MCP](/boveda/mcp-azure-kubernetes-service) — combo si tu Pulumi aprovisiona AKS.

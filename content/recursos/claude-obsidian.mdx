@@ -1,0 +1,278 @@
+---
+title: "Claude + Obsidian — segunda cabeza con memoria permanente"
+description: "Convertir una carpeta de Obsidian en la memoria persistente de Claude Code. Cada conversación queda guardada como notas conectadas que Claude lee, escribe y enlaza solo. Setup, casos de uso y cuándo conviene este combo."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "obsidian"]
+publishedAt: "2026-05-24"
+readingTime: "9 min"
+relatedSlugs: ["memoria-claude-code", "book-to-skill", "memory-palace-agentes"]
+---
+
+## El problema
+
+Cada conversación buena que tenés con Claude se borra al cerrar el chat. Lo que aprendiste, las decisiones que tomaron juntos, los snippets que pidió, las ideas que surgieron — todo se va.
+
+Las "soluciones" típicas:
+
+- Pegar el chat completo en un doc → engorroso, no se busca después
+- Confiar en la memoria de Claude → no recuerda entre sesiones distintas
+- Anotar a mano lo importante → siempre olvidás algo
+
+Hay un patrón mejor: **conectar Claude Code a una carpeta de Obsidian**. Cada conversación valiosa queda como nota, conectada con otras notas relacionadas, lista para que Claude la consulte la próxima vez.
+
+---
+
+## Qué es Obsidian (1 minuto)
+
+Obsidian es una app gratis que abre **una carpeta de tu compu** como si fuera un cuaderno. Cada nota es un archivo markdown chiquito. Las notas se enlazan entre sí con `[[wiki-links]]`, formando un grafo de conocimiento.
+
+Lo importante:
+
+- **Tu data vive en tu compu**, no en un servidor externo
+- Las notas son **markdown plano** — Claude puede leerlas y escribirlas como cualquier archivo
+- Los enlaces `[[]]` son trivialmente parseables — Claude entiende el grafo
+
+Para este combo, no necesitás ser experto en Obsidian. Bastante con tener una carpeta de notas.
+
+---
+
+## Cómo funciona el combo
+
+El patrón es simple:
+
+```
+~/Documents/segundo-cerebro/   ← carpeta de Obsidian
+├── inbox/                     ← notas nuevas sin clasificar
+├── conceptos/                 ← conocimiento estable
+├── proyectos/                 ← notas vinculadas a proyectos
+├── personas/                  ← gente que mencionás seguido
+└── diario/                    ← capturas diarias
+```
+
+Claude Code apunta a esa carpeta como contexto persistente. Cuando le pedís:
+
+```
+> Acabamos de discutir cómo armar el equipo de soporte. Guardá lo importante.
+```
+
+Claude:
+
+1. Identifica los conceptos clave (estructura del equipo, decisiones, tradeoffs)
+2. Decide en qué carpeta va cada uno (`proyectos/` para la decisión específica, `conceptos/` si es framework reutilizable)
+3. Crea las notas con headers, listas y `[[wikilinks]]` a notas relacionadas
+4. Si una nota relacionada ya existe, la **actualiza** en lugar de duplicar
+
+La próxima sesión, cuando hablás de soporte, Claude consulta `proyectos/soporte.md` antes de contestar. Contexto persistente sin que vos tipees nada.
+
+---
+
+## Setup
+
+<Step number={1} title="Tener una carpeta Obsidian">
+
+Si nunca usaste Obsidian:
+
+1. Descargalo desde [obsidian.md](https://obsidian.md) (gratis)
+2. Creá un "vault" → es solo decirle qué carpeta usar
+3. Estructura mínima: hacé las carpetas que tenga sentido para vos. Si no se te ocurre, arrancá con `inbox/` y `permanente/`
+
+Si ya usás Obsidian, perfecto — usá tu vault existente.
+
+</Step>
+
+<Step number={2} title="Conectar Claude Code">
+
+Hay dos approaches:
+
+**Approach A — Skill simple**:
+
+Creás `.claude/skills/obsidian/SKILL.md`:
+
+```markdown
+---
+name: obsidian
+description: Lee y escribe en mi vault de Obsidian en ~/Documents/segundo-cerebro/.
+  Activate cuando hable de "guardar nota", "anotame esto", "buscame en mis notas",
+  "qué sabemos de X", o cualquier referencia a mi conocimiento personal.
+---
+
+# Skill de Obsidian
+
+Mi vault está en `~/Documents/segundo-cerebro/`. Estructura:
+
+- `inbox/` — notas nuevas sin clasificar
+- `conceptos/` — conocimiento estable y reutilizable
+- `proyectos/` — notas vinculadas a proyectos
+- `personas/` — gente que aparece seguido
+- `diario/AAAA-MM-DD.md` — captura diaria
+
+## Reglas
+
+### Cuando voy a guardar una nota nueva
+1. Decidí en qué carpeta va según el tipo de contenido
+2. Buscá si ya existe una nota relacionada (mismo tema o entidad)
+3. Si existe, **actualizá** esa nota (no dupliques)
+4. Si no existe, creá una nueva con `[[wikilinks]]` a notas relacionadas
+5. Mostrame el resumen de lo que guardaste
+
+### Cuando me pidas "buscar en notas"
+1. Hacé grep recursivo del término
+2. Devolveme las 3-5 notas más relevantes con links
+3. Resumime qué dice cada una (3 líneas máximo)
+
+### Formato de nota
+```
+# Título
+
+> Captura de [fecha]
+
+[Contenido en markdown limpio]
+
+## Relacionadas
+- [[otra-nota]]
+- [[otra-más]]
+```
+
+### NO hacer
+- No tocar archivos en `archive/` (son históricos)
+- No duplicar notas
+- No agregar tags si la nota no los necesita
+```
+
+**Approach B — MCP server dedicado**:
+
+Para uso intensivo, hay MCP servers para Obsidian que exponen búsqueda full-text, gestión de wikilinks, y queries más complejas. Más setup pero más potente.
+
+Para arrancar, el Approach A alcanza.
+
+</Step>
+
+<Step number={3} title="Usar" last>
+
+A partir de ahora, en cualquier sesión de Claude Code:
+
+```
+> Anotame que decidimos usar Stripe en lugar de Mercado Pago para el checkout
+  internacional. Razón: mejor docs y el equipo ya lo conoce.
+
+Claude:
+  Guardé esto en proyectos/pagos.md (era el lugar lógico — ya existía con la
+  evaluación inicial de proveedores).
+
+  Actualicé:
+  - Sección "Decisión final": Stripe (antes estaba marcada como "pendiente")
+  - Agregué fecha de decisión y razón
+  - Linkié [[mercado-pago]] como "evaluado, descartado"
+
+  ¿Querés que abra mercado-pago.md para marcarla también?
+```
+
+Próxima sesión, cuando volvés:
+
+```
+> ¿Qué habíamos decidido para pagos?
+
+Claude:
+  [lee proyectos/pagos.md]
+  Decidieron Stripe para checkout internacional el [fecha]. Razón: mejores
+  docs y experiencia previa del equipo. Mercado Pago quedó descartado para
+  este caso pero marcado como "considerar para LATAM nativa" en una posible
+  fase 2.
+```
+
+</Step>
+
+---
+
+## Casos donde brilla
+
+### 1. Decisiones de proyecto
+
+Cada decisión técnica importante queda como nota con: contexto, opciones evaluadas, decisión, razón, fecha. **3 meses después, cuando volvés a discutir lo mismo, ya tenés el histórico.**
+
+### 2. Conocimiento de dominio
+
+Si trabajás en una industria con jerga propia (logística, seguros, salud), cada vez que aprendés un concepto lo guardás. Después de 6 meses, tenés un glosario completo construido sin esfuerzo deliberado.
+
+### 3. Gente con la que hablás seguido
+
+`personas/juan-cliente.md`, `personas/maria-vendor.md`. Acumulás contexto: última interacción, qué les importa, qué prometiste, qué te pidieron. Mejor CRM que los CRMs.
+
+### 4. Aprendizajes de fallos
+
+Cada vez que algo se rompió, una nota en `incidentes/` con: qué pasó, causa raíz, fix, cómo prevenir. **Eso te ahorra repetir errores.**
+
+### 5. Captura diaria
+
+`diario/2026-05-26.md` con lo que pasó hoy, qué decidiste, qué quedó pendiente. Bonus: al final de mes, Claude puede resumirte el mes completo.
+
+---
+
+## Anti-patrones
+
+### 1. Querer que Claude organice todo desde el día 1
+
+Si tu vault tiene 5000 notas desordenadas, Claude no las va a organizar mágicamente. **Empezá con vault chico** (10-30 notas estructuradas) y dejá que crezca con el uso.
+
+### 2. Guardar TODO lo que charlás
+
+No todo merece ser nota. Pedile a Claude "anotame esto" cuando es **algo que vas a consultar después**. Conversaciones exploratorias no necesitan persistirse.
+
+### 3. Sin estructura inicial
+
+Si no definís las carpetas base (`conceptos/`, `proyectos/`, etc.), Claude inventa cada vez. Termina caos. **Definí la estructura en el SKILL.md** desde el principio.
+
+### 4. Confundir Obsidian con CRM / proyect management
+
+Obsidian es para **conocimiento y referencia**, no para gestión de tareas. Si necesitás "tareas con fecha y responsable", usá Linear/Notion/Todoist. Obsidian guarda lo que aprendiste de las tareas, no las tareas.
+
+---
+
+## Diferencias vs otras opciones
+
+| Opción | Pros | Contras |
+|--------|------|---------|
+| **Solo `CLAUDE.md`** | Simple, viaja con el repo | Limitado, no crece, único por proyecto |
+| **`/memory` de Claude** | Preferencias por usuario | No es base de conocimiento, es preferencias |
+| **Notion + integración** | UI bonita, colaborativo | Vendor lock-in, dependés de API |
+| **Obsidian + skill** | Local, markdown, escalable, gratis | Necesita disciplina inicial |
+| **MCP de memoria semántica** | Búsqueda por significado | Setup complejo, overkill para uso solo |
+
+Para un developer/founder/operador solo, **Obsidian + skill** es el sweet spot.
+
+---
+
+## Una variación útil — auto-captura
+
+Si querés que Claude **automáticamente** capture lo importante de cada sesión sin que vos lo pidas, agregá un hook `Stop` que dispare al final de la sesión:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude --no-interactive 'Revisá la conversación que termino. Si hubo algo importante (decisión, aprendizaje, info de cliente), anotalo en mi vault. Si no, no guardes nada.'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Después de cada sesión, Claude pasa por el filtro y decide qué persistir. Es automático pero **el filtro evita basura**.
+
+Más sobre hooks en la [guía de hooks](/boveda/hooks-automatizacion).
+
+---
+
+## Próximos pasos
+
+- Para entender otras estrategias de memoria persistente (sin Obsidian), [memoria infinita para Claude Code](/boveda/memoria-claude-code)
+- Para meter libros enteros como skills (no solo notas crecientes), [Book to Skill](/boveda/book-to-skill)
+- Para sistemas multi-agente con memoria compartida, [Memory Palace](/boveda/memory-palace-agentes)

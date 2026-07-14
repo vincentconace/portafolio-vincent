@@ -1,0 +1,104 @@
+---
+title: "MCP Box — manejá archivos y queries AI en Box desde Claude"
+description: "MCP server en Python que integra Box API. Búsqueda de archivos, extracción de texto, queries AI sobre tu storage de Box. Útil para enterprises que ya tienen su contenido en Box y quieren que Claude opere ahí."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "box"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["dominar-cowork", "anatomia-claude", "plugin-knowledge-work-plugins"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/box"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/box.json"
+---
+
+## Qué es
+
+Box es el storage cloud que mucha enterprise sigue usando (especialmente legal, finance, healthcare por temas de compliance). Si tu empresa vive ahí, este MCP es la forma directa de que Claude opere con esos archivos.
+
+Es un MCP server escrito en Python que conecta a Box API. Le da a Claude tres capacidades clave:
+- **File search** — buscar archivos por nombre, contenido, metadata
+- **Text extraction** — sacar el texto de PDFs, Word, etc.
+- **AI-based querying** — pedirle a Claude que responda preguntas sobre el contenido
+
+Útil cuando todo tu contenido sensible vive en Box y no querés copiarlo localmente para que Claude lo lea.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 115 |
+| Servidor MCP | `mcp-server-box` |
+| Lenguaje del server | Python |
+| Cuenta requerida | Sí — Box (Personal, Business, Enterprise) |
+| API del lado server | Box API + OAuth |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/box
+```
+
+Pre-requisitos: cuenta Box + app registrada en el [Box Developer Console](https://developer.box.com) para obtener client ID + secret (OAuth).
+
+Para Claude:
+
+```
+Instalá el MCP devtools/box. Después decime los env vars que necesito
+setear (Box client ID, secret, etc.) y mostrame cómo se autentica via
+OAuth la primera vez.
+```
+
+## Qué podés hacer con esto
+
+### Buscar archivos por contenido
+
+"Buscame todos los contratos vigentes con cliente X firmados en el último año". El MCP busca en tus folders de Box (no solo por nombre — también extrae y busca dentro del PDF).
+
+### Extraer datos de PDFs masivos
+
+"Tengo 200 facturas en `/Finanzas/Facturas/2026/`. Extraé fecha, monto y CUIT de cada una y exportá a CSV". Box maneja la extracción, Claude estructura la salida.
+
+### Q&A sobre documentación interna
+
+"En la carpeta `/Legal/Templates/`, ¿qué cláusula de penalidad usamos en contratos de SaaS B2B?" Claude responde citando el archivo concreto.
+
+### Audit de archivos sensibles
+
+"Listame archivos en `/HR/` modificados en los últimos 30 días por usuarios fuera del grupo HR". Útil para compliance.
+
+### Conectar con Cowork workflows
+
+Si usás [Claude Cowork](/boveda/dominar-cowork) y todo vive en Box, este MCP le da capacidades reales a tu Cowork. Encaja bien con el pack `enterprise-search` del [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins).
+
+## Pre-requisitos
+
+- **Cuenta Box activa** con permisos sobre el contenido que vas a usar
+- **App registrada** en Box Developer Console
+- **Python 3.x** (el server es Python — el wrapper de aitmpl baja deps)
+- **Permisos OAuth** del lado de tu org si es Enterprise
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si no usás Box:** obvio. Para Google Drive hay otros MCPs; para Dropbox también.
+- **Data sensible y prompt injection:** si Claude lee un archivo de Box con instrucciones embebidas (por ejemplo, un PDF malicioso), podría actuar sobre ellas. Para data altamente regulada, mirá hooks de validación.
+- **Permisos amplios:** la app de Box puede ver todo lo que tu cuenta ve. Para read-only de un folder específico, configurá scopes mínimos.
+- **Latencia:** búsquedas full-text sobre miles de archivos son lentas. Es la naturaleza del API de Box, no del MCP.
+- **Costos de API:** Box Enterprise tiene límites de API requests. Mirá tu plan antes de uso masivo.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Box MCP](https://www.aitmpl.com/component/mcps/devtools/box) — comando exacto.
+- **Config JSON:** [box.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/box.json) — definición.
+- **Box Developer Console:** [developer.box.com](https://developer.box.com) — para crear la app y obtener credenciales.
+
+## Recursos relacionados
+
+- [Dominar Cowork](/boveda/dominar-cowork) — si tu uso es de oficina y todo vive en Box, leé Cowork primero.
+- [Knowledge Work Plugins](/boveda/plugin-knowledge-work-plugins) — el marketplace oficial de Anthropic para knowledge work, complementa bien con este MCP.
+- [Anatomía de Claude](/boveda/anatomia-claude) — para ubicar este MCP como conector a un servicio externo (no skill ni agent).

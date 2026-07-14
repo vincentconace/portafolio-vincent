@@ -1,0 +1,350 @@
+---
+title: "5 preguntas antes de meterle IA a tu negocio (no necesitás la Mac Mini)"
+description: "El hype dice que necesitás una Mac Mini cara para 'meterte en IA'. Falso. Lo que te falta no es hardware — es claridad sobre tu negocio. 5 preguntas con prompts copy-paste para que Claude te entreviste, audite tu proceso, y te dé un plan de IA en 3 fases. Última: convertilo en una skill reutilizable."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["mejores-practicas-claude", "agencia-marketing-claude", "claude-fabrica-a-pro"]
+---
+
+## El mito
+
+Una ola de gente comprando la misma Mac Mini cara "para meterse en IA". Es síntoma de un error de fondo: **creer que la IA es un problema de hardware**.
+
+No lo es.
+
+Si vas a meterle IA a tu negocio, la herramienta más potente **ya corre en cualquier navegador**, en la laptop que tenés hoy. Lo que de verdad te frena no es la máquina — es que **la IA no conoce tu negocio**. Y no lo va a adivinar.
+
+Antes de gastar un peso en equipo, gastá **una hora** contestando 5 preguntas que casi nadie te hace.
+
+---
+
+## Las 5 preguntas
+
+| # | Pregunta | Para qué |
+|---|----------|----------|
+| 1 | ¿Qué te da el resultado? | Aislás los pasos que producen dinero real |
+| 2 | ¿Dónde está escrito? | Convertís el conocimiento tácito en doc |
+| 3 | ¿Qué ya no debería existir? | Auditás qué sobra (no automatices grasa) |
+| 4 | ¿Cuál es la versión más simple? | Limpiás el proceso a su forma esencial |
+| 5 | ¿Cómo le meto IA? | Claude te tira un plan en 3 fases |
+
+Las primeras 4 las hacés con Claude haciéndote de consultor. La 5ta se la pegás todo de vuelta y te tira el plan.
+
+---
+
+## Pregunta 1 — ¿Qué te da el resultado?
+
+Los pasos que **de verdad producen** tus ventas, no la teoría bonita.
+
+Te vas a sorprender cuánta gente no sabe ni cómo funciona su propio negocio. Antes de automatizar nada, necesitás saber **qué mueve la aguja**.
+
+### Prompt
+
+```
+Sos consultor de operaciones directo y práctico. Ayudame a
+identificar qué pasos de mi negocio producen mis resultados
+(ventas, clientes, entregas) y cuáles son solo costumbre o teoría.
+
+Mi negocio es: [describí en 2-3 frases: qué vendés, a quién,
+cómo ganás dinero].
+
+Hacéme preguntas UNA A LA VEZ (máximo 2 juntas) y esperá mi
+respuesta antes de seguir.
+
+Empezá por el final: preguntame cuál es el momento exacto en
+que un cliente me paga, y vamos hacia atrás desde ahí hasta
+el primer contacto.
+
+Tu meta: que al terminar tengamos claro, en orden, el camino
+real que lleva a un cliente desde que me conoce hasta que me
+paga, marcando cuáles pasos producen el resultado y cuáles
+solo están porque "siempre se han hecho así".
+
+NO me dejes adornar. Si algo no aporta, decímelo.
+```
+
+### Qué esperar
+
+15-30 min de entrevista. Claude te va a preguntar:
+- "¿Cómo recibís el primer contacto?"
+- "¿Qué pasa entre que pregunta precio y compra?"
+- "¿Qué hacés vos / qué hace tu equipo?"
+
+Al final, vas a tener una imagen clara que muchos **no tenían antes** de hacer este ejercicio.
+
+---
+
+## Pregunta 2 — ¿Dónde está escrito?
+
+Si la IA no lo puede ver, no te puede ayudar. Necesitás convertir la conversación de la pregunta 1 en un **documento estructurado**.
+
+### Prompt
+
+Continuá la misma conversación de pregunta 1 con:
+
+```
+Tomá todo lo que conversamos sobre cómo funciona mi negocio y
+convertilo en un documento de proceso claro y ordenado.
+
+Estructuralo así:
+1. Objetivo del proceso en una línea
+2. Pasos en orden numerado
+3. Quién hace cada paso
+4. Qué herramienta se usa / dónde se hace
+5. Cuánto tarda más o menos cada paso
+
+Escribilo en lenguaje simple, como si se lo explicaras a alguien
+que entra mañana y no sabe nada del negocio.
+
+Si te falta info para algún paso, NO la inventes — marcalo con
+[FALTA: ...] para que yo lo complete.
+
+Entregalo listo para guardar como archivo proceso.md.
+```
+
+### El output
+
+Te queda `proceso.md` que es la **materia prima de todo lo demás**. Sin esto, los siguientes pasos no aplican.
+
+---
+
+## Pregunta 3 — ¿Qué ya no debería existir?
+
+Agarrás tus pasos y borrás lo que sobra. **No tiene sentido automatizar un paso que ni debería existir**.
+
+Primero quitás grasa, después metés IA.
+
+### Prompt
+
+```
+Acá está mi proceso escrito:
+
+[pegá proceso.md completo]
+
+Auditalo como un consultor al que le pagan por encontrar grasa.
+
+Para CADA paso decime:
+1. ¿Esto le importa al cliente o solo a mí?
+2. ¿Qué pasaría si lo borro mañana?
+3. ¿Se hace por una buena razón o solo porque siempre se hizo así?
+
+Al final dame lista corta de pasos a eliminar, con una frase de
+por qué cada uno. Sé directo, NO me cuides los sentimientos.
+
+Si un paso es sagrado y no se toca, decímelo también y explicá
+por qué.
+```
+
+### Qué te va a doler
+
+Vas a ver que tenés:
+- Pasos que sumás "por las dudas"
+- Confirmaciones triples que nadie pide
+- Burocracia interna que no aporta al cliente
+- Trabajo manual que no genera valor
+
+Algunos van a ser fáciles de cortar. Otros van a doler. **Igual cortalos**.
+
+---
+
+## Pregunta 4 — ¿Cuál es la versión más simple?
+
+Quitás piezas, juntás pasos, dejás clarísimo quién hace qué, cómo, cuándo y por qué.
+
+La versión más simple que da los mismos resultados **es la que vas a usar para meterle IA**.
+
+### Prompt
+
+```
+Con los pasos que sobrevivieron a la auditoría, armá la versión
+más simple de mi proceso que todavía me dé los mismos resultados.
+
+Reglas:
+- Juntá pasos donde tenga sentido
+- Eliminá traspasos y esperas innecesarias
+- En cada paso dejá clarísimo quién lo hace, qué hace, cuándo y por qué
+
+Entregalo en 2 partes:
+1. El proceso final, limpio y numerado
+2. Un resumen corto de qué cambió vs versión original y qué gané
+
+Esta versión es la que voy a usar para IA — escribila para que
+cualquiera (o cualquier IA) la pueda seguir sin preguntarme nada.
+```
+
+---
+
+## Pregunta 5 — ¿Cómo le meto IA?
+
+Acá es donde **Claude te tira el plan**. Pegale todo el contexto:
+
+### Prompt maestro
+
+```
+Actuá como estratega de IA práctico y honesto, NO como gurú
+que vende humo.
+
+Mi negocio: [qué vendés, a quién, cómo ganás dinero]
+
+Proceso simple: [pegá la versión simple del paso 4]
+
+Mis herramientas actuales: [ej: WhatsApp, Excel, Gmail, Instagram]
+
+Lo que más tiempo me quita: [describí la parte más pesada]
+
+Contexto: NO sé programar. Presupuesto bajo.
+
+Analizá mi proceso paso por paso y dame:
+
+1. En qué pasos exactos la IA me ahorraría más tiempo o dinero.
+   Ordenalos por impacto vs esfuerzo (más fácil y rentable primero).
+
+2. Para cada uno, qué puedo hacer HOY solo con Claude en el
+   navegador, sin instalar nada.
+
+3. Qué necesitaría llevar más adelante a Claude Code o
+   automatización, y por qué.
+
+4. Qué NO vale la pena automatizar todavía (para no perder tiempo).
+
+Cerrá con plan en 3 fases:
+- Esta semana
+- Este mes
+- Más adelante
+
+Decime el primer paso concreto que debo hacer HOY.
+NADA de teoría — pasos accionables.
+```
+
+### El resultado
+
+Una **lista priorizada** que vale 10x más que cualquier curso de "IA para negocios":
+
+- Lo que resolvés hoy en el chat
+- Lo que llevás a Claude Code después
+- Lo que NO vale la pena tocar todavía
+
+---
+
+## Llevarlo a Claude Code
+
+El chat es perfecto para pensar. **Claude Code** puede:
+- Leer tus archivos reales (proceso.md, Excel, plantillas)
+- Crear cosas que se quedan guardadas
+- Repetir trabajo por vos
+
+No necesitás ser programador. Le hablás igual que en el chat — solo que ahora tiene manos.
+
+### Setup (una sola vez)
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+O usá la app desktop / versión web. Ver [setup zero](/boveda/claude-code-setup-zero).
+
+### Tu primer prompt en Claude Code
+
+```
+> Estás trabajando en la carpeta de mi negocio.
+  Leé el archivo proceso.md para entender cómo opero.
+
+  Quiero construir la primera automatización de mi plan:
+  [pegá el paso #1 en impacto vs esfuerzo]
+
+  Antes de crear o tocar archivos, explicame en español simple
+  qué vas a hacer y por qué, como si yo NO supiera programar
+  (porque no sé).
+
+  Vamos paso a paso. Después de cada paso, decime qué hicimos
+  y qué sigue.
+
+  Si necesitás algo de mí (clave, dato, decisión), preguntame
+  en lugar de inventarlo.
+```
+
+---
+
+## El agente que repite el método
+
+Lo más potente: en lugar de repetir las 5 preguntas a mano cada vez, **empaquetalas en una skill**. La instalás una vez y la llamás por nombre las próximas.
+
+### Prompt para crear la skill
+
+```
+> Crear skill de Claude Code llamada "diagnostico-negocio".
+
+  Su trabajo: llevar a una persona por las 5 preguntas que
+  preparan un proceso de negocio antes de meterle IA.
+
+  En orden:
+  1. Hacé las preguntas una por una, esperando respuesta
+     (qué da resultado, dónde está escrito, qué sobra,
+     cuál es la versión simple)
+  2. Andá escribiendo todo en proceso.md a medida que avanzamos
+  3. Auditá qué pasos sobran y proponé cuáles eliminar
+  4. Entregá la versión más simple del proceso
+  5. Cerrá con plan IA en 3 fases + primer paso de hoy
+
+  Creala con su archivo SKILL.md bien escrito.
+
+  Cuando termines, explicame en español simple:
+  - Cómo se instala
+  - Cómo la vuelvo a usar la próxima vez sin repetir nada
+```
+
+### Cómo la reusás
+
+```
+> Usá la skill diagnostico-negocio para analizar mi proceso de
+  postventa.
+```
+
+Te lleva por las 5 preguntas otra vez con el contexto nuevo.
+
+---
+
+## Anti-patrones
+
+### 1. Saltearse las preguntas e ir directo a la 5
+
+Si pegás "armame un plan de IA" sin haber pasado por 1-4, Claude te tira **un plan genérico**. El valor está en el contexto que construís.
+
+### 2. Comprar hardware "por las dudas"
+
+Si todavía no contestaste las 5 preguntas, **no necesitás Mac Mini ni nada**. Tu laptop actual + claude.ai es suficiente para todo este proceso.
+
+### 3. Querer automatizar todo a la vez
+
+El plan en 3 fases es **a propósito**. Si intentás meter IA en 8 pasos a la vez, **no funciona ninguno**. Empezá por 1, validá, después seguí.
+
+### 4. No escribir las respuestas
+
+Si las 5 preguntas las contestás "mentalmente" sin escribir, **no te sirve**. La IA necesita texto. La práctica de **escribirlo** también te clarifica.
+
+### 5. Sobre-analizar y nunca ejecutar
+
+El proceso entero es **una hora**. Si pasaste 3 días "preparando las preguntas", ya estás procrastinando. Hacelo crudo, salí con un plan B, ajustá después.
+
+---
+
+## ROI del ejercicio
+
+| Inversión | Retorno |
+|-----------|---------|
+| Mac Mini "para IA" | $700 + nada concreto |
+| Curso de "IA para negocios" | $300-1500 + horas de video |
+| 1h con las 5 preguntas | $0 + plan claro accionable hoy |
+
+Si después del ejercicio descubrís que **sí necesitás más compute** para algo específico, ahí compré la Mac Mini. **Con justificación**, no por moda.
+
+---
+
+## Próximos pasos
+
+- Para principios generales que aplican a cualquier proyecto con Claude, [mejores prácticas Claude](/boveda/mejores-practicas-claude)
+- Para escalar a agencia de marketing, [agencia marketing Claude](/boveda/agencia-marketing-claude)
+- Para llevar tu negocio a "fábrica pro" con sistemas, [Claude fábrica a pro](/boveda/claude-fabrica-a-pro)

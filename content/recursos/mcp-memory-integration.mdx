@@ -1,0 +1,97 @@
+---
+title: "MCP Memory — memoria persistente entre sesiones (5,656 installs, top 4)"
+description: "MCP server con 5,656 installs — el cuarto más adoptado de todo el catálogo aitmpl. Persistent memory y context management para sesiones de Claude Code. Recuerda info entre conversations y proyectos."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-claude-mem", "memoria-claude-code", "plugin-everything-claude-code"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/integration/memory-integration"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/memory-integration.json"
+---
+
+## Qué es
+
+Este es uno de los MCPs más fundacionales del ecosystem: **5,656 installs**, el #4 absoluto del catálogo. Solo lo superan [Context7](/boveda/mcp-context7) (11k), [GitHub Integration](/boveda/mcp-github-integration) (2.8k de integration) y [Chrome DevTools](/boveda/mcp-chrome-devtools) (2.7k).
+
+Resuelve un problema básico de Claude Code: cada sesión empieza de cero. Si trabajaste 3 horas en un proyecto ayer, hoy Claude no se acuerda de nada. Con este MCP, sí.
+
+Te da:
+- **Persistent memory** entre sesiones
+- **Context management** entre proyectos
+- **Recall** de información clave (decisiones, preferencias, contexto del proyecto)
+
+Comparado con [Claude Mem](/boveda/plugin-claude-mem) (42k stars en GitHub, plugin más sofisticado): este MCP es más simple y directo, sin el agent-sdk de compresión. Para muchos casos, alcanza.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `integration` |
+| Installs | **5,656 (top 4 del catálogo)** |
+| Servidor MCP | `memory` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp integration/memory-integration
+```
+
+Para Claude:
+
+```
+Instalé el MCP integration/memory-integration. Mostrame los tools que
+expone el server. Después guardame esta info como contexto persistente
+para el proyecto X: [info clave].
+```
+
+## Qué podés hacer con esto
+
+### Recordar decisiones de arquitectura
+
+"Recordá: en este proyecto usamos Postgres con UUID primary keys, Redis para cache de sesión, y Prisma como ORM. No usamos MongoDB ni REST endpoints sueltos — todo va por GraphQL". Sesión próxima, Claude lo trae.
+
+### Preferencias persistentes
+
+"Recordá: prefiero error handling con Result types en vez de try/catch, español neutro Latam con voseo en los comentarios, tests con Vitest, no Jest". Eliminás reexplicar cada vez.
+
+### Context entre sesiones de proyectos grandes
+
+"En el proyecto X, lo que hicimos ayer fue [resumen]. Lo que falta es [lista]". Próxima vez que abrís el proyecto, Claude tiene el estado.
+
+### Knowledge graph implícito
+
+Con uso continuado, el MCP arma un mapa mental del proyecto: módulos, decisiones, deuda técnica, gotchas. Reduce el "Claude, ¿te acordás que...?" repetitivo.
+
+### Memoria cross-project
+
+Decisiones globales tuyas (preferencias de stack, estilo de código) pueden vivir como memoria global, no del proyecto específico.
+
+## Pre-requisitos
+
+- **Node.js + Claude Code** funcionando
+- **Espacio en disco** para storage (donde el server guarde las memorias depende de implementación — mirá el JSON)
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si usás [Claude Mem](/boveda/plugin-claude-mem):** ese es más sofisticado y popular (42k stars). Solapan; elegí uno.
+- **Si la memoria nativa de Claude Code 2.x te alcanza:** [Memoria Claude Code](/boveda/memoria-claude-code) ya cubre tu caso. Verificá si necesitás más.
+- **Data sensible:** las memorias quedan persistidas. Si trabajás con código sensible (cliente, salud, finanzas), entendé dónde se guardan antes.
+- **Para casos one-shot:** no agregás memoria persistente para una tarea de 20 min.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Memory Integration MCP](https://www.aitmpl.com/component/mcps/integration/memory-integration) — comando exacto.
+- **Config JSON:** [memory-integration.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/integration/memory-integration.json).
+
+## Recursos relacionados
+
+- [Claude Mem (plugin)](/boveda/plugin-claude-mem) — versión plugin con 42k stars. Más completo, más opciones. Compará.
+- [Memoria Claude Code](/boveda/memoria-claude-code) — la memoria nativa de Claude Code 2.x. Empezá por ahí.
+- [Everything Claude Code](/boveda/plugin-everything-claude-code) — el agent harness top que incluye memoria como uno de sus 5 ejes.

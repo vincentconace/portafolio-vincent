@@ -1,0 +1,285 @@
+---
+title: "5 errores que queman tu cuenta de Claude sin que te des cuenta"
+description: "Correcciones que disparan re-lectura, chats largos que no rotás, preguntas en mensajes separados, funciones extra siempre activas y usar Claude en horas pico. Cada error explicado con su fix concreto. Con estos 5 cambios, tu plan rinde el doble."
+difficulty: "fácil"
+category: "guides"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["claude-token-efficient", "cinco-repos-no-quemar-cuenta", "cambia-de-modelo"]
+---
+
+## El modelo mental
+
+Tu plan de Claude es como una **cubeta de agua**. Cada mensaje que mandás es echar un vaso.
+
+Pero hay un detalle clave: **cada vez que escribís, Claude tiene que leer toda la conversación desde el principio**. Cuanto más larga la conversación, más agua se gasta por mensaje.
+
+Los 5 errores que siguen son **dejar la llave abierta** sin darte cuenta. Cada uno tiene su fix.
+
+---
+
+## Error 1 — Mandar mensajes de corrección
+
+### Lo que hacés mal
+
+Claude responde algo que no te gustó. Mandás otro mensaje diciendo "así no" o "hacelo diferente". Claude tiene que **releer TODA la conversación** desde el inicio para entender qué cambiar.
+
+### Analogía
+
+Le pedís a alguien que te lea un libro de 200 páginas. En la página 180 le decís "cambiá una palabra en la página 5". Esa persona tiene que **volver a leer las 200 páginas desde el inicio** solo para cambiar esa palabra.
+
+### El fix
+
+**No mandes mensaje nuevo**. En lugar:
+
+1. Andá al mensaje original donde le pediste las cosas
+2. Click en **"editar mensaje"**
+3. Corregí el prompt con más detalle
+4. Dale **"regenerar"**
+
+Claude lee la conversación **una sola vez** en lugar de dos.
+
+### Ahorro estimado
+
+En conversaciones largas con 3-5 correcciones: **30-50%** de tokens ahorrados.
+
+---
+
+## Error 2 — No empezar chats nuevos
+
+### Lo que hacés mal
+
+Llevás 20, 30, 50 mensajes en el mismo chat. Cada mensaje nuevo, Claude relee los 50 anteriores. Tu cuota se va en **releer lo que ya dijo**.
+
+### Analogía
+
+Como ir al súper y cargar **TODAS las bolsas de TODAS las veces que fuiste**. Cada visita nueva cargás las bolsas viejas + las nuevas. Al rato no podés ni caminar.
+
+### El fix — 4 pasos
+
+```
+1. Cuando lleves +20 mensajes, pedile a Claude:
+   "Dame resumen estructurado de todo lo que hicimos hasta ahora"
+
+2. Copiá ese resumen
+
+3. Abrí chat NUEVO
+
+4. Pegá el resumen como primer mensaje y seguí trabajando
+```
+
+### Ahorro estimado
+
+Conversación de 50 mensajes vs reset a 1 mensaje contextualizado: **70-85%** de tokens en cada mensaje siguiente.
+
+### Truco para automatizarlo
+
+En CLAUDE.md de tu proyecto:
+
+```
+Cuando la conversación pase los 25 mensajes, ofrecé
+proactivamente generar un resumen estructurado para que
+pueda hacer reset en chat nuevo.
+```
+
+---
+
+## Error 3 — Mandar preguntas por separado
+
+### Lo que hacés mal
+
+```
+Vos: "¿Cuál es la mejor librería para X?"
+[esperás respuesta]
+Vos: "¿Cómo la instalo?"
+[esperás respuesta]
+Vos: "¿Hay ejemplos?"
+[esperás respuesta]
+```
+
+3 mensajes = Claude cargó la conversación **3 veces**.
+
+### Analogía
+
+Es como llamar a tu amigo **3 veces** para hacerle 3 preguntas en lugar de UNA llamada con todo junto. Cada llamada cuesta.
+
+### El fix
+
+Juntá todas tus preguntas en **UN solo mensaje**:
+
+```
+Vos: "Sobre librerías para X:
+  1. ¿Cuál es la mejor?
+  2. ¿Cómo se instala?
+  3. ¿Tenés ejemplo de uso básico?"
+```
+
+Claude lee la conversación una vez y te contesta todo.
+
+### Ahorro estimado
+
+3 preguntas separadas vs 1 conjunta: **~50-60%** del costo de las 3 separadas.
+
+---
+
+## Error 4 — Funciones extra siempre encendidas
+
+### Lo que hacés mal
+
+Tenés encendidas:
+- Web search
+- Conectores (Notion, Google Drive, etc.)
+- Apps conectadas
+- MCPs custom
+
+**Si no las usás en cada mensaje, igual cuentan**. Claude tiene que verificar capacidades, evaluar si las necesita, etc. Eso son tokens.
+
+### Analogía
+
+Dejás **TODAS las luces de tu casa encendidas** mientras estás solo en una habitación. Baño, cocina, patio, cuarto de visitas — todas prendidas. Recibo de luz carísimo.
+
+### El fix
+
+Settings de Claude → revisá conexiones activas:
+
+| Función | ¿Necesario default? |
+|---------|---------------------|
+| Web search | Solo cuando necesitás info actual |
+| Conectores (Notion, Drive, Gmail) | Solo en proyectos que los usan |
+| Extended thinking | Solo para tareas complejas |
+| Apps conectadas | Solo las que usás regularmente |
+
+**Apagá todo lo que no uses regularmente**. Encendelo manualmente cuando lo necesites.
+
+### Ahorro estimado
+
+15-25% en uso casual. Para usuarios con muchas conexiones activas: **hasta 40%**.
+
+---
+
+## Error 5 — Usar Claude en horas pico
+
+### Lo que pasa
+
+Desde marzo 2026, Claude tiene **rate limiting variable según hora**. Las horas pico son:
+
+- **7am a 1pm hora centro de Ciudad de México** (donde converge demanda global de LATAM + early US + early Europa)
+
+Misma pregunta en hora pico puede:
+- Tardar 2-3x más en responder
+- Tener throttling/queue
+- Consumir más cuota nominal del plan flat
+
+### Analogía
+
+Ir al súper un **domingo a mediodía**. Filas enormes, todo tarda, los precios suben. Si vas **temprano entre semana** comprás lo mismo más rápido y barato.
+
+### El fix
+
+Para tareas pesadas (sesiones largas con Claude Code, batches, generación grande):
+
+**Hacelo temprano** (antes de 7am hora México) o **tarde** (después de 1pm).
+
+Para chats puntuales rápidos, horas pico está bien.
+
+### Ahorro estimado
+
+15-25% en duración del plan flat. Para usuarios de horario diurno fijo: cambiar 2h a horarios off-peak ya da el ahorro completo.
+
+---
+
+## Tarjeta de referencia rápida
+
+| # | Error | Fix |
+|---|-------|-----|
+| 1 | Correcciones nuevas | Editá el mensaje original + regenerá |
+| 2 | Chats >25 msgs | Pedí resumen → chat nuevo → pegá |
+| 3 | Preguntas separadas | Juntá todo en un mensaje |
+| 4 | Funciones siempre activas | Apagá conectores no usados |
+| 5 | Horas pico | Trabajá temprano (antes 7am) o noche (post 13h) |
+
+---
+
+## El combo de ahorro
+
+Si aplicás los 5 simultáneamente:
+
+| Plan | Sin fixes | Con fixes |
+|------|-----------|-----------|
+| Pro $20 | ~70-100h/mes uso intensivo | ~150-200h/mes |
+| Max $100 | ~150-200h/mes | ~300-400h/mes |
+| Max Ultra $200 | ~400h/mes | ~700-800h/mes |
+
+**El plan te dura ~2x más**. Sin pagar más, sin cambiar de plan.
+
+---
+
+## Anti-patrones que NO ayudan
+
+### "Voy a usar prompts más cortos"
+
+Tu **prompt** es ~1% del costo. Lo caro es **la conversación acumulada que Claude relee**. Prompts cortos no cambian el quemar de cuenta. Los 5 errores sí.
+
+### "Voy a hablar más rápido"
+
+Velocidad no = ahorro. Si mandás 30 mensajes en 1 hora vs 30 en 4 horas, **mismo costo**. Lo que cuenta es la **estructura de conversación**.
+
+### "Voy a usar Haiku siempre"
+
+Haiku ahorra dinero pero **pierde calidad** en tareas complejas. Resultado: necesitás re-prompt, rebound a Sonnet/Opus, y terminás gastando más. Usá el modelo correcto para cada tarea — ver [cambia de modelo](/boveda/cambia-de-modelo).
+
+### "Voy a copy-paste el prompt afinado siempre"
+
+Genial, pero si lo pegás en un chat de 50 mensajes ya saturado, **el ahorro es marginal**. Primero arreglá la conversación, después afiná prompts.
+
+---
+
+## Combinaciones con otros recursos
+
+### Con Token Efficient
+
+[Token Efficient](/boveda/claude-token-efficient) corta el **output verboso** de Claude. Los 5 errores cortan **input innecesario**. Los dos combinados: **ahorro máximo**.
+
+### Con 5 repos no quemar cuenta
+
+[5 repos no quemar cuenta](/boveda/cinco-repos-no-quemar-cuenta) son skills/tools que automatizan estos comportamientos. Capa avanzada sobre los hábitos básicos.
+
+### Con cambio de modelo
+
+[Cambia de modelo](/boveda/cambia-de-modelo) según tarea: tareas mecánicas en Haiku, razonamiento en Opus. Optimización por dimensión distinta.
+
+---
+
+## Errores específicos por plan
+
+### Plan Pro $20
+
+- Error 2 (chats largos) es el más caro para vos
+- Error 5 (horas pico) impacta más porque tu cuota es chica
+
+### Plan Max $100
+
+- Error 4 (conectores) suele ser el más caro (usuarios Max tienen muchos activos)
+- Error 3 (preguntas separadas) es menor relativo
+
+### Plan API (pay per token)
+
+- TODOS los errores cuestan dinero literal
+- Especialmente importante: Error 2 (releyendo conversación entera = pagás más cada vez)
+
+---
+
+## Cuándo NO importa optimizar
+
+Si usás Claude **2-3 veces por semana** para queries puntuales, no te preocupes — tu cuota sobra.
+
+Estos fixes son para **uso intensivo** (>20h/mes con Claude Code o >50 mensajes/día en chat).
+
+---
+
+## Próximos pasos
+
+- Para optimizar output (no input), [Claude Token Efficient](/boveda/claude-token-efficient)
+- Para usar modelo correcto en cada tarea, [cambia de modelo](/boveda/cambia-de-modelo)
+- Para skills que automatizan ahorro, [5 repos no quemar cuenta](/boveda/cinco-repos-no-quemar-cuenta)

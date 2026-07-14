@@ -1,0 +1,264 @@
+---
+title: "Browser Harness — Claude drives your real Chrome and learns every search"
+description: "A skill that lets Claude operate your real Chrome (with your logged-in sessions) and save what it learns as a per-site skill. It takes a while the first time on Amazon; the second time it already knows how. Use cases, installation, and how it differs from pure scraping."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "chrome"]
+publishedAt: "2026-05-27"
+readingTime: "10 min"
+relatedSlugs: ["agent-view-paralelo", "scrapling-leads", "apify-mcp"]
+---
+
+## What it solves
+
+Classic scraping (curl + HTML parsing) **fails on many modern sites**:
+
+- LinkedIn requires login → curl can't do it
+- Amazon has aggressive anti-bot protection → it blocks you
+- Facebook Ads Library is a heavy-JS SPA → the initial HTML has no data
+- Mercado Libre changes its HTML often → your parser breaks
+
+**Browser Harness** solves this differently: instead of simulating traffic, it **uses your real Chrome with your logged-in sessions**. Claude operates your browser the way you would — clicks, scrolling, navigation.
+
+**Bonus**: every successful task **gets saved as a per-site skill**. The first time, Claude "learns" how to pull prices from Amazon; the second time it goes straight to it.
+
+---
+
+## How it works
+
+### Technical setup
+
+Chrome runs with the **debugging port open** (`--remote-debugging-port=9222`). That lets an external process (Claude) control it via the Chrome DevTools Protocol.
+
+Important: **it's YOUR Chrome with YOUR session**. If you're logged into LinkedIn, Claude operates as you.
+
+### The typical flow
+
+```
+[You]: Get me the top 10 headphone prices on Amazon, sorted
+       by best sellers.
+
+[Claude]:
+  First time with Amazon. I'm going to "learn" how to do it:
+  - Open Amazon
+  - Navigate to Electronics > Headphones
+  - Apply the "Most popular" filter
+  - Scrape the first 10
+  - Save the procedure as the skill `amazon-products-search.md`
+
+  [Shows you the progress step by step]
+
+  Done. Result:
+  1. Sony WH-1000XM5 — $399
+  2. Apple AirPods Pro 2 — $249
+  ...
+
+  Skill saved. Next time you ask for something similar on Amazon,
+  I'll go straight to it.
+```
+
+### The second time
+
+```
+[You]: Now get me the top 10 mechanical keyboards on Amazon.
+
+[Claude]:
+  [uses the amazon-products-search skill it learned]
+  [goes straight to the flow]
+  [brings you the 10 in 30 seconds]
+```
+
+---
+
+## Catalog of pre-learned sites
+
+The community keeps building skills for popular sites. Typical status:
+
+| Site | Skill available |
+|-------|-------------------|
+| Amazon | ✅ search, prices, reviews |
+| LinkedIn | ✅ profiles, companies, searches |
+| Facebook Ads Library | ✅ competitors' active ads |
+| Instagram | ✅ profile data, hashtags |
+| YouTube | ✅ channels, videos, comments |
+| Mercado Libre | ✅ products, prices, sellers |
+| Shopify (public) | ✅ products, prices |
+| Google Maps | ✅ businesses, reviews |
+| ~90 more sites | ✅ variable |
+
+If the site you need isn't there, **Claude learns it the first time**.
+
+---
+
+## Real use cases
+
+### Case 1 — Visual competitive research
+
+```
+> Go to Facebook Ads Library and find the active ads for "my-competitor".
+  For each ad:
+  - Screenshot
+  - Copy text
+  - Start date
+  - Approximate audience
+
+  Give it back to me structured.
+```
+
+LinkedIn / Facebook Ads Library aren't scrapeable with curl. With Browser Harness, **trivial**.
+
+### Case 2 — Price monitoring
+
+```
+> Every Monday, get me the prices of these 20 Amazon products.
+  Compare them against last week's snapshot (it's at
+  /tmp/precios/anterior.json).
+
+  Show me:
+  - Products with a change >5%
+  - Discontinued products (not in stock)
+  - New products in my competitor list
+```
+
+[Hook](/boveda/hooks-automatizacion) every Monday → automatic report.
+
+### Case 3 — Lead enrichment with LinkedIn
+
+Your CRM has 100 contacts with only name + company. You want to enrich them:
+
+```
+> For each contact in /tmp/contactos.csv:
+  - Find their LinkedIn profile (name + company)
+  - If you find it, add:
+    - Profile URL
+    - Current role
+    - Time at the company
+    - Approximate connections
+
+  If you don't find a confident match, mark it "not found".
+  Output to /tmp/contactos-enriched.csv
+```
+
+A 4-6 hour manual job → 20 min with Browser Harness.
+
+### Case 4 — Visual QA of your own app
+
+```
+> Test the checkout on my app at https://staging.miapp.com/checkout:
+
+  Flow:
+  1. Add a product to the cart
+  2. Go to checkout
+  3. Fill in email + test address
+  4. Test card (4242 4242 4242 4242)
+  5. Confirm
+
+  For each step: screenshot + report back if anything failed visually.
+```
+
+---
+
+## Anti-patterns and warnings
+
+### 1. Sites with login = detection risk
+
+LinkedIn / Facebook **prohibit scraping in their terms**. Even if your real browser makes the connection, **repetitive patterns** give you away:
+
+- Lots of fast requests → they ban you
+- Non-human pattern (you don't scroll, you don't move the mouse) → flag
+
+**Mitigation**:
+- **Low volume** (dozens of queries per day, not thousands)
+- **Sleep between actions** (make it look human)
+- **Use a separate account** for scraping, not your personal one
+
+### 2. DON'T log in with your sensitive personal account
+
+If you get blocked / suspended scraping LinkedIn, you lose that account. **Use a secondary account** for scraping.
+
+### 3. Terms of service
+
+Every site has its own terms. **Read them first** before building a serious pipeline. Some explicitly prohibit automation, others allow it with conditions.
+
+### 4. NO email harvesting
+
+As with any scraping, **pulling emails for mass spam** is problematic legally and technically (CAN-SPAM, GDPR). Browser Harness doesn't exempt you from those laws.
+
+### 5. Generated skills need validation
+
+The skill Claude learns the first time **may not be optimal**. Review it before trusting it 100%:
+- Are the selectors robust or too specific?
+- Does it handle the "no results found" case?
+- What happens if the site changes its layout?
+
+---
+
+## vs alternatives
+
+| Approach | When |
+|----------|--------|
+| **Browser Harness** | Sites with login, SPAs, aggressive anti-bot |
+| **[Apify MCP](/boveda/apify-mcp)** | Popular sites, you don't want to maintain anything |
+| **[Scrapling](/boveda/scrapling-leads)** | Static sites, heavy use, free |
+| **The site's official API** | When it exists → always the best option |
+
+Browser Harness wins **when no alternative works** (login + JS + anti-bot). It's not the default approach.
+
+---
+
+## Installation
+
+### Step 1 — Paste the prompt
+
+```
+> Install Browser Harness for me following the install.md from the
+  official repo.
+```
+
+Claude:
+1. Clones the repo
+2. Installs deps
+3. Configures the Chrome hooks
+4. Explains how to launch Chrome with the debugging port
+
+### Step 2 — Launch Chrome with the debugging port
+
+Mac:
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222
+```
+
+Close all Chrome instances first. This session is the one Claude controls.
+
+### Step 3 — Test it
+
+```
+> Browser Harness, open google.com and search for "test".
+```
+
+If it works, you're connected.
+
+---
+
+## The most important warning
+
+When Browser Harness operates your Chrome:
+
+- **It can see what's open** in other tabs (potentially)
+- **It can act as you** on sites where you're logged in (bank, email, etc.)
+
+**Serious mitigation**:
+- Use a **dedicated Chrome profile** just for this
+- In that profile, do **NOT** be logged into your bank / critical systems
+- Use your main Chrome for normal life, and Chrome with the debugging port for Claude
+
+This separation reduces the risk of a random command touching something critical.
+
+---
+
+## Next steps
+
+- If all you need is public sites without login, [Scrapling](/boveda/scrapling-leads) (free, no browser)
+- For popular sites without maintaining anything, [Apify MCP](/boveda/apify-mcp)
+- For multiple Claudes operating in parallel (not necessarily browser), [parallel agent-view](/boveda/agent-view-paralelo)

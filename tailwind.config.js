@@ -3,7 +3,11 @@ import { tailwindPlugin } from './app/_lib';
 
 /** @type {import('tailwindcss').Config} */
 const tailwindConfig = {
-  content: ['./components/**/*.{js,jsx,mdx}', './app/**/*.{js,jsx,mdx}'],
+  content: [
+    './components/**/*.{js,jsx,mdx}',
+    './app/**/*.{js,jsx,mdx,ts,tsx}',
+    './nucleo/**/*.{ts,tsx}',
+  ],
   plugins: [tailwindPlugin, animatePlugin],
 };
 

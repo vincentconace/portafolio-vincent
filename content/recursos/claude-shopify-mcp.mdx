@@ -1,0 +1,298 @@
+---
+title: "Shopify + Claude MCP — gestionar tu tienda desde el chat"
+description: "MCP que conecta Claude a tu tienda Shopify. Subir productos, cambiar precios, revisar pedidos, crear descuentos, todo conversacional. Setup, casos de uso reales y los warnings cuando trabajás contra tienda en producción."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude", "mcp", "shopify"]
+publishedAt: "2026-05-27"
+readingTime: "9 min"
+relatedSlugs: ["plugin-supabase-mcp", "claude-small-business", "scrapling-leads"]
+---
+
+## La idea
+
+Si manejás tienda Shopify, conocés el problema: cualquier tarea operativa son **5-10 clicks en la UI de Shopify**, en distintas pantallas, con interfaces que no son consistentes entre módulos.
+
+Cambiar precio de 30 productos = 30 productos × N clicks cada uno = 1 hora. Crear descuento de Black Friday = 4 pantallas distintas. Revisar inventory crítico = otro flow.
+
+El MCP de Shopify mete tu tienda **adentro de Claude**. Le decís en español, ejecuta.
+
+> Importante: trabajar contra una tienda en producción es **destructivo**. Sigue las precauciones de "modos de permisos" más abajo.
+
+---
+
+## Lo que podés hacer
+
+### Productos
+
+```
+> Subí estos 12 productos nuevos al store. Te paso CSV con: nombre,
+  descripción, precio, peso, categoría, stock inicial.
+
+  Para imágenes: usá la primera URL que pase por producto.
+
+  Mostrame draft antes de publicar.
+```
+
+```
+> Cambiá el precio de todos los productos de la categoría "verano"
+  con un descuento del 15%. NO toques los de "esenciales".
+  Mostrame lista antes de aplicar.
+```
+
+```
+> Identificá productos con stock < 5 unidades. Para cada uno:
+  - Cuánto vendí en los últimos 30 días
+  - Cuánto tarda el proveedor en reponer
+  - Si vale la pena reordenar o discontinuar
+```
+
+### Pedidos
+
+```
+> Mostrame los pedidos del último mes con estado "pending fulfillment"
+  que tienen más de 5 días. Para cada uno: cliente, productos, monto,
+  por qué probablemente no se cumplió.
+```
+
+```
+> El pedido #12345 — el cliente pidió cambio del producto X por Y.
+  Procesá el cambio respetando diferencias de precio. Mostrame draft
+  del nuevo pedido antes de confirmar.
+```
+
+### Descuentos
+
+```
+> Creá descuento para Black Friday:
+  - 20% off en toda la tienda
+  - Excluyendo productos de la colección "Premium"
+  - Válido del 28/11 al 1/12
+  - Código: BLACK20
+  - Máximo 1000 usos
+  - 1 uso por cliente
+
+  Antes de crearlo, mostrame el resumen.
+```
+
+### Customers
+
+```
+> Buscá customers VIP (>5 órdenes en últimos 12 meses, total > $500).
+  Para cada uno, drafft un email de "agradecimiento + early access" al
+  nuevo lanzamiento.
+```
+
+### Reports custom
+
+```
+> Reporte de los últimos 30 días:
+  - Top 10 productos por revenue
+  - Top 5 productos por unidades
+  - Países con más ventas
+  - Tasa de devolución por categoría
+  - Hora del día con más conversión
+```
+
+---
+
+## Setup
+
+### Requisitos
+
+<Checklist
+  storageKey="shopify-mcp-prereqs"
+  items={[
+    "Tienda Shopify activa (plan paid)",
+    "Acceso de admin para crear API token",
+    "Claude Code v1.5+",
+    "Aceptás los riesgos de operar contra producción (ver más abajo)",
+  ]}
+/>
+
+### Pasos
+
+<Step number={1} title="Generar API token desde Shopify">
+
+En Shopify Admin:
+1. Settings → Apps and sales channels
+2. Develop apps → Create custom app
+3. Configurá los **scopes mínimos necesarios** (NO marqués todos):
+   - `read_products` + `write_products` (si vas a editar)
+   - `read_orders` + `write_orders` (si vas a procesar)
+   - `read_customers` + `write_customers` (idem)
+4. Install app → genera token
+
+</Step>
+
+<Step number={2} title="Configurar el MCP en Claude">
+
+`.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "shopify": {
+      "command": "npx",
+      "args": ["-y", "@shopify/mcp-server"],
+      "env": {
+        "SHOPIFY_STORE": "tu-tienda.myshopify.com",
+        "SHOPIFY_ACCESS_TOKEN": "${SHOPIFY_TOKEN}",
+        "WRITE_MODE": "false"
+      }
+    }
+  }
+}
+```
+
+**Crítico**: `WRITE_MODE: "false"` por defecto. Esto hace al MCP **read-only**. Vas a ver todo, pero no podés modificar nada. Es el modo seguro para empezar.
+
+</Step>
+
+<Step number={3} title="Verificar" last>
+
+```
+> Listame mis 5 productos más vendidos del último mes.
+```
+
+Si responde, conectado. Si pide permisos, autorizá scopes faltantes.
+
+</Step>
+
+---
+
+## Los modos de operación
+
+Igual que [Supabase MCP](/boveda/plugin-supabase-mcp), Shopify MCP soporta 3 modos:
+
+| Modo | `WRITE_MODE` | Para qué |
+|------|--------------|----------|
+| **Read-only** (default) | `false` | Análisis, reports, investigación |
+| **Write** | `true` | Operaciones que modifican (precios, productos, descuentos) |
+| **Confirmación cada vez** | `confirm` | Write activo pero pide approval explícito por cada acción |
+
+**Recomendación**:
+- **Desarrollo / pruebas**: store de staging con `WRITE_MODE: true`
+- **Producción**: `WRITE_MODE: confirm` siempre. Que cada acción pida "¿confirmás?"
+
+Solo `WRITE_MODE: true` sin confirmación si estás 100% seguro de los flows. Un bug en una skill puede modificar precios de todo el catálogo en segundos.
+
+---
+
+## Patrones útiles
+
+### Patrón 1 — Triple validación antes de cambios masivos
+
+Para operaciones que tocan muchos productos:
+
+```
+> Voy a cambiar precios de la categoría "invierno" con 30% off.
+
+PROTOCOLO:
+1. Mostrame primero la lista completa de productos afectados
+2. Después mostrame el cambio propuesto (precio antes / precio después)
+3. Mostrame el total revenue que afecta este cambio
+4. SOLO si confirmo, aplicalo
+5. Después de aplicar, hacé snapshot por si necesito revertir
+```
+
+3 confirmaciones antes de tocar nada → casi imposible romper algo masivo sin querer.
+
+### Patrón 2 — Auditoría semanal automática
+
+[Hook](/boveda/hooks-automatizacion) `SessionStart`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test $(date +%u) -eq 1 && echo 'Mostrame el reporte de la semana de Shopify'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Cada lunes al abrir Claude, ya tenés el reporte semanal cargado.
+
+### Patrón 3 — Combinación con scraping de competencia
+
+Combinado con [Scrapling](/boveda/scrapling-leads):
+
+```
+> Scrapeá los productos de mi competidor X. Cruzá con mi catálogo
+  Shopify. Mostrame:
+  - Productos similares con diferencia de precio > 10%
+  - Productos que ellos tienen y yo no
+  - Productos que yo tengo y ellos no (mis diferenciadores)
+
+  Después proponé ajustes de precio o catálogo.
+```
+
+---
+
+## Anti-patrones
+
+### 1. `WRITE_MODE: true` desde el día 1
+
+Te va a morder. Empezá read-only, después `confirm`, después write libre solo cuando ya conocés los flows.
+
+### 2. Scopes muy amplios en el token
+
+Si solo vas a leer products, **no des scope de orders/customers**. Si el token se filtra, daño limitado.
+
+### 3. Operar producción sin staging
+
+Para flows nuevos / experimentales: armá tienda de staging (Shopify lo permite), probá ahí, después al production.
+
+### 4. Confiar en outputs sin verificar
+
+Los datos que el MCP devuelve vienen de Shopify, pero Claude puede **malinterpretar** o **resumir mal**. Para decisiones críticas (cambios de precio, refunds), **chequeá la fuente** antes de aprobar.
+
+### 5. Auto-respuestas a customers sin tu approval
+
+Si Claude detecta queja del cliente y propone responder, **el approval lo das vos**. Auto-responder a customers reales es zona gris peligrosa.
+
+---
+
+## Casos donde el MCP gana
+
+✅ Manejás tienda solo o equipo chico (1-3 personas)
+✅ Volumen de operaciones repetitivas (uploads en lote, cambios masivos)
+✅ Necesitás reports custom que la UI no te da
+✅ Querés cross-reference con otros datos (CRM, scraping)
+
+❌ Tienda enterprise con compliance estricto
+❌ Equipo grande con flows ya armados en Shopify Flow
+❌ Operaciones que requieren auditoría detallada con audit trail certificado
+
+---
+
+## El cálculo de tiempo ahorrado
+
+Para una tienda PyME típica:
+
+| Tarea | A mano | Con MCP |
+|-------|--------|---------|
+| Cambiar precio de 30 productos | 1h | 5 min |
+| Reporte mensual ejecutivo | 2h | 15 min |
+| Triage de pedidos pendientes | 45 min | 10 min |
+| Crear campaña con descuento + emails | 3h | 30 min |
+| Auditoría de inventory bajo | 1h | 10 min |
+
+**~8h/semana** ahorradas en una tienda mediana.
+
+---
+
+## Próximos pasos
+
+- Si tu workflow requiere más allá de Shopify (otros sistemas), [Claude Small Business](/boveda/claude-small-business)
+- Para el patrón general de MCPs con conexión a DBs/sistemas, [Supabase MCP](/boveda/plugin-supabase-mcp)
+- Si vas a hacer outreach a customers desde el MCP, primero leé las restricciones de [Scrapling — el warning legal](/boveda/scrapling-leads)

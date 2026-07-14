@@ -1,0 +1,221 @@
+---
+title: "Plugin: Automated tests — a single command that writes your tests properly"
+description: "A Claude Code slash command that analyzes the function or component you point it at, infers the edge cases, and writes the tests with your framework (Vitest, Jest, Playwright). Not just the happy path: the broken cases too."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "vitest", "jest", "playwright"]
+version: "v1.0"
+publishedAt: "2026-05-14"
+readingTime: "11 min"
+relatedSlugs: ["skill-code-reviewer", "hooks-automatizacion"]
+---
+
+## The problem
+
+Asking Claude to "write tests for this function" works, but:
+
+- It only covers the happy path in 80% of cases
+- It sometimes invents imports that don't exist
+- It won't use your framework if you have several installed
+- It doesn't look at the `vitest.config` or the setup files
+
+This plugin (a custom slash command) solves that with a **4-step protocol**: it detects your framework, reads the entire function along with its dependencies, explicitly enumerates the edge cases BEFORE writing, and only then produces code.
+
+---
+
+## Installation
+
+Slash commands live in `.claude/commands/` (per project) or `~/.claude/commands/` (global). For this case, global is the better choice:
+
+```bash
+mkdir -p ~/.claude/commands
+```
+
+`~/.claude/commands/tests.md`:
+
+```markdown
+---
+description: Generates complete tests (happy path + edge cases) for the targeted function or file.
+argument-hint: <file:function or just file>
+---
+
+# Generate tests
+
+Goal: write complete tests for `$ARGUMENTS`.
+
+## Protocol (don't skip steps)
+
+### 1. Detect the framework
+
+Read `package.json` and `vitest.config.*` / `jest.config.*` / `playwright.config.*` to detect:
+- Test runner: Vitest, Jest, Bun:test, Node:test, Playwright
+- Runner version
+- Setup files (if any)
+- Naming conventions (`.test.ts`, `.spec.ts`, etc.)
+
+If you can't detect it, **ask** before continuing.
+
+### 2. Read the target function
+
+Read the whole file. Not just the function — also the relevant imports and types.
+
+If `$ARGUMENTS` points to a file without a specific function, list the public functions for me and ask which ones to test.
+
+### 3. Enumerate edge cases BEFORE writing
+
+In a single message to the user, list:
+- **Happy path**: 1-2 cases
+- **Boundary inputs**: empty, null, undefined, 0, negative numbers, very long strings
+- **Expected errors**: which exceptions it throws and when
+- **Side effects**: does it modify anything? does it call something else? what needs to be mocked?
+- **Async cases**: race conditions, timeouts, cancellations
+
+Wait for confirmation or adjustments from the user before writing code.
+
+### 4. Write the tests
+
+Rules:
+- One `describe` per function under test
+- One `it` per case enumerated in step 3
+- Descriptive names: "returns null if the input is empty", NOT "test 1"
+- Only mock what's necessary. Don't mock standard libraries (fs, path) unless it's unavoidable.
+- If the code depends on time (Date.now, setTimeout), use `vi.useFakeTimers()` or the equivalent
+- Correct relative imports for the test file
+- Isolated tests: each `it` must be able to run on its own
+
+### 5. Verify
+
+After writing:
+- Run the tests with the project's command (`npm test`, `pnpm test`, etc.)
+- If a test fails because the test itself is wrong (not the function), fix it
+- If it fails because there's a real bug in the function, report it to the user — do NOT touch the function's code just to make it pass
+```
+
+---
+
+## How to use it
+
+Inside Claude Code:
+
+```
+> /tests src/lib/format-currency.ts
+```
+
+Or pointing at a specific function:
+
+```
+> /tests src/lib/auth.ts:validateToken
+```
+
+Claude will:
+
+1. Read `package.json` and detect that you're using Vitest 1.6
+2. Read the entire function
+3. Send you the edge case enumeration:
+
+```
+I'm going to test `validateToken(token, options)`. Cases identified:
+
+Happy path:
+- Valid token + empty options → returns { valid: true, payload }
+
+Boundary inputs:
+- token = "" → should throw TokenError
+- token = null → should throw TokenError
+- token with JWT format but invalid signature → { valid: false }
+
+Side effects:
+- Calls `verifyJWT` (need a mock)
+- No other observable side effects
+
+Async:
+- The function is async, we need to await
+
+Any case you'd like to add or remove?
+```
+
+4. After your confirmation, it writes the `src/lib/auth.test.ts` file and runs it.
+
+---
+
+## Why it works better than asking for it loosely
+
+| Loose request | With this command |
+|---------------|------------------|
+| "Write tests for validateToken" | "/tests src/lib/auth.ts:validateToken" |
+| Sometimes invents Jest even though you use Vitest | Detects your config first |
+| Dumps code straight away | Gives you the edge cases to review |
+| Over-mocks | Only mocks what's necessary |
+| If the tests fail, "fixes" the function | If they fail because of a bug, reports it to you |
+
+---
+
+## Handy variants
+
+### `/tests-quick` — happy path only
+
+For when you already know the function is fine and you just want minimal coverage:
+
+```markdown
+---
+description: Quick tests, happy path only (3 cases max)
+argument-hint: <file:function>
+---
+
+Write 3 tests for `$ARGUMENTS`, happy path only. Don't enumerate edge cases. Give me the test file ready to go.
+```
+
+### `/tests-e2e` — for Playwright
+
+```markdown
+---
+description: Generates an e2e test with Playwright for the described flow
+argument-hint: <flow description>
+---
+
+Write a Playwright e2e test for: $ARGUMENTS
+
+Protocol:
+1. Read playwright.config.ts and the existing tests (if any) to detect the project's pattern
+2. Identify which pages/selectors you'll need
+3. Write the test using the page object pattern if the project already uses it
+4. Assertions should use `expect(page.locator(...)).toBeVisible()` style, not `toBe` with `.textContent()`
+```
+
+---
+
+## Integration with Hooks
+
+A combination worth its weight in gold: run the tests **automatically** whenever Claude edits a test file.
+
+`.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_FILE_PATHS\" | grep -qE '\\.(test|spec)\\.(ts|tsx|js)'; then npm test -- --run \"$CLAUDE_FILE_PATHS\" 2>&1 | tail -20; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="Tight loop">
+With the hook above: Claude writes the test → runs it → sees if it passes → adjusts if it fails → runs it again. All in the same session, without you having to watch.
+</Callout>
+
+---
+
+## Limitations
+
+- **Complex UI components**: for visual tests of stateful components, a better tool is Storybook + interaction tests. This command works for components with clear logic but struggles with purely visual ones.
+- **Functions over 300 lines**: if the function is huge, the command will suggest refactoring first. It's not a bad idea to take its advice.
+- **Load / performance tests**: this command does functional tests. For load testing, use k6 or artillery.

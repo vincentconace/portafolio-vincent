@@ -1,0 +1,91 @@
+---
+title: "Hook Performance Monitor — tracking de CPU + memory + tiempo durante sesión (654 installs)"
+description: "Hook con 654 installs. Monitorea performance del sistema durante operaciones de Claude Code: CPU, memory, execution time. Para optimizar tu setup cuando Claude consume demasiado."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-performance-budget-guard", "hook-context-timeline", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/performance/performance-monitor"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/performance/performance-monitor.json"
+---
+
+## Qué es
+
+Monitorea performance del sistema durante operaciones Claude Code:
+- **CPU usage**
+- **Memory usage**
+- **Execution time** por tool
+
+Hook events: `PreToolUse` (start timer) + `PostToolUse` (end timer + record).
+
+Útil cuando tu Claude Code anda lento o tu Mac transpira de más, para entender qué operación es la culpable.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `performance` |
+| Installs | 654 |
+| Hook events | `PreToolUse` + `PostToolUse` |
+| Métricas | CPU, memory, exec time |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook performance/performance-monitor
+```
+
+Para Claude:
+
+```
+Instalé el hook performance/performance-monitor. Después de una sesión
+de 10 minutos, mostrame summary: qué tools fueron más caros en CPU
+y tiempo, y memory peak.
+```
+
+## Qué podés hacer con esto
+
+### Identificar tools lentos
+
+¿Por qué Claude tarda? Mirás el log y ves "Edit demoró 8s en repo grande" o "Bash X demoró 45s".
+
+### Detectar memory leaks
+
+Si tu sesión consume memoria progresivamente, este hook te lo muestra.
+
+### Optimizar tu setup
+
+Si ciertas operaciones son consistentemente lentas, podés re-organizar o cambiar tools.
+
+### Para máquinas chicas
+
+Si trabajás en una Mac vieja, el monitor te ayuda a entender cuándo Claude la satura.
+
+### Comparación de configs
+
+Probás 2 setups (con/sin MCP X). El monitor te da números para comparar.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu setup va bien:** el monitor agrega overhead sin ganancia.
+- **Para sesiones cortas:** las métricas no son significativas.
+- **Si querés monitor de tu app, no de Claude:** este hook es del sistema, no de tu deploy.
+- **Si ya usás otros monitoring tools:** activity monitor del SO da info similar.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Performance Monitor Hook](https://www.aitmpl.com/component/hooks/performance/performance-monitor) — comando exacto.
+- **Config JSON:** [performance-monitor.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/performance/performance-monitor.json).
+
+## Recursos relacionados
+
+- [Performance Budget Guard Hook](/boveda/hook-performance-budget-guard) — para perf de tu app vs perf del sistema.
+- [Context Timeline Hook](/boveda/hook-context-timeline) — visualización web en lugar de log textual.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — optimization patterns.

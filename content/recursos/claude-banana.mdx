@@ -1,0 +1,343 @@
+---
+title: "Claude Banana — convierte prompts simples en prompts profesionales de imagen"
+description: "Le decís 'un gato en un jardín' y Claude reescribe el prompt con 7 ingredientes (sujeto, estilo, entorno, iluminación, acción, ángulo, texturas) para que Gemini/Flow/Midjourney generen imágenes profesionales. 9 modos especializados, formato narrativo, gratis."
+difficulty: "fácil"
+category: "prompts"
+tools: ["claude", "gemini", "midjourney"]
+publishedAt: "2026-05-28"
+readingTime: "7 min"
+relatedSlugs: ["restaura-tus-fotos", "higgsfield-mcp", "claude-disenador-web"]
+---
+
+## El problema
+
+Cuando le decís a un generador de imágenes "un gato en un jardín", **tiene que adivinar todo lo demás**:
+- ¿Qué estilo? (foto, ilustración, anime, 3D?)
+- ¿Qué luz? (mediodía, golden hour, dramática?)
+- ¿Qué ángulo? (eye-level, plongée, contre-plongée?)
+- ¿Qué texturas?
+- ¿Qué mood?
+
+Resultado: **imagen genérica**, iluminación plana, sin personalidad.
+
+**Claude Banana** es un proyecto que toma tu prompt simple y **lo reescribe con 7 ingredientes** que los generadores necesitan para entregar imágenes profesionales.
+
+Repo: `Hainrixz/claude-banana`. Open source.
+
+---
+
+## La fórmula — 7 ingredientes
+
+| # | Ingrediente | Para qué |
+|---|-------------|----------|
+| 1 | **Sujeto** | Qué aparece (persona, objeto, escena) |
+| 2 | **Estilo visual** | Foto / ilustración / 3D / cinema / acuarela |
+| 3 | **Entorno** | Estudio / naturaleza / ciudad / abstracto |
+| 4 | **Iluminación** | Golden hour / dramática / neón / natural |
+| 5 | **Acción** | Movimiento, pose, interacción |
+| 6 | **Ángulo de cámara** | Primer plano / cenital / eye-level / gran angular |
+| 7 | **Texturas** | Piel, tela, metal, madera, agua |
+
+**Importante**: los generadores actuales (Gemini, Flow, etc.) prefieren **oraciones descriptivas**, no listas de keywords separadas por comas. Claude Banana genera en **formato narrativo**.
+
+---
+
+## Antes vs después — ejemplo real
+
+### Sin Claude Banana
+
+```
+Input: "un gato en un jardín"
+Output: imagen genérica de gato cualquiera en jardín cualquiera
+```
+
+### Con Claude Banana
+
+```
+Input: "un gato en un jardín"
+
+Claude Banana reescribe a:
+
+"A tabby cat lounging on sun-warmed flagstones in a walled
+cottage garden, soft golden-hour sidelight filtering through
+climbing roses, shallow depth of field with a creamy bokeh
+background of lavender bushes, shot from a low eye-level angle,
+fine fur texture catching individual light strands, watercolor-
+illustration style with muted earth tones and pops of floral pink."
+```
+
+Output: imagen **con intención visual clara**, detalles que importan.
+
+---
+
+## Setup — menos de 1 minuto
+
+### Paso 1 — Descargar
+
+`github.com/Hainrixz/claude-banana` → Download ZIP.
+
+Descomprimir.
+
+### Paso 2 — Abrir con Claude
+
+**Opción A — App de escritorio**:
+1. Abrí Claude Desktop
+2. Projects → New Project
+3. Seleccioná la carpeta descomprimida
+
+**Opción B — Claude Code en terminal**:
+```bash
+cd claude-banana-main
+claude
+```
+
+### Paso 3 — Escribir tu pedido
+
+```
+> Quiero imagen para mi nuevo lanzamiento de SaaS.
+  Concepto: persona viendo dashboard moderno, mood productivo
+  pero calmo.
+```
+
+### Paso 4 — Pegar el output en un generador
+
+Claude Banana te entrega prompt optimizado. Lo copiás y pegás en:
+- **Flow** (Google Labs) — gratis
+- **Whisk** (Google Labs) — gratis para remixing
+- **Midjourney**
+- **DALL-E**
+- **Stable Diffusion**
+
+Funciona con cualquier generador moderno.
+
+---
+
+## Los 9 modos especializados
+
+Cada modo ajusta la fórmula para un tipo específico de imagen:
+
+| Modo | Para qué |
+|------|----------|
+| **Cinema** | Fotogramas cinematográficos con iluminación dramática |
+| **Producto** | Fotos de producto para e-commerce y catálogos |
+| **Retrato** | Retratos profesionales con iluminación de estudio |
+| **Moda** | Editorial de moda con estilismo y composición |
+| **UI Design** | Assets para interfaces y diseño digital |
+| **Logos** | Logotipos, iconos, branding visual |
+| **Paisajes** | Naturaleza, ciudades, escenas panorámicas |
+| **Abstracto** | Arte generativo, patrones, composiciones libres |
+| **Infografías** | Visualizaciones de datos, diagramas estilizados |
+
+Para invocar un modo:
+
+```
+> Usá modo Cinema. Imagen: detective en bar de los años 40
+  fumando, sombras dramáticas.
+```
+
+---
+
+## Casos de uso
+
+### 1. Fotos de producto para e-commerce
+
+```
+> Modo Producto.
+
+  Producto: zapatillas running negras con detalles verde lima.
+
+  Necesito 3 variantes:
+  - Vista 3/4 con fondo gris suave (catálogo)
+  - Vista lateral con texturas en macro (detalle de material)
+  - Vista en uso (corriendo, golden hour, urban)
+
+  Generá los 3 prompts optimizados para Flow.
+```
+
+### 2. Hero image para landing
+
+```
+> Modo Cinema.
+
+  Landing de SaaS B2B de inventario para retail.
+  Audiencia: COOs de retail mediano LATAM.
+
+  Necesito hero con persona profesional (40-50 años),
+  expresión confiada pero accesible, en oficina moderna,
+  mirando holograma de dashboard de inventario.
+
+  Mood: control + tecnología + humano (no frío corporativo).
+  Paleta: azules profundos + acentos cálidos.
+```
+
+### 3. Logo y branding
+
+```
+> Modo Logos.
+
+  Negocio: cafetería de especialidad llamada "Compass".
+
+  Estilo: minimalista, geométrico, sofisticado pero accesible.
+  Colores: marrón café espresso + crema + acento dorado.
+  Inspirado en: marcas como Aesop, Blue Bottle Coffee.
+
+  Generá 3 conceptos:
+  1. Wordmark + ícono integrado
+  2. Solo ícono (para favicon, app)
+  3. Variante monoespaciada para sello
+```
+
+### 4. Iteración desde imagen de referencia
+
+```
+> Acá hay imagen de referencia [adjunto].
+
+  Necesito:
+  1. Mismo sujeto pero estilo cinematográfico (iluminación
+     dramática)
+  2. Fondo cambia a ciudad de noche con bokeh
+  3. Mantené detalle facial pero más texturas
+  4. Formato panorámico 16:9
+
+  Generá prompt optimizado para Gemini.
+```
+
+### 5. Preset de marca personalizado
+
+```
+> Creá preset de marca con estos parámetros:
+
+  Paleta: tonos tierra cálidos (#D4A574, #8B6F47, #F5E6D3)
+  Estilo: fotografía editorial minimalista
+  Iluminación: luz natural suave, golden hour
+  Texturas: orgánicas, materiales naturales
+  Encuadre: centrado con espacio negativo
+
+  Aplicá este preset a: "una taza de café en mesa de madera"
+
+  Después guardá el preset como "marca-cafeteria" para
+  reusar.
+```
+
+---
+
+## Reglas clave que aplica
+
+### Formato narrativo
+
+Los generadores entienden **mejor oraciones completas** que listas de keywords separadas por comas.
+
+❌ "cat, garden, golden hour, watercolor, eye-level, lavender"
+✅ "A tabby cat lounging in a cottage garden at golden hour..."
+
+### Sin palabras prohibidas
+
+NO usa términos que no aportan:
+- "4K"
+- "masterpiece"
+- "hyperrealistic"
+- "ultra detailed"
+
+Estos términos **no mejoran** el resultado moderno y pueden empeorarlo.
+
+### Compatible con todo
+
+Funciona con Gemini, Midjourney, DALL-E, Stable Diffusion. La narrativa funciona en los principales engines.
+
+### Iteración fácil
+
+Si no te gusta el output, no empezás de cero:
+
+```
+> El gato del prompt anterior, pero más oscuro y con luz neón
+  cyan/magenta en lugar de golden hour.
+```
+
+Claude ajusta solo lo que pediste, mantiene el resto.
+
+---
+
+## Dónde generar — herramientas gratis
+
+| Tool | Para qué | Costo |
+|------|----------|-------|
+| **Flow (Google Labs)** | Generación desde cero | Gratis con Google account |
+| **Whisk (Google Labs)** | Remix de imágenes existentes | Gratis con Google account |
+| **Midjourney** | Calidad premium | Plan paid |
+| **DALL-E 3 (ChatGPT)** | Integrado en ChatGPT | Pro |
+| **Stable Diffusion local** | Sin créditos, sin censura | Setup local |
+
+Para empezar sin gastar: **Flow + Whisk** de Google son excelentes.
+
+---
+
+## Anti-patrones
+
+### 1. Prompts hiper largos
+
+Después de 200 palabras, los generadores **se confunden**. Si Claude Banana te genera un párrafo largo, está bien — pero más allá de eso, refiná.
+
+### 2. Mezclar muchos estilos
+
+❌ "Foto realista + acuarela + 3D + cinematic + anime"
+
+Pickea **un estilo dominante**, no 5.
+
+### 3. Usar Claude Banana para diseños UI
+
+Para UIs funcionales (botones, dashboards), usá [Stitch](/boveda/stitch-diseno-ia) o [diseñador web](/boveda/claude-disenador-web). Claude Banana es para **imágenes/arte**, no interfaces funcionales.
+
+### 4. No iterar
+
+Primera generación rara vez es perfecta. **Iterá** con feedback específico. Es la diferencia entre amateur (acepta primera) vs pro (refina 3-5 veces).
+
+### 5. Querer pixel-perfect
+
+Los generadores tienen **varianza**. El mismo prompt puede dar imágenes ligeramente distintas. Aceptá la varianza o usá seeds (si el generador lo soporta).
+
+---
+
+## Combinaciones potentes
+
+### Con NanoBanana (restauración)
+
+[Restaura tus fotos](/boveda/restaura-tus-fotos) usa NanoBanana para restaurar. Claude Banana es para **generar nuevas**.
+
+```
+> Generá imagen con Claude Banana del producto.
+> Después usá NanoBanana para restaurar/upscale a 4K.
+```
+
+### Con Higgsfield MCP
+
+[Higgsfield](/boveda/higgsfield-mcp) integra generación dentro de Claude. Claude Banana es approach más simple sin MCP.
+
+Para uso ocasional: Claude Banana.
+Para uso intensivo + video: Higgsfield MCP.
+
+### Con [diseñador web](/boveda/claude-disenador-web)
+
+```
+> Usá Claude Banana para generar imágenes hero para mi landing.
+> Después integralas en el componente Hero que diseñé con
+  Claude Disenador Web.
+```
+
+---
+
+## Cuándo NO conviene
+
+| Caso | Por qué |
+|------|---------|
+| Necesitás UI funcional | Usá tools de diseño UI específicas |
+| Producción de stock photography | Sites de stock + Photoshop |
+| Diseño con marca muy estricta | Necesitás diseñador humano para garantizar fidelidad |
+| Animación / video | Higgsfield u otros para video |
+
+---
+
+## Próximos pasos
+
+- Para restaurar fotos existentes (no generar), [restaura tus fotos con NanoBanana](/boveda/restaura-tus-fotos)
+- Para integración más profunda con Claude (MCP), [Higgsfield MCP](/boveda/higgsfield-mcp)
+- Para diseño UI funcional, [Claude diseñador web](/boveda/claude-disenador-web)

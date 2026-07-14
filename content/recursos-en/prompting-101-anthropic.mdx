@@ -1,0 +1,437 @@
+---
+title: "Prompting 101 — Anthropic's 10 pillars distilled"
+description: "Anthropic's Applied AI team (Hannah + Christian) teaches its 10 pillars with a real case: a Swedish accident report that in v1 Claude mistakes for a skiing accident, and in v5 delivers the verdict in XML ready for your DB. Plus: the 3 changes in Opus 4.7 and 4 copy-paste templates."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude"]
+publishedAt: "2026-05-28"
+readingTime: "13 min"
+relatedSlugs: ["hablarle-a-claude", "guia-claude-opus-47", "comando-de-sistema"]
+---
+
+## Why it matters
+
+Prompt engineering is **the practice of writing clear instructions**, giving Claude the context it needs and thinking about how you structure that info for the best result. **It's not magic. It's empirical science**: you run it, read the output, identify what failed, and run it again.
+
+This page distills the **Prompting 101** class from Anthropic's Applied AI Team with the real case they used: a Swedish accident report with 17 rows of checkboxes + a hand-drawn sketch. v1 ends up saying it's a **skiing accident**. v5 delivers the verdict in `<final_verdict>`, ready to parse.
+
+---
+
+## 2026 update — the 3 changes in Opus 4.7
+
+If you feel Claude got **dumber**, it's not your imagination. Opus 4.7 changed how you have to ask for things — and almost no one noticed. **It didn't get worse — it stopped guessing**.
+
+### Change 1 — It's more literal
+
+**Before**: "clean up this text" → Claude guessed what you meant (spelling + phrasing + etc).
+
+**Now**: it does **literally** what you ask. It doesn't generalize or infer.
+
+**What to do**: give it exact steps. "Fix the spelling AND break up the long sentences." If you want it applied everywhere, state the scope: "apply it to ALL sections, not just the first one."
+
+### Change 2 — It calibrates length on its own
+
+**Before**: consistent response.
+
+**Now**: it judges complexity. "Summarize this" → 1 line (because it thinks that's what you wanted).
+
+**What to do**: ask for a level of detail. "Give me a DETAILED summary" or "concise answers, no filler." **Positive examples** work better than prohibitions.
+
+### Change 3 — It stops shouting
+
+**Before**: "CRITICAL: you MUST do X" worked.
+
+**Now**: with aggressive language it **responds worse**. Anthropic recommends the opposite.
+
+**What to do**: talk to it normally, like to a person. Better yet: **give it the reason**.
+
+❌ "Never use ellipses"
+✅ "This is read by a voice reader that doesn't pronounce them, so never use them"
+
+Claude **generalizes from the explanation**.
+
+### The common pattern
+
+All 3 changes are the same thing: **give it context and tell it exactly what you want**.
+
+---
+
+## The 10 pillars — in order
+
+Anthropic recommends building the prompt as **a single piece with 10 elements in order**. Not all of them always apply, but if you assemble it in this order you make sure that when something is missing it's **by choice, not by oversight**.
+
+The **first 6** normally live in the system prompt. The **last 4** shape the response.
+
+### 1. Task description / role
+
+You tell it what role it takes and what it's for. Without this, it **guesses the domain** (in the demo, it ended up talking about a skiing accident).
+
+Example: "You are an AI assistant for a human insurance adjuster who reviews car accident reports in Swedish and determines liability."
+
+### 2. Tone context
+
+How it should sound. For factual tasks: **confident, concise, no guessing**. If it's not sure, it says so — it doesn't fill in with creativity.
+
+### 3. Background data, documents & images
+
+What **does NOT change** between calls. Form structure, glossary, domain examples. It goes in the system prompt and is ideal for **prompt caching**.
+
+### 4. Detailed task description & rules
+
+Step-by-step of how to reason. **ORDER matters**: in the demo, reading the form first and then the sketch raises quality (the sketch without context is just boxes and lines).
+
+### 5. Examples (few-shot)
+
+Gray-area cases where your human intuition already knows the truth. You pass them to Claude with their input and expected output.
+
+### 6. Conversation history
+
+Only if there's history that carries real context. In batch jobs, it usually doesn't apply.
+
+### 7. Immediate task description
+
+The **here-and-now** reminder at the end of the prompt. After all the preamble, you tell it what you want IN THIS call. **It reduces drift**.
+
+### 8. Thinking step-by-step
+
+Explicit chain of thought or extended thinking. You ask it to show its reasoning **before concluding**. It raises quality on multi-step tasks and gives you a **trace to diagnose errors**.
+
+### 9. Output formatting
+
+How you want the result. JSON, XML, Markdown, length, type. If you leave it open, Claude chooses — and it **rarely matches what your parser expects**.
+
+### 10. Prefilled response
+
+Start talking for Claude. You put the first word (or tag) in its message and force the shape without having to ask for it in prose.
+
+Example: prefill with `{` → forces JSON. With `<final_verdict>` → forces the tag.
+
+### Rule of thumb
+
+If your app calls Claude **more than once** with the same structure, **pillars 1-6 = system prompt + prompt caching**. Pillars 7-10 shape the response and go in the last user message or as the assistant prefill.
+
+---
+
+## The demo — v1 → v5
+
+A single prompt evolving. Each version **adds a pillar and fixes the previous one's error**.
+
+### v1 — Vague prompt
+
+Just: "review this report and tell me who was at fault."
+
+**Output**: Claude mistakes it for a **skiing accident** on a Swedish street. With no role/tone/background, it guesses the entire domain.
+
+### v2 — Task + tone context (pillars 1+2)
+
+We add: role (adjuster's assistant, reviews reports in Swedish), tone (don't guess if you're not sure).
+
+**Output**: it identifies that it's a vehicle crash. It reads rows correctly. But it responds **unsure and with no verdict** — it still doesn't know what each row means.
+
+### v3 — Background data (pillar 3)
+
+We add: form structure in the system prompt (17 rows, 2 columns, humans mark with X/circles/scribbles, purpose).
+
+**Output**: it reads with confidence, **verdict: vehicle B liable**. It takes advantage of the system prompt being static and cached.
+
+**Still fails**: free-form output, over-narrates, **not parseable by a downstream system**.
+
+### v4 — Detailed rules + order (pillars 4+7+8)
+
+We add: step-by-step rules (read the form row by row, list marks, cross-reference with the sketch, issue a verdict only if consistent).
+
+**Output**: ordered reasoning. First it lists each checkbox, then cross-references with the sketch, then the verdict. **Quality rises on hard cases**.
+
+**Still fails**: it keeps narrating too much. Useful for humans, not for machines.
+
+### v5 — Output formatting + prefill (pillars 9+10)
+
+We add: output rule (wrap the verdict in XML). Optional: prefill with `<final_verdict>`.
+
+**Output**: verdict wrapped in `<final_verdict>...</final_verdict>`. Ready for a parser. All the preamble is ignored.
+
+### The operational lesson
+
+**Don't ship v1 to production**. But don't try to write v5 in one shot either. **Start simple → observe the error → add ONE pillar → run it again**.
+
+Quality rises in layers and **written evidence remains of why each part is there**.
+
+---
+
+## XML tags vs prose
+
+Claude is **fine-tuned to recognize XML blocks** as sections with a distinct purpose. It's not decoration: when you wrap in `<background>`, `<rules>`, `<output_format>`, Claude treats them as **separate intents**.
+
+### System prompt with XML — full template
+
+```
+<role>
+You are an AI assistant for a human insurance adjuster.
+You review car accident reports in Swedish and determine
+liability.
+</role>
+
+<tone>
+Stay factual and confident. If you can't determine something with
+certainty, say so. Do NOT guess.
+</tone>
+
+<background>
+The form is a standard Swedish report with 17 numbered rows and 2
+columns (vehicle A, vehicle B). Humans mark with X,
+circles or scribbles — do NOT expect perfect formatting. Each row
+represents an action of the vehicle at the moment of the accident.
+</background>
+
+<rules>
+1) Read the form row by row. List which vehicle marked what.
+2) Cross-reference that list with the accident sketch.
+3) Only if the evidence is consistent, issue a verdict.
+   If not, mark "insufficient".
+</rules>
+
+<output_format>
+Reason inside <thinking>...</thinking>.
+Your final verdict goes inside <final_verdict>...</final_verdict>.
+Everything else is ignored.
+</output_format>
+
+<task>
+For this specific report, run the <rules> flow and
+respect <output_format>.
+</task>
+```
+
+### When NOT to use XML
+
+- Very short tasks (a direct question)
+- Chat-mode with Claude to explore
+
+In those cases XML only adds noise.
+
+---
+
+## Extended thinking — the prompt engineer's crutch
+
+Claude 4.x allows **extended thinking**: it writes its reasoning in `<thinking>` tags before answering. Christian (Anthropic) puts it bluntly: extended thinking is **the prompt engineer's crutch**.
+
+### The flow
+
+1. You enable thinking
+2. You read the scratchpad transcript
+3. You see at which step Claude slips
+4. You feed that intuition back into the system prompt
+
+After a few iterations, your prompt is so sharp that **you no longer need thinking** — the reasoning lives written as explicit rules.
+
+### When NOT to turn it on
+
+Simple tasks (classification, direct extraction). Overthinking adds latency and cost without improving the result.
+
+---
+
+## Prefill + caching
+
+### Prefill — puts words in Claude's mouth
+
+When the model responds, **it continues the text you put** in its message.
+
+| Prefill | For what |
+|---------|----------|
+| `{` | Forces JSON with no preamble |
+| `<final_verdict>` | Forces direct XML wrapping |
+| `1.` | Forces a numbered list with no intro |
+| `[As a senior adjuster]:` | Keeps the persona |
+
+### Prompt caching
+
+The big block of background + role + rules is **identical on every call**. Enable prompt caching:
+- You pay the full token cost the first time
+- ~10% on subsequent ones
+
+For batch apps (processing 1000 reports), the savings are **orders of magnitude**.
+
+---
+
+## The 5 golden rules for 2026
+
+### 1. Say what you DO want, not what you don't
+
+❌ "Don't use markdown"
+✅ "Write in flowing prose, in complete paragraphs"
+
+### 2. Give the reason behind each instruction
+
+When you explain **why it matters**, Claude understands your goal and **generalizes to cases you didn't name**.
+
+### 3. Teach with examples, not just rules
+
+3-5 well-built examples shape format/tone/structure **better than any paragraph of instructions**. Wrap each one in `<example>`.
+
+### 4. "Do it" vs "could you suggest?"
+
+❌ "Could you suggest improvements to this function?"
+✅ "Change this function so it runs faster"
+
+The model now follows your instruction **to the letter**.
+
+### 5. Ask for the voice you want
+
+Opus 4.7 defaults to being **more direct and opinionated**. If your brand needs a warm tone, **ask for it explicitly**.
+
+---
+
+## 4 copy-paste templates
+
+### Template 1 — System prompt with the 10 pillars
+
+```
+<role>
+[Pillar 1] You are a [specific role] who [clear mission, 1 line].
+</role>
+
+<tone>
+[Pillar 2] Stay [factual / warm / technical]. If [uncertainty
+condition], [explicit action instead of guessing].
+</tone>
+
+<background>
+[Pillar 3] Context that does NOT change between calls:
+- Structure of the input you'll receive
+- Domain glossary or conventions
+- Fixed business rules
+</background>
+
+<examples>
+[Pillar 5] Hard cases already solved by humans:
+<example>
+  <input>...</input>
+  <output>...</output>
+</example>
+</examples>
+
+<rules>
+[Pillar 4] How to reason step by step:
+1) [First step, the simplest]
+2) [Second step, depends on the first]
+3) [Verdict / output, only if previous steps are consistent]
+</rules>
+
+<output_format>
+[Pillar 9] Wrap the result inside [<tag>...</tag> or JSON].
+[Pillar 8] Before the result, reason inside <thinking>.
+</output_format>
+
+<task>
+[Pillar 7] For this specific input, run the <rules> flow.
+</task>
+
+<!-- Pillar 10 (prefill): start the assistant message with
+"{" or "<...>" depending on the desired format. -->
+```
+
+### Template 2 — Audit your current prompt
+
+```
+I'm going to paste you my current prompt. I want you to audit it against
+the 10 pillars from Anthropic Applied AI's Prompting 101.
+
+CURRENT PROMPT:
+"""
+[paste your full prompt]
+"""
+
+USE CASE:
+[describe in 1-2 lines what it does in production]
+
+DELIVER TO ME:
+1. A table with the 10 pillars marking ✅ present / ⚠️ weak /
+   ❌ absent and one line of evidence.
+2. The 3 pillars with the greatest impact if added to this specific
+   prompt — and what improvement you expect.
+3. The sharpened version of the prompt, ready to copy, with XML
+   tags if applicable.
+4. One line of strategy: what changed and why.
+```
+
+### Template 3 — Apply the v1→v5 flow to your case
+
+```
+I want to apply the iterative V1 → V5 flow from Prompting 101 to
+MY use case.
+
+MY TASK:
+"""
+[describe in 2-3 lines what you want Claude to do, what inputs
+it receives and what output you expect]
+"""
+
+DELIVER THE 5 VERSIONS TO ME:
+
+v1 — Vague prompt, a single line. To show the failure mode.
+v2 — v1 + role + tone context.
+v3 — v2 + background data (input structure, glossary, rules).
+v4 — v3 + step-by-step rules on how to reason, in order.
+v5 — v4 + output formatting (XML or JSON) + prefill suggestion.
+
+For each version:
+- Mark which pillar you added vs the previous one
+- Paste the full prompt in a copyable block
+- One line: which error of v(n-1) it fixes
+
+Close with: which one you recommend running in production and why.
+```
+
+### Template 4 — Refactor to system + user
+
+```
+I have this prompt all in a single user message. I want to
+refactor it into the system + user structure Anthropic
+recommends.
+
+CURRENT PROMPT (all together):
+"""
+[paste it whole]
+"""
+
+DELIVER TO ME:
+
+1) SYSTEM PROMPT — what does NOT change between calls:
+- <role>...</role>
+- <tone>...</tone>
+- <background>...</background>
+- <rules>...</rules>
+- <examples>...</examples> (if any)
+- <output_format>...</output_format>
+
+2) USER MESSAGE TEMPLATE — what DOES change per call:
+- Placeholders {{...}} marked
+- Pillar 7 (immediate task) at the start or the end
+
+3) PROMPT CACHING NOTE — which block is worth caching
+
+4) SUGGESTED PREFILL — what to put in the assistant to force the format
+```
+
+---
+
+## How to chain the templates
+
+- **Starting from scratch** → template 1 (10 pillars) + v1→v5 flow
+- **Already have something running** → audit first, refactor next, finally v5 with prefill
+
+---
+
+## Who this does NOT apply to
+
+If you only use Claude in chat-mode to explore, **the 10 pillars are overkill**. This methodology is for when a prompt **goes into production** and runs hundreds or thousands of times.
+
+In those cases, each pillar paid for = fewer errors, fewer tokens, outputs your downstream system actually parses.
+
+---
+
+## Next steps
+
+- For basic principles of talking to Claude (non-production), [talking to Claude](/boveda/hablarle-a-claude)
+- To dig deeper into Opus 4.7 specifically, [Claude Opus 4.7 guide](/boveda/guia-claude-opus-47)
+- For a meta-prompt that designs system prompts, [system command](/boveda/comando-de-sistema)

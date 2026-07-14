@@ -1,0 +1,101 @@
+---
+title: "MCP MongoDB Official — MongoDB's official server for Claude Code"
+description: "MongoDB's official MCP for connecting to databases and Atlas clusters. Querying, aggregation, collection management. Fewer installs (23) than the community one, but backed by MongoDB Inc."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "mongodb"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-mongodb", "mcp-dbhub", "plugin-pg-aiguide"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/database/mongodb-official"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mongodb-official.json"
+---
+
+## What it is
+
+It's the **official** version of the MongoDB MCP, maintained by MongoDB Inc. Capabilities similar to the [community MongoDB MCP](/boveda/mcp-mongodb) (319 installs): connecting to databases and Atlas clusters, querying, aggregation, collection management.
+
+The obvious question: why only 23 installs if it's official? Likely reason: it came out more recently and the community is still moving over to the official one. If you value official backing, go with this one. If you value community maturity, go with the other.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `database` |
+| Installs | 23 |
+| MCP server | `mongodb-official` |
+| Author | MongoDB Inc. |
+| Support | Self-hosted + Atlas |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp database/mongodb-official
+```
+
+Prerequisites: connection string + credentials.
+
+For Claude:
+
+```
+I installed the database/mongodb-official MCP. Set up the credentials and
+list the tools it exposes. Then show me the databases in my
+Atlas cluster.
+```
+
+## What you can do with it
+
+The same as with the [community version](/boveda/mcp-mongodb), plus the official backing. The use cases are similar:
+
+- Exploring inferred schemas
+- Natural-language queries
+- Complex aggregations
+- Index optimization
+- Atlas-specific operations
+
+Check out the examples in [community MongoDB MCP](/boveda/mcp-mongodb) — they apply almost 1:1.
+
+## Differences from the community version
+
+- **Maintained by MongoDB Inc.** — releases aligned with MongoDB and Atlas
+- **Fewer installs (23 vs 319)** — still a smaller community testing pool
+- **Direct MongoDB support** if you have a plan
+- **Predictable updates** — new Mongo feature ships, MCP update ships
+
+## When to choose which
+
+| Case | Recommendation |
+| --- | --- |
+| You want official support and Mongo backing | **Official** |
+| You want more community and more battle-tested tools | **Community** |
+| You're just getting started and don't care | **Either — start with community for maturity** |
+| Critical enterprise stack | **Official** |
+
+## Prerequisites
+
+- **Connection string** to your MongoDB
+- **Correct credentials**
+- **Verify version compatibility** of your Mongo version with the MCP
+
+## When it's not a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you already have [`mongodb`](/boveda/mcp-mongodb) community installed and working:** don't force a migration. Test it in a sandbox first.
+- **Don't install both:** tool collision.
+- **23 installs is low:** fewer publicly known issues. For critical production, validate it yourself.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [MongoDB Official MCP](https://www.aitmpl.com/component/mcps/database/mongodb-official) — exact command.
+- **JSON config:** [mongodb-official.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/database/mongodb-official.json).
+- **MongoDB official:** [mongodb.com](https://www.mongodb.com).
+
+## Related resources
+
+- [MongoDB MCP (community)](/boveda/mcp-mongodb) — the community version, more widely adopted. Compare before choosing.
+- [DBHub MCP](/boveda/mcp-dbhub) — for relational databases (a good combo if your stack is hybrid).
+- [PG AIGuide](/boveda/plugin-pg-aiguide) — for Postgres with Timescale's vertical expertise.

@@ -1,0 +1,293 @@
+---
+title: "Plugin claude-code-setup — el consejero oficial que te dice qué le falta a tu proyecto"
+description: "Plugin oficial de Anthropic. Escanea tu repo, detecta el stack, y te recomienda las top 1-2 automatizaciones de cada categoría (hooks, skills, MCPs, subagentes, slash commands). Read-only — no toca nada. Cómo instalarlo, qué prompt usar, y las 6 trampas que el README no cuenta."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "10 min"
+relatedSlugs: ["claude-code-setup-zero", "guia-claude-code-completa", "hooks-automatizacion"]
+---
+
+## El problema
+
+Abrís un proyecto nuevo en Claude Code. Sabés que existe el ecosistema de **hooks, skills, MCPs, subagentes, slash commands**. Pero no sabés cuáles te convienen **a tu stack específico**.
+
+Resultado típico: o no instalás nada (y perdés productividad) o instalás todo (y se vuelve ruido).
+
+**`claude-code-setup`** es la respuesta oficial de Anthropic. Un plugin que:
+
+1. Escanea tu codebase
+2. Detecta tu stack real
+3. Te recomienda **top 1-2 automatizaciones por categoría**
+4. Te justifica cada una contra tu proyecto
+5. **No toca nada** — read-only
+
+Es como tener un dev senior que entra a tu repo por 2 minutos y te dice "ojo, te falta esto y esto".
+
+---
+
+## Características clave
+
+| Aspecto | Detalle |
+|---------|---------|
+| Mantenido por | Anthropic (escrito por Isabella He) |
+| Repo | `anthropics/claude-plugins-official` |
+| Estrellas | ~20k |
+| Modo | 100% read-only |
+| Auto-instala | No — solo recomienda |
+| Versión Claude Code requerida | 2.x o superior |
+
+---
+
+## Pre-requisitos
+
+### 1. Claude Code v2.x instalado
+
+Verificá:
+
+```bash
+claude --version
+```
+
+Si te tira `1.x` → actualizá:
+
+```bash
+npm install -g @anthropic-ai/claude-code@latest
+# o si fue brew:
+brew upgrade claude-code
+```
+
+Si no tenés Claude Code todavía, arrancá con [setup zero](/boveda/claude-code-setup-zero) primero.
+
+### 2. Proyecto abierto
+
+`claude-code-setup` analiza un directorio específico. No podés correrlo "en general" — necesita un proyecto adelante.
+
+```bash
+cd ~/proyectos/mi-app
+claude
+```
+
+---
+
+## Instalación — 3 comandos
+
+```bash
+# Adentro de Claude Code:
+> /plugin install claude-code-setup@claude-plugins-official
+
+# Si te tira "plugin not found in any marketplace":
+> /plugin marketplace add anthropics/claude-plugins-official
+> /plugin install claude-code-setup@claude-plugins-official
+
+# Activar sin reiniciar:
+> /reload-plugins
+```
+
+### Verificar
+
+```
+> /plugin
+```
+
+Te abre la UI de plugins. Andá a la pestaña **Installed**. `claude-code-setup` debería aparecer con status **Enabled**.
+
+---
+
+## Las 5 categorías que recomienda
+
+### 1. Hooks
+
+Acciones automáticas que se disparan ante eventos (antes/después de editar archivos, después de comandos).
+
+**Ejemplos del README oficial**:
+- `auto-format` — corre tu formatter después de cada edición
+- `auto-lint` — corre linter y devuelve errores a Claude para que los arregle
+- `block-sensitive-files` — impide editar `.env`, secrets, credenciales
+
+Ver [hooks de Claude Code](/boveda/hooks-automatizacion) para profundizar.
+
+### 2. Skills
+
+Paquetes de instrucciones que le agregan a Claude expertise en un dominio.
+
+**Ejemplos**:
+- `plan-agent` — meta planificación estructurada antes de escribir código
+- `frontend-design` — Claude piensa como diseñador (paletas, fuentes, layout)
+
+Para entender el mental model, ver [aprende skill](/boveda/aprende-skill).
+
+### 3. MCP Servers
+
+Conectores que enchufan Claude a apps externas.
+
+**Ejemplos**:
+- `context7` — acceso a docs oficiales de librerías (evita que Claude invente APIs)
+- `playwright` — control de navegador real para testing/automation
+
+### 4. Subagents
+
+Agentes especializados que Claude llama para tareas específicas sin contaminar el contexto principal.
+
+**Ejemplos**:
+- `security-reviewer` — audita vulnerabilidades (SQL injection, XSS, secrets hardcodeados)
+- `performance-reviewer` — detecta queries N+1, loops ineficientes, re-renders
+- `accessibility-reviewer` — chequea WCAG, contraste, ARIA
+
+### 5. Slash Commands
+
+Comandos cortos que disparan workflows completos.
+
+**Ejemplos**:
+- `/test` — corre tests y muestra fallos con stack trace
+- `/pr-review` — genera análisis estilo code review del último commit
+- `/explain` — explica el archivo/función abierta
+
+---
+
+## El prompt que dispara el análisis
+
+Cuatro variantes según cuánto detalle querés:
+
+### Variante 1 — el clásico del README
+
+```
+> Recomendá automatizaciones para este proyecto.
+```
+
+Directo. Te devuelve la tabla de recomendaciones top 1-2 por categoría.
+
+### Variante 2 — narrativo (cuando recién arrancás)
+
+```
+> Ayudame a configurar Claude Code para este proyecto.
+
+Antes de tirarme las recomendaciones:
+1. Listá los archivos clave que mirás para entender el stack
+   (package.json, pyproject.toml, go.mod, etc.)
+2. Decime en 1-2 líneas qué tipo de proyecto detectaste
+   y qué framework principal usa
+3. Después tirame la tabla con tus recomendaciones top 1-2
+   por categoría (Hooks, Skills, MCPs, Subagents, Slash commands)
+4. En cada recomendación, explicame en 1 línea por qué me sirve
+   a mí — no en general
+
+Si una categoría no aplica, saltala y decime por qué.
+```
+
+### Variante 3 — focalizada (cuando ya sabés qué te falta)
+
+```
+> ¿Qué hooks debería usar en este proyecto?
+
+Mirá mi stack y tirame los top 3 hooks que más impacto darían.
+Para cada uno:
+- Qué hace en 1 línea simple
+- Por qué me sirve específicamente
+- El comando exacto para instalarlo o snippet para pegar
+```
+
+### Variante 4 — extendida (el más completo)
+
+```
+> Hacé análisis completo de este proyecto y dame:
+
+1. RESUMEN (3-5 líneas):
+   - Tipo de proyecto + framework
+   - Stack detectado
+   - Tamaño (archivos, LOC, deps)
+
+2. RECOMENDACIONES (top 1-2 por categoría):
+   Para CADA una:
+   - Nombre
+   - Qué hace (1 línea)
+   - Por qué me sirve referenciando algo REAL de mi código
+   - Comando/path/snippet exacto
+   - Setup adicional requerido (API keys, plan pago, permisos)
+
+3. CATEGORÍAS NO RELEVANTES:
+   Marcá 'no aplica' y decime por qué (1 línea)
+
+4. ORDEN SUGERIDO:
+   Si fueras yo, en qué orden aplicarías las recomendaciones
+
+NO apliques nada. Solo recomendá. Yo decido después.
+```
+
+---
+
+## Qué esperar cuando corre
+
+| Paso | Qué pasa | Tiempo típico |
+|------|----------|---------------|
+| 1 | Claude lee tus archivos (package.json, imports, estructura) | 5-10s |
+| 2 | Detecta framework y patrones | 10-30s |
+| 3 | Matchea contra catálogo de automatizaciones | 5-15s |
+| 4 | Genera tabla con justificaciones | 10-30s |
+| 5 | Imprime salida estructurada | inmediato |
+
+**Total**: 30s-2min para proyecto chico/mediano. Hasta 5min para monorepo enorme.
+
+---
+
+## Anti-patrones
+
+### 1. Esperar que aplique todo solo
+
+`claude-code-setup` es un **consejero, no un wizard**. Si esperás que después de correrlo tu proyecto quede configurado, te equivocaste de herramienta.
+
+Lo que ganás: una tabla con recomendaciones + comandos. Vos aplicás cada una **una por una**, revisando.
+
+### 2. Aplicar las 5 categorías a la vez el primer día
+
+Sobrecarga. Arrancá con 1-2 hooks. La semana siguiente, sumá 1 skill. Y así.
+
+### 3. Saltarse la justificación
+
+Cuando Claude te tira "instalá X porque te conviene", **leelo**. El "por qué" te enseña a evaluar futuras automatizaciones sin necesitar el plugin.
+
+### 4. Correrlo en proyectos vacíos
+
+Si tu proyecto tiene 3 archivos, el plugin no tiene de dónde sacar contexto. Las recomendaciones van a ser genéricas. **Correlo cuando tu proyecto ya tenga estructura real**.
+
+### 5. No actualizar el plugin
+
+Anthropic actualiza el catálogo de automatizaciones. Cada 1-2 meses corré `/plugin update claude-code-setup` para tener las recomendaciones nuevas.
+
+### 6. Tomar las recomendaciones como exhaustivas
+
+El plugin te tira **top 1-2 por categoría**, no las únicas opciones. Si querés explorar más, abrí la UI con `/plugin` → tab Discover y navegá el catálogo completo.
+
+---
+
+## Cuándo NO usarlo
+
+| Caso | Por qué |
+|------|---------|
+| Solo usás chat web de claude.ai | Plugins viven en Claude Code, no en web |
+| Claude Code 1.x sin posibilidad de actualizar | `/plugin` no existe ahí |
+| Industria regulada con compliance estricto | No podés instalar nada sin aprobar antes |
+| Proyecto vacío recién creado | No hay contexto suficiente para recomendar |
+| Equipo enterprise con stack muy específico | Las recomendaciones generales no encajan |
+
+---
+
+## Patrón recomendado — el primer mes
+
+| Semana | Qué hacer |
+|--------|-----------|
+| 1 | Instalar plugin + correr Prompt Variante 2. Leer todas las recomendaciones sin aplicar |
+| 2 | Aplicar 1-2 hooks (el de mayor impacto según la recomendación) |
+| 3 | Aplicar 1 skill que te ahorre repetir contexto |
+| 4 | Sumar 1 MCP si tu workflow lo requiere |
+
+Después de 1 mes, evaluá: ¿qué automatización usaste más? ¿Cuál no tocaste? Remové lo que no usás.
+
+---
+
+## Próximos pasos
+
+- Si recién arrancás con Claude Code, [setup zero](/boveda/claude-code-setup-zero)
+- Para entender el ecosistema completo de plugins/skills/MCPs, [guía Claude Code completa](/boveda/guia-claude-code-completa)
+- Para profundizar en hooks (lo que el plugin más suele recomendar), [hooks de automatización](/boveda/hooks-automatizacion)

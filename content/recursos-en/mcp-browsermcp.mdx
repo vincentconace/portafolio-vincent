@@ -1,0 +1,81 @@
+---
+title: "MCP Browser MCP — browser automation for AI apps"
+description: "MCP server with 582 installs that gives AI applications control over the browser: navigate, fill out forms, interact with pages. A general pattern for plugging web capabilities into Claude Code without fighting the setup."
+difficulty: "fácil"
+category: "mcp"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-browser-use-mcp-server", "plugin-playwright-skill", "browser-harness"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/browser_automation/browsermcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/browsermcp.json"
+---
+
+## What it is
+
+Browser MCP is one of the base MCPs in the browser_automation catalog. Simpler than [browser-use](/boveda/mcp-browser-use-mcp-server) or [Chrome DevTools](/boveda/mcp-chrome-devtools), its role is to give AI applications basic web capabilities: navigate URLs, fill out forms, interact with elements.
+
+Handy when you need something lighter than browser-use but friendlier than the raw Chrome DevTools Protocol. Its 582 installs make it a recognized option.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `browser_automation` |
+| Installs | 582 |
+| MCP server | `browsermcp` |
+| Focus | General browser automation for AI |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --mcp browser_automation/browsermcp
+```
+
+For Claude:
+
+```
+Install the browser_automation/browsermcp MCP. Open example.com and give me back
+the main text of the page.
+```
+
+## What you can do with this
+
+### Basic navigation
+
+Open a URL, wait for it to load, read the content. Tasks like "go to `my-app.com/dashboard` and bring me the cards that show up".
+
+### Fill out simple forms
+
+"Go to the contact form and submit a message with test data". Useful for quick smoke tests.
+
+### Light scraping
+
+For pages without serious anti-bot protection, it's enough. If the page has Cloudflare or captchas, go with [Bright Data](/boveda/mcp-brightdata) instead.
+
+### Post-deploy validation
+
+"Go to the prod URL and verify the home page loads without errors". Lightweight uptime validation + sanity check.
+
+## When NOT to use it
+
+<Callout type="warning" title="Before installing">
+
+- **For complex automations:** [browser-use](/boveda/mcp-browser-use-mcp-server) (1,636 installs) is more mature. [Chrome DevTools](/boveda/mcp-chrome-devtools) (2,685 installs) gives you more control.
+- **For serious scraping:** [Apify](/boveda/mcp-apify) or [Bright Data](/boveda/mcp-brightdata).
+- **For reproducible E2E tests:** [Playwright Skill](/boveda/plugin-playwright-skill) is better.
+- **If you just need an HTTP fetch:** a plain `curl` or `fetch` is simpler. The MCP is for when you need real interaction with the page.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Browser MCP](https://www.aitmpl.com/component/mcps/browser_automation/browsermcp) — exact command.
+- **JSON config:** [browsermcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/browser_automation/browsermcp.json) — definition.
+
+## Related resources
+
+- [Browser-Use MCP](/boveda/mcp-browser-use-mcp-server) — more mature and robust option for complex automation.
+- [Playwright Skill](/boveda/plugin-playwright-skill) — model-invoked, better for reproducible tests.
+- [Browser Harness](/boveda/browser-harness) — an alternative as a skill with a community catalog of sites.

@@ -1,0 +1,85 @@
+---
+title: "Setting Development Mode — broad permissions for trusted dev (1,983 installs)"
+description: "Setting with 1,983 installs. Comprehensive permission set for active development. Allow 18 common ops + deny 4 sensitive. For trusted dev environments where you want a smooth workflow without sacrificing baseline security."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-allow-npm-commands", "setting-allow-git-operations", "setting-deny-sensitive-files"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/development-mode"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/development-mode.json"
+---
+
+## What it is
+
+An "all-in-one" setting for active development. It combines:
+- **Allow:** 18 common operations (git, npm, build, test, lint, fs reads, etc.)
+- **Deny:** 4 sensitive paths (.env, secrets, etc.)
+
+Instead of installing [Allow Git Operations](/boveda/setting-allow-git-operations) + [Allow Npm Commands](/boveda/setting-allow-npm-commands) + [Deny Sensitive Files](/boveda/setting-deny-sensitive-files) separately, this one bundles them together.
+
+With 1,983 installs, it ranks as one of the most widely adopted permission settings.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `permissions` |
+| Installs | **1,983** |
+| Allow | 18 ops |
+| Deny | 4 sensitive paths |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting permissions/development-mode
+```
+
+For Claude:
+
+```
+I installed the permissions/development-mode setting. List the 18
+allowed ops and the 4 denied paths for me. Show me how to add more
+allow entries if I need to.
+```
+
+## What you can do with it
+
+### One-command permissions setup
+
+Instead of combining 3 settings, one covers them all.
+
+### Trusted dev environments
+
+If your repo and machine are secure, the balanced preset gives you a frictionless workflow.
+
+### Combined with security hooks
+
+Settings establish a baseline. Hooks ([Dangerous Command Blocker](/boveda/hook-dangerous-command-blocker), [AI Bash Guard](/boveda/hook-ai-bash-guard)) add dynamic layers.
+
+### For autonomous sessions
+
+Long `/goal` runs don't get stuck asking for permission at every step.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before you install">
+
+- **For prod or sensitive repos:** the broad set may be too permissive. A custom config is recommended.
+- **If you already have [Allow Git/Npm](/boveda/setting-allow-git-operations) separately:** don't install this on top of it — duplication.
+- **If you don't trust your environment:** narrow the scope first.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Development Mode Setting](https://www.aitmpl.com/component/settings/permissions/development-mode) — exact command.
+- **JSON config:** [development-mode.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/development-mode.json).
+
+## Related resources
+
+- [Allow Git Operations Setting](/boveda/setting-allow-git-operations) — git ops on their own.
+- [Allow Npm Commands Setting](/boveda/setting-allow-npm-commands) — npm on its own.
+- [Deny Sensitive Files Setting](/boveda/setting-deny-sensitive-files) — deny on its own.

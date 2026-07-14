@@ -1,0 +1,85 @@
+---
+title: "Setting Colorful Statusline — statusline con ANSI colors (2,551 installs, top)"
+description: "Setting con 2,551 installs — el #2 absoluto de statusline (solo detrás de [Context Monitor](/boveda/setting-context-monitor)). Statusline simple con ANSI colors: blue model, green dir, etc. Útil sin gimmicky."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-context-monitor", "setting-command-statusline", "setting-bug-circus-statusline"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/colorful-statusline"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/colorful-statusline.json"
+---
+
+## Qué es
+
+**#2 absoluto de statuslines (2,551 installs).** Solo detrás de [Context Monitor](/boveda/setting-context-monitor) (10k+).
+
+Statusline con ANSI color codes para distinguir info por color:
+- **Blue** — model
+- **Green** — directory
+- ...y más
+
+Sin gimmick, sin tema. Solo color útil. Por eso tiene más adopción que los temáticos.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `statusline` |
+| Installs | **2,551 (#2 de statuslines)** |
+| Type | ANSI colors |
+| Foco | Visual clarity, no gimmick |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting statusline/colorful-statusline
+```
+
+Para Claude:
+
+```
+Instalé el setting statusline/colorful-statusline. Mostrame qué colors
+usa para cada info type.
+```
+
+## Qué podés hacer con esto
+
+### Visual scan rápido
+
+En vez de leer texto, los colores te llevan al info que importa.
+
+### Compatible con terminals modernos
+
+ANSI colors funcionan en macOS Terminal, iTerm, Ghostty, Linux terms, Windows Terminal moderno.
+
+### Profesional sin gimmicky
+
+Para teams donde gimmicky statuslines son inapropiados, este es la opción seria con visual appeal.
+
+### Combo con [Context Monitor](/boveda/setting-context-monitor)
+
+Context Monitor es info-rich con progress bars. Colorful es liviano con color. Compará según preferencia — no instalés ambos (statusline es uno solo).
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Terminal sin soporte ANSI:** colors aparecen como escape codes raros.
+- **Si querés más info:** [Context Monitor](/boveda/setting-context-monitor) tiene progress bars y analytics.
+- **Para terminales con accessibility de bajo contraste:** verificá legibilidad.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Colorful Statusline Setting](https://www.aitmpl.com/component/settings/statusline/colorful-statusline) — comando exacto.
+- **Config JSON:** [colorful-statusline.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/colorful-statusline.json).
+
+## Recursos relacionados
+
+- [Context Monitor Setting](/boveda/setting-context-monitor) — el #1 de statuslines, más info-rich.
+- [Command Statusline Setting](/boveda/setting-command-statusline) — para armar custom statusline.
+- [Bug Circus Statusline](/boveda/setting-bug-circus-statusline) — si querés gimmicky.

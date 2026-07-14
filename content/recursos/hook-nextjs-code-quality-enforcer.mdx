@@ -1,0 +1,92 @@
+---
+title: "Hook Next.js Code Quality Enforcer — best practices Next.js automáticas (1,395 installs)"
+description: "Hook con 1,395 installs (#3 del catálogo). Enforce best practices de Next.js: file structure, component patterns, TypeScript usage. Validation automática con sugerencias para proyectos Next.js."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code", "nextjs"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["mcp-deepgraph-nextjs", "hook-lint-on-save", "hook-format-javascript-files"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/development-tools/nextjs-code-quality-enforcer"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/nextjs-code-quality-enforcer.json"
+---
+
+## Qué es
+
+**1,395 installs — #3 del catálogo entero.** Razón: Next.js es el framework más popular para frontend AI-assisted, y enforce sus convenciones específicas es no trivial.
+
+Después de cada edit, el hook valida:
+- File structure (`app/` vs `pages/`, layouts anidados, route groups)
+- Component patterns (Server vs Client, naming conventions)
+- TypeScript usage (proper types, no `any` sin razón)
+- Best practices generales de Next.js
+
+Hook event: `PostToolUse`.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `development-tools` |
+| Installs | **1,395 (#3 del catálogo)** |
+| Hook event | `PostToolUse` (Edit) |
+| Framework | Next.js |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --hook development-tools/nextjs-code-quality-enforcer
+```
+
+Para Claude:
+
+```
+Instalé el hook development-tools/nextjs-code-quality-enforcer.
+Mostrame qué reglas valida (file structure, components, TS). Probá
+con un edit que viole convention común — debería warn.
+```
+
+## Qué podés hacer con esto
+
+### Mantener convención Next.js
+
+Claude tiende a mezclar App Router y Pages Router si no está claro. El hook detecta inconsistencias.
+
+### Server vs Client Components
+
+El bug más común en App Router: importar código `'use client'` desde un Server Component. El hook lo detecta.
+
+### TypeScript estricto
+
+Si tu proyecto es TS strict, el hook valida que Claude no introduzca `any` sin razón o tipos incompletos.
+
+### Combo con [Lint On Save](/boveda/hook-lint-on-save)
+
+Lint general + Next.js-specific = doble cobertura.
+
+### Combo con [DeepGraph Next.js MCP](/boveda/mcp-deepgraph-nextjs)
+
+Hook valida cada edit. DeepGraph te da view del proyecto completo. Combinados: micro + macro analysis.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu proyecto no es Next.js:** no aporta.
+- **Si tu equipo tiene convenciones diferentes a las default:** ajustá rules o este hook genera falsos positivos.
+- **Para proyectos Next.js chicos:** alcanza con lint normal.
+- **Si tu equipo ya tiene linter custom para Next.js:** duplica.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Next.js Code Quality Enforcer Hook](https://www.aitmpl.com/component/hooks/development-tools/nextjs-code-quality-enforcer) — comando exacto.
+- **Config JSON:** [nextjs-code-quality-enforcer.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/development-tools/nextjs-code-quality-enforcer.json).
+
+## Recursos relacionados
+
+- [DeepGraph Next.js MCP](/boveda/mcp-deepgraph-nextjs) — análisis macro del proyecto Next.js.
+- [Lint On Save Hook](/boveda/hook-lint-on-save) — lint general, combinable.
+- [Format JavaScript Files Hook](/boveda/hook-format-javascript-files) — format pipeline pre-lint.

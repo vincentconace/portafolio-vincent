@@ -1,0 +1,81 @@
+---
+title: "Hook Force Push Blocker — block git force push so you never overwrite remote history"
+description: "Hook with 50 installs. Blocks git force push (--force, -f, --force-with-lease) via a lightweight if condition. Prevents catastrophic overwrites of remote history when Claude operates git."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-conventional-commits", "hook-dangerous-command-blocker", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/security/force-push-blocker"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/force-push-blocker.json"
+---
+
+## What it is
+
+A hook that detects any `git push --force`, `-f`, or `--force-with-lease` and blocks execution. It covers the common variations. Hook event: `PreToolUse` on Bash.
+
+It addresses a concrete risk: Claude resolves a conflict with a force push, you overwrite remote history, and you lose other people's commits. Catastrophic if it happens on main or a shared branch.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `security` |
+| Installs | 50 |
+| Hook event | `PreToolUse` (Bash) |
+| Trigger | Command matches `push --force`, `-f`, `--force-with-lease` |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook security/force-push-blocker
+```
+
+For Claude:
+
+```
+I installed the security/force-push-blocker hook. Try it: ask Claude
+to run `git push --force` — it should be blocked. Then with a normal
+git push, it should go through.
+```
+
+## What you can do with it
+
+### Anti-catastrophe on shared branches
+
+When you work on shared branches, force-push is dangerous. The hook prevents the accident.
+
+### For repos with branch protection
+
+Even if your GitHub/GitLab has branch protection, the hook acts locally before reaching the server.
+
+### For teams new to git
+
+Devs just learning git may reach for force-push out of desperation. The hook protects that moment.
+
+### Combo with [Conventional Commits](/boveda/hook-conventional-commits)
+
+Conventional Commits enforces format. Force Push Blocker enforces safety. Combined, your git workflow ends up decent by default.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you work on disposable personal branches:** force-push is legitimate. The hook adds friction.
+- **If your workflow includes interactive rebases on feature branches:** after the rebase you need force-push. Override required.
+- **Only 50 installs:** validate the implementation before adopting it everywhere.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Force Push Blocker Hook](https://www.aitmpl.com/component/hooks/security/force-push-blocker) — exact command.
+- **JSON config:** [force-push-blocker.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/security/force-push-blocker.json).
+
+## Related resources
+
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — natural git safety combo.
+- [Dangerous Command Blocker Hook](/boveda/hook-dangerous-command-blocker) — for destructive commands in general.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — git workflow safety patterns.

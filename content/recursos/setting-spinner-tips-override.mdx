@@ -1,0 +1,81 @@
+---
+title: "Setting Spinner Tips Override — customizá los tips mientras Claude piensa"
+description: "Setting con 36 installs. Customiza los spinner tips que aparecen mientras Claude está procesando. Reemplazá los defaults con messages propios. Decorativo."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-friday-deploy-warning", "setting-company-announcements", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/global/spinner-tips-override"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/spinner-tips-override.json"
+---
+
+## Qué es
+
+`spinnerTipsOverride` te deja reemplazar los textos que aparecen rotando mientras Claude piensa. `excludeDefault: true` quita los defaults; tu array `tips` los reemplaza.
+
+Casos: humor team-specific, reminders, brand voice.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `global` |
+| Installs | 36 |
+| Setting key | `spinnerTipsOverride` |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting global/spinner-tips-override
+```
+
+Editá el array `tips` con tus mensajes.
+
+Para Claude:
+
+```
+Instalé el setting global/spinner-tips-override. Mostrame el array
+default y reemplazálo con [tips custom de mi equipo].
+```
+
+## Qué podés hacer con esto
+
+### Brand voice constante
+
+Tu org tiene tono específico. Reemplazás defaults con tus phrases.
+
+### Reminders team
+
+"Quedan 2 días para sprint review" como spinner tip.
+
+### Humor team
+
+Tips chistosas que solo tu equipo entiende.
+
+### Combo con [Friday Deploy Warning](/boveda/setting-friday-deploy-warning)
+
+Friday Deploy es un caso específico. Spinner Tips es más genérico.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Solo 36 installs:** muy nicho.
+- **Si los defaults te alcanzan:** override es overhead.
+- **Para uso individual:** less útil que team-shared.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Spinner Tips Override Setting](https://www.aitmpl.com/component/settings/global/spinner-tips-override) — comando exacto.
+- **Config JSON:** [spinner-tips-override.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/global/spinner-tips-override.json).
+
+## Recursos relacionados
+
+- [Friday Deploy Warning Setting](/boveda/setting-friday-deploy-warning) — case específico.
+- [Company Announcements Setting](/boveda/setting-company-announcements) — para mensajes persistentes vs spinner.
+- [Anatomía de Claude](/boveda/anatomia-claude) — personalización general.

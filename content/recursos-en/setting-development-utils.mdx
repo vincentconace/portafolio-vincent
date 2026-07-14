@@ -1,0 +1,86 @@
+---
+title: "Setting Development Utils — env enhancements (ripgrep, terminal title, working dir) (2,715 installs)"
+description: "Setting with 2,715 installs. Enhanced dev env config: built-in ripgrep usage, project working dir maintenance, terminal title updates. Quality-of-life for dev work."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-bash-timeouts", "setting-development-mode", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/environment/development-utils"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/development-utils.json"
+---
+
+## What it is
+
+**2,715 installs — one of the most widely adopted settings.** An env setting with quality-of-life enhancements for dev work:
+
+- `USE_BUILTIN_RIPGREP=1` — uses built-in ripgrep (faster than grep)
+- `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1` — bash keeps the project working dir (you don't lose the path between commands)
+- `CLAUDE_CODE_DISABLE_TERMINAL_TITLE=0` — the terminal title updates with session info
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `environment` |
+| Installs | **2,715** |
+| Env vars | 3 quality-of-life vars |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --setting environment/development-utils
+```
+
+For Claude:
+
+```
+I installed the environment/development-utils setting. Check that the 3
+env vars are active and show me exactly what changes in my
+workflow vs without them.
+```
+
+## What you can do with it
+
+### Faster searches
+
+`USE_BUILTIN_RIPGREP` makes searches 10x faster than traditional grep in large repos.
+
+### Consistent working dir
+
+`CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` prevents an accidental `cd` in one command from breaking the following ones.
+
+### Useful terminal title
+
+Know which session you're in without having to look inside. Handy when you rotate between several projects.
+
+### For long sessions
+
+Better quality-of-life = less accumulated friction.
+
+### Combo with [Bash Timeouts](/boveda/setting-bash-timeouts)
+
+Dev Utils improves UX. Bash Timeouts adds safety. A natural combo.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If you don't have ripgrep installed:** the setting expects it to be present.
+- **If your custom workflow breaks with a maintained working dir:** check compatibility.
+- **If you don't want the terminal title update:** disable it explicitly with `CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1`.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Development Utils Setting](https://www.aitmpl.com/component/settings/environment/development-utils) — exact command.
+- **JSON config:** [development-utils.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/environment/development-utils.json).
+
+## Related resources
+
+- [Bash Timeouts Setting](/boveda/setting-bash-timeouts) — natural environment combo.
+- [Development Mode Setting](/boveda/setting-development-mode) — complementary permissions.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — environment tuning.

@@ -1,0 +1,388 @@
+---
+title: "Apify + Claude — pull leads from Google Maps, LinkedIn, Instagram, Facebook"
+description: "Apify has 1500+ ready-made scrapers (Google Maps, LinkedIn, Instagram, Facebook, Amazon, YouTube, TikTok). You connect it to Claude via MCP (1 URL), ask for leads in plain language, and in minutes it hands you a list with phone numbers, emails, and contacts. Free plan: $5/month in credit."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "apify", "mcp"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["navega-y-automatiza", "agent-browser", "investigador-automatico"]
+---
+
+## The problem
+
+Finding customers by hand **burns hours**:
+- You open Google Maps
+- You copy the name, the phone number
+- You hunt for an email on the web
+- You jot it down in Excel
+- × 50 = a whole day lost
+
+---
+
+## What Apify is
+
+A platform with **1500+ scrapers** (they call them "actors") already built for:
+
+- Google Maps
+- LinkedIn
+- Instagram
+- Facebook
+- Amazon
+- YouTube
+- TikTok
+- And almost any site
+
+**You don't code**. You just pick the actor, give it parameters, and get data back.
+
+**What's new**: Apify has an **official MCP**. You connect it to Claude once, then talk to it in plain language: *"pull me 50 dentists in Mexico City with phone numbers and emails"* → Claude runs the right actor, cleans up the info, and hands you a list.
+
+---
+
+## Which network to use for each business
+
+| Your business | Recommended network | Why |
+|------------|------------------|---------|
+| Local B2C services (clinics, restaurants, gyms, repair shops) | **Google Maps** | Where people look for reviews and hours |
+| B2B SaaS / consulting / recruiting | **LinkedIn** | Professional decision-makers |
+| Physical product / courses / collaborations | **Instagram** | Brands, creators, influencers |
+| Events / communities / local businesses on FB | **Facebook** | Industries that haven't migrated yet |
+
+**Rule**: pick the network where your customers **already are**, not where you think they should be.
+
+---
+
+## Top actors by network
+
+| Network | Suggested actor |
+|-----|---------------|
+| Google Maps | **Google Maps Scraper** — 193k users, 4.8★ |
+| LinkedIn | LinkedIn Company Scraper or LinkedIn People Search |
+| Instagram | Instagram Profile Scraper + Instagram Hashtag Scraper |
+| Facebook | Facebook Pages Scraper |
+
+---
+
+## Setup in 5 steps
+
+### Step 1 — Free account
+
+`apify.com` → sign up with no card.
+
+**Free plan**: **$5/month in credit**. Enough for hundreds of Google Maps leads if you're just getting started.
+
+### Step 2 — Find your actor
+
+In the Store, search for "Google Maps" (or LinkedIn, Instagram, FB). Pick the one with the most users + best reviews.
+
+### Step 3 — Enable MCP
+
+Avatar (top right) → Account → **Integrations** → enable **MCP Server**.
+
+Apify gives you an authenticated URL.
+
+### Step 4 — Copy the URL
+
+The base URL is `mcp.apify.com` with your token at the end.
+
+### Step 5 — Paste it into Claude
+
+**Claude Desktop**: Settings → Connectors → Add MCP Server → paste the URL.
+
+**Claude Code**:
+```bash
+claude mcp add apify [url]
+```
+
+Restart. In a chat, try:
+
+```
+> Can you run Apify's Google Maps actor?
+```
+
+If it says yes, you're **connected**.
+
+---
+
+## The 5 prompts — from zero to a lead list
+
+Paste them **in order**. Wait for a reply before the next one.
+
+### Prompt 1 — Interview to understand your business
+
+```
+Before pulling customers with Apify, interview me.
+
+Ask me:
+- What I do
+- What I sell
+- Who my ideal customer is
+- What city or country they're in
+- How much a new customer is worth to me
+- How I contact them today
+
+When you have everything, tell me:
+- Which network is best to use (Google Maps, LinkedIn, Instagram, or Facebook)
+- Which Apify actor we're going to run
+
+Wait for my OK before running anything.
+```
+
+**Without this**, Claude guesses and gives you a generic list. The first prompt **makes the difference**.
+
+### Prompt 2 — Pull 50 leads
+
+```
+Using the Apify MCP, pull me a list of 50 potential customers
+based on what we agreed on in the interview.
+
+I want a file with:
+- Business name
+- Contact person if one shows up
+- Phone number
+- Email
+- Website
+- Social media
+- Address or city
+- Any extra useful data
+
+If the actor asks for parameters, show them to me before running.
+
+When it's done, show me the table and save the result to
+use in the next steps.
+```
+
+### Prompt 3 — Enrich the incomplete ones
+
+```
+Take the list of 50 leads and enrich it.
+
+For each contact missing an email, phone, or socials,
+try to fill it in by running ANOTHER Apify actor (contact info,
+email finder, or a scraper for the social network that business uses).
+
+Clearly mark which data came from the original scraper and which
+came from enrichment.
+
+If something stays incomplete, leave it marked as "pending" so we
+don't make things up.
+```
+
+### Prompt 4 — Personalized emails
+
+```
+With the enriched list, draft a personalized first-contact email
+for each of the 50.
+
+Use:
+- Business name
+- Something specific from the scraper (rating, latest post, service they offer)
+- Tie it to what I sell
+
+Human tone, short (max 120 words), plain English, with a soft
+CTA like "got 10 minutes this week?".
+
+Save the 50 emails in a separate file with a subject and body
+per lead.
+```
+
+### Prompt 5 — Automate it weekly
+
+```
+Set it up to run on autopilot.
+
+Every Monday at 9am:
+1. Run the Apify actor again with the same parameters
+2. Pull 50 new leads
+3. Enrich them
+4. Draft the emails
+
+BEFORE sending anything, show me the batch in a message to approve.
+
+If I approve → send via my connected account.
+If I DON'T approve → discard.
+
+Let me know how many Apify credits I've spent for the month so I
+don't go over the free plan.
+```
+
+---
+
+## Apify vs Scrapling — when to use each
+
+[Scrapling](#) is the **100% free** open-source alternative.
+
+| Aspect | Apify | Scrapling |
+|---------|-------|-----------|
+| Cost | Free up to $5/month | 100% free, always |
+| Setup | Account + MCP URL | Manual local install |
+| LinkedIn / Instagram / heavy sites | Handled (IP rotation, captchas) | You get blocked fast |
+| Scale | Thousands of leads/month | Dozens to hundreds |
+| When | Time is worth more than $5 + complex sites | Starting out + local businesses |
+
+### Rule
+
+- **Starting out + local businesses** → free Scrapling
+- **LinkedIn / Instagram / want to scale** → Apify
+
+Both, in that order. Your next customer pays for the account.
+
+---
+
+## Use cases
+
+### 1. Local agency
+
+```
+I sell local SEO to dental clinics in Mexico City.
+
+Apify Google Maps Scraper:
+- Search "dentists Mexico City"
+- Filter rating < 4.0 (more likely to need help)
+- Extract contact info
+- Personalized emails mentioning their current rating and how to improve it
+```
+
+### 2. B2B SaaS
+
+```
+I sell a CRM for Series A SaaS startups in LATAM.
+
+Apify LinkedIn:
+- Filter LATAM companies, 10-50 employees, Series A
+- Pull Marketing Directors and Heads of Sales
+- Email + LinkedIn URL
+- Emails referencing their current stack and how my CRM integrates
+```
+
+### 3. Creator looking for collabs
+
+```
+I sell a productivity course.
+
+Apify Instagram:
+- Search for 10k-100k fitness creators in Mexico who make reels
+- Extract email from bio or link
+- Pitch a collab: "My audience would overlap perfectly with
+  yours"
+```
+
+### 4. E-commerce looking for suppliers
+
+```
+I buy stock of [product] to resell.
+
+Apify Amazon Scraper:
+- Search for the product on Amazon
+- Extract top sellers + data
+- Cross-reference with an Alibaba scraper to find suppliers
+- Prioritized list of prospects
+```
+
+---
+
+## Anti-patterns
+
+### 1. Skipping the interview (Prompt 1)
+
+No interview → generic leads → low conversion → "Apify doesn't work." The problem is the **brief**, not the tool.
+
+### 2. Sending 50 identical emails
+
+Even if you use Apify, if your email is copy-paste, **you'll get flagged as spam**. Personalization IS the point.
+
+### 3. Burning credits on the wrong sites
+
+Pulling 1000 LinkedIn leads when you sell to local businesses = credits wasted. **Pick the right network first**.
+
+### 4. No auth on private sites
+
+Some actors require login. **Store credentials in .env** or in the official integration — never in the prompt.
+
+### 5. Scraping without respecting ToS
+
+Apify handles anti-bot well, but **some sites prohibit commercial scraping**. Check the ToS before operating at large scale.
+
+---
+
+## Compliance and ethics
+
+### What you CAN do
+
+- ✅ Scrape **public** data
+- ✅ Contact companies for legitimate B2B
+- ✅ Build your own datasets for analysis
+
+### What you CAN'T
+
+- ❌ Scrape **private / login-required** data without authorization
+- ❌ Mass unsolicited spam to individuals
+- ❌ Violate GDPR (EU) or CCPA (California)
+- ❌ Sell personal data without consent
+
+**When in doubt → ask**. Some industries (legal, medical, finance) have strict rules.
+
+---
+
+## Powerful combinations
+
+### With Firecrawl
+
+```
+> 1. Apify pulls a list of 50 businesses with their websites
+> 2. [Firecrawl](/boveda/navega-y-automatiza) reads each site
+> 3. Claude enriches with contextual info
+> 4. Hyper-personalized emails with details from the site
+```
+
+### With Agent Browser
+
+```
+> Apify pulls leads with a LinkedIn profile URL.
+> [Agent Browser](/boveda/agent-browser) navigates each profile to
+  extract extra info (latest post, location, connections).
+```
+
+### With scheduled tasks
+
+[Cowork scheduled tasks](/boveda/claude-cowork-workflow) → run Prompt 5 automatically every week.
+
+### With humanizer
+
+```
+> Emails generated by Claude → run them through /humanizalo before
+  sending. So they don't sound like AI.
+```
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| You don't have a clear product/service | Leads with no offer = wasted emails |
+| Strict regulated compliance | Check with legal first |
+| You expect 50% conversion | Reality: 1-5% is typical |
+| You only want 5 leads | Setup time isn't worth it |
+
+---
+
+## Expected ROI
+
+| Metric | Typical reality |
+|---------|-----------------|
+| Manual time for 50 leads | 8-15h |
+| Time with Apify + Claude | 30 min |
+| Conversion to reply | 5-15% |
+| Conversion to call | 1-5% |
+| Cost per lead | $0.05-0.20 (Apify) |
+
+If your customer pays $500+, **it's always worth it**. For small tickets, evaluate.
+
+---
+
+## Next steps
+
+- For a free alternative without Apify, [browse and automate with Firecrawl + Playwright](/boveda/navega-y-automatiza)
+- For more efficient navigation, [Agent Browser](/boveda/agent-browser)
+- For trend research ahead of outreach, [Automatic Researcher](/boveda/investigador-automatico)

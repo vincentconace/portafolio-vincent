@@ -1,0 +1,91 @@
+---
+title: "Claude Workflow V2 — universal workflow with agents, skills, hooks and commands"
+description: "A CloudAI-X plugin (1.3k⭐) that sets up a universal workflow for Claude Code by combining all four primitives (agents, skills, hooks, commands) into a single ready-to-use package."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["trifecta-perfecta", "agency-agents", "claude-code-best-practices"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/claude-workflow-v2"
+github: "https://github.com/CloudAI-X/claude-workflow-v2"
+---
+
+## What it is
+
+Claude Workflow V2 is an "all-in-one" plugin from the CloudAI-X team. The idea is to give you a complete workflow that combines the four Claude Code primitives (agents, skills, hooks, commands) without you having to assemble it piece by piece.
+
+The "v2" indicates it's a second iteration — the team already went through a first version and refined it. That's usually a good sign of active maintenance.
+
+It's a single plugin (not a marketplace of many), focused on "I just installed Claude Code, give me a decent setup to get started."
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| Author | CloudAI-X |
+| Stars | 1.3k |
+| Type | Single plugin (universal workflow) |
+| Components | skills (declares agents, skills, hooks, commands) |
+| Marketplace | `CloudAI-X/claude-workflow-v2` |
+
+## How to install it
+
+```bash
+/plugin marketplace add CloudAI-X/claude-workflow-v2
+/plugin install claude-workflow-v2@CloudAI-X-claude-workflow-v2
+```
+
+Or `/plugin` → Discover.
+
+For Claude:
+
+```
+Install claude-workflow-v2 from the CloudAI-X marketplace. Then show me
+which agents, skills, hooks and commands are available and give me an example
+of a recommended flow.
+```
+
+## What you can do with this
+
+### Get an opinionated workflow without building it
+
+If you're overwhelmed deciding which agents to add, which hooks to enable and which skills to include, V2 gives you a coherent set put together by a team. It's not "the best," it's "a decent one, already assembled."
+
+### A base you can layer on later
+
+Like [Claude Forge](/boveda/plugin-claude-forge), it works as a starting point. Afterwards you add specific plugins (LSPs for your language, vertical packs per provider, etc.) on top of the base V2 left behind.
+
+### Compare with your own setup
+
+If you already have Claude Code configured to your liking, installing V2 in a test workspace shows you what decisions the CloudAI-X team made. Useful as a "second opinion" on your own config.
+
+## Real benefits
+
+- **All-in-one** — agents + skills + hooks + commands in a single install.
+- **Team curation** — it's not from a single dev experimenting.
+- **V2 implies iteration** — more mature than a v1.
+- **Lightweight compared to giant marketplaces** (1.3k vs Alirezarezvani's 7.5k, Everything Claude Code's 113k).
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **If you already have your own setup:** V2 will clash with your hooks and commands. You could end up with duplicates or conflicts.
+- **The detail of "what exactly it brings" isn't visible from aitmpl:** the description is generic. Before installing, check the [repo](https://github.com/CloudAI-X/claude-workflow-v2) to see the specifics.
+- **If you want something more "famous":** [Claude Forge](/boveda/plugin-claude-forge) (612⭐) has more community traction and more documentation on what it includes.
+- **Reliance on a single provider:** the whole plugin is from CloudAI-X. If at some point it's retired, you depend on that.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Claude Workflow V2](https://www.aitmpl.com/plugins/claude-workflow-v2) — exact command.
+- **GitHub repo:** [CloudAI-X/claude-workflow-v2](https://github.com/CloudAI-X/claude-workflow-v2) — code and concrete details of the workflow.
+
+## Related resources
+
+- [Trifecta Perfecta](/boveda/trifecta-perfecta) — another way to build an "all-assembled" workflow with 3 specific tools instead of a single universal plugin.
+- [Agency Agents](/boveda/agency-agents) — to understand the primitives (agents/skills/hooks/commands) before adopting a workflow that combines them.
+- [Claude Code Best Practices](/boveda/claude-code-best-practices) — to compare what V2 proposes vs what the official documentation recommends.

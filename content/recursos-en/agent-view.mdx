@@ -1,0 +1,381 @@
+---
+title: "Agent View — multiple Claude Code sessions running in parallel inside the same panel"
+description: "On May 11, 2026, Anthropic shipped a new view in Claude Code. A panel where you see several Claude sessions working at the same time: ad auditor, creative generator, publisher. Requires v2.1.139+. How to open it, the 7 shortcuts, persistence (survives closing the terminal, does NOT survive sleep), and a real case with 3 parallel agents."
+difficulty: "intermedio"
+category: "agentes"
+tools: ["claude-code"]
+publishedAt: "2026-05-28"
+readingTime: "11 min"
+relatedSlugs: ["claude-ads", "higgsfield-mcp", "ecosistema-de-agentes"]
+---
+
+## What changed on May 11, 2026
+
+Until that date, if you wanted 3 Claude agents working at the same time, you opened 3 terminals. You had to switch windows to check on each one. If one got stuck waiting for input, you found out too late.
+
+**Agent View** is Anthropic's answer: a panel inside Claude Code where you see **all your active sessions, their status and outputs** — from the same terminal.
+
+| Feature | Detail |
+|----------------|---------|
+| Required version | Claude Code 2.1.139 or higher |
+| Plan | Pro, Max, Team, Enterprise, API (NOT Free) |
+| Status | Research preview |
+| Command | `claude agents` |
+
+---
+
+## What it is and what it is NOT
+
+### It is
+
+- A panel of **top-level** Claude Code sessions — each row is an independent agent
+- **Persistent**: sessions survive closing the terminal
+- A replacement for keeping several windows open
+- Compatible with skills (you launch them from the panel without re-pasting the prompt)
+
+### It is NOT
+
+- **It does not show sub-agents** that a session spawns internally
+- **It is not an automatic orchestrator** — you still assign tasks to each one
+- **It does not multiply your quota** — every active session counts against your plan
+- **It does not survive** if your machine sleeps or reboots (there's recovery)
+
+---
+
+## Prerequisites
+
+### Check your version
+
+```bash
+claude --version
+```
+
+If it returns **less than 2.1.139** → update:
+
+```bash
+npm install -g @anthropic-ai/claude-code@latest
+```
+
+If you have the desktop app, open it — it offers an auto-update.
+
+---
+
+## Open the panel
+
+```bash
+claude agents
+```
+
+(**Plural**. `claude agent` on its own does not work.)
+
+The first time it's empty. That's normal — you haven't launched any agent yet.
+
+---
+
+## The 7 keyboard shortcuts
+
+| Key | Action | What it does |
+|-------|--------|----------|
+| ← | Detach | Leave the session and return to the panel without killing it |
+| → | Attach | Enter the selected session to interact |
+| Space | Peek | Preview the latest output without attaching — a quick check |
+| ↑↓ | Navigate | Move between rows |
+| Esc | Exit | Close the entire panel (don't use this to detach) |
+| Ctrl+T | Pin | Pin a session to the top (so it doesn't get lost among the rest) |
+| Ctrl+R | Rename | Give it a readable name (not the auto slug) |
+
+**Optimal flow**: ↑↓ to find, Space to peek, → only if you're going to interact. **Detach with ←**, NOT with Esc.
+
+---
+
+## The 6 states
+
+| State | Color | Means |
+|--------|-------|-----------|
+| **Working** | Blue | Claude is running tools |
+| **Needs input** | Yellow | It's waiting for your reply |
+| **Idle** | Gray | Open but with no current task |
+| **Completed** | Green | Finished OK, you can archive it |
+| **Failed** | Red | Finished with an error, attach to see the traceback |
+| **Stopped** | Dark gray | You stopped it, kept for review |
+
+---
+
+## Launch your first agent
+
+### Path A — from a clean terminal
+
+```bash
+claude --bg "your task here on a single line"
+```
+
+The session keeps running in the background. Open the panel with `claude agents` and you'll see it.
+
+### Path B — from an active session
+
+If you're already inside a normal session and want to send it to the background:
+
+```
+> /bg
+```
+
+(or `/background`)
+
+### Your first test
+
+```bash
+# 1. Launch:
+claude --bg "list the files in ~/Downloads sorted by size and put the result in /tmp/downloads.md"
+
+# 2. Immediately:
+claude agents
+
+# 3. You'll see a new row with your task
+# 4. Watch it change from Working → Completed
+# 5. Press → to attach and read the output
+```
+
+Now you've got the full cycle.
+
+---
+
+## Real case — 3 agents in parallel
+
+The case that motivates the feature: an agency that every day audits ads, generates new creatives to replace fatigued ones, and publishes to the calendar.
+
+**Prerequisites**: have [Claude Ads](/boveda/claude-ads) + [Higgsfield MCP](/boveda/higgsfield-mcp) installed.
+
+### Agent 1 — Ad auditor
+
+```bash
+claude --bg "Run /ads audit across all my accounts. Note the 3 most critical findings with their impact on spend and put the summary in ~/agent-view-runs/audit-\$(date +%Y-%m-%d).md"
+```
+
+### Agent 2 — Creative generator
+
+```bash
+claude --bg "Read the latest audit in ~/agent-view-runs/audit-*.md, identify the 3 ads with the worst CTR, and use Higgsfield to generate 5 new variants for each, focused on the hook the audit proposes. Save the renders in ~/agent-view-runs/creativos/"
+```
+
+### Agent 3 — Publisher
+
+```bash
+claude --bg "Take the approved creatives in ~/agent-view-runs/creativos/ and run /ads publish --dry-run first. Once it confirms, publish to my main account with the schedule you recommended."
+```
+
+### How it looks in the panel
+
+After launching all 3:
+
+```
+┌─ AGENTS ─────────────────────────────────────────┐
+│ ● auditor          Working       4m32s ago       │
+│ ● creativos        Needs input   2m18s ago       │
+│ ● publicador       Needs input   1m05s ago       │
+└──────────────────────────────────────────────────┘
+```
+
+You jump around with the arrows, reply when needed, and the rest flows.
+
+### Honesty about the parallelism
+
+This is **not model-level parallelism** — the 3 agents share your plan and rate limits. On Pro you'll notice that running 3 at once slows all of them down a bit. For serious production, **Max or Team** give you more headroom.
+
+Compared to 3 terminals with you jumping between them, the reduction in friction is huge.
+
+---
+
+## Persistence — what survives and what doesn't
+
+### Survives
+
+- ✅ Closing the terminal window
+- ✅ Exiting the panel with Esc
+- ✅ Opening another session in another terminal
+- ✅ Claude Code auto-updates
+- ✅ User logout/login
+
+### Does NOT survive
+
+- ❌ Putting the machine to sleep (sleep/suspend)
+- ❌ Shutting down or rebooting
+- ❌ Running out of battery
+- ❌ A prolonged network outage
+
+### Recovery after sleep/reboot
+
+The state is kept on disk. When you come back, the sessions show up as **Stopped**. You reactivate them:
+
+```bash
+claude respawn --all
+```
+
+Or a specific one:
+
+```bash
+claude stop [session-name]
+```
+
+### Trick for overnight work
+
+If you leave agents running overnight:
+
+```bash
+# On Mac, prevent it from sleeping:
+caffeinate -d &
+# Then leave the agents running
+```
+
+Plug the laptop into power. In the morning, if it slept anyway, `claude respawn --all` brings them all back in 10s.
+
+---
+
+## 5 copy-paste prompts for different workdays
+
+### 1. Overnight ad auditor
+
+```
+> You're my overnight auditor. When I wake up, I want a 1-page
+  brief with the 5 most profitable moves to make today.
+
+  Steps:
+  1. /ads audit across all my accounts (Meta, Google, TikTok)
+  2. Compare against the audit from 7 days ago — what got worse
+  3. Filter out noise: only findings with impact > $20/day
+  4. Rank the top 5 by (impact × ease). Ignore anything that
+     requires new creative
+  5. Save to ~/briefs/$(date +%Y-%m-%d)-auditor.md with this
+     structure: finding · $ impact · action · time
+
+  If something is critical (disabled account, very high CPA, spend
+  with no tracking), mark it Needs input and ask for a reply.
+```
+
+### 2. Batch creative generator
+
+```
+> You're my background creative generator. One hour while I focus
+  on something else.
+
+  1. Read ~/briefs/hooks-de-la-semana.md (10 hooks, 3 industries)
+  2. For each hook, using the Higgsfield MCP:
+     - 1 static 1:1 image
+     - 1 vertical 9:16 image
+     - 1 5-second video
+  3. 3 tone variants per hook (urgency, social proof, curiosity)
+  4. Save to ~/creativos/$(date +%Y-%m-%d)/[hook]/[variant].ext
+  5. Generate an index.md with thumbnails and suggested copy
+
+  If Higgsfield fails on a variant, skip it. Only stop if the
+  API key breaks.
+```
+
+### 3. Publisher with an approval queue
+
+```
+> You're my publisher with an approval queue. We protect the account.
+
+  Flow:
+  1. List the "approved" creatives in ~/creativos/$(date +%Y-%m-%d)/index.md
+  2. For each one: /ads publish --dry-run, show me the account, schedule,
+     initial budget. Mark Needs input
+  3. When I type "go N", publish that one. "go all" → all of them with
+     a 15 min delay between each
+  4. After each publish, note it in
+     ~/logs/publicaciones-$(date +%Y-%m-%d).md with timestamp + URL
+  5. If Zernio returns an out-of-credits account error, stop and tell me
+
+  NEVER publish without my explicit "go".
+```
+
+### 4. Lead inbox reviewer
+
+```
+> You're my inbox reviewer.
+
+  1. Connect to Gmail (MCP already configured), filter the last 24h
+     without reading them
+  2. Classify: hot lead, cold lead, support, spam, other
+  3. For the top 5 hot leads, draft a personalized reply, Latam
+     tone, max 4 lines, ending with a concrete question
+  4. Replies as DRAFTS in Gmail — never send automatically
+  5. Summary in ~/inbox/$(date +%Y-%m-%d).md: total classified,
+     hot leads with a link to the draft, urgent items
+
+  If something is legally or financially sensitive, DON'T touch
+  anything, mark it Needs input.
+```
+
+### 5. PR monitor
+
+```
+> You're my background repo monitor.
+
+  Ongoing task:
+  1. Every 30 min, git fetch + check for new PRs or changes on main
+  2. For each new PR: read the diff, identify risks (auth, payments,
+     migrations, CI). Leave a DRAFT comment on the PR — do NOT publish
+     until I confirm
+  3. If someone merged to main: mini-changelog in
+     ~/changelog/diario-$(date +%Y-%m-%d).md (file, change in
+     1 line, author)
+  4. If something is critical (broken CI, CVE dependency, changed
+     secrets), mark it Needs input and pause
+
+  When the workday ends (after 8pm), stop on your own with a final summary.
+```
+
+---
+
+## Best practices — don't burn through your account
+
+### Do this
+
+1. **Pack recurring tasks as a skill** — launch with `/[skill]` without re-pasting the prompt
+2. **Rename sessions with Ctrl+R** as soon as you launch them (`auditor-nocturno-meta` > `session-a7f3`)
+3. **Pin with Ctrl+T** the critical / long-running ones
+4. **Stop the agents** you no longer need (each active one consumes quota)
+
+### Avoid this
+
+1. **Don't launch 10 agents on the Pro plan** — 3-4 active is the sensible limit
+2. **Don't use Agent View for 30s tasks** — it's for long tasks, batches, monitoring
+3. **Don't assume it survives sleep** — `claude respawn --all` when you come back
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|-----|
+| Free plan | Not available |
+| 30s sessions | Panel overhead > value |
+| You only use chat-mode | It's a feature for long autonomous tasks |
+| One thing at a time | Multi-parallelism doesn't apply |
+
+---
+
+## Powerful combinations
+
+### With Claude Ads + Higgsfield + Zernio
+
+The real case from the 3-agents section. A complete automated paid media pipeline.
+
+### With [/loop](/boveda/claude-code-loop)
+
+`/loop` lets you iterate an agent with feedback. You combine:
+- 1 agent in `/loop` improving something iteratively
+- 2-3 agents in `/bg` doing parallel tasks
+- All visible in Agent View
+
+### With packed skills
+
+Tasks you repeat weekly → pack them as a skill → launch them from the panel with a single slash command. The best time ROI of the feature.
+
+---
+
+## Next steps
+
+- For the 3 agents in the real case, [Claude Ads](/boveda/claude-ads) + [Higgsfield MCP](/boveda/higgsfield-mcp)
+- For a broader multi-agent system outside Claude Code, [ecosistema de agentes](/boveda/ecosistema-de-agentes)
+- To understand Managed Agents (the cloud version, not local), [Managed Agents](/boveda/agentes-managed-claude)

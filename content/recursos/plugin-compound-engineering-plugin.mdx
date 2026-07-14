@@ -1,0 +1,115 @@
+---
+title: "Compound Engineering — la metodología de Every Inc. como plugin de Claude Code"
+description: "Plugin oficial de Every Inc. (11k⭐) que mete la filosofía 'Compound Engineering' dentro de Claude Code: cada unidad de trabajo deja más fácil la siguiente. 2 plugins, 41 skills, 6 agents, 1 MCP."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code", "codex"]
+publishedAt: "2026-05-29"
+readingTime: "4 min"
+relatedSlugs: ["claude-codex-equipo", "agency-agents", "aprende-skill"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/compound-engineering-plugin"
+github: "https://github.com/EveryInc/compound-engineering-plugin"
+---
+
+## Qué es
+
+Every Inc. es una empresa de media que escribe sobre IA aplicada. Una de sus tesis más conocidas es "Compound Engineering" — la idea de que cada unidad de trabajo de ingeniería debería dejar el siguiente más fácil. No solo entregar el feature; entregar el feature **y** dejar el camino más despejado para los próximos.
+
+Este plugin baja esa filosofía a operaciones concretas dentro de Claude Code. El plugin principal (`compound-engineering` por Kieran Klaassen) trae 41 skills y 6 agents enfocados en construir "skills que enseñan a Claude a hacer mejor las próximas tareas similares". Es meta-tooling: usás Claude para mejorar cómo Claude trabaja.
+
+El segundo plugin (`coding-tutor` por Nityesh Agarwal) usa el mismo principio para enseñarte a vos: tutoriales personalizados que usan tu codebase real como ejemplo, con spaced repetition.
+
+Funciona en Claude Code, Codex y más.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | EveryInc (Every Inc.) |
+| Stars | 11k |
+| Tipo | Marketplace (2 plugins) |
+| Componentes | 42 skills, 6 agents, 1 MCP, 3 commands |
+| Marketplace | `EveryInc/compound-engineering-plugin` |
+| Guía oficial | [every.to/guides/compound-engineering](https://every.to/guides/compound-engineering) |
+
+### Los 2 plugins
+
+| Plugin | Autor | Para qué |
+| --- | --- | --- |
+| `compound-engineering` | Kieran Klaassen | 41 skills + 6 agents + 1 MCP para que cada tarea deje más fácil la siguiente |
+| `coding-tutor` | Nityesh Agarwal | Tutoriales personalizados con tu codebase real, spaced repetition, quizzes |
+
+## Cómo se instala
+
+```bash
+# 1) Marketplace
+/plugin marketplace add EveryInc/compound-engineering-plugin
+
+# 2) Instalar uno o ambos
+/plugin install compound-engineering@EveryInc-compound-engineering-plugin
+/plugin install coding-tutor@EveryInc-compound-engineering-plugin
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalá compound-engineering-plugin del marketplace EveryInc. Después leé
+la filosofía en every.to/guides/compound-engineering y mostrame los 3
+casos de uso más representativos del plugin compound-engineering.
+```
+
+## Qué podés hacer con esto
+
+### Hacer que cada tarea baje la fricción de la próxima
+
+El patrón compound es: hacés el feature, pero también capturás los aprendizajes en una skill nueva, actualizás `CLAUDE.md` con lo que descubriste, dejás un comando que otros pueden reusar. La próxima vez que aparezca algo similar, ya está medio resuelto.
+
+### Convertir patrones repetidos en skills
+
+`compound-engineering` te ayuda a detectar cuándo estás haciendo algo por tercera vez y a empaquetarlo como skill para que Claude lo haga solo en el futuro. Compara con [crea-claude-skills](/boveda/crea-claude-skills) — Compound Engineering es la filosofía continua, "Crea Claude Skills" es el patrón puntual.
+
+### Tutoriales que usan tu propio codebase
+
+`coding-tutor` no te muestra ejemplos genéricos. Toma tu repo, identifica un concepto que querés aprender (por ejemplo "cómo funcionan los hooks en este proyecto") y arma el tutorial usando código real tuyo. Con quizzes de spaced repetition para que no se te olvide.
+
+### Mejorar el setup del equipo, no solo el tuyo
+
+Las skills que dejás en `compound-engineering` son compartibles. Si trabajás en equipo y todos usan Claude Code, lo que aprende uno queda disponible para todos.
+
+### Filosofía aplicada, no solo predicada
+
+Every escribe mucho sobre esto. El plugin es la versión "show, don't tell". Si la idea te resuena pero no sabés cómo aplicarla, el plugin te da los rails.
+
+## Beneficios reales
+
+- **11k stars** — la filosofía tiene tracción real, no es marketing.
+- **Skills compartibles entre proyectos** — el "compound" funciona también cross-repo.
+- **`coding-tutor` es único** — no hay nada equivalente que use tu codebase real.
+- **Funciona cross-tool** (Claude Code, Codex) — no quedás atado.
+- **Guía oficial accesible** ([every.to](https://every.to/guides/compound-engineering)) — la teoría está bien explicada.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Si tu uso es one-shot:** Compound Engineering brilla en trabajo continuo sobre un mismo proyecto. Para tareas aisladas no aporta tanto.
+- **Si no tenés cultura de capturar aprendizajes:** el plugin propone capturar y empaquetar. Si tu equipo no es así, las skills generadas se van a quedar sin uso.
+- **`coding-tutor` consume tokens:** spaced repetition + quizzes sobre tu codebase = muchas llamadas. Mirá cuota.
+- **No es un atajo:** capturar aprendizajes lleva trabajo extra. La inversión paga después de varias sesiones, no en la primera.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Compound Engineering Plugin](https://www.aitmpl.com/plugins/compound-engineering-plugin) — los 2 plugins.
+- **Repo en GitHub:** [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin) — código, issues.
+- **Guía oficial:** [every.to/guides/compound-engineering](https://every.to/guides/compound-engineering) — la filosofía completa explicada por Every.
+
+## Recursos relacionados
+
+- [Aprende Skill](/boveda/aprende-skill) — el primer paso si recién entendés qué es una skill. Compound Engineering asume que ya lo dominás.
+- [Agency Agents](/boveda/agency-agents) — para diferenciar los 6 agents del plugin de los agents de otros marketplaces.
+- [Claude + Codex en equipo](/boveda/claude-codex-equipo) — Compound Engineering funciona en ambos, este recurso da el contexto cross-tool.

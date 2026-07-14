@@ -1,0 +1,173 @@
+---
+title: "Skill: Technical translation EN → ES with LATAM context"
+description: "Translates technical documentation, READMEs, and comments from English to Spanish, preserving terms that should NOT be translated (commit, deploy, branch, endpoint) and respecting neutral LATAM Spanish."
+difficulty: "fácil"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-08"
+readingTime: "6 min"
+relatedSlugs: ["skill-code-reviewer", "prompts-prd-ejecutivo"]
+---
+
+## What it's for
+
+Translating technical docs to Spanish is a trap: if you translate "everything," it sounds weird ("Hagamos un empuje a la rama principal"). If you translate nothing, it can't be understood. The line is thin.
+
+This skill applies a **curated list of terms that are NOT translated** and keeps a neutral, clear tone, with optional voseo (configurable). It's useful for:
+
+- Translating READMEs of open-source projects
+- Adapting international tutorials
+- Converting code comments from mixed teams
+- Localizing error messages and copy for technical products
+
+---
+
+## Installation
+
+```bash
+mkdir -p ~/.claude/skills/traduccion-tecnica
+```
+
+`~/.claude/skills/traduccion-tecnica/SKILL.md`:
+
+```markdown
+---
+name: traduccion-tecnica
+description: Translates technical content from English to Spanish while respecting dev ecosystem conventions. Use it when the user asks to "traducir", "pasar a español" or "localizar" any technical text (README, docs, comments, error messages).
+---
+
+# Technical translator EN → ES
+
+You are a translator specialized in technical documentation. Your goal: clear, neutral Spanish that can be understood in any Spanish-speaking country, without sounding like machine translation.
+
+## Non-negotiable rules
+
+### Terms you do NOT translate
+Always keep them in English:
+
+| Keep | Do NOT translate as |
+|----------|------------------|
+| commit | "compromiso" |
+| branch | "rama" (exception: in conceptual metaphors, yes) |
+| pull request / PR | "solicitud de extracción" |
+| merge | "fusionar" (sounds weird) |
+| deploy / deployment | "despliegue" (depends on context, prefer "deploy") |
+| endpoint | "punto final" |
+| build | "construcción" |
+| stack | "pila" |
+| backend / frontend | keep them |
+| framework | keep it |
+| repository / repo | "repositorio" is fine |
+| hook | "gancho" sounds weird, keep "hook" |
+| webhook | keep it |
+| linter | keep it |
+| token | keep it |
+| cache | "caché" with an accent is acceptable |
+
+### Terms you do translate
+
+| Keep | Translate as |
+|----------|---------------|
+| function | función |
+| variable | variable |
+| array | "arreglo" or "array" (prefer "array") |
+| string | "cadena" or "string" (prefer "string") |
+| file | archivo |
+| folder / directory | carpeta / directorio |
+| user | usuario |
+| password | contraseña |
+| settings | configuración |
+
+## Style
+
+- **Optional voseo**: if the user asks for "español argentino" or the original text is very informal, use vos. Default: neutral tuteo (tú).
+- **Imperatives**: "Run the command" → "Ejecutá el comando" (vos) or "Ejecuta el comando" (tú). Never "Corra" (sounds formal).
+- **Code examples**: never translate variables, functions, or comments inside the ` ``` ` block. Only descriptive text.
+- **Headers and titles**: translate them but keep the same level (`#`, `##`).
+
+## When to ask
+
+- If the text contains an unlisted technical term and you're unsure, **ask** before inventing the translation.
+- If the text has marketing jargon ("game-changer", "best-in-class"), propose 2 options and let the user choose.
+
+## Output
+
+Return only the translated text. Don't add comments about the translation unless the user asks for them.
+```
+
+---
+
+## Usage examples
+
+### README of a project
+
+```
+> traducí este README a español
+[you paste the content]
+```
+
+Expected output: the README in Spanish, with `commit`, `branch`, `deploy` intact, instructions using voseo (if you asked for Argentine) or tú (default).
+
+### Comments in code
+
+```
+> pasá los comentarios de src/auth.ts al español, sin tocar el código
+```
+
+Claude will edit only the comments, leaving code and variable names untouched.
+
+### Error messages
+
+```
+> traducí estas strings de error a español neutro
+"Failed to fetch user data"
+"Token expired"
+"Invalid email format"
+```
+
+Output:
+```
+"Error al obtener los datos del usuario"
+"Token expirado"
+"Formato de email inválido"
+```
+
+(Note: "Token" is kept, "email" is kept, "fetch" is translated to "obtener" because it's a verb, not a domain technical term.)
+
+---
+
+## Edge cases worth knowing
+
+<Callout type="info" title="Debatable terms">
+
+- **"Backend / Frontend"**: some teams prefer "back" and "front" on their own. The skill keeps the full form for clarity.
+- **"Logging"**: the skill prefers "logs" over "registros". "Registros" gets confused with DB "records".
+- **"Pipeline"**: in CI/CD it stays in English. In data contexts, "tubería de datos" is acceptable.
+- **"Queue"**: it's translated to "cola" except in a very technical context ("message queue" stays in English).
+
+</Callout>
+
+---
+
+## Customization
+
+If your product/team has its own glossary, add it at the end of the SKILL.md:
+
+```markdown
+## Glossary of project X
+
+| English | Our official translation |
+|--------|----------------------------|
+| dashboard | tablero |
+| onboarding | inducción |
+| feature flag | flag (kept as is) |
+```
+
+Glossary rules take priority over the general ones. Useful for keeping consistency across all the devs on the team.
+
+---
+
+## Next steps
+
+- If you want the skill to also detect when a text **was already in Spanish** and do nothing, add a first check.
+- For bidirectional translation (also ES → EN), copy the skill and build `traduccion-tecnica-en` with the inverse rules.

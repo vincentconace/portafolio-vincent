@@ -1,0 +1,99 @@
+---
+title: "Hook TDD Gate — block editing prod code without a matching test"
+description: "Hook with 91 installs. Test-Driven Development enforcement. Blocks edits to production files (.cs, .py, .ts, .go, .rs, .rb, .php, .java, .kt, .swift, .dart) if the matching test doesn't exist."
+difficulty: "intermedio"
+category: "skills"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["hook-run-tests-after-changes", "hook-plan-gate", "hook-scope-guard"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/hooks/quality-gates/tdd-gate"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/tdd-gate.json"
+---
+
+## What it is
+
+Orthodox TDD says: write a test, see it go red, write code, see it go green, refactor. This hook enforces the first step: you can't edit production files unless the matching test exists.
+
+Supported languages:
+- `.cs` (C#)
+- `.py` (Python)
+- `.ts`, `.tsx`, `.js`, `.jsx` (TS/JS)
+- `.go` (Go)
+- `.rs` (Rust)
+- `.rb` (Ruby)
+- `.php` (PHP)
+- `.java`, `.kt` (Java/Kotlin)
+- `.swift` (Swift)
+- `.dart` (Dart)
+
+Hook event: `PreToolUse`.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `quality-gates` |
+| Installs | 91 |
+| Hook event | `PreToolUse` |
+| Languages | 11+ common ones |
+
+## How to install it
+
+```bash
+npx claude-code-templates@latest --hook quality-gates/tdd-gate
+```
+
+For Claude:
+
+```
+I installed the quality-gates/tdd-gate hook. Show me which test patterns
+it looks for per language (test_*.py, *_test.go, *.spec.ts, etc.).
+Let's ask it to edit prod code without a test — it should get blocked.
+```
+
+## What you can do with it
+
+### Strict TDD enforcement
+
+No more "I'll write the test later." The hook enforces it upfront.
+
+### For autonomous sessions
+
+Long `/goal` runs: Claude won't introduce code without a test. Quality baseline guaranteed.
+
+### Adopting TDD in new teams
+
+Forcing the pattern is the fastest way to internalize it.
+
+### Combo with [Run Tests After Changes](/boveda/hook-run-tests-after-changes)
+
+TDD Gate enforces that tests exist first. Run Tests After validates that they stay green afterward.
+
+### Combo with [Plan Gate](/boveda/hook-plan-gate)
+
+Plan Gate enforces the spec. TDD Gate enforces tests. A quadruple quality net.
+
+## When it's NOT a good fit
+
+<Callout type="warning" title="Before installing">
+
+- **If your team doesn't do TDD:** the hook generates constant friction.
+- **For spike code or experiments:** strict TDD blocks speed.
+- **For massive refactors:** the hook can be overly cautious.
+- **Without a clear test-naming convention:** the hook may not find existing tests.
+- **If your test runner doesn't exist:** frequent overrides.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [TDD Gate Hook](https://www.aitmpl.com/component/hooks/quality-gates/tdd-gate) — the exact command.
+- **JSON config:** [tdd-gate.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/hooks/quality-gates/tdd-gate.json).
+
+## Related resources
+
+- [Run Tests After Changes Hook](/boveda/hook-run-tests-after-changes) — the natural combo: tests exist, tests stay green.
+- [Plan Gate Hook](/boveda/hook-plan-gate) — enforce specs upfront.
+- [Scope Guard Hook](/boveda/hook-scope-guard) — enforce the spec's scope.

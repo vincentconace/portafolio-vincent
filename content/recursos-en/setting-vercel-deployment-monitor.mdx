@@ -1,0 +1,90 @@
+---
+title: "Setting Vercel Deployment Monitor — real-time status + clickable deploy link"
+description: "Setting with 402 installs. Statusline with real-time Vercel deployment status. Build status, time since last deploy, clickable OSC 8 hyperlink to open the deploy. For Vercel shops."
+difficulty: "intermedio"
+category: "guías"
+tools: ["claude-code", "vercel"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-vercel-multi-env-status", "setting-vercel-error-alert-system", "setting-zero-config-deployment-monitor"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/statusline/vercel-deployment-monitor"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-deployment-monitor.json"
+---
+
+## What it is
+
+Statusline focused on Vercel deployments. It shows:
+- **Build status** in real-time
+- **Time** since the last deploy
+- **OSC 8 hyperlink** that's clickable and opens the deployment
+
+OSC 8 is the escape sequence for hyperlinks in modern terminals — clicking on the statusline opens the URL.
+
+## Summary table
+
+| Field | Value |
+| --- | --- |
+| aitmpl category | `statusline` |
+| Installs | 402 |
+| Platform | Vercel |
+| Features | Real-time + clickable link |
+
+## How to install
+
+```bash
+npx claude-code-templates@latest --setting statusline/vercel-deployment-monitor
+```
+
+Prerequisites: Vercel CLI auth + linked project.
+
+For Claude:
+
+```
+I installed the statusline/vercel-deployment-monitor setting. Trigger a
+deploy for me and show me how it appears in the statusline. The link should be
+clickable.
+```
+
+## What you can do with it
+
+### Build status awareness
+
+Without opening the Vercel dashboard, you can see whether the deploy went through.
+
+### Open the deploy in one click
+
+Clicking the link takes you to the deployment in the browser.
+
+### For fast iteration
+
+Edit → push → see the build in the statusline → click to verify live.
+
+### Combo with [Vercel Auto Deploy Hook](/boveda/hook-vercel-auto-deploy)
+
+The hook triggers the deploy. The statusline shows the status. A natural combo.
+
+### Combo with [Vercel Multi Env Status](/boveda/setting-vercel-multi-env-status)
+
+Single Deploy Monitor vs. Multi Env. You can only have one statusline — choose based on your needs.
+
+## When it's NOT worth it
+
+<Callout type="warning" title="Before installing">
+
+- **No Vercel:** doesn't apply.
+- **If your terminal doesn't support OSC 8:** the click won't work, but the text still does.
+- **Production deploys only:** [Multi Env Status](/boveda/setting-vercel-multi-env-status) covers staging/preview as well.
+
+</Callout>
+
+## Get it from the source
+
+- **Listing on aitmpl.com:** [Vercel Deployment Monitor Setting](https://www.aitmpl.com/component/settings/statusline/vercel-deployment-monitor) — exact command.
+- **JSON config:** [vercel-deployment-monitor.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/statusline/vercel-deployment-monitor.json).
+
+## Related resources
+
+- [Vercel Multi Env Status Setting](/boveda/setting-vercel-multi-env-status) — production + preview simultaneously.
+- [Vercel Error Alert System Setting](/boveda/setting-vercel-error-alert-system) — alerts on failures.
+- [Zero Config Deployment Monitor Setting](/boveda/setting-zero-config-deployment-monitor) — auto-detect, no config.

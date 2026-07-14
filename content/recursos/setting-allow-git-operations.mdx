@@ -1,0 +1,87 @@
+---
+title: "Setting Allow Git Operations — autoriza git status/diff/add/commit/push (1,061 installs)"
+description: "Setting con 1,061 installs. Pre-autoriza git ops comunes (status, diff, add, commit, push). Workflow git fluido sin pedir permiso por cada comando. Requiere user confirmation para destructivos."
+difficulty: "fácil"
+category: "guías"
+tools: ["claude-code", "git"]
+publishedAt: "2026-05-29"
+readingTime: "2 min"
+relatedSlugs: ["setting-allow-npm-commands", "hook-conventional-commits", "hook-prevent-direct-push"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/settings/permissions/allow-git-operations"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-git-operations.json"
+---
+
+## Qué es
+
+Claude Code por default pregunta antes de ejecutar comandos. Este setting pre-autoriza las git ops comunes:
+- `git status`
+- `git diff`
+- `git add`
+- `git commit`
+- `git push`
+- ...y más (7 ops totales)
+
+Operaciones destructivas siguen requiriendo confirmation. Workflow git fluido sin "permitir / cancelar" cada vez.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `permissions` |
+| Installs | 1,061 |
+| Setting key | `permissions.allow` |
+| Ops autorizadas | 7 git comandos comunes |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --setting permissions/allow-git-operations
+```
+
+Para Claude:
+
+```
+Instalé el setting permissions/allow-git-operations. Listame qué git
+ops están pre-autorizadas y cuáles siguen pidiendo confirmation.
+```
+
+## Qué podés hacer con esto
+
+### Workflow git sin interrupciones
+
+Editás, Claude commitea, Claude pushea — sin "permitir" en cada step.
+
+### Para sesiones autónomas
+
+`/goal` que incluye git ops: el setting evita que Claude se trabe pidiendo confirmation.
+
+### Combo con [Conventional Commits Hook](/boveda/hook-conventional-commits)
+
+Setting autoriza commits. Hook valida format. Workflow git automatizado pero seguro.
+
+### Combo con [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push)
+
+Setting autoriza push genérico. Hook bloquea push a branches protegidas. Defense in depth.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de habilitar">
+
+- **Para repos críticos:** considerá si querés siempre confirmation.
+- **Sin hooks de seguridad:** auto-push sin [Prevent Direct Push](/boveda/hook-prevent-direct-push) puede ser peligroso.
+- **Si tu workflow es de review-each-step:** este setting saltea esos pasos.
+- **Tokens git con scope amplio:** el setting + tokens amplios = catastrofe potencial.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Allow Git Operations Setting](https://www.aitmpl.com/component/settings/permissions/allow-git-operations) — comando exacto.
+- **Config JSON:** [allow-git-operations.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/settings/permissions/allow-git-operations.json).
+
+## Recursos relacionados
+
+- [Allow Npm Commands Setting](/boveda/setting-allow-npm-commands) — equivalente para npm.
+- [Conventional Commits Hook](/boveda/hook-conventional-commits) — validar format complementario.
+- [Prevent Direct Push Hook](/boveda/hook-prevent-direct-push) — safety net post-autorización.

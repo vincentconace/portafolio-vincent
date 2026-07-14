@@ -1,0 +1,292 @@
+---
+title: "Claude SEO — a skill with 13 commands that turns Claude into an SEO specialist"
+description: "Open source Claude Code skill. Adds 13 slash commands: technical audit, content/keyword analysis, reports, and an automated agent (/seo-fix) that fixes issues with your approval. Covers meta tags, schema, headings, performance, internal linking."
+difficulty: "intermedio"
+category: "prompts"
+tools: ["claude-code", "skills"]
+publishedAt: "2026-05-28"
+readingTime: "9 min"
+relatedSlugs: ["cinco-habilidades-marketing", "claude-copywriter", "andromeda-meta-ads"]
+---
+
+## Why a skill, not a prompt
+
+An SEO prompt gets lost the moment you close the conversation. Every time you need to audit your site, you paste it back in.
+
+**Claude SEO** is a skill that lives in your project. It activates automatically when Claude detects that you need SEO. It has direct access to:
+
+- Your sitemap
+- Your code
+- Your content files (MDX, Markdown, HTML)
+- Your assets (images, schemas)
+
+And it can make **real changes** to your codebase with your approval.
+
+Repo: `skills-sh/claude-seo`.
+
+---
+
+## Installation
+
+```bash
+# Option A
+npx skills.sh install claude-seo
+
+# Option B (manual)
+git clone https://github.com/skills-sh/claude-seo .claude/skills/claude-seo
+```
+
+To verify: run any command below. If Claude responds with analysis, it's active.
+
+---
+
+## The 13 commands
+
+### Technical audit (5 commands)
+
+They analyze the technical structure — what Google needs to crawl and index.
+
+| Command | What it does |
+|---------|----------|
+| `/seo-audit` | Full audit (meta tags, headings, alt, broken links, sitemap, robots, canonical) |
+| `/seo-speed` | Performance — bundle size, unoptimized images, blocking scripts, Core Web Vitals |
+| `/seo-structure` | Architecture — URL hierarchy, internal linking, click depth, orphan pages |
+| `/seo-crawl` | Crawlability — robots.txt, noindex, duplicate canonicals, redirect chains |
+| `/seo-schema` | Structured data (JSON-LD) — types, required fields, validation, rich snippet opportunities |
+
+### Content and keywords (5 commands)
+
+| Command | What it does |
+|---------|----------|
+| `/seo-keywords` | Density, placement in headings, presence in meta, semantic variations |
+| `/seo-meta` | Generates optimized meta titles + descriptions (length, keywords, CTR) |
+| `/seo-headings` | H1-H6 hierarchy, keywords in H1, length, per-page suggestions |
+| `/seo-content` | Length, readability, thin content, internal duplication, topic gaps |
+| `/seo-images` | Alt text, size, format (WebP/AVIF), lazy loading, descriptive names |
+
+### Reports and automation (3 commands)
+
+| Command | What it does |
+|---------|----------|
+| `/seo-report` | Full SEO report in markdown with a score and a prioritized plan |
+| `/seo-compare` | Side-by-side comparison (your page vs a competitor or vs another of your own) |
+| `/seo-fix` | The agent. Audits, prioritizes, **fixes automatically** with an approvable diff |
+
+---
+
+## The recommended flow
+
+### Day 1 — Diagnosis
+
+```
+> /seo-audit
+```
+
+Gives you an overall score + a prioritized list of issues.
+
+```
+> /seo-report
+```
+
+A complete markdown report you can share with a client/team.
+
+### Day 2 — Automatic quick wins
+
+```
+> /seo-fix
+```
+
+The agent iterates over the report. For each issue:
+
+1. Shows you the problem
+2. Proposes the fix
+3. Shows you the **diff** of the change
+4. Waits for your approval
+
+You decide what to apply. Typical quick wins:
+- Missing meta titles/descriptions
+- Alt text on images
+- Duplicate or missing H1
+- Basic schema (Organization, BreadcrumbList)
+
+### Day 3+ — Structural issues
+
+For things that require deeper decisions (re-architecture, content strategy), use specific commands:
+
+```
+> /seo-structure
+```
+
+Detects orphan pages, excessive click depth, lack of internal linking.
+
+```
+> /seo-content
+```
+
+Flags pages with thin content (fewer than 300 words), internal duplication, gaps versus competitors.
+
+---
+
+## Use cases
+
+### 1. Freshly launched site — baseline audit
+
+```
+> We just launched miapp.com. Do a full SEO audit:
+
+  1. /seo-audit first
+  2. /seo-schema to make sure the JSON-LD is well built
+  3. /seo-meta to validate all titles/descriptions
+  4. /seo-report consolidated at the end
+
+  Give me prioritization by impact/effort (2x2 matrix).
+```
+
+### 2. Site 6+ months old — deep analysis
+
+```
+> Site with 200 pages, 6 months online. We've noticed traffic
+  has plateaued.
+
+  1. /seo-structure — are there orphan pages?
+  2. /seo-content — thin content or duplication?
+  3. /seo-keywords — are we ranking for what we expect?
+  4. /seo-compare vs our 2 main competitors:
+     [competitor1.com] and [competitor2.com]
+
+  Give me a 90-day action plan.
+```
+
+### 3. Pre-deploy — validation
+
+Before deploying, run:
+
+```
+> /seo-crawl
+```
+
+Catches catastrophic things that sneak into deploys:
+- Accidental `noindex` on the homepage
+- Canonical pointing to staging
+- Robots.txt blocking production
+- Redirect loops
+
+### 4. Bulk image optimization
+
+```
+> Site with 800 images in /public/. Many are heavy, poorly optimized.
+
+  /seo-images with the auto-fix flag to:
+  - Generate descriptive alt text (not generic)
+  - Convert JPGs/PNGs to WebP where it applies
+  - Rename files descriptively
+
+  Show me EVERYTHING in a diff before applying.
+```
+
+---
+
+## The power of `/seo-fix`
+
+This is the star command. It combines the other 12 + an agent that decides what to fix.
+
+Flow:
+
+```
+1. You: > /seo-fix
+2. Claude SEO:
+   - Runs a full audit
+   - Detects 47 issues
+   - Prioritizes by impact on rankings (high/medium/low)
+   - Filters the ones it can fix without breaking anything (~25-30)
+   - Proposes applying them in order
+
+3. For each fix:
+   - Shows BEFORE and AFTER
+   - Waits for your OK / SKIP / EDIT
+   - Applies only if you approve
+
+4. Structural issues (the ones it CANNOT fix alone):
+   - Lists them at the end with suggestions
+   - E.g.: "add a blog to target keyword X"
+```
+
+Typical result: in 30 min, your site has **20-30 SEO improvements applied**. To get to the same point with SEMrush + a senior dev, it takes 1-2 days.
+
+---
+
+## Anti-patterns
+
+### 1. Running `/seo-fix` without reviewing diffs
+
+The temptation: "approve everything, go." **Mistake**. Sometimes the automatic fix breaks editorial context.
+
+Example: Claude detects that the `<h1>` has "too many words" and shortens it. If that h1 was fine-tuned by your content team, it loses its meaning.
+
+**Rule**: approve individually, not in bulk.
+
+### 2. SEO without content
+
+Claude SEO **optimizes** what you have. If your content is generic, no meta title will save you. Solid content first, SEO after.
+
+### 3. Obsessing over schema
+
+Schema markup helps with **rich snippets**, not direct rankings. If your site has no traffic yet, schema isn't a priority. Content + basic technical SEO first.
+
+### 4. Comparing against small competitors
+
+`/seo-compare` only helps if the competitor is **above you**. Comparing against someone who's doing worse gives you false confidence.
+
+### 5. Ignoring `/seo-speed`
+
+Page speed is a real ranking factor. If Core Web Vitals are red, the other fixes matter less. Start with speed if it's bad.
+
+---
+
+## Powerful combinations
+
+### With Claude Copywriter
+
+```
+> /seo-content flagged 12 pages with thin content for me.
+
+  For each one:
+  1. Identify the target query
+  2. Expand the content to 800-1200 words
+  3. Run the draft through /humanizer
+  4. Validate with /seo-content that it's no longer thin
+```
+
+You combine SEO + [humanizer](/boveda/claude-copywriter) in a single flow.
+
+### With Marketing Skills
+
+```
+> I just published 5 new articles.
+
+  1. Marketing Skills: build me a distribution strategy
+     (email, social, communities)
+  2. Claude SEO: /seo-meta to optimize SEO for all 5
+  3. Claude SEO: /seo-schema to add Article schema
+```
+
+[5 marketing skills](/boveda/cinco-habilidades-marketing) + Claude SEO = a whole content marketing pipeline.
+
+---
+
+## When it's NOT worth it
+
+| Case | Why |
+|------|---------|
+| Enterprise e-commerce with 50k+ products | SEMrush/Ahrefs + a dev team is better |
+| Extreme local SEO (Google Business focused) | Claude SEO doesn't touch GBP optimization |
+| Black hat SEO | Claude SEO is opinionated about good practices |
+| SEO in a language other than Spanish/English | Variable quality in non-major languages |
+
+---
+
+## Next steps
+
+- To humanize the content you generate post-SEO, [Claude Copywriter](/boveda/claude-copywriter)
+- For a full marketing suite (not just SEO), [5 marketing skills](/boveda/cinco-habilidades-marketing)
+- For Meta Ads with a system (another distribution vertical), [Andromeda Meta Ads](/boveda/andromeda-meta-ads)

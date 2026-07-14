@@ -1,0 +1,102 @@
+---
+title: "Ralph Wiggum Marketer — copywriter autónomo de marketing dentro de Claude Code"
+description: "Plugin de muratcankoylan (706⭐) que provee un copywriter de IA autónomo. Genera copy de marketing aplicando la 'Ralph Wiggum technique': iteración con contexto fresco hasta convergencia."
+difficulty: "intermedio"
+category: "plugins"
+tools: ["claude-code"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["goal-claude-code", "claude-code-loop", "agency-agents"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/plugins/ralph-wiggum-marketer"
+github: "https://github.com/muratcankoylan/ralph-wiggum-marketer"
+---
+
+## Qué es
+
+Murat Can Koylan armó un plugin que aplica la "Ralph Wiggum technique" al copywriting de marketing. La técnica viene del autor Geoffrey Huntley y consiste en hacer que el modelo trabaje sobre el mismo problema repetidamente, viendo su output previo pero con contexto fresco cada vez. Cada iteración mira con ojos nuevos lo que hizo antes.
+
+Para copywriting, esto es valioso: el primer copy suele estar contaminado por templates obvios. Las iteraciones siguientes, viendo el primero como punto de partida pero sin compromiso emocional, lo afilan. El resultado: copy que evoluciona de "genérico de IA" a "específico y memorable".
+
+El plugin trae el setup completo: skills + commands + hooks que orquestan el loop.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Autor | muratcankoylan (Murat Can Koylan) |
+| Stars | 706 |
+| Tipo | Plugin único (copywriter autónomo) |
+| Componentes | skills, commands, hooks |
+| Técnica | Ralph Wiggum (iteración con contexto fresco) |
+| Marketplace | `muratcankoylan/ralph-wiggum-marketer` |
+
+## Cómo se instala
+
+```bash
+/plugin marketplace add muratcankoylan/ralph-wiggum-marketer
+/plugin install ralph-wiggum-marketer@muratcankoylan-ralph-wiggum-marketer
+```
+
+O `/plugin` → Discover.
+
+Para Claude:
+
+```
+Instalé ralph-wiggum-marketer. Mi producto es [descripción + audiencia +
+beneficio principal]. Pediré copy para [landing / email / ad headline /
+tweet] — iterá con la técnica Ralph hasta convergencia.
+```
+
+## Qué podés hacer con esto
+
+### Copy de landing que evoluciona
+
+Pasás un brief (producto + audiencia + diferencial). El plugin genera el primer copy. Después itera viendo ese copy con contexto fresco. Cada iteración filtra ruido, afila la propuesta y suele converger a algo más limpio que el primer intento.
+
+### Headlines para ads
+
+Donde el primer borrador suele ser obvio ("Compará planes!"), las iteraciones empujan a algo más específico. Útil para tests A/B donde necesitás múltiples opciones diferenciadas.
+
+### Emails de outbound
+
+El típico "Quería conectar contigo porque..." genérico. El plugin itera hasta llegar a aperturas más personales y propuestas más claras.
+
+### Tweets / posts cortos
+
+El formato corto premia la afilación. Ralph itera específicamente bien acá: cada pasada elimina palabras innecesarias.
+
+### Comparación con prompts de un solo shot
+
+Si comparás con pedirle a Claude "armame el copy" una vez, la diferencia se nota más en copies que requieren claridad y especificidad. Para copy genérico, una sola pasada alcanza.
+
+## Beneficios reales
+
+- **Aplica una técnica probada** (Ralph) en un dominio específico (marketing).
+- **Convergencia automática** — no tenés que decidir cuándo parar.
+- **Output suele ser mejor que one-shot** especialmente para copy denso.
+- **706 stars** — adopción decente.
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **Para copy trivial** (un asunto de email, un botón CTA): one-shot alcanza, el loop suma fricción.
+- **Si vendés en LATAM con voseo:** verificá que el copy generado respete tu tono. Los modelos tienden a default tuteo o "neutro".
+- **Costo de tokens:** las iteraciones suman. Para volúmenes grandes (200 ad variations) mirá el cost antes.
+- **Para campañas con brand voice fuerte ya definido:** primero entrená el plugin con tus guidelines, sino genera copy genérico que no respeta tu voz.
+- **No reemplaza al copywriter humano** — para piezas hero, decisiones de positioning, claims con peso, mejor revisión humana al final.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Ralph Wiggum Marketer](https://www.aitmpl.com/plugins/ralph-wiggum-marketer) — comando exacto.
+- **Repo en GitHub:** [muratcankoylan/ralph-wiggum-marketer](https://github.com/muratcankoylan/ralph-wiggum-marketer) — código, ejemplos.
+- **Origen de la técnica Ralph Wiggum** documentada en posts del autor (referido en el README).
+
+## Recursos relacionados
+
+- [/goal — la meta que Claude no suelta](/boveda/goal-claude-code) — el primitivo nativo para ejecuciones que iteran hasta convergencia. Buena referencia para entender la base que Ralph aprovecha.
+- [Claude Code Loop](/boveda/claude-code-loop) — para usar el primitivo loop de Claude Code para otros usos además de copywriting.
+- [Agency Agents](/boveda/agency-agents) — para entender la diferencia entre un agent autónomo y un loop iterativo como Ralph.

@@ -1,0 +1,101 @@
+---
+title: "MCP Android — controlá dispositivos Android desde Claude vía ADB"
+description: "MCP server que conecta Claude Code con Android Debug Bridge (ADB). Inspeccionar, automatizar y debuggear dispositivos Android desde una conversación con Claude — testing de apps, screenshots, logcat, etc."
+difficulty: "intermedio"
+category: "mcp"
+tools: ["claude-code", "adb"]
+publishedAt: "2026-05-29"
+readingTime: "3 min"
+relatedSlugs: ["plugin-playwright-skill", "agency-agents", "anatomia-claude"]
+source: "aitmpl.com"
+sourceUrl: "https://www.aitmpl.com/component/mcps/devtools/android-mcp"
+github: "https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/android-mcp.json"
+---
+
+## Qué es
+
+Si desarrollás apps Android, ADB (Android Debug Bridge) es la herramienta nativa para hablar con un dispositivo o emulador conectado: instalar APKs, leer logs, sacar screenshots, simular taps, etc. El problema: ADB es CLI puro y verboso.
+
+Este MCP envuelve ADB para que Claude lo opere por vos. Le decís "tomá screenshot, abrí mi app y andá a la pantalla de checkout" y Claude traduce eso a comandos `adb`.
+
+Sirve para QA, debugging, automatización de testing manual repetitivo y para repros de bugs que requieren manipular el device.
+
+## Tabla resumen
+
+| Campo | Valor |
+| --- | --- |
+| Categoría aitmpl | `devtools` |
+| Installs | 40 |
+| Servidor MCP | `android-mcp` |
+| Requisito clave | ADB instalado + device/emulador conectado |
+| Plataformas | Linux, macOS, Windows |
+
+## Cómo se instala
+
+```bash
+npx claude-code-templates@latest --mcp devtools/android-mcp
+```
+
+Antes de usarlo necesitás:
+1. ADB instalado (`brew install android-platform-tools` en Mac, paquete `android-tools-adb` en Linux, Platform Tools en Windows)
+2. Dispositivo Android con USB debugging activado, o emulador corriendo
+3. `adb devices` mostrando algo
+
+Para Claude:
+
+```
+Instalá el MCP devtools/android-mcp. Verificá que adb está disponible
+y listame los devices conectados. Después tomame un screenshot de la
+pantalla actual.
+```
+
+## Qué podés hacer con esto
+
+### Screenshots y screen records
+
+"Tomá un screenshot ahora, después abrí la app de mensajes y otro screenshot". Útil para documentar bugs o estados de UI.
+
+### Logcat filtrado
+
+"Mostrame los últimos errores de la app `com.miapp` en los últimos 5 minutos". Claude corre `adb logcat` con los filtros correctos y resume los hits.
+
+### Reproducir bugs paso a paso
+
+"Andá a `Settings > Network > VPN > Add new`, llename el form con datos de prueba, intentá conectar y traeme los logs". Claude orquesta los taps con `adb shell input`.
+
+### Instalar y verificar APKs
+
+"Instalá `~/Downloads/build-debug.apk` y abrila". Útil en pipelines de testing local.
+
+### Inspección de procesos y memoria
+
+"Mostrame qué procesos están corriendo y cuál consume más memoria". `dumpsys` + `top` traducidos a respuestas humanas.
+
+## Pre-requisitos
+
+- **ADB instalado** y en el PATH
+- **Device o emulador conectado** con USB debugging
+- **App firmada en modo debuggable** si querés acceder a su estado interno
+
+## Cuándo NO conviene
+
+<Callout type="warning" title="Antes de instalar">
+
+- **No reemplaza testing automatizado serio:** para tests E2E mantenibles, usá Espresso, Detox o Appium. El MCP es para tareas ad-hoc.
+- **iOS no incluido:** este MCP es solo Android. Para iOS necesitás otro setup (idb, xcrun).
+- **Riesgo en device de producción:** si conectás tu device personal y Claude tira un comando equivocado, podés afectar apps reales. Usá emulador.
+- **Latencia por USB:** ADB sobre USB es rápido pero ADB sobre WiFi puede ser molesto si tu red anda mal.
+- **Permisos del shell:** algunos comandos requieren root. Sin root, opciones limitadas.
+
+</Callout>
+
+## Bajalo de la fuente
+
+- **Ficha en aitmpl.com:** [Android MCP](https://www.aitmpl.com/component/mcps/devtools/android-mcp) — comando exacto.
+- **Config JSON:** [android-mcp.json](https://github.com/davila7/claude-code-templates/blob/main/cli-tool/components/mcps/devtools/android-mcp.json) — definición del MCP server.
+
+## Recursos relacionados
+
+- [Playwright Skill](/boveda/plugin-playwright-skill) — para testing en browser, no en mobile. Comparalo si tu app tiene versión web.
+- [Agency Agents](/boveda/agency-agents) — para entender cómo orquestar agents que usen este MCP para QA automatizado.
+- [Anatomía de Claude](/boveda/anatomia-claude) — el mapa: este MCP es "el cable telefónico" que conecta Claude a tu device.

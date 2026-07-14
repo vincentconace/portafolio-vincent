@@ -64,12 +64,14 @@ const { scrollYProgress } = useScroll({
   target: ref,
   offset: ['start end', 'end end'], // footer = último elemento → 'end end'
 });
-const height = useTransform(scrollYProgress, [0, 0.85], [250, 0]);
+// Retraer con scaleY (NO height): visual idéntico (border-radius en % escala con
+// la caja) pero compuesto por GPU → fluido en mobile. Animar `height` se traba.
+const scaleY = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 // ...
 <div ref={ref} className="ni-footer-reveal">
   <Footer />
   <motion.div aria-hidden className="ni-footer-curve"
-    style={{ height, borderRadius: '0 0 50% 50%' }} />
+    style={{ scaleY, transformOrigin: 'top', borderRadius: '0 0 50% 50%' }} />
 </div>
 ```
 
@@ -79,8 +81,9 @@ CSS (`nucleo/styles/nucleo.css`):
 .ni-footer-reveal { position: relative; }
 .ni-footer-curve {
   position: absolute; top: 0; left: 0; width: 100%;
+  height: 250px;                /* fija: la retracción la hace scaleY, no height */
   background: var(--bg-base);   /* color del contenido, NO del footer */
-  z-index: 2; pointer-events: none;
+  z-index: 2; pointer-events: none; will-change: transform;
 }
 ```
 
@@ -90,8 +93,11 @@ CSS (`nucleo/styles/nucleo.css`):
 2. `motion.div` **clara** absoluta sobre el tope (`top:0; left:0; width:100%`),
    `background` = color del contenido, `borderRadius: '0 0 50% 50%'`,
    `pointer-events:none`, `z-index` por encima.
-3. Animar `height` de `250 → 0` con
-   `useTransform(scrollYProgress, [0, 0.85–0.9], [250, 0])`.
+3. Retraerla con **`scaleY: 1 → 0`** (`transform-origin: top`,
+   `useTransform(scrollYProgress, [0, 0.85–0.9], [1, 0])`) + altura fija en CSS —
+   **NO animar `height`**: el border-radius en % escala con la caja (visual
+   idéntico) pero `transform` lo compone la GPU; `height` reflowea/repinta cada
+   frame y **se traba en el teléfono**. Sumar `will-change: transform`.
 4. Elegir el `offset` según la posición del target:
    - Con contenido debajo → `['start end', 'end start']`.
    - **Footer = último elemento del documento → `['start end', 'end end']`**

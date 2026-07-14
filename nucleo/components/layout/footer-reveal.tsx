@@ -7,8 +7,12 @@ import { Footer } from './footer'
 /**
  * Curva de transición hacia el footer, igual que la home del portfolio:
  * una "tapa" del color del contenido (claro) que cubre el tope del footer
- * oscuro con las esquinas de abajo redondeadas (0 0 50% 50%). Su altura se
- * anima con el scroll (250→0), así el footer se revela con la curva.
+ * oscuro con las esquinas de abajo redondeadas (0 0 50% 50%).
+ *
+ * Se retrae con el scroll animando `scaleY` (1→0, origen arriba) — NO `height`.
+ * El resultado visual es idéntico (el border-radius en % escala con la caja),
+ * pero `transform` lo compone la GPU → fluido en mobile. Animar `height`
+ * reflowea/repinta cada frame y se TRABA en el teléfono.
  */
 export function FooterReveal() {
   const ref = useRef<HTMLDivElement>(null)
@@ -18,7 +22,7 @@ export function FooterReveal() {
     target: ref,
     offset: ['start end', 'end end'],
   })
-  const height = useTransform(scrollYProgress, [0, 0.85], [250, 0])
+  const scaleY = useTransform(scrollYProgress, [0, 0.85], [1, 0])
 
   return (
     <div ref={ref} className="ni-footer-reveal">
@@ -26,7 +30,7 @@ export function FooterReveal() {
       <motion.div
         aria-hidden
         className="ni-footer-curve"
-        style={{ height, borderRadius: '0 0 50% 50%' }}
+        style={{ scaleY, transformOrigin: 'top', borderRadius: '0 0 50% 50%' }}
       />
     </div>
   )

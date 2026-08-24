@@ -25,7 +25,11 @@ export const translations = {
       comingSoon: 'Próximamente',
       soon: 'Pronto',
       items: {
-        cliente: { title: 'Trabajá conmigo', subtitle: 'Portal + onboarding' },
+        cliente: {
+          title: 'Trabajá conmigo',
+          subtitle: 'Automaticemos por WhatsApp',
+          wa: '¡Hola Vincent! Quiero automatizar algo en mi negocio y ver si encajamos para trabajar juntos. ¿Cómo arrancamos?',
+        },
         comunidad: { title: 'Núcleo de la IA', subtitle: 'Mi comunidad' },
         web: { title: 'Mi web', subtitle: 'Portfolio y servicios' },
         stockguardian: { title: 'StockGuardian', subtitle: 'Mi producto' },
@@ -382,7 +386,11 @@ export const translations = {
       comingSoon: 'Coming soon',
       soon: 'Soon',
       items: {
-        cliente: { title: 'Work with me', subtitle: 'Portal + onboarding' },
+        cliente: {
+          title: 'Work with me',
+          subtitle: "Let's automate on WhatsApp",
+          wa: "Hi Vincent! I'd like to automate something in my business and see if we're a fit to work together. How do we start?",
+        },
         comunidad: { title: 'Núcleo de la IA', subtitle: 'My community' },
         web: { title: 'My website', subtitle: 'Portfolio & services' },
         stockguardian: { title: 'StockGuardian', subtitle: 'My product' },

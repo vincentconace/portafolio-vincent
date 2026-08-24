@@ -44,13 +44,28 @@ export function LinkCards({ links, enabled }) {
           ? t('links.comingSoon')
           : t(`links.items.${link.id}.subtitle`);
 
+        // WhatsApp: adjuntar el mensaje pre-cargado en el idioma activo.
+        const resolved = link.whatsapp
+          ? {
+              ...link,
+              href: `${link.href}?text=${encodeURIComponent(
+                t(`links.items.${link.id}.wa`)
+              )}`,
+            }
+          : link;
+
         return (
           <motion.div
             key={link.id}
             variants={reduced ? undefined : item}
             whileTap={reduced ? undefined : { scale: 0.97 }}
           >
-            <LinkCard link={link} title={title} subtitle={subtitle} enabled={enabled} />
+            <LinkCard
+              link={resolved}
+              title={title}
+              subtitle={subtitle}
+              enabled={enabled}
+            />
           </motion.div>
         );
       })}

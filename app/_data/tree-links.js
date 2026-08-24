@@ -30,12 +30,14 @@ export const treeLinks = [
   {
     id: 'cliente',
     variant: 'primary',
-    icon: 'Briefcase',
+    icon: 'WhatsApp',
     title: 'Trabajá conmigo',
-    subtitle: 'Portal + onboarding',
-    href: null, // futuro: /cliente
-    external: false,
-    comingSoon: true, // placeholder → muestra "Próximamente / Coming soon"
+    subtitle: 'Automaticemos por WhatsApp',
+    // WhatsApp con mensaje pre-cargado. El texto se arma bilingüe en
+    // <LinkCards/> (según el idioma activo) y se le añade `?text=` acá.
+    href: 'https://wa.me/542236368902',
+    external: true,
+    whatsapp: true, // dispara el prellenado del mensaje (t('links.items.cliente.wa'))
   },
   {
     id: 'comunidad',

@@ -24,6 +24,14 @@ export const translations = {
       madeBy: 'Hecho por Vincent Conace',
       comingSoon: 'Próximamente',
       soon: 'Pronto',
+      // Pantalla /links/ebooks
+      ebooksTitle: 'Ebooks',
+      ebooksTagline:
+        'Guías descargables para dominar Claude, paso a paso y en español.',
+      ebooksBack: 'Volver',
+      ebooksSeries: 'Claude de Cero a Cien',
+      ebooksUpcoming: 'Próximos volúmenes',
+      ebooksPayWith: 'Pagás con',
       items: {
         cliente: {
           title: 'Trabajá conmigo',
@@ -31,8 +39,18 @@ export const translations = {
           wa: '¡Hola Vincent! Quiero automatizar algo en mi negocio y ver si encajamos para trabajar juntos. ¿Cómo arrancamos?',
         },
         comunidad: { title: 'Núcleo de la IA', subtitle: 'Mi comunidad' },
+        ebooks: { title: 'Ebooks', subtitle: 'Mis guías descargables' },
         web: { title: 'Mi web', subtitle: 'Portfolio y servicios' },
         stockguardian: { title: 'StockGuardian', subtitle: 'Mi producto' },
+        // Ebooks — serie "Claude de Cero a Cien" (pantalla /links/ebooks).
+        ebook1: {
+          title: 'Vol. 1 — La Base',
+          subtitle: 'Comprar ahora',
+          desc: 'Todo lo que necesitás para dominar Claude, de tu primera conversación a automatizar flujos de trabajo completos con Claude Code. Paso a paso. Sin jerga.',
+          meta: '225 páginas · 28 capítulos · Edición 2026',
+        },
+        ebook2: { title: 'Vol. 2 — Construye con Claude Code', subtitle: '' },
+        ebook3: { title: 'Vol. 3 — Productos y automatizaciones', subtitle: '' },
       },
     },
     description: {
@@ -385,6 +403,14 @@ export const translations = {
       madeBy: 'Made by Vincent Conace',
       comingSoon: 'Coming soon',
       soon: 'Soon',
+      // /links/ebooks screen
+      ebooksTitle: 'Ebooks',
+      ebooksTagline:
+        'Downloadable guides to master Claude, step by step and in Spanish.',
+      ebooksBack: 'Back',
+      ebooksSeries: 'Claude de Cero a Cien',
+      ebooksUpcoming: 'Upcoming volumes',
+      ebooksPayWith: 'Pay with',
       items: {
         cliente: {
           title: 'Work with me',
@@ -392,8 +418,18 @@ export const translations = {
           wa: "Hi Vincent! I'd like to automate something in my business and see if we're a fit to work together. How do we start?",
         },
         comunidad: { title: 'Núcleo de la IA', subtitle: 'My community' },
+        ebooks: { title: 'Ebooks', subtitle: 'My downloadable guides' },
         web: { title: 'My website', subtitle: 'Portfolio & services' },
         stockguardian: { title: 'StockGuardian', subtitle: 'My product' },
+        // Ebooks — "Claude de Cero a Cien" series (/links/ebooks screen).
+        ebook1: {
+          title: 'Vol. 1 — La Base',
+          subtitle: 'Buy now',
+          desc: 'Everything you need to master Claude, from your first conversation to automating full workflows with Claude Code. Step by step. No jargon.',
+          meta: '225 pages · 28 chapters · 2026 Edition',
+        },
+        ebook2: { title: 'Vol. 2 — Construye con Claude Code', subtitle: '' },
+        ebook3: { title: 'Vol. 3 — Productos y automatizaciones', subtitle: '' },
       },
     },
     description: {

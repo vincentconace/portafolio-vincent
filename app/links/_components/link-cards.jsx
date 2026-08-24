@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 
+import { cn } from '@/utils';
 import { useTranslation } from '@/providers';
 
 import { LinkCard } from './link-card';
@@ -24,15 +25,19 @@ const item = {
 /**
  * Grilla de destinos con entrada escalonada al entrar en viewport + textos
  * bilingües (título/subtítulo desde `t()`; el placeholder muestra "Próximamente").
- * @param {{ links: any[]; enabled: boolean }} props
+ * `singleColumn` fuerza una sola columna (útil para títulos largos, ej. ebooks).
+ * @param {{ links: any[]; enabled: boolean; singleColumn?: boolean }} props
  */
-export function LinkCards({ links, enabled }) {
+export function LinkCards({ links, enabled, singleColumn = false }) {
   const reduced = useReducedMotion();
   const { t } = useTranslation();
 
   return (
     <motion.section
-      className='mt-4 grid grid-cols-1 gap-2.5 sm:mt-8 sm:grid-cols-2 sm:gap-3.5'
+      className={cn(
+        'mt-4 grid grid-cols-1 gap-2.5 sm:mt-8 sm:gap-3.5',
+        !singleColumn && 'sm:grid-cols-2'
+      )}
       variants={container}
       initial={reduced ? false : 'initial'}
       whileInView='enter'

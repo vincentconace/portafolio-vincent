@@ -1,5 +1,6 @@
 import {
   ArrowUpRight,
+  BookOpen,
   Briefcase,
   Clock,
   Globe,
@@ -27,7 +28,7 @@ function WhatsApp({ className, ...props }) {
   );
 }
 
-const icons = { Briefcase, Users, Globe, ShieldCheck, WhatsApp };
+const icons = { Briefcase, Users, Globe, ShieldCheck, BookOpen, WhatsApp };
 
 /**
  * Tarjeta de destino del hub (pill estilo web).

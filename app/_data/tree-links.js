@@ -49,6 +49,15 @@ export const treeLinks = [
     external: true, // abrir en pestaña nueva
   },
   {
+    id: 'ebooks',
+    variant: 'secondary',
+    icon: 'BookOpen',
+    title: 'Ebooks',
+    subtitle: 'Mis guías descargables',
+    href: '/links/ebooks', // pantalla interna con la lista de ebooks
+    external: false, // navegación interna (misma pestaña)
+  },
+  {
     id: 'web',
     variant: 'secondary',
     icon: 'Globe',

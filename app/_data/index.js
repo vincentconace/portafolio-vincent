@@ -1,3 +1,4 @@
+export * from './ebooks';
 export * from './nav-items';
 export * from './preloader-words';
 export * from './project-options';

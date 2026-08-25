@@ -23,9 +23,15 @@ const item = {
 };
 
 /**
- * Grilla de destinos con entrada escalonada al entrar en viewport + textos
- * bilingües (título/subtítulo desde `t()`; el placeholder muestra "Próximamente").
- * `singleColumn` fuerza una sola columna (útil para títulos largos, ej. ebooks).
+ * Grilla de destinos con entrada escalonada + textos bilingües (título/subtítulo
+ * desde `t()`; el placeholder muestra "Próximamente"). `singleColumn` fuerza una
+ * sola columna (útil para títulos largos, ej. ebooks).
+ *
+ * La entrada se dispara AL MONTAR (`animate`), NO con `whileInView`: éste depende
+ * de IntersectionObserver y en scroll rápido / salto de posición puede no
+ * dispararse y dejar las cards en `opacity:0` (el mismo problema que ya se corrigió
+ * en scroll-reveal y el scrollspy del Núcleo). Al animar en el montaje, el contenido
+ * siempre termina visible. Respeta reduced-motion (sin estado oculto inicial).
  * @param {{ links: any[]; enabled: boolean; singleColumn?: boolean }} props
  */
 export function LinkCards({ links, enabled, singleColumn = false }) {
@@ -40,8 +46,7 @@ export function LinkCards({ links, enabled, singleColumn = false }) {
       )}
       variants={container}
       initial={reduced ? false : 'initial'}
-      whileInView='enter'
-      viewport={{ once: true, margin: '-8% 0px -8% 0px' }}
+      animate='enter'
     >
       {links.map((link) => {
         const title = t(`links.items.${link.id}.title`);

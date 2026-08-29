@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Clock } from 'lucide-react';
 
 import { useTranslation } from '@/providers';
 
@@ -35,6 +35,7 @@ function MercadoPago({ className, ...props }) {
 export function EbookFeatured({ ebook }) {
   const { t } = useTranslation();
   const base = `links.items.${ebook.id}`;
+  const isFree = Boolean(ebook.promo?.free);
 
   return (
     <a
@@ -44,13 +45,13 @@ export function EbookFeatured({ ebook }) {
       className='group relative mt-8 block overflow-hidden rounded-[28px] border border-border bg-background p-5 transition-all duration-500 ease-in-expo hover-hover:hover:-translate-y-1 hover-hover:hover:border-foreground/25 hover-hover:hover:shadow-[0_28px_60px_-24px_rgba(28,30,33,0.35)] active:scale-[0.99] sm:p-6'
     >
       <div className='flex flex-col items-center gap-5 sm:flex-row sm:items-center sm:gap-7'>
-        {/* Portada (ratio real 2550×3302) */}
+        {/* Portada (ratio real 798×1200) */}
         <div className='w-[150px] shrink-0 sm:w-[160px]'>
           <Image
             src={ebook.cover}
             alt={t(`${base}.title`)}
-            width={2550}
-            height={3302}
+            width={798}
+            height={1200}
             sizes='(max-width: 640px) 150px, 160px'
             className='w-full rounded-xl border border-border/60 shadow-[0_20px_40px_-18px_rgba(28,30,33,0.5)] transition-transform duration-500 ease-in-expo hover-hover:group-hover:scale-[1.02]'
           />
@@ -73,15 +74,27 @@ export function EbookFeatured({ ebook }) {
 
           {/* Precio + CTA (span visual, no link anidado) */}
           <div className='mt-4 flex flex-col items-center gap-3 sm:flex-row sm:gap-4'>
-            <span className='text-2xl font-medium leading-none tracking-[-0.02em] text-foreground'>
-              {ebook.price}
-              <span className='ml-1.5 text-sm font-normal text-muted-foreground'>
-                {ebook.currency}
+            {isFree ? (
+              // Promo: "Gratis" grande + precio normal tachado al lado.
+              <span className='flex items-baseline gap-2'>
+                <span className='text-2xl font-medium leading-none tracking-[-0.02em] text-foreground'>
+                  {t('links.ebooksFree')}
+                </span>
+                <span className='text-base font-normal text-muted-foreground line-through decoration-1'>
+                  {ebook.price} {ebook.currency}
+                </span>
               </span>
-            </span>
+            ) : (
+              <span className='text-2xl font-medium leading-none tracking-[-0.02em] text-foreground'>
+                {ebook.price}
+                <span className='ml-1.5 text-sm font-normal text-muted-foreground'>
+                  {ebook.currency}
+                </span>
+              </span>
+            )}
 
             <span className='inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background transition-transform duration-500 ease-in-expo hover-hover:group-hover:-translate-y-0.5'>
-              {t(`${base}.subtitle`)}
+              {isFree ? t('links.ebooksFreeCta') : t(`${base}.subtitle`)}
               <ArrowUpRight
                 className='size-4 transition-transform duration-500 ease-in-expo hover-hover:group-hover:translate-x-0.5'
                 strokeWidth={1.75}
@@ -90,12 +103,20 @@ export function EbookFeatured({ ebook }) {
             </span>
           </div>
 
-          {/* Método de pago: Mercado Pago (isotipo en celeste de marca) */}
-          <div className='mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground sm:justify-start'>
-            <span>{t('links.ebooksPayWith')}</span>
-            <MercadoPago className='size-4 text-[#00b1ea]' />
-            <span className='font-medium text-foreground/75'>Mercado Pago</span>
-          </div>
+          {isFree ? (
+            // Aviso de promo por tiempo limitado.
+            <div className='mt-3 flex items-center justify-center gap-1.5 text-xs font-medium text-foreground/75 sm:justify-start'>
+              <Clock className='size-4' strokeWidth={1.75} aria-hidden />
+              <span>{t('links.ebooksFreePromo')}</span>
+            </div>
+          ) : (
+            // Método de pago: Mercado Pago (isotipo en celeste de marca).
+            <div className='mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground sm:justify-start'>
+              <span>{t('links.ebooksPayWith')}</span>
+              <MercadoPago className='size-4 text-[#00b1ea]' />
+              <span className='font-medium text-foreground/75'>Mercado Pago</span>
+            </div>
+          )}
         </div>
       </div>
     </a>

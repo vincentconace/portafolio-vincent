@@ -32,6 +32,9 @@ export const translations = {
       ebooksSeries: 'Claude de Cero a Cien',
       ebooksUpcoming: 'Próximos volúmenes',
       ebooksPayWith: 'Pagás con',
+      ebooksFree: 'Gratis',
+      ebooksFreePromo: 'Gratis por 24 horas',
+      ebooksFreeCta: 'Descargar gratis',
       items: {
         cliente: {
           title: 'Trabajá conmigo',
@@ -47,7 +50,7 @@ export const translations = {
           title: 'Vol. 1 — La Base',
           subtitle: 'Comprar ahora',
           desc: 'Todo lo que necesitás para dominar Claude, de tu primera conversación a automatizar flujos de trabajo completos con Claude Code. Paso a paso. Sin jerga.',
-          meta: '225 páginas · 28 capítulos · Edición 2026',
+          meta: '234 páginas · 29 capítulos · Edición Agosto 2026',
         },
         ebook2: { title: 'Vol. 2 — Construye con Claude Code', subtitle: '' },
         ebook3: { title: 'Vol. 3 — Productos y automatizaciones', subtitle: '' },
@@ -411,6 +414,9 @@ export const translations = {
       ebooksSeries: 'Claude de Cero a Cien',
       ebooksUpcoming: 'Upcoming volumes',
       ebooksPayWith: 'Pay with',
+      ebooksFree: 'Free',
+      ebooksFreePromo: 'Free for 24 hours',
+      ebooksFreeCta: 'Get it free',
       items: {
         cliente: {
           title: 'Work with me',
@@ -426,7 +432,7 @@ export const translations = {
           title: 'Vol. 1 — La Base',
           subtitle: 'Buy now',
           desc: 'Everything you need to master Claude, from your first conversation to automating full workflows with Claude Code. Step by step. No jargon.',
-          meta: '225 pages · 28 chapters · 2026 Edition',
+          meta: '234 pages · 29 chapters · August 2026 Edition',
         },
         ebook2: { title: 'Vol. 2 — Construye con Claude Code', subtitle: '' },
         ebook3: { title: 'Vol. 3 — Productos y automatizaciones', subtitle: '' },

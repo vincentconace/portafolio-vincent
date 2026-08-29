@@ -10,10 +10,14 @@
 /** Ebook destacado: portada + precio + link real de Payhip. */
 export const featuredEbook = {
   id: 'ebook1',
-  cover: '/ebooks/vol1-la-base.png',
+  cover: '/ebooks/vol1-la-base.jpg',
   href: 'https://payhip.com/b/gDuES',
   price: '$30.000', // formato AR (punto de miles)
   currency: 'ARS',
+  // Promo por tiempo limitado: gratis 24 h. El precio queda tachado y el CTA
+  // pasa a "descargar gratis". Poné `free: false` (o borrá `promo`) para volver
+  // al precio normal + método de pago Mercado Pago.
+  promo: { free: true },
 };
 
 /**
